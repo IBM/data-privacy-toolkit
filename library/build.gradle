@@ -1,120 +1,124 @@
-/*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2022                                        *
- *                                                                 *
- *******************************************************************/
-apply plugin: 'java-library'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-
 ext {
-    junit_jupiter_version = '5.9.1'
-    junit_platform_launcher_version = '1.9.1'
-
-    mockito_version = '4.11.0'
-    jdefault_version = '2.0.0'
-    hamcrest_version = '2.2'
-
-    jackson_version = '2.13.3'
-    jackson_dataformat_version = '2.14.1'
-
-    log4j2_version = '2.19.0'
-
-    commons_codec_version = '1.13'
-    commons_csv_version = '1.9.0'
-    commons_io_version = '2.7'
-    commons_lang_version = '3.12.0'
-    commons_math_version = '3.6.1'
-    commons_text_version = '1.8'
-    commons_validator_version = '1.7'
-    pdfbox_version = '2.0.24'
-
-    poi_version = "5.2.3"
+    artifactory_user = project.findProperty("ARTIFACTORY_USERNAME") ?: System.getenv("ARTIFACTORY_USERNAME")
+    artifactory_password = project.findProperty("ARTIFACTORY_PASSWORD") ?: System.getenv("ARTIFACTORY_PASSWORD")
 }
 
-dependencies {
-    // implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
-    // implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
-    // implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+allprojects {
+    group = 'com.ibm.research.drl.dpt'
+    version = '6.0.0-SNAPSHOT'
 
-    implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
-    implementation "org.apache.commons:commons-csv:${commons_csv_version}"
-    implementation "org.apache.commons:commons-math3:${commons_math_version}"
-    implementation "commons-validator:commons-validator:${commons_validator_version}"
+    repositories {
+        mavenCentral()
 
-    implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
-    implementation "org.apache.poi:poi-ooxml:${poi_version}"
+        maven {
+            url = uri('https://www.dcm4che.org/maven2')
+        }
 
-    implementation "ca.uhn.hapi:hapi-base:2.3"
-    implementation "ca.uhn.hapi:hapi-structures-v22:2.3"
-    implementation "ca.uhn.hapi:hapi-structures-v23:2.3"
-    implementation 'org.iban4j:iban4j:3.2.4-RELEASE'
+        maven {
+            credentials {
+                username = artifactory_user
+                password = artifactory_password
+            }
+            url = uri('https://eu.artifactory.swg-devops.com/artifactory/res-drl-maven-local')
+        }
 
-    testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
-    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
-    testImplementation "org.mockito:mockito-core:${mockito_version}"
-    testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
-    testImplementation "org.beer30:jdefault:${jdefault_version}"
+        maven {
+            credentials {
+                username = artifactory_user
+                password = artifactory_password
+            }
+            url = uri('https://na.artifactory.swg-devops.com/artifactory/wcp-systemt-maven-local')
+        }
 
-    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
-}
-
-sourceCompatibility = '11'
-targetCompatibility = '11'
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-test {
-    useJUnitPlatform()
-    minHeapSize = "5g"
-    maxHeapSize = "10g"
-
-    testLogging {
-        events 'failed'
-        exceptionFormat 'short'
-
-        showCauses true
-        showExceptions true
-        showStackTraces true
-        showStandardStreams false
+        maven {
+            credentials {
+                username = artifactory_user
+                password = artifactory_password
+            }
+            url = uri('https://na.artifactory.swg-devops.com/artifactory/wcp-nlp-maven-local')
+        }
     }
 }
 
-group = 'com.ibm.research.drl.dpt'
-version = '6.0.0'
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'maven-publish'
 
-repositories {
-    mavenCentral()
-    mavenLocal()
+    ext {
+        junit_jupiter_version = '5.6.2'
+        junit_platform_launcher_version = '1.6.2'
 
-    maven {
-        url = uri('https://www.dcm4che.org/maven2')
+        mockito_version = '3.3.3'
+        jdefault_version = '2.0.0'
+        hamcrest_version = '2.2'
+
+        jackson_version = '2.13.3'
+        jackson_dataformat_version = '2.13.3'
+
+        log4j2_version = '2.17.1'
+
+        commons_codec_version = '1.13'
+        commons_csv_version = '1.8'
+        commons_io_version = '2.7'
+        commons_lang_version = '3.10'
+        commons_math_version = '3.6.1'
+        commons_text_version = '1.8'
+        commons_validator_version = '1.7'
+        pdfbox_version = '2.0.24'
+
+        poi_version = "5.2.2"
     }
-}
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = "sources"
-}
+    dependencies {
+        implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
+        testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            pom {
-                name = 'Data Privacy Toolkit'
-                description = 'The IBM Data Privacy Toolkit (DPT)'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
+
+        testImplementation "org.mockito:mockito-core:${mockito_version}"
+        testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
+
+        testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
+    }
+
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    test {
+        useJUnitPlatform()
+        minHeapSize = "5g"
+        maxHeapSize = "10g"
+
+        testLogging {
+            events 'failed'
+            exceptionFormat 'short'
+
+            showCauses true
+            showExceptions true
+            showStackTraces true
+            showStandardStreams false
+        }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from(components.java)
+                repositories {
+                    maven {
+                        credentials {
+                            username = artifactory_user
+                            password = artifactory_password
+                        }
+                        url = uri('https://eu.artifactory.swg-devops.com/artifactory/res-drl-maven-local')
                     }
                 }
             }
