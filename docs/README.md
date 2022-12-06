@@ -6,9 +6,9 @@ This is a live, outdated, document. Thus, please refer to test directory in the 
 
 Currently, DPT's functionality can be consumed as follows:
 
-* [Java API](api)
+* [Java API](api) (currently outdated)
 * [Command Line Toolkit](toolkit)
-* [REST API](rest-service) (currently outdated)
+* [REST API](prima-service) (currently outdated)
 * [Spark-base API](spark) (currently outdated)
 
 All the implementation share a common set of functionality wrapped in various manner to simplify the consumption in various engagements.
