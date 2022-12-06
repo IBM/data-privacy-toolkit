@@ -1,11 +1,5 @@
 # IBM Data Privacy Toolkit (DPT)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](./CODE_OF_CONDUCT.md)
-
-## Status
-[![DataPrivacyToolkit-Library](https://github.com/IBM/data-privacy-toolkit/actions/workflows/library.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/library.yml)
-[![DataPrivacyToolkit-Toolkit](https://github.com/IBM/data-privacy-toolkit/actions/workflows/toolkit.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/toolkit.yml)
-
- 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](./CODE_OF_CONDUCT.md) 
 
 The IBM Data Privacy Toolkit, (formerly known as Privacy Masking and Anonymization, or PRIMA) is a toolkit for data type identification, privacy risk assessment, data masking and data anonymization that is exposed as a Java/Scala library and as a REST API.
 The toolkit consists of four main components:
@@ -49,14 +43,12 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 
 
 ## References
-- [Documentation](docs/README.md)
-- [Java Library](library)
-- [Toolkit (CLI/Docker)](docker)
-- [Spark wrappers](spark)
-
-## Academic References:
+- Documentation ([Online](https://pages.github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-docs/)) [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-docs)
+- PRIMA is an Alpha level service in [IBM.Next](https://ibmnext.stage1.mybluemix.net/assets/primaservice)
+- Toolkit (CLI) [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-cli)
+- Demo (web-based UI for demo purposes only) [repo](https://github.ibm.com/Dublin-Research-Lab/prima-demo)
+- Spark wrappers [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-spark)
 - S. Antonatos, S. Braghin, N. Holohan, Y. Gkoufas and P. Mac Aonghusa, "PRIMA: An End-to-End Framework for Privacy at Scale," 2018 IEEE 34th International Conference on Data Engineering (ICDE), 2018, pp. 1531-1542, doi: 10.1109/ICDE.2018.00171.
-- N. Holohan, S. Antonatos, S. Braghin, P. Mac Aonghusa, "(k, ϵ)-anonymity: k-anonymity with ϵ-differential privacy,", 2017, arXiv preprint arXiv:1710.01615.
 - A. Gkoulalas-Divanis and S. Braghin, "IPV: A system for identifying privacy vulnerabilities in datasets," in IBM Journal of Research and Development, vol. 60, no. 4, pp. 14:1-14:10, July-Aug. 2016, doi: 10.1147/JRD.2016.2576818.
 - A. Gkoulalas-Divanis, S. Braghin and S. Antonatos, "FPVI: A scalable method for discovering privacy vulnerabilities in microdata," 2016 IEEE International Smart Cities Conference (ISC2), 2016, pp. 1-8, doi: 10.1109/ISC2.2016.7580849.
 - A. Gkoulalas-Divanis and S. Braghin, "Efficient algorithms for identifying privacy vulnerabilities," 2015 IEEE First International Smart Cities Conference (ISC2), 2015, pp. 1-8, doi: 10.1109/ISC2.2015.7366170.
