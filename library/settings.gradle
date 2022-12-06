@@ -1,0 +1,7 @@
+rootProject.name = 'ibm-data-privacy-toolkit'
+
+//include(':core')
+//include(':classification')
+//include(':masking')
+//include(':anonymization')
+//include(':riskassessment')
