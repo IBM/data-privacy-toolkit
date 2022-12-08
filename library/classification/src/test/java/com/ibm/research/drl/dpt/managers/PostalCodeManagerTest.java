@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class PostalCodeManagerTest {
 
     @Test
-    public void testLookupSuccessful() throws Exception {
+    public void testLookupSuccessful() {
         PostalCodeManager postalCodeManager = PostalCodeManager.getInstance();
         String code = "99503";
 
@@ -24,7 +24,7 @@ public class PostalCodeManagerTest {
     }
 
     @Test
-    public void testRandomCodeGenerator() throws Exception {
+    public void testRandomCodeGenerator() {
         PostalCodeManager postalCodeManager = PostalCodeManager.getInstance();
         assertTrue(postalCodeManager.isValidKey(postalCodeManager.getRandomKey()));
     }
@@ -42,12 +42,12 @@ public class PostalCodeManagerTest {
         }
 
         long diff = System.currentTimeMillis() - startMillis;
-        System.out.println(String.format("%d operations took %d milliseconds (%f per op)",
-                N, diff, (double) diff / N));
+        System.out.printf("%d operations took %d milliseconds (%f per op)%n",
+                N, diff, (double) diff / N);
     }
 
     @Test
-    public void testClosestCode() throws Exception {
+    public void testClosestCode() {
         PostalCodeManager postalCodeManager = PostalCodeManager.getInstance();
         String originalCode = "99529";
         String[] neighbors = {
