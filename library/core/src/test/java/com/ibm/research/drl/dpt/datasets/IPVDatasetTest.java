@@ -1,11 +1,7 @@
 /*******************************************************************
-* IBM Confidential                                                *
 *                                                                 *
 * Copyright IBM Corp. 2015                                        *
 *                                                                 *
-* The source code for this program is not published or otherwise  *
-* divested of its trade secrets, irrespective of what has         *
-* been deposited with the U.S. Copyright Office.                  *
 *******************************************************************/
 package com.ibm.research.drl.dpt.datasets;
 
@@ -22,6 +18,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -44,7 +41,7 @@ public class IPVDatasetTest {
 
     @Test
     public void testLoadSkipHeaders() throws Exception {
-        try (InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/100.csv"))) {
+        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/100.csv")))) {
             IPVDataset dataset = IPVDataset.load(reader, true, ',', '"', false);
             assertEquals(99, dataset.getNumberOfRows());
         }
@@ -52,7 +49,7 @@ public class IPVDatasetTest {
 
     @Test
     public void loadDatasetWithHeader() throws Exception {
-        try (InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/test_with_header.csv"))) {
+        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/test_with_header.csv")))) {
             IPVDataset dataset = IPVDataset.load(reader, true, ',', '"', false);
             assertEquals(2, dataset.getNumberOfRows());
 
@@ -97,7 +94,7 @@ public class IPVDatasetTest {
     }
 
     @Test
-    public void testInMemoryDataset() throws Exception {
+    public void testInMemoryDataset() {
         List<List<String>> values = new ArrayList<>();
 
         List<String> row1 = new ArrayList<>();
@@ -133,7 +130,7 @@ public class IPVDatasetTest {
 
         try (
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Writer writer = new OutputStreamWriter(baos);
+                Writer writer = new OutputStreamWriter(baos)
         ) {
             dataset.toCSV(new CSVDatasetOptions(false, ',', '"', false), writer);
 
@@ -144,7 +141,7 @@ public class IPVDatasetTest {
 
         try (
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Writer writer = new OutputStreamWriter(baos);
+                Writer writer = new OutputStreamWriter(baos)
         ) {
             dataset.toCSV(new CSVDatasetOptions(true, ',', '"', false), writer);
 
@@ -162,12 +159,12 @@ public class IPVDatasetTest {
 
         try (
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Writer writer = new OutputStreamWriter(baos);
+                Writer writer = new OutputStreamWriter(baos)
         ) {
             dataset.toJSON(new JSONDatasetOptions(), writer);
 
             System.out.println(
-                    baos.toString()
+                    baos
             );
         }
     }
@@ -194,12 +191,12 @@ public class IPVDatasetTest {
 
         try (
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Writer writer = new OutputStreamWriter(baos);
+                Writer writer = new OutputStreamWriter(baos)
         ) {
             dataset.toJSON(new JSONDatasetOptions(), writer);
 
             System.out.println(
-                    baos.toString()
+                    baos
             );
         }
     }
