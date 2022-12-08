@@ -1,23 +1,18 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2015                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2015                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.schema;
 
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchemaFieldType;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * The type Item set generator.
+ *
  */
 public class ItemSetGenerator implements Iterable<ItemSet> {
     /**
@@ -80,7 +75,7 @@ public class ItemSetGenerator implements Iterable<ItemSet> {
     public Iterator<ItemSet> iterator() {
         return new Iterator<ItemSet>() {
             private long counter = 1L;
-            private final long max = (long) Math.pow(2, fields.size());
+            private long max = (long) Math.pow(2, fields.size());
 
             @Override
             public boolean hasNext() {

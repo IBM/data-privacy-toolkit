@@ -34,7 +34,8 @@ public class DateOPM {
         return daysBetween;
     }
 
-    public static Date addDays(Date date, int days) {
+    public static Date addDays(Date date, int days)
+    {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, days); //minus number would decrement the days
@@ -52,18 +53,18 @@ public class DateOPM {
         Date start = df.parse(startDate);
         Date end = df.parse(endDate);
 
-        Calendar cal = Calendar.getInstance();
+        Calendar cal= Calendar.getInstance();
         cal.setTime(start);
 
         long originalSpaceSize = daysBetween(start, end);
         long mappedSpaceSize = originalSpaceSize + daysBudget;
 
-        int maxStep = (int) Math.floor((double) mappedSpaceSize / (double) originalSpaceSize);
+        int maxStep = (int)Math.floor((double)mappedSpaceSize/(double)originalSpaceSize);
 
         Date mappedValue = addDays(start, -daysBudget);
 
         cal.setTime(start);
-        while (cal.getTime().before(end)) {
+        while(cal.getTime().before(end)) {
             String key = df.format(cal.getTime());
 
             int nextStep = 1 + random.nextInt(maxStep);

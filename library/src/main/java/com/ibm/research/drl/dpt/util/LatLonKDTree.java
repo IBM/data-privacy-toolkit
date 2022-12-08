@@ -24,7 +24,7 @@ public class LatLonKDTree<T extends Location> {
      * @param locations the location list
      * @throws Exception the exception
      */
-    public LatLonKDTree(List<T> locations) throws Exception {
+    public LatLonKDTree(List<T> locations) throws Exception{
         List<LatLonCartesianPoint<T>> points = new ArrayList<>(locations.size());
 
         for (final T location : locations) {

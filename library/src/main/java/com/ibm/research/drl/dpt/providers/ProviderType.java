@@ -8,7 +8,10 @@ package com.ibm.research.drl.dpt.providers;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Provider type.
@@ -18,7 +21,7 @@ public final class ProviderType implements Serializable {
 
     public static final ProviderType SORT_CODE = new ProviderType("SORT_CODE", "SORT CODE", "");
 
-    public static final ProviderType AGE = new ProviderType("AGE", "Age", "Masks age values", TypeClass.NUMERICAL);
+    public static final ProviderType AGE = new ProviderType("AGE", "Age", "Masks age values", TypeClass.NUMERICAL) ;
     /**
      * The constant NUMERIC.
      */
@@ -27,7 +30,7 @@ public final class ProviderType implements Serializable {
      * The constant NAME.
      */
     public static final ProviderType NAME = new ProviderType("NAME", "Name", "Masks names (with gender preservation) and surnames");
-
+    
     public static final ProviderType ANIMAL = new ProviderType("ANIMAL", "Animal", "Masks animal species");
     /**
      * The constant EMAIL.
@@ -154,7 +157,7 @@ public final class ProviderType implements Serializable {
     /**
      * The constant UNSUPPORTED.
      */
-    public static final ProviderType UNSUPPORTED = new ProviderType("UNSUPPORTED", "dummy", "for internal purposes", TypeClass.CATEGORICAL, true);
+    public static final ProviderType UNSUPPORTED  = new ProviderType("UNSUPPORTED", "dummy", "for internal purposes", TypeClass.CATEGORICAL, true);
     /**
      * The constant EMPTY.
      */
@@ -233,39 +236,39 @@ public final class ProviderType implements Serializable {
 
     public static final ProviderType SYMPTOM = new ProviderType("SYMPTOM", "Symptom", "Mask symptoms");
     public static final ProviderType PROCEDURE = new ProviderType("PROCEDURE", "Procedure", "Mask procedures");
-
+    
     public static final ProviderType HEIGHT = new ProviderType("HEIGHT", "Height", "Masks height values", TypeClass.NUMERICAL);
 
     public static final ProviderType MRN = new ProviderType("MRN", "Medical Record Number", "Medical record number");
-
+    
     public static final ProviderType TEMPORAL = new ProviderType("TEMPORAL", "Temporal pattern", "Temporal pattern");
-
+    
     public static final ProviderType TIME = new ProviderType("TIME", "Time pattern", "Time pattern");
 
     public static final ProviderType REPLACE_FIXED = new ProviderType("REPLACE_FIXED", "Replace fixed", "Replace fixed");
-
+    
     public static final ProviderType CHAMELEON = new ProviderType("CHAMELEON", "Chameleon Pseudonyms", "Chameleon Pseudonyms");
     public static final ProviderType DIFFERENTIAL_PRIVACY = new ProviderType("DIFFERENTIAL_PRIVACY", "Differential Privacy", "e-differential privacy");
 
     public static final ProviderType SUPPRESS_FIELD = new ProviderType("SUPPRESS_FIELD", "Suppress field", "Suppress the entire field");
-
-    public static final ProviderType DICTIONARY_BASED = new ProviderType("DICTIONARY_BASED", "Dictionary based",
+    
+    public static final ProviderType DICTIONARY_BASED = new ProviderType("DICTIONARY_BASED", "Dictionary based", 
             "Replaces values based on dictionaries");
 
     public static final ProviderType DECIMAL_ROUNDING = new ProviderType("DECIMAL_ROUNDING", "Decimal rounding",
             "Rounds decimal points");
 
     public static final ProviderType RATIO_BASED = new ProviderType("RATIO_BASED", "Ratio-based", "Ratio based");
-
+    
     public static final ProviderType GENERALIZATION = new ProviderType("GENERALIZATION", "Generalization-based masking", "Generalization-based");
 
     public static final ProviderType PERSON = new ProviderType("PERSON", "Generic person", "Person");
-
+    
     private final String name;
-    private final String description;
-    private final String friendlyName;
+	private final String description;
+	private final String friendlyName;
     private final int id;
-    private final boolean forInternalPurposes;
+	private final boolean forInternalPurposes;
     private final TypeClass typeClass;
 
     /**
@@ -284,8 +287,8 @@ public final class ProviderType implements Serializable {
      * @return the string
      */
     public String name() {
-        return this.name;
-    }
+		return this.name;
+	}
 
     /**
      * Gets name.
@@ -302,12 +305,12 @@ public final class ProviderType implements Serializable {
      * @return the friendly name
      */
     public String getFriendlyName() {
-        return this.friendlyName;
-    }
+		return this.friendlyName;
+	}
 
-    private boolean isForInternalPurposes() {
-        return forInternalPurposes;
-    }
+	private boolean isForInternalPurposes() {
+		return forInternalPurposes;
+	}
 
     /**
      * Gets description.
@@ -315,8 +318,8 @@ public final class ProviderType implements Serializable {
      * @return the description
      */
     public String getDescription() {
-        return this.description;
-    }
+		return this.description;
+	}
 
     /**
      * Gets type class.
@@ -328,26 +331,26 @@ public final class ProviderType implements Serializable {
     }
 
     private ProviderType(String name, String friendlyName, String description, TypeClass typeClass, boolean forInternalPurposes) {
-        this.name = name;
-        this.friendlyName = friendlyName;
-        this.description = description;
-        this.forInternalPurposes = forInternalPurposes;
+		this.name = name;
+		this.friendlyName = friendlyName;
+		this.description = description;
+		this.forInternalPurposes = forInternalPurposes;
         this.typeClass = typeClass;
 
         this.id = insertType(this);
-    }
+	}
 
     private ProviderType(String name, String friendlyName, String description, TypeClass typeClass) {
         this(name, friendlyName, description, typeClass, false);
     }
 
-    private ProviderType(String name, String friendlyName, String description) {
-        this(name, friendlyName, description, TypeClass.CATEGORICAL, false);
-    }
+	private ProviderType(String name, String friendlyName, String description) {
+		this(name, friendlyName, description, TypeClass.CATEGORICAL, false);
+	}
 
     private ProviderType(String name) {
-        this(name, name, "");
-    }
+    	this(name, name, "");
+	}
 
 
     @Override
@@ -367,7 +370,7 @@ public final class ProviderType implements Serializable {
      * @return the provider type
      */
     public static synchronized ProviderType valueOf(String name) {
-        if (!registeredTypes.containsKey(name)) {
+        if(!registeredTypes.containsKey(name)) {
             return new ProviderType(name);
         }
 
@@ -380,16 +383,16 @@ public final class ProviderType implements Serializable {
      * @return the collection
      */
     public static synchronized Collection<ProviderType> publicValues() {
-        Collection<ProviderType> providerTypes = new ArrayList<>();
+		Collection<ProviderType> providerTypes = new ArrayList<>();
 
-        for (ProviderType p : registeredTypes.values()) {
-            if (!p.isForInternalPurposes()) {
-                providerTypes.add(p);
-            }
-        }
+		for(ProviderType p: registeredTypes.values()) {
+			if (!p.isForInternalPurposes()) {
+				providerTypes.add(p);
+			}
+		}
 
-        return providerTypes;
-    }
+		return providerTypes;
+	}
 
     /**
      * Values provider type [ ].
@@ -423,10 +426,5 @@ public final class ProviderType implements Serializable {
         }
 
         return registeredTypes.get(type.name()).getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, description, friendlyName, id, forInternalPurposes, typeClass);
     }
 }

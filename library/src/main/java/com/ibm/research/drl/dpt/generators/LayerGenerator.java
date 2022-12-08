@@ -9,6 +9,7 @@ import java.util.*;
 
 /**
  * The type Layer generator.
+ *
  */
 public class LayerGenerator implements IPVGenerator {
     private final int nAttributes;
@@ -38,6 +39,7 @@ public class LayerGenerator implements IPVGenerator {
     }
 
     /**
+     *
      * @return true iif it went to the next layer
      */
     private boolean increment() {

@@ -20,7 +20,7 @@ import java.util.Collection;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class FHIRContract extends FHIRBaseDomainResource {
+public class FHIRContract extends FHIRBaseDomainResource{
 
     private FHIRIdentifier identifier;
     private String issued;

@@ -53,14 +53,12 @@ public interface Identifier {
      * @return the priority
      */
     int getPriority();
-
+   
     int getMinimumCharacterRequirements();
-
+   
     int getMinimumLength();
-
+    
     int getMaximumLength();
-
-    default boolean isPOSIndependent() {
-        return false;
-    }
+    
+    default boolean isPOSIndependent() {return false;}
 }

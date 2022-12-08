@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 /**
  * The type Latitude longitude identifier.
+ *
  */
 public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
     private final static String[] appropriateNames = {"Latitude", "Longitude", "LatitudeLongitude"};
@@ -28,12 +29,12 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
             Pattern.UNICODE_CASE);
 
     private final Collection<Pattern> coordinatePatterns = new ArrayList<>(Arrays.asList(
-            latlonPattern, compassPattern, dmsCoordinatePattern
+       latlonPattern, compassPattern, dmsCoordinatePattern
     ));
-
+    
     @Override
     protected boolean quickCheck(String value) {
-        for (int i = 0; i < value.length(); i++) {
+        for(int i = 0; i < value.length(); i++) {
             if (Character.isDigit(value.charAt(i))) {
                 return true;
             }
@@ -61,9 +62,11 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
     public Pattern getPatternFromFormat(LatitudeLongitudeFormat format) {
         if (format == LatitudeLongitudeFormat.COMPASS) {
             return compassPattern;
-        } else if (format == LatitudeLongitudeFormat.DECIMAL) {
+        }
+        else if(format == LatitudeLongitudeFormat.DECIMAL) {
             return latlonPattern;
-        } else if (format == LatitudeLongitudeFormat.DMS) {
+        }
+        else if(format == LatitudeLongitudeFormat.DMS) {
             return dmsCoordinatePattern;
         }
 
@@ -97,7 +100,7 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
      * @return the boolean
      */
     public boolean isGPSFormat(String identifier) {
-        return latlonPattern.matcher(identifier).matches();
+        return  latlonPattern.matcher(identifier).matches();
     }
 
     /**
@@ -109,7 +112,8 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
     public LatitudeLongitude parseCoordinate(String identifier) {
         if (isGPSFormat(identifier)) {
             return parseGPSFormat(identifier);
-        } else if (isCompassFormat(identifier) || isDMSFormat(identifier)) {
+        }
+        else if(isCompassFormat(identifier) || isDMSFormat(identifier)) {
             return parseCompassFormat(identifier);
         }
 
@@ -122,11 +126,11 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
      * @param identifier the identifier
      * @return the latitude longitude
      */
-    public static LatitudeLongitude parseGPSFormat(String identifier) throws NumberFormatException {
-        //GPS format is expected as "x,y"
-        String[] parts = identifier.split(",\\s*");
-        double latitude = Double.parseDouble(parts[0]);
-        double longitude = Double.parseDouble(parts[1]);
+    public static LatitudeLongitude parseGPSFormat(String identifier) {
+        //GPS format is "x,y"
+        String[] parts = identifier.split(",");
+        Double latitude = Double.parseDouble(parts[0]);
+        Double longitude = Double.parseDouble(parts[1]);
         return new LatitudeLongitude(latitude, longitude, LatitudeLongitudeFormat.DECIMAL);
     }
 
@@ -136,14 +140,14 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
      * @param identifier the identifier
      * @return the latitude longitude
      */
-    public LatitudeLongitude parseCompassFormat(String identifier) throws NumberFormatException {
-        double latitude;
-        double longitude;
-        double nsDegrees, ewDegrees;
-        double nsMinutes, ewMinutes;
-        double nsSeconds, ewSeconds;
-        String ns;
-        String ew;
+    public LatitudeLongitude parseCompassFormat(String identifier) {
+        double latitude = 0.0;
+        double longitude = 0.0;
+        double nsDegrees = 0.0, ewDegrees = 0.0;
+        double nsMinutes = 0.0, ewMinutes = 0.0;
+        double nsSeconds = 0.0, ewSeconds = 0.0;
+        String ns = null;
+        String ew = null;
         LatitudeLongitudeFormat format = LatitudeLongitudeFormat.COMPASS;
 
         Matcher m1 = getPatternFromFormat(LatitudeLongitudeFormat.DMS).matcher(identifier);
@@ -156,11 +160,15 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
             ewMinutes = Double.parseDouble(m1.group("ewMinutes"));
             ewSeconds = Double.parseDouble(m1.group("ewSeconds"));
 
+            latitude = GeoUtils.degreesToDecimal(nsDegrees, nsMinutes, nsSeconds);
+            longitude = GeoUtils.degreesToDecimal(ewDegrees, ewMinutes, ewSeconds);
+
             ns = m1.group("ns");
             ew = m1.group("ew");
 
             format = LatitudeLongitudeFormat.DMS;
-        } else {
+        }
+        else {
             Matcher m2 = getPatternFromFormat(LatitudeLongitudeFormat.COMPASS).matcher(identifier);
             if (!m2.matches()) {
                 return null;
@@ -196,7 +204,7 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
         if (ns.equals("S")) {
             latitude = -latitude;
         }
-        if (ew.equals("W")) {
+        if(ew.equals("W")) {
             longitude = -longitude;
         }
 
@@ -212,7 +220,7 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DIGIT;

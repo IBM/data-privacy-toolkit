@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2015                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.generators;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemSet implements Comparable<ItemSet>, Serializable {
     private int size;
-    private final BitSet bitSet;
+    private BitSet bitSet;
 
     /**
      * Instantiates a new Item set.
@@ -32,8 +32,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
      * @param items the items
      */
     public ItemSet(int... items) {
-        if (Objects.isNull(items) || items.length == 0)
-            throw new IllegalArgumentException("Items must be not null and more that 0");
+        if (Objects.isNull(items) || items.length == 0) throw new IllegalArgumentException("Items must be not null and more that 0");
 
         this.bitSet = new BitSet(items.length);
 
@@ -87,7 +86,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
     public void addItem(int item) {
         if (!bitSet.get(item)) {
             bitSet.set(item);
-            size += 1;
+            size += 1L;
         }
     }
 
@@ -99,7 +98,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
     public void removeItem(int item) {
         if (bitSet.get(item)) {
             bitSet.set(item, false);
-            size -= 1;
+            size -= 1L;
         }
     }
 
@@ -119,7 +118,10 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
 
         ItemSet itemSet = (ItemSet) o;
 
-        return (this.isSubSetOf(itemSet) && itemSet.isSubSetOf(this));
+        return  (this.isSubSetOf(itemSet) && itemSet.isSubSetOf(this));
+
+//        if (size != itemSet.size) return false;
+//        return bitSet != null ? bitSet.equals(itemSet.bitSet) : itemSet.bitSet == null;
     }
 
     @Override
@@ -169,7 +171,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
     }
 
     /**
-     * Can be extended with boolean.
+     * Can be extend with boolean.
      *
      * @param item the item
      * @return the boolean

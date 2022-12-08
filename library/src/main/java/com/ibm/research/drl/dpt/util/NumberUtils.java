@@ -20,40 +20,39 @@ public class NumberUtils {
             ));
 
     private final static Map<String, String> ordinalNumbers = new HashMap<>();
-
     static {
-        ordinalNumbers.put("first", "one");
-        ordinalNumbers.put("second", "two");
-        ordinalNumbers.put("third", "three");
-        ordinalNumbers.put("fourth", "four");
-        ordinalNumbers.put("fifth", "five");
-        ordinalNumbers.put("sixth", "six");
-        ordinalNumbers.put("seventh", "seven");
-        ordinalNumbers.put("eighth", "eight");
-        ordinalNumbers.put("ninth", "nine");
-        ordinalNumbers.put("tenth", "ten");
-        ordinalNumbers.put("eleventh", "eleven");
-        ordinalNumbers.put("twelfth", "twelve");
-        ordinalNumbers.put("thirteenth", "thirteen");
-        ordinalNumbers.put("fourteenth", "fourteen");
-        ordinalNumbers.put("fifteenth", "fifteen");
-        ordinalNumbers.put("sixteenth", "sixteen");
-        ordinalNumbers.put("seventeenth", "seventeen");
-        ordinalNumbers.put("eighteenth", "eighteen");
-        ordinalNumbers.put("nineteenth", "nineteen");
-        ordinalNumbers.put("twentieth", "twenty");
-        ordinalNumbers.put("thirtieth", "thirty");
-        ordinalNumbers.put("fortieth", "forty");
-        ordinalNumbers.put("fiftieth", "fifty");
-        ordinalNumbers.put("sixtieth", "sixty");
-        ordinalNumbers.put("seventieth", "seventy");
-        ordinalNumbers.put("eightieth", "eighty");
-        ordinalNumbers.put("ninetieth", "ninety");
-        ordinalNumbers.put("hundredth", "hundred");
-        ordinalNumbers.put("thousandth", "thousand");
-        ordinalNumbers.put("millionth", "million");
+        ordinalNumbers.put("first","one");
+        ordinalNumbers.put("second","two");
+        ordinalNumbers.put("third","three");
+        ordinalNumbers.put("fourth","four");
+        ordinalNumbers.put("fifth","five");
+        ordinalNumbers.put("sixth","six");
+        ordinalNumbers.put("seventh","seven");
+        ordinalNumbers.put("eighth","eight");
+        ordinalNumbers.put("ninth","nine");
+        ordinalNumbers.put("tenth","ten");
+        ordinalNumbers.put("eleventh","eleven");
+        ordinalNumbers.put("twelfth","twelve");
+        ordinalNumbers.put("thirteenth","thirteen");
+        ordinalNumbers.put("fourteenth","fourteen");
+        ordinalNumbers.put("fifteenth","fifteen");
+        ordinalNumbers.put("sixteenth","sixteen");
+        ordinalNumbers.put("seventeenth","seventeen");
+        ordinalNumbers.put("eighteenth","eighteen");
+        ordinalNumbers.put("nineteenth","nineteen");
+        ordinalNumbers.put("twentieth","twenty");
+        ordinalNumbers.put("thirtieth","thirty");
+        ordinalNumbers.put("fortieth","forty");
+        ordinalNumbers.put("fiftieth","fifty");
+        ordinalNumbers.put("sixtieth","sixty");
+        ordinalNumbers.put("seventieth","seventy");
+        ordinalNumbers.put("eightieth","eighty");
+        ordinalNumbers.put("ninetieth","ninety");
+        ordinalNumbers.put("hundredth","hundred");
+        ordinalNumbers.put("thousandth","thousand");
+        ordinalNumbers.put("millionth","million");
     }
-
+    
     private static final String[] tensNames = {
             "",
             " ten",
@@ -89,14 +88,15 @@ public class NumberUtils {
             " eighteen",
             " nineteen"
     };
-
+    
     private static String convertLessThanOneThousand(int number) {
         String soFar;
 
-        if (number % 100 < 20) {
+        if (number % 100 < 20){
             soFar = numNames[number % 100];
             number /= 100;
-        } else {
+        }
+        else {
             soFar = numNames[number % 10];
             number /= 10;
 
@@ -106,11 +106,9 @@ public class NumberUtils {
         if (number == 0) return soFar;
         return numNames[number] + " hundred" + soFar;
     }
-
+    
     public static String createWords(long number) {
-        if (number == 0) {
-            return "zero";
-        }
+        if (number == 0) { return "zero"; }
 
         String snumber = Long.toString(number);
 
@@ -120,60 +118,60 @@ public class NumberUtils {
         snumber = df.format(number);
 
         // XXXnnnnnnnnn
-        int billions = Integer.parseInt(snumber.substring(0, 3));
+        int billions = Integer.parseInt(snumber.substring(0,3));
         // nnnXXXnnnnnn
-        int millions = Integer.parseInt(snumber.substring(3, 6));
+        int millions  = Integer.parseInt(snumber.substring(3,6));
         // nnnnnnXXXnnn
-        int hundredThousands = Integer.parseInt(snumber.substring(6, 9));
+        int hundredThousands = Integer.parseInt(snumber.substring(6,9));
         // nnnnnnnnnXXX
-        int thousands = Integer.parseInt(snumber.substring(9, 12));
+        int thousands = Integer.parseInt(snumber.substring(9,12));
 
         String tradBillions;
         switch (billions) {
             case 0:
                 tradBillions = "";
                 break;
-            case 1:
+            case 1 :
                 tradBillions = convertLessThanOneThousand(billions)
                         + " billion ";
                 break;
-            default:
+            default :
                 tradBillions = convertLessThanOneThousand(billions)
                         + " billion ";
         }
-        String result = tradBillions;
+        String result =  tradBillions;
 
         String tradMillions;
         switch (millions) {
             case 0:
                 tradMillions = "";
                 break;
-            case 1:
-            default:
+            case 1 :
+            default :
                 tradMillions = convertLessThanOneThousand(millions) + " million ";
         }
-        result = result + tradMillions;
+        result =  result + tradMillions;
 
         String tradHundredThousands;
         switch (hundredThousands) {
             case 0:
                 tradHundredThousands = "";
                 break;
-            case 1:
+            case 1 :
                 tradHundredThousands = "one thousand ";
                 break;
-            default:
+            default :
                 tradHundredThousands = convertLessThanOneThousand(hundredThousands)
                         + " thousand ";
         }
-        result = result + tradHundredThousands;
+        result =  result + tradHundredThousands;
 
         String tradThousand;
         tradThousand = convertLessThanOneThousand(thousands);
-        result = result + tradThousand;
+        result =  result + tradThousand;
 
         // remove extra spaces!
-        return result.replaceAll("^\\s+", "").replaceAll("\\b\\s{2,}\\b", " ").trim();
+        return result.replaceAll("^\\s+", "").replaceAll("\\b\\s{2,}\\b", " ").trim(); 
     }
 
 
@@ -189,12 +187,12 @@ public class NumberUtils {
         input = input.toLowerCase().replaceAll(" and", " ");
         String[] splittedParts = input.trim().split("\\s+");
 
-        for (int i = 0; i < splittedParts.length; i++) {
+        for(int i = 0; i < splittedParts.length; i++) {
             String str = splittedParts[i];
-            if (ordinalNumbers.containsKey(str)) {
+            if(ordinalNumbers.containsKey(str)) {
                 splittedParts[i] = ordinalNumbers.get(str);
             }
-
+            
             if (!allowedStrings.contains(splittedParts[i])) {
                 return null;
             }
@@ -281,12 +279,12 @@ public class NumberUtils {
         finalResult += result;
         return finalResult;
     }
-
+    
     public static Long createNumber(String input) {
         boolean isValidInput = true;
         long result = 0;
         long finalResult = 0;
-
+        
         if (input == null || input.length() == 0) {
             return null;
         }
@@ -391,7 +389,7 @@ public class NumberUtils {
     public static long countDigits(String data) {
         long cnt = 0;
 
-        for (int i = 0; i < data.length(); i++) {
+        for(int i = 0; i < data.length(); i++) {
             if (Character.isDigit(data.charAt(i))) {
                 cnt++;
             }

@@ -20,7 +20,6 @@ public abstract class AbstractRegexBasedIdentifier extends AbstractIdentifier {
     protected boolean quickCheck(String data) {
         return true;
     }
-
     /**
      * Matches boolean.
      *
@@ -31,8 +30,8 @@ public abstract class AbstractRegexBasedIdentifier extends AbstractIdentifier {
         if (!quickCheck(data)) {
             return false;
         }
-
-        for (Pattern p : getPatterns()) {
+        
+        for(Pattern p: getPatterns()) {
             if (p.matcher(data).matches()) {
                 return true;
             }

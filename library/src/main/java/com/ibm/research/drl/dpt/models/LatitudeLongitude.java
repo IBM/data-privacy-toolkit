@@ -1,21 +1,19 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2022                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2021                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.models;
-
-import java.util.Objects;
 
 public class LatitudeLongitude {
     /**
      * The Latitude.
      */
-    double latitude;
+    Double latitude;
     /**
      * The Longitude.
      */
-    double longitude;
+    Double longitude;
     /**
      * The Format.
      */
@@ -27,7 +25,7 @@ public class LatitudeLongitude {
      * @param latitude  the latitude
      * @param longitude the longitude
      */
-    public LatitudeLongitude(double latitude, double longitude) {
+    public LatitudeLongitude(Double latitude, Double longitude) {
         this(latitude, longitude, LatitudeLongitudeFormat.DECIMAL);
     }
 
@@ -38,7 +36,7 @@ public class LatitudeLongitude {
      * @param longitude the longitude
      * @param format    the format
      */
-    public LatitudeLongitude(double latitude, double longitude, LatitudeLongitudeFormat format) {
+    public LatitudeLongitude(Double latitude, Double longitude, LatitudeLongitudeFormat format) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.format = format;
@@ -49,18 +47,14 @@ public class LatitudeLongitude {
      *
      * @return the format
      */
-    public LatitudeLongitudeFormat getFormat() {
-        return this.format;
-    }
+    public LatitudeLongitudeFormat getFormat() {return this.format; }
 
     /**
      * Sets format.
      *
      * @param format the format
      */
-    public void setFormat(LatitudeLongitudeFormat format) {
-        this.format = format;
-    }
+    public void setFormat(LatitudeLongitudeFormat format) {this.format = format;}
 
     /**
      * Gets latitude.
@@ -86,49 +80,51 @@ public class LatitudeLongitude {
             return false;
         }
 
-        LatitudeLongitude latLon = (LatitudeLongitude) obj;
-        return Objects.equals(latLon.getLatitude(), latitude) && Objects.equals(latLon.getLongitude(), longitude);
+        LatitudeLongitude latlon = (LatitudeLongitude)obj;
+        return latlon.getLatitude() == latitude && latlon.getLongitude() == longitude;
     }
 
     @Override
     public String toString() {
         if (format == LatitudeLongitudeFormat.DECIMAL) {
             return String.format("%.8f,%.8f", getLatitude(), getLongitude());
+            /*
+            StringBuilder builder = new StringBuilder();
+            builder.append(getLatitude());
+            builder.append(",");
+            builder.append(getLongitude());
+            return builder.toString();
+            */
         }
 
         String ns = "N";
         String ew = "E";
 
-        double latitude = this.latitude;
+        Double latitude = this.latitude;
         if (latitude < 0) {
             ns = "S";
             latitude = -latitude;
         }
 
-        double longitude = this.longitude;
+        Double longitude = this.longitude;
         if (longitude < 0) {
             ew = "W";
             longitude = -longitude;
         }
 
-        int nsDegrees = (int) latitude;
-        int nsMinutes = (int) ((latitude - nsDegrees) * 60);
-        double nsSeconds = (latitude - nsDegrees - (double) nsMinutes / 60.0) * 3600;
-        int ewDegrees = (int) longitude;
-        int ewMinutes = (int) ((longitude - ewDegrees) * 60);
-        double ewSeconds = (longitude - ewDegrees - (double) ewMinutes / 60.0) * 3600;
+        int nsDegrees = latitude.intValue();
+        int nsMinutes = (int)((latitude - nsDegrees)*60);
+        Double nsSeconds = (latitude - nsDegrees - (double)nsMinutes/60.0) * 3600;
+        int ewDegrees = longitude.intValue();
+        int ewMinutes = (int)((longitude - ewDegrees)*60);
+        Double ewSeconds = (longitude - ewDegrees - (double)ewMinutes/60.0) * 3600;
 
-        if (format == LatitudeLongitudeFormat.COMPASS) {
+        if(format == LatitudeLongitudeFormat.COMPASS) {
             return String.format("%s%02d.%02d.%02d %s%02d.%02d.%02d",
-                    ns, nsDegrees, nsMinutes, (int) nsSeconds, ew, ewDegrees, ewMinutes, (int) ewSeconds);
+                    ns, nsDegrees, nsMinutes, nsSeconds.intValue(), ew, ewDegrees, ewMinutes, ewSeconds.intValue());
         }
 
         return String.format("%02d:%02d'%f%s %02d:%02d'%f%s",
                 nsDegrees, nsMinutes, nsSeconds, ns, ewDegrees, ewMinutes, ewSeconds, ew);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(latitude, longitude, format);
     }
 }

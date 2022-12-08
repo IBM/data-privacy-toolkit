@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.models;
@@ -15,10 +15,11 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class FHIRValidationTest {
-    private static class ElementDefinition {
+    private class ElementDefinition {
         private final int min;
         private final int max;
         private final String name;

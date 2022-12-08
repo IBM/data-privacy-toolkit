@@ -1,18 +1,18 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2021                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2021                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.models;
 
 import java.util.List;
 
 public class City implements Location, LocalizedEntity {
 
-    private final String name;
-    private final String nameCountryCode;
-    private final String countryCode;
-    private final LatitudeLongitude latitudeLongitude;
+    private String name;
+    private String nameCountryCode;
+    private String countryCode;
+    private LatitudeLongitude latitudeLongitude;
     private List<City> neighbors;
 
     /**

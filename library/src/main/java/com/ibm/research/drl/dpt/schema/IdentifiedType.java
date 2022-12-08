@@ -1,15 +1,15 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2015                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2015                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.schema;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The type Identified type.
+ *
  */
 public final class IdentifiedType implements Comparable<IdentifiedType>, Serializable {
     private final String typeName;
@@ -60,13 +60,5 @@ public final class IdentifiedType implements Comparable<IdentifiedType>, Seriali
     @Override
     public String toString() {
         return "IdentifiedType(" + getCount() + ", " + getTypeName() + ")";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IdentifiedType that = (IdentifiedType) o;
-        return count == that.count && Objects.equals(typeName, that.typeName);
     }
 }

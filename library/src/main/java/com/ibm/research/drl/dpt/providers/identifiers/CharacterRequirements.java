@@ -16,6 +16,5 @@ public class CharacterRequirements {
     public static final int COLUMN = 64;
     public static final int SLASH = 128;
 
-    private CharacterRequirements() {
-    }
+    private CharacterRequirements() {}
 }

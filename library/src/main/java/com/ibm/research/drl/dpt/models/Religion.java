@@ -10,7 +10,7 @@ public class Religion implements LocalizedEntity, ProbabilisticEntity {
     private final String group;
     private final String nameCountryCode;
     private final double probability;
-
+    
     /**
      * Gets name country code.
      *

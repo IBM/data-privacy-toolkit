@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2017                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.util;
@@ -12,7 +12,7 @@ import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.sin;
 
 public class KDTree<T extends KDTree.CartesianPoint> {
-    private final KDTreeNode<T> root;
+    private KDTreeNode<T> root;
 
     private static final Comparator<CartesianPoint> X_COMPARATOR = Comparator.comparingDouble(o -> o.x);
 
@@ -116,7 +116,7 @@ public class KDTree<T extends KDTree.CartesianPoint> {
             return Collections.emptyList();
         }
 
-        TreeSet<KDTreeNode<T>> results = new TreeSet<>(new ComparatorAgainstFixedPoint<>(value));
+        TreeSet<KDTreeNode<T>> results = new TreeSet<>(new ComparatorAgainstFixedPoint(value));
 
         // Find the closest leaf node
         KDTreeNode<T> prev = null;
@@ -155,17 +155,16 @@ public class KDTree<T extends KDTree.CartesianPoint> {
             lastNode = results.last();
             lastDistance = lastNode.point.euclideanDistance(value);
         }
-        double nodeDistance = node.point.euclideanDistance(value);
-        if (nodeDistance< lastDistance) {
+        Double nodeDistance = node.point.euclideanDistance(value);
+        if (nodeDistance.compareTo(lastDistance) < 0) {
             if (results.size() == K && lastNode != null)
                 results.remove(lastNode);
             results.add(node);
-        } else if (nodeDistance == lastDistance) {
+        } else if (nodeDistance.equals(lastDistance)) {
             results.add(node);
         } else if (results.size() < K) {
             results.add(node);
         }
-
         lastNode = results.last();
         lastDistance = lastNode.point.euclideanDistance(value);
 
@@ -215,7 +214,7 @@ public class KDTree<T extends KDTree.CartesianPoint> {
         }
     }
 
-    private static class ComparatorAgainstFixedPoint<T extends KDTree.CartesianPoint> implements Comparator<KDTreeNode<T>> {
+    private  static class ComparatorAgainstFixedPoint<T extends KDTree.CartesianPoint> implements Comparator<KDTreeNode<T>> {
         private final CartesianPoint point;
 
         ComparatorAgainstFixedPoint(CartesianPoint point) {
@@ -224,11 +223,11 @@ public class KDTree<T extends KDTree.CartesianPoint> {
 
         @Override
         public int compare(KDTreeNode o1, KDTreeNode o2) {
-            double d1 = point.euclideanDistance(o1.point);
-            double d2 = point.euclideanDistance(o2.point);
-            if (d1 < d2)
+            Double d1 = point.euclideanDistance(o1.point);
+            Double d2 = point.euclideanDistance(o2.point);
+            if (d1.compareTo(d2) < 0)
                 return -1;
-            else if (d2 <d1)
+            else if (d2.compareTo(d1) < 0)
                 return 1;
             return o1.point.compareTo(o2.point);
         }

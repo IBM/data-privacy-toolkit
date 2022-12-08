@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.util;
@@ -15,19 +15,20 @@ public class HashUtilsTest {
 
     @Test
     public void testHashUtils() {
-        long l = HashUtils.longFromHash("000000");
+
+        Long l = HashUtils.longFromHash("000000", "SHA-1");
         assertNotNull(l);
 
-        long originalValue = l;
+        Long originalValue = l;
         for(int i = 0; i < 1000; i++) {
-            l = HashUtils.longFromHash("000000");
-            assertEquals(originalValue, l);
+            l = HashUtils.longFromHash("000000", "SHA-1");
+            assertEquals(originalValue.longValue(), l.longValue());
         }
     }
 
     @Test
     public void testNull() {
-        Long l = HashUtils.longFromHash(null);
+        Long l = HashUtils.longFromHash(null, "SHA-1");
         assertNotNull(l);
     }
 
@@ -39,7 +40,7 @@ public class HashUtilsTest {
         long start = System.currentTimeMillis();
 
         for(int i = 0; i < N; i++) {
-            var l = HashUtils.longFromHash("000000");
+            Long l = HashUtils.longFromHash("000000", "SHA-1");
         }
 
         System.out.println("N: " + N + ", time: " + (System.currentTimeMillis() - start));

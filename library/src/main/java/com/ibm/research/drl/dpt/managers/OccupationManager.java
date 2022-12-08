@@ -21,13 +21,9 @@ public class OccupationManager extends ResourceBasedManager<Occupation> {
 
     private static final OccupationManager OCCUPATION_MANAGER = new OccupationManager();
 
-    public static OccupationManager getInstance() {
-        return OCCUPATION_MANAGER;
-    }
+    public static OccupationManager getInstance() {return OCCUPATION_MANAGER;}
 
-    private OccupationManager() {
-        super();
-    }
+    private OccupationManager() {super();}
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -38,7 +34,7 @@ public class OccupationManager extends ResourceBasedManager<Occupation> {
     protected List<Tuple<String, Occupation>> parseResourceRecord(CSVRecord line, String countryCode) {
         String occupationName = line.get(0);
         List<String> categories = new ArrayList<>();
-        for (int i = 1; i < line.size(); i++) {
+        for(int i = 1; i < line.size(); i++) {
             String category = line.get(i);
             categories.add(category);
         }
@@ -46,7 +42,7 @@ public class OccupationManager extends ResourceBasedManager<Occupation> {
         Occupation occupation = new Occupation(occupationName, countryCode, categories);
         String key = occupationName.toUpperCase();
 
-        return List.of(new Tuple<>(key, occupation));
+        return Arrays.asList(new Tuple<>(key, occupation));
     }
 
     @Override

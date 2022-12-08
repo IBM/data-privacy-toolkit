@@ -1,5 +1,4 @@
 package com.ibm.research.drl.dpt.configuration;
-
 /*******************************************************************
  *                                                                 *
  * Copyright IBM Corp. 2022                                        *

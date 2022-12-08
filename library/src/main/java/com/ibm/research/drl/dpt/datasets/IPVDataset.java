@@ -1,19 +1,19 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2020                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2020                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.datasets;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
-import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
-import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
+import com.ibm.research.drl.schema.IPVSchema;
+import com.ibm.research.drl.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.schema.impl.SimpleSchema;
+import com.ibm.research.drl.schema.impl.SimpleSchemaField;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +29,7 @@ public class IPVDataset implements Iterable<List<String>> {
 
     protected final List<List<String>> values;
     protected IPVSchema schema;
-    private final boolean hasSchema;
+    private boolean hasSchema;
 
     public List<List<String>> getValues() {
         return this.values;
@@ -196,7 +196,7 @@ public class IPVDataset implements Iterable<List<String>> {
 
         final List<SimpleSchemaField> fields = new ArrayList<>();
 
-        for (String entry : header) {
+        for (String entry: header) {
             fields.add(new SimpleSchemaField(entry, IPVSchemaFieldType.STRING));
         }
 
@@ -243,7 +243,7 @@ public class IPVDataset implements Iterable<List<String>> {
             format = format.withHeader(schema.getFields().stream().map(IPVSchemaField::getName).toArray(String[]::new));
         }
 
-        try (CSVPrinter printer = new CSVPrinter(writer, format)) {
+        try (CSVPrinter printer = new CSVPrinter(writer, format);) {
             printer.printRecords(this);
         } catch (IOException e) {
             logger.error("Error creating writer", e);

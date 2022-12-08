@@ -1,8 +1,8 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2022                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2022                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.configuration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,9 +27,9 @@ public class IdentificationConfiguration {
     private final double defaultFrequencyThreshold;
     private final int defaultPriority;
     private final boolean considerEmptyForFrequency;
-
+    
     private final IdentificationStrategy identificationStrategy;
-
+    
     private final Map<String, Integer> priorities;
     private final Map<String, Double> frequencyThresholds;
 
@@ -47,10 +47,10 @@ public class IdentificationConfiguration {
         this.defaultPriority = defaultPriority;
         this.defaultFrequencyThreshold = defaultFrequencyThreshold;
         this.considerEmptyForFrequency = considerEmptyForFrequency;
-
+        
         this.identificationStrategy = identificationStrategy;
         this.priorities = priorities;
-        this.frequencyThresholds = frequencyThresholds;
+        this.frequencyThresholds =  frequencyThresholds;
     }
 
     public IdentificationStrategy getIdentificationStrategy() {

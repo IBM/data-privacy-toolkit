@@ -21,14 +21,8 @@ public class StreetTypeManager extends ResourceBasedManager<String> {
             LocalizationManager.getInstance().getResources(Resource.STREET_TYPES);
 
     private final static StreetTypeManager STREET_TYPE_MANAGER = new StreetTypeManager();
-
-    public static StreetTypeManager getInstance() {
-        return STREET_TYPE_MANAGER;
-    }
-
-    private StreetTypeManager() {
-        super();
-    }
+    public static StreetTypeManager getInstance() { return STREET_TYPE_MANAGER; }
+    private StreetTypeManager() {super();}
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -40,7 +34,7 @@ public class StreetTypeManager extends ResourceBasedManager<String> {
         String sname = line.get(0).trim();
         String key = sname.toUpperCase();
 
-        return List.of(new Tuple<>(key, sname));
+        return Arrays.asList(new Tuple<>(key, sname));
     }
 
     @Override

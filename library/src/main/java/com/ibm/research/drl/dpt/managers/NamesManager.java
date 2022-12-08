@@ -14,7 +14,7 @@ import com.ibm.research.drl.dpt.util.localization.Resource;
 import com.ibm.research.drl.dpt.util.localization.ResourceEntry;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -25,7 +25,7 @@ import java.util.List;
 public class NamesManager implements Serializable {
     private final static Logger log = LogManager.getLogger(NamesManager.class);
 
-    private final static class LastNameManager extends ResourceBasedManager<LastName> implements Serializable {
+    private final static class LastNameManager extends ResourceBasedManager<LastName> implements Serializable{
 
         @Override
         protected Collection<ResourceEntry> getResources() {
@@ -38,8 +38,8 @@ public class NamesManager implements Serializable {
             String key = name.toUpperCase();
 
             LastName lastName = new LastName(name, countryCode);
-
-            return List.of(new Tuple<>(key, lastName));
+            
+            return Arrays.asList(new Tuple<>(key, lastName));
         }
 
         @Override
@@ -48,7 +48,7 @@ public class NamesManager implements Serializable {
         }
     }
 
-    private final static class MaleNameManager extends ResourceBasedManager<FirstName> implements Serializable {
+    private final static class MaleNameManager extends ResourceBasedManager<FirstName> implements  Serializable {
 
         @Override
         protected Collection<ResourceEntry> getResources() {
@@ -61,8 +61,8 @@ public class NamesManager implements Serializable {
             String key = line.get(0).toUpperCase();
 
             FirstName firstName = new FirstName(name, countryCode, Gender.male);
-
-            return List.of(new Tuple<>(key, firstName));
+            
+            return Arrays.asList(new Tuple<>(key, firstName));
         }
 
         @Override
@@ -71,7 +71,7 @@ public class NamesManager implements Serializable {
         }
     }
 
-    private final static class FemaleNameManager extends ResourceBasedManager<FirstName> implements Serializable {
+    private final static class FemaleNameManager extends ResourceBasedManager<FirstName> implements Serializable{
 
         @Override
         protected Collection<ResourceEntry> getResources() {
@@ -85,9 +85,9 @@ public class NamesManager implements Serializable {
 
             FirstName firstName = new FirstName(name, countryCode, Gender.female);
 
-            return List.of(new Tuple<>(key, firstName));
+            return Arrays.asList(new Tuple<>(key, firstName));
         }
-
+        
         @Override
         public Collection<FirstName> getItemList() {
             return getValues();
@@ -185,7 +185,8 @@ public class NamesManager implements Serializable {
 
             if (coin) {
                 return maleNameManager.getRandomKey();
-            } else {
+            }
+            else {
                 return femaleNameManager.getRandomKey();
             }
         }
@@ -193,7 +194,8 @@ public class NamesManager implements Serializable {
         private String getRandomFirstName(Gender gender, String countryCode) {
             if (gender == Gender.male) {
                 return maleNameManager.getRandomKey(countryCode);
-            } else {
+            }
+            else {
                 return femaleNameManager.getRandomKey(countryCode);
             }
         }
@@ -201,9 +203,9 @@ public class NamesManager implements Serializable {
         /**
          * Gets first name.
          *
-         * @param gender         the gender
+         * @param gender      the gender
          * @param allowAnyGender the allow unisex
-         * @param countryCode    the country code
+         * @param countryCode the country code
          * @return the first name
          */
         public String getRandomFirstName(Gender gender, boolean allowAnyGender, String countryCode) {
@@ -216,8 +218,8 @@ public class NamesManager implements Serializable {
                 Gender newGender = getGender(name);
 
                 if (allowAnyGender ||
-                        newGender.equals(gender) ||
-                        newGender.equals(Gender.both)) {
+                    newGender.equals(gender) ||
+                    newGender.equals(Gender.both)) {
                     break;
                 }
             }

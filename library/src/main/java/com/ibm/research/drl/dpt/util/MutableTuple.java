@@ -1,8 +1,8 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2021                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2021                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.util;
 
 /**
@@ -55,11 +55,11 @@ public class MutableTuple<K, V> {
     public V getSecond() {
         return second;
     }
-
+    
     public void setFirst(K newValue) {
         this.first = newValue;
     }
-
+    
     public void setSecond(V newValue) {
         this.second = newValue;
     }

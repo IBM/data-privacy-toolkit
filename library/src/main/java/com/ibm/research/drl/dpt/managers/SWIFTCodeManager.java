@@ -22,14 +22,8 @@ public class SWIFTCodeManager extends ResourceBasedManager<SWIFTCode> {
     private final SecureRandom random = new SecureRandom();
 
     private final static SWIFTCodeManager SWIFT_CODE_MANAGER = new SWIFTCodeManager();
-
-    public static SWIFTCodeManager getInstance() {
-        return SWIFT_CODE_MANAGER;
-    }
-
-    private SWIFTCodeManager() {
-        super();
-    }
+    public static SWIFTCodeManager getInstance() { return SWIFT_CODE_MANAGER; }
+    private SWIFTCodeManager() {super();}
 
     @Override
     public void init() {
@@ -74,7 +68,7 @@ public class SWIFTCodeManager extends ResourceBasedManager<SWIFTCode> {
         SWIFTCode swiftCode = new SWIFTCode(code, country);
 
         String ccKey = countryCode.toUpperCase();
-        if (!codeByCountryMap.containsKey(ccKey)) {
+        if(!codeByCountryMap.containsKey(ccKey)) {
             codeByCountryMap.put(ccKey, new ArrayList<SWIFTCode>());
         }
 

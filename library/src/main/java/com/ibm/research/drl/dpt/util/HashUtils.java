@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.util;
@@ -12,10 +12,10 @@ import java.security.NoSuchAlgorithmException;
 public class HashUtils {
 
     public static Long longFromHash(String value) {
-        return longFromHash(value, "SHA-512");
+        return longFromHash(value, "SHA-1");
     }
 
-    private static Long longFromHash(String value, String algorithm) {
+    public static Long longFromHash(String value, String algorithm) {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
 

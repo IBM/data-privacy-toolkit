@@ -11,12 +11,12 @@ import java.util.Arrays;
 
 public class Country implements Location, LocalizedEntity {
 
-    private final String name;
-    private final String nameCountryCode;
-    private final String iso2code;
-    private final String iso3code;
-    private final String continent;
-    private final LatitudeLongitude latitudeLongitude;
+    private String name;
+    private String nameCountryCode;
+    private String iso2code;
+    private String iso3code;
+    private String continent;
+    private LatitudeLongitude latitudeLongitude;
     private Country[] neighbors;
 
     /**

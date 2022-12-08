@@ -27,11 +27,11 @@ public class PostalCodeManager implements Manager {
     private static final Collection<ResourceEntry> resourceList =
             LocalizationManager.getInstance().getResources(Resource.POSTAL_CODES);
     private final static int maxNeighborsLimit = 200;
-    private static final PostalCodeManager instance = new PostalCodeManager();
+    private static PostalCodeManager instance = new PostalCodeManager();
     private final MapWithRandomPick<String, PostalCode> postalCodeMap;
     private final SecureRandom random;
     private final Map<String, List<PostalCode>> neighborsMap;
-    private final List<PostalCode> postalCodeList;
+    private List<PostalCode> postalCodeList;
     private LatLonKDTree<PostalCode> latLonTree = null;
 
     private PostalCodeManager() {
@@ -44,7 +44,7 @@ public class PostalCodeManager implements Manager {
 
         try {
             this.latLonTree = new LatLonKDTree<PostalCode>(postalCodeList);
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
 
@@ -77,7 +77,7 @@ public class PostalCodeManager implements Manager {
     private Map<? extends String, ? extends PostalCode> readPostalCodeCodeList(Collection<ResourceEntry> entries) {
         Map<String, PostalCode> postals = new HashMap<>();
 
-        for (ResourceEntry entry : entries) {
+        for(ResourceEntry entry: entries) {
             InputStream inputStream = entry.createStream();
             String locale = entry.getCountryCode();
 
@@ -103,7 +103,7 @@ public class PostalCodeManager implements Manager {
 
     public String getPseudorandom(String identifier) {
         int position = (int) (Math.abs(HashUtils.longFromHash(identifier)) % this.postalCodeList.size());
-        return this.postalCodeList.get(position).getName();
+        return ((PostalCode)this.postalCodeList.get(position)).getName();
     }
 
     /**
@@ -125,7 +125,7 @@ public class PostalCodeManager implements Manager {
         LatitudeLongitude latlon = lookup.getLocation();
         double[] latlonKey = new double[]{latlon.getLatitude(), latlon.getLongitude(), 0};
 
-        return this.latLonTree.findNearestK(latlonKey, k);
+        return (ArrayList) this.latLonTree.findNearestK(latlonKey, k);
     }
 
     /**
@@ -147,7 +147,7 @@ public class PostalCodeManager implements Manager {
             k = maxNeighborsLimit;
         }
 
-        return neighbors.get(random.nextInt(k)).getName();
+        return ((PostalCode) neighbors.get(random.nextInt(k))).getName();
     }
 
     public String getRandomKey() {

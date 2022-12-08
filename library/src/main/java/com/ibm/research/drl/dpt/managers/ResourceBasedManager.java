@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.managers;
@@ -56,10 +56,10 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
             probMap.put(countryCode, new ArrayList<>());
             localMap = perLocaleMap.get(countryCode);
         }
-
+        
         localMap.put(key, value);
         listMap.get(countryCode).add(key);
-
+        
         if (value instanceof ProbabilisticEntity) {
             double probability = ((ProbabilisticEntity) value).getProbability();
             probMap.get(countryCode).add(new Pair<>(key, probability));
@@ -74,41 +74,41 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
     protected abstract Collection<ResourceEntry> getResources();
 
     protected abstract List<Tuple<String, K>> parseResourceRecord(CSVRecord record, String countryCode);
-
-
+   
+    
     protected boolean appliesToAllCountriesOnly() {
         return false;
     }
-
+    
     protected Map<String, Map<String, K>> readResources(Collection<ResourceEntry> entries) {
         Map<String, Map<String, K>> resources = new HashMap<>();
 
         this.minimumLength = Integer.MAX_VALUE;
         this.maximumLength = Integer.MIN_VALUE;
 
-        for (ResourceEntry entry : entries) {
+        for(ResourceEntry entry: entries) {
             try (InputStream inputStream = entry.createStream();
-                 CSVParser reader = Readers.createCSVReaderFromStream(inputStream)) {
+                CSVParser reader = Readers.createCSVReaderFromStream(inputStream)) {
                 String countryCode = entry.getCountryCode();
-
+                
                 for (CSVRecord line : reader) {
                     List<Tuple<String, K>> keyValuePairs = parseResourceRecord(line, countryCode);
 
-                    for (Tuple<String, K> keyValue : keyValuePairs) {
+                    for(Tuple<String, K> keyValue: keyValuePairs) {
                         String key = keyValue.getFirst();
                         K value = keyValue.getSecond();
 
                         if (!appliesToAllCountriesOnly()) {
                             addToMapByLocale(resources, countryCode, key, value);
                         }
-
+                        
                         addToMapByLocale(resources, getAllCountriesName(), key, value);
 
                         this.minimumLength = Math.min(minimumLength, key.length());
                         this.maximumLength = Math.max(maximumLength, key.length());
                     }
                 }
-
+                
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
@@ -116,18 +116,16 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
 
         return resources;
     }
-
+    
     /**
      * Init.
      */
-    protected void init() {
-    }
+    protected void init() {}
 
     /**
      * Post init.
      */
-    protected void postInit() {
-    }
+    protected void postInit() {}
 
     /**
      * Instantiates a new Resource based manager.
@@ -139,20 +137,20 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         this.listMap = new HashMap<>();
         this.probMap = new HashMap<>();
         this.probDistMap = new HashMap<>();
-
+        
         Map<String, Map<String, K>> contents = readResources(getResources());
 
-        for (final Map.Entry<String, Map<String, K>> entry : contents.entrySet()) {
+        for(final Map.Entry<String, Map<String, K>> entry: contents.entrySet()) {
             final String key = entry.getKey();
             final Map<String, K> value = entry.getValue();
             MapWithRandomPick<String, K> mapWithRandomPick = new MapWithRandomPick<>(value);
             this.resourceMap.put(key, mapWithRandomPick);
             this.resourceMap.get(key).setKeyList();
         }
-
-        for (String key : this.probMap.keySet()) {
+        
+        for(String key: this.probMap.keySet()) {
             List<Pair<String, Double>> pmf = probMap.get(key);
-
+            
             if (!pmf.isEmpty()) {
                 this.probDistMap.put(key, new EnumeratedDistribution<>(probMap.get(key)));
             }
@@ -199,13 +197,13 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
     }
 
     private String getPseudorandomElement(List<String> keys, String key) {
-        long hash = Math.abs(HashUtils.longFromHash(key));
+        Long hash = Math.abs(HashUtils.longFromHash(key, "SHA-1"));
 
         if (keys == null || keys.size() == 0) {
-            return Long.toString(hash);
+            return hash.toString();
         }
 
-        int position = (int) (hash % keys.size());
+        int position = (int)(hash % keys.size());
         return keys.get(position);
     }
 
@@ -217,7 +215,7 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
             return getPseudorandomElement(getKeys(), key);
         } else {
             if (value instanceof LocalizedEntity) {
-                String countryCode = ((LocalizedEntity) value).getNameCountryCode();
+                String countryCode = ((LocalizedEntity)value).getNameCountryCode();
                 return getPseudorandomElement(getKeys(countryCode), key);
             }
 
@@ -288,7 +286,7 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
 
         return null;
     }
-
+    
     public String getRandomProbabilityBased() {
         return getRandomProbabilityBased(allCountriesName);
     }
@@ -298,7 +296,7 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         if (distribution == null) {
             return getRandomKey(countryCode);
         }
-
+        
         return distribution.sample();
     }
 

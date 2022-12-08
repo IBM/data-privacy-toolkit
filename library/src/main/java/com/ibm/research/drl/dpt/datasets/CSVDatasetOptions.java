@@ -1,9 +1,9 @@
+package com.ibm.research.drl.dpt.datasets;
 /*******************************************************************
  *                                                                 *
  * Copyright IBM Corp. 2020                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.dpt.datasets;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

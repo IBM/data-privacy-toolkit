@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 
-public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Serializable {
+public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Serializable{
 
     private Map<String, Map<String, ZIPCode>> zipCodeMapThreeDigits;
     private final int prefixDigits;
@@ -60,7 +60,7 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
     private void buildPrefixMap(Collection<ResourceEntry> entries) {
         Map<String, Map<String, ZIPCode>> codes = new HashMap<>();
 
-        for (ResourceEntry entry : entries) {
+        for(ResourceEntry entry: entries) {
             InputStream inputStream = entry.createStream();
             String countryCode = entry.getCountryCode();
 
@@ -81,7 +81,7 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
             }
         }
     }
-
+    
     @Override
     protected List<Tuple<String, ZIPCode>> parseResourceRecord(CSVRecord line, String countryCode) {
         String code = line.get(0);
@@ -91,8 +91,8 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
         ZIPCode zipCode = new ZIPCode(code, population);
 
         String key = code.toUpperCase();
-
-        return List.of(new Tuple<>(key, zipCode));
+        
+        return Arrays.asList(new Tuple<>(key, zipCode));
     }
 
 

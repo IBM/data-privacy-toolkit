@@ -18,14 +18,8 @@ import java.util.List;
 
 public class ReligionManager extends ResourceBasedManager<Religion> {
     private final static ReligionManager RELIGION_MANAGER = new ReligionManager();
-
-    public static ReligionManager getInstance() {
-        return RELIGION_MANAGER;
-    }
-
-    private ReligionManager() {
-        super();
-    }
+    public static ReligionManager getInstance() { return RELIGION_MANAGER; }
+    private ReligionManager() {super();}
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -42,7 +36,7 @@ public class ReligionManager extends ResourceBasedManager<Religion> {
 
         Religion religion = new Religion(name, group, countryCode, probability);
 
-        return List.of(new Tuple<>(key, religion));
+        return Arrays.asList(new Tuple<>(key, religion));
     }
 
     @Override

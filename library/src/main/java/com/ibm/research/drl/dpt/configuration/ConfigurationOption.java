@@ -1,20 +1,22 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2015                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2015                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.configuration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class ConfigurationOption implements Serializable {
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     private String description;
     private String category;
     private Object value;
@@ -95,8 +97,8 @@ public class ConfigurationOption implements Serializable {
 
         if (Objects.isNull(value) || value instanceof Serializable) {
             out.writeObject(value);
-        } else if (value instanceof JsonNode) {
-            out.writeObject(value.toString().getBytes());
+        } else if ( value instanceof JsonNode ) {
+            out.writeObject( value.toString().getBytes());
         } else {
             throw new RuntimeException("Not serializable: " + value.getClass().getCanonicalName());
         }
@@ -109,7 +111,7 @@ public class ConfigurationOption implements Serializable {
         Object value = in.readObject();
 
         if (value instanceof byte[]) {
-            this.value = JsonUtils.MAPPER.readTree((byte[]) value);
+            this.value = mapper.readTree((byte[]) value);
         } else {
             this.value = value;
         }

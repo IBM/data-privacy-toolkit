@@ -1,14 +1,15 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2015                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2015                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.schema;
 
 import java.util.BitSet;
 
 /**
  * The type Item set.
+ *
  */
 public class ItemSet extends BitSet implements Comparable<ItemSet> {
     /**

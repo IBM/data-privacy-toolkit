@@ -10,11 +10,12 @@ import java.security.SecureRandom;
 import java.util.*;
 
 /**
+ *
  * @param <K> the type parameter
  * @param <V> the type parameter
  */
-public class MapWithRandomPick<K, V> implements Serializable {
-    private final Map<K, V> map;
+public class MapWithRandomPick<K,V> implements Serializable {
+    private final Map<K,V> map;
     private final List<K> keyList = new ArrayList<K>();
     private final SecureRandom random;
 
@@ -23,7 +24,7 @@ public class MapWithRandomPick<K, V> implements Serializable {
      *
      * @param map the map
      */
-    public MapWithRandomPick(Map<K, V> map) {
+    public MapWithRandomPick(Map<K,V> map) {
         this.map = map;
         this.random = new SecureRandom();
     }
@@ -35,7 +36,7 @@ public class MapWithRandomPick<K, V> implements Serializable {
         Iterator<K> iterator = map.keySet().iterator();
 
         keyList.clear();
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()) {
             K item = iterator.next();
             keyList.add(item);
         }

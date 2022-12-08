@@ -6,7 +6,7 @@
 package com.ibm.research.drl.dpt.util.localization;
 
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,7 +40,7 @@ public class ResourceEntry {
     public InputStream createStream() {
         //logger.debug("Creating stream for {} {}", filename, countryCode);
 
-        switch (resourceEntryType) {
+        switch(resourceEntryType) {
             case INTERNAL_RESOURCE:
                 //logger.debug("Returning internal resource");
                 return this.getClass().getResourceAsStream(filename);
@@ -48,8 +48,8 @@ public class ResourceEntry {
 //                logger.debug("External resource");
                 try {
                     return new FileInputStream(filename);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                } catch(FileNotFoundException e) {
+                   e.printStackTrace();
                 }
             default:
                 throw new RuntimeException("Unknown resource entry type " + resourceEntryType);
