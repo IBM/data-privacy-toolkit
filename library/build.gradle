@@ -1,25 +1,31 @@
+/*******************************************************************
+ *                                                                 *
+ * Copyright IBM Corp. 2022                                        *
+ *                                                                 *
+ *******************************************************************/
+
 apply plugin: 'java-library'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 ext {
-    junit_jupiter_version = '5.6.2'
-    junit_platform_launcher_version = '1.6.2'
+    junit_jupiter_version = '5.9.0'
+    junit_platform_launcher_version = '1.9.0'
 
-    mockito_version = '3.3.3'
+    mockito_version = '4.8.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
-    jackson_version = '2.13.3'
-    jackson_dataformat_version = '2.13.3'
+    jackson_version = '2.14.0'
+    jackson_dataformat_version = '2.14.0'
 
-    log4j2_version = '2.17.1'
+    log4j2_version = '2.19.0'
 
     commons_codec_version = '1.13'
-    commons_csv_version = '1.8'
-    commons_io_version = '2.7'
-    commons_lang_version = '3.10'
+    commons_csv_version = '1.9.0'
+    commons_io_version = '2.11.0'
+    commons_lang_version = '3.12.0'
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
@@ -29,15 +35,27 @@ ext {
 
     artifactory_user = project.findProperty("ARTIFACTORY_USERNAME") ?: System.getenv("ARTIFACTORY_USERNAME")
     artifactory_password = project.findProperty("ARTIFACTORY_PASSWORD") ?: System.getenv("ARTIFACTORY_PASSWORD")
+//    artifactory_url = project.findProperty("ARTIFACTORY_URL") ?: System.getenv("ARTIFACTORY_URL")
 }
 
 dependencies {
-    implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
-    testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
+    api "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    api "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    api "org.apache.commons:commons-lang3:${commons_lang_version}"
+    api "org.apache.commons:commons-csv:${commons_csv_version}"
+    api "org.apache.commons:commons-math3:${commons_math_version}"
 
+    implementation "commons-io:commons-io:${commons_io_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
+
+    testImplementation 'org.postgresql:postgresql:42.5.1'
+    testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
-
     testImplementation "org.mockito:mockito-core:${mockito_version}"
     testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
 
@@ -68,56 +86,31 @@ test {
     }
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from(components.java)
-            repositories {
-                maven {
-                    credentials {
-                        username = artifactory_user
-                        password = artifactory_password
-                    }
-                    url = uri('https://eu.artifactory.swg-devops.com/artifactory/res-drl-maven-local')
-                }
-            }
-        }
-    }
-}
-
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from(components.java)
+//            repositories {
+//                maven {
+//                    credentials {
+//                        username = artifactory_user
+//                        password = artifactory_password
+//                    }
+//                    url = uri(artifactory_url)
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 group = 'com.ibm.research.drl.dpt'
-version = '6.0.0-SNAPSHOT'
+version = '6.0.1'
 
 repositories {
     mavenCentral()
 
     maven {
         url = uri('https://www.dcm4che.org/maven2')
-    }
-
-    maven {
-        credentials {
-            username = artifactory_user
-            password = artifactory_password
-        }
-        url = uri('https://eu.artifactory.swg-devops.com/artifactory/res-drl-maven-local')
-    }
-
-    maven {
-        credentials {
-            username = artifactory_user
-            password = artifactory_password
-        }
-        url = uri('https://na.artifactory.swg-devops.com/artifactory/wcp-systemt-maven-local')
-    }
-
-    maven {
-        credentials {
-            username = artifactory_user
-            password = artifactory_password
-        }
-        url = uri('https://na.artifactory.swg-devops.com/artifactory/wcp-nlp-maven-local')
     }
 }
