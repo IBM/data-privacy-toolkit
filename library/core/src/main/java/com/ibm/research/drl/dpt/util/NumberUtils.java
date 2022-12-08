@@ -1,12 +1,9 @@
-package com.ibm.research.drl.prima.util;/*******************************************************************
- * IBM Confidential                                                *
+/*******************************************************************
  *                                                                 *
  * Copyright IBM Corp. 2018                                        *
  *                                                                 *
- * The source code for this program is not published or otherwise  *
- * divested of its trade secrets, irrespective of what has         *
- * been deposited with the U.S. Copyright Office.                  *
  *******************************************************************/
+package com.ibm.research.drl.dpt.util;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -150,12 +147,8 @@ public class NumberUtils {
                 tradMillions = "";
                 break;
             case 1 :
-                tradMillions = convertLessThanOneThousand(millions)
-                        + " million ";
-                break;
             default :
-                tradMillions = convertLessThanOneThousand(millions)
-                        + " million ";
+                tradMillions = convertLessThanOneThousand(millions) + " million ";
         }
         result =  result + tradMillions;
 

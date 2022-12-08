@@ -42,7 +42,6 @@ public final class JSONPathExtractor {
         return update(mapper.readTree(objString), JSONPath.compile(pattern), new IntNode(value));
     }
 
-    /* TODO: move this eventually */
     private static ValueNode createNodeValue(JsonNode node) {
         JsonNodeType type = node.getNodeType();
         switch(type) {

@@ -41,7 +41,7 @@ public class ItemSetTest {
     }
 
     @Test
-    public void testConstructor() throws Exception {
+    public void testConstructor() {
         ItemSet is = new ItemSet(3);
 
         is.set(1);

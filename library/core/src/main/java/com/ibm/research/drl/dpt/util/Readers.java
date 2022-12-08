@@ -1,18 +1,15 @@
 /*******************************************************************
-* IBM Confidential                                                *
 *                                                                 *
 * Copyright IBM Corp. 2021                                        *
 *                                                                 *
-* The source code for this program is not published or otherwise  *
-* divested of its trade secrets, irrespective of what has         *
-* been deposited with the U.S. Copyright Office.                  *
 *******************************************************************/
-package com.ibm.research.drl.prima.util;
+package com.ibm.research.drl.dpt.util;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Readers {
     private final static Readers instance = new Readers();
@@ -61,6 +58,6 @@ public class Readers {
      * @return the csv reader
      */
     public static CSVParser createCSVReaderFromStream(InputStream stream, char separator, char quoteChar) throws IOException {
-        return createGenericReader(new InputStreamReader(stream, "UTF-8"), separator, quoteChar);
+        return createGenericReader(new InputStreamReader(stream, StandardCharsets.UTF_8), separator, quoteChar);
     }
 }
