@@ -1,0 +1,10 @@
+{
+  "defaultPriority" : 50,
+  "defaultFrequencyThreshold": 20,
+  "considerEmptyForFrequency": false,
+  "identificationStrategy": "FREQUENCY_BASED",
+  "priorities" : {
+    "EMAIL": 90
+  },
+  "frequencyThresholds": {}
+}
