@@ -3,7 +3,6 @@
  * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
-
 package com.ibm.research.drl.dpt.models.fhir;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
