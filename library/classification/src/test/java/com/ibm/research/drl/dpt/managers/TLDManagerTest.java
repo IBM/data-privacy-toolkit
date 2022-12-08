@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.managers;
@@ -16,9 +16,9 @@ public class TLDManagerTest {
     public void testTLD() {
         TLDManager tldManager = TLDManager.instance();
         String domain = "www.nba.com";
-        assertTrue(tldManager.getTLD(domain).equals("com"));
+        assertEquals("com", tldManager.getTLD(domain));
         domain = "www.nba.co.uk";
-        assertTrue(tldManager.getTLD(domain).equals("co.uk"));
+        assertEquals("co.uk", tldManager.getTLD(domain));
 
         domain = "www.nba.COM";
         assertEquals("COM", tldManager.getTLD(domain));
@@ -40,6 +40,6 @@ public class TLDManagerTest {
         }
 
         long diff = System.currentTimeMillis() - startMillis;
-        System.out.println(String.format("%d operations took %d milliseconds (%f msec per op)", N, diff, (double) diff / N));
+        System.out.printf("%d operations took %d milliseconds (%f msec per op)%n", N, diff, (double) diff / N);
     }
 }
