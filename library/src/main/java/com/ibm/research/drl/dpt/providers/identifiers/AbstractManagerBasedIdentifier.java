@@ -21,11 +21,11 @@ public abstract class AbstractManagerBasedIdentifier extends AbstractIdentifier 
         if (this.getMinimumLength() > 0 && identifier.length() < this.getMinimumLength()) {
             return false;
         }
-
+        
         if (this.getMaximumLength() > 0 && identifier.length() > this.getMaximumLength()) {
             return false;
         }
-
+        
         return getManager().isValidKey(identifier);
     }
 

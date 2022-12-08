@@ -20,14 +20,8 @@ import java.util.List;
 public class AnimalSpeciesManager extends ResourceBasedManager<AnimalSpecies> {
     private static final long serialVersionUID = -910793653650184147L;
     private final static AnimalSpeciesManager ANIMAL_SPECIES_MANAGER = new AnimalSpeciesManager();
-
-    public static AnimalSpeciesManager getInstance() {
-        return ANIMAL_SPECIES_MANAGER;
-    }
-
-    private AnimalSpeciesManager() {
-        super();
-    }
+    public static AnimalSpeciesManager getInstance() { return ANIMAL_SPECIES_MANAGER; }
+    private AnimalSpeciesManager() {super();}
 
     private List<AnimalSpecies> statusList;
 
@@ -55,7 +49,7 @@ public class AnimalSpeciesManager extends ResourceBasedManager<AnimalSpecies> {
 
         statusList.add(animalSpecies);
 
-        return List.of(new Tuple<>(key, animalSpecies));
+        return Arrays.asList(new Tuple<>(key, animalSpecies));
     }
 
 }

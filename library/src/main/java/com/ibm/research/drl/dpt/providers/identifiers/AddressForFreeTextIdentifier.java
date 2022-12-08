@@ -113,7 +113,7 @@ public class AddressForFreeTextIdentifier extends AbstractIdentifier {
             "CRSSNG|" +
             "CRST|" +
             "CSWY|" +
-            "CT\\.|" +
+           "CT\\.|" +
             "CTR|" +
             "CTRS|" +
             "CTS|" +
@@ -580,12 +580,12 @@ public class AddressForFreeTextIdentifier extends AbstractIdentifier {
 
     private final static String DELIVERY_ADDRESS_LINE =
             "\\d+(?:-\\d+)?" + // primary address number
-                    "(?:\\s+" + DIRECTIONAL + ")?" + // pre directional
-                    "(?:\\s+\\p{Alpha}{3,}){1,4}(?:\\s+\\d+)?" + // street name
-                    "\\s+" + SUFFIX + // suffix
-                    "(?: " + DIRECTIONAL + ")?" + // post directional
-                    "(?:\\s+" + SECONDARY_ADDRESS + ")?"  // secondary address identifier
-            ;
+            "(?:\\s+" + DIRECTIONAL + ")?" + // pre directional
+            "(?:\\s+\\p{Alpha}{3,}){1,4}(?:\\s+\\d+)?" + // street name
+            "\\s+" + SUFFIX + // suffix
+            "(?: " + DIRECTIONAL + ")?" + // post directional
+            "(?:\\s+" + SECONDARY_ADDRESS +  ")?"  // secondary address identifier
+    ;
 
     private static final String STATE_AND_POSSESSIONS = "(?:" +
             "AK|" +
@@ -658,23 +658,23 @@ public class AddressForFreeTextIdentifier extends AbstractIdentifier {
 
     private static final List<Pattern> patterns = Arrays.asList(
             Pattern.compile(
-                    DELIVERY_ADDRESS_LINE, Pattern.CASE_INSENSITIVE
+                DELIVERY_ADDRESS_LINE, Pattern.CASE_INSENSITIVE
             ),
             Pattern.compile(
                     DELIVERY_ADDRESS_LINE + SEPARATOR + CITY_NAME + SEPARATOR + STATE_AND_POSSESSIONS
                     //, Pattern.CASE_INSENSITIVE
             )
-            , Pattern.compile(
+           , Pattern.compile(
                     DELIVERY_ADDRESS_LINE + SEPARATOR + CITY_NAME + SEPARATOR + STATE_AND_POSSESSIONS + SEPARATOR + ZIP_CODE,
                     Pattern.CASE_INSENSITIVE
             )
-            , Pattern.compile(
+           , Pattern.compile(
                     DELIVERY_ADDRESS_LINE + SEPARATOR + CITY_NAME + SEPARATOR + STATE_AND_POSSESSIONS + SEPARATOR + ZIP_CODE + SEPARATOR + COUNTRY,
                     Pattern.CASE_INSENSITIVE
             )
-            , Pattern.compile(
+           , Pattern.compile(
                     SECONDARY_ADDRESS + SEPARATOR + DELIVERY_ADDRESS_LINE + SEPARATOR + CITY_NAME + SEPARATOR + STATE_AND_POSSESSIONS + SEPARATOR + ZIP_CODE
-                    , Pattern.CASE_INSENSITIVE
+                    ,Pattern.CASE_INSENSITIVE
             )
             , Pattern.compile(
                     CITY_NAME + SEPARATOR + STATE_AND_POSSESSIONS + SEPARATOR + ZIP_CODE
@@ -693,7 +693,7 @@ public class AddressForFreeTextIdentifier extends AbstractIdentifier {
                             "(?:\\s+\\p{Alpha}{3,}){1,4}(?:\\s+\\d+)?" + // street name
                             "\\s+" + SUFFIX + // suffix
                             "(?: " + DIRECTIONAL + ")?" + // post directional
-                            "(?:\\s+" + SECONDARY_ADDRESS + ")?" +
+                            "(?:\\s+" + SECONDARY_ADDRESS +  ")?" +
                             "(?:" + SEPARATOR + "(?:\\s+\\p{Alpha}{3,}){1,4})?",
                     Pattern.CASE_INSENSITIVE
             )
@@ -711,26 +711,26 @@ public class AddressForFreeTextIdentifier extends AbstractIdentifier {
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     @Override
     public boolean isOfThisType(String data) {
         if (data.length() < 5 || data.length() >= 128 || !quickCheck(data)) {
             return false;
         }
-
+       
         if (!checkThatCaseIsConsistent(data)) {
             return false;
         }
-
-        for (Pattern pattern : patterns) {
+       
+        for(Pattern pattern: patterns) {
             if (pattern.matcher(data).matches()) {
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -739,23 +739,24 @@ public class AddressForFreeTextIdentifier extends AbstractIdentifier {
 
         int countUppercase = 0;
         int countLowercase = 0;
-
-        for (String token : tokens) {
+        
+        for(String token: tokens) {
             if (token.isEmpty()) {
                 continue;
             }
-
+            
             char c = token.charAt(0);
             if (Character.isLetter(c)) {
                 if (Character.isLowerCase(c)) {
                     countLowercase++;
-                } else {
+                }
+                else {
                     countUppercase++;
                 }
             }
         }
-
-        return (!(countLowercase > 0 && countUppercase > 0));
+        
+        return (! (countLowercase > 0 && countUppercase > 0));
     }
 
     @Override

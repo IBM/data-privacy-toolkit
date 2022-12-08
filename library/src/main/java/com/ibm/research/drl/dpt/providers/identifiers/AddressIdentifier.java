@@ -16,26 +16,28 @@ import java.util.regex.Pattern;
 
 /**
  * The type Address identifier.
+ *
  */
 public class AddressIdentifier extends AbstractIdentifier {
     private static final Pattern[] poBoxPatterns = {
-            Pattern.compile("(PO|P.O.) BOX (?<poboxnumber>\\d+)")
+            Pattern.compile("(PO|P.O.) BOX (?<poboxnumber>\\d+){1,1}")
     };
     private final static String[] appropriateNames = {"Address"};
     /**
      * The Road type pattern.
      */
     private final static Pattern roadTypePattern = Pattern.compile(
-            "\\b(?<roadtype>ST|ST.|STREET|DR|DR.|DRIVE|BOULEVARD|BLVD|BLVD.|COURT|CT|CT.|ROUTE|ROAD|RD.|RD|AVE|AVENUE|AVE.|LANE|LN.)\\b");
+            "\\b(?<roadtype>ST|ST.|STREET|DR|DR.|DRIVE|BOULEVARD|BLVD|BLVD.|COURT|CT|CT.|" +
+                    "ROUTE|ROAD|RD.|RD|AVE|AVENUE|AVE.|LANE|LN.)\\b");
 
     /**
      * The First part pattern.
      */
-    private final static Pattern firstPartPattern = Pattern.compile("^(?<number>\\d+)?\\s*(?<street>(([\\w|]+)\\s*)+)");
+    private final static Pattern firstPartPattern = Pattern.compile("^(?<number>\\d+){0,1}\\s*(?<street>(([\\w|\\d]+)\\s*)+)");
     /**
      * The Second part pattern.
      */
-    private final static Pattern secondPartPattern = Pattern.compile(",\\s+(?<cityorstate>(([a-zA-Z.’]+)\\s+)+)(?<postal>([A-Z]*\\d+[A-Z]*\\s*)+)?(,\\s+(?<country>(\\w+\\s*)+))?");
+    private final static Pattern secondPartPattern = Pattern.compile(",\\s+(?<cityorstate>(([a-zA-Z.’]+)[\\s]+)+)(?<postal>([A-Z]*\\d+[A-Z]*\\s*)+){0,1}(,\\s+(?<country>(\\w+\\s*)+)){0,1}");
 
     /**
      * Remove diacritical marks string.
@@ -91,7 +93,7 @@ public class AddressIdentifier extends AbstractIdentifier {
         int roadtypeMatchEnd = -1;
         String roadType = null;
 
-        while (roadtypeMatch.find()) {
+        while(roadtypeMatch.find()) {
             roadtypeMatchOffset = roadtypeMatch.start();
             roadtypeMatchEnd = roadtypeMatch.end();
             roadType = roadtypeMatch.group("roadtype").trim();
@@ -163,7 +165,7 @@ public class AddressIdentifier extends AbstractIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.NONE;
