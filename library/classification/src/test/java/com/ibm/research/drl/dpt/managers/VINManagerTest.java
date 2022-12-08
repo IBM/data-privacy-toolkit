@@ -7,13 +7,12 @@ package com.ibm.research.drl.dpt.managers;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VINManagerTest {
 
     @Test
-    public void testLookupSuccessful() throws Exception {
+    public void testLookupSuccessful() {
         VINManager vinManager = new VINManager();
         String wmi = "1C3";
         assertTrue(vinManager.isValidWMI(wmi));
@@ -24,7 +23,7 @@ public class VINManagerTest {
     }
 
     @Test
-    public void testRandomWMIGenerator() throws Exception {
+    public void testRandomWMIGenerator() {
         VINManager vinManager = new VINManager();
         //test random WMI
 
@@ -35,7 +34,7 @@ public class VINManagerTest {
         String exceptionWMI = "1C3";
         for(int i = 0; i < 1000; i++) {
             String randomWmi = vinManager.getRandomWMI(exceptionWMI);
-            assertFalse(randomWmi.equals(exceptionWMI));
+            assertNotEquals(randomWmi, exceptionWMI);
         }
     }
 }
