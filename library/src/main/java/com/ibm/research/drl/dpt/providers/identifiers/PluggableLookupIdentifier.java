@@ -52,10 +52,11 @@ public class PluggableLookupIdentifier extends AbstractIdentifier {
         this.isPOSIndependent = isPOSIndependent;
 
         this.valueSet = new HashSet<>();
-        for (String p : values) {
+        for(String p: values) {
             if (ignoreCase) {
                 this.valueSet.add(p.toUpperCase());
-            } else {
+            }
+            else {
                 this.valueSet.add(p);
             }
         }
@@ -75,7 +76,8 @@ public class PluggableLookupIdentifier extends AbstractIdentifier {
     public boolean isOfThisType(String data) {
         if (ignoreCase) {
             return this.valueSet.contains(data.toUpperCase());
-        } else {
+        }
+        else {
             return this.valueSet.contains(data);
         }
     }

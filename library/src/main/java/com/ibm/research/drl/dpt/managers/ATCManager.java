@@ -19,15 +19,11 @@ import java.util.List;
 
 public class ATCManager extends ResourceBasedManager<ATC> {
     private final static ATCManager ATC_MANAGER = new ATCManager();
-
-    public static ATCManager getInstance() {
-        return ATC_MANAGER;
-    }
-
-    private ATCManager() {
-        super();
-    }
-
+    
+    public static ATCManager getInstance() {return  ATC_MANAGER;}
+    
+    private ATCManager() {super();}
+    
     private List<ATC> codeList;
 
     @Override
@@ -42,17 +38,17 @@ public class ATCManager extends ResourceBasedManager<ATC> {
 
     @Override
     protected boolean appliesToAllCountriesOnly() {
-        return true;
+        return true; 
     }
 
     @Override
     protected List<Tuple<String, ATC>> parseResourceRecord(CSVRecord record, String countryCode) {
         String code = record.get(0).strip().toUpperCase();
         ATC atc = new ATC(code);
-
+        
         codeList.add(atc);
-
-        return List.of(new Tuple<>(code, atc));
+        
+        return Arrays.asList(new Tuple<>(code, atc));
     }
 
     @Override

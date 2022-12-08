@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * The type Email identifier.
+ *
  */
 public class EmailIdentifier extends AbstractRegexBasedIdentifier {
     private static final Collection<Pattern> emailPatterns = new ArrayList<>(List.of(
@@ -22,8 +23,8 @@ public class EmailIdentifier extends AbstractRegexBasedIdentifier {
     ));
 
     private static final String[] appropriateNames = {"E-mail", "Email"};
-
-
+    
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.AT;
@@ -43,7 +44,7 @@ public class EmailIdentifier extends AbstractRegexBasedIdentifier {
     protected boolean quickCheck(String value) {
         return value.indexOf('@') != -1;
     }
-
+    
     @Override
     public ProviderType getType() {
         return ProviderType.EMAIL;

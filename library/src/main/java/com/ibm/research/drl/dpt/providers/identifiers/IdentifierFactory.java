@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.util.localization.ResourceEntry;
 import com.ibm.research.drl.dpt.util.localization.ResourceEntryType;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public final class IdentifierFactory implements Serializable {
 
         @SuppressWarnings("unchecked")
         private IdentifierFactoryHelper(final Set<String> names) {
-            for (String name : names) {
+            for(String name: names) {
                 try {
                     registerIdentifier((Class<? extends Identifier>) Class.forName(name));
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -105,30 +105,28 @@ public final class IdentifierFactory implements Serializable {
     }
 
     private final IdentifierFactoryHelper helper;
-
-    @Deprecated
+    
     public static IdentifierFactory getDefaultIdentifierFactory() {
         return DEFAULT_IDENTIFIER_FACTORY;
     }
-
+    
     public Collection<Identifier> availableIdentifiers() {
-        return this.helper.availableIdentifiers();
+       return this.helper.availableIdentifiers(); 
     }
 
     public IdentifierFactory(InputStream configuration) {
         this.helper = new IdentifierFactoryHelper(configuration);
     }
-
+    
     public IdentifierFactory(Set<String> identifierClassNames) {
         this.helper = new IdentifierFactoryHelper(identifierClassNames);
     }
-
+    
     /**
      * Available identifiers collection.
      *
      * @return the collection
      */
-    @Deprecated
     public static Collection<Identifier> defaultIdentifiers() {
         return getDefaultIdentifierFactory().availableIdentifiers();
     }
@@ -255,7 +253,7 @@ public final class IdentifierFactory implements Serializable {
         if (specNames != null && specNames.isArray()) {
             List<String> names = new ArrayList<>();
 
-            specNames.elements().forEachRemaining(element -> {
+            specNames.elements().forEachRemaining( element -> {
                 String v = element.asText("").trim();
                 if (!v.isEmpty()) {
                     names.add(v);
@@ -306,7 +304,7 @@ public final class IdentifierFactory implements Serializable {
         Set<String> terms = new HashSet<>();
 
         if (spec.has("terms")) {
-            spec.get("terms").elements().forEachRemaining(term -> terms.add(term.asText().trim()));
+            spec.get("terms").elements().forEachRemaining( term -> terms.add(term.asText().trim()));
         }
         if (spec.has("paths")) {
             spec.get("paths").elements().forEachRemaining(
@@ -340,8 +338,8 @@ public final class IdentifierFactory implements Serializable {
 
         if (fileToProcess.isDirectory()) {
             return Objects.requireNonNull(fileToProcess.listFiles());
-        } else {
-            return new File[]{fileToProcess};
+        }   else {
+            return new File[]{ fileToProcess };
         }
     }
 }
