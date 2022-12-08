@@ -1,7 +1,1 @@
 rootProject.name = 'data-privacy-toolkit'
-
-include(':classification')
-//include(':classification')
-//include(':masking')
-//include(':anonymization')
-//include(':riskassessment')
