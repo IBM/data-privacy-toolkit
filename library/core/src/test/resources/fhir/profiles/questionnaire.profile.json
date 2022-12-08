@@ -1,0 +1,959 @@
+{
+    "resourceType": "StructureDefinition", 
+    "snapshot": {
+        "element": [
+            {
+                "definition": "A structured set of questions intended to guide the collection of answers. The questions are ordered and grouped into coherent subsets, corresponding to the structure of the grouping of the underlying questions.", 
+                "short": "A structured set of questions", 
+                "min": 0, 
+                "max": "*", 
+                "constraint": [
+                    {
+                        "xpath": "f:group/f:required/@value=true()", 
+                        "human": "If root group must be \"required\"", 
+                        "severity": "error", 
+                        "key": "que-3"
+                    }, 
+                    {
+                        "xpath": "count(descendant::f:linkId/@value)=count(distinct-values(descendant::f:linkId/@value))", 
+                        "human": "The link ids for groups and questions must be unique within the questionnaire", 
+                        "severity": "error", 
+                        "key": "que-2"
+                    }
+                ], 
+                "mapping": [
+                    {
+                        "map": "Observation[moodCode=DEF]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "infrastructure.information", 
+                        "identity": "w5"
+                    }
+                ], 
+                "alias": [
+                    "Form", 
+                    "CRF", 
+                    "Survey"
+                ], 
+                "path": "Questionnaire", 
+                "type": [
+                    {
+                        "code": "DomainResource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.", 
+                "short": "Logical id of this artifact", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "The only time that a resource does not have an id is when it is being submitted to the server using a create operation. Bundles always have an id, though it is usually a generated UUID.", 
+                "isSummary": true, 
+                "path": "Questionnaire.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.", 
+                "short": "Metadata about the resource", 
+                "min": 0, 
+                "max": "1", 
+                "isSummary": true, 
+                "path": "Questionnaire.meta", 
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content.", 
+                "short": "A set of rules under which this content was created", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element as much as possible.", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Questionnaire.implicitRules", 
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The base language in which the resource is written.", 
+                "short": "Language of the resource content", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "A human language.", 
+                    "valueSetUri": "http://tools.ietf.org/html/bcp47"
+                }, 
+                "comments": "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource  Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute).", 
+                "path": "Questionnaire.language", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A human-readable narrative that contains a summary of the resource, and may be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.", 
+                "short": "Text summary of the resource, for human interpretation", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Act.text?", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative.", 
+                "alias": [
+                    "narrative", 
+                    "html", 
+                    "xhtml", 
+                    "display"
+                ], 
+                "path": "Questionnaire.text", 
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ], 
+                "condition": [
+                    "dom-1"
+                ]
+            }, 
+            {
+                "definition": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.", 
+                "short": "Contained, inline Resources", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again.", 
+                "alias": [
+                    "inline resources", 
+                    "anonymous resources", 
+                    "contained resources"
+                ], 
+                "path": "Questionnaire.contained", 
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Questionnaire.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Questionnaire.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "This records identifiers associated with this question set that are defined by business processes and/or used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).", 
+                "short": "External identifiers for this questionnaire", 
+                "requirements": "Need to allow connection to a wider workflow.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".id[use=BUS]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Questionnaire.identifier", 
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The version number assigned by the publisher for business reasons.  It may remain the same when the resource is updated.", 
+                "short": "Logical identifier for this version of Questionnaire", 
+                "requirements": "In some cases, separate resource instances might be created for each version (if an older version can be maintained once a new version exists).", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".id[use=VER]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "id.version", 
+                        "identity": "w5"
+                    }
+                ], 
+                "alias": [
+                    "N/A - MIF rather than RIM level"
+                ], 
+                "isSummary": true, 
+                "path": "Questionnaire.version", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The lifecycle status of the questionnaire as a whole.", 
+                "short": "draft | published | retired", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "Lifecycle status of the questionnaire.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/questionnaire-status"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".statusCode (also whether there's a revisionControlAct - and possibly mood to distinguish \"in-progress\" from \"published)", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "status", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Questionnaire.status", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The date that this questionnaire was last changed.", 
+                "short": "Date this version was authored", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".participation[typeCode=AUT].time", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "when.recorded", 
+                        "identity": "w5"
+                    }
+                ], 
+                "alias": [
+                    "Date created", 
+                    "Date published", 
+                    "Date issued", 
+                    "Date updated"
+                ], 
+                "isSummary": true, 
+                "path": "Questionnaire.date", 
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Organization or person responsible for developing and maintaining the questionnaire.", 
+                "short": "Organization/individual who designed the questionnaire", 
+                "requirements": "Conveys responsibility for the questions and their organization and also helps evaluate the questionnaire's \"authority\".", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".participation[typeCode=AUT].role", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "who.witness", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Questionnaire.publisher", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Contact details to assist a user in finding and communicating with the publisher.", 
+                "short": "Contact information of the publisher", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".participation[typeCode=AUT].role.telecom", 
+                        "identity": "rim"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Questionnaire.telecom", 
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies the types of subjects that can be the subject of the questionnaire.", 
+                "short": "Resource that can be subject of QuestionnaireResponse", 
+                "min": 0, 
+                "max": "*", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "One of the resource types defined as part of FHIR.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/resource-types"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".outboundRelationship[typeCode=META].target[classCode=OBS, moodCode=DEFN, isCriterion=true].participation.role.classCode", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "If none are specified, then the subject is unlimited.", 
+                "isSummary": true, 
+                "path": "Questionnaire.subjectType", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A collection of related questions (or further groupings of questions).", 
+                "short": "Grouped questions", 
+                "requirements": "Need to be able to logically group answers to grouped questions.", 
+                "name": "group", 
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name", 
+                        "valueString": "Group"
+                    }
+                ], 
+                "min": 1, 
+                "max": "1", 
+                "constraint": [
+                    {
+                        "xpath": "not(exists(f:group) and exists(f:question))", 
+                        "human": "Groups may either contain questions or groups but not both", 
+                        "severity": "error", 
+                        "key": "que-1"
+                    }
+                ], 
+                "mapping": [
+                    {
+                        "map": ".outboundRelationship[typeCode=COMP].target[classCode=DOCSECT, moodCode=EVN]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "The Questionnaire itself has one \"root\" group with the actual contents of the Questionnaire.  Information on this root group applies to the questionnaire as a whole.", 
+                "alias": [
+                    "Section"
+                ], 
+                "isSummary": true, 
+                "path": "Questionnaire.group", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ], 
+                "condition": [
+                    "que-3"
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Questionnaire.group.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Questionnaire.group.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "path": "Questionnaire.group.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "An identifier that is unique within the Questionnaire allowing linkage to the equivalent group in a QuestionnaireResponse resource.", 
+                "short": "To link questionnaire with questionnaire response", 
+                "requirements": "[[[QuestionnaireResponse]]] does not require omitted groups to be included and may have some groups that repeat, so linkage based on position alone is not sufficient.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".id", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "May be omitted if there is no expectation to link answers back to a questionnaire.  This ''can'' be a meaningful identifier (e.g. a LOINC code) but is not intended to have any meaning.  GUIDs or sequential numbers are appropriate here.", 
+                "path": "Questionnaire.group.linkId", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The human-readable name for this section of the questionnaire.", 
+                "short": "Name to be displayed for group", 
+                "requirements": "When including text for the questionnaire with the answers, sections may have a section header.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".title", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "The title of the \"root\" group is the title for the questionnaire.", 
+                "isSummary": true, 
+                "path": "Questionnaire.group.title", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies a how this group of questions is known in a particular terminology such as LOINC.", 
+                "short": "Concept that represents this section in a questionnaire", 
+                "requirements": "Allows linking of groups of questions (and complete Questionnaire resources) to formal terminologies.", 
+                "min": 0, 
+                "max": "*", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "Codes for groupings of questionnaire questions.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/questionnaire-questions"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".code", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "The code(s) for the \"root\" group apply to the questionnaire as a whole.", 
+                "isSummary": true, 
+                "path": "Questionnaire.group.concept", 
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Additional text for the group, used for display purposes.", 
+                "short": "Additional text for the group", 
+                "requirements": "When including text for the questionnaire, each section may contain additional explanations are background text.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".text", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Common extensions are defined for more specialized types of display text.", 
+                "path": "Questionnaire.group.text", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "If true, indicates that the group must be present and have required questions within it answered.  If false, the group may be skipped when answering the questionnaire.", 
+                "short": "Whether the group must be included in data results", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Not supported - MIF/templating layer", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Questionnaire.group.required", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "defaultValueBoolean": false
+            }, 
+            {
+                "definition": "Whether the group may occur multiple times in the instance, containing multiple sets of answers.", 
+                "short": "Whether the group may repeat", 
+                "requirements": "Groups may be used to create set of (related) questions that can be repeated to give multiple answers to such a set.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Not supported - MIF/templating layer", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Questionnaire.group.repeats", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "defaultValueBoolean": false
+            }, 
+            {
+                "definition": "A sub-group within a group. The ordering of groups within this group is relevant.", 
+                "short": "Nested questionnaire group", 
+                "requirements": "Reports can consist of complex nested groups.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".outboundRelationship[typeCode=COMP].target[classCode=DOCSECT, moodCode=EVN]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "nameReference": "group", 
+                "path": "Questionnaire.group.group", 
+                "condition": [
+                    "que-1"
+                ]
+            }, 
+            {
+                "definition": "Set of questions within this group. The order of questions within the group is relevant.", 
+                "short": "Questions in this group", 
+                "requirements": "Must register answers to questions.", 
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name", 
+                        "valueString": "Question"
+                    }
+                ], 
+                "min": 0, 
+                "max": "*", 
+                "constraint": [
+                    {
+                        "xpath": "not(f:options and f:option)", 
+                        "human": "A question must use either option or options, not both", 
+                        "severity": "error", 
+                        "key": "que-4"
+                    }
+                ], 
+                "mapping": [
+                    {
+                        "map": ".outboundRelationship[typeCode=COMP].target[classCode=OBS, moodCode=EVN or DEF]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "alias": [
+                    "Responses", 
+                    "Contents"
+                ], 
+                "path": "Questionnaire.group.question", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ], 
+                "condition": [
+                    "que-1"
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Questionnaire.group.question.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Questionnaire.group.question.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "path": "Questionnaire.group.question.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "An identifier that is unique within the questionnaire allowing linkage to the equivalent group in a [[[QuestionnaireResponse]]] resource.", 
+                "short": "To link questionnaire with questionnaire response", 
+                "requirements": "[[[QuestionnaireResponse]]] does not require omitted groups to be included and may have some groups that repeat, so linkage based on position alone is not sufficient.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".id", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "May be omitted if there is no expectation to link answers back to a questionnaire.  This *can* be a meaningful identifier (e.g. a LOINC code) but is not intended to have any meaning.  GUIDs or sequential numbers are appropriate here.", 
+                "path": "Questionnaire.group.question.linkId", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies a how this question is known in a particular terminology such as LOINC.", 
+                "short": "Concept that represents this question on a questionnaire", 
+                "requirements": "Allows linking of questions (and their answers) to formal terminologies.", 
+                "min": 0, 
+                "max": "*", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "Codes corresponding to individual questions.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/questionnaire-questions"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".code", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Questionnaire.group.question.concept", 
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The actual question as shown to the user to prompt them for an answer.", 
+                "short": "Text of the question as it is shown to the user", 
+                "requirements": "When including text for the questionnaire, each question may contain its actual question display text.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".code.display", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Common extensions are defined for more specialized types of display text.", 
+                "alias": [
+                    "Question"
+                ], 
+                "path": "Questionnaire.group.question.text", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The expected format of the answer, e.g. the type of input (string, integer) or whether a (multiple) choice is expected.", 
+                "short": "boolean | decimal | integer | date | dateTime +", 
+                "requirements": "Defines the format in which the user is to be prompted for the answer.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "The expected format of an answer.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/answer-format"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "N/A - MIF rather than RIM level", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Additional constraints on the type of answer can be conveyed by extensions.", 
+                "path": "Questionnaire.group.question.type", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "If true, indicates that the question must be answered and have required groups within it also present.  If false, the question and any contained groups may be skipped when answering the questionnaire.", 
+                "short": "Whether the question must be answered in data results", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Not supported - MIF/templating layer", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Questionnaire.group.question.required", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "defaultValueBoolean": false
+            }, 
+            {
+                "definition": "If true, the question may have more than one answer.", 
+                "short": "Whether the question  can have multiple answers", 
+                "requirements": "Used for \"check all that apply\" types of questions or \"list your top 3\", etc.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Not supported - MIF/templating layer", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Whether the question itself will be displayed for each answer is a rendering choice typically based on whether there are nested groups.", 
+                "path": "Questionnaire.group.question.repeats", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "defaultValueBoolean": false
+            }, 
+            {
+                "definition": "Reference to a value set containing a list of codes representing permitted answers for the question.", 
+                "short": "Valueset containing permitted answers", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Not supported - MIF/templating layer to capture value set", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "LOINC defines many useful value sets for questionnaire response. See [LOINC Answer Lists](loinc.html#alist).", 
+                "path": "Questionnaire.group.question.options", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/ValueSet"
+                        ], 
+                        "code": "Reference"
+                    }
+                ], 
+                "condition": [
+                    "que-4"
+                ]
+            }, 
+            {
+                "definition": "For a \"choice\" question, identifies one of the permitted answers for the question.", 
+                "short": "Permitted answer", 
+                "min": 0, 
+                "max": "*", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "Allowed values to answer questions.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/questionnaire-answers"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "Not supported - MIF/templating layer to capture value set", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Questionnaire.group.question.option", 
+                "type": [
+                    {
+                        "code": "Coding"
+                    }
+                ], 
+                "condition": [
+                    "que-4"
+                ]
+            }, 
+            {
+                "definition": "Nested group, containing nested question for this question. The order of groups within the question is relevant.", 
+                "short": "Nested questionnaire group", 
+                "requirements": "It is useful to have \"sub-questions\", questions which normally appear when certain answers are given and which collect additional details.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".outboundRelationship[typeCode=COMP].target[classCode=DOCSECT, moodCode=EVN]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "nameReference": "group", 
+                "path": "Questionnaire.group.question.group"
+            }
+        ]
+    }, 
+    "id": "Questionnaire"
+}

@@ -1,0 +1,1537 @@
+{
+    "resourceType": "StructureDefinition", 
+    "snapshot": {
+        "element": [
+            {
+                "definition": "Demographics and other administrative information about an individual or animal receiving care or other health-related services.", 
+                "short": "Information about an individual or animal receiving health care services", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "Patient[classCode=PAT]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "ClinicalDocument.recordTarget.patientRole", 
+                        "identity": "cda"
+                    }, 
+                    {
+                        "map": "administrative.individual", 
+                        "identity": "w5"
+                    }
+                ], 
+                "alias": [
+                    "SubjectOfCare Client Resident"
+                ], 
+                "path": "Patient", 
+                "type": [
+                    {
+                        "code": "DomainResource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.", 
+                "short": "Logical id of this artifact", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "The only time that a resource does not have an id is when it is being submitted to the server using a create operation. Bundles always have an id, though it is usually a generated UUID.", 
+                "base": {
+                    "path": "Resource.id", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.", 
+                "short": "Metadata about the resource", 
+                "min": 0, 
+                "max": "1", 
+                "base": {
+                    "path": "Resource.meta", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.meta", 
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content.", 
+                "short": "A set of rules under which this content was created", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element as much as possible.", 
+                "isModifier": true, 
+                "base": {
+                    "path": "Resource.implicitRules", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.implicitRules", 
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The base language in which the resource is written.", 
+                "short": "Language of the resource content", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "A human language.", 
+                    "valueSetUri": "http://tools.ietf.org/html/bcp47"
+                }, 
+                "comments": "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource  Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute).", 
+                "base": {
+                    "path": "Resource.language", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.language", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A human-readable narrative that contains a summary of the resource, and may be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.", 
+                "short": "Text summary of the resource, for human interpretation", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Act.text?", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative.", 
+                "alias": [
+                    "narrative", 
+                    "html", 
+                    "xhtml", 
+                    "display"
+                ], 
+                "base": {
+                    "path": "DomainResource.text", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.text", 
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ], 
+                "condition": [
+                    "dom-1"
+                ]
+            }, 
+            {
+                "definition": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.", 
+                "short": "Contained, inline Resources", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again.", 
+                "alias": [
+                    "inline resources", 
+                    "anonymous resources", 
+                    "contained resources"
+                ], 
+                "base": {
+                    "path": "DomainResource.contained", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.contained", 
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "base": {
+                    "path": "DomainResource.extension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "base": {
+                    "path": "DomainResource.modifierExtension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "An identifier for this patient.", 
+                "short": "An identifier for this patient", 
+                "requirements": "Patients are almost always assigned specific numerical identifiers.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "PID-3", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".id", 
+                        "identity": "cda"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Patient.identifier", 
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Whether this patient record is in active use.", 
+                "short": "Whether this patient's record is in active use", 
+                "requirements": "Need to be able to mark a patient record as not to be used because it was created in error.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "statusCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }, 
+                    {
+                        "map": "status", 
+                        "identity": "w5"
+                    }
+                ], 
+                "comments": "Default is true. If a record is inactive, and linked to an active record, then future patient/record updates should occur on the other patient.", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Patient.active", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "defaultValueBoolean": true
+            }, 
+            {
+                "definition": "A name associated with the individual.", 
+                "short": "A name associated with the patient", 
+                "requirements": "Need to be able to track the patient by multiple names. Examples are your official name and a partner name.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "PID-5, PID-9", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "name", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".patient.name", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "A patient may have multiple names with different uses or applicable periods. For animals, the name is a \"HumanName\" in the sense that is assigned and used by humans and has the same patterns.", 
+                "isSummary": true, 
+                "path": "Patient.name", 
+                "type": [
+                    {
+                        "code": "HumanName"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted.", 
+                "short": "A contact detail for the individual", 
+                "requirements": "People have (primary) ways to contact them in some way such as phone, email.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "PID-13, PID-14, PID-40", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "telecom", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".telecom", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "A Patient may have multiple ways to be contacted with different uses or applicable periods.  May need to have options for contacting the person urgently and also to help with identification. The address may not go directly to the individual, but may reach another party that is able to proxy for the patient (i.e. home phone, or pet owner's phone).", 
+                "isSummary": true, 
+                "path": "Patient.telecom", 
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes.", 
+                "short": "male | female | other | unknown", 
+                "requirements": "Needed for identification of the individual, in combination with (at least) name and birth date. Gender of individual drives many clinical processes.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "The gender of a person used for administrative purposes.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/administrative-gender"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "PID-8", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/administrativeGender", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".patient.administrativeGenderCode", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "The gender may not match the biological sex as determined by genetics, or the individual's preferred identification. Note that for both humans and particularly animals, there are other legitimate possibilities than M and F, though the vast majority of systems and contexts only support M and F.  Systems providing decision support or enforcing business rules should ideally do this on the basis of Observations dealing with the specific gender aspect of interest (anatomical, chromosonal, social, etc.)  However, because these observations are infrequently recorded, defaulting to the administrative gender is common practice.  Where such defaulting occurs, rule enforcement should allow for the variation between administrative and biological, chromosonal and other gender aspects.  For example, an alert about a hysterectomy on a male should be handled as a warning or overrideable error, not a \"hard\" error.", 
+                "isSummary": true, 
+                "path": "Patient.gender", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The date of birth for the individual.", 
+                "short": "The date of birth for the individual", 
+                "requirements": "Age of the individual drives many clinical processes.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "PID-7", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/birthTime", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".patient.birthTime", 
+                        "identity": "cda"
+                    }, 
+                    {
+                        "map": "21112-8", 
+                        "identity": "loinc"
+                    }
+                ], 
+                "comments": "At least an estimated year should be provided as a guess if the real DOB is unknown  There is a standard extension \"patient-birthTime\" available that should be used where Time is required (such as in maternaty/infant care systems).", 
+                "isSummary": true, 
+                "path": "Patient.birthDate", 
+                "type": [
+                    {
+                        "code": "date"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Indicates if the individual is deceased or not.", 
+                "short": "Indicates if the individual is deceased or not", 
+                "requirements": "The fact that a patient is deceased influences the clinical process. Also, in human communication and relation management it is necessary to know whether the person is alive.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "PID-30  (bool) and PID-29 (datetime)", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/deceasedInd, player[classCode=PSN|ANM and determinerCode=INSTANCE]/deceasedTime", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "If there's no value in the instance it means there is no statement on whether or not the individual is deceased. Most systems will interpret the absence of a value as a sign of the person being alive.", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Patient.deceased[x]", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }, 
+                    {
+                        "code": "dateTime"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Addresses for the individual.", 
+                "short": "Addresses for the individual", 
+                "requirements": "May need to keep track of patient addresses for contacting, billing or reporting requirements and also to help with identification.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "PID-11", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "addr", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".addr", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "Patient may have multiple addresses with different uses or applicable periods.", 
+                "isSummary": true, 
+                "path": "Patient.address", 
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ]
+            }, 
+            {
+                "definition": "This field contains a patient's most recent marital (civil) status.", 
+                "short": "Marital (civil) status of a patient", 
+                "requirements": "Most, if not all systems capture it.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "The domestic partnership status of a person.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/marital-status"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "PID-16", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN]/maritalStatusCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".patient.maritalStatusCode", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.maritalStatus", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Indicates whether the patient is part of a multiple (bool) or indicates the actual birth order (integer).", 
+                "short": "Whether patient is part of a multiple birth", 
+                "requirements": "For disambiguation of multiple-birth children, especially relevant where the care provider doesn't meet the patient, such as labs.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "PID-24 (bool), PID-25 (integer)", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/multipleBirthInd,  player[classCode=PSN|ANM and determinerCode=INSTANCE]/multipleBirthOrderNumber", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "Where the valueInteger is provided, the number is the birth number in the sequence.\nE.g. The middle birth in tripplets would be valueInteger=2 and the third born would have valueInteger=3\nIf a bool value was provided for this tripplets examle, then all 3 patient records would have valueBool=true (the ordering is not indicated).", 
+                "path": "Patient.multipleBirth[x]", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }, 
+                    {
+                        "code": "integer"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Image of the patient.", 
+                "short": "Image of the patient", 
+                "requirements": "Many EHR systems have the capability to capture an image of the patient. Fits with newer social media usage too.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "OBX-5 - needs a profile", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/desc", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.photo", 
+                "type": [
+                    {
+                        "code": "Attachment"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A contact party (e.g. guardian, partner, friend) for the patient.", 
+                "short": "A contact party (e.g. guardian, partner, friend) for the patient", 
+                "requirements": "Need to track people you can contact about the patient.", 
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name", 
+                        "valueString": "Contact"
+                    }
+                ], 
+                "min": 0, 
+                "max": "*", 
+                "constraint": [
+                    {
+                        "xpath": "exists(f:name) or exists(f:telecom) or exists(f:address) or exists(f:organization)", 
+                        "human": "SHALL at least contain a contact's details or a reference to an organization", 
+                        "expression": "name.exists() or telecom.exists() or address.exists() or organization.exists()", 
+                        "severity": "error", 
+                        "key": "pat-1"
+                    }
+                ], 
+                "mapping": [
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/scopedRole[classCode=CON]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "Contact covers all kinds of contact parties: family members, business contacts, guardians, caregivers. Not applicable to register pedigree and family ties beyond use of having contact.", 
+                "path": "Patient.contact", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "base": {
+                    "path": "Element.id", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Patient.contact.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "base": {
+                    "path": "Element.extension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.contact.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "base": {
+                    "path": "BackboneElement.modifierExtension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.contact.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "The nature of the relationship between the patient and the contact person.", 
+                "short": "The kind of relationship", 
+                "requirements": "Used to determine which contact person is the most relevant to approach, depending on circumstances.", 
+                "min": 0, 
+                "max": "*", 
+                "binding": {
+                    "strength": "extensible", 
+                    "description": "The nature of the relationship between a patient and a contact person for that patient.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/patient-contact-relationship"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "NK1-7, NK1-3", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.contact.relationship", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A name associated with the contact person.", 
+                "short": "A name associated with the contact person", 
+                "requirements": "Contact persons need to be identified by name, but it is uncommon to need details about multiple other names for that contact person.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "NK1-2", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "name", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.contact.name", 
+                "type": [
+                    {
+                        "code": "HumanName"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A contact detail for the person, e.g. a telephone number or an email address.", 
+                "short": "A contact detail for the person", 
+                "requirements": "People have (primary) ways to contact them in some way such as phone, email.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "NK1-5, NK1-6, NK1-40", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "telecom", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "Contact may have multiple ways to be contacted with different uses or applicable periods.  May need to have options for contacting the person urgently, and also to help with identification.", 
+                "path": "Patient.contact.telecom", 
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Address for the contact person.", 
+                "short": "Address for the contact person", 
+                "requirements": "Need to keep track where the contact person can be contacted per postal mail or visited.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "NK1-4", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "addr", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.contact.address", 
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Administrative Gender - the gender that the contact person is considered to have for administration and record keeping purposes.", 
+                "short": "male | female | other | unknown", 
+                "requirements": "Needed to address the person correctly.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "The gender of a person used for administrative purposes.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/administrative-gender"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "NK1-15", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/administrativeGender", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.contact.gender", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Organization on behalf of which the contact is acting or for which the contact is working.", 
+                "short": "Organization that is associated with the contact", 
+                "requirements": "For guardians or business related contacts, the organization is relevant.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "NK1-13, NK1-30, NK1-31, NK1-32, NK1-41", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "scoper", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.contact.organization", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ], 
+                        "code": "Reference"
+                    }
+                ], 
+                "condition": [
+                    "pat-1"
+                ]
+            }, 
+            {
+                "definition": "The period during which this contact person or organization is valid to be contacted relating to this patient.", 
+                "short": "The period during which this contact person or organization is valid to be contacted relating to this patient", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "effectiveTime", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "path": "Patient.contact.period", 
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ]
+            }, 
+            {
+                "definition": "This patient is known to be an animal.", 
+                "short": "This patient is known to be an animal (non-human)", 
+                "requirements": "Many clinical systems are extended to care for animal patients as well as human.", 
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name", 
+                        "valueString": "Animal"
+                    }
+                ], 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "player[classCode=ANM]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "The animal element is labeled \"Is Modifier\" since patients may be non-human. Systems SHALL either handle patient details appropriately (e.g. inform users patient is not human) or reject declared animal records.   The absense of the animal element does not imply that the patient is a human. If a system requires such a positive assertion that the patient is human, an extension will be required.  (Do not use a species of homo-sapiens in animal species, as this would incorrectly infer that the patient is an animal).", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Patient.animal", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "base": {
+                    "path": "Element.id", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Patient.animal.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "base": {
+                    "path": "Element.extension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.animal.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "base": {
+                    "path": "BackboneElement.modifierExtension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.animal.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "Identifies the high level taxonomic categorization of the kind of animal.", 
+                "short": "E.g. Dog, Cow", 
+                "requirements": "Need to know what kind of animal.", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "The species of an animal.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/animal-species"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "PID-35", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "If the patient is non-human, at least a species SHALL be specified. Species SHALL be a widely recognised taxonomic classification.  It may or may not be Linnaean taxonomy and may or may not be at the level of species. If the level is finer than species--such as a breed code--the code system used SHALL allow inference of the species.  (The common example is that the word \"Hereford\" does not allow inference of the species Bos taurus, because there is a Hereford pig breed, but the SNOMED CT code for \"Hereford Cattle Breed\" does.).", 
+                "isSummary": true, 
+                "path": "Patient.animal.species", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies the detailed categorization of the kind of animal.", 
+                "short": "E.g. Poodle, Angus", 
+                "requirements": "May need to know the specific kind within the species.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "The breed of an animal.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/animal-breeds"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "PID-37", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "playedRole[classCode=GEN]/scoper[classCode=ANM, determinerCode=KIND]/code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "Breed MAY be used to provide further taxonomic or non-taxonomic classification.  It may involve local or proprietary designation--such as commercial strain--and/or additional information such as production type.", 
+                "isSummary": true, 
+                "path": "Patient.animal.breed", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Indicates the current state of the animal's reproductive organs.", 
+                "short": "E.g. Neutered, Intact", 
+                "requirements": "Gender status can affect housing and animal behavior.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "The state of the animal's reproductive organs.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/animal-genderstatus"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "genderStatusCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Patient.animal.genderStatus", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Languages which may be used to communicate with the patient about his or her health.", 
+                "short": "A list of Languages which may be used to communicate with the patient about his or her health", 
+                "requirements": "If a patient does not speak the local language, interpreters may be required, so languages spoken and proficiency is an important things to keep track of both for patient and other persons of interest.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "LanguageCommunication", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "patient.languageCommunication", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "If no language is specified, this *implies* that the default local language is spoken.  If you need to convey proficiency for multiple modes then you need multiple Patient.Communication associations.   For animals, language is not a relevant field, and should be absent from the instance. If the Patient does not speak the default local language, then the Interpreter Required Standard can be used to explicitly declare that an interpreter is required.", 
+                "path": "Patient.communication", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "base": {
+                    "path": "Element.id", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Patient.communication.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "base": {
+                    "path": "Element.extension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.communication.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "base": {
+                    "path": "BackboneElement.modifierExtension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.communication.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "The ISO-639-1 alpha 2 code in lower case for the language, optionally followed by a hyphen and the ISO-3166-1 alpha 2 code for the region in upper case; e.g. \"en\" for English, or \"en-US\" for American English versus \"en-EN\" for England English.", 
+                "short": "The language which can be used to communicate with the patient about his or her health", 
+                "requirements": "Most systems in multilingual countries will want to convey language. Not all systems actually need the regional dialect.", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "A human language.", 
+                    "valueSetUri": "http://tools.ietf.org/html/bcp47"
+                }, 
+                "mapping": [
+                    {
+                        "map": "PID-15, LAN-2", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "player[classCode=PSN|ANM and determinerCode=INSTANCE]/languageCommunication/code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".languageCode", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "The structure aa-BB with this exact casing is one the most widely used notations for locale. However not all systems actually code this but instead have it as free text. Hence CodeableConcept instead of code as the data type.", 
+                "path": "Patient.communication.language", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Indicates whether or not the patient prefers this language (over other languages he masters up a certain level).", 
+                "short": "Language preference indicator", 
+                "requirements": "People that master multiple languages up to certain level may prefer one or more, i.e. feel more confident in communicating in a particular language making other languages sort of a fall back method.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "PID-15", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "preferenceInd", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".preferenceInd", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "This language is specifically identified for communicating healthcare information.", 
+                "path": "Patient.communication.preferred", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Patient's nominated care provider.", 
+                "short": "Patient's nominated primary care provider", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "PD1-4", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "subjectOf.CareEvent.performer.AssignedEntity", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "This may be the primary care provider (in a GP context), or it may be a patient nominated care manager in a community/disablity setting, or even organization that will provide people to perform the care provider roles.\n\nThis is not to be used to record Care Teams, these should be recorded on either the CarePlan or EpisodeOfCare resources.", 
+                "path": "Patient.careProvider", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ], 
+                        "code": "Reference"
+                    }, 
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Organization that is the custodian of the patient record.", 
+                "short": "Organization that is the custodian of the patient record", 
+                "requirements": "Need to know who recognizes this patient record, manages and updates it.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "scoper", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": ".providerOrganization", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "There is only one managing organization for a specific patient record. Other organizations will have their own Patient record, and may use the Link property to join the records together (or a Person resource which can include confidence ratings for the association).", 
+                "isSummary": true, 
+                "path": "Patient.managingOrganization", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Link to another patient resource that concerns the same actual patient.", 
+                "short": "Link to another patient resource that concerns the same actual person", 
+                "requirements": "There are multiple usecases: \n\n* Duplicate patient records due to the clerical errors associated with the difficulties of identifying humans consistently, and * Distribution of patient information across multiple servers.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "outboundLink", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "comments": "There is no assumption that linked patient records have mutual links.", 
+                "isModifier": true, 
+                "path": "Patient.link", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "base": {
+                    "path": "Element.id", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Patient.link.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "base": {
+                    "path": "Element.extension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "path": "Patient.link.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "base": {
+                    "path": "BackboneElement.modifierExtension", 
+                    "max": "*", 
+                    "min": 0
+                }, 
+                "isSummary": true, 
+                "path": "Patient.link.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "The other patient resource that the link refers to.", 
+                "short": "The other patient resource that the link refers to", 
+                "min": 1, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "PID-3, MRG-1", 
+                        "identity": "v2"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "isModifier": true, 
+                "path": "Patient.link.other", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The type of link between this patient resource and another patient resource.", 
+                "short": "replace | refer | seealso - type of link", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "The type of link between this patient resource and another patient resource.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/link-type"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "typeCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "n/a", 
+                        "identity": "cda"
+                    }
+                ], 
+                "isModifier": true, 
+                "path": "Patient.link.type", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }
+        ]
+    }, 
+    "id": "Patient"
+}
