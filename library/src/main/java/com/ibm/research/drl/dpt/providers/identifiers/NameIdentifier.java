@@ -19,7 +19,6 @@ public class NameIdentifier extends AbstractIdentifier implements IdentifierWith
 
     private static final Names names = NamesManager.instance();
     private static final String[] appropriateNames = {"Name", "Surname"};
-
     @Override
     public ProviderType getType() {
         return ProviderType.NAME;
@@ -39,7 +38,7 @@ public class NameIdentifier extends AbstractIdentifier implements IdentifierWith
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;

@@ -10,7 +10,6 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -18,8 +17,8 @@ import java.util.regex.Pattern;
  */
 public class PatientIDIdentifier extends AbstractRegexBasedIdentifier {
     private static final String[] appropriateNames = {"Patient ID", "PatientID"};
-    private final Collection<Pattern> patientIDPatterns = new ArrayList<>(List.of(
-            Pattern.compile("^\\d{3}-\\d{3}-\\d{3}-\\d{3}$")
+    private final Collection<Pattern> patientIDPatterns = new ArrayList<>(Arrays.asList(
+        Pattern.compile("^\\d{3}-\\d{3}-\\d{3}-\\d{3}$")
     ));
 
     @Override
@@ -41,7 +40,7 @@ public class PatientIDIdentifier extends AbstractRegexBasedIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DIGIT;

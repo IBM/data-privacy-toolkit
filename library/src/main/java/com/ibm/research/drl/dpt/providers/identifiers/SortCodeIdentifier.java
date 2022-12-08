@@ -24,9 +24,9 @@ public class SortCodeIdentifier extends AbstractRegexBasedIdentifier {
             "|9[0123589])";
 
     private final Collection<Pattern> patterns = Arrays.asList(
-            Pattern.compile(BANK_ID + "\\d{4}"),
-            Pattern.compile(BANK_ID + "\\s\\d{2}\\s\\d{2}"),
-            Pattern.compile(BANK_ID + "-\\d{2}-\\d{2}")
+        Pattern.compile(BANK_ID + "\\d{4}"),
+        Pattern.compile(BANK_ID + "\\s\\d{2}\\s\\d{2}"),
+        Pattern.compile(BANK_ID + "-\\d{2}-\\d{2}")
     );
 
     @Override

@@ -17,15 +17,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class IMEIManager extends ResourceBasedManager<IMEI> {
-    private final static IMEIManager IMEI_MANAGER_INSTANCE = new IMEIManager();
-
+    private final static IMEIManager IMEI_MANAGER_INSTANCE =  new IMEIManager();
     public static IMEIManager getInstance() {
         return IMEI_MANAGER_INSTANCE;
     }
 
-    private IMEIManager() {
-        super();
-    }
+    private IMEIManager() {super();}
 
     @Override
     protected Collection<ResourceEntry> getResources() {

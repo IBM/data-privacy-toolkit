@@ -125,7 +125,7 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
 
         for (int i = 0; i < data.length(); ++i) {
             if (position == 16) break;
-            char character = data.charAt(i);
+            Character character = data.charAt(i);
 
             if (!Character.isLetterOrDigit(character)) continue;
 
@@ -145,9 +145,9 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
         }
 
         // find last value
-        char checksumCharacter = data.charAt(data.length() - 1);
+        Character checksumCharacter = data.charAt(data.length() - 1);
 
-        return checksumCharacter == (
+        return checksumCharacter.equals(
                 (char) ('A' + (checksum % 26))
         );
     }
@@ -157,7 +157,11 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
             day -= 40;
         }
 
-        return day > 0 && day < 31;
+        if (day > 0 && day < 31) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

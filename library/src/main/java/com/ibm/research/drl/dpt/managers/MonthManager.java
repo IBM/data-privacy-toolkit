@@ -18,15 +18,9 @@ import java.util.List;
 
 public class MonthManager extends ResourceBasedManager<Month> {
     private final static MonthManager MONTH_MANAGER = new MonthManager();
-
-    public static MonthManager getInstance() {
-        return MONTH_MANAGER;
-    }
-
-    private MonthManager() {
-        super();
-    }
-
+    public static MonthManager getInstance() { return MONTH_MANAGER; }
+    private MonthManager() {super();}
+    
     @Override
     protected Collection<ResourceEntry> getResources() {
         return LocalizationManager.getInstance().getResources(Resource.MONTH);
@@ -38,8 +32,8 @@ public class MonthManager extends ResourceBasedManager<Month> {
         String key = name.toUpperCase();
 
         Month month = new Month(name, countryCode);
-
-        return List.of(new Tuple<>(key, month));
+        
+        return Arrays.asList(new Tuple<>(key, month));
     }
 
     @Override

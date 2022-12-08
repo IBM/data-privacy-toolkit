@@ -18,15 +18,9 @@ import java.util.List;
 
 public class RaceManager extends ResourceBasedManager<Race> {
     private final static RaceManager RACE_MANAGER = new RaceManager();
-
-    public static RaceManager getInstance() {
-        return RACE_MANAGER;
-    }
-
-    private RaceManager() {
-        super();
-    }
-
+    public static RaceManager getInstance() { return RACE_MANAGER; }
+    private RaceManager() {super();}
+    
     @Override
     protected Collection<ResourceEntry> getResources() {
         return LocalizationManager.getInstance().getResources(Resource.RACE_ETHNICITY);
@@ -39,8 +33,8 @@ public class RaceManager extends ResourceBasedManager<Race> {
 
         String key = name.toUpperCase();
         Race race = new Race(name, countryCode, probability);
-
-        return List.of(new Tuple<>(key, race));
+        
+        return Arrays.asList(new Tuple<>(key, race));
     }
 
     @Override

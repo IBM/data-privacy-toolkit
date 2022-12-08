@@ -28,13 +28,10 @@ public class HospitalManager extends ResourceBasedManager<Hospital> {
         return HOSPITAL_MANAGER;
     }
 
-    private HospitalManager() {
-        super();
-    }
+    private HospitalManager() { super(); }
 
     @Override
-    public void init() {
-    }
+    public void init() {}
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -46,7 +43,7 @@ public class HospitalManager extends ResourceBasedManager<Hospital> {
         String name = line.get(0).trim();
         Hospital hospital = new Hospital(name, countryCode);
 
-        return List.of(new Tuple<>(name.toUpperCase(), hospital));
+        return Arrays.asList(new Tuple<>(name.toUpperCase(), hospital));
     }
 
     @Override

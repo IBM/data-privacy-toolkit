@@ -29,7 +29,7 @@ public class IPAddressIdentifier extends AbstractIdentifier {
     public boolean isOfThisType(String data) {
         int matches = 0;
 
-        for (int i = 0; i < data.length(); i++) {
+        for(int i = 0; i < data.length(); i++) {
             char c = data.charAt(i);
             if (Character.isDigit(c) || c == '.' || c == ':') {
                 matches++;

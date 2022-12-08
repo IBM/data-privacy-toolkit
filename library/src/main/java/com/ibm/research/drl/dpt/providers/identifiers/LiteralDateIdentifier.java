@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.identifiers;
@@ -33,7 +33,7 @@ public class LiteralDateIdentifier extends AbstractIdentifier {
 
         if (parts.size() < 2 || parts.size() > 3) return false;
 
-        int count = 0;
+        short count = 0;
 
         Iterator<String> it;
 
@@ -42,7 +42,7 @@ public class LiteralDateIdentifier extends AbstractIdentifier {
             String part = it.next();
 
             if (dayIdentifier.matcher(part).matches() ||
-                    dayPattern.matcher(part).matches()
+                dayPattern.matcher(part).matches()
             ) {
                 count += 1;
                 it.remove();

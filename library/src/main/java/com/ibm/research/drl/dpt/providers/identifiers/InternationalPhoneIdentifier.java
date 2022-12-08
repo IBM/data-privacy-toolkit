@@ -63,13 +63,14 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
 
         if (countSpacesAndDashes(data) == 0) {
             long numberOfDigits = NumberUtils.countDigits(data);
-            if (numberOfDigits < 10 || numberOfDigits > 15) {
+            if (numberOfDigits < 10  || numberOfDigits > 15) {
                 return false;
             }
 
             if (data.startsWith("+")) {
                 data = data.substring(1);
-            } else if (data.startsWith("00")) {
+            }
+            else if (data.startsWith("00")) {
                 data = data.substring(2);
             }
 
@@ -84,7 +85,11 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
             String prefix2 = data.substring(0, 2);
             String prefix3 = data.substring(0, 3);
 
-            return isValidCountryCode(prefix2) || isValidCountryCode(prefix3);
+            if (!isValidCountryCode(prefix2) && !isValidCountryCode(prefix3)) {
+                return false;
+            }
+
+            return true;
         }
 
         Matcher matcher = pattern.matcher(data);
@@ -102,12 +107,16 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
 
         String number = matcher.group("number");
 
-        return NumberUtils.countDigits(number) <= 15;
+        if (NumberUtils.countDigits(number) > 15) {
+            return false;
+        }
+
+        return true;
     }
 
     private boolean containsIllegalCharacters(String data) {
-        for (int i = 0; i < data.length(); i++) {
-            char ch = data.charAt(i);
+        for(int i = 0; i < data.length(); i++) {
+            Character ch = data.charAt(i);
 
             if (Character.isDigit(ch) || Character.isWhitespace(ch) || ch == '-') {
                 continue;
@@ -122,8 +131,8 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
     private int countSpacesAndDashes(String data) {
         int counter = 0;
 
-        for (int i = 0; i < data.length(); i++) {
-            char ch = data.charAt(i);
+        for(int i = 0; i < data.length(); i++) {
+            Character ch = data.charAt(i);
 
             if (Character.isWhitespace(ch) || ch == '-') {
                 counter++;
@@ -148,7 +157,7 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
     }
 
     private Set<String> loadFromResource(String resourceName) {
-        try (InputStream inputStream = InternationalPhoneIdentifier.class.getResourceAsStream(resourceName)) {
+        try (InputStream inputStream = this.getClass().getResourceAsStream(resourceName)) {
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
             MappingIterator<String[]> termsIterator = mapper.readerFor(
@@ -156,12 +165,12 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
             ).with(CsvSchema.emptySchema().withoutHeader()).readValues(inputStream);
 
             return StreamSupport.stream(
-                            Spliterators.spliteratorUnknownSize(
-                                    termsIterator,
-                                    Spliterator.ORDERED
-                            ), true).
+                    Spliterators.spliteratorUnknownSize(
+                            termsIterator,
+                            Spliterator.ORDERED
+                    ), true).
                     map(s -> s[0].trim()).
-                    filter(((Predicate<String>) String::isEmpty).negate()).
+                    filter(((Predicate<String>)String::isEmpty).negate()).
                     collect(Collectors.toSet());
         } catch (IOException e) {
             throw new RuntimeException("Unable to load " + resourceName, e);

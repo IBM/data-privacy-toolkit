@@ -9,7 +9,6 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class POBOXIdentifier extends AbstractRegexBasedIdentifier {
@@ -18,7 +17,7 @@ public class POBOXIdentifier extends AbstractRegexBasedIdentifier {
 
     @Override
     protected Collection<Pattern> getPatterns() {
-        return List.of(POBOX);
+        return Arrays.asList(POBOX);
     }
 
     @Override

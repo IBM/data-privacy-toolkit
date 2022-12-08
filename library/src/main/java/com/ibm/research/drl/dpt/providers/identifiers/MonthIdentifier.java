@@ -22,7 +22,7 @@ public class MonthIdentifier extends AbstractManagerBasedIdentifier {
     }
 
     @Override
-    protected Manager getManager() {
+    protected Manager getManager(){
         return monthManager;
     }
 
@@ -35,7 +35,7 @@ public class MonthIdentifier extends AbstractManagerBasedIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;

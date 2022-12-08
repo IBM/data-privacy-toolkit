@@ -15,6 +15,7 @@ import java.util.Collection;
 /**
  * The type Race ethnicity identifier.
  *
+ * @author santonat
  */
 public class RaceEthnicityIdentifier extends AbstractManagerBasedIdentifier {
     private static final RaceManager raceManager = RaceManager.getInstance();
@@ -39,7 +40,7 @@ public class RaceEthnicityIdentifier extends AbstractManagerBasedIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;

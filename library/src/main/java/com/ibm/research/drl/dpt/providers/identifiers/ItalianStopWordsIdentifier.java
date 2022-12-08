@@ -14,7 +14,7 @@ import com.ibm.research.drl.dpt.util.localization.Resource;
 import com.ibm.research.drl.dpt.util.localization.ResourceEntry;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +74,7 @@ public class ItalianStopWordsIdentifier extends AbstractManagerBasedIdentifier {
 
             stopWords.add(stopWord);
 
-            return List.of(new Tuple<>(word, stopWord));
+            return Arrays.asList(new Tuple<>(word, stopWord));
         }
     }
 

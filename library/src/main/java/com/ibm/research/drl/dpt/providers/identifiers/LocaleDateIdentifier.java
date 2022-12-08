@@ -7,7 +7,7 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
