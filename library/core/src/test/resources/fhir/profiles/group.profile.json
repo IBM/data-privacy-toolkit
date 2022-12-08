@@ -1,0 +1,677 @@
+{
+    "resourceType": "StructureDefinition", 
+    "snapshot": {
+        "element": [
+            {
+                "definition": "Represents a defined collection of entities that may be discussed or acted upon collectively but which are not expected to act collectively and are not formally or legally recognized; i.e. a collection of entities that isn't an Organization.", 
+                "short": "Group of multiple entities", 
+                "min": 0, 
+                "max": "*", 
+                "constraint": [
+                    {
+                        "xpath": "f:actual/@value=true() or not(exists(f:member))", 
+                        "human": "Can only have members if group is \"actual\"", 
+                        "severity": "error", 
+                        "key": "grp-1"
+                    }
+                ], 
+                "mapping": [
+                    {
+                        "map": "Entity[determinerCode=\"GRP\" or determinerCode=\"GRP_KIND\"]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "administrative.group", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Group", 
+                "type": [
+                    {
+                        "code": "DomainResource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.", 
+                "short": "Logical id of this artifact", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "The only time that a resource does not have an id is when it is being submitted to the server using a create operation. Bundles always have an id, though it is usually a generated UUID.", 
+                "isSummary": true, 
+                "path": "Group.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.", 
+                "short": "Metadata about the resource", 
+                "min": 0, 
+                "max": "1", 
+                "isSummary": true, 
+                "path": "Group.meta", 
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content.", 
+                "short": "A set of rules under which this content was created", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element as much as possible.", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Group.implicitRules", 
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The base language in which the resource is written.", 
+                "short": "Language of the resource content", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "A human language.", 
+                    "valueSetUri": "http://tools.ietf.org/html/bcp47"
+                }, 
+                "comments": "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource  Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute).", 
+                "path": "Group.language", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A human-readable narrative that contains a summary of the resource, and may be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.", 
+                "short": "Text summary of the resource, for human interpretation", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Act.text?", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative.", 
+                "alias": [
+                    "narrative", 
+                    "html", 
+                    "xhtml", 
+                    "display"
+                ], 
+                "path": "Group.text", 
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ], 
+                "condition": [
+                    "dom-1"
+                ]
+            }, 
+            {
+                "definition": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.", 
+                "short": "Contained, inline Resources", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again.", 
+                "alias": [
+                    "inline resources", 
+                    "anonymous resources", 
+                    "contained resources"
+                ], 
+                "path": "Group.contained", 
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Group.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Group.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "A unique business identifier for this group.", 
+                "short": "Unique id", 
+                "requirements": "Allows the group to be referenced from external specifications.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "unique(./id[displayable=\"true\" and scope=\"OBJ\"])", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Group.identifier", 
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies the broad classification of the kind of resources the group includes.", 
+                "short": "person | animal | practitioner | device | medication | substance", 
+                "requirements": "Identifies what type of resources the group is made up of.", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "Types of resources that are part of group", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/group-type"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": "person: ./classCode=\"PSN\"  animal: ./classCode=\"ANM\"  device: ./classCode=\"DEV\"  medication: ./classCode=\"MMAT\" and ./playedRole[isNormalRole() and classCode=\"THER\"]  food: ./classCode=\"FOOD\"", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "class", 
+                        "identity": "w5"
+                    }
+                ], 
+                "comments": "Group members SHALL be of the appropriate resource type (Patient for person or animal; or Practitioner, Device, Medicaiton or Substance for the other types.).", 
+                "isSummary": true, 
+                "path": "Group.type", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "If true, indicates that the resource refers to a specific group of real individuals.  If false, the group defines a set of intended individuals.", 
+                "short": "Descriptive or actual", 
+                "requirements": "There are use-cases for groups that define specific collections of individuals, and other groups that define \"types\" of intended individuals.  The requirements for both kinds of groups are similar, so we use a single resource, distinguished by this flag.", 
+                "min": 1, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "true: ./determinerCode=\"GRP\"  false: ./determinerCode=\"GRP_KIND\"", 
+                        "identity": "rim"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Group.actual", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "condition": [
+                    "grp-1"
+                ]
+            }, 
+            {
+                "definition": "Provides a specific type of resource the group includes; e.g. \"cow\", \"syringe\", etc.", 
+                "short": "Kind of Group members", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "Kind of particular resource; e.g. cow, syringe, lake, etc."
+                }, 
+                "mapping": [
+                    {
+                        "map": "./code", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This would generally be omitted for Person resources.", 
+                "isSummary": true, 
+                "path": "Group.code", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A label assigned to the group for human identification and communication.", 
+                "short": "Label for Group", 
+                "requirements": "Used to identify the group in human communication.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "./name[type=\"ST\"]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Group.name", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A count of the number of resource instances that are part of the group.", 
+                "short": "Number of members", 
+                "requirements": "Group size is a common defining characteristic.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "./quantity", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Note that the quantity may be less than the number of members if some of the members are not active.", 
+                "isSummary": true, 
+                "path": "Group.quantity", 
+                "type": [
+                    {
+                        "code": "unsignedInt"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies the traits shared by members of the group.", 
+                "short": "Trait of group members", 
+                "requirements": "Needs to be a generic mechanism for identifying what individuals can be part of a group.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "./playedRole[isNormalRole()]/participation[isNormalParticipation() and typeCode=\"SBJ\"]/act[isNormalAct and classCode=\"OBS\" and moodCode=\"EVN\"]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "All the identified characteristics must be true for an entity to a member of the group.", 
+                "path": "Group.characteristic", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Group.characteristic.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Group.characteristic.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "path": "Group.characteristic.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "A code that identifies the kind of trait being asserted.", 
+                "short": "Kind of characteristic", 
+                "requirements": "Need a formal way of identifying the characteristic being described.", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "List of characteristics used to describe group members; e.g. gender, age, owner, location, etc."
+                }, 
+                "mapping": [
+                    {
+                        "map": "./code", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Group.characteristic.code", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The value of the trait that holds (or does not hold - see 'exclude') for members of the group.", 
+                "short": "Value held by characteristic", 
+                "requirements": "The value of the characteristic is what determines group membership.", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "Value of descriptive member characteristic; e.g. red, male, pneumonia, Caucasian, etc."
+                }, 
+                "mapping": [
+                    {
+                        "map": "./value", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "For Range, it means members of the group have a value that falls somewhere within the specified range.", 
+                "path": "Group.characteristic.value[x]", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }, 
+                    {
+                        "code": "boolean"
+                    }, 
+                    {
+                        "code": "Quantity"
+                    }, 
+                    {
+                        "code": "Range"
+                    }
+                ]
+            }, 
+            {
+                "definition": "If true, indicates the characteristic is one that is NOT held by members of the group.", 
+                "short": "Group includes or excludes", 
+                "requirements": "Sometimes group membership is determined by characteristics not possessed.", 
+                "min": 1, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "./valueNegationInd", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This is labeled as \"Is Modifier\" because applications cannot wrongly include excluded members as included or vice versa.", 
+                "isModifier": true, 
+                "path": "Group.characteristic.exclude", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The period over which the characteristic is tested; e.g. the patient had an operation during the month of June.", 
+                "short": "Period over which characteristic is tested", 
+                "min": 0, 
+                "max": "1", 
+                "path": "Group.characteristic.period", 
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Identifies the resource instances that are members of the group.", 
+                "short": "Who or what is in group", 
+                "requirements": "Often the only thing of interest about a group is \"who's in it\".", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "./scopedRole[isNormalRole() and classCode=\"MBR\"]/player", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Group.member", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ], 
+                "condition": [
+                    "grp-1"
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Group.member.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Group.member.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "path": "Group.member.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "A reference to the entity that is a member of the group. Must be consistent with Group.type.", 
+                "short": "Reference to the group member", 
+                "min": 1, 
+                "max": "1", 
+                "path": "Group.member.entity", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient"
+                        ], 
+                        "code": "Reference"
+                    }, 
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Practitioner"
+                        ], 
+                        "code": "Reference"
+                    }, 
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Device"
+                        ], 
+                        "code": "Reference"
+                    }, 
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Medication"
+                        ], 
+                        "code": "Reference"
+                    }, 
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Substance"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The period that the member was in the group, if known.", 
+                "short": "Period member belonged to the group", 
+                "requirements": "Need to track who was in a group at a  particular time.", 
+                "min": 0, 
+                "max": "1", 
+                "meaningWhenMissing": "The member is in the group at this time", 
+                "path": "Group.member.period", 
+                "type": [
+                    {
+                        "code": "Period"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A flag to indicate that the member is no longer in the group, but previously may have been a member.", 
+                "short": "If member is no longer in group", 
+                "requirements": "Sometimes you don't know when someone stopped being in a group, but not when.", 
+                "min": 0, 
+                "max": "1", 
+                "path": "Group.member.inactive", 
+                "type": [
+                    {
+                        "code": "boolean"
+                    }
+                ], 
+                "defaultValueBoolean": false
+            }
+        ]
+    }, 
+    "id": "Group"
+}
