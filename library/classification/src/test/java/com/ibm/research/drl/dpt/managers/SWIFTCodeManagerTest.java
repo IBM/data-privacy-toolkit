@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.managers;
 import com.ibm.research.drl.dpt.models.SWIFTCode;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SWIFTCodeManagerTest {
@@ -20,7 +21,7 @@ public class SWIFTCodeManagerTest {
         assertTrue(swiftCodeManager.isValidKey(key));
 
         SWIFTCode code = swiftCodeManager.getKey(key);
-        assertTrue(code.getCode().equals(key));
-        assertTrue(code.getCountry().getName().toUpperCase().equals("GREECE"));
+        assertEquals(code.getCode(), key);
+        assertEquals("GREECE", code.getCountry().getName().toUpperCase());
     }
 }
