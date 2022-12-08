@@ -1,0 +1,602 @@
+{
+    "resourceType": "StructureDefinition", 
+    "snapshot": {
+        "element": [
+            {
+                "definition": "Details and position information for a physical place where services are provided  and resources and participants may be stored, found, contained or accommodated.", 
+                "short": "Details and position information for a physical place", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".Role[classCode=SDLC]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "administrative.entity", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Location", 
+                "type": [
+                    {
+                        "code": "DomainResource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.", 
+                "short": "Logical id of this artifact", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "The only time that a resource does not have an id is when it is being submitted to the server using a create operation. Bundles always have an id, though it is usually a generated UUID.", 
+                "isSummary": true, 
+                "path": "Location.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.", 
+                "short": "Metadata about the resource", 
+                "min": 0, 
+                "max": "1", 
+                "isSummary": true, 
+                "path": "Location.meta", 
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content.", 
+                "short": "A set of rules under which this content was created", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element as much as possible.", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Location.implicitRules", 
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The base language in which the resource is written.", 
+                "short": "Language of the resource content", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "A human language.", 
+                    "valueSetUri": "http://tools.ietf.org/html/bcp47"
+                }, 
+                "comments": "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource  Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute).", 
+                "path": "Location.language", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A human-readable narrative that contains a summary of the resource, and may be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.", 
+                "short": "Text summary of the resource, for human interpretation", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Act.text?", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative.", 
+                "alias": [
+                    "narrative", 
+                    "html", 
+                    "xhtml", 
+                    "display"
+                ], 
+                "path": "Location.text", 
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ], 
+                "condition": [
+                    "dom-1"
+                ]
+            }, 
+            {
+                "definition": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.", 
+                "short": "Contained, inline Resources", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again.", 
+                "alias": [
+                    "inline resources", 
+                    "anonymous resources", 
+                    "contained resources"
+                ], 
+                "path": "Location.contained", 
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Location.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Location.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "Unique code or number identifying the location to its users.", 
+                "short": "Unique code or number identifying the location to its users", 
+                "requirements": "Organization label locations in registries, need to keep track of those.", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".id", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Location.identifier", 
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ]
+            }, 
+            {
+                "definition": "active | suspended | inactive.", 
+                "short": "active | suspended | inactive", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "Indicates whether the location is still in use.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/location-status"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".statusCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "status", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Location.status", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Name of the location as used by humans. Does not need to be unique.", 
+                "short": "Name of the location as used by humans", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".name", 
+                        "identity": "rim"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Location.name", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Description of the Location, which helps in finding or referencing the place.", 
+                "short": "Description of the location", 
+                "requirements": "Humans need additional information to verify a correct location has been identified.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playingEntity[classCode=PLC determinerCode=INSTANCE].desc", 
+                        "identity": "rim"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Location.description", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Indicates whether a resource instance represents a specific location or a class of locations.", 
+                "short": "instance | kind", 
+                "requirements": "When using a Location resource for scheduling or orders, we need to be able to refer to a class of Locations instead of a specific Location.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "Indicates whether a resource instance represents a specific location or a class of locations.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/location-mode"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".playingEntity[classCode=PLC].determinerCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "class", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Location.mode", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Indicates the type of function performed at the location.", 
+                "short": "Type of function performed", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "extensible", 
+                    "description": "Indicates the type of function performed at the location.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/v3-ServiceDeliveryLocationRoleType"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "class", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Location.type", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The contact details of communication devices available at the location. This can include phone numbers, fax numbers, mobile numbers, email addresses and web sites.", 
+                "short": "Contact details of the location", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".telecom", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Location.telecom", 
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Physical location.", 
+                "short": "Physical location", 
+                "requirements": "If locations can be visited, we need to keep track of their address.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".addr", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This was kept as 0..1 as there is no use property on the address, so wouldn't be able to identify different address types.", 
+                "path": "Location.address", 
+                "type": [
+                    {
+                        "code": "Address"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Physical form of the location, e.g. building, room, vehicle, road.", 
+                "short": "Physical form of the location", 
+                "requirements": "For purposes of showing relevant locations in queries, we need to categorize locations.", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "example", 
+                    "description": "Physical form of the location", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/location-physical-type"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".playingEntity [classCode=PLC].code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "class", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isSummary": true, 
+                "path": "Location.physicalType", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The absolute geographic location of the Location, expressed using the WGS84 datum (This is the same co-ordinate system used in KML).", 
+                "short": "The absolute geographic location", 
+                "requirements": "For mobile applications and automated route-finding knowing the exact location of the Location is required.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playingEntity [classCode=PLC determinerCode=INSTANCE].positionText", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Location.position", 
+                "type": [
+                    {
+                        "code": "BackboneElement"
+                    }
+                ]
+            }, 
+            {
+                "definition": "unique id for the element within a resource (for internal references).", 
+                "short": "xml:id (or equivalent in JSON)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "representation": [
+                    "xmlAttr"
+                ], 
+                "path": "Location.position.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "n/a", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Location.position.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the element, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content", 
+                    "modifiers"
+                ], 
+                "path": "Location.position.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "Longitude. The value domain and the interpretation are the same as for the text of the longitude element in KML (see notes below).", 
+                "short": "Longitude with WGS84 datum", 
+                "min": 1, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Location.position.longitude", 
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Latitude. The value domain and the interpretation are the same as for the text of the latitude element in KML (see notes below).", 
+                "short": "Latitude with WGS84 datum", 
+                "min": 1, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Location.position.latitude", 
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Altitude. The value domain and the interpretation are the same as for the text of the altitude element in KML (see notes below).", 
+                "short": "Altitude with WGS84 datum", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "(RIM Opted not to map the sub-elements of GPS location, is now an OBS)", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Location.position.altitude", 
+                "type": [
+                    {
+                        "code": "decimal"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The organization responsible for the provisioning and upkeep of the location.", 
+                "short": "Organization responsible for provisioning and upkeep", 
+                "requirements": "Need to know who manages the location.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".scopingEntity[classCode=ORG determinerKind=INSTANCE]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This can also be used as the part of the organization hierarchy where this location provides services. These services can be defined through the HealthcareService resource.", 
+                "isSummary": true, 
+                "path": "Location.managingOrganization", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Another Location which this Location is physically part of.", 
+                "short": "Another Location this one is physically part of", 
+                "requirements": "For purposes of location, display and identification, knowing which locations are located within other locations is important.", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".inboundLink[typeCode=PART].source[classCode=SDLC]", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Location.partOf", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Location"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }
+        ]
+    }, 
+    "id": "Location"
+}
