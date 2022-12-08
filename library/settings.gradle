@@ -1,6 +1,6 @@
 rootProject.name = 'data-privacy-toolkit'
 
-include(':core')
+include(':classification')
 //include(':classification')
 //include(':masking')
 //include(':anonymization')
