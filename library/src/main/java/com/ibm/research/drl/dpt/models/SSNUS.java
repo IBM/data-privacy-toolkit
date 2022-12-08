@@ -52,10 +52,11 @@ public class SSNUS {
 
     @Override
     public String toString() {
-        String builder = areaNumber + "-" +
-                group +
-                "-" +
-                serialNumber;
-        return builder;
+        StringBuilder builder = new StringBuilder(areaNumber);
+        builder.append("-");
+        builder.append(group);
+        builder.append("-");
+        builder.append(serialNumber);
+        return builder.toString();
     }
 }

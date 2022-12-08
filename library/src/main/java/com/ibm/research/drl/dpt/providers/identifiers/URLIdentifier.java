@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class URLIdentifier extends AbstractIdentifier {
+public class URLIdentifier extends AbstractIdentifier{
     private static final String[] appropriateNames = {"URL", "Webpage", "Web URL"};
 
     @Override
@@ -25,7 +25,7 @@ public class URLIdentifier extends AbstractIdentifier {
         String data = value.toLowerCase();
 
         //TODO: to find the correct map of incorrect characters
-        for (int i = 0; i < value.length(); i++) {
+        for(int i = 0; i < value.length(); i++) {
             char c = value.charAt(i);
             if (Character.isWhitespace(c) || c == '\r' || c == '\n') {
                 return false;
@@ -39,11 +39,11 @@ public class URLIdentifier extends AbstractIdentifier {
         if (!data.startsWith("http")) {
             return false;
         }
-
+        
         try {
             URL u = new URL(value);
             return true;
-        } catch (MalformedURLException ignored) {
+        } catch(MalformedURLException ignored) {
             return data.startsWith("www.") || data.startsWith("mail.");
         }
     }
@@ -62,7 +62,7 @@ public class URLIdentifier extends AbstractIdentifier {
     public boolean isPOSIndependent() {
         return true;
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DOT;

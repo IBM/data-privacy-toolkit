@@ -68,13 +68,13 @@ public class USPhoneIdentifier extends AbstractIdentifier implements IdentifierW
 
     @Override
     public Tuple<Boolean, Tuple<Integer, Integer>> isOfThisTypeWithOffset(String data) {
-        for (Pattern pattern : patterns) {
+        for(Pattern pattern: patterns) {
             Matcher matcher = pattern.matcher(data);
             if (matcher.matches()) {
                 return new Tuple<>(true, new Tuple<>(matcher.start(1), matcher.end(1) - matcher.start(1)));
             }
         }
-
+        
         return new Tuple<>(false, null);
         /*
         return patterns.parallelStream().map(
@@ -88,7 +88,7 @@ public class USPhoneIdentifier extends AbstractIdentifier implements IdentifierW
         ).orElse(new Tuple<>(false, null));
         */
     }
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DIGIT;

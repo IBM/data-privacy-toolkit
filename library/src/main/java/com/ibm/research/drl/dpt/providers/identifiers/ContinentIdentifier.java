@@ -18,7 +18,7 @@ import java.util.Collection;
 public class ContinentIdentifier extends AbstractManagerBasedIdentifier {
     private static final String[] appropriateNames = {"Continent"};
     private static final ContinentManager continentManager = ContinentManager.getInstance();
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;
@@ -41,7 +41,7 @@ public class ContinentIdentifier extends AbstractManagerBasedIdentifier {
 
     @Override
     public Collection<ProviderType> getLinkedTypes() {
-        return Arrays.asList(ProviderType.COUNTRY, ProviderType.CITY);
+        return Arrays.asList(new ProviderType[]{ProviderType.COUNTRY, ProviderType.CITY});
     }
 
     @Override

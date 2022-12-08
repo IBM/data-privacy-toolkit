@@ -6,7 +6,7 @@
 package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchemaField;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
