@@ -15,11 +15,12 @@ import java.util.Collection;
 /**
  * The type Country identifier.
  *
+ * @author stefanob, santonat
  */
 public class CountryIdentifier extends AbstractManagerBasedIdentifier {
     private static final String[] appropriateNames = {"Country"};
     private static final CountryManager countryManager = CountryManager.getInstance();
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;
@@ -38,7 +39,7 @@ public class CountryIdentifier extends AbstractManagerBasedIdentifier {
 
     @Override
     public Collection<ProviderType> getLinkedTypes() {
-        return Arrays.asList(ProviderType.CITY);
+        return Arrays.asList(new ProviderType[]{ProviderType.CITY});
     }
 
     @Override

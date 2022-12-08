@@ -19,13 +19,9 @@ import java.util.List;
 public class CountyManager extends ResourceBasedManager<County> {
     private static final CountyManager COUNTY_MANAGER = new CountyManager();
 
-    public static CountyManager getInstance() {
-        return COUNTY_MANAGER;
-    }
+    public static CountyManager getInstance() {return COUNTY_MANAGER;}
 
-    private CountyManager() {
-        super();
-    }
+    private CountyManager() {super();}
 
     @Override
     protected Collection<ResourceEntry> getResources() {

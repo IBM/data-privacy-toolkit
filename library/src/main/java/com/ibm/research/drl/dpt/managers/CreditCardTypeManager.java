@@ -20,13 +20,9 @@ public class CreditCardTypeManager extends ResourceBasedManager<CreditCardType> 
     private static final long serialVersionUID = 2610710155976479839L;
     private static final CreditCardTypeManager CREDIT_CARD_TYPE_MANAGER = new CreditCardTypeManager();
 
-    public static CreditCardTypeManager getInstance() {
-        return CREDIT_CARD_TYPE_MANAGER;
-    }
+    public static CreditCardTypeManager getInstance() {return CREDIT_CARD_TYPE_MANAGER;}
 
-    private CreditCardTypeManager() {
-        super();
-    }
+    private CreditCardTypeManager() {super();}
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -39,7 +35,7 @@ public class CreditCardTypeManager extends ResourceBasedManager<CreditCardType> 
         String key = cctype.toUpperCase();
 
         CreditCardType creditCardType = new CreditCardType(cctype);
-        return List.of(new Tuple<>(key, creditCardType));
+        return Arrays.asList(new Tuple<>(key, creditCardType));
     }
 
     @Override

@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -60,6 +60,49 @@ public class QATest {
         for(Identifier identifier: identifiers) {
             if (identifier.isOfThisType(value)) {
                 System.out.println(identifier.getType().getName() + ":" + identifier.getClass().getCanonicalName());
+            }
+        }
+    }
+    @Test
+    @Disabled
+    public void testPopularNouns() throws Exception {
+        InputStream is = this.getClass().getResourceAsStream("/popular_nouns.csv");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+        Collection<Identifier> identifiers = IdentifierFactory.defaultIdentifiers();
+        String line;
+
+        while((line = bufferedReader.readLine()) != null) {
+            Set<String> results = new HashSet<>();
+            for(Identifier identifier: identifiers) {
+                if(identifier.isOfThisType(line)) {
+                    results.add(identifier.getType().getName());
+                }
+            }
+
+            if (!results.isEmpty()) {
+                System.out.println(line + ":" + results);
+            }
+        }
+    }
+
+    @Test
+    @Disabled
+    public void testPopularAdjectives() throws Exception {
+        InputStream is = this.getClass().getResourceAsStream("/popular_adjectives.csv");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+        Collection<Identifier> identifiers = IdentifierFactory.defaultIdentifiers();
+        String line;
+
+        while((line = bufferedReader.readLine()) != null) {
+            Set<String> results = new HashSet<>();
+            for(Identifier identifier: identifiers) {
+                if(identifier.isOfThisType(line)) {
+                    results.add(identifier.getType().getName());
+                }
+            }
+
+            if (!results.isEmpty()) {
+                System.out.println(line + ":" + results);
             }
         }
     }

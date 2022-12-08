@@ -15,19 +15,19 @@ import java.util.Collection;
 public class DayIdentifier extends AbstractManagerBasedIdentifier {
     private static final DayManager dayManager = DayManager.getInstance();
     private static final String[] appropriateNames = {"Day"};
-
+    
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;
     }
 
     @Override
-    public ProviderType getType() {
+    public ProviderType getType(){
         return ProviderType.DAY;
     }
 
     @Override
-    protected Manager getManager() {
+    protected Manager getManager(){
         return dayManager;
     }
 

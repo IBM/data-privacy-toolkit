@@ -19,15 +19,11 @@ import java.util.List;
 public class DayManager extends ResourceBasedManager<Day> {
     private static final long serialVersionUID = 422211328962854977L;
     private static final DayManager DAY_MANAGER = new DayManager();
-
-    public static DayManager getInstance() {
-        return DAY_MANAGER;
-    }
-
-    private DayManager() {
-        super();
-    }
-
+    
+    public static DayManager getInstance() {return DAY_MANAGER;}
+    
+    private DayManager() {super();}
+    
     @Override
     protected Collection<ResourceEntry> getResources() {
         return LocalizationManager.getInstance().getResources(Resource.DAY);
@@ -39,8 +35,8 @@ public class DayManager extends ResourceBasedManager<Day> {
         String key = name.toUpperCase();
 
         Day day = new Day(name, countryCode);
-
-        return List.of(new Tuple<>(key, day));
+        
+        return Arrays.asList(new Tuple<>(key, day));
     }
 
     @Override

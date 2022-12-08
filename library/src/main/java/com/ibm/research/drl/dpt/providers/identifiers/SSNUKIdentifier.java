@@ -55,7 +55,11 @@ public class SSNUKIdentifier extends AbstractIdentifier {
         }
 
         char last = ssn.charAt(8);
-        return last >= 'A' && last <= 'D';
+        if (last < 'A' || last > 'D') {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

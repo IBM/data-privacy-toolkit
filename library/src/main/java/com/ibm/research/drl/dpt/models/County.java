@@ -5,7 +5,7 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.models;
 
-public class County implements LocalizedEntity {
+public class County  implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;
     private final String shortName;
