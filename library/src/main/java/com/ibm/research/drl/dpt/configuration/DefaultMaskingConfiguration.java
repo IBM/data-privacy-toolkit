@@ -20,14 +20,15 @@ import java.util.stream.Stream;
 /**
  * The type Default masking configuration.
  *
+ * @author santonat
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"optionsByCategory", "name"})
+@JsonIgnoreProperties({"optionsByCategory","name"})
 public final class DefaultMaskingConfiguration implements MaskingConfiguration, Serializable {
     private final Map<String, ConfigurationOption> optionMap;
     private final String name;
     private ConfigurationManager configurationManager;
-
+    
     /**
      * Instantiates a new Default masking configuration.
      *
@@ -53,7 +54,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
 
         this.optionMap.put("default.masking.provider", new ConfigurationOption("RANDOM", "Default masking provider", "Defaults"));
         this.optionMap.put("fail.mode", new ConfigurationOption(FailMode.RETURN_EMPTY, "Fail mode", "Error handling"));
-
+        
         this.optionMap.put("export.sampling", new ConfigurationOption(100, "Sampling percentage", "Export"));
         this.optionMap.put("export.relationships.perRecord", new ConfigurationOption(false, "Per record relationship extraction", "Export"));
 
@@ -86,11 +87,11 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         this.optionMap.put("age.mask.randomNumbers", new ConfigurationOption(false, "Randomize age", "Age"));
 
         this.optionMap.put("excel.mask.ignoreNonExistent", new ConfigurationOption(true, "Ignore non-existent cells", "Excel"));
-
+       
         this.optionMap.put("decimalrounding.mask.rules", new ConfigurationOption("", "Decimal rounding masking rules", "Decimal Rounding"));
-
+        
         this.optionMap.put("dictionaryBased.mask.filename", new ConfigurationOption("", "Dictionary filename", "Dictionary-based masking provider"));
-
+        
         this.optionMap.put("hl7.prefixGUID", new ConfigurationOption("", "hl7.prefixGUID", "HL7"));
 
         /* DICOM options */
@@ -100,16 +101,16 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         this.optionMap.put("dicom.image.mask", new ConfigurationOption(false, "Mask image part", "DICOM"));
         this.optionMap.put("dicom.image.sensitiveTags", new ConfigurationOption("(0010,0010):(0008,0080):(0010,0020):(0008,1070):(0008,1060)", "Mask image tags with sensitive info", "DICOM"));
         this.optionMap.put("dicom.image.sensitiveTypes", new ConfigurationOption("", "Mask image tags based on types", "DICOM"));
-
+        
         /* FHIR options */
 
         this.optionMap.put("fhir.prefixGUID", new ConfigurationOption("--", "fhir.prefixGUID", "FHIR"));
 
         this.optionMap.put("fhir.resources.enabled", new ConfigurationOption("Device,DeviceMetric,DeviceComponent,Patient,Practitioner,Location,Organization,Observation,Medication,MedicationOrder,MedicationAdministration,Contract,QuestionnaireResponse,BodySite,Group,CarePlan,AuditEvent", "fhir.resources.enabled", "FHIR"));
 
-        this.optionMap.put("fhir.basePath.Patient", new ConfigurationOption("/fhir/Patient", "fhir.resources.enabled", "FHIR"));
-        this.optionMap.put("fhir.basePath.CarePlan", new ConfigurationOption("/fhir/CarePlan", "fhir.resources.enabled", "FHIR"));
-        this.optionMap.put("fhir.basePath.Device", new ConfigurationOption("/fhir/Device", "fhir.resources.enabled", "FHIR"));
+        this.optionMap.put("fhir.basePath.Patient", new ConfigurationOption("/fhir/Patient","fhir.resources.enabled", "FHIR"));
+        this.optionMap.put("fhir.basePath.CarePlan", new ConfigurationOption("/fhir/CarePlan","fhir.resources.enabled", "FHIR"));
+        this.optionMap.put("fhir.basePath.Device", new ConfigurationOption("/fhir/Device","fhir.resources.enabled", "FHIR"));
         this.optionMap.put("fhir.basePath.DeviceComponent", new ConfigurationOption("/fhir/DeviceComponent", "fhir.resources.enabled", "FHIR"));
         this.optionMap.put("fhir.basePath.DeviceMetric", new ConfigurationOption("/fhir/DeviceMetric", "fhir.resources.enabled", "FHIR"));
         this.optionMap.put("fhir.basePath.Observation", new ConfigurationOption("/fhir/Observation", "fhir.resources.enabled", "FHIR"));
@@ -392,19 +393,19 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         this.optionMap.put("zipcode.mask.minimumPopulationUsePrefix", new ConfigurationOption(true, "Use prefix for minimum population", "ZIP code"));
         this.optionMap.put("zipcode.mask.minimumPopulationPrefixDigits", new ConfigurationOption(3, "Prefix for minimum population", "ZIP code"));
         this.optionMap.put("zipcode.mask.minimumPopulation", new ConfigurationOption(20000, "Minimum Population", "ZIP code"));
-
+    
         this.optionMap.put("image.mask.words", new ConfigurationOption("", "Words to mask on the image", "Imaging"));
         this.optionMap.put("image.mask.types", new ConfigurationOption("", "Types to mask on the image", "Imaging"));
 
         this.optionMap.put("religion.mask.probabilityBased", new ConfigurationOption(false, "Probabilistic masking of religions", "Religion"));
-
+        
         this.optionMap.put("race.mask.probabilityBased", new ConfigurationOption(false, "Probabilistic masking of races", "Race"));
-
+        
         this.optionMap.put("generalization.masking.hierarchyName", new ConfigurationOption("", "Probabilistic masking of races", "Generalization"));
         this.optionMap.put("generalization.masking.hierarchyMap", new ConfigurationOption(null, "Probabilistic masking of races", "Generalization"));
         this.optionMap.put("generalization.masking.hierarchyLevel", new ConfigurationOption(-1, "Probabilistic masking of races", "Generalization"));
         this.optionMap.put("generalization.masking.randomizeOnFail", new ConfigurationOption(true, "Probabilistic masking of races", "Generalization"));
-
+        
         this.optionMap.put("differentialPrivacy.parameter.epsilon", new ConfigurationOption(8.0, "Noise parameter", "Differential Privacy"));
         //this.optionMap.put("differentialPrivacy.parameter.delta", new ConfigurationOption(0.0, "Relaxation parameter", "Differential Privacy"));
         this.optionMap.put("differentialPrivacy.parameter.diameter", new ConfigurationOption(-1, "Base for the admissible displacement", "Differential Privacy"));
@@ -455,7 +456,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
     public Collection<String> getStringValueWithPrefixMatch(String prefix) {
         Collection<String> values = new ArrayList<>();
 
-        for (String key : this.optionMap.keySet()) {
+        for(String key: this.optionMap.keySet()) {
             if (key.startsWith(prefix)) {
                 values.add(getStringValue(key));
             }

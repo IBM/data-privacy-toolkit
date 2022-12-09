@@ -12,6 +12,7 @@ import java.util.Collection;
 /**
  * The interface Masking configuration.
  *
+ * @author stefanob
  */
 public interface MaskingConfiguration {
     /**
@@ -32,7 +33,6 @@ public interface MaskingConfiguration {
     int getIntValue(String key);
 
     double getDoubleValue(String key);
-
     /**
      * Gets boolean value.
      *
@@ -50,9 +50,8 @@ public interface MaskingConfiguration {
     String getStringValue(String key);
 
     JsonNode getJsonNodeValue(String key);
-
+    
     Collection<String> getStringValueWithPrefixMatch(String key);
-
     /**
      * Sets value.
      *
@@ -62,6 +61,7 @@ public interface MaskingConfiguration {
     void setValue(String key, Object value);
 
     /**
+     *
      * @return the configuration manager that generated this configuration
      */
     ConfigurationManager getConfigurationManager();

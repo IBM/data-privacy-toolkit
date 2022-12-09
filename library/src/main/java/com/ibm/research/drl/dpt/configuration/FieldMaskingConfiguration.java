@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * The type Field masking configuration.
  *
+ * @author stefanob
  */
 public class FieldMaskingConfiguration implements MaskingConfiguration, Serializable {
     private final MaskingConfiguration parent;
@@ -69,7 +70,7 @@ public class FieldMaskingConfiguration implements MaskingConfiguration, Serializ
     public Collection<String> getStringValueWithPrefixMatch(String prefix) {
         Collection<String> values = new ArrayList<>();
 
-        for (String key : fieldOptions.keySet()) {
+        for(String key: fieldOptions.keySet()) {
             if (key.startsWith(prefix)) {
                 values.add(getStringValue(key));
             }

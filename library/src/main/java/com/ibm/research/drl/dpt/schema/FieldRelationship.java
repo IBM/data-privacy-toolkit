@@ -89,18 +89,16 @@ public class FieldRelationship implements Serializable {
      *
      * @return the relationship operand [ ]
      */
-    public RelationshipOperand[] getOperands() {
-        return this.operands;
-    }
+    public RelationshipOperand[] getOperands() { return this.operands; }
 
     @Override
     public String toString() {
         StringBuilder operandNames = new StringBuilder();
-        for (RelationshipOperand operand : this.operands) {
+        for(RelationshipOperand operand: this.operands) {
             operandNames.append(operand.getName()).append(",");
         }
 
         return String.format("Field %s (%s) has relationship %s with %s", fieldName,
-                valueClass.name(), relationshipType.name(), operandNames);
+                valueClass.name(), relationshipType.name(), operandNames.toString());
     }
 }

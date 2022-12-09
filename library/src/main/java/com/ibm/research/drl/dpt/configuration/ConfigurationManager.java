@@ -69,15 +69,15 @@ public class ConfigurationManager implements Serializable {
             return value.asBoolean();
         if (value.isShort() || value.isInt() || value.isIntegralNumber())
             return value.asInt();
-
+        
         if (value.isDouble() || value.isFloat()) {
             return value.asDouble();
         }
-
+        
         if (value.isArray() || value.isObject()) {
             return value;
         }
-
+        
         return value.textValue();
     }
 
