@@ -1,0 +1,19 @@
+{
+  "_fields" :  {
+      "field1": {
+        "phone.countryCode.preserve": false
+      },
+      "field2": {
+        "phone.countryCode.preserve": true
+      },
+      "--fhir.location.identifier": {
+        "default.masking.provider": "CITY",
+        "dummy.conf.value": "DUMMY"
+      }
+  },
+  "_defaults": {
+    "default.masking.provider": "RANDOM",
+    "fhir.prefixGUID": "--",
+    "phone.countryCode.preserve": false
+  }
+}
