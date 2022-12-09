@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractComplexMaskingProviderTest {
 
-    private static class DummyComplexMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    private class DummyComplexMaskingProvider extends AbstractComplexMaskingProvider<String> {
 
         private final MaskingConfiguration fieldConfiguration;
 

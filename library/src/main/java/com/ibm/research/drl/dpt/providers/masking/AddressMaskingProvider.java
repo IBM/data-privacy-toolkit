@@ -18,6 +18,7 @@ import java.security.SecureRandom;
 
 /**
  * The type Address masking provider.
+ *
  */
 public class AddressMaskingProvider extends AbstractMaskingProvider {
     private static final AddressIdentifier addressIdentifier = new AddressIdentifier();
@@ -80,6 +81,7 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
     }
 
 
+
     @Override
     public String mask(String identifier) {
         Address randomAddress;
@@ -88,7 +90,8 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
         if (address == null) {
             address = new Address("", "", "", "", "", "");
             randomAddress = new Address();
-        } else {
+        }
+        else {
             randomAddress = new Address(address);
         }
 
@@ -98,7 +101,8 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
             if (this.getPseudorandom) {
                 String poBoxNumber = address.getPoBoxNumber();
                 randomAddress.setPoBoxNumber(Long.toString(Math.abs(HashUtils.longFromHash(poBoxNumber)) % 10000));
-            } else {
+            }
+            else {
                 randomAddress.setPoBoxNumber(random.nextInt(10000) + "");
             }
             return randomAddress.toString();
@@ -108,7 +112,8 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
             if (this.getPseudorandom) {
                 String number = randomAddress.getNumber();
                 randomAddress.setNumber(Long.toString(Math.abs(HashUtils.longFromHash(number)) % 300));
-            } else {
+            }
+            else {
                 randomAddress.setNumber(this.random.nextInt(300) + "");
             }
         }
@@ -127,7 +132,8 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
             if (this.getPseudorandom) {
                 String sname = randomAddress.getName();
                 randomAddress.setName(streetNameManager.getPseudorandom(sname));
-            } else {
+            }
+            else {
                 randomAddress.setName(streetNameManager.getRandomKey());
             }
         }
@@ -137,8 +143,9 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
             int randomPosition;
 
             if (this.getPseudorandom) {
-                randomPosition = (int) (Math.abs(HashUtils.longFromHash(identifier)) % roadTypes.length);
-            } else {
+                randomPosition = (int)(Math.abs(HashUtils.longFromHash(identifier)) % roadTypes.length);
+            }
+            else {
                 randomPosition = random.nextInt(roadTypes.length);
             }
 
@@ -151,10 +158,12 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
             if (this.getPseudorandom) {
                 String postalCode = address.getPostalCode();
                 randomAddress.setPostalCode(postalCodeManager.getPseudorandom(postalCode));
-            } else if (this.nearestPostalCode) {
+            }
+            else if (this.nearestPostalCode) {
                 String postalCode = address.getPostalCode();
                 randomAddress.setPostalCode(postalCodeManager.getClosestPostalCode(postalCode, this.nearestPostalCodeK));
-            } else {
+            }
+            else {
                 randomAddress.setPostalCode(postalCodeManager.getRandomKey());
             }
         }

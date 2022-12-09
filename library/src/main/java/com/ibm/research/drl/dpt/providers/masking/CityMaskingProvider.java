@@ -14,6 +14,7 @@ import java.security.SecureRandom;
 
 /**
  * The type City masking provider.
+ *
  */
 public class CityMaskingProvider extends AbstractMaskingProvider {
     private static final CityManager cityManager = CityManager.getInstance();

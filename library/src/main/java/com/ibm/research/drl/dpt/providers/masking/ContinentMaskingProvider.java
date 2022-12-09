@@ -24,6 +24,7 @@ import java.util.Map;
 /**
  * The type Continent masking provider.
  *
+ * @author santonat
  */
 public class ContinentMaskingProvider extends AbstractMaskingProvider {
     private static final CountryManager countryManager = CountryManager.getInstance();
@@ -83,7 +84,8 @@ public class ContinentMaskingProvider extends AbstractMaskingProvider {
             }
 
             return country.getContinent();
-        } else if (relationshipOperand.getType() == ProviderType.CITY) {
+        }
+        else if(relationshipOperand.getType() == ProviderType.CITY) {
             City city = cityManager.getKey(operandMaskedValue);
             if (city != null) {
                 String countryCode = city.getCountryCode();

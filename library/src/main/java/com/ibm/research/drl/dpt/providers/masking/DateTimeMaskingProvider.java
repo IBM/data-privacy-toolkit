@@ -16,7 +16,7 @@ import com.ibm.research.drl.dpt.util.HashUtils;
 import com.ibm.research.drl.dpt.util.RandomGenerators;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -33,6 +33,7 @@ import java.util.Objects;
 
 /**
  * The type Date time masking provider.
+ *
  */
 public class DateTimeMaskingProvider extends AbstractMaskingProvider {
     private static final Logger logger = LogManager.getLogger(DateTimeMaskingProvider.class);
@@ -92,6 +93,7 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
             .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
             .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
             .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0).toFormatter();
+    ;
 
     /**
      * Instantiates a new Date time masking provider.
@@ -344,12 +346,13 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
         String keyValue = pair.getOriginal();
 
         long minMaxDistance = this.keyBasedMaxDays - this.keyBasedMinDays;
-
+        
         final long hashValue;
 
         if (minMaxDistance > 0) {
             hashValue = this.keyBasedMinDays + Math.abs(HashUtils.longFromHash(keyValue)) % minMaxDistance;
-        } else {
+        }
+        else {
             hashValue = this.keyBasedMinDays;
         }
 
@@ -438,7 +441,8 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
                 if (operandOriginalDate.isAfter(originalDate)) {
                     //diff is positive
                     d = d.minus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
-                } else {
+                }
+                else {
                     //diff is zero or negative
                     d = d.plus(-diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
                 }
@@ -533,7 +537,7 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
 
         if (generalizeYear) {
             int originalYear = cal.get(Calendar.YEAR);
-            return Integer.toString(originalYear);
+            return Integer.toString(originalYear );
         }
 
         if (generalizeNYearInterval) {

@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2020                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -10,15 +10,7 @@ import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.providers.masking.dicom.CSMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.DAMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.DTMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.LOMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.PNMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.SHMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.SQMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.TMMaskingProvider;
-import com.ibm.research.drl.dpt.providers.masking.dicom.UIMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.*;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.persistence.AbstractPersistentMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.persistence.DBPersistentMaskingProvider;
@@ -26,7 +18,7 @@ import com.ibm.research.drl.dpt.providers.masking.persistence.FileBackedPersiste
 import com.ibm.research.drl.dpt.providers.masking.persistence.LocallyPersistentMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.persistence.causal.CausalOrderingConsistentMaskingProvider;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.File;
 import java.io.Serializable;
@@ -50,6 +42,11 @@ public final class MaskingProviderFactory implements Serializable {
     private final HashMap<String, MaskingProvider> globalPersistent;
 
     private static final String PERSISTENCE_TYPE_CONF_NAME = "persistence.type";
+
+    @Deprecated(forRemoval = true)
+    public  MaskingProviderFactory() {
+        this(new ConfigurationManager(), Collections.emptyMap());
+    }
 
     /**
      * Instantiates a new Masking provider factory.
@@ -119,8 +116,7 @@ public final class MaskingProviderFactory implements Serializable {
      * @return the masking provider
      */
     public synchronized MaskingProvider get(ProviderType providerType, MaskingConfiguration configuration) {
-        if (null == providerType)
-            providerType = ProviderType.valueOf(configuration.getStringValue("default.masking.provider"));
+        if (null == providerType) providerType = ProviderType.valueOf(configuration.getStringValue("default.masking.provider"));
 
         final MaskingProvider provider;
 
@@ -148,8 +144,8 @@ public final class MaskingProviderFactory implements Serializable {
     private MaskingProvider getPersistentMaskingProvider(MaskingConfiguration configuration, ProviderType providerType) {
         String namespace = configuration.getStringValue("persistence.namespace");
 
-        if (namespace == null) {
-            throw new IllegalArgumentException("persistence.namespace is not defined");
+        if(namespace == null) {
+            throw new IllegalArgumentException("persistence.namespace is not defined");    
         }
 
         String namespaceID = createNamespaceID(configuration);
@@ -158,7 +154,7 @@ public final class MaskingProviderFactory implements Serializable {
             logger.info("Persistent provider for " + namespaceID + " does not exist. Creating..");
             globalPersistent.put(namespaceID, createPersistentWrapper(getProviderFromType(providerType, configuration), configuration));
         }
-
+        
         return globalPersistent.get(namespaceID);
     }
 
@@ -280,37 +276,37 @@ public final class MaskingProviderFactory implements Serializable {
                 return new ICDv9MaskingProvider(random, configuration);
 
             case "RELIGION":
-                return new ReligionMaskingProvider(random, configuration);
+                    return new ReligionMaskingProvider(random, configuration);
 
             case "MARITAL_STATUS":
-                return new MaritalStatusMaskingProvider(random, configuration);
+                    return new MaritalStatusMaskingProvider(random, configuration);
 
             case "RACE":
-                return new RaceEthnicityMaskingProvider(random, configuration);
+                    return new RaceEthnicityMaskingProvider(random, configuration);
 
             case "MAC_ADDRESS":
-                return new MACAddressMaskingProvider(random, configuration);
+                    return new MACAddressMaskingProvider(random, configuration);
 
             case "ATC":
-                return new ATCMaskingProvider(random, configuration);
+                    return new ATCMaskingProvider(random, configuration);
 
             case "MEDICINE":
-                return new MedicineMaskingProvider(random, configuration);
+                    return new MedicineMaskingProvider(random, configuration);
 
             case "LATITUDE_LONGITUDE":
-                return new LatitudeLongitudeMaskingProvider(random, configuration);
+                    return new LatitudeLongitudeMaskingProvider(random, configuration);
 
             case "IMSI":
-                return new IMSIMaskingProvider(random, configuration);
+                    return new IMSIMaskingProvider(random, configuration);
 
             case "HOSPITAL":
-                return new HospitalMaskingProvider(random, configuration);
+                    return new HospitalMaskingProvider(random, configuration);
 
             case "SWIFT":
-                return new SWIFTCodeMaskingProvider(random, configuration);
+                    return new SWIFTCodeMaskingProvider(random, configuration);
 
             case "FHIR":
-                return new FHIRMaskingProvider(random, configuration, this);
+                    return new FHIRMaskingProvider(random, configuration, this);
 
             case "HASHINT":
                 return new HashIntMaskingProvider(random, configuration);
@@ -334,7 +330,7 @@ public final class MaskingProviderFactory implements Serializable {
                 return new PNMaskingProvider(random, configuration, this);
 
             case "DICOM_DA":
-                return new DAMaskingProvider(random, configuration);
+                return new DAMaskingProvider(random ,configuration);
 
             case "DICOM_CS":
                 return new CSMaskingProvider(random, configuration);
@@ -365,9 +361,8 @@ public final class MaskingProviderFactory implements Serializable {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.DifferentialPrivacyMaskingProvider")
                                     .getConstructor(MaskingProviderFactory.class, MaskingConfiguration.class, Map.class);
-                    return constructor.newInstance(this, configuration, identifiedTypes);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
+                    return constructor.newInstance( this, configuration, identifiedTypes);
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     logger.error("Unable to instantiate masking provider for FREE_TEXT");
 
                     throw new RuntimeException(e);
@@ -375,24 +370,23 @@ public final class MaskingProviderFactory implements Serializable {
 
             case "SUPPRESS_FIELD":
                 return new SuppressFieldMaskingProvider(random, configuration);
-
+                
             case "DICTIONARY_BASED":
                 return new DictionaryBasedMaskingProvider(random, configuration);
-
+                
             case "DECIMAL_ROUNDING":
                 return new DecimalTrimmingMaskingProvider(random, configuration);
-
+                
             case "RATIO_BASED":
                 return new RatioBasedMaskingProvider(random, configuration);
-
+                
             case "GENERALIZATION":
                 try {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.GeneralizationMaskingProvider")
                                     .getConstructor(MaskingProviderFactory.class, MaskingConfiguration.class, Map.class);
-                    return constructor.newInstance(this, configuration, identifiedTypes);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
+                    return constructor.newInstance( this, configuration, identifiedTypes);
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     logger.error("Unable to instantiate masking provider for FREE_TEXT");
 
                     throw new RuntimeException(e);
@@ -400,15 +394,14 @@ public final class MaskingProviderFactory implements Serializable {
 
             case "TIMESTAMP":
                 return new TimeStampMaskingProvider(random, configuration);
-
+                
             case "FREE_TEXT":
                 try {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.FreeTextMaskingProvider")
                                     .getConstructor(MaskingProviderFactory.class, MaskingConfiguration.class, Map.class);
-                    return constructor.newInstance(this, configuration, identifiedTypes);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
+                    return constructor.newInstance( this, configuration, identifiedTypes);
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     logger.error("Unable to instantiate masking provider for FREE_TEXT");
 
                     throw new RuntimeException(e);
@@ -422,8 +415,7 @@ public final class MaskingProviderFactory implements Serializable {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.AnnotateMaskingProvider").getConstructor(SecureRandom.class, MaskingConfiguration.class);
                     return constructor.newInstance(random, configuration);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     logger.error("Unable to load AnnotateMaskingProvider", e);
                     throw new RuntimeException(e);
                 }
@@ -432,8 +424,7 @@ public final class MaskingProviderFactory implements Serializable {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.ICDv10MaskingProvider").getConstructor(MaskingConfiguration.class, MaskingProviderFactory.class);
                     return constructor.newInstance(configuration, this);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             case "HADOOP_DICTIONARY_BASED":
@@ -441,8 +432,7 @@ public final class MaskingProviderFactory implements Serializable {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.spark.masking.provider.HadoopDictionaryBasedMaskingProvider").getConstructor(SecureRandom.class, MaskingConfiguration.class);
                     return constructor.newInstance(random, configuration);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
+                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     logger.error("Unable to load HadoopDictionaryBasedMaskingProvider", e);
                     throw new RuntimeException(e);
                 }
