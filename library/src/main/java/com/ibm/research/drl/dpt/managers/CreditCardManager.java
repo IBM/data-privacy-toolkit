@@ -29,10 +29,7 @@ public class CreditCardManager {
 
     private final static CreditCardManager CREDIT_CARD_MANAGER = new CreditCardManager();
 
-    public static CreditCardManager getInstance() {
-        return CREDIT_CARD_MANAGER;
-    }
-
+    public static CreditCardManager getInstance() {return CREDIT_CARD_MANAGER;}
     /**
      * Instantiates a new Credit card manager.
      */
@@ -56,7 +53,7 @@ public class CreditCardManager {
         Collection<ResourceEntry> resources = LocalizationManager.getInstance().getResources(Resource.CREDIT_CARD_TYPE);
         Map<String, CreditCard> ccMap = new HashMap<>();
 
-        for (ResourceEntry resourceEntry : resources) {
+        for(ResourceEntry resourceEntry: resources) {
             InputStream inputStream = resourceEntry.createStream();
             try (CSVParser reader = Readers.createCSVReaderFromStream(inputStream)) {
                 for (CSVRecord line : reader) {

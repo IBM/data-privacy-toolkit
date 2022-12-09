@@ -10,7 +10,6 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
@@ -49,13 +48,13 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
      * @param random the random
      */
     public ReplaceMaskingProvider(SecureRandom random) {
-        this(random, new DefaultMaskingConfiguration());
+        this(random, new  DefaultMaskingConfiguration());
     }
 
     /**
      * Instantiates a new Replace masking provider.
      *
-     * @param random        the random
+     * @param random               the random
      * @param configuration the masking configuration
      */
     public ReplaceMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
@@ -76,7 +75,7 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
         JsonNode replacementValuesNode = configuration.getJsonNodeValue("replace.mask.replacementValueSet");
 
         if (null != replacementValuesNode) {
-            replacementValuesNode.elements().forEachRemaining(node -> {
+            replacementValuesNode.elements().forEachRemaining( node -> {
                 this.replacementValues.add(node.asText());
             });
         }
@@ -84,7 +83,7 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
         // "000-0000-0000-000-00" -> <prefix>-[UNIQUE]
 
         if (this.replaceOnValueInSet || this.replaceOnValueNotInSet) {
-            configuration.getJsonNodeValue("replace.mask.testValues").elements().forEachRemaining(node -> {
+            configuration.getJsonNodeValue("replace.mask.testValues").elements().forEachRemaining( node -> {
                 testValues.add(node.asText());
             });
         }
@@ -117,7 +116,7 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public ReplaceMaskingProvider(MaskingConfiguration configuration) {
-        this(new SecureRandom(), configuration);
+       this(new SecureRandom(), configuration);
     }
 
     @Override
@@ -192,21 +191,23 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
     @Override
     public String mask(String identifier, String fieldName,
                        FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-        if (fieldRelationship.getRelationshipType() == RelationshipType.KEY) {
-            String operandFieldName = fieldRelationship.getOperands()[0].getName();
-            OriginalMaskedValuePair originalMaskedValuePair = maskedValues.get(operandFieldName);
-            String operandValue = originalMaskedValuePair.getOriginal();
+        switch (fieldRelationship.getRelationshipType()) {
+            case KEY:
+                String operandFieldName = fieldRelationship.getOperands()[0].getName();
+                OriginalMaskedValuePair originalMaskedValuePair = maskedValues.get(operandFieldName);
+                String operandValue = originalMaskedValuePair.getOriginal();
 
-            if (shouldValueBePreserved(operandValue)) {
-                return identifier;
-            }
-            return mask(identifier, false);
+                if (shouldValueBePreserved(operandValue)) {
+                    return identifier;
+                }
+                return mask(identifier, false);
+            default:
+                return mask(identifier);
         }
-        return mask(identifier);
     }
 
     private boolean shouldValueBePreserved(String value) {
-        if (replaceOnValueInSet && !testValues.contains(value)) {
+        if (replaceOnValueInSet && ! testValues.contains(value)) {
             return true;
         }
 

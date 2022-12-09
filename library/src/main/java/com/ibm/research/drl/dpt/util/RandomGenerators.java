@@ -14,11 +14,12 @@ import com.ibm.research.drl.dpt.providers.masking.IPAddressMaskingProvider;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.checkdigit.LuhnCheckDigit;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,13 +45,13 @@ public class RandomGenerators {
     private static final NamesManager.Names namesManager = NamesManager.instance();
 
     private static final char[] alphaDigitSubset = "0123456789abcdefghijklmnopqrstuvwxyz".toCharArray();
-
+    
     private static final SSNUKManager SSNUK_MANAGER = SSNUKManager.getInstance();
 
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     /**
-     * Generate random IMSI string.
+     * Generate random imsi string.
      *
      * @return the string
      */
@@ -58,7 +59,7 @@ public class RandomGenerators {
         String mccmnc = imsiManager.getRandomKey();
         StringBuilder builder = new StringBuilder(mccmnc);
 
-        for (int i = mccmnc.length(); i < 15; i++) {
+        for(int i = mccmnc.length(); i < 15; i++) {
             builder.append(randomDigit());
         }
 
@@ -68,16 +69,16 @@ public class RandomGenerators {
     public static String generateRandomSSNUK() {
         String prefix = SSNUK_MANAGER.getRandomPrefix();
         StringBuilder builder = new StringBuilder(prefix);
-
-        for (int i = 0; i < 6; i++) {
+        
+        for(int i = 0; i < 6; i++) {
             builder.append(randomDigit());
         }
-
+        
         builder.append(SSNUK_MANAGER.getRandomSuffix());
-
+        
         return builder.toString();
     }
-
+    
     public static String buildNameBasedUsername() {
         String firstName = namesManager.getRandomFirstName();
         String lastName = namesManager.getRandomLastName();
@@ -88,7 +89,8 @@ public class RandomGenerators {
 
         if (prefixForSurname <= lastName.length()) {
             lastNamePortion = lastName.substring(0, prefixForSurname);
-        } else {
+        }
+        else {
             lastNamePortion = lastName;
         }
 
@@ -209,16 +211,19 @@ public class RandomGenerators {
     public static String randomReplacement(String identifier) {
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < identifier.length(); i++) {
+        for(int i = 0; i < identifier.length(); i++) {
             char c = identifier.charAt(i);
 
             if (Character.isDigit(c)) {
                 builder.append(RandomGenerators.randomDigit());
-            } else if (Character.isUpperCase(c)) {
-                builder.append((char) ('A' + random.nextInt(25)));
-            } else if (Character.isLowerCase(c)) {
-                builder.append((char) ('a' + random.nextInt(25)));
-            } else {
+            }
+            else if(Character.isUpperCase(c)) {
+                builder.append((char)('A' + random.nextInt(25)));
+            }
+            else if(Character.isLowerCase(c)) {
+                builder.append((char)('a' + random.nextInt(25)));
+            }
+            else {
                 builder.append(c);
             }
         }
@@ -228,7 +233,7 @@ public class RandomGenerators {
 
     private static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
+        for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
@@ -246,8 +251,8 @@ public class RandomGenerators {
     public static String deterministicReplacement(String identifier) {
 
         try {
-            MessageDigest salt = MessageDigest.getInstance("SHA-512");
-            salt.update(identifier.getBytes(StandardCharsets.UTF_8));
+            MessageDigest salt = MessageDigest.getInstance("SHA-256");
+            salt.update(identifier.getBytes("UTF-8"));
             String digest = bytesToHex(salt.digest());
 
             if (digest.length() >= identifier.length()) {
@@ -261,7 +266,7 @@ public class RandomGenerators {
             }
 
             return digest.substring(0, identifier.length());
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -276,7 +281,11 @@ public class RandomGenerators {
         String host = RandomGenerators.randomUIDGenerator(10);
         String tld = getRandomTLD();
 
-        return "http://" + host + '.' + tld;
+        StringBuilder builder = new StringBuilder("http://");
+        builder.append(host);
+        builder.append('.');
+        builder.append(tld);
+        return builder.toString();
     }
 
     /**
@@ -286,7 +295,7 @@ public class RandomGenerators {
      */
     public static long randomDateMilliseconds() {
         long currentMillis = System.currentTimeMillis();
-        return currentMillis - (long) random.nextInt(100) * 365 * 24 * 60 * 60 * 1000;
+        return currentMillis - (long)random.nextInt(100)*365*24*60*60*1000;
     }
 
     /**
@@ -321,7 +330,7 @@ public class RandomGenerators {
         /* TODO missing tests */
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < length; i++) {
+        for(int i = 0; i < length; i++) {
             builder.append(RandomGenerators.randomDigit());
         }
 
@@ -342,17 +351,17 @@ public class RandomGenerators {
     public static LatitudeLongitude generateRandomCoordinateFromBearing(
             double latitude, double longitude, double radian, int distance) {
 
-        double delta = (double) distance / GeoUtils.getR();
+        double delta = (double)distance / GeoUtils.getR();
         double theta = Math.toRadians(radian);
 
         double f1 = Math.toRadians(latitude);
         double l1 = Math.toRadians(longitude);
 
-        double f2 = Math.asin(Math.sin(f1) * Math.cos(delta) +
-                Math.cos(f1) * Math.sin(delta) * Math.cos(theta));
+        double f2 = Math.asin(Math.sin(f1)*Math.cos(delta) +
+                Math.cos(f1)*Math.sin(delta)*Math.cos(theta));
 
-        double l2 = l1 + Math.atan2(Math.sin(theta) * Math.sin(delta) * Math.cos(f1),
-                Math.cos(delta) - Math.sin(f1) * Math.sin(f2));
+        double l2 = l1 + Math.atan2(Math.sin(theta) * Math.sin(delta)*Math.cos(f1),
+                Math.cos(delta)-Math.sin(f1)*Math.sin(f2));
         // normalise to -180..+180
         l2 = (l2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
 
@@ -376,14 +385,15 @@ public class RandomGenerators {
     public static LatitudeLongitude generateRandomCoordinate(
             Double latitude, Double longitude, int minimumOffsetRadius, int maximumOffsetRadius) {
 
-        while (true) {
+        while(true) {
             LatitudeLongitude latitudeLongitude = generateRandomCoordinate(latitude, longitude, maximumOffsetRadius);
-            double distance = GeoUtils.latitudeLongitudeDistance(latitude, longitude, latitudeLongitude.getLatitude(),
+            Double distance = GeoUtils.latitudeLongitudeDistance(latitude, longitude, latitudeLongitude.getLatitude(),
                     latitudeLongitude.getLongitude());
 
             if (distance >= minimumOffsetRadius) {
                 return latitudeLongitude;
             }
+
         }
 
     }
@@ -414,7 +424,7 @@ public class RandomGenerators {
 
         double foundLatitude = y + latitude;
         if (foundLatitude > 90.0) {
-            double diff = foundLatitude - 90.0;
+           double diff = foundLatitude - 90.0;
             foundLatitude = Math.abs(-90 + diff);
         }
 
@@ -449,8 +459,8 @@ public class RandomGenerators {
      * @return the latitude longitude
      */
     public static LatitudeLongitude generateRandomCoordinate() {
-        double latitude = random.nextInt(90);
-        double longitude = random.nextInt(180);
+        Double latitude = (double)random.nextInt(90);
+        Double longitude = (double)random.nextInt(180);
 
         if (random.nextBoolean()) {
             latitude = -latitude;
@@ -487,23 +497,27 @@ public class RandomGenerators {
      * @return the string
      */
     public static String randomHostnameGenerator(String hostname, int preserveDomains) {
-
+        
         if (preserveDomains == -1) {
             return hostname;
         }
-
+        
         int idx;
         int preserveSubdomains = Math.max(preserveDomains - 1, 0);
 
         if (ipAddressIdentifier.isIPv4(hostname)) {
             return ipAddressMaskingProvider.directMask(hostname, true);
-        } else if (ipAddressIdentifier.isIPv6(hostname)) {
+        }
+        else if (ipAddressIdentifier.isIPv6(hostname)) {
             return ipAddressMaskingProvider.directMask(hostname, false);
         }
 
 
         if (preserveDomains == 0) {
-            return generateRandomHost(hostname, preserveSubdomains) + '.' + tldManager.getRandomTLD();
+            StringBuilder builder = new StringBuilder(generateRandomHost(hostname, preserveSubdomains));
+            builder.append('.');
+            builder.append(tldManager.getRandomTLD());
+            return builder.toString();
         }
 
         String tld = tldManager.getTLD(hostname);
@@ -513,7 +527,10 @@ public class RandomGenerators {
 
         hostname = hostname.substring(0, idx - 1);
 
-        return generateRandomHost(hostname, preserveSubdomains) + '.' + tld;
+        StringBuilder builder = new StringBuilder(generateRandomHost(hostname, preserveSubdomains));
+        builder.append('.');
+        builder.append(tld);
+        return builder.toString();
     }
 
     /**
@@ -547,13 +564,13 @@ public class RandomGenerators {
 
         for (int i = 0; i < length; i++) {
             if (random.nextBoolean()) {
-                nextRandom = (char) ('a' + random.nextInt(26));
+                nextRandom = (char) ( 'a' + random.nextInt(26));
             } else {
-                nextRandom = (char) ('0' + random.nextInt(10));
+                nextRandom = (char) ( '0' + random.nextInt(10));
             }
 
             if (excludedCharacters != null) {
-                if (contains(excludedCharacters, nextRandom)) {
+                if(contains(excludedCharacters, nextRandom)) {
                     i--;
                     continue;
                 }
@@ -586,7 +603,7 @@ public class RandomGenerators {
 
         StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < length; i++) {
+        for(int i = 0; i < length; i++) {
             builder.append(String.format("%02x", random.nextInt(256)));
         }
 

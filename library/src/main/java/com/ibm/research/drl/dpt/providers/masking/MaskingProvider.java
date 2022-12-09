@@ -14,6 +14,7 @@ import java.util.Map;
 /**
  * The interface Masking provider.
  *
+ * @author stefanob
  */
 public interface MaskingProvider extends Serializable {
     /**
