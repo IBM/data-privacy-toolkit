@@ -9,7 +9,7 @@ package com.ibm.research.drl.dpt.configuration;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.ibm.research.drl.dpt.providers.masking.ReplaceMaskingProvider;$
+import com.ibm.research.drl.dpt.providers.masking.ReplaceMaskingProvider;
 
 import java.io.Serializable;
 import java.util.*;
