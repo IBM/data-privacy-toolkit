@@ -1,0 +1,43 @@
+{
+  "_fields": {
+
+    "--/fhir/Patient/identifier" : {
+      "fhir.identifier.maskAssigner": false
+    },
+
+    "--/fhir/Patient/identifier/type/coding/code" : {
+      "default.masking.provider": "HASH"
+    },
+
+    "--/fhir/Patient/identifier/type/coding/display" : {
+      "default.masking.provider": "HASH"
+    },
+
+    "--/fhir/Patient/identifier/type/text" : {
+      "null.mask.returnNull": true,
+      "default.masking.provider": "NULL"
+    },
+
+    "--/fhir/Patient/identifier/system" : {
+      "null.mask.returnNull": true,
+      "default.masking.provider": "NULL"
+    },
+
+    "--/fhir/Patient/identifier/value" : {
+      "null.mask.returnNull": true,
+      "default.masking.provider": "NULL"
+    },
+
+    "--/fhir/Patient/identifier/period/start" : {
+      "default.masking.provider": "HASH"
+    },
+
+    "--/fhir/Patient/identifier/period/end" : {
+      "default.masking.provider": "HASH"
+    }
+
+  },
+  "_defaults": {
+    "fhir.maskingConf.Patient.identifier": "/identifier:FHIR_Identifier"
+  }
+}

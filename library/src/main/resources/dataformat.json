@@ -1,0 +1,110 @@
+{
+  "CSV" : {
+    "masking": true,
+    "identification": true,
+    "vulnerabilityAssessment": true,
+    "anonymization": true,
+    "freeText": false,
+    "output": ["CSV", "PARQUET"]
+  },
+  
+  "JSON" : {
+    "masking" : true,
+    "identification": true,
+    "vulnerabilityAssessment": true,
+    "anonymization": false,
+    "freeText": false,
+    "output" : ["JSON", "PARQUET"]
+  },
+
+  "PARQUET" : {
+    "masking" : true,
+    "identification": true,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output" : ["PARQUET"]
+  },
+  
+  "XLS" : {
+    "masking": true,
+    "identification": true,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["XLS"]
+  },
+
+  "XLSX" : {
+    "masking": true,
+    "identification": true,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["XLSX"]
+  },
+  
+  "XML" : {
+    "masking": true,
+    "identification": true,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["XML"]
+  },
+
+  "DICOM" : {
+    "masking": true,
+    "identification": true,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["DICOM"]
+  },
+
+  "HL7" : {
+    "masking": true,
+    "identification": false,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["HL7"]
+  },
+
+  "PDF" : {
+    "masking": true,
+    "identification": false,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": true,
+    "output": ["PDF"]
+  },
+
+  "PLAIN" : {
+    "masking": true,
+    "identification": false,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": true,
+    "output": ["PLAIN"]
+  },
+
+  "VCF" : {
+    "masking": true,
+    "identification": false,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["VCF"]
+  },
+
+  "JDBC" : {
+    "masking": true,
+    "identification": true,
+    "vulnerabilityAssessment": false,
+    "anonymization": false,
+    "freeText": false,
+    "output": ["JDBC"]
+  }
+  
+}
