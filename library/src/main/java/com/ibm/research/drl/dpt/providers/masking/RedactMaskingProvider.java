@@ -18,7 +18,7 @@ public class RedactMaskingProvider extends AbstractMaskingProvider {
     public RedactMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
-
+    
     public RedactMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
         this.preserveLength = configuration.getBooleanValue("redact.preserve.length");
         this.replacementCharacter = configuration.getStringValue("redact.replace.character");

@@ -18,7 +18,7 @@ import java.security.SecureRandom;
 public class ReligionMaskingProvider extends AbstractMaskingProvider {
     private static final ReligionManager religionManager = ReligionManager.getInstance();
     private final boolean probabilityBasedMasking;
-
+    
     /**
      * Instantiates a new Religion masking provider.
      */
@@ -52,16 +52,16 @@ public class ReligionMaskingProvider extends AbstractMaskingProvider {
 
         return religionManager.getRandomKey(religion.getNameCountryCode());
     }
-
+    
     private String probabilisticMask(Religion religion) {
-
+       
         if (religion == null) {
             return religionManager.getRandomProbabilityBased();
         }
-
+        
         return religionManager.getRandomProbabilityBased(religion.getNameCountryCode());
     }
-
+    
     @Override
     public String mask(String identifier) {
         Religion religion = religionManager.getKey(identifier);
@@ -69,7 +69,7 @@ public class ReligionMaskingProvider extends AbstractMaskingProvider {
         if (!this.probabilityBasedMasking) {
             return randomMask(religion);
         }
-
+        
         return probabilisticMask(religion);
     }
 }

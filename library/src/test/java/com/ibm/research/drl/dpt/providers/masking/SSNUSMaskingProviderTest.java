@@ -1,8 +1,12 @@
 /*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2015                                        *
- *                                                                 *
- *******************************************************************/
+* IBM Confidential                                                *
+*                                                                 *
+* Copyright IBM Corp. 2015                                        *
+*                                                                 *
+* The source code for this program is not published or otherwise  *
+* divested of its trade secrets, irrespective of what has         *
+* been deposited with the U.S. Copyright Office.                  *
+*******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
@@ -12,8 +16,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import com.ibm.research.drl.dpt.providers.identifiers.SSNUSIdentifier;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SSNUSMaskingProviderTest {
     @Test

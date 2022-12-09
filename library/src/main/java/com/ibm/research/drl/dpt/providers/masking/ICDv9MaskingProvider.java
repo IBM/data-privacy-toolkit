@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 /**
  * The type Ic dv 9 masking provider.
  *
+ * @author santonat
  */
 public class ICDv9MaskingProvider extends AbstractMaskingProvider {
     private final static ICDv9Manager icdV9Manager = ICDv9Manager.getInstance();
@@ -63,13 +64,16 @@ public class ICDv9MaskingProvider extends AbstractMaskingProvider {
         if (this.randomizeToRange) {
             if (format == ICDFormat.CODE) {
                 return icd.getChapterCode();
-            } else {
+            }
+            else {
                 return icd.getChapterName();
             }
-        } else if (this.randomizeToCategory) {
+        }
+        else if (this.randomizeToCategory) {
             if (format == ICDFormat.CODE) {
                 return icd.getCategoryCode();
-            } else {
+            }
+            else {
                 return icd.getCategoryName();
             }
         }
