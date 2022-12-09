@@ -1,0 +1,34 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader": true,
+  "trimFields": false,
+
+  "toBeMasked" : {
+    "date": "DATETIME"
+  },
+
+  "predefinedRelationships" : [
+    {
+      "fieldName": "date",
+      "relationshipType": "KEY",
+      "valueClass": "DATE",
+      "operands": [
+        {
+          "name": "id",
+          "type": "HASH"
+        }
+      ]
+    }
+  ],
+
+  "inputFormat": "CSV",
+  "outputFormat": "CSV",
+
+  "_fields" : {
+  },
+  "_defaults": {
+    "datetime.format.fixed": "yyyy-MM-dd",
+    "datetime.mask.keyBasedMaxDays": 7
+  }
+}
