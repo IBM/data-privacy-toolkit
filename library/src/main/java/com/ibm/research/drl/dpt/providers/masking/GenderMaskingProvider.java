@@ -11,7 +11,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.GenderManager;
 import com.ibm.research.drl.dpt.models.Sex;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.security.SecureRandom;
 
@@ -20,7 +20,7 @@ public class GenderMaskingProvider extends AbstractMaskingProvider {
 
     private static final GenderManager genderManager = GenderManager.getInstance();
     private final int failMode;
-
+    
     public GenderMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }

@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.util.RandomGenerators;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.security.SecureRandom;
 
@@ -21,7 +21,7 @@ public class NumberVarianceMaskingProvider extends AbstractMaskingProvider {
     private final double limitUp;
     private final int precisionDigits;
     private final int failMode;
-
+    
     /**
      * Instantiates a new Number variance masking provider.
      */
@@ -56,13 +56,13 @@ public class NumberVarianceMaskingProvider extends AbstractMaskingProvider {
             log.error(msg);
             throw new RuntimeException(msg);
         }
-
+        
         if (this.limitUp < 0) {
             String msg = "numvariance.mask.limitUp cannot be a negative number";
             log.error(msg);
             throw new RuntimeException(msg);
         }
-
+        
         if (this.precisionDigits < -1) {
             String msg = "precisionDigits must be either -1 or >=0";
             log.error(msg);
@@ -74,7 +74,7 @@ public class NumberVarianceMaskingProvider extends AbstractMaskingProvider {
             log.error(msg);
             throw new RuntimeException(msg);
         }
-
+        
     }
 
     @Override
@@ -82,7 +82,7 @@ public class NumberVarianceMaskingProvider extends AbstractMaskingProvider {
         Double number;
         try {
             number = Double.valueOf(identifier);
-        } catch (NumberFormatException e) {
+        } catch(NumberFormatException e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
@@ -94,10 +94,10 @@ public class NumberVarianceMaskingProvider extends AbstractMaskingProvider {
                     return "";
             }
         }
-
+        
         double percentage = RandomGenerators.randomWithinRange(0.0, limitDown, limitUp);
         number += number * percentage / 100.0;
-
+        
         if (this.precisionDigits == -1) {
             return number.toString();
         }

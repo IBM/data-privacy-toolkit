@@ -50,7 +50,7 @@ public class ShiftMaskingProviderTest {
 
         MaskingProvider maskingProvider = new ShiftMaskingProvider(maskingConfiguration);
         
-        long start = System.currentTimeMillis();
+        Long start = System.currentTimeMillis();
 
         String originalValue = "15.34";
 
@@ -59,7 +59,7 @@ public class ShiftMaskingProviderTest {
             assertEquals(5.34d, Double.parseDouble(maskedValue), 0.0001);
         }
         
-        long end = System.currentTimeMillis();
+        Long end = System.currentTimeMillis();
 
         System.out.println("time: " + (end - start));
     }

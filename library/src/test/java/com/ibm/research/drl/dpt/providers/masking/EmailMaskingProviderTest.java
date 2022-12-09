@@ -5,15 +5,12 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
-import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.identifiers.EmailIdentifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
@@ -23,7 +20,7 @@ public class EmailMaskingProviderTest {
 
     @Test
     public void testMask() throws Exception {
-        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(new MaskingProviderFactory());
 
         assertThat(maskingProvider.mask("dummyEmail@ie.ibm.com"), not("dummyEmail@ie.ibm.com"));
         assertThat(maskingProvider.mask("adsfasdfafs12341@fdlkjfsal.com"), not("adsfasdfafs12341@fdlkjfsal.com"));
@@ -37,7 +34,7 @@ public class EmailMaskingProviderTest {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("fail.mode", FailMode.GENERATE_RANDOM);
 
-        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(maskingConfiguration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
         EmailIdentifier identifier = new EmailIdentifier();
 
         String invalidEmail = "foobar";
@@ -65,7 +62,7 @@ public class EmailMaskingProviderTest {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("email.nameBasedUsername", true);
 
-        MaskingProvider maskingProvider = new EmailMaskingProvider(maskingConfiguration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+        MaskingProvider maskingProvider = new EmailMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
 
         String originalUsername = "dummy";
         String original = originalUsername + "@ie.ibm.com";
@@ -89,7 +86,7 @@ public class EmailMaskingProviderTest {
         DefaultMaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("email.preserve.domains", -1);
         
-        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(configuration, new MaskingProviderFactory());
         
         String originalValue = "test@ie.ibm.com";
         String maskedValue = maskingProvider.mask(originalValue);
@@ -102,7 +99,7 @@ public class EmailMaskingProviderTest {
         DefaultMaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("email.preserve.domains", 3);
 
-        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+        EmailMaskingProvider maskingProvider = new EmailMaskingProvider(configuration, new MaskingProviderFactory());
 
         String originalValue = "test@gamers.prO";
         String maskedValue = maskingProvider.mask(originalValue);
@@ -119,7 +116,7 @@ public class EmailMaskingProviderTest {
         maskingConfiguration.setValue("default.masking.provider", "HASH");
         maskingConfiguration.setValue("email.usernameVirtualField", "__username__");
 
-        final MaskingProviderFactory factory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
+        final MaskingProviderFactory factory = new MaskingProviderFactory();
 
         EmailMaskingProvider emailMaskingProvider = new EmailMaskingProvider(maskingConfiguration, factory);
         HashMaskingProvider hashMaskingProvider = new HashMaskingProvider();
@@ -140,7 +137,7 @@ public class EmailMaskingProviderTest {
         maskingConfiguration.setValue("email.preserve.domains", 0);
         maskingConfiguration.setValue("email.domainVirtualField", "__domain__");
 
-        final MaskingProviderFactory factory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
+        final MaskingProviderFactory factory = new MaskingProviderFactory();
 
         EmailMaskingProvider emailMaskingProvider = new EmailMaskingProvider(maskingConfiguration, factory);
         HashMaskingProvider hashMaskingProvider = new HashMaskingProvider();
@@ -161,7 +158,7 @@ public class EmailMaskingProviderTest {
         maskingConfiguration.setValue("email.preserve.domains", 1);
         maskingConfiguration.setValue("email.domainVirtualField", "__domain__");
 
-        final MaskingProviderFactory factory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
+        final MaskingProviderFactory factory = new MaskingProviderFactory();
 
         EmailMaskingProvider emailMaskingProvider = new EmailMaskingProvider(maskingConfiguration, factory);
         HashMaskingProvider hashMaskingProvider = new HashMaskingProvider();
@@ -191,7 +188,7 @@ public class EmailMaskingProviderTest {
         String originalValue = "dummyEmail@ie.ibm.com";
 
         for (DefaultMaskingConfiguration configuration : configurations) {
-            EmailMaskingProvider maskingProvider = new EmailMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+            EmailMaskingProvider maskingProvider = new EmailMaskingProvider(configuration, new MaskingProviderFactory());
 
             long startMillis = System.currentTimeMillis();
 

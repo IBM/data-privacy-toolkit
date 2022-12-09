@@ -13,7 +13,7 @@ import com.ibm.research.drl.dpt.util.DomainUtils;
 import com.ibm.research.drl.dpt.util.RandomGenerators;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.util.Collections;
 import java.util.Set;
@@ -78,9 +78,10 @@ public class EmailMaskingProvider extends AbstractComplexMaskingProvider<String>
     }
 
     private String buildEmail(String username, String maskedDomain) {
-        String builder = username + "@" +
-                maskedDomain;
-        return builder;
+        StringBuilder builder = new StringBuilder(username);
+        builder.append("@");
+        builder.append(maskedDomain);
+        return builder.toString();
     }
 
     @Override
@@ -111,7 +112,7 @@ public class EmailMaskingProvider extends AbstractComplexMaskingProvider<String>
 
         String username = (this.usernameVirtualFieldMaskingProvider != null) ?
                 this.usernameVirtualFieldMaskingProvider.mask(originalUsername) : randomizeUsernamePart();
-
+        
         String maskedDomain;
 
         if (this.domainVirtualFieldMaskingProvider != null) {
@@ -123,8 +124,9 @@ public class EmailMaskingProvider extends AbstractComplexMaskingProvider<String>
             if (!tld.isEmpty()) {
                 maskedDomain += "." + tld;
             }
-        } else {
-            maskedDomain = RandomGenerators.randomHostnameGenerator(domain, this.preserveDomains);
+        }
+        else {
+           maskedDomain = RandomGenerators.randomHostnameGenerator(domain, this.preserveDomains);
         }
 
         return buildEmail(username, maskedDomain);
