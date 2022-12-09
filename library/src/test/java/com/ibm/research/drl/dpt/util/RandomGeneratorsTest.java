@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2015                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.util;
@@ -48,11 +48,11 @@ public class RandomGeneratorsTest {
 
         long startMillis = System.currentTimeMillis();
         for (int i = 0; i < N; i++) {
-            String ignored = RandomGenerators.randomHostnameGenerator("ie.ibm.com", 2);
+            String randomUsername = RandomGenerators.randomHostnameGenerator("ie.ibm.com", 2);
         }
 
         long diff = System.currentTimeMillis() - startMillis;
-        System.out.printf("%d operations took %d milliseconds (%f msec per op)%n", N, diff, (double) diff / N);
+        System.out.println(String.format("%d operations took %d milliseconds (%f msec per op)", N, diff, (double) diff / N));
     }
 
     @Test
@@ -62,11 +62,11 @@ public class RandomGeneratorsTest {
 
         long startMillis = System.currentTimeMillis();
         for (int i = 0; i < N; i++) {
-            String ignored = RandomGenerators.randomUsernameAndDomain();
+            String randomUsername = RandomGenerators.randomUsernameAndDomain();
         }
 
         long diff = System.currentTimeMillis() - startMillis;
-        System.out.printf("%d operations took %d milliseconds (%f per op)%n", N, diff, (double) diff / N);
+        System.out.println(String.format("%d operations took %d milliseconds (%f per op)", N, diff, (double) diff / N));
     }
 
     @Test
@@ -111,8 +111,8 @@ public class RandomGeneratorsTest {
 
     @Test
     public void testGenerateRandomCoordinates() throws Exception {
-        double latitude = 90.0;
-        double longitude = 180.0;
+        Double latitude = 90.0;
+        Double longitude = 180.0;
 
         LatitudeLongitude originalLatitudeLongitude = new LatitudeLongitude(latitude, longitude);
 
@@ -124,9 +124,9 @@ public class RandomGeneratorsTest {
             assertTrue(randomLatitudeLongitude.getLongitude() >= -180.0);
             assertTrue(randomLatitudeLongitude.getLongitude() <= 180.0);
 
-            assertNotEquals(originalLatitudeLongitude, randomLatitudeLongitude);
+            assertFalse(originalLatitudeLongitude.equals(randomLatitudeLongitude));
 
-            var distance = GeoUtils.latitudeLongitudeDistance(originalLatitudeLongitude, randomLatitudeLongitude);
+            Double distance = GeoUtils.latitudeLongitudeDistance(originalLatitudeLongitude, randomLatitudeLongitude);
             assertTrue(distance <= (100.0 + 0.5));
         }
     }
@@ -138,15 +138,15 @@ public class RandomGeneratorsTest {
         for(int i  = 0; i < 1000; i++) {
             LatitudeLongitude original = RandomGenerators.generateRandomCoordinate();
             LatitudeLongitude randomCoordinate = RandomGenerators.generateRandomCoordinateRandomDirection(original, radius);
-            double distance = GeoUtils.latitudeLongitudeDistance(original, randomCoordinate);
+            Double distance = GeoUtils.latitudeLongitudeDistance(original, randomCoordinate);
             assertEquals(100.0, distance, 0.1);
         }
     }
 
     @Test
     public void testGenerateRandomCoordinatesDonut() throws Exception {
-        double latitude = 40.0;
-        double longitude = 120.0;
+        Double latitude = 40.0;
+        Double longitude = 120.0;
 
         LatitudeLongitude originalLatitudeLongitude = new LatitudeLongitude(latitude, longitude);
 
@@ -159,19 +159,20 @@ public class RandomGeneratorsTest {
             assertTrue(randomLatitudeLongitude.getLongitude() >= -180.0);
             assertTrue(randomLatitudeLongitude.getLongitude() <= 180.0);
 
-            assertNotEquals(originalLatitudeLongitude, randomLatitudeLongitude);
+            assertFalse(originalLatitudeLongitude.equals(randomLatitudeLongitude));
 
-            double distance = GeoUtils.latitudeLongitudeDistance(originalLatitudeLongitude, randomLatitudeLongitude);
+            Double distance = GeoUtils.latitudeLongitudeDistance(originalLatitudeLongitude, randomLatitudeLongitude);
             assertTrue(distance >= (50.0));
             assertTrue(distance <= (100.0 + 0.5));
         }
     }
 
     @Test
-    public void testRandomHostname() {
+    public void testRandomHostname() throws Exception {
+
         String hostname = "1.2.3.4";
         String randomHostname = RandomGenerators.randomHostnameGenerator(hostname, 0);
-        assertNotEquals(randomHostname, hostname);
+        assertFalse(randomHostname.equals(hostname));
         assertTrue(new IPAddressIdentifier().isOfThisType(randomHostname));
 
         hostname = "www.nba.com";
@@ -179,7 +180,7 @@ public class RandomGeneratorsTest {
 
         for(int i = 0; i < 100; i++) {
             randomHostname = RandomGenerators.randomHostnameGenerator(hostname, 0);
-            assertNotEquals(randomHostname, hostname);
+            assertFalse(randomHostname.equals(hostname));
 
             if(!randomHostname.endsWith(".com")) {
                 randomizationOK++;
@@ -193,7 +194,7 @@ public class RandomGeneratorsTest {
 
         for(int i = 0; i < 100; i++) {
             randomHostname = RandomGenerators.randomHostnameGenerator(hostname, 1);
-            assertNotEquals(randomHostname, hostname);
+            assertFalse(randomHostname.equals(hostname));
             assertTrue(randomHostname.endsWith(".co.uk"));
         }
 
@@ -201,7 +202,7 @@ public class RandomGeneratorsTest {
         //check that hostname without TLD is processed
         hostname = "adasdasdad";
         randomHostname = RandomGenerators.randomHostnameGenerator(hostname, 0);
-        assertNotEquals(randomHostname, hostname);
+        assertFalse(randomHostname.equals(hostname));
     }
 
     @Test
