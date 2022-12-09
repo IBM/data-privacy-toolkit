@@ -1,8 +1,8 @@
 /******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2015                                        *
- *                                                                 *
- *******************************************************************/
+*                                                                 *
+* Copyright IBM Corp. 2015                                        *
+*                                                                 *
+*******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
