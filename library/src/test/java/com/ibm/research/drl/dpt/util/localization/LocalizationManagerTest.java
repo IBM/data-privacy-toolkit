@@ -5,6 +5,7 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.util.localization;
 
+import com.ibm.research.drl.dpt.providers.identifiers.RaceEthnicityIdentifier;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -91,5 +92,11 @@ public class LocalizationManagerTest {
 
         ResourceEntry entry = resources.iterator().next();
         assertEquals(entry.getCountryCode(), newCountryCode);
+
+        RaceEthnicityIdentifier identifier = new RaceEthnicityIdentifier();
+
+        assertNotNull(identifier);
+
+        assertTrue(identifier.isOfThisType("Goblin"));
     }
 }
