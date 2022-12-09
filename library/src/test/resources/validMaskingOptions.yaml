@@ -1,0 +1,13 @@
+---
+delimiter: ","
+quoteChar: "\""
+hasHeader: false
+trimFields: false
+toBeMasked:
+  f1:
+    providerType: BINNING
+    targetPath: f1
+inputFormat: CSV
+outputFormat: CSV
+_fields: {}
+_defaults: {}

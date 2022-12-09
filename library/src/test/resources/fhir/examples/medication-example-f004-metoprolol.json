@@ -1,0 +1,29 @@
+{
+  "resourceType": "Medication",
+  "id": "f004",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f004</p><p><b>code</b>: Metoprolol tartrate 50mg tablet <span>(Details : {SNOMED CT code '318475005' = 'Metoprolol tartrate 50mg tablet (product)', given as 'Metoprolol tartrate 50mg tablet'})</span></p><p><b>isBrand</b>: true</p><h3>Packages</h3><table><tr><td>-</td><td><b>Container</b></td></tr><tr><td>*</td><td>drug container <span>(Details : {SNOMED CT code '398124009' = 'Drug container (physical object)', given as 'drug container'})</span></td></tr></table></div>"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "318475005",
+        "display": "Metoprolol tartrate 50mg tablet"
+      }
+    ]
+  },
+  "isBrand": true,
+  "package": {
+    "container": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "398124009",
+          "display": "drug container"
+        }
+      ]
+    }
+  }
+}
