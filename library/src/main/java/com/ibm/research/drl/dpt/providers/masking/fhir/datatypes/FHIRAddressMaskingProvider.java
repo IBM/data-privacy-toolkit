@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -17,7 +17,7 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -48,9 +48,9 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRAddress obj = JsonUtils.MAPPER.treeToValue(node, FHIRAddress.class);
-            FHIRAddress maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRAddress obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRAddress.class);
+            FHIRAddress maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -69,6 +69,7 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
 
             address = newAddress;
         } else {
+
             String city = address.getCity();
             String randomCity;
             String randomCountry;
@@ -97,7 +98,7 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
             }
 
             String randomStreetName = streetNameManager.getRandomKey();
-            String randomStreetNumber = Integer.toString(random.nextInt(1000));
+            String randomStreetNumber = new SecureRandom().nextInt(1000) + "";
 
 
             address.setLine(Arrays.asList(randomStreetNumber + " " + randomStreetName, randomCity, randomCountry));

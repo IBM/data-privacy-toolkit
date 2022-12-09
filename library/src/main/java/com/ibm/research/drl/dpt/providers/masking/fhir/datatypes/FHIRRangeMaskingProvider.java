@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -11,7 +11,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRange;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.util.Set;
 
@@ -47,9 +47,9 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRRange obj = JsonUtils.MAPPER.treeToValue(node, FHIRRange.class);
-            FHIRRange maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRRange obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRRange.class);
+            FHIRRange maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -58,14 +58,16 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
     public FHIRRange mask(FHIRRange range) {
         if (this.deleteHigh) {
             range.setHigh(null);
-        } else if (this.maskHigh && !isAlreadyMasked(HIGH_PATH)) {
+        }
+        else if (this.maskHigh && !isAlreadyMasked(HIGH_PATH)) {
             range.setHigh(highMaskingProvider.mask(range.getHigh()));
         }
 
 
         if (this.deleteLow) {
             range.setLow(null);
-        } else if (this.maskLow && !isAlreadyMasked(LOW_PATH)) {
+        }
+        else if (this.maskLow && !isAlreadyMasked(LOW_PATH)) {
             range.setLow(lowMaskingProvider.mask(range.getLow()));
         }
 

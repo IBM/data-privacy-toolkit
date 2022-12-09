@@ -66,8 +66,8 @@ public class ConditionalMaskingProvider extends AbstractMaskingProvider {
 
     @Override
     public String mask(String identifier) {
-        if ((isWhiteListEnabled && matchesAtLeastAPattern(identifier)) ||
-                (!isWhiteListEnabled && !matchesAtLeastAPattern(identifier))) {
+        if ( (isWhiteListEnabled && matchesAtLeastAPattern(identifier)) ||
+                        (!isWhiteListEnabled && !matchesAtLeastAPattern(identifier)) ) {
             return identifier;
         } else {
             return maskingProvider.mask(identifier);

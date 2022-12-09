@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCoding;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.util.Set;
 
@@ -55,9 +55,9 @@ public class FHIRCodingMaskingProvider extends AbstractComplexMaskingProvider<Js
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRCoding cc = JsonUtils.MAPPER.treeToValue(node, FHIRCoding.class);
+            FHIRCoding cc = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRCoding.class);
             FHIRCoding maskedCc = mask(cc);
-            return JsonUtils.MAPPER.valueToTree(maskedCc);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedCc);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

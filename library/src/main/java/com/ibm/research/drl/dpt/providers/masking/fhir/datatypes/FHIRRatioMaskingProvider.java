@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -11,7 +11,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRatio;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.util.Set;
 
@@ -44,9 +44,9 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRRatio obj = JsonUtils.MAPPER.treeToValue(node, FHIRRatio.class);
-            FHIRRatio maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRRatio obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRRatio.class);
+            FHIRRatio maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -55,14 +55,16 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
     public FHIRRatio mask(FHIRRatio ratio) {
         if (this.deleteDenominator) {
             ratio.setDenominator(null);
-        } else if (this.maskDenominator && !isAlreadyMasked(DENOMINATOR_PATH)) {
+        }
+        else if (this.maskDenominator && !isAlreadyMasked(DENOMINATOR_PATH)) {
             ratio.setDenominator(denominatorMaskingProvider.mask(ratio.getDenominator()));
         }
 
 
         if (this.deleteNumerator) {
             ratio.setNumerator(null);
-        } else if (this.maskNumerator && !isAlreadyMasked(NUMERATOR_PATH)) {
+        }
+        else if (this.maskNumerator && !isAlreadyMasked(NUMERATOR_PATH)) {
             ratio.setNumerator(numeratorMaskingProvider.mask(ratio.getNumerator()));
         }
 

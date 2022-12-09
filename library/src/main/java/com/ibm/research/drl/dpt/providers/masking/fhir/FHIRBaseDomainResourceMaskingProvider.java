@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
@@ -45,12 +45,13 @@ public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskin
     }
 
 
+
     public JsonNode mask(JsonNode obj) {
         if (obj == null || obj.isNull()) {
             return NullNode.getInstance();
         }
 
-        ObjectNode object = (ObjectNode) obj;
+        ObjectNode object = (ObjectNode)obj;
 
         if (this.removeExtension) {
             object.set("extension", null);

@@ -1,19 +1,17 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCoding;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.datatypes.FHIRCodingMaskingProvider;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +35,7 @@ public class FHIRCodingMaskingProviderTest {
             FHIRCoding coding = objectMapper.readValue(json, FHIRCoding.class);
             assertEquals("1.2", coding.getVersion());
             FHIRCodingMaskingProvider codingMaskingProvider = new FHIRCodingMaskingProvider(new DefaultMaskingConfiguration(),
-                    new HashSet<String>(), "/foo", new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+                    new HashSet<String>(), "/foo", new MaskingProviderFactory());
             FHIRCoding maskedCoding = codingMaskingProvider.mask(coding);
 
             if(!maskedCoding.getVersion().equals("1.2")) {

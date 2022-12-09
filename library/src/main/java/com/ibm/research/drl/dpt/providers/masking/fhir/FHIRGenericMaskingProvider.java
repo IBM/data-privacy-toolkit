@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
@@ -29,8 +29,8 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
         if (fhirType.startsWith("FHIR_")) {
             fhirType = fhirType.substring(5);
         }
-
-        switch (fhirType) {
+        
+        switch(fhirType) {
             case "Address":
                 return new FHIRAddressMaskingProvider(getConfigurationForSubfield(fullPath, maskingConfiguration),
                         maskedFields, fullPath, this.factory);
@@ -92,7 +92,7 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
 
         String basePath = resourceConfiguration.getBasePath();
 
-        for (FHIRResourceField field : fields) {
+        for(FHIRResourceField field: fields) {
 
             String path = field.getPath();
             String fullPath = basePath + path;
@@ -102,12 +102,14 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
             boolean isDelete = false;
 
             String fhirType = field.getFhirType();
-
+            
             if (fhirType.equals("Delete")) {
                 isDelete = true;
-            } else if (fhirType.startsWith("FHIR_")) {
+            }
+            else if (fhirType.startsWith("FHIR_")) {
                 abstractComplexMaskingProvider = createFHIRMaskingProvider(fhirType, fullPath, maskingConfiguration);
-            } else {
+            }
+            else {
                 MaskingConfiguration nameMaskingConfiguration = getConfigurationForSubfield(fullPath, maskingConfiguration);
                 maskingProvider = this.factory.get(ProviderType.valueOf(fhirType), nameMaskingConfiguration);
             }
@@ -130,7 +132,8 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
     }
 
     private void maskFinalPathComplex(JsonNode node, JsonNode valueNode, String path,
-                                      AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider) {
+                                      AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider)
+    {
         if (valueNode == null) {
             return;
         }
@@ -138,11 +141,12 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
         if (valueNode.isObject()) {
             JsonNode maskedValueNode = abstractComplexMaskingProvider.mask(valueNode);
             ((ObjectNode) node).set(path, maskedValueNode);
-        } else if (valueNode.isArray()) {
+        }
+        else if (valueNode.isArray()) {
             Iterator<JsonNode> items = valueNode.elements();
             ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
 
-            while (items.hasNext()) {
+            while(items.hasNext()) {
                 JsonNode item = items.next();
                 JsonNode maskedItem = abstractComplexMaskingProvider.mask(item);
                 arrayNode.add(maskedItem);
@@ -153,14 +157,16 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
     }
 
     private ValueNode getValueNode(JsonNode originalValueNode, String maskedValue) {
-        switch (originalValueNode.getNodeType()) {
+        switch(originalValueNode.getNodeType()) {
             case NUMBER:
                 if (originalValueNode.isInt()) {
                     return new IntNode(Integer.parseInt(maskedValue));
 
-                } else if (originalValueNode.isFloat()) {
+                }
+                else if (originalValueNode.isFloat()) {
                     return new FloatNode(Float.parseFloat(maskedValue));
-                } else {
+                }
+                else {
                     return new DoubleNode(Double.parseDouble(maskedValue));
                 }
             case BOOLEAN:
@@ -177,7 +183,8 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
         ((ObjectNode) node).set(path, getValueNode(valueNode, maskedValue));
     }
 
-    private void maskFinalPathSimple(JsonNode node, JsonNode valueNode, String path, MaskingProvider maskingProvider) {
+    private void maskFinalPathSimple(JsonNode node, JsonNode valueNode, String path, MaskingProvider maskingProvider)
+    {
 
         if (valueNode == null) {
             return;
@@ -191,7 +198,7 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
             Iterator<JsonNode> items = valueNode.elements();
             ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
 
-            while (items.hasNext()) {
+            while(items.hasNext()) {
                 JsonNode item = items.next();
 
                 if (item.isNull() || item.isObject() || item.isArray()) {
@@ -206,7 +213,8 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
             }
 
             ((ObjectNode) node).set(path, arrayNode);
-        } else {
+        }
+        else {
             if (!valueNode.isNull()) {
                 String value = valueNode.asText();
                 String maskedValue = maskingProvider.mask(value);
@@ -227,15 +235,17 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
 
             if (subNode.isArray()) {
                 Iterator<JsonNode> items = subNode.elements();
-                while (items.hasNext()) {
+                while(items.hasNext()) {
                     maskNode(rootNode, items.next(), paths, pathIndex + 1, maskingAction);
                 }
-            } else if (subNode.isObject()) {
+            }
+            else if (subNode.isObject()) {
                 maskNode(rootNode, subNode, paths, pathIndex + 1, maskingAction);
             }
-        } else {
+        }
+        else {
 
-            if (maskingAction.isDelete()) {
+            if(maskingAction.isDelete()) {
                 ((ObjectNode) node).set(path, NullNode.getInstance());
                 return;
             }
@@ -244,7 +254,8 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
                 AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider = maskingAction.getAbstractComplexMaskingProvider();
                 JsonNode valueNode = node.get(path);
                 maskFinalPathComplex(node, valueNode, path, abstractComplexMaskingProvider);
-            } else {
+            }
+            else {
                 MaskingProvider maskingProvider = maskingAction.getMaskingProvider();
                 JsonNode valueNode = node.get(path);
                 maskFinalPathSimple(node, valueNode, path, maskingProvider);
@@ -256,7 +267,7 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
     public JsonNode mask(JsonNode node) {
         this.fhirBaseDomainResourceMaskingProvider.mask(node);
 
-        for (FHIRResourceMaskingAction maskingAction : this.maskingActionList) {
+        for(FHIRResourceMaskingAction maskingAction: this.maskingActionList) {
             if (!isAlreadyMasked(maskingAction.getFullPath())) {
                 String[] paths = maskingAction.getPaths();
                 maskNode(node, node, paths, 0, maskingAction);

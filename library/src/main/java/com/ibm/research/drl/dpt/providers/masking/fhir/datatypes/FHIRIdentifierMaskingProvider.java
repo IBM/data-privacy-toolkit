@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -13,7 +13,6 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
-import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -75,9 +74,9 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRIdentifier obj = JsonUtils.MAPPER.treeToValue(node, FHIRIdentifier.class);
-            FHIRIdentifier maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRIdentifier obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRIdentifier.class);
+            FHIRIdentifier maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -107,7 +106,7 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
             identifier.setAssigner(assignerMaskingProvider.mask(identifier.getAssigner()));
         }
 
-        if (this.maskValue && !isAlreadyMasked(VALUE_PATH)) {
+        if(this.maskValue && !isAlreadyMasked(VALUE_PATH)) {
             String value = identifier.getValue();
             if (value != null) {
                 identifier.setValue(maskValue(value));

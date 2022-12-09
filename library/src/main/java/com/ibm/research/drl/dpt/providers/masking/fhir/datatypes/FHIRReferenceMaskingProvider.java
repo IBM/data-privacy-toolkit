@@ -1,11 +1,12 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
@@ -13,12 +14,11 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
-import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.Set;
 
-public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
+public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable{
 
     private final boolean maskDisplay;
     private final boolean removeDisplay;
@@ -28,6 +28,8 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
     private final MaskingProvider referenceMaskingProvider;
     private final MaskingProvider displayMaskingProvider;
     private final Set<String> maskReferenceExcludePrefixList;
+
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final String REFERENCE_FIELD_PATH;
     private final String DISPLAY_FIELD_PATH;
@@ -51,9 +53,9 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRReference reference = JsonUtils.MAPPER.treeToValue(node, FHIRReference.class);
+            FHIRReference reference = objectMapper.treeToValue(node, FHIRReference.class);
             FHIRReference maskedReference = mask(reference);
-            return JsonUtils.MAPPER.valueToTree(maskedReference);
+            return objectMapper.valueToTree(maskedReference);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -77,7 +79,8 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
 
         if (this.removeDisplay) {
             reference.setDisplay(null);
-        } else if (this.maskDisplay && !isAlreadyMasked(DISPLAY_FIELD_PATH)) {
+        }
+        else if (this.maskDisplay && !isAlreadyMasked(DISPLAY_FIELD_PATH)) {
             String display = reference.getDisplay();
             if (display != null) {
                 reference.setDisplay(displayMaskingProvider.mask(display));
@@ -91,7 +94,11 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
         if (this.maskReference && !isAlreadyMasked(REFERENCE_FIELD_PATH)) {
             String refValue = reference.getReference();
             if (refValue != null) {
-                boolean maskingRequired = this.maskReferenceExcludePrefixList.isEmpty() || !matchPrefix(refValue);
+                boolean maskingRequired = true;
+
+                if (!this.maskReferenceExcludePrefixList.isEmpty() && matchPrefix(refValue)) {
+                    maskingRequired = false;
+                }
 
                 if (maskingRequired) {
                     String maskedReference = FHIRMaskingUtils.maskResourceId(refValue, this.preserveReferencePrefix, referenceMaskingProvider);

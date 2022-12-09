@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -14,7 +14,6 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
-import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
         }
 
         Collection<String> maskedNames = new ArrayList<>();
-        for (String name : originalNames) {
+        for(String name: originalNames) {
             maskedNames.add(nameMaskingProvider.mask(name));
         }
 
@@ -60,7 +59,7 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
 
         Collection<String> givenNames = name.getGiven();
         if (givenNames != null) {
-            for (String givenName : givenNames) {
+            for(String givenName: givenNames) {
                 builder.append(givenName);
                 builder.append(" ");
             }
@@ -68,7 +67,7 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
 
         Collection<String> familyNames = name.getFamily();
         if (familyNames != null) {
-            for (String familyName : familyNames) {
+            for(String familyName: familyNames) {
                 builder.append(familyName);
                 builder.append(" ");
             }
@@ -83,9 +82,9 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRHumanName obj = JsonUtils.MAPPER.treeToValue(node, FHIRHumanName.class);
-            FHIRHumanName maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRHumanName obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRHumanName.class);
+            FHIRHumanName maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

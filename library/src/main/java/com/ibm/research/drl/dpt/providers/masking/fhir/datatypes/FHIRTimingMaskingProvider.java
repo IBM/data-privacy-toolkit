@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRTiming;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,9 +45,9 @@ public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<Js
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRTiming obj = JsonUtils.MAPPER.treeToValue(node, FHIRTiming.class);
-            FHIRTiming maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRTiming obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRTiming.class);
+            FHIRTiming maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -56,7 +56,7 @@ public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<Js
     private Collection<String> maskEvents(Collection<String> events) {
         Collection<String> maskedEvents = new ArrayList<>();
 
-        for (String event : events) {
+        for(String event: events) {
             if (event != null) {
                 maskedEvents.add(eventMaskingProvider.mask(event));
             }

@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -13,7 +13,7 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCoding;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +54,7 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
         }
 
         Collection<FHIRCoding> maskedCodings = new ArrayList<>();
-        for (FHIRCoding coding : codings) {
+        for(FHIRCoding coding: codings) {
             maskedCodings.add(this.codingMaskingProvider.mask(coding));
         }
 
@@ -63,9 +63,9 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRCodeableConcept cc = JsonUtils.MAPPER.treeToValue(node, FHIRCodeableConcept.class);
+            FHIRCodeableConcept cc = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRCodeableConcept.class);
             FHIRCodeableConcept maskedCc = mask(cc);
-            return JsonUtils.MAPPER.valueToTree(maskedCc);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedCc);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

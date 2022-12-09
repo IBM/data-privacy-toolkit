@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -14,7 +14,6 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
-import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.security.SecureRandom;
 import java.util.Set;
@@ -39,7 +38,7 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
 
     private final static SecureRandom random = new SecureRandom();
     /* https://www.hl7.org/fhir/valueset-contact-point-use.html */
-    private final static String[] useValues = new String[]{"home", "work", "temp", "old", "mobile"};
+    private final static String[] useValues = new String[] {"home", "work", "temp", "old", "mobile"};
 
     public FHIRContactPointMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
@@ -64,15 +63,16 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRContactPoint cc = JsonUtils.MAPPER.treeToValue(node, FHIRContactPoint.class);
+            FHIRContactPoint cc = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRContactPoint.class);
             FHIRContactPoint maskedCc = mask(cc);
-            return JsonUtils.MAPPER.valueToTree(maskedCc);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedCc);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
     }
 
     public FHIRContactPoint mask(FHIRContactPoint contactPoint) {
+
         if (contactPoint == null) {
             return null;
         }
@@ -89,7 +89,8 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
 
             if (system == null) {
                 maskedValue = randomMaskingProvider.mask(originalValue);
-            } else {
+            }
+            else {
                 /* https://www.hl7.org/fhir/valueset-contact-point-system.html */
                 switch (system) {
                     case "email":

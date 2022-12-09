@@ -1,16 +1,16 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,10 +19,12 @@ import java.security.SecureRandom;
 import java.util.*;
 
 public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> {
-    private final Map<String, FHIRGenericMaskingProvider> maskingProviderMap;
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    private final Map<String, FHIRGenericMaskingProvider> maskingProviderMap ;
 
     public FHIRMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
-        this("fhir", maskingConfiguration, new HashSet<>(), factory);
+        this("fhir", maskingConfiguration, new HashSet<String>(), factory);
     }
 
     public FHIRMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
@@ -33,17 +35,18 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
         this("fhir", maskingConfiguration, maskedFields, factory);
     }
 
-//    private InputStream loadResource(String name, boolean external) {
-//        if (external) {
-//            try {
-//                return new FileInputStream(name);
-//            } catch (Exception e) {
-//                throw new RuntimeException("unable to load external resource: " + name);
-//            }
-//        }
-//
-//        return this.getClass().getResourceAsStream(name);
-//    }
+    private InputStream loadResource(String name, boolean external) {
+        if (external) {
+            try {
+                return new FileInputStream(name);
+            }
+            catch (Exception e) {
+                throw new RuntimeException("unable to load external resource: " + name);
+            }
+        }
+
+        return this.getClass().getResourceAsStream(name);
+    }
 
     public static Collection<String> loadRulesForResource(String resourceName, MaskingConfiguration maskingConfiguration) {
         return maskingConfiguration.getStringValueWithPrefixMatch("fhir.maskingConf." + resourceName + ".");
@@ -51,15 +54,15 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
 
     public static Collection<String> loadRulesForResource(String resourceName, Map<String, DataMaskingTarget> toBeMasked) {
         List<String> rules = new ArrayList<>();
-
+        
         String prefix = resourceName + ".";
-
-        for (Map.Entry<String, DataMaskingTarget> entry : toBeMasked.entrySet()) {
+        
+        for(Map.Entry<String, DataMaskingTarget> entry: toBeMasked.entrySet()) {
             if (entry.getKey().startsWith(prefix)) {
                 rules.add(entry.getValue().getProviderType().name());
             }
         }
-
+        
         return rules;
     }
 
@@ -71,7 +74,7 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
 
         this.maskingProviderMap = new HashMap<>();
 
-        for (String enabledResource : enabledResources) {
+        for(String enabledResource: enabledResources) {
             String basePath = maskingConfiguration.getStringValue("fhir.basePath." + enabledResource);
             if (basePath == null) {
                 basePath = "/fhir/" + enabledResource;
@@ -84,22 +87,22 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
         }
 
     }
-
+    
     public FHIRMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration,
                                Set<String> maskedFields, Map<String, DataMaskingTarget> toBeMasked, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
         String enabledResourcesConf = maskingConfiguration.getStringValue("fhir.resources.enabled");
         Set<String> enabledResources = new HashSet<>(Arrays.asList(enabledResourcesConf.split(",")));
-
+        
         this.maskingProviderMap = new HashMap<>();
 
-        for (String enabledResource : enabledResources) {
+        for(String enabledResource: enabledResources) {
             String basePath = maskingConfiguration.getStringValue("fhir.basePath." + enabledResource);
             if (basePath == null) {
                 basePath = "/fhir/" + enabledResource;
             }
-
+            
             Collection<String> maskingConfigurations = loadRulesForResource(enabledResource, toBeMasked);
             FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration(basePath, maskingConfigurations, maskingConfiguration);
             this.maskingProviderMap.put(enabledResource.toLowerCase(), new FHIRGenericMaskingProvider(resourceConfiguration,
@@ -124,7 +127,7 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
         FHIRGenericMaskingProvider maskingProvider = maskingProviderMap.get(resourceTypeName);
 
         if (maskingProvider != null) {
-            return maskingProvider.mask(resource);
+            return  maskingProvider.mask(resource);
         }
 
         return resource;
@@ -144,7 +147,7 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
     public String mask(JsonNode resource) {
         JsonNode maskedValue = maskResource(resource);
 
-        if (maskedValue == null) {
+        if(maskedValue == null) {
             return null;
         }
 
@@ -154,7 +157,7 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
     public String mask(String identifier) {
 
         try {
-            JsonNode resource = JsonUtils.MAPPER.readTree(identifier);
+            JsonNode resource = mapper.readTree(identifier);
 
             String maskedResource = mask(resource);
             if (maskedResource == null) {

@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRQuantity;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 
 import java.util.Set;
 
@@ -49,9 +49,9 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRQuantity obj = JsonUtils.MAPPER.treeToValue(node, FHIRQuantity.class);
-            FHIRQuantity maskedObj = mask(obj);
-            return JsonUtils.MAPPER.valueToTree(maskedObj);
+            FHIRQuantity obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRQuantity.class);
+            FHIRQuantity maskedObj= mask(obj);
+            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
@@ -64,7 +64,7 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
 
         if (this.maskValue && !isAlreadyMasked(VALUE_PATH)) {
             float value = quantity.getValue();
-            quantity.setValue(Float.parseFloat(valueMaskingProvider.mask(Float.toString(value))));
+            quantity.setValue(Float.valueOf(valueMaskingProvider.mask(Float.toString(value))));
         }
 
         if (this.maskSystem && !isAlreadyMasked(SYSTEM_PATH)) {

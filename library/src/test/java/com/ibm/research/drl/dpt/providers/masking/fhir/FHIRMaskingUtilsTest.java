@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2121                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
@@ -38,7 +38,7 @@ public class FHIRMaskingUtilsTest {
     public void testPostprocessing() throws IOException {
         String json = "{\"/fhir/ContactPoint\":{\"resourceType\":\"ContactPoint\",\"system\":\"email\",\"value\":\"p.heuvel@gmail.com\",\"use\":\"home\"}}";
 
-        String processed = FHIRMaskingUtils.postProcessFHIRObject(json);
+        String processed = FHIRMaskingUtils.postprocessFHIRObject(json);
         System.out.println(processed);
 
         ObjectMapper objectMapper = new ObjectMapper();
