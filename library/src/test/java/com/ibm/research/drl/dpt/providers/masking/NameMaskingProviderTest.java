@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NameMaskingProviderTest {
     private final NamesManager.Names names = NamesManager.instance();
-    private final MaskingProviderFactory factory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
+    private final MaskingProviderFactory factory = new MaskingProviderFactory();
 
     @Test
     public void testMask() {

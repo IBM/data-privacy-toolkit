@@ -16,7 +16,10 @@ import java.security.SecureRandom;
 /**
  * The type Latitude longitude masking provider.
  *
+ * @author santonat
  */
+
+
 public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
 
     private final boolean fixedRadiusRandomDirection;
@@ -46,7 +49,6 @@ public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
     public LatitudeLongitudeMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
-
     /**
      * Instantiates a new Latitude longitude masking provider.
      *
@@ -65,7 +67,7 @@ public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
             throw new IllegalArgumentException("invalid maximum offset radius:" + this.maximumOffsetRadius);
         }
 
-        if (this.minimumOffsetRadius <= minimumOffset) {
+        if(this.minimumOffsetRadius <= minimumOffset) {
             throw new IllegalArgumentException("invalid minimum offset radius:" + this.minimumOffsetRadius);
         }
 
@@ -75,7 +77,8 @@ public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
     /**
      * Instantiates a new Latitude longitude masking provider.
      */
-    public LatitudeLongitudeMaskingProvider() {
+    public LatitudeLongitudeMaskingProvider()
+    {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
@@ -84,11 +87,14 @@ public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
 
         if (this.randomWithinCircle) {
             randomLatLon = RandomGenerators.generateRandomCoordinate(latitudeLongitude, this.maximumOffsetRadius);
-        } else if (this.donutMasking) {
+        }
+        else if (this.donutMasking) {
             randomLatLon = RandomGenerators.generateRandomCoordinate(latitudeLongitude, this.minimumOffsetRadius, this.maximumOffsetRadius);
-        } else if (this.fixedRadiusRandomDirection) {
+        }
+        else  if (this.fixedRadiusRandomDirection) {
             randomLatLon = RandomGenerators.generateRandomCoordinateRandomDirection(latitudeLongitude, this.maximumOffsetRadius);
-        } else {
+        }
+        else {
             randomLatLon = RandomGenerators.generateRandomCoordinate();
         }
 
@@ -96,7 +102,8 @@ public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String mask(String identifier) {
+    public String mask(String identifier)
+    {
         LatitudeLongitude latitudeLongitude = latitudeLongitudeIdentifier.parseCoordinate(identifier);
         if (latitudeLongitude == null) {
             return RandomGenerators.generateRandomCoordinate().toString();
