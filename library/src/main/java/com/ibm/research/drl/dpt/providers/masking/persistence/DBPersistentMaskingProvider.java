@@ -57,7 +57,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
     }
 
-    private static class DBCache {
+    private class DBCache {
         private int cacheLimit;
         private int cacheEntries = 0;
         private Connection connection;
@@ -73,8 +73,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 this.tableName = "mappings_" + namespace;
                 try {
                     initializeTable();
-                } catch (SQLException ignored) {
-                }
+                } catch (SQLException ignored) {}
                 initializeCache(cacheLimit);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -90,10 +89,8 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
 
         private void initializeTable() throws SQLException {
-            try (Statement statement = connection.createStatement();
-                 ResultSet executionResult = statement.executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)")
-            ) {
-            }
+            connection.createStatement()
+                    .executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)");
         }
 
         private void initializeCache(int cacheLimit) throws SQLException {
@@ -109,27 +106,26 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 SQL += " LIMIT " + cacheLimit;
             }
 
-            try (ResultSet resultSet = retrieveAllMappings(SQL)) {
+            ResultSet resultSet = retrieveAllMappings(SQL);
 
-                while (resultSet.next()) {
-                    String value = resultSet.getString("value");
-                    String masked = resultSet.getString("masked");
+            while(resultSet.next()) {
+                String value = resultSet.getString("value");
+                String masked = resultSet.getString("masked");
 
-                    int valueCode = value.hashCode();
-                    cache.put(valueCode, masked);
+                int valueCode = value.hashCode();
+                cache.put(valueCode, masked);
 
-                    this.cacheEntries++;
-                    if (cacheLimit != -1 && this.cacheEntries >= cacheLimit) {
-                        break;
-                    }
+                this.cacheEntries++;
+                if (cacheLimit != -1 && this.cacheEntries >= cacheLimit) {
+                    break;
                 }
             }
+
         }
 
         private ResultSet retrieveAllMappings(String SQL) throws SQLException {
-            try (Statement stmt = connection.createStatement()) {
-                return stmt.executeQuery(SQL);
-            }
+            Statement stmt = connection.createStatement();
+            return stmt.executeQuery(SQL);
         }
 
         private ResultSet retrieveMapping(String value) throws SQLException {
@@ -176,34 +172,35 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 }
             }
 
-            try (ResultSet rs = retrieveMapping(value)) {
-                if (rs.next()) {
-                    return rs.getString("masked");
-                }
+            ResultSet rs = retrieveMapping(value);
 
-                String maskedValue = maskingProvider.mask(value);
-
-                String query = " insert into " + tableName + "(value, masked) values (?, ?)";
-
-                try (PreparedStatement preparedStmt = this.connection.prepareStatement(query)) {
-                    preparedStmt.setString(1, value);
-                    preparedStmt.setString(2, maskedValue);
-                    preparedStmt.execute();
-                } catch (SQLIntegrityConstraintViolationException e) {
-                    try (ResultSet mappingRS = retrieveMapping(value)) {
-                        if (mappingRS.next()) {
-                            String finalMasked = rs.getString("masked");
-                            putToCache(value, finalMasked);
-                            return finalMasked;
-                        } else {
-                            throw new RuntimeException("Out of sync");
-                        }
-                    }
-                }
-
-                putToCache(value, maskedValue);
-                return maskedValue;
+            if(rs.next()) {
+                return rs.getString("masked");
             }
+
+            String maskedValue = maskingProvider.mask(value);
+
+            String query = " insert into " + tableName + "(value, masked) values (?, ?)";
+
+            PreparedStatement preparedStmt = this.connection.prepareStatement(query);
+            preparedStmt.setString(1, value);
+            preparedStmt.setString(2, maskedValue);
+
+            try {
+                preparedStmt.execute();
+            }catch (SQLIntegrityConstraintViolationException e) {
+                rs = retrieveMapping(value);
+                if(rs.next()) {
+                    String finalMasked = rs.getString("masked");
+                    putToCache(value, finalMasked);
+                    return finalMasked;
+                } else {
+                    throw new RuntimeException("out of sync");
+                }
+            }
+
+            putToCache(value, maskedValue);
+            return maskedValue;
         }
 
         private void putToCache(String value, String maskedValue) {
@@ -221,14 +218,16 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
 
         void storeValue(String value, String maskedValue) throws SQLException {
-            String query = " insert into " + tableName + " (value, masked) values (?, ?)";
-            try (PreparedStatement preparedStmt = this.connection.prepareStatement(query)) {
+            try {
+                String query = " insert into " + tableName + " (value, masked) values (?, ?)";
+
+                PreparedStatement preparedStmt = this.connection.prepareStatement(query);
                 preparedStmt.setString(1, value);
                 preparedStmt.setString(2, maskedValue);
 
 
                 preparedStmt.execute();
-            } catch (SQLIntegrityConstraintViolationException e) {
+            }catch (SQLIntegrityConstraintViolationException e) {
                 e.printStackTrace();
             }
 

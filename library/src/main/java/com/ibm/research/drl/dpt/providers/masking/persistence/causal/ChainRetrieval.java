@@ -9,10 +9,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ChainRetrieval {
-    List<DictionaryEntry> retrieveChain() throws IOException;
-
-    void append(String hashedTerm) throws Exception;
-
-    void shutDown();
+   List<DictionaryEntry> retrieveChain() throws IOException;
+   void append(String hashedTerm) throws Exception;
+   void shutDown();
 }
 
