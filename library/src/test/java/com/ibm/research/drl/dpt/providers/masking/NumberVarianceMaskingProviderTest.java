@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2015                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -46,12 +46,12 @@ public class NumberVarianceMaskingProviderTest {
         configuration.setValue("numvariance.mask.limitUp", margin);
         MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-        double originalValue = 50d;
-        String value = Double.toString(originalValue);
+        Double originalValue = 50d;
+        String value = originalValue.toString();
 
         for (int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(value);
-            double maskedDouble = Double.parseDouble(maskedValue);
+            Double maskedDouble = Double.valueOf(maskedValue);
             assertTrue(maskedDouble >= (originalValue - margin));
             assertTrue(maskedDouble <= (originalValue + margin));
         }
@@ -67,8 +67,8 @@ public class NumberVarianceMaskingProviderTest {
             configuration.setValue("numvariance.mask.limitUp", margin);
             MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-            double originalValue = 50.456788;
-            String value = Double.toString(originalValue);
+            Double originalValue = 50.456788;
+            String value = originalValue.toString();
 
             for (int i = 0; i < 100; i++) {
                 String maskedValue = maskingProvider.mask(value);
@@ -90,8 +90,8 @@ public class NumberVarianceMaskingProviderTest {
             configuration.setValue("numvariance.mask.precisionDigits", precisionDigits);
             MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-            double originalValue = 50.456788;
-            String value = Double.toString(originalValue);
+            Double originalValue = 50.456788;
+            String value = originalValue.toString();
 
             for (int i = 0; i < 100; i++) {
                 String maskedValue = maskingProvider.mask(value);
@@ -114,8 +114,8 @@ public class NumberVarianceMaskingProviderTest {
         configuration.setValue("numvariance.mask.precisionDigits", precisionDigits);
         MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-        double originalValue = 50.456788;
-        String value = Double.toString(originalValue);
+        Double originalValue = 50.456788;
+        String value = originalValue.toString();
 
         for (int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(value);

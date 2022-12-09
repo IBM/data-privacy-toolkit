@@ -83,7 +83,8 @@ public class PhoneMaskingProvider extends AbstractMaskingProvider {
         String countryCode = null;
         if (this.preserveCountryCode) {
             countryCode = phoneNumber.getCountryCode();
-        } else {
+        }
+        else {
             countryCode = msisdnManager.getRandomCountryCode();
         }
 
@@ -94,7 +95,7 @@ public class PhoneMaskingProvider extends AbstractMaskingProvider {
             StringCharacterIterator acIterator = new StringCharacterIterator(phoneNumber.getAreaCode());
             StringBuilder randomAreaCode = new StringBuilder();
 
-            for (char c = acIterator.first(); c != CharacterIterator.DONE; c = acIterator.next()) {
+            for(char c = acIterator.first(); c != CharacterIterator.DONE; c = acIterator.next()) {
                 randomAreaCode.append(RandomGenerators.randomDigit());
             }
 
@@ -115,9 +116,9 @@ public class PhoneMaskingProvider extends AbstractMaskingProvider {
             return phoneNumber.getPrefix() + countryCode +
                     phoneNumber.getSeparator() +
                     areaCode +
-                    builder;
+                    builder.toString();
         }
 
-        return areaCode + builder;
+        return areaCode + builder.toString();
     }
 }

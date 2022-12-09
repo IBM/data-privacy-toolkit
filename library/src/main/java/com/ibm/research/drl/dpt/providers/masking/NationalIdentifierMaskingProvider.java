@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 
 /**
  * The type National identifier masking provider.
+ *
  */
 public class NationalIdentifierMaskingProvider extends AbstractMaskingProvider {
     /**

@@ -15,6 +15,7 @@ import java.security.SecureRandom;
 /**
  * The type Patient id masking provider.
  *
+ * @author santonat
  */
 public class PatientIDMaskingProvider extends AbstractMaskingProvider {
 
@@ -33,7 +34,8 @@ public class PatientIDMaskingProvider extends AbstractMaskingProvider {
      *
      * @param random the random
      */
-    public PatientIDMaskingProvider(SecureRandom random) {
+    public PatientIDMaskingProvider(SecureRandom random)
+    {
         this(random, new DefaultMaskingConfiguration());
     }
 
@@ -60,10 +62,10 @@ public class PatientIDMaskingProvider extends AbstractMaskingProvider {
     private String randomPatientID() {
         String[] groups = new String[4];
 
-        for (int i = 0; i < groups.length; i++) {
+        for(int i = 0; i < groups.length; i++) {
             StringBuilder builder = new StringBuilder();
-            for (int k = 0; k < 3; k++) {
-                builder.append((char) ('0' + random.nextInt(10)));
+            for(int k = 0; k < 3; k++) {
+                builder.append((char)('0' + random.nextInt(10)));
             }
             groups[i] = builder.toString();
         }
@@ -79,10 +81,10 @@ public class PatientIDMaskingProvider extends AbstractMaskingProvider {
 
         String[] groups = identifier.split("-");
 
-        for (int i = preservedGroups; i < groups.length; i++) {
+        for(int i=preservedGroups; i < groups.length; i++) {
             StringBuilder builder = new StringBuilder();
-            for (int k = 0; k < 3; k++) {
-                builder.append((char) ('0' + random.nextInt(10)));
+            for(int k = 0; k < 3; k++) {
+                builder.append((char)('0' + random.nextInt(10)));
             }
             groups[i] = builder.toString();
         }
