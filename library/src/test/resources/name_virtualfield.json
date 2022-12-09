@@ -1,0 +1,11 @@
+{
+  "_fields" : {
+    "__name0__": {
+      "default.masking.provider": "HASH"
+    }
+  },
+  "_defaults": {
+    "names.mask.virtualField": "__name0__",
+    "default.masking.provider" : "RANDOM"
+  }
+}

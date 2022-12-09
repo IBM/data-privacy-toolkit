@@ -1,0 +1,29 @@
+{
+  "resourceType": "Medication",
+  "id": "f005",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: f005</p><p><b>code</b>: Enalapril maleate 5mg tablet <span>(Details : {SNOMED CT code '318851002' = 'Enalapril maleate 5mg tablet (product)', given as 'Enalapril maleate 5mg tablet'})</span></p><p><b>isBrand</b>: true</p><h3>Packages</h3><table><tr><td>-</td><td><b>Container</b></td></tr><tr><td>*</td><td>drug container <span>(Details : {SNOMED CT code '398124009' = 'Drug container (physical object)', given as 'drug container'})</span></td></tr></table></div>"
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "318851002",
+        "display": "Enalapril maleate 5mg tablet"
+      }
+    ]
+  },
+  "isBrand": true,
+  "package": {
+    "container": {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "398124009",
+          "display": "drug container"
+        }
+      ]
+    }
+  }
+}
