@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -10,7 +10,15 @@ import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.providers.masking.dicom.*;
+import com.ibm.research.drl.dpt.providers.masking.dicom.CSMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.DAMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.DTMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.LOMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.PNMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.SHMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.SQMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.TMMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.dicom.UIMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.persistence.AbstractPersistentMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.persistence.DBPersistentMaskingProvider;
