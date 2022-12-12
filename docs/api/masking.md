@@ -11,12 +11,12 @@
 The following example will mask a single value using the default masking configuration.
 
 ```java
-import com.ibm.research.drl.prima.configuration.ConfigurationManager;
-import com.ibm.research.drl.prima.configuration.MaskingConfiguration;
-import com.ibm.research.drl.prima.providers.ProviderType;
-import com.ibm.research.drl.prima.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.prima.providers.masking.MaskingProvider;
-import com.ibm.research.drl.prima.providers.masking.AbstractMaskingProvider;
+import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
+import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
+import com.ibm.research.drl.dpt.providers.ProviderType;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;

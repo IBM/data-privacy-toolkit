@@ -44,12 +44,14 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 
 
 ## References
-- Documentation [here (being updated)](docs/README.md)
-- Toolkit (CLI/Docker) [here](docker)
-- Spark wrappers [here](spark)
+- [Documentation](docs/README.md)
+- [Java Library](library)
+- [Toolkit (CLI/Docker)](docker)
+- [Spark wrappers](spark)
 
 ## Academic References:
 - S. Antonatos, S. Braghin, N. Holohan, Y. Gkoufas and P. Mac Aonghusa, "PRIMA: An End-to-End Framework for Privacy at Scale," 2018 IEEE 34th International Conference on Data Engineering (ICDE), 2018, pp. 1531-1542, doi: 10.1109/ICDE.2018.00171.
+- N. Holohan, S. Antonatos, S. Braghin, P. Mac Aonghusa, "(k, ϵ)-anonymity: k-anonymity with ϵ-differential privacy,", 2017, arXiv preprint arXiv:1710.01615.
 - A. Gkoulalas-Divanis and S. Braghin, "IPV: A system for identifying privacy vulnerabilities in datasets," in IBM Journal of Research and Development, vol. 60, no. 4, pp. 14:1-14:10, July-Aug. 2016, doi: 10.1147/JRD.2016.2576818.
 - A. Gkoulalas-Divanis, S. Braghin and S. Antonatos, "FPVI: A scalable method for discovering privacy vulnerabilities in microdata," 2016 IEEE International Smart Cities Conference (ISC2), 2016, pp. 1-8, doi: 10.1109/ISC2.2016.7580849.
 - A. Gkoulalas-Divanis and S. Braghin, "Efficient algorithms for identifying privacy vulnerabilities," 2015 IEEE First International Smart Cities Conference (ISC2), 2015, pp. 1-8, doi: 10.1109/ISC2.2015.7366170.

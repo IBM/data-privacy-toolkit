@@ -3,9 +3,9 @@
 In the following example, we will try to identify the type for the value `John`. We are looping through all the available identifiers, as returned by `IdentifierFactory.availableIdentifiers()` and we invoke the `.isOfThisType(value)` for each identifier. On a successful match we print the type name. 
 
 ```java
-import com.ibm.research.drl.prima.providers.ProviderType;
-import com.ibm.research.drl.prima.providers.identifiers.IdentifierFactory;
-import com.ibm.research.drl.prima.providers.identifiers.Identifier;
+import com.ibm.research.drl.dpt.providers.ProviderType;
+import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
+import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 
 public void testIdentifyValue() {
 
