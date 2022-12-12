@@ -358,6 +358,7 @@ public class NonUniformEntropyTest {
     }
     
     @Test
+    @Disabled("Dataset requires validation")
     public void testIssueWithUpperBound() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/13f496b9-6bd8-42e0-bbfe-44964d3b199e.csv");
         IPVDataset dataset = IPVDataset.load(is, true, ',', '"', false);
