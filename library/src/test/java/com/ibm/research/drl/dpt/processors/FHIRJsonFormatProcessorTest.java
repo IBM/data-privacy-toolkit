@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.configuration.DataMaskingOptions;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -100,7 +100,7 @@ public class FHIRJsonFormatProcessorTest {
             );
             MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, Collections.emptyMap());
 
-            JsonNode node = JsonUtils.MAPPER.readTree(is);
+            JsonNode node = FHIRMaskingUtils.getObjectMapper().readTree(is);
 
             assertTrue(node.get("dispenseRequest").get("numberOfRepeatsAllowed").isInt());
             assertEquals(2, node.get("dispenseRequest").get("numberOfRepeatsAllowed").intValue());
@@ -108,7 +108,7 @@ public class FHIRJsonFormatProcessorTest {
             FHIRJsonFormatProcessor processor = new FHIRJsonFormatProcessor();
             processor.maskStream(inputStream, output, factory, dataMaskingOptions, Collections.emptySet(), Collections.emptyMap());
 
-            JsonNode maskedNode = JsonUtils.MAPPER.readTree(byteArrayOutputStream.toString());
+            JsonNode maskedNode = FHIRMaskingUtils.getObjectMapper().readTree(byteArrayOutputStream.toString());
 
             assertTrue(maskedNode.get("dispenseRequest").get("numberOfRepeatsAllowed").isInt());
         }
@@ -133,7 +133,7 @@ public class FHIRJsonFormatProcessorTest {
             );
             MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, Collections.emptyMap());
 
-            JsonNode node = JsonUtils.MAPPER.readTree(is);
+            JsonNode node = FHIRMaskingUtils.getObjectMapper().readTree(is);
 
             assertTrue(node.get("dispenseRequest").get("numberOfRepeatsAllowed").isArray());
             assertEquals(2, node.get("dispenseRequest").get("numberOfRepeatsAllowed").get(0).intValue());
@@ -141,7 +141,7 @@ public class FHIRJsonFormatProcessorTest {
             FHIRJsonFormatProcessor processor = new FHIRJsonFormatProcessor();
             processor.maskStream(inputStream, output, factory, dataMaskingOptions, Collections.emptySet(), Collections.emptyMap());
 
-            JsonNode maskedNode = JsonUtils.MAPPER.readTree(baos.toString());
+            JsonNode maskedNode = FHIRMaskingUtils.getObjectMapper().readTree(baos.toString());
 
             assertTrue(maskedNode.get("dispenseRequest").get("numberOfRepeatsAllowed").get(0).isInt());
         }

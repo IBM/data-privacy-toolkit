@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.excel;
@@ -13,8 +13,6 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
@@ -28,12 +26,11 @@ import java.io.InputStream;
 import java.util.*;
 
 public class ExcelMaskingProvider extends AbstractMaskingProvider {
-    private static final Logger logger = LogManager.getLogger(ExcelMaskingProvider.class);
     private final DataTypeFormat inputFormatType;
     private final Map<String, DataMaskingTarget> toBeMasked;
     private final MaskingProviderFactory maskingProviderFactory;
     private final boolean ignoreNonExistent;
-
+    
     public ExcelMaskingProvider(MaskingConfiguration maskingConfiguration, DataTypeFormat inputFormatType,
                                 Map<String, DataMaskingTarget> toBeMasked, MaskingProviderFactory maskingProviderFactory) {
         this.inputFormatType = inputFormatType;
@@ -41,7 +38,7 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
         this.toBeMasked = toBeMasked;
         this.maskingProviderFactory = maskingProviderFactory;
     }
-
+    
     @Override
     public String mask(String identifier) {
         return null;
@@ -50,7 +47,7 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
     private Workbook copyXSSFWorkbook(Workbook source) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         source.write(outputStream);
-
+        
         byte[] bytes = outputStream.toByteArray();
         return new XSSFWorkbook(new ByteArrayInputStream(bytes));
     }
@@ -62,7 +59,7 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
         byte[] bytes = outputStream.toByteArray();
         return new HSSFWorkbook(new ByteArrayInputStream(bytes));
     }
-
+    
     @Override
     public byte[] mask(byte[] data) {
         try {
@@ -70,7 +67,7 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
 
             Workbook wb;
             Workbook maskedWb;
-
+            
             if (inputFormatType == DataTypeFormat.XLSX) {
                 wb = new XSSFWorkbook(input);
                 maskedWb = copyXSSFWorkbook(wb);
@@ -78,52 +75,53 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
                 wb = new HSSFWorkbook(input);
                 maskedWb = copyHSSFWorkbook(wb);
             }
-
-            for (Map.Entry<String, DataMaskingTarget> entry : toBeMasked.entrySet()) {
+            
+            for(Map.Entry<String, DataMaskingTarget> entry: toBeMasked.entrySet()) {
                 String path = entry.getKey();
                 DataMaskingTarget dataMaskingTarget = entry.getValue();
-
+                
                 ProviderType providerType = dataMaskingTarget.getProviderType();
                 String targetPath = dataMaskingTarget.getTargetPath();
-
+                
                 MaskingProvider maskingProvider = this.maskingProviderFactory.get(path, providerType);
-
+                
                 String[] parts = path.trim().split("/");
-
+                
                 if (parts.length != 3) {
                     throw new RuntimeException("wrongly formatted path: " + path.trim());
                 }
-
+                
                 String workbookName = parts[1];
                 String cellReference = parts[2];
-
+                
                 Sheet sheet = wb.getSheet(workbookName);
 
                 if (sheet == null && this.ignoreNonExistent) {
                     continue;
                 }
-
+               
                 boolean isRange = cellReference.contains(":");
-
+                
                 List<Cell> cellsToMask = getCells(sheet, cellReference);
-
+                
                 DataFormatter formatter = new DataFormatter();
-
-                for (Cell toMask : cellsToMask) {
+                
+                for(Cell toMask: cellsToMask) {
                     String value = formatter.formatCellValue(toMask);
                     String maskedValue = maskingProvider.mask(value);
 
                     String[] targetParts = targetPath.split("/");
                     String targetWb = targetParts[1];
                     String targetCellReferenceS = targetParts[2];
-
+                    
                     int targetRow;
                     int targetColumn;
-
+                    
                     if (isRange) {
                         targetRow = toMask.getRowIndex();
                         targetColumn = toMask.getColumnIndex();
-                    } else {
+                    }
+                    else {
                         CellReference targetCellReference = new CellReference(targetCellReferenceS);
                         targetRow = targetCellReference.getRow();
                         targetColumn = targetCellReference.getCol();
@@ -133,12 +131,12 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
                     targetCell.setCellValue(maskedValue);
                 }
             }
-
+            
             wb.close();
-
+            
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             maskedWb.write(outputStream);
-
+            
             maskedWb.close();
             return outputStream.toByteArray();
         } catch (IOException e) {
@@ -146,62 +144,51 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
             return null;
         }
     }
-
     private List<Cell> getCellRange(Sheet sheet, String cellReference) {
         List<Cell> cells = new ArrayList<>();
 
         String[] references = cellReference.split(":");
 
-        CellAddress firstAddress = new CellAddress(new CellReference(references[0]));
+        CellAddress firstAddress = new CellAddress(new CellReference(references[0]));        
         CellAddress lastAddress = new CellAddress(new CellReference(references[1]));
-
-        for (int i = firstAddress.getRow(); i <= lastAddress.getRow(); i++) {
-            for (int j = firstAddress.getColumn(); j <= lastAddress.getColumn(); j++) {
+        
+        for(int i = firstAddress.getRow(); i <= lastAddress.getRow(); i++) {
+            for(int j = firstAddress.getColumn(); j <= lastAddress.getColumn(); j++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
                     continue;
                 }
-
+                
                 Cell cell = row.getCell(j);
-
+                
                 if (cell == null) {
                     continue;
                 }
-
+                
                 cells.add(cell);
             }
         }
-
+        
         return cells;
     }
 
-    private List<Cell> getCells(Sheet sheet, String cellReferenceSpecification) {
-
-        if (cellReferenceSpecification.contains(":")) {
-            return getCellRange(sheet, cellReferenceSpecification);
+    private List<Cell> getCells(Sheet sheet, String cellReference) {
+        
+        if (cellReference.contains(":")) {
+            return getCellRange(sheet, cellReference);
         }
+        
+        CellReference cellReference1 = new CellReference(cellReference);
 
-        CellReference cellReference = new CellReference(cellReferenceSpecification);
-
-        Row cellRow = sheet.getRow(cellReference.getRow());
-
-        if (cellRow != null) {
-            Cell cell = cellRow.getCell(cellReference.getCol());
-
-            if (cell != null) {
-                return Collections.singletonList(cell);
-            } else {
-                logger.trace("Cell is null: {}", cellReferenceSpecification);
-            }
-        } else {
-            logger.trace("Row is null: {}", cellReferenceSpecification);
-        }
-
-        if (this.ignoreNonExistent) {
+        Row toMaskRow = sheet.getRow(cellReference1.getRow());
+        if (toMaskRow == null && this.ignoreNonExistent) {
             return Collections.emptyList();
         }
 
-        throw new IllegalArgumentException("Invalid/non existing cell reference: " + cellReferenceSpecification);
+        Cell toMask = toMaskRow.getCell(cellReference1.getCol());
+        
+        return Arrays.asList(toMask);
+        
     }
 
 
@@ -211,7 +198,7 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
             maskedWb.createSheet(targetWb);
         }
 
-        Row targetRow = maskedWb.getSheet(targetWb).getRow(rowIndex);
+        Row targetRow =  maskedWb.getSheet(targetWb).getRow(rowIndex);
         if (targetRow == null) {
             targetRow = maskedWb.getSheet(targetWb).createRow(rowIndex);
         }
@@ -220,7 +207,7 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
         if (targetCell == null) {
             targetCell = targetRow.createCell(columnIndex);
         }
-
+        
         return targetCell;
     }
 

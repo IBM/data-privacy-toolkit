@@ -10,7 +10,7 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.util.Collections;
 import java.util.NoSuchElementException;
@@ -38,9 +38,10 @@ public class HL7Record implements Record {
             if (v == null) {
                 return null;
             }
-
+            
             return v.getBytes();
-        } catch (NoSuchElementException | HL7Exception e) {
+        }
+        catch (NoSuchElementException | HL7Exception e) {
             logger.info("Not existing element", e);
             return null;
         }
@@ -72,22 +73,13 @@ public class HL7Record implements Record {
         }
     }
 
-    @Override
-    public final String toString() {
-        return formatRecord();
-    }
+    @Override public final String toString() { return formatRecord(); }
 
-    protected byte[] formatRecordBytes() {
-        return formatRecord().getBytes();
-    }
+    protected byte[] formatRecordBytes() { return  formatRecord().getBytes(); }
 
-    @Override
-    public final byte[] toBytes() {
-        return formatRecordBytes();
-    }
+    @Override public final byte[] toBytes() { return formatRecordBytes(); }
 
-    @Override
-    public boolean isHeader() {
+    @Override public boolean isHeader() {
         return false;
     }
 

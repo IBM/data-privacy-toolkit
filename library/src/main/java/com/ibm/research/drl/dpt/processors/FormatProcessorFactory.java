@@ -9,9 +9,9 @@ package com.ibm.research.drl.dpt.processors;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 
 public class FormatProcessorFactory {
-
+    
     public static FormatProcessor getProcessor(DataTypeFormat datatypeFormat) {
-
+        
         switch (datatypeFormat) {
             case CSV:
                 return new CSVFormatProcessor();
@@ -36,5 +36,5 @@ public class FormatProcessorFactory {
                 throw new IllegalArgumentException("Unsupported data input format type");
         }
     }
-
+    
 }

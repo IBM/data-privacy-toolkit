@@ -16,8 +16,8 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.excel.ExcelMaskingProvider;
 import com.ibm.research.drl.dpt.schema.IdentifiedType;
+import com.ibm.research.drl.dpt.util.FileUtils;
 import com.ibm.research.drl.dpt.util.IdentifierUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,7 +32,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-public class ExcelFormatProcessor extends FormatProcessor {
+public class ExcelFormatProcessor extends AbstractFormatProcessor {
 
     @Override
     public boolean supportsStreams() {
@@ -43,7 +43,7 @@ public class ExcelFormatProcessor extends FormatProcessor {
     public void maskStream(InputStream dataset, OutputStream output, MaskingProviderFactory factory,
                            DataMaskingOptions dataMaskingOptions, Set<String> alreadyMaskedFields,
                            Map<ProviderType, Class<? extends MaskingProvider>> registerTypes) throws IOException {
-
+        
         if (registerTypes != null) {
             for (final Map.Entry<ProviderType, Class<? extends MaskingProvider>> typeProviderPair : registerTypes.entrySet()) {
                 factory.registerMaskingProviderClass(typeProviderPair.getValue(), typeProviderPair.getKey());
@@ -54,7 +54,7 @@ public class ExcelFormatProcessor extends FormatProcessor {
                 factory.getConfigurationForField(null), dataMaskingOptions.getInputFormat(),
                 dataMaskingOptions.getToBeMasked(), factory);
 
-        byte[] inputBytes = IOUtils.toByteArray(dataset);
+        byte[] inputBytes = FileUtils.inputStreamToBytes(dataset);
         byte[] outputBytes = maskingProvider.mask(inputBytes);
         output.write(outputBytes);
     }
@@ -70,7 +70,7 @@ public class ExcelFormatProcessor extends FormatProcessor {
         String sheetName = sheet.getSheetName();
 
         for (Row row : sheet) {
-            for (Cell cell : row) {
+            for(Cell cell: row) {
                 String value = formatter.formatCellValue(cell);
 
                 if (value == null || value.isEmpty()) {
@@ -100,22 +100,23 @@ public class ExcelFormatProcessor extends FormatProcessor {
 
     @Override
     public IdentificationReport identifyTypesStream(InputStream input, DataTypeFormat inputFormatType,
-                                                    DatasetOptions datasetOptions, Collection<Identifier> identifiers,
-                                                    int firstN) throws IOException {
-
+                                                                              DatasetOptions datasetOptions, Collection<Identifier> identifiers,
+                                                                              int firstN) throws IOException {
+        
         final Map<String, List<IdentifiedType>> allTypes = new HashMap<>();
 
         Workbook wb;
 
         if (inputFormatType == DataTypeFormat.XLSX) {
             wb = new XSSFWorkbook(input);
-        } else {
+        }
+        else {
             wb = new HSSFWorkbook(input);
         }
 
         int numberOfSheets = wb.getNumberOfSheets();
 
-        for (int i = 0; i < numberOfSheets; i++) {
+        for(int i = 0; i < numberOfSheets; i++) {
             Sheet sheet = wb.getSheetAt(i);
             inspectSheet(sheet, allTypes, identifiers);
         }
@@ -124,7 +125,7 @@ public class ExcelFormatProcessor extends FormatProcessor {
 
 
         Map<String, IdentifiedType> bestTypes = IdentifierUtils.getIdentifiedType(allTypes, 1L, IdentificationConfiguration.DEFAULT);
-
+        
         return new IdentificationReport(
                 allTypes,
                 bestTypes,

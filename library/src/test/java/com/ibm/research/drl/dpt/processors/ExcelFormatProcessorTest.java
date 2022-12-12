@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2020                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.processors;
@@ -19,19 +19,20 @@ public class ExcelFormatProcessorTest {
 
     @Test
     public void testIdentifyStreamXLSX() throws Exception {
-        try (InputStream inputStream = ExcelFormatProcessorTest.class.getResourceAsStream("/sampleXLS.xlsx")) {
-            IdentificationReport results = new ExcelFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XLSX, null, IdentifierFactory.defaultIdentifiers(), -1);
+        InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xlsx");
 
-            assertThat(results.getRawResults().size(), greaterThan(0));
-        }
+        IdentificationReport results = new ExcelFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XLSX, null, IdentifierFactory.defaultIdentifiers(), -1);
+
+        assertThat(results.getRawResults().size(), greaterThan(0));
     }
 
     @Test
     public void testIdentifyStreamXLS() throws Exception {
-        try (InputStream inputStream = ExcelFormatProcessorTest.class.getResourceAsStream("/sampleXLS.xls");) {
-            IdentificationReport results = new ExcelFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XLS, null, IdentifierFactory.defaultIdentifiers(), -1);
+        InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xls");
 
-            assertThat(results.getRawResults().size(), greaterThan(0));
-        }
+        IdentificationReport results = new ExcelFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XLS, null, IdentifierFactory.defaultIdentifiers(),  -1);
+
+        assertThat(results.getRawResults().size(), greaterThan(0));
     }
+    
 }

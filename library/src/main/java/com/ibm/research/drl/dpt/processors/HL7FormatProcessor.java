@@ -26,8 +26,8 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Set;
 
-public class HL7FormatProcessor extends FormatProcessor {
-
+public class HL7FormatProcessor extends AbstractFormatProcessor {
+    
 
     @Override
     public boolean supportsStreams() {
