@@ -14,17 +14,14 @@ import java.util.Collection;
 public class MaritalStatusHierarchy extends MaterializedHierarchy {
     private final static MaritalStatusManager MARITAL_STATUS_MANAGER = MaritalStatusManager.getInstance();
 
-    private static final MaritalStatusHierarchy instance = new MaritalStatusHierarchy();
-
-    public static MaritalStatusHierarchy getInstance() {
-        return instance;
-    }
+    private static MaritalStatusHierarchy instance = new MaritalStatusHierarchy();
+    public static MaritalStatusHierarchy getInstance() {return instance;}
 
     private MaritalStatusHierarchy() {
         super();
 
         Collection<MaritalStatus> maritalStatuses = MARITAL_STATUS_MANAGER.getItemList();
-        for (MaritalStatus maritalStatus : maritalStatuses) {
+        for(MaritalStatus maritalStatus: maritalStatuses) {
             String[] terms = new String[3];
             terms[0] = maritalStatus.getName();
             terms[1] = maritalStatus.getCategory();
