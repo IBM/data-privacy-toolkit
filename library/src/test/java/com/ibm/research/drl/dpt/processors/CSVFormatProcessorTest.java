@@ -41,7 +41,6 @@ public class CSVFormatProcessorTest {
     }
 
     @Test
-    @Disabled("Free text support to be re-enabled")
     public void testWithMaskingAndFreetext() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         try (
@@ -292,8 +291,8 @@ public class CSVFormatProcessorTest {
             identifiedTypes.put("Column 1", new DataMaskingTarget(ProviderType.CITY, "Column 1"));
             identifiedTypes.put("Column 2", new DataMaskingTarget(ProviderType.COUNTRY, "Column 2"));
 
-            Map<String, FieldRelationship> predefinedRelationships = new HashMap<>();
-            predefinedRelationships.put("Column 2", new FieldRelationship(
+            Map<String, FieldRelationship> predifinedRelationships = new HashMap<>();
+            predifinedRelationships.put("Column 2", new FieldRelationship(
                     ValueClass.LOCATION,
                     RelationshipType.LINKED,
                     "Column 1",
@@ -304,7 +303,7 @@ public class CSVFormatProcessorTest {
 
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.CSV, DataTypeFormat.CSV,
                     identifiedTypes, false,
-                    predefinedRelationships, new CSVDatasetOptions(false, ',', '"', false));
+                    predifinedRelationships, new CSVDatasetOptions(false, ',', '"', false));
             MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
             new CSVFormatProcessor().maskStream(inputStream, output, factory, dataMaskingOptions, Collections.emptySet(), Collections.emptyMap());
 
@@ -312,6 +311,20 @@ public class CSVFormatProcessorTest {
 
             System.out.println(result);
         }
+    }
+    
+    @Test
+    @Disabled
+    public void testLargeWithCompounds() throws IOException {
+        ConfigurationManager configurationManager = ConfigurationManager.load(new ObjectMapper().readTree(getClass().getResourceAsStream("/masking_key_rel.json")));
+        DataMaskingOptions dataMaskingOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream("/masking_key_rel.json"), DataMaskingOptions.class);
+        
+        InputStream dataset = new FileInputStream("/Users/santonat/dev/truata/transactions/transactions.csv");
+        PrintStream out = new PrintStream(new FileOutputStream("/Users/santonat/dev/truata/transactions/masked.csv"));
+        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, Collections.emptyMap());
+        FormatProcessor formatProcessor = new CSVFormatProcessor();
+
+        formatProcessor.maskStream(dataset, out, factory, dataMaskingOptions, new HashSet<>(), null);
     }
 
     @Test

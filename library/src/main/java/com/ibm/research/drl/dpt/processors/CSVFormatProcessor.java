@@ -21,21 +21,20 @@ import com.ibm.research.drl.dpt.processors.records.Record;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 import com.ibm.research.drl.dpt.vulnerability.WithRowExtractor;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class CSVFormatProcessor extends FormatProcessor {
+public class CSVFormatProcessor extends AbstractFormatProcessor {
     private static final Logger logger = LogManager.getLogger(CSVFormatProcessor.class);
 
     private static final CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
     @Override
     protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions datasetOptions, int firstN) {
-        if (!(datasetOptions instanceof CSVDatasetOptions))
-            throw new IllegalArgumentException("Dataset masking options not consistent with the format processor: CSV");
+        if (!(datasetOptions instanceof CSVDatasetOptions)) throw new IllegalArgumentException("Dataset masking options not consistent with the format processor: CSV" );
 
         final CSVDatasetOptions csvOptions = (CSVDatasetOptions) datasetOptions;
 
@@ -125,7 +124,7 @@ public class CSVFormatProcessor extends FormatProcessor {
         };
     }
 
-    private Map<String, Integer> buildFieldsMap(String[] fieldNames) {
+    private Map<String,Integer> buildFieldsMap(String[] fieldNames) {
         Map<String, Integer> fieldMap = new HashMap<>(fieldNames.length);
 
         for (String name : fieldNames) {
@@ -160,12 +159,13 @@ public class CSVFormatProcessor extends FormatProcessor {
         Map<IPVVulnerability, List<Integer>> results = new HashMap<>();
 
         if (isFullReport && algorithm instanceof WithRowExtractor) {
-            for (IPVVulnerability vulnerability : vulnerabilities) {
+            for(IPVVulnerability vulnerability: vulnerabilities) {
                 Integer[] rowIDs = extractRowIds(vulnerability.getItemSet(), kValue, csvDatasetOptions.isHasHeader(), dataset);
                 results.put(vulnerability, Arrays.asList(rowIDs));
             }
-        } else {
-            for (IPVVulnerability vulnerability : vulnerabilities) {
+        }
+        else {
+            for(IPVVulnerability vulnerability: vulnerabilities) {
                 results.put(vulnerability, null);
             }
         }
@@ -190,7 +190,7 @@ public class CSVFormatProcessor extends FormatProcessor {
         Arrays.sort(rows);
 
         if (hasHeader) {
-            for (int i = 0; i < rows.length; i++) {
+            for(int i = 0; i < rows.length; i++) {
                 rows[i]++;
             }
         }
