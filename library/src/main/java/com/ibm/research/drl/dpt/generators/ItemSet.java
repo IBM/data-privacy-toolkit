@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.generators;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemSet implements Comparable<ItemSet>, Serializable {
     private int size;
-    private BitSet bitSet;
+    private final BitSet bitSet;
 
     /**
      * Instantiates a new Item set.
