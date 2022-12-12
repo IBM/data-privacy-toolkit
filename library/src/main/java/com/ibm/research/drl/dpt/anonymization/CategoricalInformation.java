@@ -102,7 +102,7 @@ public class CategoricalInformation implements ColumnInformation {
     public String getRepresentation() {
         return null;
     }
-
+    
     @Override
     public String toString() {
         return String.format("Categorical, type: %s, weight: %f, isForLinking: %s", columnType.name(), weight, forLinking);
