@@ -44,7 +44,6 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 
 ## References
 - Documentation [here (being updated)](docs/README.md)
-- PRIMA is an Alpha level service in [IBM.Next](https://ibmnext.stage1.mybluemix.net/assets/primaservice)
 - Toolkit (CLI) [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-cli)
 - Demo (web-based UI for demo purposes only) [repo](https://github.ibm.com/Dublin-Research-Lab/prima-demo)
 - Spark wrappers [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-spark)
