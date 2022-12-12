@@ -3,7 +3,7 @@
  * Copyright IBM Corp. 2016                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.dpt.anonymization.linkability;
+package com.ibm.research.drl.dpt.linkability;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;

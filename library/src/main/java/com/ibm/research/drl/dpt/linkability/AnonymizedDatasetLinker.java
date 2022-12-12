@@ -3,7 +3,7 @@
  * Copyright IBM Corp. 2020                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.dpt.anonymization.linkability;
+package com.ibm.research.drl.dpt.linkability;
 
 
 import com.ibm.research.drl.dpt.anonymization.*;
