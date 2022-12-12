@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2017                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.risk;
@@ -13,17 +13,15 @@ import com.ibm.research.drl.dpt.anonymization.ola.OLA;
 import com.ibm.research.drl.dpt.anonymization.ola.OLAOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.IntStream;
-
-;
 
 public class RiskValidationTest {
     private static final Logger logger = LogManager.getLogger(RiskValidationTest.class);
@@ -69,7 +67,9 @@ public class RiskValidationTest {
         List<ColumnInformation> columnInformation = getFloridaColumnInformation(); 
         
         IntStream.rangeClosed(minK, maxK)
+                .filter((k) -> ((k - minK) % kInterval) == 0)
                 .boxed()
+                //.parallel()
                 .forEach(k -> {
                     for (double suppression = minSuppression; suppression <= maxSuppression; suppression += suppressionInterval) {
                         final List<PrivacyConstraint> privacyConstraints = Collections.singletonList(new KAnonymity(k));
@@ -94,17 +94,17 @@ public class RiskValidationTest {
                         for (RiskMetric metric : metrics) {
                             String shortName = metric.getShortName();
                             double riskValue = metric.initialize(originalDataset, anonymizedDataset, columnInformation, k, riskMetricOptions).report();
-                            System.out.printf("%d\t%f\t%s\t%f%n", k, suppression, shortName, riskValue);
+                            System.out.println(String.format("%d\t%f\t%s\t%f", k, suppression, shortName, riskValue));
                         }
 
                         try {
                             double realRisk = calculateRealRisk("/population_10k.txt", anonymizedDataset, columnInformation, 
                                     ola.reportBestNode().getValues());
-                            System.out.printf("%d\t%f\t%s\t%f%n", k, suppression, "REAL", realRisk);
+                            System.out.println(String.format("%d\t%f\t%s\t%f", k, suppression, "REAL", realRisk));
                         } catch (Exception e) {
                             System.out.println(e);
                         }
-                        System.out.println();
+                        System.out.println("");
                     }
                 });
     }
@@ -117,7 +117,7 @@ public class RiskValidationTest {
         Map<String, Integer> anonEQCounters = AnonymizationUtils.generateEQCounters(anonymizedDataset, columnInformation);
         Map<String, Integer> populationEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(originalIS, columnInformation, levels);
 
-        int minimumLink = anonEQCounters.values().stream().mapToInt(Integer::intValue).min().orElse(Integer.MAX_VALUE);
+        Integer minimumLink = Integer.MAX_VALUE;
         
         for(String key: anonEQCounters.keySet()) {
             Integer linkedWith = populationEQCounters.get(key);

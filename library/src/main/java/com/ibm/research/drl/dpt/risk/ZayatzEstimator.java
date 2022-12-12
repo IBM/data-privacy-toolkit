@@ -22,9 +22,9 @@ public class ZayatzEstimator implements RiskMetric {
     private int n;
     private int N;
     private int totalEquivalenceClasses;
-
+    
     private Map<Integer, Integer> equivalenceClassSizes;
-
+    
     @Override
     public String getName() {
         return "Zayatz Estimator";
@@ -50,7 +50,7 @@ public class ZayatzEstimator implements RiskMetric {
             return new ZayatzEstimatorResults(0.0, 0.0);
         }
 
-        for (Map.Entry<Integer, Integer> entry : this.equivalenceClassSizes.entrySet()) {
+        for(Map.Entry<Integer, Integer> entry: this.equivalenceClassSizes.entrySet()) {
             Integer size = entry.getKey();
             Integer count = entry.getValue();
 
@@ -59,14 +59,14 @@ public class ZayatzEstimator implements RiskMetric {
         }
 
         HypergeometricDistribution d = new HypergeometricDistribution(this.N, 1, this.n);
-        double p = (((double) classesWithSizeOne / (double) totalEquivalenceClasses) * d.probability(1)) / sum;
+        double p = (((double)classesWithSizeOne / (double)totalEquivalenceClasses) * d.probability(1)) / sum;
 
-        double estimatedUniques = (p * (double) classesWithSizeOne) / ((double) n / (double) N);
-
+        double estimatedUniques = (p * (double)classesWithSizeOne) / ((double) n / (double) N); 
+        
         return new ZayatzEstimatorResults(classesWithSizeOne, estimatedUniques);
     }
-
-
+    
+    
     @Override
     public void validateOptions(Map<String, String> options) throws IllegalArgumentException {
         if (!options.containsKey(POPULATION)) throw new IllegalArgumentException("Missing parameter N");
@@ -90,10 +90,10 @@ public class ZayatzEstimator implements RiskMetric {
 
         this.equivalenceClassSizes = new HashMap<>();
         this.totalEquivalenceClasses = 0;
-
+        
         for (final Partition partition : AnonymizationUtils.generatePartitionsForLinking(anonymized, columnInformationList)) {
             this.totalEquivalenceClasses += 1;
-
+            
             final Integer size = partition.size();
 
             this.equivalenceClassSizes.merge(size, 1, Integer::sum);

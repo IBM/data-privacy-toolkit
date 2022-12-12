@@ -27,7 +27,7 @@ public class BinomialRiskMetric implements RiskMetric {
     private double n;
     private double N;
     private boolean useGlobalP;
-
+    
     @Override
     public String getName() {
         return "Binomial distribution based risk metric";
@@ -49,11 +49,11 @@ public class BinomialRiskMetric implements RiskMetric {
 
     @Override
     public double report() {
-        if (useGlobalP) {
-            return reportGlobalP();
-        }
-
-        return reportLocalP();
+       if (useGlobalP) {
+           return reportGlobalP();
+       }
+      
+       return reportLocalP();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class BinomialRiskMetric implements RiskMetric {
             final int Fk = extractFk(F.get(k));
             final int tries = FastMath.min(10, f.get(k));
 
-            double p = (double) f.get(k) / (double) Fk;
+            double p = (double) f.get(k) / (double)Fk;
 
             double k_risk = risk(Fk, p, tries);
 
@@ -95,7 +95,7 @@ public class BinomialRiskMetric implements RiskMetric {
 
         return risk;
     }
-
+    
     public double reportGlobalP() {
         double risk = 0.0;
 
@@ -115,7 +115,7 @@ public class BinomialRiskMetric implements RiskMetric {
         double k_risk = 0.0;
         final BinomialDistribution binomialDistribution = new BinomialDistribution(Fk, p);
 
-        for (long i = 1L; i <= tries; ++i) {
+        for (long i = 1L; i <= tries; ++i){
             k_risk += Math.pow(binomialDistribution.probability(1), i);
         }
 
@@ -128,7 +128,7 @@ public class BinomialRiskMetric implements RiskMetric {
         n = anonymized.getNumberOfRows();
         N = Integer.parseInt(options.get(POPULATION));
         useGlobalP = Boolean.parseBoolean(options.get(USE_GLOBAL_P));
-
+                
         f = new ArrayList<>(partitions.size());
         F = new ArrayList<>(partitions.size());
 
@@ -141,6 +141,7 @@ public class BinomialRiskMetric implements RiskMetric {
                     new PoissonDistribution(N * pi_k)
             );
         }
+
 
 
         return this;
