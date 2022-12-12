@@ -29,9 +29,9 @@ public interface Partition {
      * @return the member
      */
     IPVDataset getMember();
-
+    
     boolean isAnonymous();
-
+    
     void setAnonymous(boolean value);
 }
 

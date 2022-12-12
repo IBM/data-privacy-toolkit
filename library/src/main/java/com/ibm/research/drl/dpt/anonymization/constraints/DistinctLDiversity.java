@@ -8,11 +8,7 @@ package com.ibm.research.drl.dpt.anonymization.constraints;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
-import com.ibm.research.drl.dpt.anonymization.ContentRequirements;
-import com.ibm.research.drl.dpt.anonymization.Partition;
-import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
-import com.ibm.research.drl.dpt.anonymization.PrivacyMetric;
+import com.ibm.research.drl.dpt.anonymization.*;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.Histogram;
 
@@ -33,13 +29,13 @@ public class DistinctLDiversity implements PrivacyConstraint {
     }
 
     private boolean checkDistinctLDiversity(Partition partition, List<Integer> sensitiveColumns) {
-        for (Integer sensitiveColumn : sensitiveColumns) {
+        for(Integer sensitiveColumn: sensitiveColumns) {
             Set<String> uniqueValues = new HashSet<>();
 
             IPVDataset members = partition.getMember();
             int numberOfRows = members.getNumberOfRows();
 
-            for (int i = 0; i < numberOfRows; i++) {
+            for(int i = 0; i < numberOfRows; i++) {
                 String value = members.get(i, sensitiveColumn);
                 uniqueValues.add(value.toUpperCase());
 
@@ -59,11 +55,11 @@ public class DistinctLDiversity implements PrivacyConstraint {
 
     @Override
     public boolean check(PrivacyMetric metric) {
-        LDiversityMetric lDiversityMetric = (LDiversityMetric) metric;
+        LDiversityMetric lDiversityMetric = (LDiversityMetric)metric;
 
         List<Histogram> histograms = lDiversityMetric.getHistograms();
 
-        for (Histogram histogram : histograms) {
+        for(Histogram histogram: histograms) {
             if (histogram.size() < this.l) {
                 return false;
             }

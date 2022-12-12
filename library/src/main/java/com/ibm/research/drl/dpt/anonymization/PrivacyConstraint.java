@@ -19,22 +19,17 @@ import java.util.List;
         property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(name = "KAnonymity", value = KAnonymity.class),
-        @JsonSubTypes.Type(name = "DistinctLDiversity", value = DistinctLDiversity.class),
-        @JsonSubTypes.Type(name = "EntropyLDiversity", value = EntropyLDiversity.class),
-        @JsonSubTypes.Type(name = "RecursiveCLDiversity", value = RecursiveCLDiversity.class),
-        @JsonSubTypes.Type(name = "TCloseness", value = TCloseness.class),
+        @JsonSubTypes.Type(name="KAnonymity", value=KAnonymity.class),
+        @JsonSubTypes.Type(name="DistinctLDiversity", value=DistinctLDiversity.class),
+        @JsonSubTypes.Type(name="EntropyLDiversity", value=EntropyLDiversity.class),
+        @JsonSubTypes.Type(name="RecursiveCLDiversity", value=RecursiveCLDiversity.class),
+        @JsonSubTypes.Type(name="TCloseness", value=TCloseness.class),
 })
 public interface PrivacyConstraint extends Serializable {
     boolean check(PrivacyMetric metric);
-
     boolean check(Partition partition, List<Integer> sensitiveColumns);
-
     boolean requiresAnonymizedPartition();
-
     int contentRequirements();
-
     void sanityChecks(IPVDataset dataset);
-
     void initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList);
 }

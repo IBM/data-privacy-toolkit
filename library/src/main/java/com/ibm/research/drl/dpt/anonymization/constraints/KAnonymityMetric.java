@@ -31,7 +31,7 @@ public class KAnonymityMetric implements PrivacyMetric, Serializable {
 
     @Override
     public void update(PrivacyMetric metric) {
-        count += ((KAnonymityMetric) metric).getCount();
+        count += ((KAnonymityMetric)metric).getCount();
     }
 }
 

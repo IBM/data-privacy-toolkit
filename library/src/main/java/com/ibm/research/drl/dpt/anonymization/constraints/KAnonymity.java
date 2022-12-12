@@ -29,11 +29,11 @@ public class KAnonymity implements PrivacyConstraint {
 
     @Override
     public boolean check(PrivacyMetric metric) {
-        return ((KAnonymityMetric) metric).getCount() >= this.k;
+        return ((KAnonymityMetric)metric).getCount() >= this.k;
     }
 
     @Override
-    public boolean check(Partition partition, List<Integer> sensitiveColumns) {
+    public boolean check(Partition partition, List<Integer> sensitiveColumns){
         return partition.size() >= k;
     }
 
@@ -45,7 +45,7 @@ public class KAnonymity implements PrivacyConstraint {
     public String toString() {
         return "K-anonymity constraint with k-value = " + k;
     }
-
+    
     @Override
     public int contentRequirements() {
         return ContentRequirements.NONE;
