@@ -3,9 +3,9 @@
 In our example, let's assume that we need to register a new localization for races/ethnicities. The dictionary content is located in file `/tmp/races_fantasy.csv` and contains two entries: `Goblin` and `Elf`. The new locale is called `fantasy`. It is very important that the registration process needs to be done BEFORE the instantiation of masking providers
 
 ```java
-import com.ibm.research.drl.prima.util.localization.LocalizationManager;
-import com.ibm.research.drl.prima.util.localization.Resource;
-import com.ibm.research.drl.prima.providers.masking.RaceEthnicityMaskingProvider;
+import com.ibm.research.drl.dpt.util.localization.LocalizationManager;
+import com.ibm.research.drl.dpt.util.localization.Resource;
+import com.ibm.research.drl.dpt.providers.masking.RaceEthnicityMaskingProvider;
 
  public void testNewExternalResources() throws Exception {
         //this is the file containing the dictionary content
