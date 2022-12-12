@@ -51,11 +51,7 @@ public abstract class TabularRecord implements Record {
 
         this.fieldNames = this.fieldNames.entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(field))
-                .peek(entry -> {
-                    if (entry.getValue() > fieldIndex) {
-                        entry.setValue(entry.getValue() - 1);
-                    }
-                })
+                .peek(entry -> { if (entry.getValue() > fieldIndex) { entry.setValue(entry.getValue() - 1); } })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         this.data = IntStream.range(0, this.data.length)
@@ -65,22 +61,10 @@ public abstract class TabularRecord implements Record {
     }
 
     protected abstract String formatRecord();
+    public final String toString() { return formatRecord(); }
 
-    public final String toString() {
-        return formatRecord();
-    }
+    protected byte[] formatRecordBytes() { return  formatRecord().getBytes(); }
+    @Override public final byte[] toBytes() { return formatRecordBytes(); }
 
-    protected byte[] formatRecordBytes() {
-        return formatRecord().getBytes();
-    }
-
-    @Override
-    public final byte[] toBytes() {
-        return formatRecordBytes();
-    }
-
-    @Override
-    public boolean isHeader() {
-        return isHeader;
-    }
+    @Override public boolean isHeader() { return isHeader; }
 }

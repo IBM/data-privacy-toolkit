@@ -40,8 +40,7 @@ public final class CSVRecord extends TabularRecord {
 
         try {
             return mapper.writer(schema).writeValueAsString(data);
-        } catch (JsonProcessingException ignore) {
-        }
+        } catch (JsonProcessingException ignore) {}
 
         throw new RuntimeException("unreachable");
     }
