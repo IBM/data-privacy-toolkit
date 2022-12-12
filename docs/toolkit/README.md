@@ -1,6 +1,7 @@
 ## DPT Command-line Toolkit
 
-**DPT Command-line Toolkit** is a command line tool exposing the DPT Java library functionality in a more user friendly manner. The toolkit is packaged together with its dependencies so there is no requirement for additional configuration of classpaths or internet connection to artifact repositories.
+**DPT Command-line Toolkit** is a command line tool exposing the DPT Java library functionality in a more user-friendly manner.
+The toolkit is packaged together with its dependencies so there is no requirement for additional configuration of classpath or internet connection to artifact repositories.
 
 A containerised version of the command line tool also exists, which nicely integrates into data pipelines - for further information, please refer to the last section of this page.
 
