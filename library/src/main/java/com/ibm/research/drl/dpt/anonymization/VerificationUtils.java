@@ -43,7 +43,7 @@ public class VerificationUtils {
     public static boolean isQuasiIdentifier(ItemSet itemSet, IPVDataset dataset, int k) {
         Map<String, Set<Integer>> valueMap = buildValueMap(itemSet, dataset);
 
-        for (Set<Integer> value : valueMap.values()) {
+        for(Set<Integer> value: valueMap.values()) {
             if (value.size() < k) {
                 return true;
             }
