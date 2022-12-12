@@ -9,7 +9,7 @@ package com.ibm.research.drl.dpt.linkability;
 import com.ibm.research.drl.dpt.anonymization.*;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,34 +28,36 @@ public class AnonymizedDatasetLinker {
     public Integer matchAnonymizedRow(List<String> anonymizedRow, Collection<LinkInfo> linkInformation, List<ColumnInformation> columnInformations) {
         List<List<Set<Integer>>> matching = new ArrayList<>(linkInformation.size());
 
-        for (LinkInfo info : linkInformation) {
+        for(LinkInfo info: linkInformation) {
             List<Set<Integer>> infoMatching = new ArrayList<>();
 
             int sourceIndex = info.getSourceIndex();
             int targetIndex = info.getTargetIndex();
-
+            
             String value = anonymizedRow.get(sourceIndex);
 
             ColumnInformation columnInformation = columnInformations.get(sourceIndex);
             if (columnInformation instanceof NumericalRange) {
                 String[] tokens = value.split("-");
                 Set<Integer> matchedRows;
-
+                
                 if (tokens.length == 1) {
                     Double numericValue = Double.parseDouble(value);
                     matchedRows = datasetLinker.matchValue(numericValue, targetIndex);
-                } else {
+                }
+                else {
                     Double minValue = Double.parseDouble(tokens[0]);
                     Double maxValue = Double.parseDouble(tokens[1]);
                     matchedRows = datasetLinker.matchValueRange(minValue, maxValue, targetIndex);
                 }
-
+                
                 if (matchedRows == null) {
                     return 0;
                 } else {
                     infoMatching.add(matchedRows);
                 }
-            } else {
+            }
+            else {
                 if (value.equals(info.getWildcharPattern())) {
                     continue;
                 }
@@ -140,10 +142,8 @@ public class AnonymizedDatasetLinker {
         });
 
         for (Set<T> setGroup : setGroups.get(0)) {
-            outer:
-            for (T entry : setGroup) {
-                inner:
-                for (int i = 1; i < setGroups.size(); ++i) {
+            outer: for (T entry : setGroup) {
+                inner: for (int i = 1; i < setGroups.size(); ++i) {
                     for (Set<T> setGroupI : setGroups.get(i)) {
                         if (setGroupI.contains(entry)) {
                             continue inner;
@@ -162,14 +162,14 @@ public class AnonymizedDatasetLinker {
         final List<Integer> matchResults = new ArrayList<>();
 
         List<Integer> matchColumns = new ArrayList<>();
-        for (LinkInfo info : linkInformation) {
+        for(LinkInfo info: linkInformation) {
             int sourceIndex = info.getSourceIndex();
             matchColumns.add(sourceIndex);
         }
 
         final List<Partition> partitions = AnonymizationUtils.generatePartitionsByColumnIndex(source, matchColumns);
 
-        for (Partition partition : partitions) {
+        for(Partition partition: partitions) {
             IPVDataset members = partition.getMember();
 
             if (members.getNumberOfRows() == 0) {
@@ -178,7 +178,7 @@ public class AnonymizedDatasetLinker {
 
             Integer matches = datasetLinker.matchRow(members.getRow(0), linkInformation);
 
-            for (int i = 0; i < members.getNumberOfRows(); i++) {
+            for(int i = 0; i < members.getNumberOfRows(); i++) {
                 matchResults.add(matches);
             }
         }
@@ -190,14 +190,14 @@ public class AnonymizedDatasetLinker {
         final List<Integer> matchResults = new ArrayList<>();
 
         List<Integer> matchColumns = new ArrayList<>();
-        for (LinkInfo info : linkInformation) {
+        for(LinkInfo info: linkInformation) {
             int sourceIndex = info.getSourceIndex();
             matchColumns.add(sourceIndex);
         }
 
         final List<Partition> partitions = AnonymizationUtils.generatePartitionsByColumnIndex(source, matchColumns);
 
-        for (Partition partition : partitions) {
+        for(Partition partition: partitions) {
             IPVDataset members = partition.getMember();
 
             if (members.getNumberOfRows() == 0) {
@@ -206,7 +206,7 @@ public class AnonymizedDatasetLinker {
 
             Integer matches = matchAnonymizedRow(members.getRow(0), linkInformation, columnInformations);
 
-            for (int i = 0; i < members.getNumberOfRows(); i++) {
+            for(int i = 0; i < members.getNumberOfRows(); i++) {
                 matchResults.add(matches);
             }
         }
@@ -223,7 +223,7 @@ public class AnonymizedDatasetLinker {
             return Collections.emptyList();
         }
 
-        for (int i = 0; i < members.getNumberOfRows(); i++) {
+        for(int i = 0; i < members.getNumberOfRows(); i++) {
             Integer matches = matchAnonymizedRow(members.getRow(i), linkInformation, columnInformations);
             matchResults.add(matches);
         }

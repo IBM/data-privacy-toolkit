@@ -13,7 +13,7 @@ public class LinkInfo {
     private final boolean prefixMatch;
     private final int prefixMatchLength;
     private final boolean isNumerical;
-
+    
     public boolean isPrefixMatch() {
         return prefixMatch;
     }
@@ -62,7 +62,7 @@ public class LinkInfo {
     public LinkInfo(int sourceIndex, int targetIndex, boolean isNumerical) {
         this(sourceIndex, targetIndex, "*", false, 0, isNumerical);
     }
-
+    
     @Override
     public String toString() {
         return "LinkInfo{" +

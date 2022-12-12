@@ -10,7 +10,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +24,7 @@ public class DatasetLinker {
     private int numberOfRows;
     private Map<String, Set<Integer>>[] targetIndices;
     private TreeMap<Double, Set<Integer>>[] targetIndicesNumerical; //we explicitly declare TreeMap since we need the ordered iterator
-
+    
     public DatasetLinker(InputStream target, Collection<LinkInfo> targetColumns) throws IOException {
         buildTargetIndex(target, targetColumns);
     }
@@ -52,7 +52,8 @@ public class DatasetLinker {
         for (LinkInfo info : linkInfos) {
             if (info.isNumerical()) {
                 targetIndicesNumerical[info.getTargetIndex()] = new TreeMap<>();
-            } else {
+            }
+            else {
                 targetIndices[info.getTargetIndex()] = new HashMap<>();
             }
         }
@@ -69,7 +70,7 @@ public class DatasetLinker {
 
                 for (LinkInfo info : linkInfos) {
                     int targetColumn = info.getTargetIndex();
-
+                    
                     if (!info.isNumerical()) {
                         String key = createKey(nextRow[targetColumn]);
 
@@ -79,7 +80,8 @@ public class DatasetLinker {
                         }
 
                         addIntoIndex(targetIndices[targetColumn], key, i);
-                    } else {
+                    }
+                    else {
                         Double value = Double.parseDouble(nextRow[targetColumn]);
                         addIntoIndex(targetIndicesNumerical[targetColumn], value, i);
                     }
@@ -88,7 +90,7 @@ public class DatasetLinker {
             }
 
             this.numberOfRows = i;
-
+            
             int j = 0;
             for (Map<String, Set<Integer>> index : targetIndices) {
                 if (null != index) {
@@ -109,7 +111,7 @@ public class DatasetLinker {
 
         set.add(rowId);
     }
-
+    
     private void addIntoIndex(Map<String, Set<Integer>> index, String key, int rowId) {
         Set<Integer> set = index.get(key);
 
@@ -125,28 +127,32 @@ public class DatasetLinker {
     public Set<Integer> matchValueRange(Double minValue, Double maxValue, int targetIndex) {
         Map<Double, Set<Integer>> map = targetIndicesNumerical[targetIndex];
         Set<Integer> results = new HashSet<>();
-
-        for (Map.Entry<Double, Set<Integer>> entry : map.entrySet()) {
+        
+        for(Map.Entry<Double, Set<Integer>> entry: map.entrySet()) {
             Double v = entry.getKey();
-
+            
             if (v >= minValue && v <= maxValue) {
                 results.addAll(entry.getValue());
             }
         }
-
+        
         return results;
     }
-
+    
     public Set<Integer> matchValue(Double value, int targetIndex) {
-        return targetIndicesNumerical[targetIndex].get(value);
+        return targetIndicesNumerical[targetIndex].get(value);        
     }
-
+    
     public Set<Integer> matchValue(String value, int targetIndex, boolean isWithPrefix) {
         final Map<String, Set<Integer>> index = targetIndices[targetIndex];
 
         String key = createKey(value);
 
         Set<Integer> rows = index.get(key);
+
+        if (rows == null) {
+            return null;
+        }
 
         return rows;
     }
@@ -158,14 +164,15 @@ public class DatasetLinker {
         if (first.size() < second.size()) {
             small = first;
             large = second;
-        } else {
+        }
+        else {
             small = second;
             large = first;
         }
 
         Set<T> result = new HashSet<>(small.size());
 
-        for (T entry : small) {
+        for(T entry: small) {
             if (large.contains(entry)) {
                 result.add(entry);
             }
@@ -188,11 +195,10 @@ public class DatasetLinker {
 
         int results = 0;
 
-        outer:
-        for (T entry : sets.get(0)) {
-            for (int i = 1; i < sets.size(); i++) {
+        outer: for(T entry: sets.get(0)) {
+            for(int i = 1; i < sets.size(); i++) {
                 Set<T> setI = sets.get(i);
-                if (!setI.contains(entry)) {
+                if (! setI.contains(entry)) {
                     continue outer;
                 }
             }
@@ -212,7 +218,7 @@ public class DatasetLinker {
 
             String value = sourceRow.get(sourceIndex);
             Set<Integer> targetRows;
-
+            
             if (!info.isNumerical()) {
                 String key = createKey(value);
 
@@ -221,7 +227,8 @@ public class DatasetLinker {
                 }
 
                 targetRows = matchValue(value, targetIndex, info.isPrefixMatch());
-            } else {
+            }
+            else {
                 Double numericValue = Double.parseDouble(value);
                 targetRows = matchValue(numericValue, targetIndex);
             }
