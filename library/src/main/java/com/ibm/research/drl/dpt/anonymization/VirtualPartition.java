@@ -10,10 +10,10 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 public class VirtualPartition implements Partition {
     private final int size;
     private boolean anonymous;
-
+    
     @Override
     public int size() {
-        return this.size;
+        return this.size; 
     }
 
     @Override
@@ -35,7 +35,7 @@ public class VirtualPartition implements Partition {
     public void setAnonymous(boolean value) {
         this.anonymous = value;
     }
-
+    
     public VirtualPartition(int size) {
         this.size = size;
     }

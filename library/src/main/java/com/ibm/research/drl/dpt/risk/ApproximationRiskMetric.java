@@ -28,7 +28,7 @@ public class ApproximationRiskMetric implements RiskMetric {
     private double n;
     private double N;
     private boolean useGlobalP;
-
+    
     @Override
     public String getName() {
         return "Approximation based risk metric";
@@ -50,11 +50,11 @@ public class ApproximationRiskMetric implements RiskMetric {
 
     @Override
     public double report() {
-        if (useGlobalP) {
-            return reportGlobalP();
-        }
-
-        return reportLocalP();
+       if (useGlobalP) {
+           return reportGlobalP();
+       }
+      
+       return reportLocalP();
     }
 
     @Override
@@ -80,34 +80,34 @@ public class ApproximationRiskMetric implements RiskMetric {
         boolean bool = Boolean.parseBoolean(useGlobalP);
     }
 
-
+    
     private double calculateEQRisk(double fk, double pk) {
         double k_risk = 1.0;
         double qk = 1 - pk;
 
-        for (int i = 1; i <= 7; ++i) {
+        for (int i = 1; i <= 7; ++i){
             double v1 = factorial(i) * Math.pow(qk, i);
 
             double p = 1.0;
-            for (int j = 1; j <= i; j++) {
-                p = p * (fk + j);
+            for(int j = 1; j <= i; j++) {
+                p = p*(fk + j);
             }
 
             k_risk += v1 / p;
         }
-
+        
         return (pk / fk) * k_risk;
     }
-
+    
     public Double reportLocalP() {
         double risk = 0.0;
 
         for (int k = 0; k < F.size(); ++k) {
             final int Fk = extractFk(k);
             final double fk = f.get(k);
-
-            double pk = (double) f.get(k) / (double) Fk;
-
+            
+            double pk = (double)f.get(k) / (double)Fk;
+           
             double k_risk = calculateEQRisk(fk, pk);
 
             risk = FastMath.max(risk, k_risk);
@@ -115,7 +115,7 @@ public class ApproximationRiskMetric implements RiskMetric {
 
         return risk;
     }
-
+    
     public double reportGlobalP() {
         double risk = 0.0;
 
@@ -135,7 +135,7 @@ public class ApproximationRiskMetric implements RiskMetric {
         n = anonymized.getNumberOfRows();
         N = Integer.parseInt(options.get(POPULATION));
         useGlobalP = Boolean.parseBoolean(options.get(USE_GLOBAL_P));
-
+                
         f = new ArrayList<>(partitions.size());
         F = new ArrayList<>(partitions.size());
 
@@ -148,6 +148,7 @@ public class ApproximationRiskMetric implements RiskMetric {
                     new PoissonDistribution(N * pi_k)
             );
         }
+
 
 
         return this;

@@ -8,7 +8,7 @@ package com.ibm.research.drl.dpt.anonymization.ola;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class IntervalGenerator {
 
         int numberOfRows = dataset.getNumberOfRows();
 
-        for (int i = 0; i < numberOfRows; i++) {
+        for(int i = 0; i < numberOfRows; i++) {
             List<String> row = dataset.getRow(i);
             Long v = Long.valueOf(row.get(columnIndex));
             longs.add(v);
@@ -43,20 +43,20 @@ public class IntervalGenerator {
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
 
         long diff = maximum - minimum;
-        int levels = (int) (diff / 10);
+        int levels = (int)(diff/10);
         logger.info("minimum: " + minimum + ", maximum: " + maximum + ", diff: " + diff + ", levels: " + levels);
 
-        for (Long v : longs) {
+        for(Long v: longs) {
 
-            int segments = (int) Math.pow(2, levels - 3);
+            int segments = (int)Math.pow(2, levels - 3);
             List<String> terms = new ArrayList<>();
             terms.add(v.toString());
 
             for (int i = 1; i < (levels - 1); i++) {
                 long delta = (maximum - minimum) / segments;
 
-                int group = (int) ((v - minimum) / delta);
-                long base = minimum + group * delta;
+                int group = (int) ((v - minimum)/delta);
+                long base = minimum + group*delta;
 
                 terms.add(base + "-" + (base + delta - 1));
                 segments /= 2;

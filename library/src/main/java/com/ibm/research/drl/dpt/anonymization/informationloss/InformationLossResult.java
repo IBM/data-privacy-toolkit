@@ -27,7 +27,7 @@ public class InformationLossResult {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
-
+    
     public String toString() {
         return "[" + lowerBound + ", " + value + ", " + upperBound + "]";
     }

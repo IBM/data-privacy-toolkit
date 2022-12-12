@@ -39,12 +39,12 @@ public class FKRatioMetric implements RiskMetric {
 
         return Fk;
     }
-
+    
     @Override
     public double report() {
         double risk = 0.0;
 
-        for (Partition partition : partitions) {
+        for (Partition partition: partitions) {
             final double pi_k = partition.size() / n;
 
             PoissonDistribution poissonDistribution = new PoissonDistribution(population * pi_k);
@@ -74,14 +74,14 @@ public class FKRatioMetric implements RiskMetric {
 
     private double anonymizedSize(List<Partition> partitions) {
         double size = 0.0;
-
-        for (Partition partition : partitions) {
+        
+        for (Partition partition: partitions) {
             size += partition.size();
         }
-
+        
         return size;
     }
-
+    
     @Override
     public RiskMetric initialize(IPVDataset original, IPVDataset anonymized, List<ColumnInformation> columnInformationList, int k, Map<String, String> options) {
         this.partitions = AnonymizationUtils.generatePartitionsForLinking(anonymized, columnInformationList);

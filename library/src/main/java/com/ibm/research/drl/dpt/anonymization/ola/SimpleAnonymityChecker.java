@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2021                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.ola;
@@ -20,10 +20,10 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
     private final List<ColumnInformation> columnInformationList;
     private final List<Integer> sensitiveColumns;
     private final List<PrivacyConstraint> privacyConstraints;
-    private final int privacyConstraintsContentRequirements;
-
+    private final int privacyConstraintsContentRequirements;    
+    
     private boolean checkConstraints(Partition partition) {
-        for (PrivacyConstraint privacyConstraint : privacyConstraints) {
+        for(PrivacyConstraint privacyConstraint: privacyConstraints) {
             if (!privacyConstraint.check(partition, sensitiveColumns)) {
                 return false;
             }
@@ -34,39 +34,42 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
 
     public double calculateSuppressionRate(LatticeNode node) {
         List<Partition> partitions;
-
+        
         int contentRequirements = this.privacyConstraintsContentRequirements;
-
+        
         if (contentRequirements == ContentRequirements.NONE) {
+            long start = System.currentTimeMillis();
             Map<String, Integer> eqCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(dataset, columnInformationList, node.getValues());
-
+            
             partitions = new ArrayList<>();
-            for (Integer eqSize : eqCounters.values()) {
+            for(Integer eqSize: eqCounters.values()) {
                 partitions.add(new VirtualPartition(eqSize));
             }
-        } else {
+        }
+        else {
             Collection<Partition> partitionCollection =
                     DatasetGeneralizer.generalizeAndPartition(dataset, columnInformationList, node.getValues(), contentRequirements);
             partitions = new ArrayList<>(partitionCollection);
         }
 
-        double suppressedRows = 0.0d;
-
-        for (Partition partition : partitions) {
+        Double suppressedRows = 0.0d;
+        
+        for(Partition partition: partitions) {
             if (!checkConstraints(partition)) {
                 suppressedRows += partition.size();
                 partition.setAnonymous(false);
-            } else {
+            }
+            else {
                 partition.setAnonymous(true);
             }
         }
-
+        
         /* DM has not content requirements so we are fine */
         InformationMetric metric = new DiscernibilityStar(); /*TODO: replace with NUE */
         metric.initialize(dataset, null, partitions, null, this.columnInformationList, null);
         node.setInformationLoss(metric.report());
-
-        return 100.0 * (suppressedRows / (double) dataset.getNumberOfRows());
+        
+        return 100.0 * (suppressedRows/(double)dataset.getNumberOfRows());
     }
 
 

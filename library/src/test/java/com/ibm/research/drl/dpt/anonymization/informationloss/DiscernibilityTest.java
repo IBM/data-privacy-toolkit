@@ -108,13 +108,13 @@ public class DiscernibilityTest {
         InformationMetric discernibility = new Discernibility().initialize(original, anonymized,
                 ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformationList, null);
 
-        double discernibilityValue = discernibility.report();
+        Double discernibilityValue = discernibility.report();
 
         // the anonymized dataset contains two clusters: one with 3 rows and another with 5 rows
         // and also two suppressed partitions, each one with one row
 
         double expected = 3.0*3.0 + 5.0*5.0 + 10.0*1.0*1.0 + 10.0*1.0*1.0;
-        assertEquals(discernibilityValue, expected);
+        assertTrue(discernibilityValue == expected);
     }
 }
 

@@ -14,17 +14,13 @@ import java.util.List;
 public interface InformationMetric {
 
     String getName();
-
     String getShortName();
 
     double getLowerBound();
-
     double getUpperBound();
 
     boolean supportsNumerical();
-
     boolean supportsCategorical();
-
     boolean supportsSuppressedDatasets();
 
     boolean supportsWeights();
@@ -40,7 +36,7 @@ public interface InformationMetric {
 
     InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                  List<ColumnInformation> columnInformationList, InformationMetricOptions options);
-
+    
     InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                  List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options);
 }
