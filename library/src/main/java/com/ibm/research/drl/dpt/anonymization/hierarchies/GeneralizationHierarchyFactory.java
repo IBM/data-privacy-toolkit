@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.hierarchies;
@@ -77,6 +77,8 @@ public class GeneralizationHierarchyFactory {
                 if (hierarchyConfig != null && hierarchyConfig.has("format") && !hierarchyConfig.get("format").isNull())
                     return new DateHierarchy(hierarchyConfig.get("format").asText());
                 return new DateHierarchy();
+            case "LAT_LON":
+                return new LatitudeLongitudeHierarchy();
             default:
                 try {
                     Class<? extends GeneralizationHierarchy> hierarchyClass = (Class<? extends GeneralizationHierarchy>) Class.forName(hierarchyType);
