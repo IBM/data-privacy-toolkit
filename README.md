@@ -44,9 +44,10 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 
 ## References
 - Documentation [here (being updated)](docs/README.md)
-- Toolkit (CLI) [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-cli)
-- Demo (web-based UI for demo purposes only) [repo](https://github.ibm.com/Dublin-Research-Lab/prima-demo)
-- Spark wrappers [repo](https://github.ibm.com/Dublin-Research-Lab/ibm-data-privacy-toolkit-spark)
+- Toolkit (CLI/Docker) [here](docker)
+- Spark wrappers [here](spark)
+
+## Academic References:
 - S. Antonatos, S. Braghin, N. Holohan, Y. Gkoufas and P. Mac Aonghusa, "PRIMA: An End-to-End Framework for Privacy at Scale," 2018 IEEE 34th International Conference on Data Engineering (ICDE), 2018, pp. 1531-1542, doi: 10.1109/ICDE.2018.00171.
 - A. Gkoulalas-Divanis and S. Braghin, "IPV: A system for identifying privacy vulnerabilities in datasets," in IBM Journal of Research and Development, vol. 60, no. 4, pp. 14:1-14:10, July-Aug. 2016, doi: 10.1147/JRD.2016.2576818.
 - A. Gkoulalas-Divanis, S. Braghin and S. Antonatos, "FPVI: A scalable method for discovering privacy vulnerabilities in microdata," 2016 IEEE International Smart Cities Conference (ISC2), 2016, pp. 1-8, doi: 10.1109/ISC2.2016.7580849.
