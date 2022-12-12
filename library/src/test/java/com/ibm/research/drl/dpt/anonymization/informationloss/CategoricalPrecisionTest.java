@@ -65,7 +65,7 @@ public class CategoricalPrecisionTest {
         CategoricalInformation categoricalInformation = new CategoricalInformation(hierarchy, ColumnType.QUASI);
         columnInformationList.add(categoricalInformation);
 
-        Double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
+        double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
 
         //the precision is (0 + 0 ) = 0
         // plus two suppressed : 1 + 1
@@ -280,8 +280,6 @@ public class CategoricalPrecisionTest {
     @Test
     public void testCategoricalWithOLAWithTransformationLevels() throws Exception {
         IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
-
-//        System.out.println("original: " + original.getNumberOfRows());
 
         GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
         List<ColumnInformation> columnInformation = new ArrayList<>();
