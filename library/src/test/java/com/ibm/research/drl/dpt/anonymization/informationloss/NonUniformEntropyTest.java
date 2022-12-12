@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2015                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.informationloss;
@@ -14,10 +14,6 @@ import com.ibm.research.drl.dpt.anonymization.ola.OLA;
 import com.ibm.research.drl.dpt.anonymization.ola.OLAOptions;
 import com.ibm.research.drl.dpt.configuration.AnonymizationOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
-import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
-import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -33,6 +29,7 @@ public class NonUniformEntropyTest {
 
     @Test
     public void testNonUniformEntropy() {
+
         IPVDataset original = new IPVDataset(1);
         original.addRow(Arrays.asList("1"));
         original.addRow(Arrays.asList("2"));
@@ -59,7 +56,7 @@ public class NonUniformEntropyTest {
 
         double upperBound = 4 * (-log2(0.25));
         
-        double ne = nonUniformEntropy.report();
+        Double ne = nonUniformEntropy.report();
 
         assertEquals(4.0, ne, 0.01);
         assertEquals(upperBound, nonUniformEntropy.getUpperBound(), 0.01);
@@ -94,7 +91,7 @@ public class NonUniformEntropyTest {
 
         double upperBound = 4 * (-log2(0.25));
 
-        double ne = nonUniformEntropy.report();
+        Double ne = nonUniformEntropy.report();
 
         assertEquals(4.0 * 0.5, ne, 0.01);
         assertEquals(upperBound, nonUniformEntropy.getUpperBound(), 0.01);
@@ -129,7 +126,7 @@ public class NonUniformEntropyTest {
 
         double upperBound = 4 * (-log2(0.25));
 
-        double ne = nonUniformEntropy.report();
+        Double ne = nonUniformEntropy.report();
 
         assertEquals(0.0, ne, 0.01);
         assertEquals(upperBound, nonUniformEntropy.getUpperBound(), 0.01);
@@ -272,7 +269,7 @@ public class NonUniformEntropyTest {
         int[] kValues  = new int[] {2, 4, 5, 8, 10};
         double suppression = 20.0;
 
-        double lastUpper = Double.NaN;
+        Double lastUpper = null;
         
         for(int k: kValues) {
             List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
@@ -287,8 +284,10 @@ public class NonUniformEntropyTest {
             NonUniformEntropy entropy = new NonUniformEntropy();
             entropy.initialize(original, anonymized, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformation, ola.reportBestNode().getValues(), null);
             
-            if (!Double.isNaN(lastUpper)) {
-                assertEquals(lastUpper, entropy.getUpperBound(), 0.000000001);
+            System.out.println(entropy.getLowerBound() + ":" + entropy.getUpperBound());
+            
+            if (lastUpper != null) {
+                assertEquals(lastUpper.doubleValue(), entropy.getUpperBound(), 0.000000001);
             }
             
             lastUpper = entropy.getUpperBound();
@@ -298,19 +297,17 @@ public class NonUniformEntropyTest {
     @Test
     public void testNonUniformEntropyNoLoss() {
 
-        IPVDataset original = new IPVDataset(List.of(
-                Arrays.asList("1"),
-                Arrays.asList("2"),
-                Arrays.asList("3"),
-                Arrays.asList("4")),
-                new SimpleSchema("foo", List.of(new SimpleSchemaField("Column 0", IPVSchemaFieldType.STRING))), true);
+        IPVDataset original = new IPVDataset(1);
+        original.addRow(Arrays.asList("1"));
+        original.addRow(Arrays.asList("2"));
+        original.addRow(Arrays.asList("3"));
+        original.addRow(Arrays.asList("4"));
 
-        IPVDataset anonymized = new IPVDataset(List.of(
-                Arrays.asList("1"),
-                Arrays.asList("2"),
-                Arrays.asList("3"),
-                Arrays.asList("4")),
-                new SimpleSchema("bar", List.of(new SimpleSchemaField("Column 0", IPVSchemaFieldType.STRING))), true);
+        IPVDataset anonymized = new IPVDataset(1);
+        anonymized.addRow(Arrays.asList("1"));
+        anonymized.addRow(Arrays.asList("2"));
+        anonymized.addRow(Arrays.asList("3"));
+        anonymized.addRow(Arrays.asList("4"));
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(null, ColumnType.QUASI));
@@ -324,7 +321,7 @@ public class NonUniformEntropyTest {
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized, 
                 Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
 
-        double ne = nonUniformEntropy.report();
+        Double ne = nonUniformEntropy.report();
         assertEquals(0.0, ne, 0.01);
     }
 
@@ -355,13 +352,12 @@ public class NonUniformEntropyTest {
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
                 Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
 
-        double ne = nonUniformEntropy.report();
+        Double ne = nonUniformEntropy.report();
         assertEquals(0.0, ne, 0.01);
         assertEquals(0.0, nonUniformEntropy.getUpperBound(), 0.01);
     }
     
     @Test
-    @Disabled("Dataset requires validation")
     public void testIssueWithUpperBound() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/13f496b9-6bd8-42e0-bbfe-44964d3b199e.csv");
         IPVDataset dataset = IPVDataset.load(is, true, ',', '"', false);

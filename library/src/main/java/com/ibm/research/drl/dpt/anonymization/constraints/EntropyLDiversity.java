@@ -8,11 +8,7 @@ package com.ibm.research.drl.dpt.anonymization.constraints;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
-import com.ibm.research.drl.dpt.anonymization.ContentRequirements;
-import com.ibm.research.drl.dpt.anonymization.Partition;
-import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
-import com.ibm.research.drl.dpt.anonymization.PrivacyMetric;
+import com.ibm.research.drl.dpt.anonymization.*;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.EntropyUtilities;
 import com.ibm.research.drl.dpt.util.Histogram;
@@ -54,15 +50,15 @@ public class EntropyLDiversity implements PrivacyConstraint {
 
     @Override
     public boolean check(PrivacyMetric metric) {
-        LDiversityMetric lDiversityMetric = (LDiversityMetric) metric;
+        LDiversityMetric lDiversityMetric = (LDiversityMetric)metric;
 
         long total = lDiversityMetric.getCount();
         if (total < this.l) {
             return false;
         }
 
-        for (Histogram histogram : lDiversityMetric.getHistograms()) {
-            if (!checkHistogramEntropy(histogram, (int) total)) {
+        for(Histogram histogram: lDiversityMetric.getHistograms()) {
+            if (!checkHistogramEntropy(histogram, (int)total)) {
                 return false;
             }
         }
@@ -76,7 +72,7 @@ public class EntropyLDiversity implements PrivacyConstraint {
             return true;
         }
 
-        for (Integer sensitiveColumn : sensitiveColumns) {
+        for(Integer sensitiveColumn: sensitiveColumns) {
             if (!checkEntropyDiversity(partition, sensitiveColumn)) {
                 return false;
             }

@@ -18,7 +18,7 @@ import java.util.Map;
 public class NonUniformEntropy implements InformationMetric {
     /* Original paper: https://www.openu.ac.il/lists/mediaserver_documents/personalsites/tamirtassa/entropy_j.pdf */
     /* paper that shows how NUE is a good metric for health data: http://ebooks.iospress.nl/publication/48242 */
-
+    
     private IPVDataset original;
     private IPVDataset anonymized;
     private List<ColumnInformation> columnInformationList;
@@ -27,14 +27,14 @@ public class NonUniformEntropy implements InformationMetric {
     private boolean withTransformationLevels;
     private int[] transformationLevels;
     private double globalMaximumEntropy;
-
+    
     private List<Partition> originalPartitions;
     private List<Partition> anonymizedPartitions;
-
+    
     private String createKey(String value) {
-        return value;
+        return value;    
     }
-
+    
     @Override
     public String getName() {
         return "Non-Uniform entropy";
@@ -46,7 +46,7 @@ public class NonUniformEntropy implements InformationMetric {
     }
 
     @Override
-    public double getLowerBound() {
+    public double getLowerBound(){
         return 0.0;
     }
 
@@ -75,53 +75,53 @@ public class NonUniformEntropy implements InformationMetric {
         return true;
     }
 
-    public static double entropyForOutlier(Partition originalPartition, Map<String, Double> originalFrequencies,
+    public static double entropyForOutlier(Partition originalPartition, Map<String, Double> originalFrequencies, 
                                            int columnIndex) {
-
+       
         IPVDataset members = originalPartition.getMember();
         int numberOfRows = members.getNumberOfRows();
-
+        
         double result = 0.0;
-
-        for (int i = 0; i < numberOfRows; i++) {
+        
+        for(int i = 0; i < numberOfRows; i++) {
             String originalValue = members.get(i, columnIndex);
             double proportion = originalFrequencies.get(originalValue);
 
             result += -log2(proportion);
         }
-
+        
         return result;
     }
-
-    public static double entropyForAnonymous(Partition originalPartition, Map<String, Double> originalFrequencies,
-                                             Partition anonymizedPartition, Map<String, Double> anonymizedFrequencies,
-                                             int columnIndex) {
-
+    
+    public static double entropyForAnonymous(Partition originalPartition, Map<String, Double> originalFrequencies, 
+                                       Partition anonymizedPartition, Map<String, Double> anonymizedFrequencies, 
+                                       int columnIndex) {
+        
         IPVDataset originalMembers = originalPartition.getMember();
         IPVDataset anonymizedMembers = anonymizedPartition.getMember();
-
+        
         int numberOfRows = originalMembers.getNumberOfRows();
 
         double result = 0.0;
 
-        for (int i = 0; i < numberOfRows; i++) {
+        for(int i = 0; i < numberOfRows; i++) {
             String originalValue = originalMembers.get(i, columnIndex);
             String anonymizedValue = anonymizedMembers.get(i, columnIndex);
-
+            
             double freqOrig = originalFrequencies.get(originalValue);
             double freqAnon = anonymizedFrequencies.get(anonymizedValue);
-
-            result += -log2(freqOrig / freqAnon);
+            
+            result += -log2(freqOrig /freqAnon);
         }
-
-
-        return result;
+        
+        
+        return result; 
     }
-
+    
     private InformationLossResult reportForColumn(int columnIndex) {
         ColumnInformation columnInformation = columnInformationList.get(columnIndex);
         double weight = columnInformation.getWeight();
-
+        
         if (columnInformation.getColumnType() != ColumnType.QUASI) {
             return null;
         }
@@ -129,31 +129,32 @@ public class NonUniformEntropy implements InformationMetric {
         double result = 0.0;
 
         int numPartitions = originalPartitions.size();
-
+        
         Map<String, Double> originalFrequencies = this.proportionsOriginal.get(columnIndex);
         Map<String, Double> anonymizedFrequencies = this.proprtionsAnonymized.get(columnIndex);
-
-        for (int i = 0; i < numPartitions; i++) {
+        
+        for(int i = 0; i < numPartitions; i++) {
             Partition originalPartition = originalPartitions.get(i);
 
-            if (originalPartition.isAnonymous()) {
+            if(originalPartition.isAnonymous()) {
                 Partition anonymizedPartition = anonymizedPartitions.get(i);
-                result += entropyForAnonymous(originalPartition, originalFrequencies,
+                result += entropyForAnonymous(originalPartition, originalFrequencies, 
                         anonymizedPartition, anonymizedFrequencies, columnIndex);
-            } else {
+            }
+            else {
                 result += entropyForOutlier(originalPartition, originalFrequencies, columnIndex);
             }
         }
 
         double maxNUE = calculateMaxEntropy(originalFrequencies, columnIndex);
-
+        
         return new InformationLossResult(weight * result, 0.0, maxNUE);
     }
-
+    
     private double calculateMaxEntropyForEntireDataset() {
-
+        
         double sum = 0.0;
-        for (int columnIndex = 0; columnIndex < this.columnInformationList.size(); columnIndex++) {
+        for(int columnIndex = 0; columnIndex < this.columnInformationList.size(); columnIndex++) {
             ColumnInformation columnInformation = columnInformationList.get(columnIndex);
 
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
@@ -165,20 +166,20 @@ public class NonUniformEntropy implements InformationMetric {
 
             sum += columnMax;
         }
-
+        
         return sum;
     }
 
     private double calculateMaxEntropy(Map<String, Double> originalFrequencies, int columnIndex) {
-
+            
         double sum = 0.0;
         int numPartitions = originalPartitions.size();
-
-        for (int i = 0; i < numPartitions; i++) {
+        
+        for(int i = 0; i < numPartitions; i++) {
             Partition originalPartition = originalPartitions.get(i);
             sum += entropyForOutlier(originalPartition, originalFrequencies, columnIndex);
         }
-
+        
         return sum;
     }
 
@@ -204,8 +205,8 @@ public class NonUniformEntropy implements InformationMetric {
     public List<InformationLossResult> reportPerQuasiColumn() {
         List<InformationLossResult> results = new ArrayList<>();
         int columnIndex = 0;
-
-        for (ColumnInformation columnInformation : columnInformationList) {
+        
+        for(ColumnInformation columnInformation: columnInformationList) {
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 columnIndex++;
                 continue;
@@ -214,7 +215,7 @@ public class NonUniformEntropy implements InformationMetric {
             InformationLossResult iloss = reportForColumn(columnIndex);
 
             results.add(iloss);
-
+            
             columnIndex++;
         }
 
@@ -230,36 +231,38 @@ public class NonUniformEntropy implements InformationMetric {
 
         Map<String, Double> map = new HashMap<>();
 
-        for (int i = 0; i < numberOfRows; i++) {
+        for(int i = 0; i < numberOfRows; i++) {
 
             String value = createKey(dataset.get(i, columnIndex));
 
             Double counter = map.get(value);
             if (counter == null) {
                 map.put(value, 1.0);
-            } else {
+            }
+            else {
                 map.put(value, counter + 1.0);
             }
         }
-
-        for (Map.Entry<String, Double> entry : map.entrySet()) {
+       
+        for(Map.Entry<String, Double> entry: map.entrySet()) {
             String key = entry.getKey();
             Double value = entry.getValue();
-
+            
             map.put(key, value / (double) numberOfRows);
         }
         return map;
     }
-
+    
     private List<Map<String, Double>> calculateFrequencies(IPVDataset dataset) {
 
         List<Map<String, Double>> frequencies = new ArrayList<>();
         int numberOfColumns = dataset.getNumberOfColumns();
 
-        for (int i = 0; i < numberOfColumns; i++) {
+        for(int i = 0; i < numberOfColumns; i++) {
             if (columnInformationList.get(i).getColumnType() != ColumnType.QUASI) {
                 frequencies.add(null);
-            } else {
+            }
+            else {
                 frequencies.add(calculateFrequenciesForColumn(dataset, i));
             }
         }
@@ -276,20 +279,20 @@ public class NonUniformEntropy implements InformationMetric {
 
         this.proportionsOriginal = calculateFrequencies(original);
         this.proprtionsAnonymized = calculateFrequencies(anonymized);
-
+       
         this.originalPartitions = originalPartitions;
         this.anonymizedPartitions = anonymizedPartitions;
-
+        
         this.withTransformationLevels = false;
         this.transformationLevels = null;
-
+        
         this.globalMaximumEntropy = calculateMaxEntropyForEntireDataset();
-
+        
         return this;
     }
-
+    
     @Override
-    public InformationMetric initialize(IPVDataset original, IPVDataset anonymized,
+    public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, 
                                         List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {
         this.original = original;
@@ -298,15 +301,15 @@ public class NonUniformEntropy implements InformationMetric {
 
         this.proportionsOriginal = calculateFrequencies(original);
         this.proprtionsAnonymized = calculateFrequencies(anonymized);
-
+        
         this.originalPartitions = originalPartitions;
         this.anonymizedPartitions = anonymizedPartitions;
-
+        
         this.withTransformationLevels = true;
         this.transformationLevels = transformationLevels;
-
+       
         this.globalMaximumEntropy = calculateMaxEntropyForEntireDataset();
-
+        
         return this;
     }
 

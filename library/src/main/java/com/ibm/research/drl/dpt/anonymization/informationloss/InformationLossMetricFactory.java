@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InformationLossMetricFactory {
-    private static final List<InformationMetric> metricList = Arrays.asList(
+    private static List<InformationMetric> metricList = Arrays.asList(
             new AverageEquivalenceClassSize(),
             new CategoricalPrecision(),
             new Discernibility(),
@@ -20,7 +20,7 @@ public class InformationLossMetricFactory {
             new GlobalCertaintyPenalty(),
             new NonUniformEntropy(),
             new SensitiveSimilarityMeasure()
-    );
+            );
 
     public static List<InformationMetric> getAvailableMetrics() {
         return metricList;
@@ -31,8 +31,7 @@ public class InformationLossMetricFactory {
             if (metric.getShortName().equals(shortName)) {
                 try {
                     return metric.getClass().getConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                         InvocationTargetException e) {
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }

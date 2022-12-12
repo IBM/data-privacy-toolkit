@@ -884,7 +884,7 @@ public class OLATest {
         columnInformation.add(new CategoricalInformation(heightHierarchy, ColumnType.QUASI));
         columnInformation.add(new DefaultColumnInformation());
         
-        IPVDataset anonymized= DatasetGeneralizer.generalize(original, columnInformation, new int[] { 0, 1, 1, 0, 1});
+        IPVDataset anonymized = DatasetGeneralizer.generalize(original, columnInformation, new int[] { 0, 1, 1, 0, 1});
         
         int k = 10;
         double suppression = 50;
@@ -944,7 +944,7 @@ public class OLATest {
 
     @Test
     @Disabled
-    public void testTangramBug20180208Good() throws Exception {
+    public void testClientILBug20180208Good() throws Exception {
         //this is working
         String goodConfName = "/a71577ba-2eda-47d3-b55b-613e34a3d3e9.json";
 
@@ -964,7 +964,7 @@ public class OLATest {
     }
     
     @Test
-    public void testOLAAgesTangram() throws Exception {
+    public void testOLAAgesClientIL() throws Exception {
         
         IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
         
@@ -991,7 +991,7 @@ public class OLATest {
 
     @Test
     @Disabled
-    public void testTangramBug20180208Bad() throws Exception {
+    public void testClientILBug20180208Bad() throws Exception {
         // this is crashing
         String badConfName = "/2bac2243-fcfc-455d-a096-33b53d795179.json";
         AnonymizationOptions badOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream(badConfName), AnonymizationOptions.class);
@@ -1009,40 +1009,6 @@ public class OLATest {
         cp.initialize(dataset, anonymizedDataset, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(),
                 badOptions.getColumnInformation(), null);
         System.out.println(cp.report());
-    }
-
-    @Test
-    @Disabled
-    public void testTangramBug20180318Bad() throws Exception {
-        // this is crashing
-        String basePath = "/Users/santonat/dev/tangram_test/bug_20180318/";
-        String badConfName = basePath + "conf.json";
-
-        AnonymizationOptions badOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream(badConfName), AnonymizationOptions.class);
-
-        OLA ola = new OLA();
-        OLAOptions olaOptions = new OLAOptions(badOptions.getSuppressionRate());
-
-        String inputFile = basePath + "DemoInput.csv";
-        IPVDataset dataset = IPVDataset.load(new FileInputStream(inputFile), true, ',', '"', false);
-        ola.initialize(dataset, badOptions.getColumnInformation(), badOptions.getPrivacyConstraints(), olaOptions);
-
-        IPVDataset anonymizedDataset = ola.apply();
-        System.out.println(anonymizedDataset.getNumberOfRows());
-
-        NonUniformEntropy nue = new NonUniformEntropy();
-        
-        nue.initialize(dataset, anonymizedDataset, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), 
-                badOptions.getColumnInformation(), null);
-
-        System.out.println("reported: " + nue.report());
-        System.out.println("global max: " + nue.getUpperBound());
-        
-        List<InformationLossResult> informationLossResults = nue.reportPerQuasiColumn();
-        for(InformationLossResult result: informationLossResults) {
-            System.out.println(result.getValue() + " , lower: " + result.getLowerBound() + ", upper: " + result.getUpperBound());
-        }
-        
     }
     
     @Test

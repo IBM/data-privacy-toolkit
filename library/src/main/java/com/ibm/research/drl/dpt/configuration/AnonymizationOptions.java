@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2017                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.configuration;
@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.anonymization.*;
 import com.ibm.research.drl.dpt.anonymization.constraints.*;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
@@ -23,12 +24,7 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.exceptions.RiskOptionsMisconfigurationException;
-import com.ibm.research.drl.dpt.risk.BinomialRiskMetric;
-import com.ibm.research.drl.dpt.risk.FKRatioMetric;
-import com.ibm.research.drl.dpt.risk.KRatioMetric;
-import com.ibm.research.drl.dpt.risk.RiskMetric;
-import com.ibm.research.drl.dpt.risk.ZayatzEstimator;
-import com.ibm.research.drl.dpt.util.JsonUtils;
+import com.ibm.research.drl.dpt.risk.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Constructor;
@@ -37,6 +33,8 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AnonymizationOptions {
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     private final List<PrivacyConstraint> privacyConstraints;
     private final List<ColumnInformation> columnInformation;
     private final DatasetOptions datasetOptions;
@@ -52,21 +50,21 @@ public class AnonymizationOptions {
     @JsonCreator
     public AnonymizationOptions(
             @JsonProperty("delimiter")
-            char delimiter,
+                    char delimiter,
             @JsonProperty("quoteChar")
-            char quoteChar,
+                    char quoteChar,
             @JsonProperty(value = "hasHeader", defaultValue = "false")
-            boolean hasHeader,
+                    boolean hasHeader,
             @JsonProperty(value = "trimFields")
-            boolean trimFields,
+                    boolean trimFields,
             @JsonProperty(value = "estimateUniqueness", required = true)
             boolean estimateUniqueness,
             @JsonProperty(value = "riskMetric", required = true)
-            JsonNode riskMetricNode,
+                    JsonNode riskMetricNode,
             @JsonProperty(value = "riskMetricOptions", required = true)
-            JsonNode riskMetricOptionsNode,
+                    JsonNode riskMetricOptionsNode,
             @JsonProperty(value = "hierarchies", required = true)
-            JsonNode hierarchiesNode,
+                    JsonNode hierarchiesNode,
             @JsonProperty(value = "informationLoss", required = true)
             String informationLoss,
             @JsonProperty(value = "options")
@@ -89,15 +87,15 @@ public class AnonymizationOptions {
 
         this.estimateUniqueness = estimateUniqueness;
 
-        try {
-            riskMetric = generateRiskMetric(riskMetricNode);
-            riskOptions = generateRiskOptions(riskMetricOptionsNode);
-            riskMetric.validateOptions(riskOptions);
-        } catch (IllegalArgumentException e) {
-            throw new RiskOptionsMisconfigurationException(e.getMessage());
-        }
+            try {
+                riskMetric = generateRiskMetric(riskMetricNode);
+                riskOptions = generateRiskOptions(riskMetricOptionsNode);
+                riskMetric.validateOptions(riskOptions);
+            } catch (IllegalArgumentException e) {
+                throw new RiskOptionsMisconfigurationException(e.getMessage());
+            }
 
-        this.informationLoss = InformationLossMetricFactory.getInstance(informationLoss);
+            this.informationLoss = InformationLossMetricFactory.getInstance(informationLoss);
 
 
         if (Objects.nonNull(options) && options.isObject() && options.has(SUPPRESSION_FIELD)) {
@@ -116,8 +114,7 @@ public class AnonymizationOptions {
     }
 
     private Map<String, String> generateRiskOptions(JsonNode riskMetricOptions) {
-        return JsonUtils.MAPPER.convertValue(riskMetricOptions, new TypeReference<>() {
-        });
+        return mapper.convertValue(riskMetricOptions, new TypeReference<>() {});
     }
 
     private RiskMetric generateRiskMetric(final JsonNode riskMetric) {
@@ -207,13 +204,13 @@ public class AnonymizationOptions {
                     if (kNode == null || kNode.isNull() || !kNode.isInt()) {
                         throw new MisconfigurationException("parameter for k is either missing, null or not an integer");
                     }
-
+                    
                     int kValue = kNode.intValue();
-
+                    
                     if (kValue <= 1) {
                         throw new MisconfigurationException("k value must be greater than 1");
                     }
-
+                    
                     privacyConstraints.add(new KAnonymity(kNode.intValue()));
                     break;
                 case "distinctL":
@@ -221,13 +218,13 @@ public class AnonymizationOptions {
                     if (lNode == null || lNode.isNull() || !lNode.isInt()) {
                         throw new MisconfigurationException("parameter for distinctL is either missing, null or not an integer");
                     }
-
+                    
                     int lValue = lNode.intValue();
 
                     if (lValue < 1) {
                         throw new MisconfigurationException("l value must be >=1");
                     }
-
+                    
                     privacyConstraints.add(new DistinctLDiversity(lValue));
                     break;
                 case "entropyL":
@@ -235,7 +232,7 @@ public class AnonymizationOptions {
                     if (leNode == null || leNode.isNull() || !leNode.isInt()) {
                         throw new MisconfigurationException("parameter for entropyL is either missing, null or not an integer");
                     }
-
+                    
                     privacyConstraints.add(new EntropyLDiversity(leNode.intValue()));
                     break;
                 case "recursiveCL":
@@ -255,7 +252,7 @@ public class AnonymizationOptions {
                     if (tNode == null || tNode.isNull() || !tNode.isDouble()) {
                         throw new MisconfigurationException("parameter t for tCloseness is either missing, null or not a number");
                     }
-
+                    
                     privacyConstraints.add(new TCloseness(tNode.doubleValue()));
                     break;
                 default:
@@ -265,7 +262,7 @@ public class AnonymizationOptions {
 
         return privacyConstraints;
     }
-
+   
     public static GeneralizationHierarchy getHierarchyFromJsonNode(JsonNode specification) {
         GeneralizationHierarchy hierarchy;
 
@@ -286,10 +283,10 @@ public class AnonymizationOptions {
             default:
                 throw new MisconfigurationException("Hierarchy is not recognized");
         }
-
+        
         return hierarchy;
     }
-
+    
     public static Map<String, GeneralizationHierarchy> hierarchiesFromJSON(JsonNode hierarchies) {
         if (hierarchies == null || hierarchies.isNull() || !hierarchies.isObject()) {
             throw new MisconfigurationException("hierarchies key is either missing or null or not an object");
@@ -374,8 +371,8 @@ public class AnonymizationOptions {
     }
 
     private static String listColumnTypes() {
-        ColumnType[] values = ColumnType.values();
-        return StringUtils.join(values, ",");
+       ColumnType[] values = ColumnType.values();
+       return StringUtils.join(values, ",");
     }
 
     public static List<ColumnInformation> columnInformationFromJSON(JsonNode contents, Map<String, GeneralizationHierarchy> defaultHierarchyMap) {
@@ -405,7 +402,7 @@ public class AnonymizationOptions {
 
             final boolean isForLinking = entry.has("isForLinking") && entry.get("isForLinking").asBoolean();
 
-
+            
             switch (columnType) {
                 case QUASI:
                     final double weight;
@@ -425,14 +422,14 @@ public class AnonymizationOptions {
                     } else {
                         weight = 1.0;
                     }
-
+                    
                     JsonNode isCategoricalNode = entry.get("isCategorical");
                     if (isCategoricalNode == null || !isCategoricalNode.isBoolean()) {
                         throw new MisconfigurationException("isCategorical for column is either missing or not a boolean");
                     }
 
                     final boolean isCategorical = isCategoricalNode.asBoolean();
-
+                    
                     if (isCategorical) {
                         JsonNode hierarchyNode = entry.get("hierarchy");
                         if (hierarchyNode == null || !hierarchyNode.isTextual() || hierarchyNode.isNull()) {
@@ -446,6 +443,7 @@ public class AnonymizationOptions {
                             throw new MisconfigurationException("Cannot find the hierarchy: " + hierarchyName);
                         }
 
+                       
 
                         int maximumLevel = -1;
                         final JsonNode maximumLevelNode = entry.get("maximumLevel");
@@ -467,7 +465,7 @@ public class AnonymizationOptions {
 
                         columnInformationList.add(new CategoricalInformation(hierarchy, ColumnType.QUASI, weight, maximumLevel, isForLinking));
                     } else {
-                        List<Double> sortedValues = new ArrayList<>();
+                        List<Double> sortedValues = new ArrayList<>(); 
                         columnInformationList.add(new NumericalRange(sortedValues, ColumnType.QUASI, weight, isForLinking));
                     }
                     break;
