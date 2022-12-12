@@ -3,7 +3,7 @@
  * Copyright IBM Corp. 2016                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.dpt.anonymization.linkability;
+package com.ibm.research.drl.dpt.linkability;
 
 import com.ibm.research.drl.dpt.anonymization.*;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;

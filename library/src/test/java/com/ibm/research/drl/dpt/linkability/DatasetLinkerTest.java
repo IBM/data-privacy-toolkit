@@ -3,7 +3,7 @@
  * Copyright IBM Corp. 2017                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.dpt.anonymization.linkability;
+package com.ibm.research.drl.dpt.linkability;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
