@@ -19,7 +19,7 @@ import com.ibm.research.drl.dpt.generators.ItemSet;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.util.Histogram;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchemaField;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

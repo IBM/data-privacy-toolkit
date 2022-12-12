@@ -34,18 +34,18 @@ public class ClusteringAnonUtils {
         }
 
         List<Map<String, Integer>> counters = new ArrayList<>();
-        for (int i = 0; i < hierarchy.getHeight(); i++) {
+        for(int i = 0; i < hierarchy.getHeight(); i++) {
             counters.add(new HashMap<>());
         }
 
-        for (String value : values) {
+        for(String value: values) {
             int currentLevel = hierarchy.getNodeLevel(value);
 
             if (currentLevel == -1) {
                 break;
             }
 
-            for (int i = currentLevel; i < hierarchy.getHeight(); i++) {
+            for(int i = currentLevel; i < hierarchy.getHeight(); i++) {
                 String ancestor = hierarchy.encode(value, i - currentLevel, true);
 
                 Integer counter = counters.get(i).get(ancestor);
@@ -75,17 +75,18 @@ public class ClusteringAnonUtils {
 
         List<List<String>> centroids = new ArrayList<>();
 
-        for (List<Set<String>> clusterList : categoricalVariables) {
+        for(List<Set<String>> clusterList: categoricalVariables ) {
             List<String> clusterCentroids = new ArrayList<>();
 
-            for (int i = 0; i < clusterList.size(); i++) {
+            for(int i = 0; i < clusterList.size(); i++) {
                 Set<String> values = clusterList.get(i);
                 ColumnInformation columnInformation = columnInformationList.get(i);
 
                 if (values.size() == 0 || !columnInformation.isCategorical()) {
                     clusterCentroids.add(null);
-                } else {
-                    GeneralizationHierarchy hierarchy = ((CategoricalInformation) columnInformation).getHierarchy();
+                }
+                else {
+                    GeneralizationHierarchy hierarchy = ((CategoricalInformation)columnInformation).getHierarchy();
                     clusterCentroids.add(calculateCommonAncestor(values, hierarchy));
                 }
 

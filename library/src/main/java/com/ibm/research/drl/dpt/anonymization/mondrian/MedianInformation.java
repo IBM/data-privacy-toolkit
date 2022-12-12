@@ -55,13 +55,13 @@ public class MedianInformation {
         this.splitValueString = splitValue;
         this.splitValueNumerical = null;
     }
-
+    
     public MedianInformation(Double low, Double high, Double splitValue) {
         this.low = low;
         this.high = high;
         this.splitValueString = null;
         this.splitValueNumerical = splitValue;
     }
-
+    
 }
 

@@ -13,8 +13,8 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.TypeClass;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchema;
+import com.ibm.research.drl.schema.IPVSchemaField;
 
 import java.util.*;
 
@@ -27,12 +27,12 @@ public class Mondrian implements AnonymizationAlgorithm {
     private List<PrivacyConstraint> privacyConstraints;
     private List<ColumnInformation> columnInformationList;
     private CategoricalSplitStrategy categoricalSplitStrategy;
-
+    
     public static List<Integer> getNonQuasiColumns(int numberOfColumns, List<Integer> quasiColumns) {
         List<Integer> result = new ArrayList<>();
 
-        for (int i = 0; i < numberOfColumns; i++) {
-            if (quasiColumns.contains(i)) {
+        for(int i = 0; i < numberOfColumns; i++) {
+            if(quasiColumns.contains(i)) {
                 continue;
             }
 
@@ -60,44 +60,44 @@ public class Mondrian implements AnonymizationAlgorithm {
     public List<Partition> getOriginalPartitions() {
         return this.partitions;
     }
-
+    
     public List<Partition> getAnonymizedPartitions() {
         return this.anonymizedPartitions;
     }
 
     public static String findCommonAncestor(List<List<String>> values, int columnIndex, MaterializedHierarchy materializedHierarchy) {
         Set<String> uniqueValues = new HashSet<>();
-
-        for (List<String> row : values) {
+        
+        for(List<String> row: values) {
             String v = row.get(columnIndex);
             uniqueValues.add(v);
         }
 
         return ClusteringAnonUtils.calculateCommonAncestor(uniqueValues, materializedHierarchy);
     }
-
+    
     private static List<String> calculateCommonAncestors(MondrianPartition partition, List<ColumnInformation> columnInformationList) {
-
+        
         List<String> commonAncestors = new ArrayList<>();
-
-        for (int columnIndex = 0; columnIndex < columnInformationList.size(); columnIndex++) {
+        
+        for(int columnIndex = 0; columnIndex < columnInformationList.size(); columnIndex++) {
             ColumnInformation columnInformation = columnInformationList.get(columnIndex);
             if (columnInformation.getColumnType() != ColumnType.QUASI || !columnInformation.isCategorical()) {
                 commonAncestors.add(null);
                 continue;
             }
-
-            CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
-            String commonAncestor = findCommonAncestor(partition.getMember().getValues(), columnIndex,
-                    (MaterializedHierarchy) categoricalInformation.getHierarchy());
+            
+            CategoricalInformation categoricalInformation = (CategoricalInformation)columnInformation; 
+            String commonAncestor = findCommonAncestor(partition.getMember().getValues(), columnIndex, 
+                    (MaterializedHierarchy)categoricalInformation.getHierarchy()); 
             commonAncestors.add(commonAncestor);
         }
-
+        
         return commonAncestors;
     }
-
-    public static Partition anonymizePartition(MondrianPartition partition,
-                                               List<Integer> quasiColumns, List<Integer> nonQuasiColumns,
+    
+    public static Partition anonymizePartition(MondrianPartition partition, 
+                                               List<Integer> quasiColumns, List<Integer> nonQuasiColumns, 
                                                List<ColumnInformation> columnInformationList, CategoricalSplitStrategy categoricalSplitStrategy) {
         List<List<String>> anonymizedValues = new ArrayList<>();
 
@@ -105,16 +105,16 @@ public class Mondrian implements AnonymizationAlgorithm {
         List<String> middle = partition.getMiddle();
 
         List<String> commonAncestors = null;
-
+        
         if (categoricalSplitStrategy == CategoricalSplitStrategy.ORDER_BASED) {
             commonAncestors = calculateCommonAncestors(partition, columnInformationList);
         }
-
-        for (int i = 0; i < partition.size(); i++) {
+        
+        for(int i = 0; i < partition.size(); i++) {
             List<String> row = member.getRow(i);
             List<String> anonymizedRow = new ArrayList<>(row.size());
 
-            for (int k = 0; k < row.size(); k++) {
+            for(int k = 0; k < row.size(); k++) {
                 anonymizedRow.add(null);
             }
 
@@ -128,7 +128,7 @@ public class Mondrian implements AnonymizationAlgorithm {
                 }
             }
 
-            for (Integer k : nonQuasiColumns) {
+            for(Integer k: nonQuasiColumns) {
                 anonymizedRow.set(k, row.get(k));
             }
 
@@ -142,14 +142,14 @@ public class Mondrian implements AnonymizationAlgorithm {
     private IPVDataset getAnonymizedDataset() {
         List<List<String>> values = new ArrayList<>();
 
-        for (Partition p : partitions) {
+        for(Partition p: partitions) {
             MondrianPartition partition = (MondrianPartition) p;
 
-            Partition anonP = anonymizePartition(partition, this.quasiColumns, this.nonQuasiColumns,
+            Partition anonP = anonymizePartition(partition, this.quasiColumns, this.nonQuasiColumns, 
                     this.columnInformationList, this.categoricalSplitStrategy);
             values.addAll(anonP.getMember().getValues());
             this.anonymizedPartitions.add(anonP);
-
+            
             p.setAnonymous(true);
             anonP.setAnonymous(true);
         }
@@ -159,20 +159,20 @@ public class Mondrian implements AnonymizationAlgorithm {
 
     private void anonymize(MondrianPartition partition, int level) {
 
-        if (!partition.isSplittable()) {
+        if(!partition.isSplittable()) {
             partitions.add(partition);
             return;
         }
 
         int dim = partition.chooseDimension();
-
+       
         List<MondrianPartition> subPartitions = partition.split(dim, level);
-
+        
         if (subPartitions.size() == 0) {
             partition.disallow(dim);
             anonymize(partition, level + 1);
-        } else {
-            for (MondrianPartition p : subPartitions) {
+        }  else {
+            for(MondrianPartition p: subPartitions) {
                 anonymize(p, level + 1);
             }
         }
@@ -181,16 +181,16 @@ public class Mondrian implements AnonymizationAlgorithm {
 
     private double calculateCardinality(IPVDataset dataset, int columnIndex) {
         int numberOfRows = dataset.getNumberOfRows();
-        Set<String> values = new HashSet<>();
-
-        for (int i = 0; i < numberOfRows; i++) {
+        Set<String> values = new HashSet<>(); 
+        
+        for(int i = 0; i < numberOfRows; i++) {
             String value = dataset.get(i, columnIndex);
             values.add(value.toLowerCase());
         }
-
+        
         return values.size();
     }
-
+    
     @Override
     public IPVDataset apply() {
         if (dataset == null || dataset.getNumberOfRows() == 0) {
@@ -199,13 +199,13 @@ public class Mondrian implements AnonymizationAlgorithm {
 
         List<String> middle = new ArrayList<>();
         List<Interval> width = new ArrayList<>();
-
-        for (int i = 0; i < dataset.getNumberOfColumns(); i++) {
+        
+        for(int i = 0; i < dataset.getNumberOfColumns(); i++) {
             ColumnInformation columnInformation = columnInformationList.get(i);
 
             if (columnInformation.getColumnType() == ColumnType.QUASI) {
                 if (!columnInformation.isCategorical()) {
-                    NumericalRange numericalInformation = (NumericalRange) columnInformation;
+                    NumericalRange numericalInformation = (NumericalRange) columnInformation; 
                     middle.add(MondrianPartition.generateMiddleKey(numericalInformation.getLow(), numericalInformation.getHigh()));
                     width.add(new Interval(numericalInformation.getLow(), numericalInformation.getHigh()));
                 } else {
@@ -214,7 +214,8 @@ public class Mondrian implements AnonymizationAlgorithm {
                     middle.add(topTerm.toUpperCase());
                     width.add(new Interval(0d, calculateCardinality(dataset, i)));
                 }
-            } else {
+            }
+            else {
                 middle.add(null);
                 width.add(null);
             }
@@ -234,7 +235,7 @@ public class Mondrian implements AnonymizationAlgorithm {
     }
 
     private List<ColumnInformation> buildColumnInformationList(IPVDataset dataset, Collection<IPVVulnerability> vulnerabilities,
-                                                               Collection<String> sensitiveFields, Map<String, ProviderType> fieldTypes) {
+                                                       Collection<String> sensitiveFields, Map<String, ProviderType> fieldTypes) {
         List<ColumnInformation> columnInformationList = new ArrayList<>(dataset.getNumberOfColumns());
 
         IPVSchema schema = dataset.getSchema();
@@ -244,7 +245,7 @@ public class Mondrian implements AnonymizationAlgorithm {
 
         final boolean isForLinking = false;
 
-        for (int i = 0; i < dataset.getNumberOfColumns(); i++) {
+        for(int i = 0; i < dataset.getNumberOfColumns(); i++) {
             String fieldName = fields.get(i).getName();
 
             if (sensitiveFields.contains(fieldName)) {
@@ -267,12 +268,14 @@ public class Mondrian implements AnonymizationAlgorithm {
             if (fieldType.getTypeClass() == TypeClass.NUMERICAL) {
                 NumericalRange numericalRange = ColumnInformationGenerator.generateNumericalRange(dataset, i, ColumnType.QUASI);
                 columnInformationList.add(numericalRange);
-            } else {
+            }
+            else {
                 GeneralizationHierarchy hierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(fieldType);
                 if (hierarchy == null) {
                     columnInformationList.add(ColumnInformationGenerator.generateCategoricalFromData(dataset, i, ColumnType.QUASI));
-                } else {
-                    columnInformationList.add(new CategoricalInformation(hierarchy, ColumnType.QUASI));
+                }
+                else {
+                    columnInformationList.add(new CategoricalInformation((MaterializedHierarchy)hierarchy, ColumnType.QUASI));
                 }
             }
         }
@@ -290,30 +293,29 @@ public class Mondrian implements AnonymizationAlgorithm {
     @Override
     public AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList,
                                              List<PrivacyConstraint> privacyConstraints, AnonymizationAlgorithmOptions options) {
-
-        if (columnInformationList.size() != dataset.getNumberOfColumns())
-            throw new IllegalArgumentException("Number of column information not matching number of columns of the dataset");
+        
+        if (columnInformationList.size() != dataset.getNumberOfColumns()) throw new IllegalArgumentException("Number of column information not matching number of columns of the dataset");
 
         this.categoricalSplitStrategy = CategoricalSplitStrategy.ORDER_BASED;
-
+        
         if (options != null) {
             if (!(options instanceof MondrianOptions)) {
                 throw new IllegalArgumentException("Expecting instance of OLAOptions");
             }
-
+            
             MondrianOptions mondrianOptions = (MondrianOptions) options;
             this.categoricalSplitStrategy = mondrianOptions.getCategoricalSplitStrategy();
         }
-
+        
         this.dataset = dataset;
         this.quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         this.nonQuasiColumns = getNonQuasiColumns(dataset.getNumberOfColumns(), this.quasiColumns);
         this.columnInformationList = columnInformationList;
         this.privacyConstraints = privacyConstraints;
         this.anonymizedPartitions = new ArrayList<>();
-
+        
         AnonymizationUtils.initializeConstraints(dataset, columnInformationList, privacyConstraints);
-
+        
         initialize();
 
         return this;
