@@ -29,21 +29,21 @@ public class XMLRecord extends MultipathRecord {
 
     private final static String transformation =
             "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">" +
-                    "<xsl:output method=\"text\" indent=\"no\" />" +
-                    "<xsl:template match=\"*[not(*)]\">" +
-                    "<xsl:for-each select=\"ancestor-or-self::*\">" +
-                    "<xsl:value-of select=\"concat('/', name())\" />" +
-                    "<xsl:if test=\"count(preceding-sibling::*[name() = name(current())]) != 0\">" +
-                    "<xsl:value-of select=\"concat('[', count(preceding-sibling::*[name() = name(current())]) + 1, ']')\" />" +
-                    "</xsl:if>" +
-                    "</xsl:for-each>" +
-                    "<xsl:text>&#xA;</xsl:text>" +
-                    "<xsl:apply-templates select=\"*\" />" +
-                    "</xsl:template>" +
-                    "<xsl:template match=\"*\">" +
-                    "<xsl:apply-templates select=\"*\" />" +
-                    "</xsl:template>" +
-                    "</xsl:stylesheet>";
+            "<xsl:output method=\"text\" indent=\"no\" />" +
+            "<xsl:template match=\"*[not(*)]\">" +
+            "<xsl:for-each select=\"ancestor-or-self::*\">" +
+            "<xsl:value-of select=\"concat('/', name())\" />" +
+            "<xsl:if test=\"count(preceding-sibling::*[name() = name(current())]) != 0\">" +
+            "<xsl:value-of select=\"concat('[', count(preceding-sibling::*[name() = name(current())]) + 1, ']')\" />" +
+            "</xsl:if>" +
+            "</xsl:for-each>" +
+            "<xsl:text>&#xA;</xsl:text>" +
+            "<xsl:apply-templates select=\"*\" />" +
+            "</xsl:template>" +
+            "<xsl:template match=\"*\">" +
+            "<xsl:apply-templates select=\"*\" />" +
+            "</xsl:template>" +
+            "</xsl:stylesheet>";
     private final static XPath xPath = XPathFactory.newInstance().newXPath();
 
     public XMLRecord(Document document) {
@@ -138,7 +138,7 @@ public class XMLRecord extends MultipathRecord {
 
     private Map<String, Integer> getNodeFrequencies(NodeList nl) {
         HashMap<String, Integer> nodesFrequencies = new HashMap<>();
-        for (int i = 0; i < nl.getLength(); i++) {
+        for(int i = 0; i < nl.getLength(); i++) {
             nodesFrequencies.merge(nl.item(i).getNodeName(), 1, Integer::sum);
         }
         return nodesFrequencies;
@@ -152,11 +152,11 @@ public class XMLRecord extends MultipathRecord {
         if (parts.isEmpty()) {
             try {
                 NodeList nl = (NodeList) xPath.compile(head).evaluate(document, XPathConstants.NODESET);
-                if (nl.getLength() == 1) {
+                if(nl.getLength() == 1) {
                     return Collections.singletonList(head);
                 } else {
                     List<String> paths = new ArrayList<>();
-                    for (int i = 1; i <= nl.getLength(); i++) {
+                    for(int i = 1; i <= nl.getLength(); i++) {
                         paths.add(head + "[" + i + "]");
                     }
                     return paths;
@@ -176,9 +176,9 @@ public class XMLRecord extends MultipathRecord {
             Map<String, Integer> nodesFrequencies = getNodeFrequencies(nl);
 
             HashMap<String, Integer> arraysCounters = new HashMap<>();
-            for (int i = 0; i < nl.getLength(); i++) {
+            for(int i = 0; i < nl.getLength(); i++) {
                 String node = nl.item(i).getNodeName();
-                if (!isArray(node, nodesFrequencies)) {
+                if(isArray(node, nodesFrequencies) == false) {
                     paths.addAll(
                             generatePaths(
                                     document,
@@ -187,7 +187,7 @@ public class XMLRecord extends MultipathRecord {
                             )
                     );
                 } else {
-                    arraysCounters.merge(node, 1, (a, b) -> a + b);
+                    arraysCounters.merge(node, 1,  (a, b) -> a + b);
                     paths.addAll(
                             generatePaths(
                                     document,
@@ -197,7 +197,7 @@ public class XMLRecord extends MultipathRecord {
                     );
                 }
             }
-        } catch (XPathExpressionException e) {
+        } catch(XPathExpressionException e) {
             throw new RuntimeException(e.getMessage());
         }
 

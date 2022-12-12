@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
-public class XMLFormatProcessor extends MultipathFormatProcessor {
+public class XMLFormatProcessor extends AbstractMultipathFormatProcessor {
     private final DocumentBuilder documentBuilder;
 
     public XMLFormatProcessor() {
@@ -37,7 +37,7 @@ public class XMLFormatProcessor extends MultipathFormatProcessor {
             return Collections.singletonList(
                     new XMLRecord(document)
             );
-        } catch (SAXException e) {
+        } catch ( SAXException e) {
             throw new RuntimeException("Error parsing the document " + e.getMessage());
         }
     }

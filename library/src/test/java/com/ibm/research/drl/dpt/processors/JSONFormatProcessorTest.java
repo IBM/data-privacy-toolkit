@@ -235,7 +235,8 @@ public class JSONFormatProcessorTest {
     public void testIdentifyJSONElementsInnerObjects2() throws Exception {
         String jsonS = "{\"a\" : [{\"a\": \"foo@gmail.com\"}, {\"a\" : \"boo@gmail.com\"}, null, {\"a\": \"goo@gmail.com\"}]}";
 
-        IdentificationReport allResults = new JSONFormatProcessor().identifyTypesStream(new ByteArrayInputStream(jsonS.getBytes()), DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
+        IdentificationReport allResults =
+                new JSONFormatProcessor().identifyTypesStream(new ByteArrayInputStream(jsonS.getBytes()), DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
         
         Map<String, IdentifiedType> results = allResults.getBestTypes();
 
@@ -297,7 +298,8 @@ public class JSONFormatProcessorTest {
     public void testIdentifyStreamJSON() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/fhir/deviceExampleOneLine.json");
 
-        IdentificationReport results = new JSONFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
+        IdentificationReport results
+                = new JSONFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
 
         assertThat(results.getRawResults().size(), not(0));
     }
@@ -529,7 +531,7 @@ public class JSONFormatProcessorTest {
             Map<String, FieldRelationship> relationships = new HashMap<>();
             relationships.put("/date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "/date", Arrays.asList(new RelationshipOperand("userid"))));
 
-            MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
+            MaskingProviderFactory mpf = new MaskingProviderFactory();
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
                     DataTypeFormat.JSON,
                     DataTypeFormat.JSON,
@@ -595,7 +597,7 @@ public class JSONFormatProcessorTest {
                 new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE, "" +
                         "/date", Arrays.asList(new RelationshipOperand("/operand"))));
 
-        MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
+        MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory();
 
         DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
                 DataTypeFormat.JSON,
@@ -611,7 +613,7 @@ public class JSONFormatProcessorTest {
 
         JSONRecord record = new JSONRecord(new ObjectMapper().readTree("{\"operand\": null, \"date\": \"" + originalDate +"\"}"));
 
-        //maskRecord returns a reference to the same object of the first argument, so we need to create a new record each time
+        //maskRecord returns a reference to the same object of the first argument so we need to create a new record each time
         Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, new HashSet<>(), dataMaskingOptions);
         String maskedDate = new String(masked.getFieldValue("/date"));
 
