@@ -67,6 +67,8 @@ public class GeneralizationHierarchyFactory {
                 return ZIPCodeHierarchy.getInstance();
             case "ZIPCODE_MATERIALIZED":
                 return ZIPCodeMaterializedHierarchy.getInstance();
+            case "ZIPCODE_COMPUTATIONAL":
+                return new ZIPCodeCompBasedHierarchy();
             case "HEIGHT":
                 return HeightHierarchy.getInstance();
             case "RELIGION":

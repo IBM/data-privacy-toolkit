@@ -27,7 +27,7 @@ public class ZIPCodeCompBasedHierarchy implements GeneralizationHierarchy {
     public int leavesForNode(String value) {
         int level = getNodeLevel(value);
 
-        return (int) Math.pow(10, level);
+        return (int)Math.pow(10, level);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ZIPCodeCompBasedHierarchy implements GeneralizationHierarchy {
     public int getNodeLevel(String value) {
         int level = 0;
 
-        for (int i = (value.length() - 1); i >= 0; i++) {
+        for(int i = (value.length() - 1); i >= 0; i++) {
             if (value.charAt(i) == '*') {
                 level++;
             }
@@ -69,7 +69,7 @@ public class ZIPCodeCompBasedHierarchy implements GeneralizationHierarchy {
 
         StringBuilder prefix = new StringBuilder(value.substring(0, value.length() - level));
 
-        for (int i = 0; i < level; i++) {
+        for(int i = 0; i < level; i++) {
             prefix.append("*");
         }
 
