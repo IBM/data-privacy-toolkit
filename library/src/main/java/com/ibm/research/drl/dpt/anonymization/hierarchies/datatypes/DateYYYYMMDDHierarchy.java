@@ -42,18 +42,14 @@ public class DateYYYYMMDDHierarchy implements GeneralizationHierarchy {
     }
 
     @Override
-    public Set<String> getNodeLeaves(String value) {
+    public Set<String>  getNodeLeaves(String value) {
         String[] parts = value.split("-");
 
         switch (parts.length) {
-            case 1:
-                return enumerateDaysInYear(parts[0]);
-            case 2:
-                return enumerateDaysInYearMonth(parts[0], parts[1]);
-            case 3:
-                return Collections.singleton(value);
-            default:
-                throw new IllegalArgumentException();
+            case 1: return enumerateDaysInYear(parts[0]);
+            case 2: return enumerateDaysInYearMonth(parts[0], parts[1]);
+            case 3: return Collections.singleton(value);
+            default: throw new IllegalArgumentException();
         }
     }
 
@@ -94,12 +90,9 @@ public class DateYYYYMMDDHierarchy implements GeneralizationHierarchy {
         String[] parts = value.split("-");
 
         switch (parts.length) {
-            case 1:
-                return YEAR_LEVEL;
-            case 2:
-                return MONTH_LEVEL;
-            case 3:
-                return DAY_LEVEL;
+            case 1: return YEAR_LEVEL;
+            case 2: return MONTH_LEVEL;
+            case 3: return DAY_LEVEL;
 
             default:
                 throw new RuntimeException("Unknown: " + value);

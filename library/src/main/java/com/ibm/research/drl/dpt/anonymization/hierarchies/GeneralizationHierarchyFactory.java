@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2020                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.hierarchies;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.*;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class GeneralizationHierarchyFactory {
     public static GeneralizationHierarchy getGenericFromFixedSet(List<String> terms) {
         return getGenericFromFixedSet(terms, "*");
     }
-
+        
     public static GeneralizationHierarchy getGenericFromFixedSet(List<String> terms, String topTerm) {
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
 
@@ -36,7 +36,7 @@ public class GeneralizationHierarchyFactory {
             hierarchy.add(items);
         }
 
-        return hierarchy;
+        return hierarchy; 
     }
 
     public static GeneralizationHierarchy getDefaultHierarchy(JsonNode hierarchy) {
@@ -67,8 +67,6 @@ public class GeneralizationHierarchyFactory {
                 return ZIPCodeHierarchy.getInstance();
             case "ZIPCODE_MATERIALIZED":
                 return ZIPCodeMaterializedHierarchy.getInstance();
-            case "ZIPCODE_COMPUTATIONAL":
-                return new ZIPCodeCompBasedHierarchy();
             case "HEIGHT":
                 return HeightHierarchy.getInstance();
             case "RELIGION":
@@ -79,8 +77,6 @@ public class GeneralizationHierarchyFactory {
                 if (hierarchyConfig != null && hierarchyConfig.has("format") && !hierarchyConfig.get("format").isNull())
                     return new DateHierarchy(hierarchyConfig.get("format").asText());
                 return new DateHierarchy();
-            case "LAT_LON":
-                return new LatitudeLongitudeHierarchy();
             default:
                 try {
                     Class<? extends GeneralizationHierarchy> hierarchyClass = (Class<? extends GeneralizationHierarchy>) Class.forName(hierarchyType);
@@ -94,7 +90,7 @@ public class GeneralizationHierarchyFactory {
                     throw new RuntimeException(e);
                 } catch (NoSuchMethodException e) {
                     logger.error("Unable to retrieve empty constructor for hierarchy {}", hierarchyType);
-                    throw new RuntimeException(e);
+                    throw  new RuntimeException(e);
                 }
         }
     }
@@ -105,7 +101,7 @@ public class GeneralizationHierarchyFactory {
         hierarchySpec.get("terms").forEach(hierarchyPath -> {
             List<String> pathTerms = new ArrayList<>();
 
-            hierarchyPath.elements().forEachRemaining(term -> pathTerms.add(term.asText()));
+            hierarchyPath.elements().forEachRemaining( term -> pathTerms.add(term.asText()) );
 
             hierarchy.add(pathTerms);
         });

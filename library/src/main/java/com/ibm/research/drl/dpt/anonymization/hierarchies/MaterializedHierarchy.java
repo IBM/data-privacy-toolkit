@@ -37,7 +37,7 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
     @JsonCreator
     public MaterializedHierarchy(
             @JsonProperty("terms") List<List<String>> terms
-    ) {
+            ) {
         this();
         for (List<String> hierarchy : terms) {
             add(hierarchy);
@@ -63,7 +63,7 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
         return this.topTerm;
     }
 
-    public void add(String... hierarchy) {
+    public void add(String ... hierarchy) {
         add(Arrays.asList(hierarchy));
     }
 
@@ -72,14 +72,14 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
         this.leaves.put(leaf.toLowerCase(), hierarchy);
         this.terms.add(hierarchy);
         this.indices.put(leaf.toLowerCase(), this.termsAdded);
-
+            
         if (this.termsAdded == 0) {
             this.topTerm = hierarchy.get(hierarchy.size() - 1);
             nodes.put(this.topTerm.toUpperCase(), new GeneralizationNode(this.topTerm, null, false, hierarchy.size()));
         }
 
         this.hierarchyHeight = Math.max(this.hierarchyHeight, hierarchy.size());
-
+        
         addNode(hierarchy);
         this.termsAdded++;
     }
@@ -95,7 +95,7 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
     }
 
     private void addNode(List<String> listOriginal) {
-        List<String> list = new ArrayList<>(listOriginal);
+       List<String> list = new ArrayList<>(listOriginal);
 
 
        /*
@@ -103,17 +103,20 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
            Married, Coupled, *
            Widowed, Alone, *
        */
-        Collections.reverse(list);
+       Collections.reverse(list);
 
-        for (int i = 0; i < list.size(); i++) {
-            String s = list.get(i).toUpperCase();
-            boolean isLeaf = i == list.size() - 1;
+       for(int i = 0; i < list.size(); i++) {
+           String s = list.get(i).toUpperCase();
+           boolean isLeaf = false;
+           if (i == list.size() - 1) {
+               isLeaf = true;
+           }
 
-            if (!nodes.containsKey(s)) {
-                String previous = list.get(i - 1).toUpperCase();
-                nodes.put(s, new GeneralizationNode(s, nodes.get(previous), isLeaf, list.size()));
-            }
-        }
+           if (!nodes.containsKey(s)) {
+               String previous = list.get(i - 1).toUpperCase();
+               nodes.put(s, new GeneralizationNode(s, nodes.get(previous), isLeaf, list.size()));
+           }
+       }
     }
 
     @Override

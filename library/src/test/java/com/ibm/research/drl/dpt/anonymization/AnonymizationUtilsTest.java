@@ -1,6 +1,6 @@
 /******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2017                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization;
@@ -17,22 +17,22 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AnonymizationUtilsTest {
     @Test
-    public void generationOfPartitionsForLinkingWithNoColumnInformationThrows() {
+    public void generationOfPartitionsForLinkingWithNoColumnInformationThrows() throws Exception {
         assertThrows(RuntimeException.class, () -> {
             AnonymizationUtils.generatePartitionsForLinking(new IPVDataset(Collections.emptyList(), null, false), Collections.emptyList());
         });
     }
 
     @Test
-    public void generationOfPartitionsForLinkingWithLinkColumnInformationThrows() {
+    public void generationOfPartitionsForLinkingWithLinkColumnInformationThrows() throws Exception {
         assertThrows(RuntimeException.class, () -> {
-            List<ColumnInformation> columnInformation = new ArrayList<>();
+            List<ColumnInformation> columnInformations = new ArrayList<>();
 
             for (int i = 0; i < 10; ++i) {
-                columnInformation.add(new CategoricalInformation(GenderHierarchy.getInstance(), ColumnType.QUASI));
+                columnInformations.add(new CategoricalInformation(GenderHierarchy.getInstance(), ColumnType.QUASI));
             }
     
-            AnonymizationUtils.generatePartitionsForLinking(new IPVDataset(Collections.emptyList(), null, false), columnInformation);
+            AnonymizationUtils.generatePartitionsForLinking(new IPVDataset(Collections.emptyList(), null, false), columnInformations);
         });
     }
 }

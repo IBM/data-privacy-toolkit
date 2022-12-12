@@ -9,7 +9,7 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarch
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchemaField;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;

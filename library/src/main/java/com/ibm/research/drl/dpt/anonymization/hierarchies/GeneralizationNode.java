@@ -25,10 +25,11 @@ public class GeneralizationNode implements Serializable {
         if (isLeaf) {
             return results;
         }
-        for (GeneralizationNode n : this.children) {
+        for(GeneralizationNode n: this.children) {
             if (n.isLeaf()) {
                 results.add(n.getValue());
-            } else {
+            }
+            else {
                 results.addAll(n.getLeaveValues());
             }
         }
@@ -39,17 +40,18 @@ public class GeneralizationNode implements Serializable {
     /* TODO: add test*/
     public List<GeneralizationNode> getLeaveNodes() {
         List<GeneralizationNode> results;
-
+        
         if (isLeaf) {
             return Collections.emptyList();
         }
-
+        
         results = new ArrayList<>();
-
-        for (GeneralizationNode n : this.children) {
+        
+        for(GeneralizationNode n: this.children) {
             if (n.isLeaf()) {
                 results.add(n);
-            } else {
+            }
+            else {
                 results.addAll(n.getLeaveNodes());
             }
         }
@@ -84,9 +86,9 @@ public class GeneralizationNode implements Serializable {
             parent.getChildren().add(this);
             this.level = parent.getLevel() - 1;
 
-            for (GeneralizationNode p : this.parents) {
+            for(GeneralizationNode p: this.parents) {
                 p.getCoverMap().put(this.value, this);
-                if (isLeaf) {
+                if (isLeaf == true) {
                     p.increaseLeafNumber();
                 }
             }
