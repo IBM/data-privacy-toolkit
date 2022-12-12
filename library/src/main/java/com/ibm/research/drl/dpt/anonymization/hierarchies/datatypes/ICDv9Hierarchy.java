@@ -15,16 +15,13 @@ public class ICDv9Hierarchy extends MaterializedHierarchy {
     private final static ICDv9Manager ICD_V9_MANAGER = ICDv9Manager.getInstance();
 
     private static final ICDv9Hierarchy instance = new ICDv9Hierarchy();
-
-    public static ICDv9Hierarchy getInstance() {
-        return instance;
-    }
+    public static ICDv9Hierarchy getInstance() {return instance;}
 
     private ICDv9Hierarchy() {
         super();
 
         Collection<ICD> icdList = ICD_V9_MANAGER.getItemList();
-        for (ICD icd : icdList) {
+        for(ICD icd: icdList) {
             String[] terms = new String[4];
             terms[0] = icd.getCode();
             terms[1] = icd.getCategoryCode();

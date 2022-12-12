@@ -13,10 +13,8 @@ import java.util.Set;
 public class HeightHierarchy implements GeneralizationHierarchy {
     private static final HeightHierarchy instance = new HeightHierarchy();
 
-    public static HeightHierarchy getInstance() {
-        return instance;
-    }
-
+    public static HeightHierarchy getInstance() {return instance;}
+    
     private final String topTerm = "*";
     private final int[] steps = {1, 2, 4, 8, 10, 20, 30};
 
@@ -47,21 +45,21 @@ public class HeightHierarchy implements GeneralizationHierarchy {
             if (topTerm.equals(value)) {
                 return getHeight() - 1;
             }
-
+            
             return 0;
         }
-
+        
         int start = Integer.parseInt(tokens[0]);
         int end = Integer.parseInt(tokens[1]);
-
+        
         int diff = end - start;
-
-        for (int i = 0; i < steps.length; i++) {
+        
+        for(int i = 0; i < steps.length; i++) {
             if (diff == steps[i]) {
                 return 1 + i;
             }
         }
-
+        
         return getHeight();
     }
 
@@ -81,13 +79,13 @@ public class HeightHierarchy implements GeneralizationHierarchy {
         }
 
         double value = Double.parseDouble(valueString);
-
+        
         int step = steps[level - 1];
-
+        
         int base = (int) value;
         int start = base - base % step;
         int end = start + step;
-
+        
         return String.format("%d-%d", start, end);
     }
 }

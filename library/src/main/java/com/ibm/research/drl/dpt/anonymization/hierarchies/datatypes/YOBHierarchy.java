@@ -16,14 +16,12 @@ public class YOBHierarchy extends MaterializedHierarchy {
 
     private static final int LEAF = 0;
 
-    public static YOBHierarchy getInstance() {
-        return instance;
-    }
+    public static YOBHierarchy getInstance() {return instance;}
 
     private YOBHierarchy() {
         super();
 
-        int[] intervals = new int[]{2, 4, 8};
+        int[] intervals = new int[] {2, 4, 8};
         String topTerm = "*";
 
         final Year currentYear = Year.now();
@@ -37,9 +35,9 @@ public class YOBHierarchy extends MaterializedHierarchy {
 
             terms[LEAF] = year.toString();
 
-            for (int i = 0; i < intervals.length; i++) {
+            for(int i = 0; i < intervals.length; i++) {
                 int interval = intervals[i];
-                int start = year.minus(year.getValue() % interval, ChronoUnit.YEARS).getValue();
+                int start = year.minus( year.getValue() % interval, ChronoUnit.YEARS).getValue();
                 int end = start + interval;
 
                 String term = start + "-" + (end - 1);
