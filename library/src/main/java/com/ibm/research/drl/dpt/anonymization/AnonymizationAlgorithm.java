@@ -15,9 +15,9 @@ import java.util.Map;
 
 public interface AnonymizationAlgorithm {
     TransformationType getTransformationType();
-
+    
     List<ColumnInformation> getColumnInformationList();
-
+    
     /* returns the EQ classes based on the original records */
     List<Partition> getOriginalPartitions();
 

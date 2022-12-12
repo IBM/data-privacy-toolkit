@@ -13,8 +13,8 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.TypeClass;
 import com.ibm.research.drl.dpt.util.Tuple;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchema;
+import com.ibm.research.drl.schema.IPVSchemaField;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,15 +25,15 @@ public class OLA implements AnonymizationAlgorithm {
     private IPVDataset original;
     private double suppressionRate;
     private List<ColumnInformation> columnInformationList;
-
+    
     private List<Partition> originalPartitions;
     private List<Partition> anonymizedPartitions;
-
+    
     private Lattice lattice;
     private LatticeNode bestNode;
     private List<PrivacyConstraint> privacyConstraints;
     private List<Integer> sensitiveColumns;
-
+    
     @Override
     public TransformationType getTransformationType() {
         return TransformationType.GLOBAL_RECODING;
@@ -95,8 +95,7 @@ public class OLA implements AnonymizationAlgorithm {
     public AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList, List<PrivacyConstraint> privacyConstraints,
                                              AnonymizationAlgorithmOptions options) {
         if (!(options instanceof OLAOptions)) throw new IllegalArgumentException("Expecting instance of OLAOptions");
-        if (columnInformationList.size() != dataset.getNumberOfColumns())
-            throw new IllegalArgumentException("Number of column information not matching number of columns of the dataset");
+        if (columnInformationList.size() != dataset.getNumberOfColumns()) throw new IllegalArgumentException("Number of column information not matching number of columns of the dataset");
 
         this.original = dataset;
         this.suppressionRate = ((OLAOptions) options).getSuppressionRate();
@@ -104,7 +103,7 @@ public class OLA implements AnonymizationAlgorithm {
         this.privacyConstraints = privacyConstraints;
 
         AnonymizationUtils.initializeConstraints(dataset, columnInformationList, privacyConstraints);
-
+        
         return this;
     }
 
@@ -141,11 +140,11 @@ public class OLA implements AnonymizationAlgorithm {
         IPVDataset finalDataset = new IPVDataset(new ArrayList<>(), anonymized.getSchema(), anonymized.hasColumnNames());
 
         int numPartitions = this.originalPartitions.size();
-
-        for (int n = 0; n < numPartitions; n++) {
+        
+        for(int n = 0; n < numPartitions; n++) {
             Partition p = this.originalPartitions.get(n);
             Partition anonP = this.anonymizedPartitions.get(n);
-
+                    
             if (!checkConstraints(p)) {
                 p.setAnonymous(false);
                 anonP.setAnonymous(false);
@@ -158,7 +157,7 @@ public class OLA implements AnonymizationAlgorithm {
             for (int i = 0; i < memberRows; i++) {
                 finalDataset.addRow(member.getRow(i));
             }
-
+            
             p.setAnonymous(true);
             anonP.setAnonymous(true);
         }
@@ -184,7 +183,6 @@ public class OLA implements AnonymizationAlgorithm {
     public List<Partition> getAnonymizedPartitions() {
         return this.anonymizedPartitions;
     }
-
     /**
      * Gets total nodes.
      *
@@ -203,6 +201,7 @@ public class OLA implements AnonymizationAlgorithm {
         return lattice.getNodesChecked();
     }
 
+    
 
     public static LatticeNode selectLowestLossOnLevel(List<LatticeNode> nodes) {
 
@@ -227,16 +226,15 @@ public class OLA implements AnonymizationAlgorithm {
     @Override
     public IPVDataset apply() {
         if (null == original
-                || null == columnInformationList
-                || null == privacyConstraints) throw new RuntimeException("Not initialized yet");
+            || null == columnInformationList
+            || null == privacyConstraints) throw new RuntimeException("Not initialized yet");
 
-        if (columnInformationList.stream().noneMatch(columnInformation -> columnInformation.getColumnType().equals(ColumnType.QUASI)))
-            return original;
+        if (columnInformationList.stream().noneMatch(columnInformation -> columnInformation.getColumnType().equals(ColumnType.QUASI))) return original;
 
         AnonymityChecker anonymityChecker = new SimpleAnonymityChecker(original, this.columnInformationList, this.privacyConstraints);
         lattice = new Lattice(anonymityChecker, this.columnInformationList, this.suppressionRate);
         lattice.explore();
-
+        
 
         List<LatticeNode> kMinimalNodes = lattice.getKMinimal();
 
@@ -247,9 +245,9 @@ public class OLA implements AnonymizationAlgorithm {
         }
 
         IPVDataset anonymized = DatasetGeneralizer.generalize(original, this.columnInformationList, bestNode.getValues());
-        Tuple<List<Partition>, List<Partition>> bothPartitions =
+        Tuple<List<Partition>, List<Partition>> bothPartitions = 
                 OLAUtils.generatePartitions(original, anonymized, this.columnInformationList);
-
+        
         this.originalPartitions = bothPartitions.getFirst();
         this.anonymizedPartitions = bothPartitions.getSecond();
 
@@ -268,14 +266,12 @@ public class OLA implements AnonymizationAlgorithm {
         return bestNode;
     }
 
-    public LatticeNode reportMaxNode() {
-        return lattice.getMaxNode();
-    }
+    public LatticeNode reportMaxNode() { return lattice.getMaxNode(); }
 
     public List<LatticeNode> reportLossOnAllNodes() {
         return lattice.reportLossOnAllNodes();
     }
-
+    
     public int getTagsPerformed() {
         return lattice.getTagsPerformed();
     }

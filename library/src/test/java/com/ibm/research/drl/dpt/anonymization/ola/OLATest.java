@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2020                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.ola;
@@ -13,14 +13,14 @@ import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
-import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.ZIPCodeCompBasedHierarchy;
 import com.ibm.research.drl.dpt.anonymization.informationloss.CategoricalPrecision;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationLossResult;
+import com.ibm.research.drl.dpt.anonymization.informationloss.NonUniformEntropy;
 import com.ibm.research.drl.dpt.anonymization.mondrian.MondrianTest;
 import com.ibm.research.drl.dpt.configuration.AnonymizationOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.schema.IPVSchemaField;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
@@ -28,6 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -600,13 +601,13 @@ public class OLATest {
                 System.out.println("anonymized: " + anonymized.getNumberOfRows());
 
                 String filename = "/tmp/random1_4q_" + k + "_" + suppressionRate;
-                try (
-                        FileWriter fw = new FileWriter(filename);
-                CSVPrinter writer = new CSVPrinter(fw, CSVFormat.RFC4180.withDelimiter(',').withQuoteMode(QuoteMode.MINIMAL));) {
-                    for (int i = 0; i < anonymized.getNumberOfRows(); i++) {
-                        writer.printRecord(anonymized.getRow(i));
-                    }
+                CSVPrinter writer = new CSVPrinter(new FileWriter(filename), CSVFormat.RFC4180.withDelimiter(',').withQuoteMode(QuoteMode.MINIMAL));
+
+                for(int i = 0; i < anonymized.getNumberOfRows(); i++) {
+                    writer.printRecord(anonymized.getRow(i));
                 }
+
+                writer.close();
             }
         }
     }
@@ -617,12 +618,12 @@ public class OLATest {
             IPVDataset original = IPVDataset.load(is, false, ',', '"', false);
             OLA ola = new OLA();
 
-            List<ColumnInformation> columnInformation = new ArrayList<>();
+            List<ColumnInformation> columnInformations = new ArrayList<>();
             for (int i = 0; i < original.getNumberOfColumns(); ++i) {
-                columnInformation.add(new DefaultColumnInformation());
+                columnInformations.add(new DefaultColumnInformation());
             }
 
-            ola.initialize(original, columnInformation, Arrays.asList(new KAnonymity(10)), new OLAOptions(0.0));
+            ola.initialize(original, columnInformations, Arrays.asList(new KAnonymity(10)), new OLAOptions(0.0));
 
             IPVDataset anonymized = ola.apply();
 
@@ -673,9 +674,9 @@ public class OLATest {
 
                 List<InformationLossResult> lossResults = cp.reportPerQuasiColumn();
 
-                System.out.printf("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f%n",
+                System.out.println(String.format("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f",
                         k, suppression, ola.reportSuppressionRate(),
-                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue());
+                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue()));
             }
         }
     }
@@ -725,9 +726,9 @@ public class OLATest {
                 System.out.println("tags: " + ola.getTagsPerformed());
                 System.out.println("nodes checked: " + ola.getNodesChecked());
                 
-                System.out.printf("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f%n",
+                System.out.println(String.format("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f",
                         k, suppression, ola.reportSuppressionRate(),
-                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue());
+                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue()));
             }
         }
     }
@@ -882,7 +883,7 @@ public class OLATest {
         columnInformation.add(new CategoricalInformation(heightHierarchy, ColumnType.QUASI));
         columnInformation.add(new DefaultColumnInformation());
         
-        IPVDataset anonymized = DatasetGeneralizer.generalize(original, columnInformation, new int[] { 0, 1, 1, 0, 1});
+        IPVDataset anonymized= DatasetGeneralizer.generalize(original, columnInformation, new int[] { 0, 1, 1, 0, 1});
         
         int k = 10;
         double suppression = 50;
@@ -942,7 +943,7 @@ public class OLATest {
 
     @Test
     @Disabled
-    public void testClientILBug20180208Good() throws Exception {
+    public void testTangramBug20180208Good() throws Exception {
         //this is working
         String goodConfName = "/a71577ba-2eda-47d3-b55b-613e34a3d3e9.json";
 
@@ -962,7 +963,7 @@ public class OLATest {
     }
     
     @Test
-    public void testOLAAgesClientIL() throws Exception {
+    public void testOLAAgesTangram() throws Exception {
         
         IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
         
@@ -989,7 +990,7 @@ public class OLATest {
 
     @Test
     @Disabled
-    public void testClientILBug20180208Bad() throws Exception {
+    public void testTangramBug20180208Bad() throws Exception {
         // this is crashing
         String badConfName = "/2bac2243-fcfc-455d-a096-33b53d795179.json";
         AnonymizationOptions badOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream(badConfName), AnonymizationOptions.class);
@@ -1007,6 +1008,40 @@ public class OLATest {
         cp.initialize(dataset, anonymizedDataset, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(),
                 badOptions.getColumnInformation(), null);
         System.out.println(cp.report());
+    }
+
+    @Test
+    @Disabled
+    public void testTangramBug20180318Bad() throws Exception {
+        // this is crashing
+        String basePath = "/Users/santonat/dev/tangram_test/bug_20180318/";
+        String badConfName = basePath + "conf.json";
+
+        AnonymizationOptions badOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream(badConfName), AnonymizationOptions.class);
+
+        OLA ola = new OLA();
+        OLAOptions olaOptions = new OLAOptions(badOptions.getSuppressionRate());
+
+        String inputFile = basePath + "DemoInput.csv";
+        IPVDataset dataset = IPVDataset.load(new FileInputStream(inputFile), true, ',', '"', false);
+        ola.initialize(dataset, badOptions.getColumnInformation(), badOptions.getPrivacyConstraints(), olaOptions);
+
+        IPVDataset anonymizedDataset = ola.apply();
+        System.out.println(anonymizedDataset.getNumberOfRows());
+
+        NonUniformEntropy nue = new NonUniformEntropy();
+        
+        nue.initialize(dataset, anonymizedDataset, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), 
+                badOptions.getColumnInformation(), null);
+
+        System.out.println("reported: " + nue.report());
+        System.out.println("global max: " + nue.getUpperBound());
+        
+        List<InformationLossResult> informationLossResults = nue.reportPerQuasiColumn();
+        for(InformationLossResult result: informationLossResults) {
+            System.out.println(result.getValue() + " , lower: " + result.getLowerBound() + ", upper: " + result.getUpperBound());
+        }
+        
     }
     
     @Test
