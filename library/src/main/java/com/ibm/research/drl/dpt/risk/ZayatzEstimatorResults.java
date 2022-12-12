@@ -6,10 +6,10 @@
 package com.ibm.research.drl.dpt.risk;
 
 public class ZayatzEstimatorResults {
-
+    
     private final double estimatedRealUniques;
     private final double uniques;
-
+    
     public double getEstimatedRealUniques() {
         return estimatedRealUniques;
     }
@@ -22,6 +22,6 @@ public class ZayatzEstimatorResults {
         this.uniques = uniques;
         this.estimatedRealUniques = estimatedRealUniques;
     }
-
+    
 }
 
