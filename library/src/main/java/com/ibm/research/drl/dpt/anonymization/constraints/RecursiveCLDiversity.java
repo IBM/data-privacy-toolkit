@@ -39,7 +39,7 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
     private boolean checkHistogram(Histogram<String> histogram) {
         List<Long> frequencies = new ArrayList<>();
 
-        for (String key : histogram.keySet()) {
+        for(String key: histogram.keySet()) {
             Long counter = histogram.get(key);
             frequencies.add(counter);
         }
@@ -67,9 +67,9 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
 
     @Override
     public boolean check(PrivacyMetric metric) {
-        LDiversityMetric lDiversityMetric = (LDiversityMetric) metric;
+        LDiversityMetric lDiversityMetric = (LDiversityMetric)metric;
 
-        for (Histogram histogram : lDiversityMetric.getHistograms()) {
+        for(Histogram histogram: lDiversityMetric.getHistograms()) {
             if (!checkHistogram(histogram)) {
                 return false;
             }
@@ -84,8 +84,8 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
             return true;
         }
 
-        for (Integer sensitiveColumn : sensitiveColumns) {
-            if (!checkRecursiveCLDiversity(partition, sensitiveColumn)) {
+        for(Integer sensitiveColumn: sensitiveColumns) {
+            if(!checkRecursiveCLDiversity(partition, sensitiveColumn)) {
                 return false;
             }
         }
