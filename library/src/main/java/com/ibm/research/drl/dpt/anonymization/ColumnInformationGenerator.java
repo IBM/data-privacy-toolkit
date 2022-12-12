@@ -23,17 +23,17 @@ public class ColumnInformationGenerator {
     public static NumericalRange generateNumericalRange(IPVDataset dataset, int column, ColumnType columnType) {
         return generateNumericalRange(dataset, column, columnType, 1.0);
     }
-
+    
     public static NumericalRange generateNumericalRange(IPVDataset dataset, int column, ColumnType columnType, double weight) {
         return generateNumericalRange(dataset, column, columnType, weight, false);
     }
-
+    
     public static NumericalRange generateNumericalRange(IPVDataset dataset, int column, ColumnType columnType, double weight, boolean isForLinking) {
         List<Double> doubles = new ArrayList<>();
 
         int numberOfRows = dataset.getNumberOfRows();
 
-        for (int i = 0; i < numberOfRows; i++) {
+        for(int i = 0; i < numberOfRows; i++) {
             List<String> row = dataset.getRow(i);
             try {
                 Double v = Double.valueOf(row.get(column));
@@ -59,7 +59,7 @@ public class ColumnInformationGenerator {
 
         int numberOfRows = dataset.getNumberOfRows();
 
-        for (int i = 0; i < numberOfRows; i++) {
+        for(int i = 0; i < numberOfRows; i++) {
             List<String> row = dataset.getRow(i);
             String v = row.get(column);
             valueSet.add(v);
