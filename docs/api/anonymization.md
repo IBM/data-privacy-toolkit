@@ -3,26 +3,29 @@
 The anonymization algorithms require 4 input parameters:
 
 1. The dataset to be loaded. The current anonymization algorithms support CSV datasets
-2. A list of ColumnInformation objects. These objects contain information about the column: if the column is categorical or numerical, if it is quasi, sensitive or non-sensitive, the weight they contribute to the information loss and if they are considered as part of the linking attributes for re-identification risk calculation. The `Column Information` section includes further details
+2. A list of ColumnInformation objects.
+These objects contain information about the column: if the column is categorical or numerical, if it is quasi, sensitive or non-sensitive, the weight they contribute to the information loss and if they are considered as part of the linking attributes for re-identification risk calculation. 
+The `Column Information` [section](#column_information) includes further details.
 3. A list of privacy constraints. These constraints specify the k-anonymity and/or l-diversity and/or t-closeness privacy guarantees that the algorithms must achieve. The `Privacy constraints` describes in detail how to construct the privacy constraints objects
-4. Algorithm-specific options
+Algorithm-specific options.
+
 
 ## Available algorithms
 
 The following table describes the available anonymization algorithms:
 
-|Algorithm Name| 
-|--------------|
-|Optimal Lattice Anonymization (OLA)|
-|Mondrian|
-|KMeans|
+|Algorithm Name| Reference |
+|--------------|-----------|
+|Optimal Lattice Anonymization (OLA)|El Emam, Khaled, et al. "A globally optimal k-anonymity method for the de-identification of health data." Journal of the American Medical Informatics Association 16.5 (2009): 670-682.|
+|Mondrian|LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. "Mondrian multidimensional k-anonymity." 22nd International conference on data engineering (ICDE'06). IEEE, 2006.|
+|KMeans|Jun-Lin Lin and Meng-Cheng Wei. 2008. An efficient clustering method for k-anonymization. In Proceedings of the 2008 international workshop on Privacy and anonymity in information society (PAIS '08). Association for Computing Machinery, New York, NY, USA, 46–50.|
 
 
 ## Invocation of the algorithms
 
 The steps to invoke an anonymization algorithm are the following:
 
-1 Create an AnonymizationAlgorithm instance, for example:
+1. Create an AnonymizationAlgorithm instance, for example:
 
 ```java
 AnonymizationAlgorithm ola = new OLA();
@@ -30,7 +33,7 @@ AnonymizationAlgorithm mondrian = new Mondrian();
 AnonymizationAlgorithm kMeans = new KMeans();
 ```  
 
-2 Initialize the algorithm and pass the dataset, column information, privacy constraints and the algorithm specific options
+2. Initialize the algorithm and pass the dataset, column information, privacy constraints and the algorithm specific options
 
 The initialization method definition is the following:
 
@@ -42,15 +45,17 @@ The initialization method definition is the following:
                 	AnonymizationAlgorithmOptions options);
 ```
 
-3 Call the `apply()` method to get the anonymized dataset. The function will return an `IPVDataset`:
+3. Call the `apply()` method to get the anonymized dataset. The function will return an `IPVDataset`:
 
 ```java
 IPVDatased anonymized  = ola.apply()
 ```
 
-## Column information 
+## Column information <a name="#column_information"></a>
 
 The anonymization algorithms require to know information about each column.
+The identification of quasi identifiers, direct identifiers and sensitive fields is a required characterization that is required from the user.
+Vulnerability detection capabilities, described in the corresponding [section](vulnerability.md) can assist in the identification.
 
 ### Quasi columns
 
@@ -69,11 +74,11 @@ public CategoricalInformation(
 
 and requires five parameters:
 
-1 The `hierarchy` which is the generalization hierarchy for the attribute. See the next Section for details how to generate hierarchies
-2 The `columnType` for this column. This should have the value `ColumnType.QUASI` since we need to represent a quasi-identifier
-3 The `weight` which is the weight we should for that column when calculating the information loss.
-4 The `maximumLevel` which is the maximum generalization level we want to apply. This level is only considered when we use the `OLA` algorithm. If the value is -1 then there is no maximum level applied.
-5 A boolean `isForLinking` that denotes if the column should be considered as part of the linking attributes when we calculate the re-identification risk.  
+1. The `hierarchy` which is the generalization hierarchy for the attribute. See the next Section for details how to generate hierarchies
+2. The `columnType` for this column. This should have the value `ColumnType.QUASI` since we need to represent a quasi-identifier
+3. The `weight` which is the weight we should assign for that column when calculating the information loss.
+4. The `maximumLevel` which is the maximum generalization level we want to apply. This level is only considered when we use the `OLA` algorithm. If the value is -1 then there is no maximum level applied.
+5. A boolean `isForLinking` that denotes if the column should be considered as part of the linking attributes when we calculate the re-identification risk.  
 
 
 #### Numerical
@@ -93,13 +98,13 @@ public NumericalRange(
 
 and requires five parameters:
 
-1 A list of Double objects that **must be sorted**
-2 The `columnType` for this column. This should have the value `ColumnType.QUASI` since we need to represent a quasi-identifier
-3 The `weight` which is the weight we should for that column when calculating the information loss.
-4 A boolean `isForLinking` that denotes if the column should be considered as part of the linking attributes when we calculate the re-identification risk. 
+1. A list of Double objects that **must be sorted**
+2. The `columnType` for this column. This should have the value `ColumnType.QUASI` since we need to represent a quasi-identifier
+3. The `weight` which is the weight we should for that column when calculating the information loss.
+4. A boolean `isForLinking` that denotes if the column should be considered as part of the linking attributes when we calculate the re-identification risk. 
 
 
-There is a utility function located in the `com.ibm.research.drl.prima.anonymization.ColumnInformationGenerator` class that generates a `NumericalRange` object based on a dataset and the column index of the numerical attribute that we want to extract the information for:
+There is a utility function located in the `com.ibm.research.drl.dpt.anonymization.ColumnInformationGenerator` class that generates a `NumericalRange` object based on a dataset and the column index of the numerical attribute that we want to extract the information for:
 
 ```java
     public static NumericalRange generateNumericalRange(
@@ -204,7 +209,7 @@ For example, if we have the values `A`, `B` and `C` and we want a simple two-lev
 the top term being `*` then we can create it as:
 
 ```java
-import com.ibm.research.drl.prima.anonymization.hierarchies.GeneralizationHierarchyFactory;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 
 GeneralizationHierarchy hierarchy = 	
 	GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("A", "B", "C"), "*");
@@ -212,7 +217,7 @@ GeneralizationHierarchy hierarchy =
 
 ### Developer guide for implementing a generalization hierarchy
 
-A class that wants to implement a generalization hierarchy needs to implement the `com.ibm.research.drl.prima.algorithms.anonymization.hierarchies.GeneralizationHierarchy` interface.
+A class that wants to implement a generalization hierarchy needs to implement the `com.ibm.research.drl.dpt.algorithms.anonymization.hierarchies.GeneralizationHierarchy` interface.
 
 The interface contains the following methods:
 
@@ -321,27 +326,27 @@ The `encode` function replaces the digits of the ZIP code based on the level spe
 
 The anonymization algorithm requires a list of privacy constraints to operate. This list must include the k-anonymity constraint and then optionally the l-diversity and/or the t-closeness constraint.
 
-### K-anonymity
+### *k*-anonymity
 
-The k-anonymity constraint is initialized as:
+The *k*-anonymity constraint is initialized as:
 
 ```java
-import com.ibm.research.drl.prima.anonymization.constraints.KAnonymity;
+import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 
 int k = 2;
 PrivacyConstraint kAnonymity = new KAnonymity(k);
 ```
 
-### L-diversity
+### l-diversity
 
-The toolkit contains three variants of L-diversity: distinct, entropy-based and recursive CL.
+The toolkit contains three variants of l-diversity: distinct, entropy-based and recursive CL.
 
-#### Distinct L-diversity
+#### Distinct l-diversity
 
-The distinct L-diversity is initialized as:
+The distinct l-diversity is initialized as:
 
 ```java
-import com.ibm.research.drl.prima.anonymization.constraints.DistinctLDiversity;
+import com.ibm.research.drl.dpt.anonymization.constraints.DistinctLDiversity;
 
 int l = 2;
 PrivacyConstraint distincLDiversity = new DistinctLDiversity(l);
@@ -349,29 +354,29 @@ PrivacyConstraint distincLDiversity = new DistinctLDiversity(l);
 
 where the `l` parameter represents the number of unique values within each equivalence class
 
-#### Entropy-based L-diversity
+#### Entropy-based l-diversity
 
 ```java
-import com.ibm.research.drl.prima.anonymization.constraints.EntropyLDiversity;
+import com.ibm.research.drl.dpt.anonymization.constraints.EntropyLDiversity;
 
 int l = 2;
 PrivacyConstraint entropyLDiversity = new EntropyLDiversity(l);
 ```
 
-#### Recursive CL-Diversity
+#### Recursive cl-Diversity
 
 ```java
-import com.ibm.research.drl.prima.anonymization.constraints.RecursiveCLDiversity;
+import com.ibm.research.drl.dpt.anonymization.constraints.RecursiveCLDiversity;
 
 int l = 2;
 double c = 0.1;
 PrivacyConstraint entropyLDiversity = new RecursiveCLDiversity(l, c);
 ```
 
-### T-closeness
+### t-closeness
 
 ```java
-import com.ibm.research.drl.prima.anonymization.constraints.TCloseness;
+import com.ibm.research.drl.dpt.anonymization.constraints.TCloseness;
 
 PrivacyConstraint tCloseness = new TCloseness();
 ```
@@ -383,7 +388,7 @@ Mondrian and KMeans have no specific options. A `null` value can be safely passe
 For the case of OLA we pass a `OLAOptions` object which expects the maximum suppression rate as an input parameters, for example initializing OLA options with a 2% maximum suppression rate:
 
 ```java
-import com.ibm.research.drl.prima.anonymization.ola.OLAOptions;
+import com.ibm.research.drl.dpt.anonymization.ola.OLAOptions;
 
 AnonymizationAlgorithmOptions olaOptions = new OLAOptions(2.0);
 ```
@@ -429,12 +434,12 @@ public static IPVDataset load(
 For this example, we assume a dataset with the name  with 4 columns. The first column is a patient ID which is already hashed, and we consider it as non-quasi and non-sensitive. The next three columns are quasi-identifiers: gender, race and ZIP code. We will use the pre-defined hierarchies available in the toolkit. 
 
 ```java
-import com.ibm.research.drl.prima.anonymization.*;
-import com.ibm.research.drl.prima.anonymization.constraints.KAnonymity;
-import com.ibm.research.drl.prima.anonymization.hierarchies.GeneralizationHierarchy;
-import com.ibm.research.drl.prima.anonymization.hierarchies.GeneralizationHierarchyFactory;
-import com.ibm.research.drl.prima.datasets.IPVDataset;
-import com.ibm.research.drl.prima.providers.ProviderType;
+import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
+import com.ibm.research.drl.dpt.datasets.IPVDataset;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -484,13 +489,13 @@ public class OLAAnonymizationExample {
 For this example, we assume a dataset with the name  with 5 columns. The first column is a patient ID which is already hashed and we consider it as non-quasi and non-sensitive. The next four columns are quasi-identifiers: gender (categorical), race (categorical), ZIP code (categorical) and height (numerical). We will use the pre-defined hierarchies available in the toolkit for the categorical quasis. 
 
 ```java
-import com.ibm.research.drl.prima.anonymization.*;
-import com.ibm.research.drl.prima.anonymization.constraints.KAnonymity;
-import com.ibm.research.drl.prima.anonymization.hierarchies.GeneralizationHierarchy;
-import com.ibm.research.drl.prima.anonymization.hierarchies.GeneralizationHierarchyFactory;
-import com.ibm.research.drl.prima.anonymization.mondrian.Mondrian;
-import com.ibm.research.drl.prima.datasets.IPVDataset;
-import com.ibm.research.drl.prima.providers.ProviderType;
+import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
+import com.ibm.research.drl.dpt.anonymization.mondrian.Mondrian;
+import com.ibm.research.drl.dpt.datasets.IPVDataset;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.io.File;
 import java.io.FileInputStream;
