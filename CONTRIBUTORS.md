@@ -7,3 +7,4 @@ Contributors (by order of appearance):
 * Naoise Holohan
 * Killian Levacher
 * Marco Simioni
+* Anisa Halimi
