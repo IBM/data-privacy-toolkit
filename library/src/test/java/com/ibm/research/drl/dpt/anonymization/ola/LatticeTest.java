@@ -9,6 +9,7 @@ import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
 import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
 import com.ibm.research.drl.dpt.anonymization.ColumnType;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.ZIPCodeCompBasedHierarchy;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

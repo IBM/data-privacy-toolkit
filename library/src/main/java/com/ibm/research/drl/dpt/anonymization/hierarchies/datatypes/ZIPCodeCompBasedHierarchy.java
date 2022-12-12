@@ -3,7 +3,7 @@
  * Copyright IBM Corp. 2017                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.dpt.anonymization.ola;
+package com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes;
 
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 
