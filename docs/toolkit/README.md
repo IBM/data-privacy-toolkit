@@ -1,4 +1,4 @@
-## DPT Command-line Toolkit
+## Data Privacy Toolkit Command-line
 
 **DPT Command-line Toolkit** is a command line tool exposing the DPT Java library functionality in a more user-friendly manner.
 The toolkit is packaged together with its dependencies so there is no requirement for additional configuration of classpath or internet connection to artifact repositories.
