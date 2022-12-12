@@ -13,6 +13,7 @@ import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.ZIPCodeCompBasedHierarchy;
 import com.ibm.research.drl.dpt.anonymization.informationloss.CategoricalPrecision;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationLossResult;
 import com.ibm.research.drl.dpt.anonymization.informationloss.NonUniformEntropy;
