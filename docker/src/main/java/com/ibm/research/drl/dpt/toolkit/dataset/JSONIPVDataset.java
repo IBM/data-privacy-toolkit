@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
-import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
-import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
+import com.ibm.research.drl.schema.IPVSchema;
+import com.ibm.research.drl.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.schema.impl.SimpleSchema;
+import com.ibm.research.drl.schema.impl.SimpleSchemaField;
 
 import java.io.IOException;
 import java.io.Reader;
