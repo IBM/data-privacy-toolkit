@@ -52,21 +52,21 @@ public class KMeansAnonymization implements AnonymizationAlgorithm {
     }
 
     @Override
-    public AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList,
+    public AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList, 
                                              List<PrivacyConstraint> privacyConstraints, AnonymizationAlgorithmOptions options) {
-
-        KMeansOptions kMeansOptions = (KMeansOptions) options;
-
+        
+        KMeansOptions kMeansOptions = (KMeansOptions)options;
+        
         this.k = AnonymizationUtils.getK(privacyConstraints);
-        this.numberOfClusters = (int) Math.floor((double) dataset.getNumberOfRows() / (double) this.k);
+        this.numberOfClusters = (int) Math.floor((double)dataset.getNumberOfRows() / (double)this.k);
         this.columnInformationList = columnInformationList;
         this.privacyConstraints = privacyConstraints;
         this.original = dataset;
         this.suppressionRate = kMeansOptions.getSuppressionRate();
         this.strategy = kMeansOptions.getStrategy();
-
+        
         AnonymizationUtils.initializeConstraints(dataset, columnInformationList, privacyConstraints);
-
+        
         return this;
     }
 
@@ -79,23 +79,25 @@ public class KMeansAnonymization implements AnonymizationAlgorithm {
     }
 
     public IPVDataset apply() {
-
-        KMeans kMeans = new KMeans(this.original, this.numberOfClusters, 1000, this.columnInformationList,
+       
+        KMeans kMeans = new KMeans(this.original, this.numberOfClusters, 1000, this.columnInformationList, 
                 AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI));
-
+        
         List<KMeansCluster> clusters = kMeans.apply();
 
-        if (this.strategy == StrategyOptions.DUMMY) {
-            this.strategyImpl = new DummySuppressionReassignment(original, suppressionRate, columnInformationList, privacyConstraints);
-        } else {
-            throw new RuntimeException("not implemented yet");
+        switch (this.strategy) {
+            case DUMMY:
+                this.strategyImpl = new DummySuppressionReassignment(original, suppressionRate, columnInformationList, privacyConstraints);
+                break;
+            default:
+                throw new RuntimeException("not implemented yet");
         }
 
         return this.strategyImpl.buildAnonymizedDataset(clusters);
     }
 
     public double reportSuppressionRate() {
-        return 100.0 * (double) this.strategyImpl.getSuppressedRows() / (double) original.getNumberOfRows();
+        return 100.0 * (double)this.strategyImpl.getSuppressedRows()/(double)original.getNumberOfRows();
     }
 }
 
