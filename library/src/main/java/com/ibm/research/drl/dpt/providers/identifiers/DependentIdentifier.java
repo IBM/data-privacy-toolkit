@@ -18,7 +18,7 @@ public class DependentIdentifier extends AbstractManagerBasedIdentifier {
     }
 
     @Override
-    protected Manager getManager() {
+    protected Manager getManager(){
         return DEPENDENT_MANAGER;
     }
 
