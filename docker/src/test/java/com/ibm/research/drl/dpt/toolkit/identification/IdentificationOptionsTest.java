@@ -22,7 +22,7 @@ public class IdentificationOptionsTest {
     public void testShouldDeserializeCorrectly() throws IOException {
         final TreeNode treeNode;
 
-        try(InputStream inputStream = IdentificationOptionsTest.class.getResourceAsStream("/configuration_identification_with_headers.json")) {
+        try(InputStream inputStream = getClass().getResourceAsStream("/configuration_identification_with_headers.json")) {
             treeNode = mapper.readTree(inputStream);
         }
 
