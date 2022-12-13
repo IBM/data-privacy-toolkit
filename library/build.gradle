@@ -3,7 +3,6 @@
  * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
-
 apply plugin: 'java-library'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
@@ -47,8 +46,6 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
     implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
     implementation "commons-validator:commons-validator:${commons_validator_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
     implementation "commons-validator:commons-validator:${commons_validator_version}"
     implementation "org.apache.poi:poi-ooxml:${poi_version}"
     implementation "ca.uhn.hapi:hapi-base:2.3"
@@ -103,6 +100,7 @@ version = '6.0.1'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     maven {
         url = uri('https://www.dcm4che.org/maven2')
