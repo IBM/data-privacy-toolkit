@@ -19,7 +19,6 @@ import java.util.Set;
 
 public class ToolkitTest {
     @Test
-    @Disabled("To be ported to new format")
     public void runningScanOnZipFile() throws Exception {
         String target = this.getClass().getResource("/test.zip").toURI().getPath();
         String piList = this.getClass().getResource("/personal_information_types.txt").toURI().getPath();
@@ -178,7 +177,7 @@ public class ToolkitTest {
                 "-c",
                 getClass().getResource("/transaction-uniqueness-ok.json").getPath(),
                 "-o",
-                Files.createTempFile("transaction-uniqueness", "report").toAbsolutePath().toString()});
+                File.createTempFile("transaction-uniqueness", "report").getPath()});
     }
 
     @Test
@@ -189,6 +188,6 @@ public class ToolkitTest {
                 "-c",
                 getClass().getResource("/test-flow.json").getPath(),
                 "-o",
-                Files.createTempFile("test-flow", "report").toAbsolutePath().toString()});
+                File.createTempFile("test-flow", "report").getPath()});
     }
 }
