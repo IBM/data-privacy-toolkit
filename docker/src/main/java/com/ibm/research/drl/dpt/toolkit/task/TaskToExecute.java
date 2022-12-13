@@ -11,11 +11,11 @@ import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.toolkit.anonymization.AnonymizationTask;
-import com.ibm.research.drl.dpt.toolkit.exploration.ExplorationTask;
+//import com.ibm.research.drl.dpt.toolkit.exploration.ExplorationTask;
 //import com.ibm.research.drl.dpt.toolkit.freetext.FreeTextDeID;
 import com.ibm.research.drl.dpt.toolkit.identification.IdentificationTask;
 import com.ibm.research.drl.dpt.toolkit.masking.MaskingTask;
-import com.ibm.research.drl.dpt.toolkit.transaction_uniqueness.TransactionUniquenessTask;
+//import com.ibm.research.drl.dpt.toolkit.transaction_uniqueness.TransactionUniquenessTask;
 import com.ibm.research.drl.dpt.toolkit.vulnerability.VulnerabilityTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,8 +36,8 @@ import java.util.Map;
         @JsonSubTypes.Type(value = MaskingTask.class, name = "Masking"),
         @JsonSubTypes.Type(value = VulnerabilityTask.class, name = "Vulnerability"),
         @JsonSubTypes.Type(value = AnonymizationTask.class, name = "Anonymization"),
-        @JsonSubTypes.Type(value = TransactionUniquenessTask.class, name = "TransactionUniqueness"),
-        @JsonSubTypes.Type(value = ExplorationTask.class, name = "Exploration"),
+//        @JsonSubTypes.Type(value = TransactionUniquenessTask.class, name = "TransactionUniqueness"),
+//        @JsonSubTypes.Type(value = ExplorationTask.class, name = "Exploration"),
 //        @JsonSubTypes.Type(value = FreeTextDeID.class, name = "FreeTextDeID"),
 })
 public abstract class TaskToExecute {
