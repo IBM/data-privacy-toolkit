@@ -10,13 +10,14 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class OSIdentifier extends AbstractIdentifier {
     private final Set<String> terms;
     private final Set<String> testDetectionPrefixes = new HashSet<>(Arrays.asList("mac os", "macos", "mac", "windows"));
-    private final Set<String> testDetectionSuffixes = new HashSet<>(Arrays.asList("linux"));
+    private final Set<String> testDetectionSuffixes = new HashSet<>(List.of("linux"));
 
     private final int minimumLength;
     private final int maximumLength;
@@ -84,7 +85,7 @@ public class OSIdentifier extends AbstractIdentifier {
 
         for (String suffix : testDetectionSuffixes) {
             if (normalized.endsWith(suffix)) {
-                String candidate = normalized.substring(0,normalized.length()-suffix.length());
+                String candidate = normalized.substring(0, normalized.length() - suffix.length());
                 if (candidate.length() >= 2) {
                     candidate = candidate.trim();
                     if (this.terms.contains(candidate)) {

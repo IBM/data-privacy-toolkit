@@ -20,9 +20,13 @@ public class GenderManager extends ResourceBasedManager<Sex> {
     private static final long serialVersionUID = -8322026980948568171L;
     private final static GenderManager GENDER_MANAGER = new GenderManager();
 
-    public static GenderManager getInstance() {return GENDER_MANAGER;}
+    public static GenderManager getInstance() {
+        return GENDER_MANAGER;
+    }
 
-    private GenderManager() {super();}
+    private GenderManager() {
+        super();
+    }
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -36,7 +40,7 @@ public class GenderManager extends ResourceBasedManager<Sex> {
 
         Sex sex = new Sex(name, countryCode);
 
-        return Arrays.asList(new Tuple<>(key, sex));
+        return List.of(new Tuple<>(key, sex));
     }
 
     @Override

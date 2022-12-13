@@ -63,7 +63,7 @@ public class DiscernibilityStar implements InformationMetric {
     public double report() {
         double value = 0.0;
 
-        for (Partition p: partitions) {
+        for (Partition p : partitions) {
             int pSize = p.size();
 
             if (pSize > 0) {
@@ -83,7 +83,7 @@ public class DiscernibilityStar implements InformationMetric {
 
         List<InformationLossResult> results = new ArrayList<>();
 
-        for(int i = 0; i < quasiIdentifiersLength; i++) {
+        for (int i = 0; i < quasiIdentifiersLength; i++) {
             results.add(new InformationLossResult(iloss, lower, upper));
         }
 
@@ -97,7 +97,7 @@ public class DiscernibilityStar implements InformationMetric {
         this.quasiIdentifiersLength = AnonymizationUtils.countColumnsByType(columnInformationList, ColumnType.QUASI);
         return this;
     }
-    
+
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {

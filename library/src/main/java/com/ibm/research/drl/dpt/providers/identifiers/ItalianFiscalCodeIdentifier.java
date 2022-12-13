@@ -157,11 +157,7 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
             day -= 40;
         }
 
-        if (day > 0 && day < 31) {
-            return true;
-        }
-
-        return false;
+        return day > 0 && day < 31;
     }
 
     @Override

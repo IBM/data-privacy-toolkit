@@ -38,7 +38,7 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
 
     private final static SecureRandom random = new SecureRandom();
     /* https://www.hl7.org/fhir/valueset-contact-point-use.html */
-    private final static String[] useValues = new String[] {"home", "work", "temp", "old", "mobile"};
+    private final static String[] useValues = new String[]{"home", "work", "temp", "old", "mobile"};
 
     public FHIRContactPointMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
@@ -89,8 +89,7 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
 
             if (system == null) {
                 maskedValue = randomMaskingProvider.mask(originalValue);
-            }
-            else {
+            } else {
                 /* https://www.hl7.org/fhir/valueset-contact-point-system.html */
                 switch (system) {
                     case "email":

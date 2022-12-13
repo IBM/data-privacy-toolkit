@@ -20,16 +20,16 @@ public class DummySuppressionReassignment extends StrategyImpl {
     private final List<ColumnInformation> columnInformationList;
     private final List<PrivacyConstraint> privacyConstraints;
     private final List<Integer> sensitiveColumns;
-    
+
     private List<List<Set<String>>> categoricalVariables;
     private Long suppressedRows = 0L;
     private final List<Partition> partitions = new ArrayList<>();
     private final List<Partition> anonymizedPartitions = new ArrayList<>();
 
-    public DummySuppressionReassignment(IPVDataset original, double maximumSuppressionRate, 
+    public DummySuppressionReassignment(IPVDataset original, double maximumSuppressionRate,
                                         List<ColumnInformation> columnInformationList,
                                         List<PrivacyConstraint> privacyConstraints) {
-        
+
         super(original, maximumSuppressionRate, columnInformationList, privacyConstraints);
         this.original = original;
         this.maximumSuppressionRate = maximumSuppressionRate;
@@ -45,7 +45,7 @@ public class DummySuppressionReassignment extends StrategyImpl {
     public List<Partition> getOriginalPartitions() {
         return partitions;
     }
-    
+
     public List<Partition> getAnonymizedPartitions() {
         return anonymizedPartitions;
     }
@@ -64,61 +64,60 @@ public class DummySuppressionReassignment extends StrategyImpl {
                 nonConforming++;
             }
         }
-        
+
         return nonConforming;
     }
-    
+
     private void mergeClusters(KMeansCluster cluster, KMeansCluster targetCluster) {
         targetCluster.addValues(cluster.getValues());
         targetCluster.computeCenter();
-        
+
         targetCluster.getOriginalData().getMember().append(cluster.getOriginalData().getMember().getValues());
     }
-    
+
     private List<KMeansCluster> suppressAndMerge(List<KMeansCluster> clusters) {
 
         List<KMeansCluster> candidateClusters = new ArrayList<>(clusters);
-        
+
         int nonConforming = checkNonConformingClusters(candidateClusters);
 
         while (nonConforming > 0) {
             List<Integer> toRemove = new ArrayList<>();
-            
-            for(int i = (candidateClusters.size() - 1); i >= 0; i--) {
+
+            for (int i = (candidateClusters.size() - 1); i >= 0; i--) {
                 KMeansCluster cluster = candidateClusters.get(i);
-                
+
                 if (cluster.getOriginalData().isAnonymous()) {
                     continue;
                 }
-                
+
                 int numberOfRecords = cluster.getOriginalData().size();
-                
-                double suppressionAfterRemoval = (100.0 * (numberOfRecords + suppressedRows)) / (double)this.original.getNumberOfRows();
-                
+
+                double suppressionAfterRemoval = (100.0 * (numberOfRecords + suppressedRows)) / (double) this.original.getNumberOfRows();
+
                 if (suppressionAfterRemoval <= this.maximumSuppressionRate) {
                     this.suppressedRows += numberOfRecords;
-                }
-                else {
+                } else {
                     int index = KMeans.getNearestPointIndex(cluster.getCenter(), candidateClusters, i);
-                    
+
                     if (index == Integer.MAX_VALUE) {
                         throw new RuntimeException("we could not merge with any cluster");
                     }
-                    
+
                     KMeansCluster targetCluster = candidateClusters.get(index);
                     mergeClusters(cluster, targetCluster);
                 }
-                
+
                 toRemove.add(i);
             }
 
-            for(Integer c: toRemove) {
+            for (Integer c : toRemove) {
                 candidateClusters.remove(c.intValue());
             }
 
             nonConforming = checkNonConformingClusters(candidateClusters);
         }
-        
+
         return candidateClusters;
     }
 
@@ -128,38 +127,36 @@ public class DummySuppressionReassignment extends StrategyImpl {
 
         int quasiIndex = 0;
 
-        for(int i = 0; i < columnInformationList.size(); i++) {
+        for (int i = 0; i < columnInformationList.size(); i++) {
             ColumnInformation columnInformation = this.columnInformationList.get(i);
 
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 anonymizedRow.add(originalRow.get(i));
-            }
-            else {
+            } else {
                 boolean isCategorical = columnInformation.isCategorical();
 
                 if (isCategorical) {
                     anonymizedRow.add(categoricalCentroids.get(quasiIndex));
-                }
-                else {
+                } else {
                     anonymizedRow.add(clusterCenter.get(quasiIndex).toString());
                 }
 
                 quasiIndex++;
             }
         }
-        
+
         return anonymizedRow;
     }
-    
+
     private List<String> createCategoricalCentroids(Partition partition) {
-        
+
         List<Integer> categoricalColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
         categoricalColumns = categoricalColumns.stream().filter(x -> this.columnInformationList.get(x).isCategorical()).collect(Collectors.toList());
 
         if (categoricalColumns.isEmpty()) {
-           return Collections.emptyList(); 
+            return Collections.emptyList();
         }
-        
+
         List<Set<String>> values = new ArrayList<>();
         List<GeneralizationHierarchy> hierarchies = new ArrayList<>();
 
@@ -168,58 +165,57 @@ public class DummySuppressionReassignment extends StrategyImpl {
             CategoricalInformation categoricalInformation = (CategoricalInformation) this.columnInformationList.get(categoricalColumn);
             hierarchies.add(categoricalInformation.getHierarchy());
         }
-        
-        for(List<String> originalRow: partition.getMember()) {
-            for(int i = 0; i < categoricalColumns.size(); i++) {
+
+        for (List<String> originalRow : partition.getMember()) {
+            for (int i = 0; i < categoricalColumns.size(); i++) {
                 Integer column = categoricalColumns.get(i);
                 String value = originalRow.get(column);
-                
+
                 values.get(i).add(value);
             }
         }
-        
+
         List<String> centroids = new ArrayList<>();
-        
-        for(int i = 0; i < categoricalColumns.size(); i++) {
+
+        for (int i = 0; i < categoricalColumns.size(); i++) {
             GeneralizationHierarchy hierarchy = hierarchies.get(i);
             centroids.add(ClusteringAnonUtils.calculateCommonAncestor(values.get(i), hierarchy));
-        }    
-        
+        }
+
         return centroids;
     }
-    
+
     private IPVDataset createAnonymized(List<KMeansCluster> clusters) {
         IPVDataset anonymized = new IPVDataset(original.getNumberOfColumns());
-        
-        for(KMeansCluster cluster: clusters) {
+
+        for (KMeansCluster cluster : clusters) {
             Partition partition = cluster.getOriginalData();
 
             if (partition.size() == 0) {
                 continue;
             }
-            
+
             List<Double> clusterCenter = cluster.getCenter();
-            
+
             List<String> categoricalCentroids = createCategoricalCentroids(partition);
-            
-            for(List<String> originalRow: partition.getMember()) {
+
+            for (List<String> originalRow : partition.getMember()) {
                 anonymized.addRow(buildAnonymizedRow(originalRow, categoricalCentroids, clusterCenter));
             }
         }
-       
+
         return anonymized;
     }
 
 
     public IPVDataset buildAnonymizedDataset(List<KMeansCluster> clusters) {
 
-       
-        List<KMeansCluster> conformingClusters = suppressAndMerge(clusters);
-        
-        return createAnonymized(conformingClusters);
-        
-    }
 
+        List<KMeansCluster> conformingClusters = suppressAndMerge(clusters);
+
+        return createAnonymized(conformingClusters);
+
+    }
 
 
 }

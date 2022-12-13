@@ -45,7 +45,7 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRatio obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRRatio.class);
-            FHIRRatio maskedObj= mask(obj);
+            FHIRRatio maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
@@ -55,16 +55,14 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
     public FHIRRatio mask(FHIRRatio ratio) {
         if (this.deleteDenominator) {
             ratio.setDenominator(null);
-        }
-        else if (this.maskDenominator && !isAlreadyMasked(DENOMINATOR_PATH)) {
+        } else if (this.maskDenominator && !isAlreadyMasked(DENOMINATOR_PATH)) {
             ratio.setDenominator(denominatorMaskingProvider.mask(ratio.getDenominator()));
         }
 
 
         if (this.deleteNumerator) {
             ratio.setNumerator(null);
-        }
-        else if (this.maskNumerator && !isAlreadyMasked(NUMERATOR_PATH)) {
+        } else if (this.maskNumerator && !isAlreadyMasked(NUMERATOR_PATH)) {
             ratio.setNumerator(numeratorMaskingProvider.mask(ratio.getNumerator()));
         }
 

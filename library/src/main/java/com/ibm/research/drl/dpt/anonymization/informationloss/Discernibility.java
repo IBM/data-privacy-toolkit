@@ -33,7 +33,7 @@ public class Discernibility implements InformationMetric {
     public double getLowerBound() {
         double value = 0.0;
 
-        for (Partition p: partitions) {
+        for (Partition p : partitions) {
             int pSize = p.size();
 
             if (pSize > 0) {
@@ -79,7 +79,7 @@ public class Discernibility implements InformationMetric {
 
         int totalRows = this.original.getNumberOfRows();
 
-        for (Partition p: partitions) {
+        for (Partition p : partitions) {
             int pSize = p.size();
 
             if (p.isAnonymous()) {
@@ -100,7 +100,7 @@ public class Discernibility implements InformationMetric {
 
         List<InformationLossResult> results = new ArrayList<>();
 
-        for(int i = 0; i < quasiIdentifiersLength; i++) {
+        for (int i = 0; i < quasiIdentifiersLength; i++) {
             results.add(new InformationLossResult(iloss, lower, upper));
         }
 
@@ -115,7 +115,7 @@ public class Discernibility implements InformationMetric {
         this.quasiIdentifiersLength = AnonymizationUtils.countColumnsByType(columnInformationList, ColumnType.QUASI);
         return this;
     }
-    
+
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {

@@ -68,13 +68,13 @@ public class AverageEquivalenceClassSize implements InformationMetric {
     public double report() {
         int equivalence_classes = 0;
 
-        for(Partition p: partitions) {
+        for (Partition p : partitions) {
             if (p.size() > 0) {
                 equivalence_classes++;
             }
         }
 
-        double aecs = total_records/(double)equivalence_classes;
+        double aecs = total_records / (double) equivalence_classes;
 
         if (!normalized) {
             return aecs;
@@ -92,7 +92,7 @@ public class AverageEquivalenceClassSize implements InformationMetric {
 
         List<InformationLossResult> results = new ArrayList<>();
 
-        for(int i = 0; i < quasiIdentifiersLength; i++) {
+        for (int i = 0; i < quasiIdentifiersLength; i++) {
             results.add(new InformationLossResult(iloss, lower, upper));
         }
 

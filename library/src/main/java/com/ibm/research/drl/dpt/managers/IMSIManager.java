@@ -16,11 +16,16 @@ import java.security.SecureRandom;
 import java.util.*;
 
 public class IMSIManager extends ResourceBasedManager<IMSI> {
-    private final static IMSIManager IMSI_MANAGER_INSTANCE =  new IMSIManager();
-    public static IMSIManager getInstance() {return IMSI_MANAGER_INSTANCE;}
+    private final static IMSIManager IMSI_MANAGER_INSTANCE = new IMSIManager();
 
-    private IMSIManager() {super();}
-    
+    public static IMSIManager getInstance() {
+        return IMSI_MANAGER_INSTANCE;
+    }
+
+    private IMSIManager() {
+        super();
+    }
+
     private final SecureRandom random = new SecureRandom();
     private Map<String, List<String>> mccMap;
 
@@ -40,14 +45,14 @@ public class IMSIManager extends ResourceBasedManager<IMSI> {
         String mnc = line.get(1);
         String mccmnc = mcc + mnc;
 
-        if(!mccMap.containsKey(mcc)) {
+        if (!mccMap.containsKey(mcc)) {
             mccMap.put(mcc, new ArrayList<>());
         }
 
         mccMap.get(mcc).add(mnc);
-       
+
         IMSI imsi = new IMSI(mcc, mnc);
-        return Arrays.asList(new Tuple<>(mccmnc.toUpperCase(), imsi));
+        return List.of(new Tuple<>(mccmnc.toUpperCase(), imsi));
     }
 
     @Override
@@ -98,8 +103,8 @@ public class IMSIManager extends ResourceBasedManager<IMSI> {
             return false;
         }
 
-        for(int i = 0; i < imsi.length(); i++) {
-            if(!Character.isDigit(imsi.charAt(i))) {
+        for (int i = 0; i < imsi.length(); i++) {
+            if (!Character.isDigit(imsi.charAt(i))) {
                 return false;
             }
         }

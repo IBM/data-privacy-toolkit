@@ -6,7 +6,7 @@
 package com.ibm.research.drl.dpt.util.localization;
 
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +29,9 @@ public class LocalizationManager {
      *
      * @return the instance
      */
-    public static LocalizationManager getInstance() {return instance;}
+    public static LocalizationManager getInstance() {
+        return instance;
+    }
 
 
     /**
@@ -96,7 +98,8 @@ public class LocalizationManager {
     private void registerResource(Resource resource, ResourceEntry entry) {
         final String countryCode = entry.getCountryCode();
 
-        if (! enabledCountries.contains(countryCode) && !countryCommonMap.values().contains(countryCode) && !COMMON.equals(countryCode)) throw new IllegalArgumentException(countryCode + " is not a known locale");
+        if (!enabledCountries.contains(countryCode) && !countryCommonMap.containsValue(countryCode) && !COMMON.equals(countryCode))
+            throw new IllegalArgumentException(countryCode + " is not a known locale");
 
         Map<String, ResourceEntry> entries = this.registeredResources.computeIfAbsent(resource, k -> new HashMap<>());
 
@@ -140,7 +143,7 @@ public class LocalizationManager {
                 return Collections.singletonList(knownEntries.get(COMMON));
         }
 
-        for(String country: countries) {
+        for (String country : countries) {
             logger.debug("Retrieving country {}", country);
 
             if (!knownEntries.containsKey(country)) {

@@ -19,7 +19,7 @@ public class TLDManager {
     private static final TLDManager instance = new TLDManager();
     SecureRandom random;
     private final String[] tlds = {"com", "org", "edu", "co.uk"};
-    private Set<String>[] tldSet = (Set<String>[]) new HashSet[256];
+    private final Set<String>[] tldSet = (Set<String>[]) new HashSet[256];
 
     private TLDManager() {
         this.random = new SecureRandom();
@@ -53,7 +53,7 @@ public class TLDManager {
                     continue;
                 }
 
-                int index = (int) line.charAt(0);
+                int index = line.charAt(0);
                 if (index > 255) {
                     index = 0;
                 }
@@ -82,7 +82,7 @@ public class TLDManager {
         }
 
         do {
-            int index = (int) Character.toLowerCase(hostname.charAt(0));
+            int index = Character.toLowerCase(hostname.charAt(0));
             if (index > 255) {
                 index = 0;
             }

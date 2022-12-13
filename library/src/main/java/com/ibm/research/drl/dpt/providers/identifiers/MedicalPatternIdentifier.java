@@ -81,13 +81,13 @@ public class MedicalPatternIdentifier extends AbstractIdentifier implements Iden
         if (response.getFirst() && !containsDigit(extractText(data, response.getSecond()))) {
             return new Tuple<>(false, null);
         }
-        
+
         return response;
     }
 
     private boolean containsDigit(String text) {
-         for (int i = 0; i < text.length(); ++i) {
-             if (Character.isDigit(text.charAt(i))) return true;
+        for (int i = 0; i < text.length(); ++i) {
+            if (Character.isDigit(text.charAt(i))) return true;
         }
         return false;
     }
@@ -100,7 +100,7 @@ public class MedicalPatternIdentifier extends AbstractIdentifier implements Iden
     public boolean isPOSIndependent() {
         return true;
     }
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.NONE;

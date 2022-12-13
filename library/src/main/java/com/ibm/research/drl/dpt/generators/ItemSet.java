@@ -32,7 +32,8 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
      * @param items the items
      */
     public ItemSet(int... items) {
-        if (Objects.isNull(items) || items.length == 0) throw new IllegalArgumentException("Items must be not null and more that 0");
+        if (Objects.isNull(items) || items.length == 0)
+            throw new IllegalArgumentException("Items must be not null and more that 0");
 
         this.bitSet = new BitSet(items.length);
 
@@ -118,7 +119,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
 
         ItemSet itemSet = (ItemSet) o;
 
-        return  (this.isSubSetOf(itemSet) && itemSet.isSubSetOf(this));
+        return (this.isSubSetOf(itemSet) && itemSet.isSubSetOf(this));
 
 //        if (size != itemSet.size) return false;
 //        return bitSet != null ? bitSet.equals(itemSet.bitSet) : itemSet.bitSet == null;

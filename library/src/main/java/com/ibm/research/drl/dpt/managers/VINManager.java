@@ -42,7 +42,7 @@ public class VINManager implements Manager, Serializable {
         Set<String> keyset = wmiMap.keySet();
         this.wmiList = keyset.toArray(new String[keyset.size()]);
 
-        for(String wmi: wmiList) {
+        for (String wmi : wmiList) {
             if (!isValidWMI(wmi)) {
                 throw new RuntimeException("invalid WMI loaded:" + wmi);
             }
@@ -52,7 +52,7 @@ public class VINManager implements Manager, Serializable {
     private Map<? extends String, ? extends String> readWMIList(Collection<ResourceEntry> entries) {
         Map<String, String> names = new HashMap<>();
 
-        for(ResourceEntry entry: entries) {
+        for (ResourceEntry entry : entries) {
             InputStream inputStream = entry.createStream();
             try (CSVParser reader = Readers.createCSVReaderFromStream(inputStream)) {
                 for (CSVRecord line : reader) {
@@ -84,7 +84,7 @@ public class VINManager implements Manager, Serializable {
         which does not include the letters I (i), O (o), or Q (q) (to avoid confusion with numerals 1 and 0).
          */
         //data = data.toUpperCase();
-        for(int i = 0; i < data.length(); i++) {
+        for (int i = 0; i < data.length(); i++) {
             char c = data.charAt(i);
 
             /* VIN is composed only of digits and letters */
@@ -98,11 +98,7 @@ public class VINManager implements Manager, Serializable {
 
         /* check if the WMI is one of the known */
         String wmi = data.substring(0, 3);
-        if (!isValidWMI(wmi)) {
-            return false;
-        }
-
-        return true;
+        return isValidWMI(wmi);
     }
 
     @Override
@@ -116,13 +112,13 @@ public class VINManager implements Manager, Serializable {
 
         for (int i = 0; i < length; i++) {
             if (random.nextBoolean()) {
-                nextRandom = (char) ( 'a' + random.nextInt(26));
+                nextRandom = (char) ('a' + random.nextInt(26));
             } else {
-                nextRandom = (char) ( '0' + random.nextInt(10));
+                nextRandom = (char) ('0' + random.nextInt(10));
             }
 
             if (excludedCharacters != null) {
-                if(ArrayUtils.contains(excludedCharacters, nextRandom)) {
+                if (ArrayUtils.contains(excludedCharacters, nextRandom)) {
                     i--;
                     continue;
                 }

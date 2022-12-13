@@ -60,8 +60,7 @@ public class OccupationMaskingProvider extends AbstractMaskingProvider {
             List<String> categories = occupation.getCategories();
             int randomIndex = random.nextInt(categories.size());
             return categories.get(randomIndex);
-        }
-        else {
+        } else {
             if (occupation == null) {
                 return occupationManager.getRandomKey();
             }

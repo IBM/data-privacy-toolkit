@@ -20,8 +20,14 @@ public class StreetNameManager extends ResourceBasedManager<String> {
             LocalizationManager.getInstance().getResources(Resource.STREET_NAMES);
 
     private final static StreetNameManager STREET_NAME_MANAGER = new StreetNameManager();
-    public static StreetNameManager getInstance() { return STREET_NAME_MANAGER; }
-    private StreetNameManager() {super();}
+
+    public static StreetNameManager getInstance() {
+        return STREET_NAME_MANAGER;
+    }
+
+    private StreetNameManager() {
+        super();
+    }
 
 
     @Override
@@ -34,7 +40,7 @@ public class StreetNameManager extends ResourceBasedManager<String> {
         String sname = line.get(0).trim();
         String key = sname.toUpperCase();
 
-        return Arrays.asList(new Tuple<>(key, sname));
+        return List.of(new Tuple<>(key, sname));
     }
 
     @Override

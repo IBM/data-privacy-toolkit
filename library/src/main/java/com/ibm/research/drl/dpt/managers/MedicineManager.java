@@ -25,9 +25,13 @@ public class MedicineManager extends ResourceBasedManager<Medicine> {
      *
      * @return the instance
      */
-    public static MedicineManager getInstance() { return MEDICE_MANAGER_INSTANCE; }
+    public static MedicineManager getInstance() {
+        return MEDICE_MANAGER_INSTANCE;
+    }
 
-    private MedicineManager() {super();}
+    private MedicineManager() {
+        super();
+    }
 
     @Override
     protected Collection<ResourceEntry> getResources() {
@@ -40,7 +44,7 @@ public class MedicineManager extends ResourceBasedManager<Medicine> {
         String key = name.toUpperCase();
         Medicine medicine = new Medicine(name, countryCode);
 
-        return Arrays.asList(new Tuple<>(key, medicine));
+        return List.of(new Tuple<>(key, medicine));
     }
 
     @Override

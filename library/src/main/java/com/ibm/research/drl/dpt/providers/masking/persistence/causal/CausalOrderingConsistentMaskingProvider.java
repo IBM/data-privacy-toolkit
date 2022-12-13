@@ -38,7 +38,7 @@ public class CausalOrderingConsistentMaskingProvider extends AbstractPersistentM
 
         boolean valueFound = false;
 
-        for(DictionaryEntry entry: chainEntries) {
+        for (DictionaryEntry entry : chainEntries) {
             if (entry.getType() == DictionaryEntryType.VALUE && entry.getValue().equals(hashedTerm)) {
                 valueFound = true;
                 break;
@@ -46,8 +46,7 @@ public class CausalOrderingConsistentMaskingProvider extends AbstractPersistentM
 
             if (entry.getType() == DictionaryEntryType.INSERT) {
                 entries.add(entry);
-            }
-            else if (entry.getType() == DictionaryEntryType.DELETE) {
+            } else if (entry.getType() == DictionaryEntryType.DELETE) {
                 entriesToRemove.add(entry.getValue());
             }
         }
@@ -64,7 +63,7 @@ public class CausalOrderingConsistentMaskingProvider extends AbstractPersistentM
         if (!entriesToRemove.isEmpty()) {
             int totalEntries = entries.size();
 
-            for(int i = (totalEntries - 1); i >= 0; i--) {
+            for (int i = (totalEntries - 1); i >= 0; i--) {
                 DictionaryEntry entry = entries.get(i);
                 if (entry.getType() != DictionaryEntryType.INSERT) {
                     continue;

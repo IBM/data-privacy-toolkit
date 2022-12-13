@@ -38,7 +38,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
 
     protected void performOutputAction(Record record, OutputStream output, Iterable<String> fieldsToSuppress) throws IOException {
 
-        for(String field: fieldsToSuppress) {
+        for (String field : fieldsToSuppress) {
             record.suppressField(field);
         }
 
@@ -51,7 +51,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
         logger.info("Masking stream");
 
         if (registerTypes != null && !registerTypes.isEmpty()) {
-            for(Map.Entry<ProviderType, Class<? extends MaskingProvider>> entry: registerTypes.entrySet()) {
+            for (Map.Entry<ProviderType, Class<? extends MaskingProvider>> entry : registerTypes.entrySet()) {
                 ProviderType providerType = entry.getKey();
                 factory.registerMaskingProviderClass(entry.getValue(), providerType);
             }
@@ -71,7 +71,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
 
     protected List<String> getFieldsToSuppress(DataMaskingOptions dataMaskingOptions) {
         List<String> fieldsToSuppress = new ArrayList<>();
-        for (Map.Entry<String, DataMaskingTarget> toBeMasked: dataMaskingOptions.getToBeMasked().entrySet()) {
+        for (Map.Entry<String, DataMaskingTarget> toBeMasked : dataMaskingOptions.getToBeMasked().entrySet()) {
             if (toBeMasked.getValue().getProviderType().equals(ProviderType.SUPPRESS_FIELD)) {
                 fieldsToSuppress.add(toBeMasked.getKey());
             }
@@ -96,7 +96,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
             }
         }
 
-        return operandsNotToBeMasked; 
+        return operandsNotToBeMasked;
     }
 
     public Record maskRecord(Record record, MaskingProviderFactory maskingProvidersFactory, Set<String> alreadyMaskedFields, DataMaskingOptions dataMaskingOptions) {
@@ -106,7 +106,8 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
 
         Map<String, OriginalMaskedValuePair> processedFields = extractOperandsNotToBeMasked(record, relationships, fieldsToMask);
 
-        fieldsLoop: while (!queuedFields.isEmpty()) {
+        fieldsLoop:
+        while (!queuedFields.isEmpty()) {
             String fieldIdentifier = queuedFields.poll();
 
             byte[] fieldValue = record.getFieldValue(fieldIdentifier);
@@ -114,7 +115,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
                 processedFields.put(fieldIdentifier, new OriginalMaskedValuePair(null, null));
                 continue;
             }
-            
+
             String originalValue = new String(fieldValue);
             String maskedValue = originalValue;
 
@@ -136,13 +137,13 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
 
                 ProviderType fieldType = fieldsToMask.get(fieldIdentifier).getProviderType();
                 String targetPath = fieldsToMask.get(fieldIdentifier).getTargetPath();
-                
+
                 MaskingProvider provider = maskingProvidersFactory.get(fieldIdentifier, fieldType);
 
                 maskedValue = maskValue(provider, originalValue, fieldIdentifier, fieldRelationship, processedFields);
                 record.setFieldValue(targetPath, (maskedValue != null) ? maskedValue.getBytes() : null);
             }
-            
+
             processedFields.put(fieldIdentifier, new OriginalMaskedValuePair(originalValue, maskedValue));
         }
 
@@ -159,7 +160,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
     }
 
     protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions) throws IOException {
-        return extractRecords(dataset, dataOptions, -1);    
+        return extractRecords(dataset, dataOptions, -1);
     }
 
     protected abstract Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException;
@@ -182,7 +183,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
     protected IdentificationReport assembleReport(Map<String, Map<String, Counter>> allTypes, Map<String, Map<String, Counter>> columnTypes, long recordCount) {
         Map<String, List<IdentifiedType>> results = allTypes.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
-                entry -> entry.getValue().entrySet().stream().map( valueEntry -> new IdentifiedType(
+                entry -> entry.getValue().entrySet().stream().map(valueEntry -> new IdentifiedType(
                                 valueEntry.getKey(),
                                 valueEntry.getValue().counter
                         )
@@ -207,7 +208,7 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
     protected Map<String, Map<String, Counter>> checkFieldNames(Record record, Collection<Identifier> identifiers) {
         Map<String, Map<String, Counter>> types = new HashMap<>();
 
-        for (final String fieldReference: record.getFieldReferences()) {
+        for (final String fieldReference : record.getFieldReferences()) {
             final Map<String, Counter> fieldCounters = new HashMap<>();
             final String fieldName = extractFieldName(fieldReference);
 
@@ -233,8 +234,8 @@ public abstract class AbstractFormatProcessor implements FormatProcessor {
 
     @Override
     public IdentificationReport identifyTypesStream(InputStream input, DataTypeFormat inputFormatType,
-                                                                              DatasetOptions datasetOptions, 
-                                                                              Collection<Identifier> identifiers, int firstN) throws IOException {
+                                                    DatasetOptions datasetOptions,
+                                                    Collection<Identifier> identifiers, int firstN) throws IOException {
         Map<String, Map<String, Counter>> allTypes = new HashMap<>();
         Map<String, Map<String, Counter>> columnTypes = new HashMap<>();
 

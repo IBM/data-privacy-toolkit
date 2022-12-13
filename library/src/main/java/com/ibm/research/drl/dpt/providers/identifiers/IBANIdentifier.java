@@ -29,7 +29,8 @@ public class IBANIdentifier extends AbstractIdentifier {
     public boolean isOfThisType(String data) {
         try {
             return ibanValidator.isValid(data);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return false;
     }

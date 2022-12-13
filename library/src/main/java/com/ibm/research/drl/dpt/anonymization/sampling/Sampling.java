@@ -19,7 +19,7 @@ public class Sampling implements AnonymizationAlgorithm {
     private IPVDataset original;
     private List<Partition> originalPartitions;
     private List<Partition> anonymizedPartitions;
-    
+
     private List<ColumnInformation> columnInformationList;
     private double percentage;
 
@@ -49,18 +49,18 @@ public class Sampling implements AnonymizationAlgorithm {
     }
 
     @Override
-    public AnonymizationAlgorithm initialize(IPVDataset dataset, 
-                                             List<ColumnInformation> columnInformationList, 
-                                             List<PrivacyConstraint> privacyConstraints, 
+    public AnonymizationAlgorithm initialize(IPVDataset dataset,
+                                             List<ColumnInformation> columnInformationList,
+                                             List<PrivacyConstraint> privacyConstraints,
                                              AnonymizationAlgorithmOptions options) {
         this.original = dataset;
         this.columnInformationList = columnInformationList;
-        this.percentage = ((SamplingOptions)options).getPercentage();
-        
+        this.percentage = ((SamplingOptions) options).getPercentage();
+
         if (percentage < 0.0 || percentage > 1.0) {
             throw new RuntimeException("invalid percentage value: " + percentage);
         }
-       
+
         return this;
     }
 
@@ -86,33 +86,33 @@ public class Sampling implements AnonymizationAlgorithm {
                     original.hasColumnNames()
             );
         }
-        
+
         List<List<String>> finalRows = new ArrayList<>();
         Random random = new SecureRandom();
-        
+
         Set<Integer> used = new HashSet<>();
-       
+
         Partition originalAnonymous = new InMemoryPartition(this.original.getNumberOfColumns());
         Partition originalNonAnonymous = new InMemoryPartition(this.original.getNumberOfColumns());
         Partition anonymizedNonAnonymous = new InMemoryPartition(this.original.getNumberOfColumns());
-        
-        for(int i = 0; i < sampleSize; i++) {
-            while(true) {
+
+        for (int i = 0; i < sampleSize; i++) {
+            while (true) {
                 int nextPos = random.nextInt(populationSize);
                 if (used.contains(nextPos)) {
                     continue;
                 }
 
                 List<String> row = this.original.getRow(nextPos);
-                
+
                 finalRows.add(row);
                 originalAnonymous.getMember().addRow(row);
-                
+
                 used.add(nextPos);
                 break;
             }
         }
-        
+
         for (int i = 0; i < this.original.getNumberOfRows(); i++) {
             if (!used.contains(i)) {
                 List<String> row = this.original.getRow(i);
@@ -120,17 +120,17 @@ public class Sampling implements AnonymizationAlgorithm {
                 anonymizedNonAnonymous.getMember().addRow(row);
             }
         }
-        
+
         Partition anonymizedAnonymous = new InMemoryPartition(finalRows);
-        
+
         originalAnonymous.setAnonymous(true);
         originalNonAnonymous.setAnonymous(false);
         this.originalPartitions = Arrays.asList(originalAnonymous, originalNonAnonymous);
-        
+
         anonymizedAnonymous.setAnonymous(true);
         anonymizedNonAnonymous.setAnonymous(false);
         this.anonymizedPartitions = Arrays.asList(anonymizedAnonymous, anonymizedNonAnonymous);
-                
+
         return new IPVDataset(
                 finalRows,
                 original.getSchema(),

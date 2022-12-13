@@ -85,20 +85,20 @@ public class DateTimeIdentifier extends AbstractIdentifier {
             new Tuple<>("M/d/y 'at' K:mma", Pattern.compile("^\\d{1,2}/\\d{1,2}/\\d{2,} at \\d{1,2}:\\d{2}[A|P]M$")),
             new Tuple<>("MMMM d 'at' Ka", Pattern.compile("^\\w{3,} \\d{1,2} at \\d{1,2}[A|P]M$")),
     };
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DIGIT;
     }
-    
-    private static final DateTimeFormatter dateFormats[];
-    private static final DateTimeFormatter ampmDateFormats[];
+
+    private static final DateTimeFormatter[] dateFormats;
+    private static final DateTimeFormatter[] ampmDateFormats;
 
     static {
         dateFormats = new DateTimeFormatter[patterns.length];
         ampmDateFormats = new DateTimeFormatter[ampmPatterns.length];
 
-        for(int i=0; i<patterns.length; i++) {
+        for (int i = 0; i < patterns.length; i++) {
             dateFormats[i] = new DateTimeFormatterBuilder()
                     .parseCaseInsensitive()
                     .appendPattern((patterns[i].getFirst()))
@@ -110,7 +110,7 @@ public class DateTimeIdentifier extends AbstractIdentifier {
                     .withZone(ZoneOffset.systemDefault());
         }
 
-        for(int i=0; i<ampmPatterns.length; i++) {
+        for (int i = 0; i < ampmPatterns.length; i++) {
             ampmDateFormats[i] = new DateTimeFormatterBuilder()
                     .parseCaseInsensitive()
                     .appendPattern((ampmPatterns[i].getFirst()))
@@ -119,7 +119,7 @@ public class DateTimeIdentifier extends AbstractIdentifier {
                     .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
                     .toFormatter()
                     .withZone(ZoneOffset.systemDefault());
-        } 
+        }
     }
 
     @Override
@@ -134,32 +134,31 @@ public class DateTimeIdentifier extends AbstractIdentifier {
      * @return the date format
      */
     public Tuple<DateTimeFormatter, TemporalAccessor> matchingFormat(String data) {
-        
+
         int digits = 0;
-        
-        for(int i = 0; i < data.length(); i++) {
+
+        for (int i = 0; i < data.length(); i++) {
             if (Character.isDigit(data.charAt(i))) {
                 digits++;
             }
         }
-        
-        if(digits == 0) {
+
+        if (digits == 0) {
             return null;
         }
-       
+
         data = data.replaceAll("(?<=\\d)(st|nd|rd|th)", "").replaceAll("\\s+", " ");
-       
+
         if (data.endsWith("am")) {
             data = data.substring(0, data.length() - 2) + "AM";
-        }
-        else if (data.endsWith("pm")) {
+        } else if (data.endsWith("pm")) {
             data = data.substring(0, data.length() - 2) + "PM";
         }
-        
+
         return checkAllPaterns(data);
     }
 
-    private Tuple<DateTimeFormatter,TemporalAccessor> checkAllPaterns(String data) {
+    private Tuple<DateTimeFormatter, TemporalAccessor> checkAllPaterns(String data) {
         Tuple<DateTimeFormatter, TemporalAccessor> f = checkPatterns(data, patterns, dateFormats);
         if (f != null) {
             return f;
@@ -167,10 +166,10 @@ public class DateTimeIdentifier extends AbstractIdentifier {
 
         return checkPatterns(data, ampmPatterns, ampmDateFormats);
     }
-    
-    private Tuple<DateTimeFormatter, TemporalAccessor> 
-                checkPatterns(String data, Tuple<String,Pattern>[] patterns, DateTimeFormatter[] dateFormats) {
-        
+
+    private Tuple<DateTimeFormatter, TemporalAccessor>
+    checkPatterns(String data, Tuple<String, Pattern>[] patterns, DateTimeFormatter[] dateFormats) {
+
         for (int i = 0; i < patterns.length; i++) {
             Pattern p = patterns[i].getSecond();
             if (p.matcher(data).matches()) {
@@ -197,28 +196,28 @@ public class DateTimeIdentifier extends AbstractIdentifier {
      * @param data the data
      * @return the tuple
      */
-    
+
     private final static String[] temporalSubstrings = {"ago", "last", "next", "every", "day", "week", "month", "year"};
-    
+
     public boolean isTemporal(String identifier) {
         String p = identifier.toLowerCase();
-        
-        for(String pattern: temporalSubstrings) {
+
+        for (String pattern : temporalSubstrings) {
             if (p.contains(pattern)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     @Override
     public boolean isOfThisType(String data) {
-        
+
         if (data.length() <= 6 || data.length() >= 64) {
             return false;
         }
-        
+
         return matchingFormat(data.trim()) != null;
 
     }

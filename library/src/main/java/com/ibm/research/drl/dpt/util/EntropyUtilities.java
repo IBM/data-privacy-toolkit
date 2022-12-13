@@ -12,8 +12,8 @@ public class EntropyUtilities {
     public static double calculateEntropy(Collection<Long> values, Long total) {
 
         double sum1 = 0d;
-        for(Long counter: values) {
-            double v = ((double)counter) / ((double) total);
+        for (Long counter : values) {
+            double v = ((double) counter) / ((double) total);
             sum1 += v * Math.log(v);
         }
 
@@ -21,6 +21,6 @@ public class EntropyUtilities {
     }
 
     public static double calculateEntropy(Histogram histogram, int total) {
-        return calculateEntropy(histogram.values(), (long)total);
+        return calculateEntropy(histogram.values(), (long) total);
     }
 }

@@ -40,7 +40,7 @@ public class RaceEthnicityIdentifier extends AbstractManagerBasedIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;

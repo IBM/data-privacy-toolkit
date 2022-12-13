@@ -44,17 +44,15 @@ public final class JSONPathExtractor {
 
     private static ValueNode createNodeValue(JsonNode node) {
         JsonNodeType type = node.getNodeType();
-        switch(type) {
+        switch (type) {
             case STRING:
                 return new TextNode(node.asText());
             case NUMBER:
                 if (node.isDouble()) {
                     return new DoubleNode(node.asDouble());
-                }
-                else if (node.isInt()) {
+                } else if (node.isInt()) {
                     return new IntNode(node.asInt());
-                }
-                else if (node.isLong()){
+                } else if (node.isLong()) {
                     return new LongNode(node.asLong());
                 }
                 break;

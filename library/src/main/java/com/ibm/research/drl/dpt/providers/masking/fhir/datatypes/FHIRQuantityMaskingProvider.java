@@ -50,7 +50,7 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
     public JsonNode mask(JsonNode node) {
         try {
             FHIRQuantity obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRQuantity.class);
-            FHIRQuantity maskedObj= mask(obj);
+            FHIRQuantity maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();

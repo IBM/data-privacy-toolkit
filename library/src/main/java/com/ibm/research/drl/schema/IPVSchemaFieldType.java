@@ -1,8 +1,8 @@
 /*******************************************************************
-*                                                                 *
-* Copyright IBM Corp. 2015                                        *
-*                                                                 *
-*******************************************************************/
+ *                                                                 *
+ * Copyright IBM Corp. 2015                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.schema;
 
 /**
@@ -54,5 +54,5 @@ public enum IPVSchemaFieldType {
     /**
      * Timestamp ipv schema field type.
      */
-    TIMESTAMP;
+    TIMESTAMP
 }

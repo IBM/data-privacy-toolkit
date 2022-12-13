@@ -78,10 +78,9 @@ public class VINMaskingProvider extends AbstractMaskingProvider {
             wmi = vinManager.getRandomWMI(wmi);
         }
 
-        if(!this.preserveVDS) {
+        if (!this.preserveVDS) {
             vds = RandomGenerators.randomUIDGeneratorWithInclusions(6, allowedCharacters);
-        }
-        else {
+        } else {
             vds = identifier.substring(3, 9);
         }
 

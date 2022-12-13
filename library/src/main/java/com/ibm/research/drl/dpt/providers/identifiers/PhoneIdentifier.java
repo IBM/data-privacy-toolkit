@@ -82,7 +82,7 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
             if (identifier.length() < 6) {
                 return null;
             }
-            
+
             String prefix = matcher.group("prefix");
 
             String countryCode = matcher.group("countryCode");
@@ -94,7 +94,7 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
             String areaCode = matcher.group("areaCode");
             String number = matcher.group("number");
 
-            return new PhoneNumber((null == prefix? "+" : prefix), countryCode, separator, number, areaCode, null != prefix);
+            return new PhoneNumber((null == prefix ? "+" : prefix), countryCode, separator, number, areaCode, null != prefix);
         }
     }
 
@@ -108,8 +108,8 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
         if (data.length() < 6) {
             return null;
         }
-        
-        for(Pattern pattern: phonePatterns) {
+
+        for (Pattern pattern : phonePatterns) {
             final Matcher m = pattern.matcher(data);
             if (!m.matches()) {
                 continue;
@@ -138,26 +138,26 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
 
     @Override
     public Tuple<Boolean, Tuple<Integer, Integer>> isOfThisTypeWithOffset(String data) {
-      
+
         if (data.length() > 64) {
             return new Tuple<>(false, null);
         }
-        
+
         final long numberOfDigits = countDigits(data);
-        
+
         if (numberOfDigits < 7 || numberOfDigits > 15) {
             return new Tuple<>(false, null);
         }
-        
+
         return Arrays.stream(phonePatterns).map(
-                pattern -> {
-                    return pattern.matcher(data);
-                }
-        ).filter(Matcher::matches).
+                        pattern -> {
+                            return pattern.matcher(data);
+                        }
+                ).filter(Matcher::matches).
                 filter(this::limitLength).
                 map(
-                matcher -> new Tuple<>(true, new Tuple<>(matcher.start(1), matcher.end(1) - matcher.start(1)))
-        ).reduce((a, b) -> a).orElse(new Tuple<>(false, null));
+                        matcher -> new Tuple<>(true, new Tuple<>(matcher.start(1), matcher.end(1) - matcher.start(1)))
+                ).reduce((a, b) -> a).orElse(new Tuple<>(false, null));
     }
 
     private boolean limitLength(Matcher matcher) {
@@ -165,13 +165,12 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
         return 7 <= numberOfDigits && numberOfDigits <= 15;
     }
 
-    
-    
+
     @Override
     public boolean isPOSIndependent() {
         return true;
     }
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DIGIT;

@@ -16,8 +16,7 @@ public class FormatUtils {
             } else if (nextTitleCase) {
                 c = Character.toUpperCase(c);
                 nextTitleCase = false;
-            }
-            else {
+            } else {
                 c = Character.toLowerCase(c);
             }
 

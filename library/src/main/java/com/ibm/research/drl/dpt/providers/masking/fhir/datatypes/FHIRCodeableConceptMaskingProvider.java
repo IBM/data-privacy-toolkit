@@ -54,7 +54,7 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
         }
 
         Collection<FHIRCoding> maskedCodings = new ArrayList<>();
-        for(FHIRCoding coding: codings) {
+        for (FHIRCoding coding : codings) {
             maskedCodings.add(this.codingMaskingProvider.mask(coding));
         }
 

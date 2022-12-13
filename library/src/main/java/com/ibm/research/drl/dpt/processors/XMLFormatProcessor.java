@@ -37,7 +37,7 @@ public class XMLFormatProcessor extends AbstractMultipathFormatProcessor {
             return Collections.singletonList(
                     new XMLRecord(document)
             );
-        } catch ( SAXException e) {
+        } catch (SAXException e) {
             throw new RuntimeException("Error parsing the document " + e.getMessage());
         }
     }

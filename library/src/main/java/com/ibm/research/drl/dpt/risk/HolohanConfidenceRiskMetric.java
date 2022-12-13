@@ -23,7 +23,9 @@ public class HolohanConfidenceRiskMetric implements RiskMetric {
     private double conf = 0.0;
 
     @Override
-    public String getName() { return "HolohanConfidenceRiskMetric"; }
+    public String getName() {
+        return "HolohanConfidenceRiskMetric";
+    }
 
     @Override
     public String getShortName() {
@@ -61,7 +63,7 @@ public class HolohanConfidenceRiskMetric implements RiskMetric {
                 cumulativeProbability += individualProbabilities[i];
 
                 if (cumulativeProbability > 1 - conf) {
-                    riskOfEquivalenceClass = (equivalenceClassSize + i > 1) ? 1.0/(equivalenceClassSize + i - 1) : Double.POSITIVE_INFINITY;
+                    riskOfEquivalenceClass = (equivalenceClassSize + i > 1) ? 1.0 / (equivalenceClassSize + i - 1) : Double.POSITIVE_INFINITY;
                     break;
                 }
             }
@@ -76,9 +78,12 @@ public class HolohanConfidenceRiskMetric implements RiskMetric {
     public RiskMetric initialize(IPVDataset original, IPVDataset anonymized, List<ColumnInformation> columnInformation, int k, Map<String, String> options) {
         this.N = Integer.parseInt(options.get(POPULATION));
         this.n = anonymized.getNumberOfRows();
-        if (options.containsKey(CONFIDENCE)) { this.conf = Double.parseDouble(options.get(CONFIDENCE)); }
+        if (options.containsKey(CONFIDENCE)) {
+            this.conf = Double.parseDouble(options.get(CONFIDENCE));
+        }
 
-        if (N < n) throw new IllegalArgumentException("Population parameter must be larger than the dataset (sample) size");
+        if (N < n)
+            throw new IllegalArgumentException("Population parameter must be larger than the dataset (sample) size");
 
         this.equivalenceClassesOverAnonymizedDataset = AnonymizationUtils.generatePartitionsForLinking(anonymized, columnInformation);
 
@@ -100,7 +105,8 @@ public class HolohanConfidenceRiskMetric implements RiskMetric {
 
             if (options.containsKey(CONFIDENCE)) {
                 conf = Double.parseDouble(options.get(CONFIDENCE));
-                if (conf < 0 || conf > 1) throw new IllegalArgumentException("CONFIDENCE, when specified, must be between 0 and 1");
+                if (conf < 0 || conf > 1)
+                    throw new IllegalArgumentException("CONFIDENCE, when specified, must be between 0 and 1");
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("POPULATION value is not a valid integer: " + nString);

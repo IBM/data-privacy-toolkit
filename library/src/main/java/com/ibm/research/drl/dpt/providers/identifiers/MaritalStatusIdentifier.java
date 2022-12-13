@@ -11,9 +11,10 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class MaritalStatusIdentifier extends AbstractManagerBasedIdentifier {
-    private Collection<String> appropriateNames = Arrays.asList("Marital Status");
+    private final Collection<String> appropriateNames = List.of("Marital Status");
     private final MaritalStatusManager maritalStatusManager = MaritalStatusManager.getInstance();
 
     @Override

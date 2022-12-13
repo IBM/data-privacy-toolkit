@@ -21,9 +21,9 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
             "PTA", "LPN", "DDS", "NP", "CDE", "OD", "DOE", "DMD", "MCF", "APRN", "PHD", "Ph.D", "PA"));
 
     private static final Set<String> titlesWithTrailingDots = new HashSet<>(Arrays.asList("M.D.", "Ph.D."));
-   
-    private static final Set<String> specialNamePrefixes  = new HashSet<>(Arrays.asList("van", "de", "la", "der", "den"));
-    
+
+    private static final Set<String> specialNamePrefixes = new HashSet<>(Arrays.asList("van", "de", "la", "der", "den"));
+
     @Override
     public ProviderType getType() {
         return ProviderType.NAME;
@@ -40,7 +40,7 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
     }
 
     /* returns true if the name looks valid and the length of the medical title */
-    
+
     private Tuple<Boolean, Tuple<Boolean, Integer>> validateMedicalName(String data, int offset) {
         try {
             data = data.substring(offset);
@@ -83,11 +83,11 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
                 if (containsIllegalCharacters(tokens[i])) {
                     return new Tuple<>(false, null);
                 }
-               
+
                 if (isSpecialNamePrefix(tokens[i])) {
                     continue;
                 }
-                
+
                 boolean tc = isTitlecase(tokens[i]);
                 boolean uc = isAllUppercase(tokens[i]);
 
@@ -141,58 +141,58 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
     private boolean containsIllegalCharacters(String token) {
         for (int i = 0; i < token.length(); i++) {
             char ch = token.charAt(i);
-            
+
             if (ch == '/') {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     private boolean isAbbreviation(String token) {
         //John J. Smith
         //John H Smith
-        return (token.length() >= 2 && token.length() <= 3 && token.endsWith(".")) 
+        return (token.length() >= 2 && token.length() <= 3 && token.endsWith("."))
                 || (token.length() == 1 && Character.isUpperCase(token.charAt(0)));
     }
-    
+
 
     public static boolean isMedicalTitle(String data) {
         if (titlesWithTrailingDots.contains(data)) {
             return true;
         }
-        
+
         if (data.endsWith(".")) {
             data = data.substring(0, data.length() - 1);
         }
-        
+
         String[] tokens = data.split("/");
-        
-        for(String token: tokens) {
+
+        for (String token : tokens) {
             if (titles.contains(token)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     private final static Pattern invalidCharactersPatterns = Pattern.compile("[^, \\.\\-a-zA-Z\\(\\)\\/']+");
-            
+
     @Override
     public Tuple<Boolean, Tuple<Integer, Integer>> isOfThisTypeWithOffset(String data) {
         if (data.endsWith(":")) {
             data = data.substring(0, data.length() - 1);
         }
-        
+
         if (invalidCharactersPatterns.matcher(data).find()) {
             return new Tuple<>(false, null);
         }
 
         int offset = 0;
 
-        for(int i = 0; i < data.length(); i++) {
+        for (int i = 0; i < data.length(); i++) {
             char ch = data.charAt(i);
             if (Character.isWhitespace(ch) || ch == ',') {
                 offset += 1;
@@ -200,24 +200,23 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
                 break;
             }
         }
-       
+
         int depth = data.length() - offset;
         boolean hasPrefix = false;
 
         //In case it starts with a prefix, like "Dr. John Doe, MD" or "Dr.John Doe" 
-        for(String prefix: prefixes) {
+        for (String prefix : prefixes) {
             if ((data.length() - offset) <= prefix.length()) {
                 continue;
             }
-            
-            if(data.substring(offset, offset + prefix.length()).toUpperCase().equals(prefix.toUpperCase())) {
+
+            if (data.substring(offset, offset + prefix.length()).equalsIgnoreCase(prefix)) {
                 int prefixOffset = prefix.length();
-                
-                for(int i = offset + prefixOffset; i < data.length(); i++) {
+
+                for (int i = offset + prefixOffset; i < data.length(); i++) {
                     if (Character.isWhitespace(data.charAt(i))) {
                         prefixOffset++;
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -233,37 +232,34 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
         if (!titleLocation.getFirst()) {
             return new Tuple<>(false, null);
         }
-        
+
         boolean containsTitle = titleLocation.getSecond().getFirst();
-        
+
         if (!hasPrefix && !containsTitle) {
             return new Tuple<>(false, null);
         }
-        
+
         depth -= titleLocation.getSecond().getSecond();
-       
-        for(int i = data.length() - 1; i >= 0; i--) {
+
+        for (int i = data.length() - 1; i >= 0; i--) {
             char ch = data.charAt(i);
             if (Character.isWhitespace(ch) || ch == ',') {
                 depth -= 1;
-            }
-            else {
+            } else {
                 break;
             }
         }
-        
-       
-        
+
+
         if (data.endsWith("'s")) {
             depth -= 2;
-        }
-        else if (data.endsWith("'")) {
+        } else if (data.endsWith("'")) {
             depth -= 1;
         }
-        
+
         return new Tuple<>(true, new Tuple<>(offset, depth));
     }
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;

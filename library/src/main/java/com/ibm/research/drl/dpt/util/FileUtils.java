@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class FileUtils {
 
-    public static Collection<String> loadLines(String fileName) throws FileNotFoundException{
+    public static Collection<String> loadLines(String fileName) throws FileNotFoundException {
         List<String> list;
 
         BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -33,7 +33,7 @@ public class FileUtils {
 
         buffer.flush();
 
-        return new String(buffer.toByteArray());
+        return buffer.toString();
     }
 
     public static byte[] inputStreamToBytes(InputStream is) throws IOException {
