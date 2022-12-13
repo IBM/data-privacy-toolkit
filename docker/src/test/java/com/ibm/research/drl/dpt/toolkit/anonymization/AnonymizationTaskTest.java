@@ -20,13 +20,13 @@ public class AnonymizationTaskTest {
 
     @Test
     public void testAnonymizationTaskHappyPath() throws Exception {
-        try (InputStream inputStream = AnonymizationTaskTest.class.getResourceAsStream("/configuration_test_anonymization.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/configuration_test_anonymization.json")) {
             AnonymizationTask task = mapper.readValue(inputStream, AnonymizationTask.class);
 
             assertNotNull(task);
 
             try (
-                    InputStream input = AnonymizationTaskTest.class.getResourceAsStream("/healthcare-dataset.txt");
+                    InputStream input = this.getClass().getResourceAsStream("/healthcare-dataset.txt");
                     OutputStream output = new ByteArrayOutputStream();
             ) {
                 task.processFile(input, output);
