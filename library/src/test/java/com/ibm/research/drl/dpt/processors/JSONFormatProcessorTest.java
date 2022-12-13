@@ -235,8 +235,7 @@ public class JSONFormatProcessorTest {
     public void testIdentifyJSONElementsInnerObjects2() throws Exception {
         String jsonS = "{\"a\" : [{\"a\": \"foo@gmail.com\"}, {\"a\" : \"boo@gmail.com\"}, null, {\"a\": \"goo@gmail.com\"}]}";
 
-        IdentificationReport allResults =
-                new JSONFormatProcessor().identifyTypesStream(new ByteArrayInputStream(jsonS.getBytes()), DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
+        IdentificationReport allResults = new JSONFormatProcessor().identifyTypesStream(new ByteArrayInputStream(jsonS.getBytes()), DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
         
         Map<String, IdentifiedType> results = allResults.getBestTypes();
 
@@ -298,8 +297,7 @@ public class JSONFormatProcessorTest {
     public void testIdentifyStreamJSON() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/fhir/deviceExampleOneLine.json");
 
-        IdentificationReport results
-                = new JSONFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
+        IdentificationReport results = new JSONFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
 
         assertThat(results.getRawResults().size(), not(0));
     }

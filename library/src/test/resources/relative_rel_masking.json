@@ -1,0 +1,23 @@
+{
+  "toBeMasked": {
+    "/a/b/*/name" : "DUMMY"
+  },
+
+  "inputFormat" : "JSON",
+  "outputFormat" : "JSON",
+
+  "predefinedRelationships" : [
+    {
+      "fieldName": "/a/b/*/name",
+      "relationshipType": "EQUALS",
+      "valueClass": "TEXT",
+      "operands": [
+        {
+          "name": "id",
+          "type": "TEXT"
+        }
+      ]
+    }
+  ]
+
+}

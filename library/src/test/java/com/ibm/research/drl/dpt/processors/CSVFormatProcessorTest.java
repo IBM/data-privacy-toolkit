@@ -41,6 +41,7 @@ public class CSVFormatProcessorTest {
     }
 
     @Test
+    @Disabled("Free text support to be re-enabled")
     public void testWithMaskingAndFreetext() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         try (
@@ -291,8 +292,8 @@ public class CSVFormatProcessorTest {
             identifiedTypes.put("Column 1", new DataMaskingTarget(ProviderType.CITY, "Column 1"));
             identifiedTypes.put("Column 2", new DataMaskingTarget(ProviderType.COUNTRY, "Column 2"));
 
-            Map<String, FieldRelationship> predifinedRelationships = new HashMap<>();
-            predifinedRelationships.put("Column 2", new FieldRelationship(
+            Map<String, FieldRelationship> predefinedRelationships = new HashMap<>();
+            predefinedRelationships.put("Column 2", new FieldRelationship(
                     ValueClass.LOCATION,
                     RelationshipType.LINKED,
                     "Column 1",
@@ -303,7 +304,7 @@ public class CSVFormatProcessorTest {
 
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.CSV, DataTypeFormat.CSV,
                     identifiedTypes, false,
-                    predifinedRelationships, new CSVDatasetOptions(false, ',', '"', false));
+                    predefinedRelationships, new CSVDatasetOptions(false, ',', '"', false));
             MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
             new CSVFormatProcessor().maskStream(inputStream, output, factory, dataMaskingOptions, Collections.emptySet(), Collections.emptyMap());
 
