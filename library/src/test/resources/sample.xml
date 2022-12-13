@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <to>Tove</to>
+  <from>Jani</from>
+  <email>lala@gmail.com</email>
+  <heading>Reminder</heading>
+  <numbers>
+    <value>1</value>
+    <value>2</value>
+    <value>3</value>
+  </numbers>
+  <body>Don't forget me this weekend!</body>
+</note>

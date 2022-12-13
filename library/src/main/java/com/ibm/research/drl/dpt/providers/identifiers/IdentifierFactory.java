@@ -105,7 +105,8 @@ public final class IdentifierFactory implements Serializable {
     }
 
     private final IdentifierFactoryHelper helper;
-    
+
+    @Deprecated
     public static IdentifierFactory getDefaultIdentifierFactory() {
         return DEFAULT_IDENTIFIER_FACTORY;
     }
@@ -127,6 +128,7 @@ public final class IdentifierFactory implements Serializable {
      *
      * @return the collection
      */
+    @Deprecated
     public static Collection<Identifier> defaultIdentifiers() {
         return getDefaultIdentifierFactory().availableIdentifiers();
     }
