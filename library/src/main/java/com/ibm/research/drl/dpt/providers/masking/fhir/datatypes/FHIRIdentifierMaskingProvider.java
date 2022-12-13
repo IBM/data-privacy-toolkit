@@ -75,7 +75,7 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
     public JsonNode mask(JsonNode node) {
         try {
             FHIRIdentifier obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRIdentifier.class);
-            FHIRIdentifier maskedObj= mask(obj);
+            FHIRIdentifier maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
@@ -106,7 +106,7 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
             identifier.setAssigner(assignerMaskingProvider.mask(identifier.getAssigner()));
         }
 
-        if(this.maskValue && !isAlreadyMasked(VALUE_PATH)) {
+        if (this.maskValue && !isAlreadyMasked(VALUE_PATH)) {
             String value = identifier.getValue();
             if (value != null) {
                 identifier.setValue(maskValue(value));

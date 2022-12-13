@@ -36,8 +36,8 @@ public class NullMaskingProvider extends AbstractMaskingProvider {
      * @param random               the random
      * @param maskingConfiguration the masking configuration
      */
-    public  NullMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
-       this(maskingConfiguration);
+    public NullMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
+        this(maskingConfiguration);
     }
 
     /**
@@ -50,7 +50,7 @@ public class NullMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String mask(String identifier){
+    public String mask(String identifier) {
         if (this.returnNull) {
             return null;
         }

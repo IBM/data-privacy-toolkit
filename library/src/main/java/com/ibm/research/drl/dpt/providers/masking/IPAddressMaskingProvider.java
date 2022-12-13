@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.IPAddressIdentifier;
 import com.ibm.research.drl.dpt.util.RandomGenerators;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
@@ -79,11 +79,10 @@ public class IPAddressMaskingProvider extends AbstractMaskingProvider {
             return identifier;
         }
 
-        for(int i=0; i<parts.length; i++) {
-            if(i < this.preservedPrefixes) {
+        for (int i = 0; i < parts.length; i++) {
+            if (i < this.preservedPrefixes) {
                 maskedParts[i] = parts[i];
-            }
-            else {
+            } else {
                 maskedParts[i] = randomSubnet();
             }
         }
@@ -104,17 +103,15 @@ public class IPAddressMaskingProvider extends AbstractMaskingProvider {
         String[] parts = identifier.split(":", -1);
         String[] maskedParts = new String[parts.length];
 
-        for(int i=0; i<parts.length; i++) {
+        for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
 
             if (part.isEmpty()) {
                 maskedParts[i] = "";
-            }
-            else if (ipAddressIdentifier.isIPv4(part)) {
+            } else if (ipAddressIdentifier.isIPv4(part)) {
                 maskedParts[i] = ipv4mask(part);
-            }
-            else {
-                maskedParts[i] = RandomGenerators.randomHexSequence(Math.max(part.length() / 2, 1) );
+            } else {
+                maskedParts[i] = RandomGenerators.randomHexSequence(Math.max(part.length() / 2, 1));
             }
 
         }
@@ -130,7 +127,7 @@ public class IPAddressMaskingProvider extends AbstractMaskingProvider {
      * @param isIPv4     the is i pv 4
      * @return the string
      */
-/* TODO: find a way to protect this */
+    /* TODO: find a way to protect this */
     public String directMask(String identifier, boolean isIPv4) {
         if (isIPv4) {
             return ipv4mask(identifier);
@@ -143,8 +140,7 @@ public class IPAddressMaskingProvider extends AbstractMaskingProvider {
     public String mask(String identifier) {
         if (ipAddressIdentifier.isIPv4(identifier)) {
             return ipv4mask(identifier);
-        }
-        else if(ipAddressIdentifier.isIPv6(identifier)) {
+        } else if (ipAddressIdentifier.isIPv6(identifier)) {
             return ipv6mask(identifier);
         }
 

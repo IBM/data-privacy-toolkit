@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataMaskingOptions implements Serializable {
-    
+
     private final DataTypeFormat inputFormat;
     private final DataTypeFormat outputFormat;
     private final boolean identifyRelationships;
 
     private final DatasetOptions datasetOptions;
-    
+
     private final Map<String, DataMaskingTarget> toBeMasked;
     private final Map<String, FieldRelationship> predefinedRelationships;
 
@@ -48,11 +48,11 @@ public class DataMaskingOptions implements Serializable {
         this.identifyRelationships = identifyRelationships;
 
         this.datasetOptions = datasetOptions;
-        
+
         this.toBeMasked = toBeMasked;
         this.predefinedRelationships = predefinedRelationships;
-        
-        if(!validateRelationships(predefinedRelationships)) {
+
+        if (!validateRelationships(predefinedRelationships)) {
             throw new RuntimeException("Cyclic dependency detected");
         }
     }
@@ -77,7 +77,7 @@ public class DataMaskingOptions implements Serializable {
             boolean identifyRelationships,
             @JsonProperty("predefinedRelationships")
             JsonNode predefinedRelationships
-            ) throws IOException {
+    ) throws IOException {
         this.inputFormat = inputFormat;
         this.outputFormat = outputFormat;
         this.identifyRelationships = identifyRelationships;
@@ -94,7 +94,7 @@ public class DataMaskingOptions implements Serializable {
         Map<DataTypeFormat, DataFormatProperties> formatPropertiesMap = DataFormatPropertiesHelper.buildProperties(this.getClass().getResourceAsStream("/dataformat.json"));
         validate(formatPropertiesMap);
 
-        if(!validateRelationships(this.predefinedRelationships)) {
+        if (!validateRelationships(this.predefinedRelationships)) {
             throw new RuntimeException("Cyclic dependency detected");
         }
     }
@@ -113,13 +113,13 @@ public class DataMaskingOptions implements Serializable {
 
     }
 
-    public static boolean validateRelationships(Map<String,FieldRelationship> predefinedRelationships) {
+    public static boolean validateRelationships(Map<String, FieldRelationship> predefinedRelationships) {
         return null == predefinedRelationships || predefinedRelationships.isEmpty() || hasNoCyclicDependencies(predefinedRelationships);
     }
 
     private static boolean hasNoCyclicDependencies(Map<String, FieldRelationship> predefinedRelationships) {
-        for(String fieldName: predefinedRelationships.keySet()) {
-            if (hasCyclicDependencies(fieldName, predefinedRelationships))  {
+        for (String fieldName : predefinedRelationships.keySet()) {
+            if (hasCyclicDependencies(fieldName, predefinedRelationships)) {
                 return false;
             }
         }
@@ -127,18 +127,18 @@ public class DataMaskingOptions implements Serializable {
         return true;
     }
 
-    private static boolean hasCyclicDependencies(String fieldName, Map<String,FieldRelationship> predefinedRelationships) {
+    private static boolean hasCyclicDependencies(String fieldName, Map<String, FieldRelationship> predefinedRelationships) {
         FieldRelationship fieldRelationship = predefinedRelationships.get(fieldName);
         Queue<String> dependencies = new LinkedList<>();
 
-        for(RelationshipOperand operand: fieldRelationship.getOperands()) {
+        for (RelationshipOperand operand : fieldRelationship.getOperands()) {
             dependencies.add(operand.getName());
         }
 
         Set<String> visited = new HashSet<>();
         visited.add(fieldName);
 
-        while(!dependencies.isEmpty()) {
+        while (!dependencies.isEmpty()) {
             String dependency = dependencies.poll();
             FieldRelationship f = predefinedRelationships.get(dependency);
 
@@ -146,7 +146,7 @@ public class DataMaskingOptions implements Serializable {
                 continue;
             }
 
-            for(RelationshipOperand operand: f.getOperands()) {
+            for (RelationshipOperand operand : f.getOperands()) {
                 String operandName = operand.getName();
                 if (visited.contains(operandName)) {
                     return true;
@@ -177,7 +177,7 @@ public class DataMaskingOptions implements Serializable {
     public Map<String, DataMaskingTarget> getToBeMasked() {
         return toBeMasked;
     }
-    
+
     public Map<String, FieldRelationship> getPredefinedRelationships() {
         return predefinedRelationships;
     }

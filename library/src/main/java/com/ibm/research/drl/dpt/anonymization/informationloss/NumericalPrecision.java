@@ -19,7 +19,9 @@ public class NumericalPrecision implements InformationMetric {
     private List<ColumnInformation> columnInformationList;
 
     @Override
-    public String getName() { return "Numerical Precision"; }
+    public String getName() {
+        return "Numerical Precision";
+    }
 
     @Override
     public String getShortName() {
@@ -61,11 +63,11 @@ public class NumericalPrecision implements InformationMetric {
         List<InformationLossResult> columnResults = reportPerQuasiColumn();
 
         double sum = 0.0;
-        for(InformationLossResult lossResult: columnResults) {
+        for (InformationLossResult lossResult : columnResults) {
             sum += lossResult.getValue();
         }
 
-        return sum / (double)columnResults.size();
+        return sum / (double) columnResults.size();
     }
 
     private InformationLossResult reportForColumn(int columnIndex) {
@@ -83,7 +85,7 @@ public class NumericalPrecision implements InformationMetric {
         double globalRange = getGlobalRange(original, columnIndex);
         double precision = 0.0;
 
-        for(int i = 0; i < numberOfRows; i++) {
+        for (int i = 0; i < numberOfRows; i++) {
             String interval = anonymized.get(i, columnIndex);
             double range = intervalToRange(interval);
 
@@ -127,7 +129,7 @@ public class NumericalPrecision implements InformationMetric {
         List<InformationLossResult> results = new ArrayList<>();
         int columnIndex = 0;
 
-        for(ColumnInformation columnInformation: columnInformationList) {
+        for (ColumnInformation columnInformation : columnInformationList) {
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 columnIndex++;
                 continue;
@@ -144,7 +146,7 @@ public class NumericalPrecision implements InformationMetric {
 
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
-                                        List< ColumnInformation > columnInformationList, InformationMetricOptions options) {
+                                        List<ColumnInformation> columnInformationList, InformationMetricOptions options) {
         this.original = original;
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;

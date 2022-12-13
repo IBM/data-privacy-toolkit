@@ -1,8 +1,8 @@
 /*******************************************************************
-*                                                                 *
-* Copyright IBM Corp. 2015                                        *
-*                                                                 *
-*******************************************************************/
+ *                                                                 *
+ * Copyright IBM Corp. 2015                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.dpt.configuration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -97,8 +97,8 @@ public class ConfigurationOption implements Serializable {
 
         if (Objects.isNull(value) || value instanceof Serializable) {
             out.writeObject(value);
-        } else if ( value instanceof JsonNode ) {
-            out.writeObject( value.toString().getBytes());
+        } else if (value instanceof JsonNode) {
+            out.writeObject(value.toString().getBytes());
         } else {
             throw new RuntimeException("Not serializable: " + value.getClass().getCanonicalName());
         }

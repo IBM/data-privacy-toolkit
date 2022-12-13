@@ -16,7 +16,7 @@ public class DBChainRetrieval implements ChainRetrieval {
     private final String tableName;
     private final List<DictionaryEntry> lastState;
 
-    public DBChainRetrieval(String host, String username, String password,String tableName) {
+    public DBChainRetrieval(String host, String username, String password, String tableName) {
         try {
             this.connection = DriverManager.getConnection(host, username, password);
             this.connection.setAutoCommit(true);

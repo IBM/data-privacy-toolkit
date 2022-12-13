@@ -28,7 +28,10 @@ public class MSISDNManager {
     private final Map<String, Set<String>> areaCodeMapByCountry;
 
     private final static MSISDNManager MSISDN_MANAGER = new MSISDNManager();
-    public static MSISDNManager getInstance() { return MSISDN_MANAGER; }
+
+    public static MSISDNManager getInstance() {
+        return MSISDN_MANAGER;
+    }
 
     /**
      * Instantiates a new Msisdn manager.
@@ -45,7 +48,7 @@ public class MSISDNManager {
     private Map<? extends String, ? extends Set<String>> readAreaCodeList(Collection<ResourceEntry> entries) {
         Map<String, Set<String>> codes = new HashMap<>();
 
-        for(ResourceEntry entry: entries) {
+        for (ResourceEntry entry : entries) {
             InputStream inputStream = entry.createStream();
             try (CSVParser reader = Readers.createCSVReaderFromStream(inputStream)) {
                 for (CSVRecord line : reader) {
@@ -81,34 +84,32 @@ public class MSISDNManager {
         }
 
         if (data.length() == 10) {
-            for(int i = 0; i < data.length(); i++) {
+            for (int i = 0; i < data.length(); i++) {
                 char c = data.charAt(i);
-                if (c < '0' || c > '9'){
+                if (c < '0' || c > '9') {
                     return false;
                 }
             }
 
             String areaCode = data.substring(0, 3);
-            if(areaCodeMap.contains(areaCode)) {
-                return true;
-            }
+            return areaCodeMap.contains(areaCode);
         }
 
         return false;
     }
 
-   private Map<? extends String, ? extends String> readCountryCodeList(Collection<ResourceEntry> entries) {
+    private Map<? extends String, ? extends String> readCountryCodeList(Collection<ResourceEntry> entries) {
         Map<String, String> names = new HashMap<>();
 
-       for(ResourceEntry entry: entries) {
-           try (CSVParser reader = Readers.createCSVReaderFromStream(entry.createStream())) {
+        for (ResourceEntry entry : entries) {
+            try (CSVParser reader = Readers.createCSVReaderFromStream(entry.createStream())) {
                 for (CSVRecord line : reader) {
-                   names.put(line.get(0), line.get(1));
-               }
-           } catch (IOException | NullPointerException e) {
-               e.printStackTrace();
-           }
-       }
+                    names.put(line.get(0), line.get(1));
+                }
+            } catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
 
         return names;
     }

@@ -16,7 +16,6 @@ import java.util.Map;
 
 /**
  * The type Dummy masking provider.
- *
  */
 public class DummyMaskingProvider extends AbstractMaskingProvider {
 

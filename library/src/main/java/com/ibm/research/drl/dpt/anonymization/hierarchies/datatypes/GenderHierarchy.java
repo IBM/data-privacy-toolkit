@@ -14,14 +14,17 @@ import java.util.Collection;
 public class GenderHierarchy extends MaterializedHierarchy {
     private final static GenderManager genderManager = GenderManager.getInstance();
 
-    private static GenderHierarchy instance = new GenderHierarchy();
-    public static GenderHierarchy getInstance() {return instance;}
+    private static final GenderHierarchy instance = new GenderHierarchy();
+
+    public static GenderHierarchy getInstance() {
+        return instance;
+    }
 
     private GenderHierarchy() {
         super();
 
         Collection<Sex> genders = genderManager.getItemList();
-        for(Sex gender: genders) {
+        for (Sex gender : genders) {
             String[] terms = new String[2];
             terms[0] = gender.getName();
             terms[1] = "*";

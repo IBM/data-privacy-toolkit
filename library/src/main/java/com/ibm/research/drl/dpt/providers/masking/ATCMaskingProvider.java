@@ -53,17 +53,13 @@ public class ATCMaskingProvider extends AbstractMaskingProvider {
         this.levelsToKeep = maskingConfiguration.getIntValue("atc.mask.levelsToKeep");
         if (this.levelsToKeep == 1) {
             this.prefixPreserveLength = 1;
-        }
-        else if (this.levelsToKeep == 2) {
+        } else if (this.levelsToKeep == 2) {
             this.prefixPreserveLength = 3;
-        }
-        else if (this.levelsToKeep == 3) {
+        } else if (this.levelsToKeep == 3) {
             this.prefixPreserveLength = 4;
-        }
-        else if (this.levelsToKeep == 4) {
+        } else if (this.levelsToKeep == 4) {
             this.prefixPreserveLength = 5;
-        }
-        else {
+        } else {
             this.prefixPreserveLength = 7;
         }
     }

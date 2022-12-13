@@ -48,7 +48,7 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRange obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRRange.class);
-            FHIRRange maskedObj= mask(obj);
+            FHIRRange maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
@@ -58,16 +58,14 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
     public FHIRRange mask(FHIRRange range) {
         if (this.deleteHigh) {
             range.setHigh(null);
-        }
-        else if (this.maskHigh && !isAlreadyMasked(HIGH_PATH)) {
+        } else if (this.maskHigh && !isAlreadyMasked(HIGH_PATH)) {
             range.setHigh(highMaskingProvider.mask(range.getHigh()));
         }
 
 
         if (this.deleteLow) {
             range.setLow(null);
-        }
-        else if (this.maskLow && !isAlreadyMasked(LOW_PATH)) {
+        } else if (this.maskLow && !isAlreadyMasked(LOW_PATH)) {
             range.setLow(lowMaskingProvider.mask(range.getLow()));
         }
 

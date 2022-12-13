@@ -7,7 +7,7 @@ package com.ibm.research.drl.dpt.anonymization.kmap;
 
 import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 
-public class KMapOptions implements AnonymizationAlgorithmOptions{
+public class KMapOptions implements AnonymizationAlgorithmOptions {
     private final double suppressionRate;
 
     public KMapOptions(double s) {

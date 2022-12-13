@@ -20,7 +20,7 @@ import java.security.SecureRandom;
 public class RaceEthnicityMaskingProvider extends AbstractMaskingProvider {
     private static final RaceManager raceManager = RaceManager.getInstance();
     private final boolean probabilityBasedMasking;
-    
+
     /**
      * Instantiates a new Race ethnicity masking provider.
      */
@@ -63,7 +63,7 @@ public class RaceEthnicityMaskingProvider extends AbstractMaskingProvider {
 
         return raceManager.getRandomProbabilityBased(race.getNameCountryCode());
     }
-    
+
     @Override
     public String mask(String identifier) {
         Race race = raceManager.getKey(identifier);
@@ -72,6 +72,6 @@ public class RaceEthnicityMaskingProvider extends AbstractMaskingProvider {
             return randomMask(race);
         }
 
-        return probabilisticMask(race); 
+        return probabilisticMask(race);
     }
 }

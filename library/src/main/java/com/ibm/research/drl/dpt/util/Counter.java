@@ -12,7 +12,7 @@ public class Counter {
     public Counter() {
         this(1L);
     }
-    
+
     public Counter(long initial) {
         counter = initial;
     }

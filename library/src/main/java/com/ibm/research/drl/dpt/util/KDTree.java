@@ -12,7 +12,7 @@ import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.sin;
 
 public class KDTree<T extends KDTree.CartesianPoint> {
-    private KDTreeNode<T> root;
+    private final KDTreeNode<T> root;
 
     private static final Comparator<CartesianPoint> X_COMPARATOR = Comparator.comparingDouble(o -> o.x);
 
@@ -214,7 +214,7 @@ public class KDTree<T extends KDTree.CartesianPoint> {
         }
     }
 
-    private  static class ComparatorAgainstFixedPoint<T extends KDTree.CartesianPoint> implements Comparator<KDTreeNode<T>> {
+    private static class ComparatorAgainstFixedPoint<T extends KDTree.CartesianPoint> implements Comparator<KDTreeNode<T>> {
         private final CartesianPoint point;
 
         ComparatorAgainstFixedPoint(CartesianPoint point) {

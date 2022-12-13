@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ExcelUtils {
-    
+
     public static String getValue(byte[] inputBytes, DataTypeFormat inputFormatType, String path) throws IOException {
-        try (Workbook wb = readWorkBook(inputFormatType, inputBytes);) {
+        try (Workbook wb = readWorkBook(inputFormatType, inputBytes)) {
             String[] parts = path.split("/");
             String workbookName = parts[1];
             String cellReference = parts[2];

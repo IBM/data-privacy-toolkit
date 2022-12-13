@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class SSNUSIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList("SS #", "SS# ", "SS # OF", "SS# OF", "SS:", "SSN:", "SS"));
-    
+
     private final static String[] appropriateNames = new String[]{
             "SSN"
     };
@@ -47,12 +47,11 @@ public class SSNUSIdentifier extends AbstractIdentifier implements IdentifierWit
             }
 
             ssnParts = toks;
-        }
-        else {
+        } else {
             return null;
         }
 
-        for (int i = 0; i < 3; i++)  {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < ssnParts[i].length(); j++) {
                 if (!Character.isDigit(ssnParts[i].charAt(j))) {
                     return null;
@@ -73,11 +72,11 @@ public class SSNUSIdentifier extends AbstractIdentifier implements IdentifierWit
         return (parseSSNUS(data) != null || prefixMatch(data) > 0);
     }
 
-            
+
     private int prefixMatch(String data) {
         data = data.toUpperCase();
-        
-        for(String prefix: prefixes) {
+
+        for (String prefix : prefixes) {
             if (data.startsWith(prefix)) {
                 String ssn = data.substring(prefix.length()).trim();
                 if (parseSSNUS(ssn) != null) {
@@ -85,17 +84,17 @@ public class SSNUSIdentifier extends AbstractIdentifier implements IdentifierWit
                 }
             }
         }
-        
-        return -1; 
+
+        return -1;
     }
 
     private int firstOccurenceOfNumber(String data, int start) {
-        for(int i = start; i < data.length(); i++) {
+        for (int i = start; i < data.length(); i++) {
             if (Character.isDigit(data.charAt(i))) {
                 return i;
             }
         }
-        
+
         return -1;
     }
 
@@ -107,20 +106,20 @@ public class SSNUSIdentifier extends AbstractIdentifier implements IdentifierWit
     @Override
     public Tuple<Boolean, Tuple<Integer, Integer>> isOfThisTypeWithOffset(String data) {
         SSNUS ssn = parseSSNUS(data);
-        
+
         if (ssn != null) {
             return new Tuple<>(true, new Tuple<>(0, data.length()));
         }
-        
+
         int offset = prefixMatch(data);
-       
+
         if (offset >= 0) {
             return new Tuple<>(true, new Tuple<>(offset, data.length() - offset));
         }
-        
+
         return new Tuple<>(false, null);
     }
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.DIGIT;

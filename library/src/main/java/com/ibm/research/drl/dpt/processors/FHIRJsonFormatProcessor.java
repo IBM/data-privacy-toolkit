@@ -22,7 +22,7 @@ public class FHIRJsonFormatProcessor extends JSONFormatProcessor {
 
     @Override
     public Record maskRecord(Record record, MaskingProviderFactory maskingProvidersFactory, Set<String> alreadyMaskedFields, DataMaskingOptions dataMaskingOptions) {
-        if (! (record instanceof JSONRecord)) throw new IllegalArgumentException("Record not of the right type");
+        if (!(record instanceof JSONRecord)) throw new IllegalArgumentException("Record not of the right type");
 
         JSONRecord jsonRecord = (JSONRecord) record;
 

@@ -45,13 +45,12 @@ public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskin
     }
 
 
-
     public JsonNode mask(JsonNode obj) {
         if (obj == null || obj.isNull()) {
             return NullNode.getInstance();
         }
 
-        ObjectNode object = (ObjectNode)obj;
+        ObjectNode object = (ObjectNode) obj;
 
         if (this.removeExtension) {
             object.set("extension", null);

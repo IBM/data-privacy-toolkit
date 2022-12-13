@@ -8,8 +8,8 @@ package com.ibm.research.drl.dpt.anonymization.sampling;
 
 import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 
-public class SamplingOptions implements AnonymizationAlgorithmOptions{
-    
+public class SamplingOptions implements AnonymizationAlgorithmOptions {
+
     private final double percentage;
 
     public double getPercentage() {
@@ -25,7 +25,7 @@ public class SamplingOptions implements AnonymizationAlgorithmOptions{
     public String getStringValue(String optionName) {
         return null;
     }
-    
+
     public SamplingOptions(double percentage) {
         this.percentage = percentage;
     }

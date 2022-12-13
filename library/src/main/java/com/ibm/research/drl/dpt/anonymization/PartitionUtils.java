@@ -29,12 +29,12 @@ public class PartitionUtils {
     public static List<Partition> createPartitions(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
         Map<String, List<List<String>>> map = new HashMap<>();
 
-        for(int k = 0; k < dataset.getNumberOfRows(); k++) {
+        for (int k = 0; k < dataset.getNumberOfRows(); k++) {
             List<String> row = new ArrayList<>();
 
             List<String> keyValues = new ArrayList<>();
 
-            for(int j = 0; j < dataset.getNumberOfColumns(); j++) {
+            for (int j = 0; j < dataset.getNumberOfColumns(); j++) {
                 String value = dataset.get(k, j);
                 row.add(value);
 
@@ -58,7 +58,7 @@ public class PartitionUtils {
         }
 
         List<Partition> partitions = new ArrayList<>();
-        for(List<List<String>> values: map.values()) {
+        for (List<List<String>> values : map.values()) {
             InMemoryPartition partition = new InMemoryPartition(values);
             partitions.add(partition);
         }
@@ -69,12 +69,12 @@ public class PartitionUtils {
     public static List<Partition> createPartitionsByIndices(IPVDataset dataset, List<Integer> columnIndices) {
         Map<String, List<List<String>>> map = new HashMap<>();
 
-        for(int k = 0; k < dataset.getNumberOfRows(); k++) {
-            List<String> row = dataset.getRow(k); 
+        for (int k = 0; k < dataset.getNumberOfRows(); k++) {
+            List<String> row = dataset.getRow(k);
 
             List<String> keyValues = new ArrayList<>();
 
-            for(int j: columnIndices) {
+            for (int j : columnIndices) {
                 String value = dataset.get(k, j);
                 keyValues.add(value);
             }
@@ -94,7 +94,7 @@ public class PartitionUtils {
         }
 
         List<Partition> partitions = new ArrayList<>();
-        for(List<List<String>> values: map.values()) {
+        for (List<List<String>> values : map.values()) {
             InMemoryPartition partition = new InMemoryPartition(values);
             partitions.add(partition);
         }

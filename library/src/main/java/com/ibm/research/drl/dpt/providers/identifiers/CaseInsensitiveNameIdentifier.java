@@ -34,7 +34,7 @@ public class CaseInsensitiveNameIdentifier extends AbstractIdentifier {
                 .filter(((Predicate<? super Matcher>) Matcher::find).negate())
                 .count();
 
-        if (.9 > withoutDigits/base) return false;
+        if (.9 > withoutDigits / base) return false;
 
         double onlyShort = Arrays.stream(parts).map(String::strip).filter(s -> s.length() < 3).count();
 
@@ -47,7 +47,7 @@ public class CaseInsensitiveNameIdentifier extends AbstractIdentifier {
                 .filter(((Predicate<String>) s -> manager.isFirstName(s) || manager.isLastName(s)).negate())
                 .count();
 
-        return 0.1 >= (remaining/base);
+        return 0.1 >= (remaining / base);
     }
 
     private String removeTrailingPunctuation(String potentialName) {

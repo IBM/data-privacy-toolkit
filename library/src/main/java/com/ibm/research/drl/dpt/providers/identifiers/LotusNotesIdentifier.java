@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class LotusNotesIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
     private static final String validIdentifier = "(?:\\w(?:[\\w\\s-_])*)";
-    private static final List<Pattern> patterns = Arrays.asList(
+    private static final List<Pattern> patterns = List.of(
             Pattern.compile(
                     "("
                             + validIdentifier + ")"
@@ -24,7 +24,7 @@ public class LotusNotesIdentifier extends AbstractRegexBasedIdentifier implement
                             + validIdentifier
                             + "/"
                             + validIdentifier
-                            + "(?:@"+ validIdentifier  + ")*"
+                            + "(?:@" + validIdentifier + ")*"
                     , Pattern.CASE_INSENSITIVE
             )
     );

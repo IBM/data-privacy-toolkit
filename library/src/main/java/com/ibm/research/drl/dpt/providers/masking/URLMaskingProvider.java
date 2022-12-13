@@ -75,7 +75,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
 
         if (parts.length == 2) {
             final String password = RandomGenerators.randomUIDGenerator(8 + random.nextInt(8));
-            
+
             return username + ":" + password;
         }
 
@@ -91,7 +91,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
             return hostname;
         }
 
-        if (hostname.charAt(0) == '[' && hostname.charAt(hostname.length()-1) == ']') {
+        if (hostname.charAt(0) == '[' && hostname.charAt(hostname.length() - 1) == ']') {
             hostname = hostname.substring(1, hostname.length() - 1);
             return String.format("[%s]", RandomGenerators.randomHostnameGenerator(hostname, 0));
         }
@@ -106,7 +106,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
      * @param type the type
      * @return the masking provider
      */
-    public synchronized  MaskingProvider getMaskingProvider(ProviderType type) {
+    public synchronized MaskingProvider getMaskingProvider(ProviderType type) {
         if (providerMap.containsKey(type)) {
             return providerMap.get(type);
         }
@@ -127,7 +127,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
         String[] tokens = query.split("&");
         String[] maskedTokens = new String[tokens.length];
 
-        for(int i = 0; i < tokens.length; i++) {
+        for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
             if (i == 0) {
                 token = token.substring(1);
@@ -139,8 +139,8 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
                 continue;
             }
 
-            for(Identifier identifier: identifiers) {
-                if(identifier.isOfThisType(parts[1])) {
+            for (Identifier identifier : identifiers) {
+                if (identifier.isOfThisType(parts[1])) {
                     MaskingProvider maskingProvider = getMaskingProvider(identifier.getType());
                     parts[1] = maskingProvider.mask(parts[1]);
                     break;
@@ -153,7 +153,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
         return "?" + StringUtils.join(maskedTokens, '&');
     }
 
-    private String buildURLString(String protocol, String host, int port, String file, String userInfo ) {
+    private String buildURLString(String protocol, String host, int port, String file, String userInfo) {
         StringBuilder builder = new StringBuilder(protocol);
         builder.append("://");
 

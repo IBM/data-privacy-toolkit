@@ -24,7 +24,7 @@ public class KMap implements AnonymizationAlgorithm {
     private List<Partition> anonymizedPartitions;
     private double suppressionRate;
     private int suppressedRows;
-    
+
     @Override
     public TransformationType getTransformationType() {
         return TransformationType.LOCAL_RECODING;
@@ -51,15 +51,15 @@ public class KMap implements AnonymizationAlgorithm {
     }
 
     @Override
-    public AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList, 
+    public AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList,
                                              List<PrivacyConstraint> privacyConstraints, AnonymizationAlgorithmOptions options) {
         this.columnInformationList = columnInformationList;
         this.privacyConstraints = privacyConstraints;
         this.originalDataset = dataset;
-        this.suppressionRate = ((KMapOptions)options).getSuppressionRate();
-        
+        this.suppressionRate = ((KMapOptions) options).getSuppressionRate();
+
         AnonymizationUtils.initializeConstraints(dataset, columnInformationList, privacyConstraints);
-        
+
         return this;
     }
 
@@ -77,27 +77,27 @@ public class KMap implements AnonymizationAlgorithm {
         if (eqClass.size() == 0) {
             return new InMemoryPartition(Collections.emptyList());
         }
-       
+
         boolean constraintMatch = AnonymizationUtils.checkPrivacyConstraints(this.privacyConstraints, eqClass, null);
-        
+
         if (constraintMatch) {
-           Partition cp = copyPartition(eqClass); 
-           cp.setAnonymous(true);
-           return cp;
+            Partition cp = copyPartition(eqClass);
+            cp.setAnonymous(true);
+            return cp;
         }
-        
+
         if (suppressionBudget >= eqClass.size()) {
             return null;
         }
-        
-        for(LatticeNode node : nodes) {            
+
+        for (LatticeNode node : nodes) {
             int[] level = node.getValues();
             IPVDataset anonymized = DatasetGeneralizer.generalize(eqClass.getMember(), this.columnInformationList, level);
             Partition p = new InMemoryPartition(anonymized);
 
-            if(AnonymizationUtils.checkPrivacyConstraints(this.privacyConstraints, p, null)) {
+            if (AnonymizationUtils.checkPrivacyConstraints(this.privacyConstraints, p, null)) {
                 p.setAnonymous(true);
-                return p; 
+                return p;
             }
         }
 
@@ -113,85 +113,85 @@ public class KMap implements AnonymizationAlgorithm {
         List<ColumnInformation> quasiColumnInformationList = this.columnInformationList.stream().filter(columnInformation -> {
             return columnInformation.getColumnType() == ColumnType.QUASI;
         }).collect(Collectors.toList());
-        
+
         int[] maxLevel = new int[quasiColumnInformationList.size()];
 
-        for(int i = 0; i < quasiColumnInformationList.size(); i++) {
+        for (int i = 0; i < quasiColumnInformationList.size(); i++) {
             CategoricalInformation categoricalInformation = (CategoricalInformation) quasiColumnInformationList.get(i);
             int maximumLevel = categoricalInformation.getMaximumLevel();
-            maxLevel[i] = maximumLevel >=0 ? maximumLevel : categoricalInformation.getHierarchy().getHeight(); 
+            maxLevel[i] = maximumLevel >= 0 ? maximumLevel : categoricalInformation.getHierarchy().getHeight();
         }
-        
+
         int[][] levels = new int[quasiColumnInformationList.size()][];
 
-        for(int i = 0; i < quasiColumnInformationList.size(); i++) {
+        for (int i = 0; i < quasiColumnInformationList.size(); i++) {
             int maxCurrentLevel = maxLevel[i];
             levels[i] = new int[maxCurrentLevel];
-            for(int k = 0; k < maxCurrentLevel; k++) {
+            for (int k = 0; k < maxCurrentLevel; k++) {
                 levels[i][k] = k;
             }
         }
-        
+
         List<LatticeNode> nodes = new ArrayList<>();
-        
+
         List<List<Integer>> productResult = Lattice.calculateProduct(levels);
-        for(List<Integer> l: productResult) {
+        for (List<Integer> l : productResult) {
             nodes.add(new LatticeNode(l));
         }
 
         nodes.sort(Comparator.comparingInt(LatticeNode::sum));
         return nodes;
-        
+
     }
-    
+
     @Override
     public IPVDataset apply() {
         List<Integer> matchColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
-       
+
         int suppressionBudget = (int) Math.ceil((this.suppressionRate / 100.0) * this.originalDataset.getNumberOfRows());
         this.suppressedRows = 0;
-        
+
         final List<Partition> partitions = AnonymizationUtils.generatePartitionsByColumnIndex(this.originalDataset, matchColumns);
-     
+
         this.anonymizedPartitions = new ArrayList<>(partitions.size());
 
         List<LatticeNode> possibleNodes = calculateNodes();
-       
+
         this.originalPartitions = partitions;
-        
-        for(Partition partition: partitions) {
+
+        for (Partition partition : partitions) {
             Partition anonymizedPartition = anonymizePartition(partition, possibleNodes, suppressionBudget);
-            
+
             if (anonymizedPartition == null) {
-                suppressionBudget -= partition.size(); 
+                suppressionBudget -= partition.size();
                 this.suppressedRows += partition.size();
                 Partition cp = copyPartition(partition);
                 cp.setAnonymous(false);
                 this.anonymizedPartitions.add(cp);
                 continue;
             }
-            
+
             this.anonymizedPartitions.add(anonymizedPartition);
         }
-        
+
         return createDataset(this.anonymizedPartitions, this.originalDataset.getNumberOfColumns());
     }
 
     private IPVDataset createDataset(List<Partition> anonymizedPartitions, int numberOfColumns) {
         IPVDataset dataset = new IPVDataset(numberOfColumns);
-        
-        for(Partition partition: anonymizedPartitions) {
+
+        for (Partition partition : anonymizedPartitions) {
             if (!partition.isAnonymous()) {
                 continue;
             }
-            
+
             IPVDataset members = partition.getMember();
-            
-            for(int i = 0; i < members.getNumberOfRows(); i++) {
+
+            for (int i = 0; i < members.getNumberOfRows(); i++) {
                 dataset.addRow(members.getRow(i));
             }
         }
-        
+
         return dataset;
     }
 

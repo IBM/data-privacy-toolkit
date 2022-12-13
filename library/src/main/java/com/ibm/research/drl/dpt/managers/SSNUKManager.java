@@ -23,10 +23,10 @@ public class SSNUKManager implements Manager {
             LocalizationManager.getInstance().getResources(Resource.SSNUK_PREFIXES);
     private final SecureRandom random;
 
-    private static SSNUKManager instance = new SSNUKManager();
+    private static final SSNUKManager instance = new SSNUKManager();
 
     public static SSNUKManager getInstance() {
-        return  instance;
+        return instance;
     }
 
     private SSNUKManager() {

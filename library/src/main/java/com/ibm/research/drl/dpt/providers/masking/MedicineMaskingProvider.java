@@ -18,21 +18,27 @@ public class MedicineMaskingProvider extends AbstractMaskingProvider {
     /**
      * Instantiates a new Medicine masking provider.
      */
-    public MedicineMaskingProvider() {this(new SecureRandom(), new DefaultMaskingConfiguration());}
+    public MedicineMaskingProvider() {
+        this(new SecureRandom(), new DefaultMaskingConfiguration());
+    }
 
     /**
      * Instantiates a new Medicine masking provider.
      *
      * @param random the random
      */
-    public MedicineMaskingProvider(SecureRandom random) {this(random, new DefaultMaskingConfiguration());}
+    public MedicineMaskingProvider(SecureRandom random) {
+        this(random, new DefaultMaskingConfiguration());
+    }
 
     /**
      * Instantiates a new Medicine masking provider.
      *
      * @param configuration the configuration
      */
-    public MedicineMaskingProvider(MaskingConfiguration configuration) {this(new SecureRandom(), configuration);}
+    public MedicineMaskingProvider(MaskingConfiguration configuration) {
+        this(new SecureRandom(), configuration);
+    }
 
     /**
      * Instantiates a new Medicine masking provider.

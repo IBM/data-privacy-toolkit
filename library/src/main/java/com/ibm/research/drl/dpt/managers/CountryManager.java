@@ -14,7 +14,7 @@ import com.ibm.research.drl.dpt.util.localization.ResourceEntry;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +62,7 @@ public class CountryManager extends AbstractManager<Country> {
 
         readCountryList(resourceCountryList);
 
-        for(MapWithRandomPick<String, Country>[] cntMap: countryMap.values()) {
+        for (MapWithRandomPick<String, Country>[] cntMap : countryMap.values()) {
             for (MapWithRandomPick map : cntMap) {
                 map.setKeyList();
             }
@@ -75,7 +75,7 @@ public class CountryManager extends AbstractManager<Country> {
         int specSize = CountryNameSpecification.values().length;
         MapWithRandomPick<String, Country>[] mapWithRandomPicks = new MapWithRandomPick[specSize];
 
-        for(int i = 0; i < mapWithRandomPicks.length; i++) {
+        for (int i = 0; i < mapWithRandomPicks.length; i++) {
             mapWithRandomPicks[i] = new MapWithRandomPick<>(new HashMap<String, Country>());
         }
 
@@ -97,7 +97,7 @@ public class CountryManager extends AbstractManager<Country> {
     }
 
     private void precomputeNearest() {
-        for(Map.Entry<String, List<Location>> entry: countryListMap.entrySet()) {
+        for (Map.Entry<String, List<Location>> entry : countryListMap.entrySet()) {
             List<Location> countryList = entry.getValue();
 
             for (Location location : countryList) {
@@ -115,8 +115,7 @@ public class CountryManager extends AbstractManager<Country> {
             countryList = new ArrayList<>();
             countryList.add(country);
             countryListMap.put(countryCode, countryList);
-        }
-        else {
+        } else {
             countryList.add(country);
         }
     }
@@ -128,8 +127,8 @@ public class CountryManager extends AbstractManager<Country> {
             return hash.toString();
         }
 
-        int position = (int)(hash % keys.size());
-        return ((Country)(keys.get(position))).getName();
+        int position = (int) (hash % keys.size());
+        return ((Country) (keys.get(position))).getName();
     }
 
     public String getPseudorandom(String identifier) {
@@ -138,10 +137,9 @@ public class CountryManager extends AbstractManager<Country> {
 
         if (country == null) {
             return getPseudorandomElement(this.countryListMap.get(ALL_COUNTRIES_NAME), key);
-        }
-        else {
-           String countryCode = country.getNameCountryCode();
-           return getPseudorandomElement(this.countryListMap.get(countryCode), key);
+        } else {
+            String countryCode = country.getNameCountryCode();
+            return getPseudorandomElement(this.countryListMap.get(countryCode), key);
         }
     }
 
@@ -153,14 +151,13 @@ public class CountryManager extends AbstractManager<Country> {
             maps = initCountryMap();
             maps[spec.ordinal()].getMap().put(key, country);
             countryMap.put(locale, maps);
-        }
-        else {
+        } else {
             maps[spec.ordinal()].getMap().put(key, country);
         }
     }
 
     private void readCountryList(Collection<ResourceEntry> entries) {
-        for(ResourceEntry entry: entries) {
+        for (ResourceEntry entry : entries) {
             try (InputStream inputStream = entry.createStream();
                  CSVParser reader = Readers.createCSVReaderFromStream(inputStream)) {
                 String locale = entry.getCountryCode();
@@ -205,7 +202,7 @@ public class CountryManager extends AbstractManager<Country> {
 
     private CountryNameSpecification getSpecificationFromName(String name) {
         String key = name.toUpperCase();
-        for (CountryNameSpecification e: CountryNameSpecification.values()) {
+        for (CountryNameSpecification e : CountryNameSpecification.values()) {
             if (this.countryMap.get(getAllCountriesName())[e.ordinal()].getMap().containsKey(key)) {
                 return e;
             }
@@ -338,7 +335,7 @@ public class CountryManager extends AbstractManager<Country> {
             return null;
         }
 
-        for(CountryNameSpecification e: CountryNameSpecification.values()) {
+        for (CountryNameSpecification e : CountryNameSpecification.values()) {
             Country res = maps[e.ordinal()].getMap().get(key);
             if (res != null) {
                 return res;
@@ -361,7 +358,7 @@ public class CountryManager extends AbstractManager<Country> {
     @Override
     public boolean isValidKey(String country) {
         String key = country.toUpperCase();
-        for(CountryNameSpecification e: CountryNameSpecification.values()) {
+        for (CountryNameSpecification e : CountryNameSpecification.values()) {
             if (countryMap.get(getAllCountriesName())[e.ordinal()].getMap().containsKey(key)) {
                 return true;
             }
@@ -374,8 +371,8 @@ public class CountryManager extends AbstractManager<Country> {
     public Collection<Country> getItemList() {
         List<Country> list = new ArrayList<>();
 
-        for(Location location: countryListMap.get(getAllCountriesName())) {
-            list.add((Country)location);
+        for (Location location : countryListMap.get(getAllCountriesName())) {
+            list.add((Country) location);
         }
 
         return list;

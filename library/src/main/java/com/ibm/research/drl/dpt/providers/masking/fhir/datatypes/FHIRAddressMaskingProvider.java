@@ -49,7 +49,7 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAddress obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRAddress.class);
-            FHIRAddress maskedObj= mask(obj);
+            FHIRAddress maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();

@@ -16,17 +16,17 @@ public class AECSOptions implements InformationMetricOptions {
 
     @Override
     public int getIntValue(String optionName) {
-        return (int)values.get(optionName);
+        return (int) values.get(optionName);
     }
 
     @Override
     public String getStringValue(String optionName) {
-        return (String)values.get(optionName);
+        return (String) values.get(optionName);
     }
 
     @Override
     public boolean getBooleanValue(String optionName) {
-        return (boolean)values.get(optionName);
+        return (boolean) values.get(optionName);
     }
 
     /**

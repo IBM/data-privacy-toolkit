@@ -46,7 +46,7 @@ public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<Js
     public JsonNode mask(JsonNode node) {
         try {
             FHIRTiming obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRTiming.class);
-            FHIRTiming maskedObj= mask(obj);
+            FHIRTiming maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
@@ -56,7 +56,7 @@ public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<Js
     private Collection<String> maskEvents(Collection<String> events) {
         Collection<String> maskedEvents = new ArrayList<>();
 
-        for(String event: events) {
+        for (String event : events) {
             if (event != null) {
                 maskedEvents.add(eventMaskingProvider.mask(event));
             }

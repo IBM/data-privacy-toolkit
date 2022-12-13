@@ -18,13 +18,16 @@ public class CityHierarchy extends MaterializedHierarchy {
     private final static CountryManager countryManager = CountryManager.getInstance();
 
     private static final CityHierarchy instance = new CityHierarchy();
-    public static CityHierarchy getInstance() {return instance;}
+
+    public static CityHierarchy getInstance() {
+        return instance;
+    }
 
     private CityHierarchy() {
         super();
 
         Collection<City> cities = cityManager.getItemList();
-        for(final City city: cities) {
+        for (final City city : cities) {
             String[] terms = new String[4];
             terms[0] = city.getName();
             /* TODO: fix the model to include Country object */

@@ -13,18 +13,18 @@ import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 import java.util.Map;
 
-public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
+public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
     private static final Logger log = LogManager.getLogger(RatioBasedMaskingProvider.class);
 
     private final int failMode;
     private final double ratio;
     private final int precisionDigits;
-    
+
     public RatioBasedMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
@@ -40,7 +40,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
     public RatioBasedMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.ratio = maskingConfiguration.getDoubleValue("ratiobased.mask.ratio");
         this.precisionDigits = maskingConfiguration.getIntValue("ratiobased.mask.precisionDigits");
-         
+
         this.failMode = maskingConfiguration.getIntValue("fail.mode");
 
         if (this.failMode == FailMode.GENERATE_RANDOM) {
@@ -49,19 +49,19 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
             throw new RuntimeException(msg);
         }
     }
-    
+
     private String formatResult(Double v) {
         if (this.precisionDigits == -1) {
             return v.toString();
         }
 
-        return String.format("%." + this.precisionDigits + "f", v); 
+        return String.format("%." + this.precisionDigits + "f", v);
     }
-    
+
     private String maskWithRatioAsOperand(double value, FieldRelationship fieldRelationship,
-                                          Map<String,OriginalMaskedValuePair> values, String identifier) {
+                                          Map<String, OriginalMaskedValuePair> values, String identifier) {
         String operandName = fieldRelationship.getOperands()[0].getName();
-        
+
         String operandValueString = values.get(operandName).getOriginal();
 
         try {
@@ -89,7 +89,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
         double value;
         try {
             value = Double.valueOf(identifier);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
@@ -101,12 +101,12 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
                     return "";
             }
         }
-        
+
         if (fieldRelationship.getRelationshipType() == RelationshipType.KEY) {
             return maskWithRatioAsOperand(value, fieldRelationship, values, identifier);
         }
-        
-        
+
+
         RelationshipOperand[] operands = fieldRelationship.getOperands();
         String baseValueField = operands[0].getName();
 
@@ -114,7 +114,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
         if (pair == null) {
             return mask(identifier);
         }
-        
+
         String originalBaseValue = pair.getOriginal();
         String maskedBaseValue = pair.getMasked();
 
@@ -147,7 +147,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider{
         double value;
         try {
             value = Double.valueOf(identifier);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;

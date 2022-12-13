@@ -1,18 +1,20 @@
 /******************************************************************
-*                                                                 *
-* Copyright IBM Corp. 2021                                        *
-*                                                                 *
-*******************************************************************/
+ *                                                                 *
+ * Copyright IBM Corp. 2021                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.dpt.models;
 
 public enum LatitudeLongitudeFormat {
     /**
      * Decimal latitude longitude format.
      */
-    DECIMAL, /**
+    DECIMAL,
+    /**
      * Compass latitude longitude format.
      */
-    COMPASS, /**
+    COMPASS,
+    /**
      * Dms latitude longitude format.
      */
     DMS

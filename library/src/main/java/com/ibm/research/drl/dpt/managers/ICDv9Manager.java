@@ -29,7 +29,10 @@ public class ICDv9Manager implements Manager {
     private final MapWithRandomPick<String, ICD> icdByNameMap;
 
     private final static ICDv9Manager ICD_V9_MANAGER = new ICDv9Manager();
-    public static ICDv9Manager getInstance() { return ICD_V9_MANAGER;}
+
+    public static ICDv9Manager getInstance() {
+        return ICD_V9_MANAGER;
+    }
 
     public Collection<ICD> getItemList() {
         return icdByCodeMap.getMap().values();
@@ -50,7 +53,7 @@ public class ICDv9Manager implements Manager {
 
     private void readICDList(Collection<ResourceEntry> entries) {
 
-        for(ResourceEntry entry: entries) {
+        for (ResourceEntry entry : entries) {
             InputStream inputStream = entry.createStream();
 
             try (CSVParser parser = Readers.createCSVReaderFromStream(inputStream, ';', '"')) {
@@ -96,8 +99,7 @@ public class ICDv9Manager implements Manager {
 
         if ((ICDv9 = this.icdByCodeMap.getMap().get(key)) != null) {
             return ICDv9;
-        }
-        else if ((ICDv9 = this.icdByNameMap.getMap().get(key)) != null) {
+        } else if ((ICDv9 = this.icdByNameMap.getMap().get(key)) != null) {
             return ICDv9;
         }
 

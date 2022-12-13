@@ -11,6 +11,7 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class CreditCardTypeIdentifier extends AbstractManagerBasedIdentifier {
 
@@ -39,7 +40,7 @@ public class CreditCardTypeIdentifier extends AbstractManagerBasedIdentifier {
 
     @Override
     public Collection<ProviderType> getLinkedTypes() {
-        return Arrays.asList(ProviderType.CREDIT_CARD);
+        return List.of(ProviderType.CREDIT_CARD);
     }
 
     @Override

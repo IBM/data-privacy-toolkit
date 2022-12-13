@@ -7,11 +7,11 @@ package com.ibm.research.drl.dpt.models;
 
 public class PhoneNumber {
 
-    private String prefix;
-    private String countryCode;
+    private final String prefix;
+    private final String countryCode;
     private String areaCode;
-    private String separator;
-    private String number;
+    private final String separator;
+    private final String number;
 
     /**
      * Is has prefix boolean.
@@ -22,7 +22,7 @@ public class PhoneNumber {
         return hasPrefix;
     }
 
-    private boolean hasPrefix;
+    private final boolean hasPrefix;
 
     /**
      * Gets country code.

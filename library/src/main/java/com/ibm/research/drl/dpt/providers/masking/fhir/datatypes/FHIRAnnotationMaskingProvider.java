@@ -56,7 +56,7 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAnnotation obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRAnnotation.class);
-            FHIRAnnotation maskedObj= mask(obj);
+            FHIRAnnotation maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();

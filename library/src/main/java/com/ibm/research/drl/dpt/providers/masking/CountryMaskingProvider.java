@@ -99,8 +99,7 @@ public class CountryMaskingProvider extends AbstractMaskingProvider {
 
         if (country == null) {
             return countryManager.getRandomKey();
-        }
-        else {
+        } else {
             return countryManager.getRandomKey(identifier, country.getNameCountryCode());
         }
     }

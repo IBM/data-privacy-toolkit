@@ -73,7 +73,7 @@ public class SSNUSMaskingProvider extends AbstractMaskingProvider {
             if (this.preserveAreaNumber) {
                 areaNumber = ssn.getAreaNumber();
             } else {
-                while(true) {
+                while (true) {
                     int areaNumberInt = random.nextInt(999);
                     if (areaNumberInt == 0 || areaNumberInt == 666) {
                         continue;

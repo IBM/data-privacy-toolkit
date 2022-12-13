@@ -20,7 +20,6 @@ public class CSMaskingProvider extends AbstractMaskingProvider {
 
     /**
      * Instantiates a new Cs masking provider.
-     *
      */
     public CSMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);

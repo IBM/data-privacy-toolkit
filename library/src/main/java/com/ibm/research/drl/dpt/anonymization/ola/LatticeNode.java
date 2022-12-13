@@ -74,7 +74,7 @@ public class LatticeNode {
     public int sum() {
         int sum = 0;
 
-        for(int i = 0; i < values.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             sum += values[i];
         }
 
@@ -99,7 +99,7 @@ public class LatticeNode {
             return false;
         }
 
-        for(int i = 0; i < values.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             if (values[i] != otherValues[i]) {
                 return false;
             }
@@ -121,7 +121,7 @@ public class LatticeNode {
 
         int[] otherValues = otherNode.getValues();
 
-        for(int i = 0; i < values.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             if (values[i] < otherValues[i]) {
                 return false;
             }
@@ -140,7 +140,7 @@ public class LatticeNode {
 
         StringBuilder builder = new StringBuilder();
         int i;
-        for(i = 0; i < (values.length - 1); i++) {
+        for (i = 0; i < (values.length - 1); i++) {
             builder.append(values[i] + "");
             builder.append(":");
         }
@@ -166,7 +166,7 @@ public class LatticeNode {
     public LatticeNode(Collection<Integer> v) {
         this.values = new int[v.size()];
         int index = 0;
-        for(Integer i: v) {
+        for (Integer i : v) {
             this.values[index] = i.intValue();
             index++;
         }

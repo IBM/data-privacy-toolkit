@@ -19,8 +19,14 @@ import java.util.List;
 
 public class MaritalStatusManager extends ResourceBasedManager<MaritalStatus> {
     private final static MaritalStatusManager MARITAL_STATUS_MANAGER = new MaritalStatusManager();
-    public static MaritalStatusManager getInstance() { return MARITAL_STATUS_MANAGER; }
-    private MaritalStatusManager() {super();}
+
+    public static MaritalStatusManager getInstance() {
+        return MARITAL_STATUS_MANAGER;
+    }
+
+    private MaritalStatusManager() {
+        super();
+    }
 
     private List<MaritalStatus> statusList;
 
@@ -49,7 +55,7 @@ public class MaritalStatusManager extends ResourceBasedManager<MaritalStatus> {
 
         statusList.add(maritalStatus);
 
-        return Arrays.asList(new Tuple<>(key, maritalStatus));
+        return List.of(new Tuple<>(key, maritalStatus));
     }
 
 }

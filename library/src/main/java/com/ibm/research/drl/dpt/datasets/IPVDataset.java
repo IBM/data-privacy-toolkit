@@ -1,8 +1,8 @@
 /*******************************************************************
-*                                                                 *
-* Copyright IBM Corp. 2020                                        *
-*                                                                 *
-*******************************************************************/
+ *                                                                 *
+ * Copyright IBM Corp. 2020                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.dpt.datasets;
 
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -29,7 +29,7 @@ public class IPVDataset implements Iterable<List<String>> {
 
     protected final List<List<String>> values;
     protected IPVSchema schema;
-    private boolean hasSchema;
+    private final boolean hasSchema;
 
     public List<List<String>> getValues() {
         return this.values;
@@ -196,7 +196,7 @@ public class IPVDataset implements Iterable<List<String>> {
 
         final List<SimpleSchemaField> fields = new ArrayList<>();
 
-        for (String entry: header) {
+        for (String entry : header) {
             fields.add(new SimpleSchemaField(entry, IPVSchemaFieldType.STRING));
         }
 
@@ -243,7 +243,7 @@ public class IPVDataset implements Iterable<List<String>> {
             format = format.withHeader(schema.getFields().stream().map(IPVSchemaField::getName).toArray(String[]::new));
         }
 
-        try (CSVPrinter printer = new CSVPrinter(writer, format);) {
+        try (CSVPrinter printer = new CSVPrinter(writer, format)) {
             printer.printRecords(this);
         } catch (IOException e) {
             logger.error("Error creating writer", e);

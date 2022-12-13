@@ -84,8 +84,7 @@ public class ContinentMaskingProvider extends AbstractMaskingProvider {
             }
 
             return country.getContinent();
-        }
-        else if(relationshipOperand.getType() == ProviderType.CITY) {
+        } else if (relationshipOperand.getType() == ProviderType.CITY) {
             City city = cityManager.getKey(operandMaskedValue);
             if (city != null) {
                 String countryCode = city.getCountryCode();

@@ -20,9 +20,13 @@ public class DependentManager extends ResourceBasedManager<Dependent> {
     private static final Collection<ResourceEntry> resourceDependentList = LocalizationManager.getInstance().getResources(Resource.DEPENDENT);
     private final static DependentManager DEPENDENT_MANAGER = new DependentManager();
 
-    public static DependentManager getInstance() {return DEPENDENT_MANAGER;}
+    public static DependentManager getInstance() {
+        return DEPENDENT_MANAGER;
+    }
 
-    private DependentManager() {super();}
+    private DependentManager() {
+        super();
+    }
 
 
     @Override
@@ -36,7 +40,7 @@ public class DependentManager extends ResourceBasedManager<Dependent> {
         String key = sname.toUpperCase();
 
         Dependent dependent = new Dependent(sname);
-        return Arrays.asList(new Tuple<>(key, dependent));
+        return List.of(new Tuple<>(key, dependent));
     }
 
     @Override
