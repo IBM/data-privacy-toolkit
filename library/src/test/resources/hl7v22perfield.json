@@ -1,0 +1,23 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader": false,
+
+  "toBeMasked" : {
+    "/.MSH-3-1": {
+      "providerType" : "HASH",
+      "targetPath" : "/.MSH-3-1"
+    }
+  },
+
+  "inputFormat": "HL7",
+  "outputFormat": "HL7",
+  
+  "_fields" : {
+    "/.MSH-3-1" : {
+      "default.masking.provider" : "HASH",
+      "hashing.algorithm.default" : "MD5"
+    }
+  },
+  "_defaults" : {}
+}

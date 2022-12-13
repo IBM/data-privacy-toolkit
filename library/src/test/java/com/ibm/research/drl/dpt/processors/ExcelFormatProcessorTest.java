@@ -34,5 +34,4 @@ public class ExcelFormatProcessorTest {
 
         assertThat(results.getRawResults().size(), greaterThan(0));
     }
-    
 }
