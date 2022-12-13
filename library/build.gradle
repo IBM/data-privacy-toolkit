@@ -106,3 +106,26 @@ repositories {
         url = uri('https://www.dcm4che.org/maven2')
     }
 }
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = "sources"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'Data Privacy Toolkit'
+                description = 'The IBM Data Privacy Toolkit (DPT)'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+            }
+        }
+    }
+}
