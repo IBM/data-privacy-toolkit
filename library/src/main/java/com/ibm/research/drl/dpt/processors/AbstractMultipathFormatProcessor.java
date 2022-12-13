@@ -21,14 +21,14 @@ import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.util.Counter;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-public abstract  class AbstractMultipathFormatProcessor extends AbstractFormatProcessor {
+public abstract class AbstractMultipathFormatProcessor extends AbstractFormatProcessor {
     private final static Logger logger = LogManager.getLogger(AbstractMultipathFormatProcessor.class);
 
     protected Map<String, OriginalMaskedValuePair> extractOperandsNotToBeMasked(MultipathRecord record, Map<String, FieldRelationship> predefinedRelationships,
@@ -78,7 +78,7 @@ public abstract  class AbstractMultipathFormatProcessor extends AbstractFormatPr
     protected List<String> expandToBeMasked(Iterable<String> fields, MultipathRecord record) {
         List<String> effectivePathsToBeMasked = new ArrayList<>();
 
-        for (String fieldIdentifier: fields) {
+        for (String fieldIdentifier : fields) {
             if (record.isSingleElement(fieldIdentifier)) {
                 effectivePathsToBeMasked.add(fieldIdentifier);
             } else {
@@ -94,7 +94,7 @@ public abstract  class AbstractMultipathFormatProcessor extends AbstractFormatPr
     protected Map<String, Tuple<DataMaskingTarget, String>> expandToBeMasked(Map<String, DataMaskingTarget> fields, MultipathRecord record) {
         Map<String, Tuple<DataMaskingTarget, String>> effectivePathsToBeMasked = new HashMap<>();
 
-        for (Map.Entry<String, DataMaskingTarget> field: fields.entrySet()) {
+        for (Map.Entry<String, DataMaskingTarget> field : fields.entrySet()) {
             final String fieldIdentifier = field.getKey();
             final DataMaskingTarget target = field.getValue();
 
@@ -285,7 +285,8 @@ public abstract  class AbstractMultipathFormatProcessor extends AbstractFormatPr
 
         final MultipathRecord multipathRecord = (MultipathRecord) record;
 
-        if (existOperandsWithNonFixedPath(relationships, multipathRecord)) throw new UnsupportedOperationException("Only fixed path operands are supported");
+        if (existOperandsWithNonFixedPath(relationships, multipathRecord))
+            throw new UnsupportedOperationException("Only fixed path operands are supported");
 
 
         Map<String, Tuple<DataMaskingTarget, String>> fieldsToMask = expandToBeMasked(dataMaskingOptions.getToBeMasked(), multipathRecord);
@@ -356,7 +357,7 @@ public abstract  class AbstractMultipathFormatProcessor extends AbstractFormatPr
 
         List<String> effectiveFieldToSuppress = expandToBeMasked(fieldsToSuppress, (MultipathRecord) record);
 
-        for(int f=effectiveFieldToSuppress.size()-1; f>=0; f--) {
+        for (int f = effectiveFieldToSuppress.size() - 1; f >= 0; f--) {
             record.suppressField(effectiveFieldToSuppress.get(f));
         }
 

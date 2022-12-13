@@ -20,28 +20,28 @@ public class CategoricalPrecision implements InformationMetric {
     private List<ColumnInformation> columnInformationList;
     private boolean withTransformationLevels;
     private int[] transformationLevels;
-    
-    
+
+
     @Override
-    public String toString(){
+    public String toString() {
         return "CategoricalPrecision";
     }
 
     private double getLossCategorical(String value, ColumnInformation columnInformation) {
-        CategoricalInformation categoricalInformation = (CategoricalInformation)columnInformation;
+        CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
         int height = categoricalInformation.getHierarchy().getHeight();
 
         int level = categoricalInformation.getHierarchy().getNodeLevel(value);
 
         if (level < 0) {
-           throw new RuntimeException("unknown level for: " + value + ", column info: " + columnInformation.toString()); 
+            throw new RuntimeException("unknown level for: " + value + ", column info: " + columnInformation);
         }
-        
+
         if (level == 0) {
             return 0.0;
         }
-        
-        return (double)(level) / (double)(height - 1);
+
+        return (double) (level) / (double) (height - 1);
     }
 
     @Override
@@ -91,13 +91,13 @@ public class CategoricalPrecision implements InformationMetric {
      */
     public double report() {
         List<InformationLossResult> columnResults = reportPerQuasiColumn();
-        
+
         double sum = 0.0;
-        for(InformationLossResult lossResult: columnResults) {
+        for (InformationLossResult lossResult : columnResults) {
             sum += lossResult.getValue();
         }
-        
-        return sum / (double)columnResults.size();
+
+        return sum / (double) columnResults.size();
     }
 
     private InformationLossResult reportForColumn(int columnIndex) {
@@ -116,16 +116,16 @@ public class CategoricalPrecision implements InformationMetric {
         double precision = 0.0;
         double cells = 0.0;
 
-        for(int i = 0; i < numberOfRows; i++) {
+        for (int i = 0; i < numberOfRows; i++) {
             cells++;
 
-            double loss = weight*getLossCategorical(anonymized.get(i, columnIndex), columnInformation);
+            double loss = weight * getLossCategorical(anonymized.get(i, columnIndex), columnInformation);
             precision += loss;
         }
 
         int suppressedRows = original.getNumberOfRows() - anonymized.getNumberOfRows();
         cells += suppressedRows;
-        precision += weight*1*suppressedRows;
+        precision += weight * 1 * suppressedRows;
 
         double iloss = (precision) / cells;
         return new InformationLossResult(iloss, 0.0d, 1.0d);
@@ -142,47 +142,46 @@ public class CategoricalPrecision implements InformationMetric {
         }
 
         double weight = columnInformation.getWeight();
-        
+
         int suppressedRows = original.getNumberOfRows() - anonymized.getNumberOfRows();
 
-        CategoricalInformation categoricalInformation = (CategoricalInformation)columnInformation;
+        CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
         int height = categoricalInformation.getHierarchy().getHeight();
-        
+
         int generalizationLevel = this.transformationLevels[quasiIndex];
-        
+
         double iloss = 0.0;
-        
+
         iloss += suppressedRows * 1.0;
-        
+
         //for each anonymized row, the loss is transformation level / height - 1
-        iloss += anonymized.getNumberOfRows() * ((double) generalizationLevel / (double)(height - 1));
-        
-        iloss /= (double) original.getNumberOfRows();
-        
+        iloss += anonymized.getNumberOfRows() * ((double) generalizationLevel / (double) (height - 1));
+
+        iloss /= original.getNumberOfRows();
+
         iloss *= weight;
-        
+
         return new InformationLossResult(iloss, 0.0, 1.0);
-        
+
     }
-    
+
     @Override
     public List<InformationLossResult> reportPerQuasiColumn() {
         List<InformationLossResult> results = new ArrayList<>();
         int columnIndex = 0;
         int quasiIndex = 0;
 
-        for(ColumnInformation columnInformation: columnInformationList) {
+        for (ColumnInformation columnInformation : columnInformationList) {
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 columnIndex++;
                 continue;
             }
 
             InformationLossResult iloss;
-            
+
             if (this.withTransformationLevels) {
                 iloss = reportForColumnWithTransformationLevel(columnIndex, quasiIndex);
-            }
-            else {
+            } else {
                 iloss = reportForColumn(columnIndex);
             }
 
@@ -203,17 +202,17 @@ public class CategoricalPrecision implements InformationMetric {
      */
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
-                                        List< ColumnInformation > columnInformationList, InformationMetricOptions options) {
+                                        List<ColumnInformation> columnInformationList, InformationMetricOptions options) {
         this.original = original;
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;
-        
+
         this.withTransformationLevels = false;
         this.transformationLevels = null;
-        
+
         return this;
     }
-    
+
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {
@@ -223,7 +222,7 @@ public class CategoricalPrecision implements InformationMetric {
 
         this.withTransformationLevels = true;
         this.transformationLevels = transformationLevels;
-        
+
         return this;
     }
 }

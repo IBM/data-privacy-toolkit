@@ -1,12 +1,12 @@
 /*******************************************************************
-* IBM Confidential                                                *
-*                                                                 *
-* Copyright IBM Corp. 2015                                        *
-*                                                                 *
-* The source code for this program is not published or otherwise  *
-* divested of its trade secrets, irrespective of what has         *
-* been deposited with the U.S. Copyright Office.                  *
-*******************************************************************/
+ * IBM Confidential                                                *
+ *                                                                 *
+ * Copyright IBM Corp. 2015                                        *
+ *                                                                 *
+ * The source code for this program is not published or otherwise  *
+ * divested of its trade secrets, irrespective of what has         *
+ * been deposited with the U.S. Copyright Office.                  *
+ *******************************************************************/
 package com.ibm.research.drl.schema.impl;
 
 import com.ibm.research.drl.schema.IPVSchemaField;
@@ -35,6 +35,7 @@ public class SimpleSchemaField implements IPVSchemaField, Serializable {
         this.name = name;
         this.type = type;
     }
+
     @Override
     public String getName() {
         return name;

@@ -16,10 +16,10 @@ import java.io.Serializable;
         property = "class"
 )
 @JsonSubTypes({
-    @JsonSubTypes.Type(name = "CategoricalInformation", value = CategoricalInformation.class),
-    @JsonSubTypes.Type(name = "DefaultColumnInformation", value = DefaultColumnInformation.class),
-    @JsonSubTypes.Type(name = "NumericalRange", value = NumericalRange.class),
-    @JsonSubTypes.Type(name = "SensitiveColumnInformation", value = SensitiveColumnInformation.class),
+        @JsonSubTypes.Type(name = "CategoricalInformation", value = CategoricalInformation.class),
+        @JsonSubTypes.Type(name = "DefaultColumnInformation", value = DefaultColumnInformation.class),
+        @JsonSubTypes.Type(name = "NumericalRange", value = NumericalRange.class),
+        @JsonSubTypes.Type(name = "SensitiveColumnInformation", value = SensitiveColumnInformation.class),
 })
 public interface ColumnInformation extends Serializable {
     /**

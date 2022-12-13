@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.node.*;
 import com.ibm.research.drl.jsonpath.JSONPathException;
 import com.ibm.research.drl.jsonpath.JSONPathExtractor;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -73,7 +73,9 @@ public final class JSONRecord extends MultipathRecord {
     }
 
     private List<String> generatePaths(JsonNode node, List<String> parts, String head) {
-        if (node == null) { return Collections.emptyList(); }
+        if (node == null) {
+            return Collections.emptyList();
+        }
 
         if (parts.isEmpty()) {
             return Collections.singletonList(head);
@@ -163,12 +165,12 @@ public final class JSONRecord extends MultipathRecord {
 
         switch (nodeType) {
             case ARRAY:
-                return () -> IntStream.range(0, node.size()).boxed().flatMap( position -> StreamSupport.stream(
+                return () -> IntStream.range(0, node.size()).boxed().flatMap(position -> StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(
-                            listAllLeaves(
-                                    node.get(position),
-                                    pathSoFar + "/*"
-                            ).iterator(),
+                                listAllLeaves(
+                                        node.get(position),
+                                        pathSoFar + "/*"
+                                ).iterator(),
                                 Spliterator.IMMUTABLE
                         ), false)).distinct().iterator();
             case OBJECT:
@@ -225,7 +227,7 @@ public final class JSONRecord extends MultipathRecord {
     }
 
     public boolean isSingleElement(String fieldIdentifier) {
-        return ! fieldIdentifier.contains("*");
+        return !fieldIdentifier.contains("*");
     }
 
     @Override

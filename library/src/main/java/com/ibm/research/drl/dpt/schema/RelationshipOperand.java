@@ -12,8 +12,8 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.io.Serializable;
 
 public class RelationshipOperand implements Serializable {
-    private String name;
-    private ProviderType type;
+    private final String name;
+    private final ProviderType type;
 
     /**
      * Instantiates a new Relationship operand.

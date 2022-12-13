@@ -12,7 +12,7 @@ import java.util.List;
 public class InMemoryPartition implements Partition {
     private final IPVDataset dataset;
     private boolean isAnon;
-    
+
     @Override
     public int size() {
         return dataset.getNumberOfRows();
@@ -50,13 +50,13 @@ public class InMemoryPartition implements Partition {
                 false
         );
     }
-    
+
     public InMemoryPartition(int numberOfColumns) {
         this.dataset = new IPVDataset(
                 numberOfColumns);
     }
 
     public InMemoryPartition(IPVDataset dataset) {
-        this.dataset = dataset; 
+        this.dataset = dataset;
     }
 }

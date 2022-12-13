@@ -20,7 +20,7 @@ import java.util.Collection;
 public class CountryIdentifier extends AbstractManagerBasedIdentifier {
     private static final String[] appropriateNames = {"Country"};
     private static final CountryManager countryManager = CountryManager.getInstance();
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.ALPHA;
@@ -39,7 +39,7 @@ public class CountryIdentifier extends AbstractManagerBasedIdentifier {
 
     @Override
     public Collection<ProviderType> getLinkedTypes() {
-        return Arrays.asList(new ProviderType[]{ProviderType.CITY});
+        return Arrays.asList(ProviderType.CITY);
     }
 
     @Override

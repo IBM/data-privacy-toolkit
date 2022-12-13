@@ -13,9 +13,9 @@ public class LevelGenerator implements IPVGenerator {
     private final int K;
     private final int N;
 
-    private List<Integer> columns;
-    private List<Integer> currentCombination;
-    private int[] bitVector;
+    private final List<Integer> columns;
+    private final List<Integer> currentCombination;
+    private final int[] bitVector;
     private int endIndex = 0;
     private ItemSet nextItem;
 
@@ -41,7 +41,7 @@ public class LevelGenerator implements IPVGenerator {
         }
 
         this.columns = new ArrayList<>();
-        for(int i = 0; i < nAttributes; i++) {
+        for (int i = 0; i < nAttributes; i++) {
             this.columns.add(i);
         }
     }
@@ -88,10 +88,10 @@ public class LevelGenerator implements IPVGenerator {
 
             nextItem = createItemSet(currentCombination);
 
-            if(!isBanned(nextItem)) {
+            if (!isBanned(nextItem)) {
                 return true;
             }
-        } while(true);
+        } while (true);
     }
 
     private ItemSet createItemSet(List<Integer> counters) {

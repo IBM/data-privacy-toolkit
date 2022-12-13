@@ -50,6 +50,8 @@ public abstract class AbstractPersistentMaskingProvider extends AbstractMaskingP
     }
 
     protected abstract boolean isCached(String value);
+
     protected abstract String getCachedValue(String value);
+
     protected abstract void cacheValue(String value, String maskedValue);
 }

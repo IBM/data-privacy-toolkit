@@ -10,9 +10,9 @@ import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
-public class BinningMaskingProvider extends AbstractMaskingProvider{
+public class BinningMaskingProvider extends AbstractMaskingProvider {
     private static final Logger log = LogManager.getLogger(BinningMaskingProvider.class);
 
     private final int binSize;
@@ -26,13 +26,13 @@ public class BinningMaskingProvider extends AbstractMaskingProvider{
 
     public BinningMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this.binSize = maskingConfiguration.getIntValue("binning.mask.binSize");
-        
+
         if (this.binSize <= 1) {
             String msg = "binning.mask.binSize must be >1";
             log.error(msg);
             throw new MisconfigurationException(msg);
         }
-        
+
         this.format = maskingConfiguration.getStringValue("binning.mask.format");
         this.returnBinMean = maskingConfiguration.getBooleanValue("binning.mask.returnBinMean");
         this.failMode = maskingConfiguration.getIntValue("fail.mode");
@@ -49,7 +49,7 @@ public class BinningMaskingProvider extends AbstractMaskingProvider{
         double value;
         try {
             value = Double.valueOf(identifier);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
@@ -62,13 +62,13 @@ public class BinningMaskingProvider extends AbstractMaskingProvider{
             }
         }
 
-        int intValue = (int)value;
+        int intValue = (int) value;
 
         int lowerBase = intValue - (intValue % binSize);
         int higherBase = lowerBase + binSize;
 
         if (returnBinMean) {
-            return String.format("%f", ((double)lowerBase + (double)higherBase) / 2.0);
+            return String.format("%f", ((double) lowerBase + (double) higherBase) / 2.0);
         }
 
         return String.format(this.format, lowerBase, higherBase);

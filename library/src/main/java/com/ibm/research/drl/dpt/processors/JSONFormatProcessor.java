@@ -95,13 +95,13 @@ public class JSONFormatProcessor extends AbstractMultipathFormatProcessor {
 
         return () -> new Iterator<Record>() {
             int readSoFar = 0;
-            
+
             @Override
             public boolean hasNext() {
                 if (firstN > 0 && readSoFar >= firstN) {
                     return false;
                 }
-                
+
                 return iterator.hasNext();
             }
 

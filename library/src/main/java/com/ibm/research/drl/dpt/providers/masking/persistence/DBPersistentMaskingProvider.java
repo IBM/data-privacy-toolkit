@@ -73,7 +73,8 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 this.tableName = "mappings_" + namespace;
                 try {
                     initializeTable();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
                 initializeCache(cacheLimit);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -108,7 +109,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
 
             ResultSet resultSet = retrieveAllMappings(SQL);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 String value = resultSet.getString("value");
                 String masked = resultSet.getString("masked");
 
@@ -174,7 +175,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
 
             ResultSet rs = retrieveMapping(value);
 
-            if(rs.next()) {
+            if (rs.next()) {
                 return rs.getString("masked");
             }
 
@@ -188,9 +189,9 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
 
             try {
                 preparedStmt.execute();
-            }catch (SQLIntegrityConstraintViolationException e) {
+            } catch (SQLIntegrityConstraintViolationException e) {
                 rs = retrieveMapping(value);
-                if(rs.next()) {
+                if (rs.next()) {
                     String finalMasked = rs.getString("masked");
                     putToCache(value, finalMasked);
                     return finalMasked;
@@ -227,7 +228,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
 
 
                 preparedStmt.execute();
-            }catch (SQLIntegrityConstraintViolationException e) {
+            } catch (SQLIntegrityConstraintViolationException e) {
                 e.printStackTrace();
             }
 

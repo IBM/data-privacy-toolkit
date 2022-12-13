@@ -10,7 +10,6 @@ import java.util.Iterator;
 
 /**
  * The interface Ipv generator.
- *
  */
 public interface IPVGenerator extends Iterator<ItemSet> {
     boolean isBanned(ItemSet candidate);

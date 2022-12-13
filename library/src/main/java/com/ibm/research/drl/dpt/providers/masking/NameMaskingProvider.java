@@ -18,7 +18,6 @@ import java.util.Set;
 
 /**
  * The type Name masking provider.
- *
  */
 public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final NamesManager.Names names;
@@ -49,8 +48,7 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
         if (this.virtualField != null) {
             MaskingConfiguration subConf = getConfigurationForSubfield(this.virtualField, configuration);
             this.virtualFieldMaskingProvider = getMaskingProvider(this.virtualField, subConf, this.factory);
-        }
-        else {
+        } else {
             this.virtualFieldMaskingProvider = null;
         }
     }
@@ -75,8 +73,8 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
         StringBuilder builder = new StringBuilder();
 
         String[] tokens = identifier.split(this.separator);
-        
-        for(int i = 0; i < tokens.length; i++) {
+
+        for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i].trim();
 
             if (token.isEmpty()) continue;
@@ -84,7 +82,7 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
             final String maskedToken;
 
             if (1 == token.length()) {
-                if (Character.isAlphabetic( token.charAt(0) )) {
+                if (Character.isAlphabetic(token.charAt(0))) {
                     // initial: randomize it
                     maskedToken = "" + ('A' + random.nextInt(26));
                 } else {
@@ -96,11 +94,9 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
                 if (lookup != null) {
                     if (getPseudorandom) {
                         maskedToken = names.getPseudoRandomFirstName(lookup.getGender(), allowAnyGender, token);
-                    }
-                    else if (virtualField != null) {
+                    } else if (virtualField != null) {
                         maskedToken = virtualFieldMaskingProvider.mask(token);
-                    }
-                    else {
+                    } else {
                         maskedToken = names.getRandomFirstName(lookup.getGender(), allowAnyGender, lookup.getNameCountryCode());
                     }
                 } else {
@@ -108,21 +104,17 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
                     if (lookupLastName != null) {
                         if (getPseudorandom) {
                             maskedToken = names.getPseudoRandomLastName(token);
-                        }
-                        else if (virtualField != null) {
+                        } else if (virtualField != null) {
                             maskedToken = virtualFieldMaskingProvider.mask(token);
-                        }
-                        else {
+                        } else {
                             maskedToken = names.getRandomLastName(lookupLastName.getNameCountryCode());
                         }
                     } else {
                         if (getPseudorandom) {
                             maskedToken = names.getPseudoRandomLastName(token);
-                        }
-                        else if (virtualField != null) {
+                        } else if (virtualField != null) {
                             maskedToken = virtualFieldMaskingProvider.mask(token);
-                        }
-                        else {
+                        } else {
                             maskedToken = names.getRandomLastName();
                         }
                     }
@@ -130,7 +122,7 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
             }
 
             builder.append(this.virtualField == null ? FormatUtils.makeTitleCase(maskedToken) : maskedToken);
-            
+
             if (i < (tokens.length - 1)) {
                 builder.append(this.whitespace);
             }

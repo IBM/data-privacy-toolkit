@@ -22,19 +22,19 @@ public class GeoUtils {
     }
 
     public static LatitudeLongitude xyzToLatlon(double x, double y, double z) {
-        double b = Math.sqrt( asq * (1-esq) );
-        double bsq = Math.pow(b,2);
-        double ep = Math.sqrt( (asq - bsq)/bsq);
-        double p = Math.sqrt( Math.pow(x,2) + Math.pow(y,2) );
-        double th = Math.atan2(R*z, b*p);
+        double b = Math.sqrt(asq * (1 - esq));
+        double bsq = Math.pow(b, 2);
+        double ep = Math.sqrt((asq - bsq) / bsq);
+        double p = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        double th = Math.atan2(R * z, b * p);
 
-        double lon = Math.atan2(y,x);
-        double lat = Math.atan2( (z + Math.pow(ep,2)*b*Math.pow(Math.sin(th),3)), (p - esq*R*Math.pow(Math.cos(th),3)));
-        double N = R /( Math.sqrt(1 - esq*Math.pow(Math.sin(lat),2)));
+        double lon = Math.atan2(y, x);
+        double lat = Math.atan2((z + Math.pow(ep, 2) * b * Math.pow(Math.sin(th), 3)), (p - esq * R * Math.pow(Math.cos(th), 3)));
+        double N = R / (Math.sqrt(1 - esq * Math.pow(Math.sin(lat), 2)));
         double alt = p / Math.cos(lat) - N;
 
         // mod lat to 0-2pi
-        lon = lon % (2*Math.PI);
+        lon = lon % (2 * Math.PI);
 
         // correction for altitude near poles left out.
         return new LatitudeLongitude(Math.toDegrees(lat), Math.toDegrees(lon));
@@ -67,7 +67,7 @@ public class GeoUtils {
      * @return the double
      */
     public static Double degreesToDecimal(Double degrees, Double minutes, Double seconds) {
-        return degrees + minutes/60 + seconds/3600;
+        return degrees + minutes / 60 + seconds / 3600;
     }
 
     /*
@@ -92,12 +92,12 @@ public class GeoUtils {
      * @return the double
      */
     public static Double latitudeLongitudeDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLng = Math.toRadians(lon2-lon1);
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLng/2) * Math.sin(dLng/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     }
 

@@ -26,7 +26,7 @@ public class MondrianPartition implements Partition {
     private final List<PrivacyConstraint> privacyConstraints;
     private boolean isAnon;
     private final CategoricalSplitStrategy categoricalSplitStrategy;
-    
+
     /**
      * Is splittable boolean.
      *
@@ -84,22 +84,21 @@ public class MondrianPartition implements Partition {
     private boolean checkConstraints(Partition partition) {
 
         Partition anonymizedPartition = null;
-        
-        for(PrivacyConstraint privacyConstraint: privacyConstraints) {
+
+        for (PrivacyConstraint privacyConstraint : privacyConstraints) {
             if (privacyConstraint.requiresAnonymizedPartition()) {
-                anonymizedPartition = Mondrian.anonymizePartition((MondrianPartition) partition, 
+                anonymizedPartition = Mondrian.anonymizePartition((MondrianPartition) partition,
                         this.quasiColumns, this.nonQuasiColumns, this.columnInformationList, this.categoricalSplitStrategy);
                 break;
             }
         }
-        
-        for(PrivacyConstraint privacyConstraint: privacyConstraints) {
+
+        for (PrivacyConstraint privacyConstraint : privacyConstraints) {
             if (!privacyConstraint.requiresAnonymizedPartition()) {
                 if (!privacyConstraint.check(partition, sensitiveColumns)) {
                     return false;
                 }
-            }
-            else {
+            } else {
                 if (!privacyConstraint.check(anonymizedPartition, sensitiveColumns)) {
                     return false;
                 }
@@ -108,44 +107,44 @@ public class MondrianPartition implements Partition {
 
         return true;
     }
-    
+
     private List<Double> extractValues(int columnIndex) {
         List<Double> values = new ArrayList<>();
         Set<String> valueSet = new HashSet<>();
-        
+
         int numberOfRows = this.member.getNumberOfRows();
-        
-        for(int i = 0 ; i < numberOfRows; i++) {
+
+        for (int i = 0; i < numberOfRows; i++) {
             String v = this.member.get(i, columnIndex);
             if (!valueSet.contains(v)) {
                 values.add(Double.parseDouble(v));
                 valueSet.add(v);
             }
         }
-        
+
         return values;
     }
 
     private double median(List<Double> values) {
         double median;
         if (values.size() % 2 == 0)
-            median = (values.get(values.size()/2) + values.get(values.size()/2 - 1))/2.0;
+            median = (values.get(values.size() / 2) + values.get(values.size() / 2 - 1)) / 2.0;
         else
-            median = values.get(values.size()/2);
+            median = values.get(values.size() / 2);
 
         return median;
     }
 
     private MedianInformation calculateMedianForNumerical(List<Double> values) {
         Collections.sort(values);
-        
+
         double median = median(values);
         double low = values.get(0);
         double high = values.get(values.size() - 1);
-        
+
         return new MedianInformation(low, high, median);
     }
-    
+
     public static String generateMiddleKey(double low, double high) {
         if (low == high) {
             return Double.toString(low);
@@ -153,7 +152,7 @@ public class MondrianPartition implements Partition {
 
         return low + "-" + high;
     }
-    
+
     public List<MondrianPartition> splitNumerical(int quasiIndex, int level) {
         int columnIndex = this.quasiColumns.get(quasiIndex);
         List<Double> values = extractValues(columnIndex);
@@ -165,27 +164,27 @@ public class MondrianPartition implements Partition {
         width.set(columnIndex, new Interval(medianInformation.getLow(), medianInformation.getHigh()));
 
         int numberOfRows = this.member.getNumberOfRows();
-       
+
         List<List<String>> leftValues = new ArrayList<>();
         List<List<String>> rightValues = new ArrayList<>();
-       
+
         double leftMax = Double.MIN_VALUE;
         double leftMin = Double.MAX_VALUE;
-        
+
         double rightMax = Double.MIN_VALUE;
         double rightMin = Double.MAX_VALUE;
-        
-        for(int i = 0; i < numberOfRows; i++) {
+
+        for (int i = 0; i < numberOfRows; i++) {
             double v = Double.parseDouble(this.member.get(i, columnIndex));
-           
+
             if (v < median) { //assign left
                 leftValues.add(this.member.getRow(i));
-                
+
                 leftMax = Math.max(v, leftMax);
                 leftMin = Math.min(v, leftMin);
             } else { //assign right
                 rightValues.add(this.member.getRow(i));
-                
+
                 rightMax = Math.max(v, rightMax);
                 rightMin = Math.min(v, rightMin);
             }
@@ -194,48 +193,47 @@ public class MondrianPartition implements Partition {
         if (leftValues.isEmpty() || rightValues.isEmpty()) {
             return Collections.emptyList();
         }
-        
+
         List<String> leftMiddle = new ArrayList<>(middle);
-        leftMiddle.set(columnIndex, generateMiddleKey(leftMin,leftMax));
-        
+        leftMiddle.set(columnIndex, generateMiddleKey(leftMin, leftMax));
+
         List<String> rightMiddle = new ArrayList<>(middle);
         rightMiddle.set(columnIndex, generateMiddleKey(rightMin, rightMax));
-        
+
         List<Interval> leftWidth = copyList(width);
         leftWidth.set(columnIndex, new Interval(leftMin, leftMax));
-        
+
         List<Interval> rightWidth = copyList(width);
         rightWidth.set(columnIndex, new Interval(rightMin, rightMax));
-        
+
         IPVDataset leftData = new IPVDataset(leftValues,
                 null,
                 false);
         IPVDataset rightData = new IPVDataset(rightValues,
                 null,
                 false);
-        
+
         MondrianPartition lhs = new MondrianPartition(leftData, leftMiddle, leftWidth, columnInformationList, privacyConstraints, categoricalSplitStrategy);
         MondrianPartition rhs = new MondrianPartition(rightData, rightMiddle, rightWidth, columnInformationList, privacyConstraints, categoricalSplitStrategy);
-        
+
         if (!checkConstraints(lhs) || !checkConstraints(rhs)) {
             return Collections.emptyList();
         }
-        
+
         return Arrays.asList(lhs, rhs);
     }
 
     private List<Interval> copyList(List<Interval> w) {
         List<Interval> newList = new ArrayList<>(w.size());
-        
-        for(Interval interval: w) {
+
+        for (Interval interval : w) {
             if (interval == null) {
                 newList.add(null);
-            }
-            else {
+            } else {
                 newList.add(interval.clone());
             }
         }
-        
+
         return newList;
     }
 
@@ -248,42 +246,42 @@ public class MondrianPartition implements Partition {
                 return splitCategoricalHierarchyBased(quasiIndex);
         }
     }
-   
+
     private Integer getIndexForValue(String v, MaterializedHierarchy materializedHierarchy) {
         Integer index = materializedHierarchy.getIndex(v);
         if (index == null) {
             index = -1;
         }
-        
+
         return index;
     }
-    
+
     private List<Double> extractCategoricalIndices(int columnIndex, MaterializedHierarchy materializedHierarchy) {
         Set<Integer> indices = new HashSet<>();
         int numberOfRows = this.member.getNumberOfRows();
 
-        for(int i = 0; i < numberOfRows; i++) {
+        for (int i = 0; i < numberOfRows; i++) {
             String v = this.member.get(i, columnIndex);
             indices.add(getIndexForValue(v, materializedHierarchy));
         }
-       
+
         List<Double> results = new ArrayList<>();
-        for(Integer index: indices) {
-            results.add((double)index);    
+        for (Integer index : indices) {
+            results.add((double) index);
         }
-        
+
         return results;
     }
-    
+
     private List<MondrianPartition> splitCategoricalOrderBased(int quasiIndex, int level) {
         int columnIndex = this.quasiColumns.get(quasiIndex);
         MaterializedHierarchy materializedHierarchy = (MaterializedHierarchy)
-                ((CategoricalInformation)this.columnInformationList.get(columnIndex)).getHierarchy();
-        
+                ((CategoricalInformation) this.columnInformationList.get(columnIndex)).getHierarchy();
+
         List<Double> categoricalIndices = extractCategoricalIndices(columnIndex, materializedHierarchy);
         Collections.sort(categoricalIndices);
         double median = median(categoricalIndices);
-       
+
         List<List<String>> leftValues = new ArrayList<>();
         List<List<String>> rightValues = new ArrayList<>();
 
@@ -291,13 +289,13 @@ public class MondrianPartition implements Partition {
         double rightMax = Double.MIN_VALUE;
         double leftMin = Double.MAX_VALUE;
         double leftMax = Double.MIN_VALUE;
-        
+
         int numberOfRows = this.member.getNumberOfRows();
-        
-        for(int i = 0; i < numberOfRows; i++) {
+
+        for (int i = 0; i < numberOfRows; i++) {
             String v = this.member.get(i, columnIndex);
             double index = getIndexForValue(v, materializedHierarchy);
-            
+
             if (index < median) {
                 if (index <= leftMin) {
                     leftMin = index;
@@ -306,36 +304,35 @@ public class MondrianPartition implements Partition {
                 if (index >= leftMax) {
                     leftMax = index;
                 }
-                
+
                 leftValues.add(this.member.getRow(i));
-            }
-            else {
+            } else {
                 if (index <= rightMin) {
                     rightMin = index;
                 }
-                
+
                 if (index >= rightMax) {
                     rightMax = index;
                 }
-                
+
                 rightValues.add(this.member.getRow(i));
             }
         }
-        
+
         if (leftValues.isEmpty() || rightValues.isEmpty()) {
             return Collections.emptyList();
         }
 
-        
+
         List<String> leftMiddle = new ArrayList<>(middle);
         leftMiddle.set(columnIndex, null);
-        
+
         List<String> rightMiddle = new ArrayList<>(middle);
         rightMiddle.set(columnIndex, null);
-        
+
         List<Interval> leftWidth = copyList(width);
         leftWidth.set(columnIndex, new Interval(leftMin, leftMax));
-        
+
         List<Interval> rightWidth = copyList(width);
         rightWidth.set(columnIndex, new Interval(rightMin, rightMax));
 
@@ -360,13 +357,12 @@ public class MondrianPartition implements Partition {
         return Arrays.asList(lhs, rhs);
     }
 
-    
 
     private List<MondrianPartition> splitCategoricalHierarchyBased(int quasiIndex) {
-        
+
         int columnIndex = this.quasiColumns.get(quasiIndex);
         MaterializedHierarchy materializedHierarchy = (MaterializedHierarchy)
-                ((CategoricalInformation)this.columnInformationList.get(columnIndex)).getHierarchy();
+                ((CategoricalInformation) this.columnInformationList.get(columnIndex)).getHierarchy();
 
         String middleValue = this.middle.get(columnIndex);
         List<GeneralizationNode> children = materializedHierarchy.getNode(middleValue).getChildren();
@@ -374,18 +370,18 @@ public class MondrianPartition implements Partition {
         if (children.isEmpty()) {
             return Collections.emptyList();
         }
-        
+
         List<List<List<String>>> groups = new ArrayList<>(children.size());
-        for(int i = 0; i < children.size(); i++) {
+        for (int i = 0; i < children.size(); i++) {
             groups.add(new ArrayList<>());
         }
-        
+
         int numberOfRows = this.member.getNumberOfRows();
-        for(int i = 0; i < numberOfRows; i++) {
+        for (int i = 0; i < numberOfRows; i++) {
             String v = this.member.get(i, columnIndex);
-           
-            
-            for(int j = 0; j < children.size(); j++) {
+
+
+            for (int j = 0; j < children.size(); j++) {
                 GeneralizationNode n = children.get(j);
                 if (n.cover(v)) {
                     groups.get(j).add(this.member.getRow(i));
@@ -393,47 +389,46 @@ public class MondrianPartition implements Partition {
                 }
             }
         }
-      
+
         List<MondrianPartition> partitions = new ArrayList<>();
-        
-        for(int i = 0; i < groups.size(); i++) {
+
+        for (int i = 0; i < groups.size(); i++) {
             if (groups.get(i).isEmpty()) {
                 continue;
             }
-         
+
             String childValue = children.get(i).getValue();
             List<String> partitionMiddle = new ArrayList<>(middle);
             partitionMiddle.set(columnIndex, childValue);
-            
+
             List<Interval> partitionWidth = copyList(width);
-            partitionWidth.set(columnIndex, new Interval(0d, (double)children.get(i).length()));
-            
+            partitionWidth.set(columnIndex, new Interval(0d, (double) children.get(i).length()));
+
             IPVDataset partitionData = new IPVDataset(
                     groups.get(i),
                     null,
                     false
             );
-            
-            MondrianPartition partition = new MondrianPartition(partitionData, partitionMiddle, partitionWidth, 
+
+            MondrianPartition partition = new MondrianPartition(partitionData, partitionMiddle, partitionWidth,
                     columnInformationList, privacyConstraints, categoricalSplitStrategy);
-            
-            if(!checkConstraints(partition)) {
+
+            if (!checkConstraints(partition)) {
                 return Collections.emptyList();
             }
-            
+
             partitions.add(partition);
         }
-        
+
         return partitions;
     }
 
     public List<MondrianPartition> split(int quasiIndex, int level) {
         ColumnInformation columnInformation = columnInformationList.get(this.quasiColumns.get(quasiIndex));
-        
-        if(!columnInformation.isCategorical()) {
+
+        if (!columnInformation.isCategorical()) {
             return splitNumerical(quasiIndex, level);
-        }
-        else {
+        } else {
             return splitCategorical(quasiIndex, level);
         }
     }
@@ -441,11 +436,11 @@ public class MondrianPartition implements Partition {
     public double getNormalizedWidth(int columnIndex) {
         ColumnInformation columnInformation = columnInformationList.get(columnIndex);
         double dividend;
-        
+
         if (columnInformation.isCategorical()) {
             CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
             String topTerm = categoricalInformation.getHierarchy().getTopTerm();
-            dividend = ((MaterializedHierarchy)categoricalInformation.getHierarchy()).getNode(topTerm).length();
+            dividend = ((MaterializedHierarchy) categoricalInformation.getHierarchy()).getNode(topTerm).length();
         } else {
             NumericalRange numericalInformation = (NumericalRange) columnInformation;
             dividend = numericalInformation.getRange();
@@ -463,12 +458,12 @@ public class MondrianPartition implements Partition {
         int maxWidth = -1;
         int maxDim = -1;
 
-        for(int i = 0; i < qiLen; i++) {
-            if(allow[i] == 0) {
+        for (int i = 0; i < qiLen; i++) {
+            if (allow[i] == 0) {
                 continue;
             }
 
-            int normalizedWidth = (int)getNormalizedWidth(this.quasiColumns.get(i));
+            int normalizedWidth = (int) getNormalizedWidth(this.quasiColumns.get(i));
             if (normalizedWidth > maxWidth) {
                 maxWidth = normalizedWidth;
                 maxDim = i;
@@ -493,17 +488,17 @@ public class MondrianPartition implements Partition {
      * @param middle                the middle
      * @param columnInformationList the column information list
      */
-    public MondrianPartition(IPVDataset data, List<String> middle, List<Interval> width, 
-                             List<ColumnInformation> columnInformationList, 
+    public MondrianPartition(IPVDataset data, List<String> middle, List<Interval> width,
+                             List<ColumnInformation> columnInformationList,
                              List<PrivacyConstraint> privacyConstraints, CategoricalSplitStrategy categoricalSplitStrategy) {
-        
+
         this.member = data;
         this.middle = middle;
         this.width = width;
-        this.quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);;
+        this.quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         this.nonQuasiColumns = Mondrian.getNonQuasiColumns(data.getNumberOfColumns(), this.quasiColumns);
         this.sensitiveColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.SENSITIVE);
-        
+
         this.qiLen = quasiColumns.size();
         this.columnInformationList = columnInformationList;
         this.privacyConstraints = privacyConstraints;

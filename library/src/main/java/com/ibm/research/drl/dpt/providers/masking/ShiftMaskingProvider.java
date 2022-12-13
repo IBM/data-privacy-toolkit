@@ -10,13 +10,12 @@ import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.util.NumberUtils;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
 /**
  * The type Shift masking provider.
- *
  */
 public class ShiftMaskingProvider extends AbstractMaskingProvider {
     private static final Logger log = LogManager.getLogger(ShiftMaskingProvider.class);
@@ -24,6 +23,7 @@ public class ShiftMaskingProvider extends AbstractMaskingProvider {
     private final double shiftValue;
     private final int failMode;
     private final int digitsToKeep;
+
     /**
      * Instantiates a new Shift masking provider.
      */
@@ -44,10 +44,10 @@ public class ShiftMaskingProvider extends AbstractMaskingProvider {
         this.shiftValue = configuration.getDoubleValue("shift.mask.value");
         this.digitsToKeep = configuration.getIntValue("shift.mask.digitsToKeep");
         this.failMode = configuration.getIntValue("fail.mode");
-        
+
         if (this.failMode == FailMode.GENERATE_RANDOM) {
             String msg = "Random generation fail mode not supported";
-            log.error(msg); 
+            log.error(msg);
             throw new RuntimeException(msg);
         }
     }
@@ -59,8 +59,7 @@ public class ShiftMaskingProvider extends AbstractMaskingProvider {
             double k = Double.parseDouble(identifier);
             String maskedValue = String.format("%f", k + shiftValue);
             return NumberUtils.trimDecimalDigitis(maskedValue, this.digitsToKeep);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;

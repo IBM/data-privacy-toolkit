@@ -73,6 +73,7 @@ public class CityManager extends ResourceBasedManager<City> {
     private Map<String, List<City>> cityListMap;
 
     private static final CityManager instance = new CityManager();
+
     public static CityManager getInstance() {
         return instance;
     }
@@ -106,8 +107,7 @@ public class CityManager extends ResourceBasedManager<City> {
             list = new ArrayList<>();
             list.add(city);
             cityListMap.put(countryCode, list);
-        }
-        else {
+        } else {
             list.add(city);
         }
     }
@@ -123,7 +123,7 @@ public class CityManager extends ResourceBasedManager<City> {
     // NOTE: benchmarked before fix for cartesian. In repeat testing, consistently faster than Nearest v2.
     // Benchmark times: 6022, 5810, 6256
     private void precomputeNearest1() {
-        for(String key: cityListMap.keySet()) {
+        for (String key : cityListMap.keySet()) {
             final List<City> cityList = cityListMap.get(key);
             final List<KDTree.CartesianPoint> cityListPoints = cityList.stream().map(
                     (c) -> new KDTree.CartesianPoint(c.getLocation().getLatitude(), c.getLocation().getLongitude())).collect(Collectors.toList());
@@ -147,7 +147,7 @@ public class CityManager extends ResourceBasedManager<City> {
     // Benchmark times: 7165, 6566, 6634
     // NOTE - incorrect behavior: not using cartesian coordinate conversion
     private void precomputeNearest2() {
-        for(String key: cityListMap.keySet()) {
+        for (String key : cityListMap.keySet()) {
             final List<City> cityList = cityListMap.get(key);
 
             for (City city : cityList) {

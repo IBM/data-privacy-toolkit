@@ -13,70 +13,92 @@ public enum Resource {
     /**
      * Swift resource.
      */
-    SWIFT, /**
+    SWIFT,
+    /**
      * Religion resource.
      */
-    RELIGION, /**
+    RELIGION,
+    /**
      * Marital status resource.
      */
-    MARITAL_STATUS, /**
+    MARITAL_STATUS,
+    /**
      * Credit card type resource.
      */
-    CREDIT_CARD_TYPE, /**
+    CREDIT_CARD_TYPE,
+    /**
      * Occupation resource.
      */
-    OCCUPATION, /**
+    OCCUPATION,
+    /**
      * City resource.
      */
-    CITY, /**
+    CITY,
+    /**
      * Continent resource.
      */
-    CONTINENT, /**
+    CONTINENT,
+    /**
      * Country resource.
      */
-    COUNTRY, /**
+    COUNTRY,
+    /**
      * Phone calling codes resource.
      */
-    PHONE_CALLING_CODES, /**
+    PHONE_CALLING_CODES,
+    /**
      * Phone area codes resource.
      */
-    PHONE_AREA_CODES, /**
+    PHONE_AREA_CODES,
+    /**
      * Postal codes resource.
      */
-    POSTAL_CODES, /**
+    POSTAL_CODES,
+    /**
      * Wmi resource.
      */
-    WMI, /**
+    WMI,
+    /**
      * Street names resource.
      */
-    STREET_NAMES, /**
+    STREET_NAMES,
+    /**
      * First name female resource.
      */
-    FIRST_NAME_FEMALE, /**
+    FIRST_NAME_FEMALE,
+    /**
      * First name male resource.
      */
-    FIRST_NAME_MALE, /**
+    FIRST_NAME_MALE,
+    /**
      * Last name resource.
      */
-    LAST_NAME, /**
+    LAST_NAME,
+    /**
      * Atc codes resource.
      */
-    ATC_CODES, /**
+    ATC_CODES,
+    /**
      * Medicines resource.
      */
-    MEDICINES, /**
+    MEDICINES,
+    /**
      * Imsi resource.
      */
-    IMSI, /**
+    IMSI,
+    /**
      * Ic dv 10 resource.
      */
-    ICDv10, /**
+    ICDv10,
+    /**
      * Ic dv 9 resource.
      */
-    ICDv9, /**
+    ICDv9,
+    /**
      * Hospital names resource.
      */
-    HOSPITAL_NAMES, /**
+    HOSPITAL_NAMES,
+    /**
      * Tacdb resource.
      */
     TACDB,
@@ -96,7 +118,7 @@ public enum Resource {
     DEPENDENT,
     MONTH,
     DAY,
-    ANIMAL, 
+    ANIMAL,
     SSNUK_PREFIXES,
 
     STOP_WORDS

@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.io.Serializable;
 
 public class DataMaskingTarget implements Serializable {
-    
+
     private final ProviderType providerType;
     private final String targetPath;
 

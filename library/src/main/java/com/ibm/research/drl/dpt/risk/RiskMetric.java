@@ -13,8 +13,12 @@ import java.util.Map;
 
 public interface RiskMetric {
     String getName();
+
     String getShortName();
+
     double report();
+
     RiskMetric initialize(IPVDataset original, IPVDataset anonymized, List<ColumnInformation> columnInformationList, int k, Map<String, String> options);
+
     void validateOptions(Map<String, String> options) throws IllegalArgumentException;
 }

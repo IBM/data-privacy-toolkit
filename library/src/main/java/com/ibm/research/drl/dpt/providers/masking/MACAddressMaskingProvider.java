@@ -55,15 +55,15 @@ public class MACAddressMaskingProvider extends AbstractMaskingProvider {
     private String randomMACAddress(int octets) {
         int subsetLength = allowedCharacters.length;
 
-        StringBuilder builder = new StringBuilder((octets-1) * 3 + 2);
+        StringBuilder builder = new StringBuilder((octets - 1) * 3 + 2);
         for (int i = 0; i < (octets - 1); i++) {
-            builder.append((char) allowedCharacters[random.nextInt(subsetLength)]);
-            builder.append((char) allowedCharacters[random.nextInt(subsetLength)]);
+            builder.append(allowedCharacters[random.nextInt(subsetLength)]);
+            builder.append(allowedCharacters[random.nextInt(subsetLength)]);
             builder.append(':');
         }
 
-        builder.append((char) allowedCharacters[random.nextInt(subsetLength)]);
-        builder.append((char) allowedCharacters[random.nextInt(subsetLength)]);
+        builder.append(allowedCharacters[random.nextInt(subsetLength)]);
+        builder.append(allowedCharacters[random.nextInt(subsetLength)]);
 
         return builder.toString();
     }

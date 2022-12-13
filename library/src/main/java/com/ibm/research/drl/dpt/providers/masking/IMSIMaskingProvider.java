@@ -66,24 +66,21 @@ public class IMSIMaskingProvider extends AbstractMaskingProvider {
             mcc = identifier.substring(0, 3);
             if (this.preserveMNC) {
                 mnc = identifier.substring(3, 6);
-            }
-            else {
+            } else {
                 mnc = imsiManager.getRandomMNC(mcc);
             }
-        }
-        else {
+        } else {
             mcc = imsiManager.getRandomMCC();
             mnc = imsiManager.getRandomMNC(mcc);
         }
 
         String uid = RandomGenerators.generateRandomDigitSequence(15 - mcc.length() - mnc.length());
 
-        StringBuilder builder = new StringBuilder(15);
-        builder.append(mcc);
-        builder.append(mnc);
-        builder.append(uid);
+        String builder = mcc +
+                mnc +
+                uid;
 
-        return builder.toString();
+        return builder;
     }
 }
 

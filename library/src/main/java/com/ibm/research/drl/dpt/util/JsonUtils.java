@@ -21,7 +21,7 @@ public class JsonUtils {
             throw new MisconfigurationException("Key " + key + " has wrong type. Expected is: " + expectedType.toString());
         }
     }
-    
+
     public static Set<String> setFromArrayOfStrings(JsonNode array) {
         if (array == null || !array.isArray()) {
             return Collections.emptySet();
@@ -32,18 +32,17 @@ public class JsonUtils {
         for (JsonNode anArray : array) {
             set.add(anArray.asText());
         }
-        
+
         return set;
     }
-    
+
     private static void mergeMaps(Map<String, List<JsonNode>> a, Map<String, List<JsonNode>> b) {
 
-        for(Map.Entry<String, List<JsonNode>> entry: b.entrySet()) {
+        for (Map.Entry<String, List<JsonNode>> entry : b.entrySet()) {
             String key = entry.getKey();
             if (a.containsKey(key)) {
                 a.get(key).addAll(entry.getValue());
-            }
-            else {
+            } else {
                 a.put(key, entry.getValue());
             }
         }
@@ -55,8 +54,7 @@ public class JsonUtils {
 
         if (a.containsKey(key)) {
             a.get(key).addAll(l);
-        }
-        else {
+        } else {
             a.put(key, l);
         }
     }
@@ -66,7 +64,7 @@ public class JsonUtils {
 
         if (node.isObject()) {
             Iterator<String> iterator = node.fieldNames();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 String key = iterator.next();
                 JsonNode value = node.get(key);
                 Map<String, List<JsonNode>> innerPaths = traverseObject(value, parentPath + "/" + key);

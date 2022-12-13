@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.schema.IdentifiedType;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class IdentifierUtils {
 
         int whitespaceRegions = 0;
 
-        for(int i = 0; i < value.length() && whitespaceRegions < 2; i++) {
+        for (int i = 0; i < value.length() && whitespaceRegions < 2; i++) {
             char c = value.charAt(i);
             if (Character.isWhitespace(c)) {
                 whitespaceRegions++;
@@ -41,52 +41,46 @@ public class IdentifierUtils {
 
     public static int createCharacterProfile(String input) {
         int mask = CharacterRequirements.NONE;
-        
-        for(int i = 0; i < input.length(); i++) {
+
+        for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            
+
             if (Character.isDigit(c)) {
                 mask |= CharacterRequirements.DIGIT;
-            }
-            else if (Character.isAlphabetic(c)) {
+            } else if (Character.isAlphabetic(c)) {
                 mask |= CharacterRequirements.ALPHA;
-            }
-            else if (Character.isWhitespace(c)) {
+            } else if (Character.isWhitespace(c)) {
                 mask |= CharacterRequirements.SPACE;
-            }
-            else if (c == '.') {
+            } else if (c == '.') {
                 mask |= CharacterRequirements.DOT;
-            }
-            else if (c == '@') {
+            } else if (c == '@') {
                 mask |= CharacterRequirements.AT;
-            }
-            else if (c == '-') {
+            } else if (c == '-') {
                 mask |= CharacterRequirements.DASH;
-            }
-            else if (c == ':') {
+            } else if (c == ':') {
                 mask |= CharacterRequirements.COLUMN;
             }
         }
-        
+
         return mask;
     }
-    
+
     public static int fillCharacterMap(String input, int[] counters) {
         int nonASCII = 0;
-        
-        for(int i = 0; i < input.length(); i++) {
-           char c = input.charAt(i);
-           if (c > 256) {
-              nonASCII++;
-              continue;
-           }
-           
-           counters[c]++;
+
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c > 256) {
+                nonASCII++;
+                continue;
+            }
+
+            counters[c]++;
         }
-        
+
         return nonASCII;
     }
-    
+
     private static int calculateFrequency(long count, long numberOfIdentified, long numberOfEmpty,
                                           long numberOfUnknown, boolean considerEmptyForConfidence) {
         long totalCount = numberOfIdentified;
@@ -98,7 +92,7 @@ public class IdentifierUtils {
             return -1;
         }
 
-        return (int)(100 * count/totalCount);
+        return (int) (100 * count / totalCount);
     }
 
     private static boolean typeIdentifiedLessThanRequiredFrequency(String typeName, int typeConfidence, IdentificationConfiguration identificationConfiguration) {
@@ -114,11 +108,11 @@ public class IdentifierUtils {
             default:
                 throw new RuntimeException("Not implemented yet");
         }
-        
+
     }
-    
-    private static IdentifiedType findBestTypePriorityBased(Collection<IdentifiedType> identifiedTypes, Long rowsProcessed, 
-                                                             IdentificationConfiguration identificationConfiguration) {
+
+    private static IdentifiedType findBestTypePriorityBased(Collection<IdentifiedType> identifiedTypes, Long rowsProcessed,
+                                                            IdentificationConfiguration identificationConfiguration) {
         IdentifiedType bestType = new IdentifiedType(ProviderType.UNKNOWN.name(), -1);
         int bestTypePriority = -1;
         final boolean considerEmptyForConfidence = identificationConfiguration.getConsiderEmptyForFrequency();
@@ -126,7 +120,7 @@ public class IdentifierUtils {
         long numberOfEmpty = 0;
         long numberOfUnknown = 0;
 
-        for (IdentifiedType type :  identifiedTypes) {
+        for (IdentifiedType type : identifiedTypes) {
             if (type.getTypeName().equals(ProviderType.EMPTY.name())) {
                 numberOfEmpty += type.getCount();
             } else if (type.getTypeName().equals(ProviderType.UNKNOWN.name())) {
@@ -135,7 +129,7 @@ public class IdentifierUtils {
         }
 
         long numberOfIdentified = rowsProcessed - numberOfEmpty;
-        
+
         for (IdentifiedType type : identifiedTypes) {
             String typeName = type.getTypeName();
             if (typeName.equals(ProviderType.EMPTY.name()) || typeName.equals(ProviderType.UNKNOWN.name())) {
@@ -152,13 +146,13 @@ public class IdentifierUtils {
             int typePriority = identificationConfiguration.getPriorityForType(typeName);
 
             if (Objects.isNull(bestType) ||
-                    typePriority > bestTypePriority||
+                    typePriority > bestTypePriority ||
                     (typePriority == bestTypePriority && type.getCount() > bestType.getCount())) {
                 bestType = type;
                 bestTypePriority = typePriority;
             }
         }
-        
+
         return bestType;
     }
 
@@ -167,7 +161,7 @@ public class IdentifierUtils {
     // 30 names <-
     // 30 city
     // 65 unknown
-    
+
     private static IdentifiedType findBestTypeFrequencyBased(Collection<IdentifiedType> identifiedTypes, Long rowsProcessed, IdentificationConfiguration identificationConfiguration) {
         IdentifiedType bestType = new IdentifiedType(ProviderType.UNKNOWN.name(), -1);
         int bestTypeFrequency = -1;
@@ -176,11 +170,10 @@ public class IdentifierUtils {
         long numberOfEmpty = 0;
         long numberOfUnknown = 0;
 
-        for (IdentifiedType type :  identifiedTypes) {
+        for (IdentifiedType type : identifiedTypes) {
             if (type.getTypeName().equals(ProviderType.EMPTY.name())) {
                 numberOfEmpty += type.getCount();
-            }
-            else if (type.getTypeName().equals(ProviderType.UNKNOWN.name())) {
+            } else if (type.getTypeName().equals(ProviderType.UNKNOWN.name())) {
                 numberOfUnknown += type.getCount();
             }
         }
@@ -245,8 +238,8 @@ public class IdentifierUtils {
 
         Collection<Identifier> identifiers = IdentifierFactory.defaultIdentifiers();
 
-        for(Identifier identifier: identifiers) {
-            if(identifier.isOfThisType(value)) {
+        for (Identifier identifier : identifiers) {
+            if (identifier.isOfThisType(value)) {
                 ProviderType providerType = identifier.getType();
                 Long counter = results.get(providerType);
 
@@ -265,14 +258,14 @@ public class IdentifierUtils {
 
     public static Map<String, List<IdentifiedType>> organizeToCollection(Map<String, Map<String, Counter>> allTypes) {
         Map<String, List<IdentifiedType>> results = new HashMap<>();
-        for(Map.Entry<String, Map<String, Counter>> entry: allTypes.entrySet()) {
+        for (Map.Entry<String, Map<String, Counter>> entry : allTypes.entrySet()) {
             String columnName = entry.getKey();
 
             Map<String, Counter> counters = entry.getValue();
 
             List<IdentifiedType> identifiedTypes = new ArrayList<>();
 
-            for(Map.Entry<String, Counter> counterEntry: counters.entrySet()) {
+            for (Map.Entry<String, Counter> counterEntry : counters.entrySet()) {
                 identifiedTypes.add(new IdentifiedType(counterEntry.getKey(), counterEntry.getValue().counter));
             }
 

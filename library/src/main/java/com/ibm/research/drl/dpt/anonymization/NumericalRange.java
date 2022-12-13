@@ -98,14 +98,14 @@ public class NumericalRange implements ColumnInformation {
             this.high = null;
             this.range = null;
         }
-        
+
         this.isForLinking = forLinking;
         this.representation = String.format("[%f-%f]", this.low, this.high);
         this.sortedValues = sortedValues;
         this.weight = weight;
 
         this.positionMap = new HashMap<>();
-        for(int i = 0; i < sortedValues.size(); i++) {
+        for (int i = 0; i < sortedValues.size(); i++) {
             Double elem = sortedValues.get(i);
             this.positionMap.put(elem, i);
         }

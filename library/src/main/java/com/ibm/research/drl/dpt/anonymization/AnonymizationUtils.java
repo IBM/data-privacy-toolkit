@@ -11,18 +11,18 @@ import com.ibm.research.drl.dpt.generators.ItemSet;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
 public class AnonymizationUtils {
     private static final Logger logger = LogManager.getLogger(AnonymizationUtils.class);
-    
+
     public static int getK(List<PrivacyConstraint> privacyConstraints) {
 
-        for(PrivacyConstraint privacyConstraint: privacyConstraints) {
+        for (PrivacyConstraint privacyConstraint : privacyConstraints) {
             if (privacyConstraint instanceof KAnonymity) {
-                return ((KAnonymity)privacyConstraint).getK();
+                return ((KAnonymity) privacyConstraint).getK();
             }
         }
 
@@ -39,7 +39,7 @@ public class AnonymizationUtils {
         Iterator<IPVVulnerability> iterator = vulnerabilities.iterator();
         ItemSet merged = new ItemSet();
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             IPVVulnerability vulnerability = iterator.next();
             ItemSet itemSet = vulnerability.getItemSet();
             merged.addAll(itemSet);
@@ -59,7 +59,7 @@ public class AnonymizationUtils {
         List<Integer> columns = new ArrayList<>();
         int index = 0;
 
-        for(ColumnInformation columnInformation: columnInformationList) {
+        for (ColumnInformation columnInformation : columnInformationList) {
             if (columnInformation.getColumnType() == columnType) {
                 columns.add(index);
             }
@@ -72,7 +72,7 @@ public class AnonymizationUtils {
     public static int countColumnsByType(List<ColumnInformation> columnInformationList, ColumnType columnType) {
         int count = 0;
 
-        for(ColumnInformation columnInformation: columnInformationList) {
+        for (ColumnInformation columnInformation : columnInformationList) {
             if (columnInformation.getColumnType() == columnType) {
                 count++;
             }
@@ -89,17 +89,17 @@ public class AnonymizationUtils {
             key.append(value);
             key.append(":");
         }
-        
+
         return key.toString();
     }
-    
+
     public static Map<String, Integer> generateEQCounters(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         Map<String, Integer> counters = new HashMap<>();
-        
+
         for (List<String> row : dataset) {
             StringBuilder builder = new StringBuilder();
-            
+
             for (int quasiColumn : quasiColumns) {
                 builder.append(row.get(quasiColumn));
                 builder.append(":");
@@ -107,7 +107,7 @@ public class AnonymizationUtils {
 
             counters.merge(builder.toString(), 1, Integer::sum);
         }
-        
+
         return counters;
     }
 
@@ -130,7 +130,7 @@ public class AnonymizationUtils {
         Map<String, List<List<String>>> partitionsMap = new HashMap<>();
         int n = anonymized.getNumberOfRows();
 
-        for(int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             List<String> row = anonymized.getRow(i);
 
             StringBuilder builder = new StringBuilder();
@@ -146,7 +146,7 @@ public class AnonymizationUtils {
                 throw e;
             }
 
-            String key = builder.toString(); 
+            String key = builder.toString();
             List<List<String>> member = partitionsMap.get(key);
 
             if (member == null) {
@@ -159,7 +159,7 @@ public class AnonymizationUtils {
 
         List<Partition> partitions = new ArrayList<>();
 
-        for(List<List<String>> l: partitionsMap.values()) {
+        for (List<List<String>> l : partitionsMap.values()) {
             partitions.add(new InMemoryPartition(l));
         }
 
@@ -194,26 +194,26 @@ public class AnonymizationUtils {
     public static int buildPrivacyConstraintContentRequirements(List<PrivacyConstraint> privacyConstraints) {
         int requirements = 0;
 
-        for(PrivacyConstraint constraint: privacyConstraints) {
+        for (PrivacyConstraint constraint : privacyConstraints) {
             requirements |= constraint.contentRequirements();
         }
 
         return requirements;
     }
-    
+
     public static boolean checkPrivacyConstraints(List<PrivacyConstraint> privacyConstraints, Partition partition, List<Integer> sensitiveColumns) {
-        for(PrivacyConstraint privacyConstraint: privacyConstraints) {
+        for (PrivacyConstraint privacyConstraint : privacyConstraints) {
             if (!privacyConstraint.check(partition, sensitiveColumns)) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
-    public static void initializeConstraints(IPVDataset dataset, List<ColumnInformation> columnInformationList, 
+    public static void initializeConstraints(IPVDataset dataset, List<ColumnInformation> columnInformationList,
                                              List<PrivacyConstraint> privacyConstraints) {
-        for(PrivacyConstraint privacyConstraint: privacyConstraints) {
+        for (PrivacyConstraint privacyConstraint : privacyConstraints) {
             privacyConstraint.initialize(dataset, columnInformationList);
         }
     }

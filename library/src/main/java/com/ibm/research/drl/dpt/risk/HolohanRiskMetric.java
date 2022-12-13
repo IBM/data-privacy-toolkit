@@ -73,7 +73,8 @@ public class HolohanRiskMetric implements RiskMetric {
         this.N = Integer.parseInt(options.get(POPULATION));
         this.n = anonymized.getNumberOfRows();
 
-        if (N < n) throw new IllegalArgumentException("Population parameter must be larger than the dataset (sample) size");
+        if (N < n)
+            throw new IllegalArgumentException("Population parameter must be larger than the dataset (sample) size");
 
         this.equivalenceClassesOverAnonymizedDataset = AnonymizationUtils.generatePartitionsForLinking(anonymized, columnInformation);
 

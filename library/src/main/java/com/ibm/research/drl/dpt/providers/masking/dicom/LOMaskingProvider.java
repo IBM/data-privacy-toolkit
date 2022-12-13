@@ -19,7 +19,6 @@ public class LOMaskingProvider extends AbstractMaskingProvider {
 
     /**
      * Instantiates a new Lo masking provider.
-     *
      */
     public LOMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this.randomMaskingProvider = new RandomMaskingProvider(maskingConfiguration);
@@ -34,7 +33,7 @@ public class LOMaskingProvider extends AbstractMaskingProvider {
 
     @Override
     public String mask(String identifier) {
-        switch(entityType) {
+        switch (entityType) {
             case HOSPITAL:
                 return hospitalMaskingProvider.mask(identifier);
             case NAME:

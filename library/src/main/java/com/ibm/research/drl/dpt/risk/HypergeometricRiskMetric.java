@@ -27,7 +27,7 @@ public class HypergeometricRiskMetric implements RiskMetric {
     private double _N;
 
     @Override
-    public String getName(){
+    public String getName() {
         return "Hypergeometric distribution based metric";
     }
 
