@@ -1,86 +1,40 @@
-plugins {
-    id 'java'
-    id 'idea'
-    id 'eclipse'
-    id "com.github.johnrengelman.shadow" version "6.1.0"
-}
+/*******************************************************************
+ *                                                                 *
+ * Copyright IBM Corp. 2022                                        *
+ *                                                                 *
+ *******************************************************************/
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
 
 ext {
-//    artifactory_user = project.findProperty("ARTIFACTORY_USER") ?: System.getenv("ARTIFACTORY_USER")
-//    artifactory_password = project.findProperty("ARTIFACTORY_PASSWORD") ?: System.getenv("ARTIFACTORY_PASSWORD")
+    junit_jupiter_version = '5.9.0'
+    junit_platform_launcher_version = '1.9.0'
 
-    junit_version = '4.12'
-    junit_platform_launcher_version = '1.6.1'
-
-    dpt_version = '5.0.0-SNAPSHOT'
-
-    junit_jupiter_version = '5.6.2'
-    junit_platform_launcher_version = '1.6.2'
-
-    mockito_version = '3.3.3'
+    mockito_version = '4.8.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
-    jackson_version = '2.11.0'
-    jackson_dataformat_version = '2.11.0'
+    jackson_version = '2.13.3'
+    jackson_dataformat_version = '2.13.3'
 
-    slf4j_version = '1.7.30'
-    log4j_version = '2.13.3'
+    log4j2_version = '2.19.0'
 
-    commons_cli_version = '1.4'
-    commons_codec_version = '1.10'
+    commons_codec_version = '1.13'
     commons_csv_version = '1.8'
     commons_io_version = '2.7'
     commons_lang_version = '3.10'
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
-    commons_validator_version = '1.6'
-}
+    commons_validator_version = '1.7'
+    pdfbox_version = '2.0.24'
 
-configurations.all {
-    resolutionStrategy {
-        cacheChangingModulesFor 0, 'seconds'
-    }
-}
+    poi_version = "5.2.2"
 
-group = 'com.ibm.research.drl.dpt'
-version = '6.0.1'
+    dpt_version = "6.0.0"
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation "commons-cli:commons-cli:${commons_cli_version}"
-
-    implementation "org.apache.commons:commons-csv:${commons_csv_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation "commons-io:commons-io:${commons_io_version}"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation "org.apache.commons:commons-text:${commons_text_version}"
-
-    runtimeOnly "edu.stanford.nlp:stanford-corenlp:4.2.0:models"
-    runtimeOnly "edu.stanford.nlp:stanford-corenlp:4.2.0:models-english"
-
-    implementation group: 'com.ibm.research.drl.dpt', name: 'license', version: '3.3.0-SNAPSHOT'
-
-    testImplementation "junit:junit:${junit_version}"
-    testImplementation "org.mockito:mockito-core:${mockito_version}"
-    testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
-    testImplementation "org.slf4j:slf4j-log4j12:${slf4j_version}"
-    testImplementation "org.apache.logging.log4j:log4j-api:${log4j_version}"
-    testImplementation "org.apache.logging.log4j:log4j-core:${log4j_version}"
-
-    implementation "commons-io:commons-io:${commons_io_version}"
-    implementation "org.apache.commons:commons-csv:${commons_csv_version}"
-    implementation "org.apache.commons:commons-text:${commons_text_version}"
-    implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
+    commons_cli_version = '1.4'
+    commons_io_version = '2.7'
 }
 
 sourceCompatibility = '11'
@@ -91,46 +45,53 @@ tasks.withType(JavaCompile) {
 }
 
 test {
+    useJUnitPlatform()
     minHeapSize = "5g"
-    maxHeapSize = "5g"
+    maxHeapSize = "10g"
+
     testLogging {
-        // set options for log level LIFECYCLE
-        events "failed"
-        exceptionFormat "short"
+        events 'failed'
+        exceptionFormat 'short'
 
-        // set options for log level DEBUG
-        debug {
-            events "started", "skipped", "failed"
-            exceptionFormat "full"
-        }
-
-        // remove standard output/error logging from --info builds
-        // by assigning only 'failed' and 'skipped' events
-        info.events = ["failed", "skipped"]
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams false
     }
 }
+
+group = 'com.ibm.research.drl.dpt'
+version = '6.0.0'
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.ibm.research.drl.dpt.toolkit.Toolkit'
+        attributes 'Main-Class': "${group}.toolkit.Toolkit"
     }
 }
 
-task customFatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': 'com.ibm.research.drl.dpt.toolkit.Toolkit'
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
-    zip64 true
+dependencies {
+    implementation "${group}:data-privacy-toolkit:${dpt_version}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
+
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+
+    implementation "commons-cli:commons-cli:${commons_cli_version}"
+    implementation "commons-io:commons-io:${commons_io_version}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
+    testImplementation "org.mockito:mockito-core:${mockito_version}"
+    testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
+
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
 }
 
-shadowJar {
-    manifest {
-        attributes 'Main-Class': 'com.ibm.research.drl.dpt.toolkit.Toolkit'
-    }
-    zip64 true
+repositories {
+    mavenCentral()
+    mavenLocal()
 }
