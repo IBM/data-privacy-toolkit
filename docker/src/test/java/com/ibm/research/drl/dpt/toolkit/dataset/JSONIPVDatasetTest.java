@@ -19,7 +19,7 @@ public class JSONIPVDatasetTest {
     @Test
     public void loadArrayOfObjects() throws Exception {
         try (
-                InputStream inputStream = JSONIPVDatasetTest.class.getResourceAsStream("/json-dataset-array.json");
+                InputStream inputStream = getClass().getResourceAsStream("/json-dataset-array.json");
                 Reader reader = new InputStreamReader(inputStream)) {
             IPVDataset dataset = JSONIPVDataset.load(reader);
 
@@ -31,7 +31,7 @@ public class JSONIPVDatasetTest {
     @Test
     public void loadSequenceOfObjects() throws Exception {
         try (
-                InputStream inputStream = JSONIPVDatasetTest.class.getResourceAsStream("/json-dataset-objects.json");
+                InputStream inputStream = getClass().getResourceAsStream("/json-dataset-objects.json");
                 Reader reader = new InputStreamReader(inputStream)) {
             IPVDataset dataset = JSONIPVDataset.load(reader);
 
@@ -43,7 +43,7 @@ public class JSONIPVDatasetTest {
     @Test
     public void loadObjectWithMissingFields() throws Exception {
         try (
-                InputStream inputStream = JSONIPVDatasetTest.class.getResourceAsStream("/json-dataset-missing-fields.json");
+                InputStream inputStream = getClass().getResourceAsStream("/json-dataset-missing-fields.json");
                 Reader reader = new InputStreamReader(inputStream)) {
             IPVDataset dataset = JSONIPVDataset.load(reader);
 
