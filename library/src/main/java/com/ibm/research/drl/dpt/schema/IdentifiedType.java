@@ -1,15 +1,14 @@
 /*******************************************************************
-*                                                                 *
-* Copyright IBM Corp. 2015                                        *
-*                                                                 *
-*******************************************************************/
+ *                                                                 *
+ * Copyright IBM Corp. 2015                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.dpt.schema;
 
 import java.io.Serializable;
 
 /**
  * The type Identified type.
- *
  */
 public final class IdentifiedType implements Comparable<IdentifiedType>, Serializable {
     private final String typeName;

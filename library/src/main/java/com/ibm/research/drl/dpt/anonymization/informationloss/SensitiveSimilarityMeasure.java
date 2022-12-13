@@ -112,7 +112,7 @@ public class SensitiveSimilarityMeasure implements InformationMetric {
 
         return this;
     }
-    
+
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {
@@ -144,6 +144,6 @@ public class SensitiveSimilarityMeasure implements InformationMetric {
             if (columnInformationList.get(i) instanceof SensitiveColumnInformation) sensitiveFields.add(i);
         }
 
-        return  sensitiveFields;
+        return sensitiveFields;
     }
 }

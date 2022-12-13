@@ -14,7 +14,7 @@ import java.util.Collection;
 
 public class ATCIdentifier extends AbstractManagerBasedIdentifier {
     private final static ATCManager atcManager = ATCManager.getInstance();
-    private final String[] appropriateNames = new String[] {"ATC"};
+    private final String[] appropriateNames = new String[]{"ATC"};
 
     @Override
     protected Manager getManager() {

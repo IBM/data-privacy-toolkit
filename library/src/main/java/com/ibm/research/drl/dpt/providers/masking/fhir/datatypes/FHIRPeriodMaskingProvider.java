@@ -34,7 +34,7 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
     public FHIRPeriodMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
-        this.START_PATH  = fieldPath + "/start";
+        this.START_PATH = fieldPath + "/start";
         this.END_PATH = fieldPath + "/end";
 
         this.maskStart = maskingConfiguration.getBooleanValue("fhir.period.maskStart");
@@ -54,7 +54,7 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
     public JsonNode mask(JsonNode node) {
         try {
             FHIRPeriod obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRPeriod.class);
-            FHIRPeriod maskedObj= mask(obj);
+            FHIRPeriod maskedObj = mask(obj);
             return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
@@ -68,8 +68,7 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
 
         if (this.removeEnd) {
             period.setEnd(null);
-        }
-        else if (this.maskEnd && !isAlreadyMasked(END_PATH)) {
+        } else if (this.maskEnd && !isAlreadyMasked(END_PATH)) {
             String end = period.getEnd();
             if (end != null) {
                 period.setEnd(endMaskingProvider.mask(end));
@@ -79,8 +78,7 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
 
         if (this.removeStart) {
             period.setStart(null);
-        }
-        else if (this.maskStart && !isAlreadyMasked(START_PATH)) {
+        } else if (this.maskStart && !isAlreadyMasked(START_PATH)) {
             String start = period.getStart();
             if (start != null) {
                 period.setStart(startMaskingProvider.mask(start));

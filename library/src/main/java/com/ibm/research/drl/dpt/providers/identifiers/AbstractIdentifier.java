@@ -19,7 +19,7 @@ public abstract class AbstractIdentifier implements Identifier, Serializable {
      */
     protected Collection<String> getAppropriateNames() {
         return Collections.emptyList();
-    };
+    }
 
     @Override
     public int getPriority() {
@@ -36,7 +36,7 @@ public abstract class AbstractIdentifier implements Identifier, Serializable {
         Collection<String> appropriateNames = getAppropriateNames();
         String fieldNameLowercase = fieldName.toLowerCase();
 
-        for(String name: appropriateNames) {
+        for (String name : appropriateNames) {
             if (name.toLowerCase().equals(fieldNameLowercase)) {
                 return true;
             }

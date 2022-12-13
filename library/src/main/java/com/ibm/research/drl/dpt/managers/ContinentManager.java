@@ -30,7 +30,9 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
 
     private final SecureRandom random = new SecureRandom();
 
-    private ContinentManager() {super();}
+    private ContinentManager() {
+        super();
+    }
 
     public Collection<Continent> getItemList() {
         return getValues();
@@ -48,8 +50,7 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
             list = new ArrayList<>();
             list.add(continent);
             continentListMap.put(countryCode, list);
-        }
-        else {
+        } else {
             list.add(continent);
         }
     }
@@ -63,7 +64,7 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
 
         addToContinentList(continent, countryCode);
 
-        return Arrays.asList(new Tuple<>(name.toUpperCase(), continent));
+        return List.of(new Tuple<>(name.toUpperCase(), continent));
     }
 
     @Override
@@ -78,7 +79,7 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
      * @param k        the k
      * @return the closest continents
      */
-/* TODO : move up for re-usability */
+    /* TODO : move up for re-usability */
     private List<Continent> getClosestContinents(Location location, String key, int k) {
         LatitudeLongitude latlon = location.getLocation();
         double[] latlonKey = new double[]{latlon.getLatitude(), latlon.getLongitude(), 0};
@@ -95,7 +96,7 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
     private void precomputeNearest() {
         this.latLonTree = new HashMap<>();
 
-        for(String key: continentListMap.keySet()) {
+        for (String key : continentListMap.keySet()) {
             List<Continent> continentList = continentListMap.get(key);
 
             int numberOfContinents = continentList.size();

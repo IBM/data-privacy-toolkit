@@ -14,9 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class PluggableRegexIdentifier extends  AbstractRegexBasedIdentifier implements IdentifierWithOffset {
+public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
     private final Collection<String> appropriateNames;
-    private Collection<Pattern> patterns;
+    private final Collection<Pattern> patterns;
     private final ProviderType providerType;
     private final ValueClass valueClass;
     private final boolean isPOSIndependent;
@@ -90,7 +90,7 @@ public class PluggableRegexIdentifier extends  AbstractRegexBasedIdentifier impl
             return new Tuple<>(false, null);
         }
 
-        for(Pattern p: this.patterns) {
+        for (Pattern p : this.patterns) {
             Matcher matcher = p.matcher(data);
 
             if (!matcher.matches()) {
@@ -110,5 +110,7 @@ public class PluggableRegexIdentifier extends  AbstractRegexBasedIdentifier impl
         return new Tuple<>(false, null);
     }
 
-    public boolean isPOSIndependent() {return this.isPOSIndependent;}
+    public boolean isPOSIndependent() {
+        return this.isPOSIndependent;
+    }
 }

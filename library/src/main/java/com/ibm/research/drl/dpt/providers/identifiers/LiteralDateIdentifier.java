@@ -42,7 +42,7 @@ public class LiteralDateIdentifier extends AbstractIdentifier {
             String part = it.next();
 
             if (dayIdentifier.matcher(part).matches() ||
-                dayPattern.matcher(part).matches()
+                    dayPattern.matcher(part).matches()
             ) {
                 count += 1;
                 it.remove();

@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class FHIRMaskingUtils {
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String maskResourceId(String id, boolean preserveIdPrefix, MaskingProvider maskingProvider) {
         if (!preserveIdPrefix) {
@@ -43,7 +43,7 @@ public class FHIRMaskingUtils {
             return set;
         }
 
-        for(String v: value.split(",")) {
+        for (String v : value.split(",")) {
             set.add(v.toUpperCase());
         }
 
@@ -106,14 +106,14 @@ public class FHIRMaskingUtils {
     }
 
     public static Collection<FHIRIdentifier>
-        maskIdentifiers(Collection<FHIRIdentifier> identifiers, FHIRIdentifierMaskingProvider maskingProvider) {
+    maskIdentifiers(Collection<FHIRIdentifier> identifiers, FHIRIdentifierMaskingProvider maskingProvider) {
 
         if (identifiers == null || identifiers.isEmpty()) {
             return identifiers;
         }
 
         Collection<FHIRIdentifier> maskedIdentifiers = new ArrayList<>();
-        for(FHIRIdentifier identifier: identifiers) {
+        for (FHIRIdentifier identifier : identifiers) {
             maskedIdentifiers.add(maskingProvider.mask(identifier));
         }
 
@@ -128,7 +128,7 @@ public class FHIRMaskingUtils {
         }
 
         Collection<FHIRReference> maskedIdentifiers = new ArrayList<>();
-        for(FHIRReference identifier: identifiers) {
+        for (FHIRReference identifier : identifiers) {
             maskedIdentifiers.add(maskingProvider.mask(identifier));
         }
 
@@ -143,7 +143,7 @@ public class FHIRMaskingUtils {
         }
 
         Collection<FHIRAnnotation> maskedIdentifiers = new ArrayList<>();
-        for(FHIRAnnotation identifier: identifiers) {
+        for (FHIRAnnotation identifier : identifiers) {
             maskedIdentifiers.add(maskingProvider.mask(identifier));
         }
 
@@ -151,14 +151,14 @@ public class FHIRMaskingUtils {
     }
 
     public static Collection<FHIRContactPoint>
-        maskTelecoms(Collection<FHIRContactPoint> telecoms, FHIRContactPointMaskingProvider maskingProvider) {
+    maskTelecoms(Collection<FHIRContactPoint> telecoms, FHIRContactPointMaskingProvider maskingProvider) {
 
         if (telecoms == null || telecoms.isEmpty()) {
             return telecoms;
         }
 
         Collection<FHIRContactPoint> maskedTelecoms = new ArrayList<>();
-        for(FHIRContactPoint telecom: telecoms) {
+        for (FHIRContactPoint telecom : telecoms) {
             maskedTelecoms.add(maskingProvider.mask(telecom));
         }
 
@@ -173,7 +173,7 @@ public class FHIRMaskingUtils {
         }
 
         Collection<FHIRCodeableConcept> maskedConcepts = new ArrayList<>();
-        for(FHIRCodeableConcept codeableConcept: codeableConcepts) {
+        for (FHIRCodeableConcept codeableConcept : codeableConcepts) {
             maskedConcepts.add(maskingProvider.mask(codeableConcept));
         }
 
@@ -188,7 +188,7 @@ public class FHIRMaskingUtils {
         }
 
         Collection<FHIRAddress> maskedTelecoms = new ArrayList<>();
-        for(FHIRAddress telecom: telecoms) {
+        for (FHIRAddress telecom : telecoms) {
             maskedTelecoms.add(maskingProvider.mask(telecom));
         }
 

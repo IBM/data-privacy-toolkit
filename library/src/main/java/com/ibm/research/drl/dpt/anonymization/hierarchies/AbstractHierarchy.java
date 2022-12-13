@@ -9,5 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 
 public abstract class AbstractHierarchy implements GeneralizationHierarchy {
-    public AbstractHierarchy(JsonNode node) {}
+    public AbstractHierarchy(JsonNode node) {
+    }
 }

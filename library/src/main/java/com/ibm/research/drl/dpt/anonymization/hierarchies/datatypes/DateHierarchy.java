@@ -24,7 +24,7 @@ public class DateHierarchy implements GeneralizationHierarchy {
     private static final int YEAR_LEVEL = 2;
     private static final int MONTH_LEVEL = 1;
     private static final int DAY_LEVEL = 0;
-    
+
     private final SimpleDateFormat yearMonthDaySimpleDateFormat;
     private final SimpleDateFormat yearMonthSimpleDateFormat;
     private final SimpleDateFormat yearSimpleDateFormat;

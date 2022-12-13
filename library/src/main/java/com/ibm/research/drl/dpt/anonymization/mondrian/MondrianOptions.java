@@ -36,7 +36,7 @@ public class MondrianOptions implements AnonymizationAlgorithmOptions {
     public MondrianOptions() {
         this.categoricalSplitStrategy = CategoricalSplitStrategy.ORDER_BASED;
     }
-    
+
     public MondrianOptions(CategoricalSplitStrategy categoricalSplitStrategy) {
         this.categoricalSplitStrategy = categoricalSplitStrategy;
     }

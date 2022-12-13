@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.io.Serializable;
 
-public class FHIRResourceMaskingAction implements Serializable{
+public class FHIRResourceMaskingAction implements Serializable {
 
     private final String fullPath;
     private final String path;

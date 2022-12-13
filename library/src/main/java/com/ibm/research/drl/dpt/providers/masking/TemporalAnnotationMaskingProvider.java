@@ -35,7 +35,7 @@ public class TemporalAnnotationMaskingProvider extends AbstractMaskingProvider {
             temporalPeriod = DAY;
         } else if (identifier.contains("week")) {
             temporalPeriod = WEEK;
-        } else if (identifier.contains("month")){
+        } else if (identifier.contains("month")) {
             temporalPeriod = MONTH;
         } else {
             temporalPeriod = YEAR;
@@ -49,7 +49,7 @@ public class TemporalAnnotationMaskingProvider extends AbstractMaskingProvider {
             if (dayBefore.matcher(identifier).find()) {
                 identifierPeriods = -2;
             } else if (daysBefore.matcher(identifier).find()) {
-                identifierPeriods = - (extractNumbers(identifier) + 1);
+                identifierPeriods = -(extractNumbers(identifier) + 1);
             } else {
                 identifierPeriods = -1;
             }

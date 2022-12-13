@@ -32,7 +32,7 @@ public class KRatioMetric implements RiskMetric {
     public double report() {
         double risk = 0.0;
 
-        for (Partition partition: partitions) {
+        for (Partition partition : partitions) {
             risk = Math.max(gamma / partition.size(), risk);
         }
 
@@ -49,7 +49,8 @@ public class KRatioMetric implements RiskMetric {
             if (null == gammaString) throw new IllegalArgumentException("Missing parameter gamma");
             double gamma = Double.parseDouble(gammaString);
 
-            if (gamma <= 0 || gamma > 1) throw new IllegalArgumentException("gamma value is not a valid real number in (0, 1] " + gammaString);
+            if (gamma <= 0 || gamma > 1)
+                throw new IllegalArgumentException("gamma value is not a valid real number in (0, 1] " + gammaString);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("gamma value is not a valid real number in (0, 1] " + gammaString);
         }

@@ -11,7 +11,7 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralizedLossMetric implements  InformationMetric {
+public class GeneralizedLossMetric implements InformationMetric {
     private IPVDataset original;
     private IPVDataset anonymized;
     private List<ColumnInformation> columnInformationList;
@@ -47,7 +47,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
             return 0.0;
         }
 
-        return ((double) (leaves - 1)) / ((double)(hierarchyLeaves - 1));
+        return ((double) (leaves - 1)) / ((double) (hierarchyLeaves - 1));
     }
 
     private double getLoss(String anonymized, ColumnInformation columnInformation) {
@@ -56,8 +56,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
 
         if (columnInformation.isCategorical()) {
             return getLossCategorical(anonymizedValue, (CategoricalInformation) columnInformation);
-        }
-        else {
+        } else {
             return getLossNumerical(anonymizedValue, (NumericalRange) columnInformation);
         }
 
@@ -85,12 +84,12 @@ public class GeneralizedLossMetric implements  InformationMetric {
         int numberOfColumns = original.getNumberOfColumns();
         List<Double> lossPerColumn = new ArrayList<>(numberOfColumns);
 
-        for(int k = 0; k < numberOfColumns; k++) {
+        for (int k = 0; k < numberOfColumns; k++) {
             lossPerColumn.add(0.0);
         }
 
         int diff = original.getNumberOfRows();
-        for(int  j = 0; j < numberOfColumns; j++) {
+        for (int j = 0; j < numberOfColumns; j++) {
             ColumnInformation columnInformation = columnInformationList.get(j);
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 continue;
@@ -100,7 +99,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
             lossPerColumn.set(j, lossPerColumn.get(j) + loss);
         }
 
-        for(int k = 0; k < numberOfColumns; k++) {
+        for (int k = 0; k < numberOfColumns; k++) {
             double averageColumnLoss = columnInformationList.get(k).getWeight() * lossPerColumn.get(k) / ((double) original.getNumberOfRows());
             lm += averageColumnLoss;
         }
@@ -139,15 +138,15 @@ public class GeneralizedLossMetric implements  InformationMetric {
         int numberOfColumns = original.getNumberOfColumns();
         List<Double> lossPerColumn = new ArrayList<>(numberOfColumns);
 
-        for(int k = 0; k < numberOfColumns; k++) {
+        for (int k = 0; k < numberOfColumns; k++) {
             lossPerColumn.add(0.0);
         }
 
         int anonymizedNumberOfRows = anonymized.getNumberOfRows();
 
-        for(int i = 0; i < anonymizedNumberOfRows; i++) {
+        for (int i = 0; i < anonymizedNumberOfRows; i++) {
 
-            for(int  j = 0; j < numberOfColumns; j++) {
+            for (int j = 0; j < numberOfColumns; j++) {
 
                 ColumnInformation columnInformation = columnInformationList.get(j);
                 if (columnInformation.getColumnType() != ColumnType.QUASI) {
@@ -164,7 +163,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
         if (anonymized.getNumberOfRows() < original.getNumberOfRows()) {
             int diff = original.getNumberOfRows() - anonymized.getNumberOfRows();
 
-            for(int  j = 0; j < numberOfColumns; j++) {
+            for (int j = 0; j < numberOfColumns; j++) {
                 ColumnInformation columnInformation = columnInformationList.get(j);
                 if (columnInformation.getColumnType() != ColumnType.QUASI) {
                     continue;
@@ -175,7 +174,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
             }
         }
 
-        for(int k = 0; k < numberOfColumns; k++) {
+        for (int k = 0; k < numberOfColumns; k++) {
             double weight = columnInformationList.get(k).getWeight();
             double averageColumnLoss = weight * lossPerColumn.get(k) / ((double) original.getNumberOfRows());
             lm += averageColumnLoss;
@@ -197,14 +196,14 @@ public class GeneralizedLossMetric implements  InformationMetric {
         int anonymizedNumberOfRows = anonymized.getNumberOfRows();
         double weight = columnInformationList.get(columnIndex).getWeight();
 
-        for(int i = 0; i < anonymizedNumberOfRows; i++) {
+        for (int i = 0; i < anonymizedNumberOfRows; i++) {
             double loss = getLoss(anonymized.get(i, columnIndex), columnInformation);
             lossPerColumn += loss;
         }
 
         if (anonymized.getNumberOfRows() < original.getNumberOfRows()) {
             int diff = original.getNumberOfRows() - anonymized.getNumberOfRows();
-            lossPerColumn += weight*diff;
+            lossPerColumn += weight * diff;
         }
 
         double averageColumnLoss = weight * lossPerColumn / ((double) original.getNumberOfRows());
@@ -217,7 +216,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
         List<InformationLossResult> results = new ArrayList<>();
         int columnIndex = 0;
 
-        for(ColumnInformation columnInformation: columnInformationList) {
+        for (ColumnInformation columnInformation : columnInformationList) {
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 columnIndex++;
                 continue;
@@ -239,7 +238,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
      * @param anonymized            the anonymized
      * @param columnInformationList the column information list
      */
-    public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions, 
+    public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, InformationMetricOptions options) {
 
         if (original.getNumberOfColumns() != anonymized.getNumberOfColumns()) {
@@ -251,7 +250,7 @@ public class GeneralizedLossMetric implements  InformationMetric {
         this.columnInformationList = columnInformationList;
         return this;
     }
-    
+
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {

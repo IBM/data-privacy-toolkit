@@ -18,7 +18,7 @@ import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 import java.io.Serializable;
 import java.util.Set;
 
-public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable{
+public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
     private final boolean maskDisplay;
     private final boolean removeDisplay;
@@ -79,8 +79,7 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
 
         if (this.removeDisplay) {
             reference.setDisplay(null);
-        }
-        else if (this.maskDisplay && !isAlreadyMasked(DISPLAY_FIELD_PATH)) {
+        } else if (this.maskDisplay && !isAlreadyMasked(DISPLAY_FIELD_PATH)) {
             String display = reference.getDisplay();
             if (display != null) {
                 reference.setDisplay(displayMaskingProvider.mask(display));
@@ -94,11 +93,7 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
         if (this.maskReference && !isAlreadyMasked(REFERENCE_FIELD_PATH)) {
             String refValue = reference.getReference();
             if (refValue != null) {
-                boolean maskingRequired = true;
-
-                if (!this.maskReferenceExcludePrefixList.isEmpty() && matchPrefix(refValue)) {
-                    maskingRequired = false;
-                }
+                boolean maskingRequired = this.maskReferenceExcludePrefixList.isEmpty() || !matchPrefix(refValue);
 
                 if (maskingRequired) {
                     String maskedReference = FHIRMaskingUtils.maskResourceId(refValue, this.preserveReferencePrefix, referenceMaskingProvider);

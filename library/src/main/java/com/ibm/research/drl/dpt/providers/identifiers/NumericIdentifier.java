@@ -22,7 +22,7 @@ public class NumericIdentifier extends AbstractIdentifier {
     public boolean isOfThisType(String data) {
         int digits = 0;
 
-        for(int i = 0; i < data.length(); i++) {
+        for (int i = 0; i < data.length(); i++) {
             if (Character.isDigit(data.charAt(i))) {
                 digits++;
             }
@@ -35,7 +35,8 @@ public class NumericIdentifier extends AbstractIdentifier {
         try {
             Double d = Double.parseDouble(data);
             return true;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return false;
     }

@@ -19,7 +19,7 @@ public class ZIPCodeMaskingProvider extends AbstractMaskingProvider {
     private final ZIPCodeManager zipCodeManager;
     private final MaskingProvider randomMaskingProvider;
 
-    public ZIPCodeMaskingProvider(){
+    public ZIPCodeMaskingProvider() {
         this(new DefaultMaskingConfiguration());
     }
 
@@ -40,7 +40,7 @@ public class ZIPCodeMaskingProvider extends AbstractMaskingProvider {
         if (requireMinimumPopulation) {
 
             if (this.requireMinimumPopulationUsePrefix && (identifier.length() >= this.requireMinimumPopulationPrefixDigits)) {
-                    identifier = identifier.substring(0, this.requireMinimumPopulationPrefixDigits);
+                identifier = identifier.substring(0, this.requireMinimumPopulationPrefixDigits);
             }
 
             Integer population = null;

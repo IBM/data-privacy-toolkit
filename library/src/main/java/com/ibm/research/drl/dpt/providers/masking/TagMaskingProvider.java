@@ -11,8 +11,11 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 
 public class TagMaskingProvider extends AbstractMaskingProvider {
-    private static class CacheEntry extends HashMap<String, String> {}
-    private static class Cache extends HashMap<String, CacheEntry> {}
+    private static class CacheEntry extends HashMap<String, String> {
+    }
+
+    private static class Cache extends HashMap<String, CacheEntry> {
+    }
 
     private static final Cache cache = new Cache();
 

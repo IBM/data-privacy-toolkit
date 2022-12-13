@@ -33,12 +33,12 @@ public class DataFormatPropertiesHelper {
             });
 
             DataFormatProperties properties = new DataFormatProperties(
-               jsonNode.get("identification").asBoolean(),
-               jsonNode.get("vulnerabilityAssessment").asBoolean(),
-               jsonNode.get("masking").asBoolean(),
-               jsonNode.get("anonymization").asBoolean(),
-               jsonNode.get("freeText").asBoolean(),
-               validOutputs
+                    jsonNode.get("identification").asBoolean(),
+                    jsonNode.get("vulnerabilityAssessment").asBoolean(),
+                    jsonNode.get("masking").asBoolean(),
+                    jsonNode.get("anonymization").asBoolean(),
+                    jsonNode.get("freeText").asBoolean(),
+                    validOutputs
             );
 
             results.put(DataTypeFormat.valueOf(key), properties);

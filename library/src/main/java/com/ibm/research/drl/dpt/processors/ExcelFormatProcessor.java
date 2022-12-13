@@ -43,7 +43,7 @@ public class ExcelFormatProcessor extends AbstractFormatProcessor {
     public void maskStream(InputStream dataset, OutputStream output, MaskingProviderFactory factory,
                            DataMaskingOptions dataMaskingOptions, Set<String> alreadyMaskedFields,
                            Map<ProviderType, Class<? extends MaskingProvider>> registerTypes) throws IOException {
-        
+
         if (registerTypes != null) {
             for (final Map.Entry<ProviderType, Class<? extends MaskingProvider>> typeProviderPair : registerTypes.entrySet()) {
                 factory.registerMaskingProviderClass(typeProviderPair.getValue(), typeProviderPair.getKey());
@@ -70,7 +70,7 @@ public class ExcelFormatProcessor extends AbstractFormatProcessor {
         String sheetName = sheet.getSheetName();
 
         for (Row row : sheet) {
-            for(Cell cell: row) {
+            for (Cell cell : row) {
                 String value = formatter.formatCellValue(cell);
 
                 if (value == null || value.isEmpty()) {
@@ -100,23 +100,22 @@ public class ExcelFormatProcessor extends AbstractFormatProcessor {
 
     @Override
     public IdentificationReport identifyTypesStream(InputStream input, DataTypeFormat inputFormatType,
-                                                                              DatasetOptions datasetOptions, Collection<Identifier> identifiers,
-                                                                              int firstN) throws IOException {
-        
+                                                    DatasetOptions datasetOptions, Collection<Identifier> identifiers,
+                                                    int firstN) throws IOException {
+
         final Map<String, List<IdentifiedType>> allTypes = new HashMap<>();
 
         Workbook wb;
 
         if (inputFormatType == DataTypeFormat.XLSX) {
             wb = new XSSFWorkbook(input);
-        }
-        else {
+        } else {
             wb = new HSSFWorkbook(input);
         }
 
         int numberOfSheets = wb.getNumberOfSheets();
 
-        for(int i = 0; i < numberOfSheets; i++) {
+        for (int i = 0; i < numberOfSheets; i++) {
             Sheet sheet = wb.getSheetAt(i);
             inspectSheet(sheet, allTypes, identifiers);
         }
@@ -125,7 +124,7 @@ public class ExcelFormatProcessor extends AbstractFormatProcessor {
 
 
         Map<String, IdentifiedType> bestTypes = IdentifierUtils.getIdentifiedType(allTypes, 1L, IdentificationConfiguration.DEFAULT);
-        
+
         return new IdentificationReport(
                 allTypes,
                 bestTypes,

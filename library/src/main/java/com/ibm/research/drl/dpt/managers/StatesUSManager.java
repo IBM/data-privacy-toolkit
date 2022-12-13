@@ -19,8 +19,14 @@ import java.util.List;
 
 public class StatesUSManager extends ResourceBasedManager<State> {
     private final static StatesUSManager STATES_US_MANAGER = new StatesUSManager();
-    public static StatesUSManager getInstance() { return STATES_US_MANAGER; }
-    private StatesUSManager() {super();}
+
+    public static StatesUSManager getInstance() {
+        return STATES_US_MANAGER;
+    }
+
+    private StatesUSManager() {
+        super();
+    }
 
     @Override
     protected Collection<ResourceEntry> getResources() {

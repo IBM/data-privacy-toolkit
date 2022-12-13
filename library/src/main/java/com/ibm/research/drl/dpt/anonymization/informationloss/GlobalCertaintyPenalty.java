@@ -21,7 +21,7 @@ public class GlobalCertaintyPenalty implements InformationMetric {
     private int numberOfQuasiColumns() {
         int s = 0;
 
-        for(ColumnInformation c: columnInformationList) {
+        for (ColumnInformation c : columnInformationList) {
             if (c.getColumnType() == ColumnType.QUASI) {
                 s += 1;
             }
@@ -94,18 +94,18 @@ public class GlobalCertaintyPenalty implements InformationMetric {
 
         double gcp = 0.0;
 
-        for(Partition p: partitions) {
+        for (Partition p : partitions) {
             double ncp = getNCP(p);
             gcp += p.size() * ncp;
         }
 
-        return gcp / ((double)d * (double)totalRecords);
+        return gcp / ((double) d * (double) totalRecords);
     }
 
     private InformationLossResult reportForColumn(int columnIndex) {
         int totalRecords = anonymized.getNumberOfRows();
         double gcp = 0.0;
-        for(Partition p: partitions) {
+        for (Partition p : partitions) {
             gcp += p.size() * p.getNormalizedWidth(columnIndex);
         }
 
@@ -118,7 +118,7 @@ public class GlobalCertaintyPenalty implements InformationMetric {
         List<InformationLossResult> results = new ArrayList<>();
         int columnIndex = 0;
 
-        for(ColumnInformation columnInformation: columnInformationList) {
+        for (ColumnInformation columnInformation : columnInformationList) {
             if (columnInformation.getColumnType() != ColumnType.QUASI) {
                 columnIndex++;
                 continue;
@@ -148,7 +148,7 @@ public class GlobalCertaintyPenalty implements InformationMetric {
         this.partitions = originalPartitions;
         return this;
     }
-    
+
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {

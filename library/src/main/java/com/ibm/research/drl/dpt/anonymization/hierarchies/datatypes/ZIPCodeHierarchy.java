@@ -17,8 +17,11 @@ import java.util.Set;
 public class ZIPCodeHierarchy implements GeneralizationHierarchy, Serializable {
     private static final long serialVersionUID = 5771549821136802771L;
     private static final ZIPCodeHierarchy instance = new ZIPCodeHierarchy();
-    public static ZIPCodeHierarchy getInstance() {return instance;}
-    
+
+    public static ZIPCodeHierarchy getInstance() {
+        return instance;
+    }
+
     private final String topTerm = "*****";
     private final int height = 6;
 
@@ -36,32 +39,32 @@ public class ZIPCodeHierarchy implements GeneralizationHierarchy, Serializable {
     public int leavesForNode(String value) {
         int level = getNodeLevel(value);
 
-        return (int)Math.pow(10, level);
+        return (int) Math.pow(10, level);
     }
 
     @Override
     public Set<String> getNodeLeaves(String value) {
         int level = getNodeLevel(value);
-        
+
         if (level == 0) { //this is a leaf in the tree
             return Collections.singleton(value);
         }
-        
+
         //we calculate how many ZIP codes are in the leaves 
         //based on the level. If the value is 1234*, then the 
         //level is 1, so we have 10^(1) = 10 remaining codes
-        int remainingZIPCodes = (int)Math.pow(10, level);
+        int remainingZIPCodes = (int) Math.pow(10, level);
 
         // if the value is 1234*, then the prefix we preserve is 1234
-        String prefix = value.substring(0, 5 - level); 
-        
+        String prefix = value.substring(0, 5 - level);
+
         Set<String> leaves = new HashSet<>();
-        
-        for(int i = 0; i < remainingZIPCodes; i++) {
+
+        for (int i = 0; i < remainingZIPCodes; i++) {
             //we left pad so the final value will be a 5-digit code
             leaves.add(prefix + StringUtils.leftPad(i + "", level, '0'));
         }
-        
+
         return leaves;
     }
 
@@ -69,7 +72,7 @@ public class ZIPCodeHierarchy implements GeneralizationHierarchy, Serializable {
     public int getNodeLevel(String value) {
         int level = 0;
 
-        for(int i = (value.length() - 1); i >= 0; i--) {
+        for (int i = (value.length() - 1); i >= 0; i--) {
             if (value.charAt(i) == '*') {
                 level++;
             }
@@ -99,7 +102,7 @@ public class ZIPCodeHierarchy implements GeneralizationHierarchy, Serializable {
 
         StringBuilder prefix = new StringBuilder(value.substring(0, value.length() - level));
 
-        for(int i = 0; i < level; i++) {
+        for (int i = 0; i < level; i++) {
             prefix.append("*");
         }
 

@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 
 /**
  * The type Address identifier.
- *
  */
 public class AddressIdentifier extends AbstractIdentifier {
     private static final Pattern[] poBoxPatterns = {
@@ -93,7 +92,7 @@ public class AddressIdentifier extends AbstractIdentifier {
         int roadtypeMatchEnd = -1;
         String roadType = null;
 
-        while(roadtypeMatch.find()) {
+        while (roadtypeMatch.find()) {
             roadtypeMatchOffset = roadtypeMatch.start();
             roadtypeMatchEnd = roadtypeMatch.end();
             roadType = roadtypeMatch.group("roadtype").trim();
@@ -165,7 +164,7 @@ public class AddressIdentifier extends AbstractIdentifier {
     protected Collection<String> getAppropriateNames() {
         return Arrays.asList(appropriateNames);
     }
-    
+
     @Override
     public int getMinimumCharacterRequirements() {
         return CharacterRequirements.NONE;

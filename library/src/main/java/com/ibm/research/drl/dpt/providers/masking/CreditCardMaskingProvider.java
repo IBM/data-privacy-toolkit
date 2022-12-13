@@ -13,7 +13,6 @@ import java.security.SecureRandom;
 
 /**
  * The type Credit card masking provider.
- *
  */
 public class CreditCardMaskingProvider extends AbstractMaskingProvider {
     private final boolean preserveIssuer;

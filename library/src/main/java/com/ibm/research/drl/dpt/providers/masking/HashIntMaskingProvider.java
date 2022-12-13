@@ -8,7 +8,7 @@ package com.ibm.research.drl.dpt.providers.masking;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
