@@ -5,10 +5,10 @@
 *******************************************************************/
 package com.ibm.research.drl.dpt.datasets;
 
-import com.ibm.research.drl.schema.IPVSchemaField;
-import com.ibm.research.drl.schema.IPVSchemaFieldType;
-import com.ibm.research.drl.schema.impl.SimpleSchema;
-import com.ibm.research.drl.schema.impl.SimpleSchemaField;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
+import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;

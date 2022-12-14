@@ -5,8 +5,8 @@
 *******************************************************************/
 package com.ibm.research.drl.dpt.schema;
 
-import com.ibm.research.drl.schema.IPVSchemaField;
-import com.ibm.research.drl.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 

@@ -5,10 +5,16 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.schema;
 
-import com.ibm.research.drl.schema.IPVSchemaField;
-import com.ibm.research.drl.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The type Item set generator.
