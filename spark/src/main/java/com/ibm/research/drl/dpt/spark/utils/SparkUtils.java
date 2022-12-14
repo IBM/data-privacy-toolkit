@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2016                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.spark.utils;
@@ -45,7 +45,7 @@ public class SparkUtils {
         Options options = new Options();
 
         options.addOption(
-                Option.build("c").longOpt("conf").hasArg().required().desc("configuration file").build()
+                Option.builder("c").longOpt("conf").hasArg().required().desc("configuration file").build()
         );
         options.addOption(
                 Option.builder("i").longOpt("input").hasArg().required().desc("json reference to input").build()

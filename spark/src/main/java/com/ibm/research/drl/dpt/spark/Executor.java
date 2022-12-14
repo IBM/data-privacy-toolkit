@@ -11,6 +11,7 @@ import com.ibm.research.drl.dpt.spark.dataset.reference.DatasetReference;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.spark.sql.Dataset;
