@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '8', '11', '17' ]
+        java: [ '11', '17', '19' ]
         distribution: ['adopt-hotspot', 'adopt-openj9', 'corretto', 'microsoft']
     steps:
       - uses: actions/checkout@v3
