@@ -8,7 +8,6 @@ package com.ibm.research.drl.schema;
 /**
  * The interface Ipv schema field.
  *
- * @author stefanob
  */
 public interface IPVSchemaField {
     /**
