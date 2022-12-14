@@ -25,9 +25,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * @author santonat
- */
 public class ReligionMaskingProviderTest {
 
     @Test

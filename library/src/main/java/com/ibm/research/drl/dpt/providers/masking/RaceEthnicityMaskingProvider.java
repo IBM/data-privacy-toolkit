@@ -15,7 +15,6 @@ import java.security.SecureRandom;
 /**
  * The type Race ethnicity masking provider.
  *
- * @author stefanob
  */
 public class RaceEthnicityMaskingProvider extends AbstractMaskingProvider {
     private static final RaceManager raceManager = RaceManager.getInstance();
