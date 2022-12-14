@@ -27,7 +27,6 @@ public class Toolkit {
 
     private enum CommandLineOptions {
         DisplayHelp("h", "help", "Display help", false, false),
-        Licence("l", "licence", "Path to the licence file (required if licensed deployment)", false, true),
         Configuration("c", "configuration", "Path to the configuration file", true, true),
         Input("i", "input", "Path to the input (file or directory)", true, true),
         Output("o", "output", "Path to the output (file or directory)", true, true),
