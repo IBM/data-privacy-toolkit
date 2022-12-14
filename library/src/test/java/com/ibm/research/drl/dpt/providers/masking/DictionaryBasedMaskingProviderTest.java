@@ -23,12 +23,10 @@ public class DictionaryBasedMaskingProviderTest {
 
     @Test
     public void testMask() throws Exception {
-        
         Set<String> terms = new HashSet<>(Arrays.asList("one", "two", "three", "four"));
 
         File tempFile2 = File.createTempFile("dict", ".csv");
         String filename = tempFile2.getCanonicalPath();
-        System.out.println(filename); 
         
         try (FileOutputStream fos = new FileOutputStream(tempFile2); PrintStream printStream = new PrintStream(fos)) {
             for (String term : terms) {
