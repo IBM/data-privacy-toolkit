@@ -87,7 +87,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
     public void addItem(int item) {
         if (!bitSet.get(item)) {
             bitSet.set(item);
-            size += 1L;
+            size += 1;
         }
     }
 
@@ -99,7 +99,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
     public void removeItem(int item) {
         if (bitSet.get(item)) {
             bitSet.set(item, false);
-            size -= 1L;
+            size -= 1;
         }
     }
 
@@ -120,9 +120,6 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
         ItemSet itemSet = (ItemSet) o;
 
         return (this.isSubSetOf(itemSet) && itemSet.isSubSetOf(this));
-
-//        if (size != itemSet.size) return false;
-//        return bitSet != null ? bitSet.equals(itemSet.bitSet) : itemSet.bitSet == null;
     }
 
     @Override
@@ -172,7 +169,7 @@ public class ItemSet implements Comparable<ItemSet>, Serializable {
     }
 
     /**
-     * Can be extend with boolean.
+     * Can be extended with boolean.
      *
      * @param item the item
      * @return the boolean
