@@ -20,7 +20,6 @@ import java.util.Map;
 /**
  * The type Country masking provider.
  *
- * @author stefanob
  */
 public class CountryMaskingProvider extends AbstractMaskingProvider {
     private static final CountryManager countryManager = CountryManager.getInstance();
