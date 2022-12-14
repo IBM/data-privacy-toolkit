@@ -6,8 +6,8 @@
 package com.ibm.research.drl.dpt.datasets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.schema.IPVSchemaField;
-import com.ibm.research.drl.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
