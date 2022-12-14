@@ -1,15 +1,20 @@
 name: dpt-library
 on: [push]
 jobs:
-  test-library:
+  build-library:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '8', '11', '17' ]
+        distribution: ['adopt-hotspot', 'adopt-openj9', 'corretto', 'microsoft']
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Setup java
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+          check-latest: true
       - name: Run gradlew clean build
         working-directory: ./library
         run: ./gradlew clean build
