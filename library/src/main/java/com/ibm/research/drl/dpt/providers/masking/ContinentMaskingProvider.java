@@ -24,7 +24,6 @@ import java.util.Map;
 /**
  * The type Continent masking provider.
  *
- * @author santonat
  */
 public class ContinentMaskingProvider extends AbstractMaskingProvider {
     private static final CountryManager countryManager = CountryManager.getInstance();

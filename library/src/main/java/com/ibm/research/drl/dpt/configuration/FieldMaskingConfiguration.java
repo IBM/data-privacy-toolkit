@@ -15,7 +15,6 @@ import java.util.Map;
 /**
  * The type Field masking configuration.
  *
- * @author stefanob
  */
 public class FieldMaskingConfiguration implements MaskingConfiguration, Serializable {
     private final MaskingConfiguration parent;
