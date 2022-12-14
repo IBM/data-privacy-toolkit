@@ -8,13 +8,13 @@ updates:
     target-branch: "main"
     labels:
       - "library dependencies"
-#  - package-ecosystem: "gradle"
-#    directory: "/docker"
-#    schedule:
-#      interval: "weekly"
-#    target-branch: "main"
-#    labels:
-#      - "toolkit dependencies"
+  - package-ecosystem: "gradle"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+    target-branch: "main"
+    labels:
+      - "toolkit dependencies"
 #  - package-ecosystem: "docker"
 #    directory: "/docker"
 #    schedule:
