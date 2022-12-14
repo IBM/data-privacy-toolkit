@@ -18,9 +18,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -248,7 +246,7 @@ public class RandomGenerators {
     public static String deterministicReplacement(String identifier) {
 
         try {
-            MessageDigest salt = MessageDigest.getInstance("SHA-256");
+            MessageDigest salt = MessageDigest.getInstance("SHA-512");
             salt.update(identifier.getBytes(StandardCharsets.UTF_8));
             String digest = bytesToHex(salt.digest());
 
@@ -278,10 +276,7 @@ public class RandomGenerators {
         String host = RandomGenerators.randomUIDGenerator(10);
         String tld = getRandomTLD();
 
-        String builder = "http://" + host +
-                '.' +
-                tld;
-        return builder;
+        return "http://" + host + '.' + tld;
     }
 
     /**
@@ -455,8 +450,8 @@ public class RandomGenerators {
      * @return the latitude longitude
      */
     public static LatitudeLongitude generateRandomCoordinate() {
-        Double latitude = (double) random.nextInt(90);
-        Double longitude = (double) random.nextInt(180);
+        double latitude = random.nextInt(90);
+        double longitude = random.nextInt(180);
 
         if (random.nextBoolean()) {
             latitude = -latitude;
@@ -509,9 +504,7 @@ public class RandomGenerators {
 
 
         if (preserveDomains == 0) {
-            String builder = generateRandomHost(hostname, preserveSubdomains) + '.' +
-                    tldManager.getRandomTLD();
-            return builder;
+            return generateRandomHost(hostname, preserveSubdomains) + '.' + tldManager.getRandomTLD();
         }
 
         String tld = tldManager.getTLD(hostname);
@@ -521,9 +514,7 @@ public class RandomGenerators {
 
         hostname = hostname.substring(0, idx - 1);
 
-        String builder = generateRandomHost(hostname, preserveSubdomains) + '.' +
-                tld;
-        return builder;
+        return generateRandomHost(hostname, preserveSubdomains) + '.' + tld;
     }
 
     /**
