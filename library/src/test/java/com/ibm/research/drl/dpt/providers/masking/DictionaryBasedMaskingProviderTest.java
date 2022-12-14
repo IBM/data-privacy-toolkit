@@ -9,9 +9,10 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,10 +26,12 @@ public class DictionaryBasedMaskingProviderTest {
     public void testMask() throws Exception {
         Set<String> terms = new HashSet<>(Arrays.asList("one", "two", "three", "four"));
 
-        File tempFile2 = File.createTempFile("dict", ".csv");
-        String filename = tempFile2.getCanonicalPath();
+        Path tempFile2 = Files.createTempFile("dict", ".csv");
+        String filename = tempFile2.toAbsolutePath().toString();
         
-        try (FileOutputStream fos = new FileOutputStream(tempFile2); PrintStream printStream = new PrintStream(fos)) {
+        try (
+                OutputStream fos = Files.newOutputStream(tempFile2);
+                PrintStream printStream = new PrintStream(fos)) {
             for (String term : terms) {
                 printStream.println(term);
             }
