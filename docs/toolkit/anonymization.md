@@ -240,12 +240,12 @@ Currently, the hierarchies provided are:
 - DATE-YYYY-MM-DD
 
 
-Third, it is possible to specify a fully qualified path name of a class implementing the `com.ibm.research.drl.prima.anonymization.hierarchies.GeneralizationHierarchy` interface, as in the following example.
+Third, it is possible to specify a fully qualified path name of a class implementing the `com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy` interface, as in the following example.
 
 ```json
 {
   "class": "CategoricalInformation",
-  "hierarchy": com.ibm.research.drl.prima.anonymization.hierarchies.datatypes.DateYYYYMMDDHierarchy,
+  "hierarchy": com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.DateYYYYMMDDHierarchy,
   "columnType": "QUASI",
   "weight": 1,
   "maximumLevel": -1,
