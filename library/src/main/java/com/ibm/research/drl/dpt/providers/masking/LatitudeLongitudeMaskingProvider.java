@@ -16,10 +16,7 @@ import java.security.SecureRandom;
 /**
  * The type Latitude longitude masking provider.
  *
- * @author santonat
  */
-
-
 public class LatitudeLongitudeMaskingProvider extends AbstractMaskingProvider {
 
     private final boolean fixedRadiusRandomDirection;

@@ -12,7 +12,6 @@ import java.util.Collection;
 /**
  * The interface Masking configuration.
  *
- * @author stefanob
  */
 public interface MaskingConfiguration {
     /**

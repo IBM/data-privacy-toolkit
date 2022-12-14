@@ -15,7 +15,6 @@ import java.util.Collection;
 /**
  * The type Country identifier.
  *
- * @author stefanob, santonat
  */
 public class CountryIdentifier extends AbstractManagerBasedIdentifier {
     private static final String[] appropriateNames = {"Country"};

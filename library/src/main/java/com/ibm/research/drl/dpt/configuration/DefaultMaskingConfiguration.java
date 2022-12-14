@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 /**
  * The type Default masking configuration.
  *
- * @author santonat
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"optionsByCategory", "name"})

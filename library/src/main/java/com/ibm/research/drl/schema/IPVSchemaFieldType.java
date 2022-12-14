@@ -8,7 +8,6 @@ package com.ibm.research.drl.schema;
 /**
  * The enum Ipv schema field type.
  *
- * @author stefanob
  */
 public enum IPVSchemaFieldType {
     /**
