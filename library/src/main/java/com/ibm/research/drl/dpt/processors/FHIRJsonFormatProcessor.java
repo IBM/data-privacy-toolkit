@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.processors;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class FHIRJsonFormatProcessor extends JSONFormatProcessor {
-    private FHIRMaskingProvider maskingProvider;
+    private volatile FHIRMaskingProvider maskingProvider;
 
     @Override
     public Record maskRecord(Record record, MaskingProviderFactory maskingProvidersFactory, Set<String> alreadyMaskedFields, DataMaskingOptions dataMaskingOptions) {
