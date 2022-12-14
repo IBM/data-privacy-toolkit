@@ -8,10 +8,7 @@ package com.ibm.research.drl.dpt.providers;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The type Provider type.
@@ -426,5 +423,10 @@ public final class ProviderType implements Serializable {
         }
 
         return registeredTypes.get(type.name()).getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, friendlyName, id, forInternalPurposes, typeClass);
     }
 }
