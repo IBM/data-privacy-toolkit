@@ -19,6 +19,7 @@ import java.util.Set;
 
 public class ToolkitTest {
     @Test
+    @Disabled("To be ported to new format")
     public void runningScanOnZipFile() throws Exception {
         String target = this.getClass().getResource("/test.zip").toURI().getPath();
         String piList = this.getClass().getResource("/personal_information_types.txt").toURI().getPath();

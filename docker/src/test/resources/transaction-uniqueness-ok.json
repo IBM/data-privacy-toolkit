@@ -1,0 +1,24 @@
+{
+  "task": "TransactionUniqueness",
+  "inputFormat": "CSV",
+  "inputOptions": {
+    "hasHeader": true,
+    "fieldDelimiter":  ",",
+    "quoteChar":  "\"",
+    "trimFields": false
+},
+  "outputFormat": "CSV",
+  "outputOptions": {
+    "hasHeader": true,
+    "fieldDelimiter":  ",",
+    "quoteChar":  "\"",
+    "trimFields": false
+  },
+
+  "taskOptions": {
+    "identityFields": ["id"],
+    "externallyObservableFields":  ["date", "location"],
+    "factor":  1,
+    "threshold": 1
+  }
+}
