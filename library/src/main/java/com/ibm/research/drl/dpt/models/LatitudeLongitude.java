@@ -11,11 +11,11 @@ public class LatitudeLongitude {
     /**
      * The Latitude.
      */
-    Double latitude;
+    double latitude;
     /**
      * The Longitude.
      */
-    Double longitude;
+    double longitude;
     /**
      * The Format.
      */
@@ -94,34 +94,27 @@ public class LatitudeLongitude {
     public String toString() {
         if (format == LatitudeLongitudeFormat.DECIMAL) {
             return String.format("%.8f,%.8f", getLatitude(), getLongitude());
-            /*
-            StringBuilder builder = new StringBuilder();
-            builder.append(getLatitude());
-            builder.append(",");
-            builder.append(getLongitude());
-            return builder.toString();
-            */
         }
 
         String ns = "N";
         String ew = "E";
 
-        Double latitude = this.latitude;
+        double latitude = this.latitude;
         if (latitude < 0) {
             ns = "S";
             latitude = -latitude;
         }
 
-        Double longitude = this.longitude;
+        double longitude = this.longitude;
         if (longitude < 0) {
             ew = "W";
             longitude = -longitude;
         }
 
-        int nsDegrees = latitude.intValue();
+        int nsDegrees = (int) latitude;
         int nsMinutes = (int) ((latitude - nsDegrees) * 60);
         Double nsSeconds = (latitude - nsDegrees - (double) nsMinutes / 60.0) * 3600;
-        int ewDegrees = longitude.intValue();
+        int ewDegrees = (int) longitude;
         int ewMinutes = (int) ((longitude - ewDegrees) * 60);
         Double ewSeconds = (longitude - ewDegrees - (double) ewMinutes / 60.0) * 3600;
 
