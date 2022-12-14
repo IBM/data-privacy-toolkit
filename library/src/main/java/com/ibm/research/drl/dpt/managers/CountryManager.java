@@ -121,10 +121,10 @@ public class CountryManager extends AbstractManager<Country> {
     }
 
     private String getPseudorandomElement(List<Location> keys, String key) {
-        Long hash = Math.abs(HashUtils.longFromHash(key, "SHA-1"));
+        long hash = Math.abs(HashUtils.longFromHash(key));
 
         if (keys == null || keys.isEmpty()) {
-            return hash.toString();
+            return Long.toString(hash);
         }
 
         int position = (int) (hash % keys.size());
