@@ -178,7 +178,7 @@ public class ToolkitTest {
                 "-c",
                 getClass().getResource("/transaction-uniqueness-ok.json").getPath(),
                 "-o",
-                File.createTempFile("transaction-uniqueness", "report").getPath()});
+                Files.createTempFile("transaction-uniqueness", "report").toAbsolutePath().toString()});
     }
 
     @Test
@@ -189,6 +189,6 @@ public class ToolkitTest {
                 "-c",
                 getClass().getResource("/test-flow.json").getPath(),
                 "-o",
-                File.createTempFile("test-flow", "report").getPath()});
+                Files.createTempFile("test-flow", "report").toAbsolutePath().toString()});
     }
 }

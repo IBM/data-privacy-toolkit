@@ -1,0 +1,45 @@
+{
+  "extension": "csv",
+  "inputFormat": "CSV",
+  "inputOptions": {
+    "fieldDelimiter": ",",
+    "hasHeader": true,
+    "quoteChar": "\"",
+    "trimFields": false
+  },
+  "outputFormat": "CSV",
+  "outputOptions": {
+    "fieldDelimiter": ",",
+    "hasHeader": true,
+    "quoteChar": "\"",
+    "trimFields": false
+  },
+  "task": "Masking",
+  "taskOptions": {
+    "maskingProviders": null,
+    "maskingProvidersConfig": {
+      "_defaults": {},
+      "_fields": {
+        "YOB": {
+          "numvariance.mask.limitDown": 0.5,
+          "numvariance.mask.limitUp": 0.5,
+          "numvariance.mask.precisionDigits": 0
+        }
+      }
+    },
+    "predefinedRelationships": null,
+    "toBeMasked": {
+      "EMAIL": "EMAIL",
+      "GENDER": "GENDER",
+      "ICD": "ICDV9",
+      "ID": "REDACT",
+      "M_STATUS": "MARITAL_STATUS",
+      "NAME": "NAME",
+      "RACE": "RACE",
+      "RELIGION": "RELIGION",
+      "SURNAME": "NAME",
+      "YOB": "NUMBERVARIANCE",
+      "ZIP": "ZIP"
+    }
+  }
+}
