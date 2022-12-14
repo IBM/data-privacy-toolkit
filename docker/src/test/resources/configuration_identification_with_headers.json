@@ -1,0 +1,16 @@
+{
+  "task":"Identification",
+
+  "extension":"csv",
+  "inputFormat":"CSV",
+  "inputOptions":{
+    "fieldDelimiter":",",
+    "quoteChar":"\"",
+    "hasHeader":true,
+    "trimFields":true
+  },
+  "taskOptions":{
+    "localization":"en-US",
+    "firstN":-1
+  }
+}
