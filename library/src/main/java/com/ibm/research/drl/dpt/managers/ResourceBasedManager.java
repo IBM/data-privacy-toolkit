@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.managers;
@@ -199,10 +199,10 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
     }
 
     private String getPseudorandomElement(List<String> keys, String key) {
-        Long hash = Math.abs(HashUtils.longFromHash(key, "SHA-1"));
+        long hash = Math.abs(HashUtils.longFromHash(key));
 
         if (keys == null || keys.size() == 0) {
-            return hash.toString();
+            return Long.toString(hash);
         }
 
         int position = (int) (hash % keys.size());
