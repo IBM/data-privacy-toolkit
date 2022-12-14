@@ -6,7 +6,8 @@ jobs:
     strategy:
       matrix:
         java: [ '11', '17']
-        distribution: ['adopt-hotspot', 'adopt-openj9', 'corretto', 'microsoft']
+        # distribution: ['adopt-hotspot', 'adopt-openj9', 'corretto', 'microsoft']
+        distribution: ['adopt', 'corretto', 'microsoft']
     steps:
       - uses: actions/checkout@v3
       - name: Setup java
