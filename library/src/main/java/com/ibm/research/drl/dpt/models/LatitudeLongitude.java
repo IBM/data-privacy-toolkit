@@ -1,9 +1,11 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.models;
+
+import java.util.Objects;
 
 public class LatitudeLongitude {
     /**
@@ -130,5 +132,10 @@ public class LatitudeLongitude {
 
         return String.format("%02d:%02d'%f%s %02d:%02d'%f%s",
                 nsDegrees, nsMinutes, nsSeconds, ns, ewDegrees, ewMinutes, ewSeconds, ew);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, format);
     }
 }
