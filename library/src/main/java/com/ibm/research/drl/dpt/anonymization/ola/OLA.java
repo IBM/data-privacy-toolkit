@@ -13,8 +13,8 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.TypeClass;
 import com.ibm.research.drl.dpt.util.Tuple;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import com.ibm.research.drl.schema.IPVSchema;
-import com.ibm.research.drl.schema.IPVSchemaField;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 
 import java.util.ArrayList;
 import java.util.Collection;

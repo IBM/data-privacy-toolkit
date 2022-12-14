@@ -3,11 +3,11 @@
  * Copyright IBM Corp. 2015                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.schema.impl;
+package com.ibm.research.drl.dpt.datasets.schema.impl;
 
-import com.ibm.research.drl.schema.IPVSchema;
-import com.ibm.research.drl.schema.IPVSchemaField;
-import com.ibm.research.drl.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
+import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 
 import java.io.Serializable;
 import java.util.ArrayList;
