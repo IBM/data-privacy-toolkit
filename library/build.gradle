@@ -34,33 +34,25 @@ ext {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    // implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    // implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
+    // implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+
     implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
     implementation "org.apache.commons:commons-csv:${commons_csv_version}"
     implementation "org.apache.commons:commons-math3:${commons_math_version}"
+    implementation "commons-validator:commons-validator:${commons_validator_version}"
 
-    implementation "commons-io:commons-io:${commons_io_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
     implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
-    implementation "commons-validator:commons-validator:${commons_validator_version}"
-    implementation "commons-validator:commons-validator:${commons_validator_version}"
     implementation "org.apache.poi:poi-ooxml:${poi_version}"
+
     implementation "ca.uhn.hapi:hapi-base:2.3"
     implementation "ca.uhn.hapi:hapi-structures-v22:2.3"
     implementation "ca.uhn.hapi:hapi-structures-v23:2.3"
-    implementation("org.dcm4che:dcm4che-imageio:5.10.6") {
-        exclude module: 'junit'
-        exclude module: 'slf4j-log4j12'
-    }
-    implementation "org.apache.commons:commons-text:${commons_text_version}"
     implementation 'org.iban4j:iban4j:3.2.4-RELEASE'
 
-    testImplementation "org.apache.commons:commons-text:${commons_text_version}"
-    testImplementation 'com.h2database:h2:2.1.214'
-    testImplementation 'org.hsqldb:hsqldb:2.7.1'
     testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
