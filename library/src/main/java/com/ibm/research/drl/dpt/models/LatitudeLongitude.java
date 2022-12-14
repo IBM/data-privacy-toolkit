@@ -86,8 +86,8 @@ public class LatitudeLongitude {
             return false;
         }
 
-        LatitudeLongitude latlon = (LatitudeLongitude) obj;
-        return latlon.getLatitude() == latitude && latlon.getLongitude() == longitude;
+        LatitudeLongitude latLon = (LatitudeLongitude) obj;
+        return Objects.equals(latLon.getLatitude(), latitude) && Objects.equals(latLon.getLongitude(), longitude);
     }
 
     @Override
