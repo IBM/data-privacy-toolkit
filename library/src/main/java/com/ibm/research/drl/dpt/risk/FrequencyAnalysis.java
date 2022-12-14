@@ -27,20 +27,16 @@ public class FrequencyAnalysis {
 
     }
 
-    public int successfulMatches(IPVDataset maskedDataset, int columnIndex) {
+    public long successfulMatches(IPVDataset maskedDataset, int columnIndex) {
         Histogram histogram = Histogram.createHistogram(maskedDataset, columnIndex, true);
         return successfulMatches(histogram);
     }
 
-    private int successfulMatches(Histogram histogram) {
-        int matches = 0;
+    private long successfulMatches(Histogram histogram) {
+        long matches = 0;
 
         List<Map.Entry<String, Long>> list = new LinkedList<>(histogram.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<String, Long>>() {
-            public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
-                return (o2.getValue()).compareTo(o1.getValue());
-            }
-        });
+        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
 
 
         for (int index = 0; index < list.size(); index++) {
