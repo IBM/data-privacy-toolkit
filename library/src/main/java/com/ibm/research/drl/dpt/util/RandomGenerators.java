@@ -50,7 +50,7 @@ public class RandomGenerators {
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     /**
-     * Generate random imsi string.
+     * Generate random IMSI string.
      *
      * @return the string
      */
