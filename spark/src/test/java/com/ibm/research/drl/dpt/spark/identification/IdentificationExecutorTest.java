@@ -9,6 +9,7 @@ import com.ibm.research.drl.dpt.configuration.IdentificationConfiguration;
 import com.ibm.research.drl.dpt.configuration.IdentificationStrategy;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.IdentifiedType;
+import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.spark.SparkConf;
