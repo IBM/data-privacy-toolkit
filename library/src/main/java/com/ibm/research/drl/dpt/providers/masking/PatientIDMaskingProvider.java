@@ -15,7 +15,6 @@ import java.security.SecureRandom;
 /**
  * The type Patient id masking provider.
  *
- * @author santonat
  */
 public class PatientIDMaskingProvider extends AbstractMaskingProvider {
 
