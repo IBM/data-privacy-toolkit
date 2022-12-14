@@ -1,4 +1,4 @@
-name: dpt-library
+name: dpt-toolkit
 on: [push]
 jobs:
   build-library:
@@ -6,7 +6,6 @@ jobs:
     strategy:
       matrix:
         java: [ '11', '17']
-        # distribution: ['adopt-hotspot', 'adopt-openj9', 'corretto', 'microsoft']
         distribution: ['adopt', 'corretto', 'microsoft']
     steps:
       - uses: actions/checkout@v3
@@ -16,6 +15,9 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
           check-latest: true
-      - name: Run gradlew build
+      - name: Run gradlew publish to maven local
         working-directory: ./library
+        run: ./gradlew publishToMavenLocal
+      - name: Run gradlew clean build
+        working-directory: ./docker
         run: ./gradlew build
