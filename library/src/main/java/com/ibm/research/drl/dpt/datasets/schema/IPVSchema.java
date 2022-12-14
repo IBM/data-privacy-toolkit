@@ -3,7 +3,7 @@
  * Copyright IBM Corp. 2015                                        *
  *                                                                 *
  *******************************************************************/
-package com.ibm.research.drl.schema;
+package com.ibm.research.drl.dpt.datasets.schema;
 
 import java.util.List;
 
