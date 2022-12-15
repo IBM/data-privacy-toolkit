@@ -14,11 +14,11 @@ Algorithm-specific options.
 
 The following table describes the available anonymization algorithms:
 
-|Algorithm Name| Reference |
-|--------------|-----------|
-|Optimal Lattice Anonymization (OLA)|El Emam, Khaled, et al. "A globally optimal k-anonymity method for the de-identification of health data." Journal of the American Medical Informatics Association 16.5 (2009): 670-682.|
-|Mondrian|LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. "Mondrian multidimensional k-anonymity." 22nd International conference on data engineering (ICDE'06). IEEE, 2006.|
-|KMeans|Jun-Lin Lin and Meng-Cheng Wei. 2008. An efficient clustering method for k-anonymization. In Proceedings of the 2008 international workshop on Privacy and anonymity in information society (PAIS '08). Association for Computing Machinery, New York, NY, USA, 46–50.|
+| Algorithm Name                      | Reference                                                                                                                                                                                                                                                              |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Optimal Lattice Anonymization (OLA) | El Emam, Khaled, et al. "A globally optimal k-anonymity method for the de-identification of health data." Journal of the American Medical Informatics Association 16.5 (2009): 670-682.                                                                                |
+| Mondrian                            | LeFevre, Kristen, David J. DeWitt, and Raghu Ramakrishnan. "Mondrian multidimensional k-anonymity." 22nd International conference on data engineering (ICDE'06). IEEE, 2006.                                                                                           |
+| KMeans                              | Jun-Lin Lin and Meng-Cheng Wei. 2008. An efficient clustering method for k-anonymization. In Proceedings of the 2008 international workshop on Privacy and anonymity in information society (PAIS '08). Association for Computing Machinery, New York, NY, USA, 46–50. |
 
 
 ## Invocation of the algorithms
