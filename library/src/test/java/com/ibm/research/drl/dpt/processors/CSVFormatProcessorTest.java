@@ -313,20 +313,6 @@ public class CSVFormatProcessorTest {
             System.out.println(result);
         }
     }
-    
-    @Test
-    @Disabled
-    public void testLargeWithCompounds() throws IOException {
-        ConfigurationManager configurationManager = ConfigurationManager.load(new ObjectMapper().readTree(getClass().getResourceAsStream("/masking_key_rel.json")));
-        DataMaskingOptions dataMaskingOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream("/masking_key_rel.json"), DataMaskingOptions.class);
-        
-        InputStream dataset = new FileInputStream("/Users/santonat/dev/truata/transactions/transactions.csv");
-        PrintStream out = new PrintStream(new FileOutputStream("/Users/santonat/dev/truata/transactions/masked.csv"));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, Collections.emptyMap());
-        FormatProcessor formatProcessor = new CSVFormatProcessor();
-
-        formatProcessor.maskStream(dataset, out, factory, dataMaskingOptions, new HashSet<>(), null);
-    }
 
     @Test
     public void testIssue369CSVShouldCorrectlyHandleNulls() throws Exception {
