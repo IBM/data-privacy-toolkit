@@ -120,7 +120,7 @@ public class LatitudeLongitude {
 
         if (format == LatitudeLongitudeFormat.COMPASS) {
             return String.format("%s%02d.%02d.%02d %s%02d.%02d.%02d",
-                    ns, nsDegrees, nsMinutes, nsSeconds.intValue(), ew, ewDegrees, ewMinutes, ewSeconds.intValue());
+                    ns, nsDegrees, nsMinutes, (int) nsSeconds, ew, ewDegrees, ewMinutes, (int) ewSeconds);
         }
 
         return String.format("%02d:%02d'%f%s %02d:%02d'%f%s",
