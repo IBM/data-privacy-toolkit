@@ -57,7 +57,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
     }
 
-    private class DBCache {
+    private static class DBCache {
         private int cacheLimit;
         private int cacheEntries = 0;
         private Connection connection;
