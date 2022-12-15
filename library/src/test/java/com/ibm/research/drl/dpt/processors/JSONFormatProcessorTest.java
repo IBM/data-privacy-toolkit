@@ -529,7 +529,7 @@ public class JSONFormatProcessorTest {
             Map<String, FieldRelationship> relationships = new HashMap<>();
             relationships.put("/date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "/date", Arrays.asList(new RelationshipOperand("userid"))));
 
-            MaskingProviderFactory mpf = new MaskingProviderFactory();
+            MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
                     DataTypeFormat.JSON,
                     DataTypeFormat.JSON,
@@ -595,7 +595,7 @@ public class JSONFormatProcessorTest {
                 new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE, "" +
                         "/date", Arrays.asList(new RelationshipOperand("/operand"))));
 
-        MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory();
+        MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
         DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
                 DataTypeFormat.JSON,
@@ -611,7 +611,7 @@ public class JSONFormatProcessorTest {
 
         JSONRecord record = new JSONRecord(new ObjectMapper().readTree("{\"operand\": null, \"date\": \"" + originalDate +"\"}"));
 
-        //maskRecord returns a reference to the same object of the first argument so we need to create a new record each time
+        //maskRecord returns a reference to the same object of the first argument, so we need to create a new record each time
         Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, new HashSet<>(), dataMaskingOptions);
         String maskedDate = new String(masked.getFieldValue("/date"));
 

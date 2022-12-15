@@ -6,6 +6,7 @@
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRHumanName;
@@ -14,13 +15,14 @@ import com.ibm.research.drl.dpt.providers.masking.fhir.datatypes.FHIRHumanNameMa
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FHIRHumanNameMaskingProviderTest {
-    private final MaskingProviderFactory factory = new MaskingProviderFactory();
+    private final MaskingProviderFactory factory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
     @Test
     public void testBasic() throws Exception {

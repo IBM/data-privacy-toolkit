@@ -5,6 +5,7 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
+import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.identifiers.IPAddressIdentifier;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +60,7 @@ public class URLMaskingProviderTest {
 
     @Test
     public void testDefaultMask() throws Exception {
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
 
         String url = "http://www.nba.com";
         String maskedResult = urlMaskingProvider.mask(url);
@@ -69,7 +71,7 @@ public class URLMaskingProviderTest {
 
     @Test
     public void testURLWithIPv4Address() throws Exception {
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         IPAddressIdentifier ipAddressIdentifier = new IPAddressIdentifier();
 
         String url = "http://10.22.33.44";
@@ -83,7 +85,7 @@ public class URLMaskingProviderTest {
 
     @Test
     public void testURLWithIPv6Address() throws Exception {
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         IPAddressIdentifier ipAddressIdentifier = new IPAddressIdentifier();
 
         String url = "http://[1::4:5:6:7:8]:100/";
@@ -101,7 +103,7 @@ public class URLMaskingProviderTest {
         configuration.setValue("url.mask.usernamePassword", true);
         configuration.setValue("url.mask.port", true);
         configuration.setValue("url.preserve.domains", 0);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
 
         // we do not preserve anything
         String url = "http://www.nba.com";
@@ -143,7 +145,7 @@ public class URLMaskingProviderTest {
         configuration.setValue("url.mask.port", true);
         configuration.setValue("url.preserve.domains", 1);
 
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://www.nba.com";
         String maskedResult = urlMaskingProvider.mask(url);
         assertTrue(identifier.isOfThisType(maskedResult));
@@ -162,7 +164,7 @@ public class URLMaskingProviderTest {
         configuration.setValue("url.mask.usernamePassword", true);
         configuration.setValue("url.mask.port", true);
         configuration.setValue("url.preserve.domains", 2);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://www.nba.com";
         String maskedResult = urlMaskingProvider.mask(url);
         assertTrue(identifier.isOfThisType(maskedResult));
@@ -176,7 +178,7 @@ public class URLMaskingProviderTest {
         configuration.setValue("url.mask.usernamePassword", true);
         configuration.setValue("url.mask.port", true);
         configuration.setValue("url.preserve.domains", 5);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://www.nba.com";
         String maskedResult = urlMaskingProvider.mask(url);
         assertTrue(identifier.isOfThisType(maskedResult));
@@ -186,7 +188,7 @@ public class URLMaskingProviderTest {
     @Test
     public void testUsernamePasswordMask() throws Exception {
 
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
 
         /* we test that both username and passwords get randomized */
         String url = "http://user1:pass1@www.nba.com";
@@ -219,7 +221,7 @@ public class URLMaskingProviderTest {
         configuration.setValue("url.mask.usernamePassword", false);
         configuration.setValue("url.mask.port", true);
         configuration.setValue("url.preserve.domains", 0);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://user1:pass1@www.nba.com";
         String maskedResult = urlMaskingProvider.mask(url);
         String originalUserInfo = new URL(url).getUserInfo();
@@ -233,7 +235,7 @@ public class URLMaskingProviderTest {
         configuration.setValue("url.mask.usernamePassword", false);
         configuration.setValue("url.mask.port", true);
         configuration.setValue("url.preserve.domains", 0);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://www.nba.com";
         String maskedResult = urlMaskingProvider.mask(url);
         URL maskedURL = new URL(maskedResult);
@@ -246,7 +248,7 @@ public class URLMaskingProviderTest {
     public void testRemoveQueryPart() throws Exception {
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("url.mask.removeQuery", true);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://www.nba.com?q=abcd";
         String maskedResult = urlMaskingProvider.mask(url);
         URL maskedURL = new URL(maskedResult);
@@ -258,7 +260,7 @@ public class URLMaskingProviderTest {
     public void testMaskQueryPart() throws Exception {
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("url.mask.maskQuery", true);
-        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory());
+        MaskingProvider urlMaskingProvider = new URLMaskingProvider(configuration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
         String url = "http://www.nba.com?q=John&q2=foobar&q3=";
         String maskedResult = urlMaskingProvider.mask(url);
         URL maskedURL = new URL(maskedResult);
@@ -268,7 +270,7 @@ public class URLMaskingProviderTest {
 
     @Test
     public void testMaskInvalidValue() throws Exception {
-        URLMaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory());
+        URLMaskingProvider urlMaskingProvider = new URLMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
 
         String url = "junk";
 
@@ -292,7 +294,7 @@ public class URLMaskingProviderTest {
         String[] originalValues = new String[]{"http://www.nba.com", "http://user1:pass1@www.nba.com", "http://10.22.33.44"};
 
         for (DefaultMaskingConfiguration maskingConfiguration : configurations) {
-            MaskingProvider maskingProvider = new URLMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
+            MaskingProvider maskingProvider = new URLMaskingProvider(maskingConfiguration, new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
 
             for (String originalValue : originalValues) {
                 long startMillis = System.currentTimeMillis();
