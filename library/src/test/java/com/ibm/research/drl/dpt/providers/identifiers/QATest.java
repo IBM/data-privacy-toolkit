@@ -63,49 +63,6 @@ public class QATest {
             }
         }
     }
-    @Test
-    @Disabled
-    public void testPopularNouns() throws Exception {
-        InputStream is = this.getClass().getResourceAsStream("/popular_nouns.csv");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
-        Collection<Identifier> identifiers = IdentifierFactory.defaultIdentifiers();
-        String line;
-
-        while((line = bufferedReader.readLine()) != null) {
-            Set<String> results = new HashSet<>();
-            for(Identifier identifier: identifiers) {
-                if(identifier.isOfThisType(line)) {
-                    results.add(identifier.getType().getName());
-                }
-            }
-
-            if (!results.isEmpty()) {
-                System.out.println(line + ":" + results);
-            }
-        }
-    }
-
-    @Test
-    @Disabled
-    public void testPopularAdjectives() throws Exception {
-        InputStream is = this.getClass().getResourceAsStream("/popular_adjectives.csv");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
-        Collection<Identifier> identifiers = IdentifierFactory.defaultIdentifiers();
-        String line;
-
-        while((line = bufferedReader.readLine()) != null) {
-            Set<String> results = new HashSet<>();
-            for(Identifier identifier: identifiers) {
-                if(identifier.isOfThisType(line)) {
-                    results.add(identifier.getType().getName());
-                }
-            }
-
-            if (!results.isEmpty()) {
-                System.out.println(line + ":" + results);
-            }
-        }
-    }
 
     @Test
     public void testEmptyStrings() {
