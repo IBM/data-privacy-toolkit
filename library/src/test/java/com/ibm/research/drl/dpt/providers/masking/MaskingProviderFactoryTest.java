@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,6 @@ class FoobarMaskingProvider extends AbstractMaskingProvider {
 }
 
 public class MaskingProviderFactoryTest {
-
     @Test
     @Disabled
     public void testPersistenceBetweenInstances() {
@@ -85,7 +85,7 @@ public class MaskingProviderFactoryTest {
 
     @Test
     public void testPersistent() {
-        MaskingProviderFactory mpf = new MaskingProviderFactory();
+        MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
         MaskingProvider mp = mpf.get(ProviderType.NAME, new DefaultMaskingConfiguration());
 
@@ -94,7 +94,7 @@ public class MaskingProviderFactoryTest {
 
     @Test
     public void testPersistentLocalOnly() {
-        MaskingProviderFactory mpf = new MaskingProviderFactory();
+        MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
 
         MaskingProvider mp1 = mpf.get(ProviderType.NAME, configuration);
@@ -125,7 +125,7 @@ public class MaskingProviderFactoryTest {
 
     @Test
     public void testPersistentGlobalSameConfiguration() {
-        MaskingProviderFactory mpf = new MaskingProviderFactory();
+        MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("persistence.export", true);
         configuration.setValue("persistence.namespace", "test");
@@ -144,14 +144,13 @@ public class MaskingProviderFactoryTest {
     @Test
     @Disabled
     public void verifySerialization() throws Exception {
-        MaskingProviderFactory mpf = new MaskingProviderFactory();
+        MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
 
         for (ProviderType providerType : ProviderType.values()) {
             MaskingProvider maskingProvider = mpf.get(providerType, configuration);
 
             assertNotNull(maskingProvider);
-            assertTrue(maskingProvider instanceof Serializable);
             assertNotSame(maskingProvider, SerializationUtils.clone(maskingProvider));
         }
     }
