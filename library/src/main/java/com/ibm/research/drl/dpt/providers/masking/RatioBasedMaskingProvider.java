@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -19,7 +19,7 @@ import java.security.SecureRandom;
 import java.util.Map;
 
 public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
-    private static final Logger log = LogManager.getLogger(RatioBasedMaskingProvider.class);
+    private static final Logger logger = LogManager.getLogger(RatioBasedMaskingProvider.class);
 
     private final int failMode;
     private final double ratio;
@@ -45,7 +45,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
 
         if (this.failMode == FailMode.GENERATE_RANDOM) {
             String msg = "Random generation fail mode not supported";
-            log.error(msg);
+            logger.error(msg);
             throw new RuntimeException(msg);
         }
     }
@@ -65,7 +65,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
         String operandValueString = values.get(operandName).getOriginal();
 
         try {
-            Double operandValue = Double.parseDouble(operandValueString);
+            double operandValue = Double.parseDouble(operandValueString);
             Double masked = value * operandValue;
             return formatResult(masked);
         } catch (NumberFormatException e) {
@@ -73,7 +73,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
                 case FailMode.THROW_ERROR:
-                    log.error("invalid numerical value");
+                    logger.error("invalid numerical value");
                     throw new IllegalArgumentException("invalid numerical value");
                 case FailMode.RETURN_EMPTY:
                 default:
@@ -94,7 +94,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
                 case FailMode.THROW_ERROR:
-                    log.error("invalid numerical value");
+                    logger.error("invalid numerical value");
                     throw new IllegalArgumentException("invalid numerical value");
                 case FailMode.RETURN_EMPTY:
                 default:
@@ -131,7 +131,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
                 case FailMode.THROW_ERROR:
-                    log.error("invalid numerical value");
+                    logger.error("invalid numerical value");
                     throw new IllegalArgumentException("invalid numerical value");
                 case FailMode.RETURN_EMPTY:
                 default:
@@ -152,7 +152,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
                 case FailMode.THROW_ERROR:
-                    log.error("invalid numerical value");
+                    logger.error("invalid numerical value");
                     throw new IllegalArgumentException("invalid numerical value");
                 case FailMode.RETURN_EMPTY:
                 default:
