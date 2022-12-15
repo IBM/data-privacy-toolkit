@@ -153,7 +153,7 @@ public class GeneralizedLossMetric implements InformationMetric {
             }
         }
 
-        Double lm = 0.0;
+        double lm = 0.0;
 
         if (anonymized.getNumberOfRows() < original.getNumberOfRows()) {
             int diff = original.getNumberOfRows() - anonymized.getNumberOfRows();
@@ -164,8 +164,7 @@ public class GeneralizedLossMetric implements InformationMetric {
                     continue;
                 }
 
-                double loss = diff;
-                lossPerColumn.set(j, lossPerColumn.get(j) + loss);
+                lossPerColumn.set(j, lossPerColumn.get(j) + (double) diff);
             }
         }
 
