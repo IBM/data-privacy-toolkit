@@ -123,7 +123,7 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
         int counter = 0;
 
         for (int i = 0; i < data.length(); i++) {
-            Character ch = data.charAt(i);
+            char ch = data.charAt(i);
 
             if (Character.isWhitespace(ch) || ch == '-') {
                 counter++;
