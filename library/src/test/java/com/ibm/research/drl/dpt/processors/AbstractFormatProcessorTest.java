@@ -225,7 +225,7 @@ public class AbstractFormatProcessorTest {
             Map<String, FieldRelationship> relationships = new HashMap<>();
             relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
 
-            MaskingProviderFactory mpf = new MaskingProviderFactory();
+            MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
                     DataTypeFormat.CSV,
                     DataTypeFormat.CSV,
@@ -304,7 +304,7 @@ public class AbstractFormatProcessorTest {
                 new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE, "" +
                         "/date", Arrays.asList(new RelationshipOperand("/operand"))));
 
-        MaskingProviderFactory mpf = new MaskingProviderFactory();
+        MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
         DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
                 DataTypeFormat.JSON,
