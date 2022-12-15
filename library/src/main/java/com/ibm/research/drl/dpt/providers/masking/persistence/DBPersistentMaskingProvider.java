@@ -93,7 +93,6 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
             try (Statement statement = connection.createStatement();
                  ResultSet executionResult = statement.executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)")
             ) {
-            ;
             }
         }
 
@@ -110,7 +109,7 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 SQL += " LIMIT " + cacheLimit;
             }
 
-            try (ResultSet resultSet = retrieveAllMappings(SQL);) {
+            try (ResultSet resultSet = retrieveAllMappings(SQL)) {
 
                 while (resultSet.next()) {
                     String value = resultSet.getString("value");
@@ -177,35 +176,34 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 }
             }
 
-            ResultSet rs = retrieveMapping(value);
-
-            if (rs.next()) {
-                return rs.getString("masked");
-            }
-
-            String maskedValue = maskingProvider.mask(value);
-
-            String query = " insert into " + tableName + "(value, masked) values (?, ?)";
-
-            PreparedStatement preparedStmt = this.connection.prepareStatement(query);
-            preparedStmt.setString(1, value);
-            preparedStmt.setString(2, maskedValue);
-
-            try {
-                preparedStmt.execute();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                rs = retrieveMapping(value);
+            try (ResultSet rs = retrieveMapping(value)) {
                 if (rs.next()) {
-                    String finalMasked = rs.getString("masked");
-                    putToCache(value, finalMasked);
-                    return finalMasked;
-                } else {
-                    throw new RuntimeException("out of sync");
+                    return rs.getString("masked");
                 }
-            }
 
-            putToCache(value, maskedValue);
-            return maskedValue;
+                String maskedValue = maskingProvider.mask(value);
+
+                String query = " insert into " + tableName + "(value, masked) values (?, ?)";
+
+                try (PreparedStatement preparedStmt = this.connection.prepareStatement(query)) {
+                    preparedStmt.setString(1, value);
+                    preparedStmt.setString(2, maskedValue);
+                    preparedStmt.execute();
+                } catch (SQLIntegrityConstraintViolationException e) {
+                    try (ResultSet mappingRS = retrieveMapping(value)) {
+                        if (mappingRS.next()) {
+                            String finalMasked = rs.getString("masked");
+                            putToCache(value, finalMasked);
+                            return finalMasked;
+                        } else {
+                            throw new RuntimeException("Out of sync");
+                        }
+                    }
+                }
+
+                putToCache(value, maskedValue);
+                return maskedValue;
+            }
         }
 
         private void putToCache(String value, String maskedValue) {
