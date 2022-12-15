@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot
 
-LABEL authors="Marco Simioni <marcosim@ibm.com>, Stefano Braghin <stefanob@ie.ibm.com>"
+LABEL authors="Marco Simioni <marco.simioni@ibm.com>, Stefano Braghin <stefanob@ie.ibm.com>"
 
 ENV INPUT=/input
 ENV OUTPUT=/output
