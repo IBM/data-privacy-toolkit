@@ -378,13 +378,12 @@ public class RandomGenerators {
 
         while (true) {
             LatitudeLongitude latitudeLongitude = generateRandomCoordinate(latitude, longitude, maximumOffsetRadius);
-            Double distance = GeoUtils.latitudeLongitudeDistance(latitude, longitude, latitudeLongitude.getLatitude(),
+            double distance = GeoUtils.latitudeLongitudeDistance(latitude, longitude, latitudeLongitude.getLatitude(),
                     latitudeLongitude.getLongitude());
 
             if (distance >= minimumOffsetRadius) {
                 return latitudeLongitude;
             }
-
         }
 
     }
