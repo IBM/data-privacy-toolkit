@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.toolkit.transaction_uniqueness;
@@ -21,7 +21,7 @@ public class TransactionUniquenessTaskTest {
 
     @Test
     public void taskDeserializedCorrectly() throws Exception {
-        try (InputStream conf = getClass().getResourceAsStream("/transaction-uniqueness-ok.json")) {
+        try (InputStream conf = TransactionUniquenessTaskTest.class.getResourceAsStream("/transaction-uniqueness-ok.json")) {
             TaskToExecute uniqueness = mapper.readValue(conf, TaskToExecute.class);
 
             assertNotNull(uniqueness);
@@ -45,7 +45,7 @@ public class TransactionUniquenessTaskTest {
         // "id,timestamp,location,amount"
 
         try (
-                InputStream conf = getClass().getResourceAsStream("/transaction-uniqueness-ok.json");
+                InputStream conf = TransactionUniquenessTaskTest.class.getResourceAsStream("/transaction-uniqueness-ok.json");
                 InputStream input = new ByteArrayInputStream(testDataset.getBytes());
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
         ) {
