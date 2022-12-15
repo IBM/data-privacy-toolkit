@@ -66,21 +66,9 @@ public class GeoUtils {
      * @param seconds the seconds
      * @return the double
      */
-    public static Double degreesToDecimal(Double degrees, Double minutes, Double seconds) {
+    public static double degreesToDecimal(double degrees, double minutes, double seconds) {
         return degrees + minutes / 60 + seconds / 3600;
     }
-
-    /*
-    public static void latitudeLongitudeToCartesian(Double latitude, Double longitude) {
-        Double lon_r = Math.toRadians(longitude);
-        Double lat_r = Math.toRadians(latitude);
-
-        Double x = R * Math.cos(lat_r) * Math.cos(lon_r);
-        Double y = R * Math.cos(lat_r) * Math.sin(lon_r);
-        Double z = R * Math.sin(lat_r);
-        //return (x, y, z)
-    }
-    */
 
     /**
      * Latitude longitude distance double.
@@ -91,7 +79,7 @@ public class GeoUtils {
      * @param lon2 the lon 2
      * @return the double
      */
-    public static Double latitudeLongitudeDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
+    public static double latitudeLongitudeDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLng = Math.toRadians(lon2 - lon1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -108,7 +96,7 @@ public class GeoUtils {
      * @param latlon2 the latlon 2
      * @return the double
      */
-    public static Double latitudeLongitudeDistance(LatitudeLongitude latlon1, LatitudeLongitude latlon2) {
+    public static double latitudeLongitudeDistance(LatitudeLongitude latlon1, LatitudeLongitude latlon2) {
         return latitudeLongitudeDistance(latlon1.getLatitude(), latlon1.getLongitude(),
                 latlon2.getLatitude(), latlon2.getLongitude());
     }
