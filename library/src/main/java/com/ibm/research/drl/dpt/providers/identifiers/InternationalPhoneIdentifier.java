@@ -107,7 +107,7 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
 
     private boolean containsIllegalCharacters(String data) {
         for (int i = 0; i < data.length(); i++) {
-            Character ch = data.charAt(i);
+            char ch = data.charAt(i);
 
             if (Character.isDigit(ch) || Character.isWhitespace(ch) || ch == '-') {
                 continue;
