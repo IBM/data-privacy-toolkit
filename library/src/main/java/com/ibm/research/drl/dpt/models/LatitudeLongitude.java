@@ -113,7 +113,7 @@ public class LatitudeLongitude {
 
         int nsDegrees = (int) latitude;
         int nsMinutes = (int) ((latitude - nsDegrees) * 60);
-        Double nsSeconds = (latitude - nsDegrees - (double) nsMinutes / 60.0) * 3600;
+        double nsSeconds = (latitude - nsDegrees - (double) nsMinutes / 60.0) * 3600;
         int ewDegrees = (int) longitude;
         int ewMinutes = (int) ((longitude - ewDegrees) * 60);
         double ewSeconds = (longitude - ewDegrees - (double) ewMinutes / 60.0) * 3600;
