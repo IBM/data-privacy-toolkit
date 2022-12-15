@@ -125,7 +125,7 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
 
         for (int i = 0; i < data.length(); ++i) {
             if (position == 16) break;
-            Character character = data.charAt(i);
+            char character = data.charAt(i);
 
             if (!Character.isLetterOrDigit(character)) continue;
 
