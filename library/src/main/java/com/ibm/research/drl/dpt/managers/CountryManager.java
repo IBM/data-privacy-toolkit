@@ -83,14 +83,13 @@ public class CountryManager extends AbstractManager<Country> {
     }
 
     private Country[] getCountriesByDistance(final Country country, List<Location> countryList) {
-
         Country[] countryArray = new Country[countryList.size()];
         countryArray = countryList.toArray(countryArray);
 
         Arrays.sort(countryArray, (o1, o2) -> {
-            Double d1 = GeoUtils.latitudeLongitudeDistance(o1.getLocation(), country.getLocation());
-            Double d2 = GeoUtils.latitudeLongitudeDistance(o2.getLocation(), country.getLocation());
-            return d1.compareTo(d2);
+            double d1 = GeoUtils.latitudeLongitudeDistance(o1.getLocation(), country.getLocation());
+            double d2 = GeoUtils.latitudeLongitudeDistance(o2.getLocation(), country.getLocation());
+            return Double.compare(d1, d2);
         });
 
         return countryArray;
