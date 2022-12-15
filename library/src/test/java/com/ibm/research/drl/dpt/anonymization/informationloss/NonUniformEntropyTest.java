@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.informationloss;
@@ -321,7 +321,7 @@ public class NonUniformEntropyTest {
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized, 
                 Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
 
-        Double ne = nonUniformEntropy.report();
+        double ne = nonUniformEntropy.report();
         assertEquals(0.0, ne, 0.01);
     }
 
