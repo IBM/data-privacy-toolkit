@@ -66,7 +66,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
 
         try {
             double operandValue = Double.parseDouble(operandValueString);
-            Double masked = value * operandValue;
+            double masked = value * operandValue;
             return formatResult(masked);
         } catch (NumberFormatException e) {
             switch (failMode) {
