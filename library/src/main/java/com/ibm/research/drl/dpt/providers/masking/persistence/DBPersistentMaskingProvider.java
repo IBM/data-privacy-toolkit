@@ -90,8 +90,9 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
 
         private void initializeTable() throws SQLException {
-            connection.createStatement()
-                    .executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)");
+            try (Statement statement = connection.createStatement();) {
+                    statement.executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)");
+            }
         }
 
         private void initializeCache(int cacheLimit) throws SQLException {
