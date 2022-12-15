@@ -1,0 +1,159 @@
+{
+   "dialogs":[{
+         "dialogContent":{
+            "dialog":[{
+                  "datetime":"May 17 2018 02:38:19",
+                  "message":"Welcome Rainer. Your chat conversation may be recorded for quality purposes. A colleage of mine ( mikko@fi.ibm.com) in Finland is not able to connect to SSO, and it seems this is the case for all of Finland",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:38:19",
+                  "message":"Rainer, please wait while the system locates a live Apple Advisor to assist you.   Did you know you can go to https://w3.ibm.com/help or download the Help@IBM mobile app for iOS from the IBM App Store to easily find solutions to your problems.  Search by the product name and a keyword related to your issue.  You are currently 1 out of 1 in the queue.",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:06",
+                  "message":"his email address is mikko.kallio@fi.ibm.com",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:31",
+                  "message":"Because of the SSO issue he can not log a ticket",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:39",
+                  "message":"Xu has joined this chat. Please wait while I review your problem description.",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:48",
+                  "message":"[Xu] hi",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:15",
+                  "message":"[Xu] hi",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:48",
+                  "message":"I have received the information that the issue is resolved.",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:51",
+                  "message":"Thanks for listening",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:52",
+                  "message":"[Xu] there is no outage about this issue, please clear his browser's history and try again",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:43:00",
+                  "message":"[Xu] Thank you for using Mac support.  Have a good day, bye.",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:43:21",
+                  "message":"Agent [Xu] closed the chat session.",
+                  "user":"Xu Yang"
+               }
+            ]
+         },
+         "dialogHeader":{
+            "agentEmails":"bjyangxu@cn.ibm.com",
+            "clientEmail":"RAINERHO@ie.ibm.com",
+            "conversationDateTime":"2018/05/17T02:38:19",
+            "duration":"00:03:47",
+            "messageCount":12,
+            "sessionID":1612334
+         }
+      },
+      {
+         "dialogContent":{
+            "dialog":[{
+                  "datetime":"May 17 2018 02:38:19",
+                  "message":"Welcome Rainer. Your chat conversation may be recorded for quality purposes. A colleage of mine ( mikko@fi.ibm.com) in Finland is not able to connect to SSO, and it seems this is the case for all of Finland",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:38:19",
+                  "message":"Rainer, please wait while the system locates a live Apple Advisor to assist you.   Did you know you can go to https://w3.ibm.com/help or download the Help@IBM mobile app for iOS from the IBM App Store to easily find solutions to your problems.  Search by the product name and a keyword related to your issue.  You are currently 1 out of 1 in the queue.",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:06",
+                  "message":"his email address is mikko.kallio@fi.ibm.com",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:31",
+                  "message":"Because of the SSO issue he can not log a ticket",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:39",
+                  "message":"Xu has joined this chat. Please wait while I review your problem description.",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:39:48",
+                  "message":"[Xu] hi",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:15",
+                  "message":"[Xu] hi",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:48",
+                  "message":"I have received the information that the issue is resolved.",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:51",
+                  "message":"Thanks for listening",
+                  "user":"RAINERHO@ie.ibm.com"
+               },
+               {
+                  "datetime":"May 17 2018 02:42:52",
+                  "message":"[Xu] there is no outage about this issue, please clear his browser's history and try again",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:43:00",
+                  "message":"[Xu] Thank you for using Mac support.  Have a good day, bye.",
+                  "user":"Xu Yang"
+               },
+               {
+                  "datetime":"May 17 2018 02:43:21",
+                  "message":"Agent [Xu] closed the chat session.",
+                  "user":"Xu Yang"
+               }
+            ]
+         },
+         "dialogHeader":{
+            "agentEmails":"bjyangxu@cn.ibm.com",
+            "clientEmail":"RAINERHO@ie.ibm.com",
+            "conversationDateTime":"2018/05/17T02:38:19",
+            "duration":"00:03:47",
+            "messageCount":12,
+            "sessionID":1612334
+         }
+      }
+   ],
+   "header":{
+      "dateRange":{
+         "endDate":"05/31/2018",
+         "startDate":"01/01/2018"
+      },
+      "productionDate":"2018-05-17",
+      "sessions":362,
+      "total":362
+   },
+   "path":"/csnext/wild/WILD/Other/FilterIBMHDText/./CHIME_CHAT_EXPORT/Mac (41)_2018-05-17.txt"
+}

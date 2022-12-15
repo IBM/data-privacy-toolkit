@@ -1,0 +1,538 @@
+{
+    "resourceType": "StructureDefinition", 
+    "snapshot": {
+        "element": [
+            {
+                "definition": "This resource identifies an instance of a manufactured item that is used in the provision of healthcare without being substantially changed through that activity. The device may be a medical or non-medical device.  Medical devices includes durable (reusable) medical equipment, implantable devices, as well as disposable equipment used for diagnostic, treatment, and research for healthcare and public health.  Non-medical devices may include items such as a machine, cellphone, computer, application, etc.", 
+                "short": "An instance of a manufactured te that is used in the provision of healthcare", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "Device", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "administrative.device", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Device", 
+                "type": [
+                    {
+                        "code": "DomainResource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The logical id of the resource, as used in the URL for the resource. Once assigned, this value never changes.", 
+                "short": "Logical id of this artifact", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "The only time that a resource does not have an id is when it is being submitted to the server using a create operation. Bundles always have an id, though it is usually a generated UUID.", 
+                "isSummary": true, 
+                "path": "Device.id", 
+                "type": [
+                    {
+                        "code": "id"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The metadata about the resource. This is content that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.", 
+                "short": "Metadata about the resource", 
+                "min": 0, 
+                "max": "1", 
+                "isSummary": true, 
+                "path": "Device.meta", 
+                "type": [
+                    {
+                        "code": "Meta"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A reference to a set of rules that were followed when the resource was constructed, and which must be understood when processing the content.", 
+                "short": "A set of rules under which this content was created", 
+                "min": 0, 
+                "max": "1", 
+                "comments": "Asserting this rule set restricts the content to be only understood by a limited set of trading partners. This inherently limits the usefulness of the data in the long term. However, the existing health eco-system is highly fractured, and not yet ready to define, collect, and exchange data in a generally computable sense. Wherever possible, implementers and/or specification writers should avoid using this element as much as possible.", 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Device.implicitRules", 
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The base language in which the resource is written.", 
+                "short": "Language of the resource content", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "A human language.", 
+                    "valueSetUri": "http://tools.ietf.org/html/bcp47"
+                }, 
+                "comments": "Language is provided to support indexing and accessibility (typically, services such as text to speech use the language tag). The html language tag in the narrative applies  to the narrative. The language tag on the resource may be used to specify the language of other presentations generated from the data in the resource  Not all the content has to be in the base language. The Resource.language should not be assumed to apply to the narrative automatically. If a language is specified, it should it also be specified on the div element in the html (see rules in HTML5 for information about the relationship between xml:lang and the html lang attribute).", 
+                "path": "Device.language", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A human-readable narrative that contains a summary of the resource, and may be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.", 
+                "short": "Text summary of the resource, for human interpretation", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": "Act.text?", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Contained resources do not have narrative. Resources that are not contained SHOULD have a narrative.", 
+                "alias": [
+                    "narrative", 
+                    "html", 
+                    "xhtml", 
+                    "display"
+                ], 
+                "path": "Device.text", 
+                "type": [
+                    {
+                        "code": "Narrative"
+                    }
+                ], 
+                "condition": [
+                    "dom-1"
+                ]
+            }, 
+            {
+                "definition": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.", 
+                "short": "Contained, inline Resources", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "This should never be done when the content can be identified properly, as once identification is lost, it is extremely difficult (and context dependent) to restore it again.", 
+                "alias": [
+                    "inline resources", 
+                    "anonymous resources", 
+                    "contained resources"
+                ], 
+                "path": "Device.contained", 
+                "type": [
+                    {
+                        "code": "Resource"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource. In order to make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.", 
+                "short": "Additional Content defined by implementations", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Device.extension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ]
+            }, 
+            {
+                "definition": "May be used to represent additional information that is not part of the basic definition of the resource, and that modifies the understanding of the element that contains it. Usually modifier elements provide negation or qualification. In order to make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.", 
+                "short": "Extensions that cannot be ignored", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": "N/A", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.", 
+                "alias": [
+                    "extensions", 
+                    "user content"
+                ], 
+                "path": "Device.modifierExtension", 
+                "type": [
+                    {
+                        "code": "Extension"
+                    }
+                ], 
+                "isModifier": true
+            }, 
+            {
+                "definition": "Unique instance identifiers assigned to a device by organizations like manufacturers or owners. If the identifier identifies the type of device, Device.type should be used.", 
+                "short": "Instance id from manufacturer, owner, and others", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".id", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "w5"
+                    }
+                ], 
+                "comments": "Often fixed to the device as a barcode and may include names given to the device in local usage.  Note that some of the barcodes affixed to the device identify its type, not its instance.  For the FDA mandated Unique Device Identifier (UDI) use  the Device.udi element.", 
+                "path": "Device.identifier", 
+                "type": [
+                    {
+                        "code": "Identifier"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Code or identifier to identify a kind of device.", 
+                "short": "What kind of device this is", 
+                "min": 1, 
+                "max": "1", 
+                "binding": {
+                    "strength": "preferred", 
+                    "description": "Defines the nature of the device and the kind of functionality/services/behavior that may be expected from it.", 
+                    "valueSetUri": "https://www.gmdnagency.org/Info.aspx?pageid=1091"
+                }, 
+                "mapping": [
+                    {
+                        "map": ".code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "class", 
+                        "identity": "w5"
+                    }
+                ], 
+                "comments": "For the FDA mandated Unique Device Identifier (UDI) use  the Device.udi element.", 
+                "path": "Device.type", 
+                "type": [
+                    {
+                        "code": "CodeableConcept"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Descriptive information, usage information or implantation information that is not captured in an existing element.", 
+                "short": "Device notes and comments", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".text", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Device.note", 
+                "type": [
+                    {
+                        "code": "Annotation"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Status of the Device availability.", 
+                "short": "available | not-available | entered-in-error", 
+                "min": 0, 
+                "max": "1", 
+                "binding": {
+                    "strength": "required", 
+                    "description": "The availability status of the device.", 
+                    "valueSetReference": {
+                        "reference": "http://hl7.org/fhir/ValueSet/devicestatus"
+                    }
+                }, 
+                "mapping": [
+                    {
+                        "map": ".statusCode", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "status", 
+                        "identity": "w5"
+                    }
+                ], 
+                "isModifier": true, 
+                "isSummary": true, 
+                "path": "Device.status", 
+                "type": [
+                    {
+                        "code": "code"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A name of the manufacturer.", 
+                "short": "Name of device manufacturer", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playedRole[typeCode=MANU].scoper.name", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Device.manufacturer", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The \"model\" is an identifier assigned by the manufacturer to identify the product by its type. This number is shared by the all devices sold as the same type.", 
+                "short": "Model id assigned by the manufacturer", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playedRole[typeCode=MANU].code", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "what", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Device.model", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The version of the device, if the device has multiple releases under the same model, or if the device is software or carries firmware.", 
+                "short": "Version number (i.e. software)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".softwareName (included as part)", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Device.version", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The date and time when the device was manufactured.", 
+                "short": "Manufacture date", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".existenceTime.low", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Device.manufactureDate", 
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The date and time beyond which this device is no longer valid or should not be used (if applicable).", 
+                "short": "Date and time of expiry of this device (if applicable)", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".expirationTime", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "when.done", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Device.expiry", 
+                "type": [
+                    {
+                        "code": "dateTime"
+                    }
+                ]
+            }, 
+            {
+                "definition": "United States Food and Drug Administration mandated Unique Device Identifier (UDI). Use the human readable information (the content that the user sees, which is sometimes different to the exact syntax represented in the barcode)  - see http://www.fda.gov/MedicalDevices/DeviceRegulationandGuidance/UniqueDeviceIdentification/default.htm.", 
+                "short": "FDA mandated Unique Device Identifier", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".id[where root is root for UDI]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "id", 
+                        "identity": "w5"
+                    }
+                ], 
+                "comments": "The unique identifier may identify an instance of a device uniquely, or it may only identify the type of the device. A portion of the UDI - the DI part - can be extracted from the UDI when required, and used to look up information about the device through the GUDID.", 
+                "path": "Device.udi", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Lot number assigned by the manufacturer.", 
+                "short": "Lot number of manufacture", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".lotNumberText", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "Alphanumeric Maximum 20.", 
+                "path": "Device.lotNumber", 
+                "type": [
+                    {
+                        "code": "string"
+                    }
+                ]
+            }, 
+            {
+                "definition": "An organization that is responsible for the provision and ongoing maintenance of the device.", 
+                "short": "Organization responsible for device", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playedRole[typeCode=OWN].scoper", 
+                        "identity": "rim"
+                    }
+                ], 
+                "path": "Device.owner", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Organization"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "The place where the device can be found.", 
+                "short": "Where the resource is found", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playedRole[typeCode=LOCE].scoper", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "where", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Device.location", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Location"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Patient information, if the resource is affixed to a person.", 
+                "short": "If the resource is affixed to a person", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".playedRole[typeCode=USED].scoper.playedRole[typeCode=PAT]", 
+                        "identity": "rim"
+                    }, 
+                    {
+                        "map": "who.focus", 
+                        "identity": "w5"
+                    }
+                ], 
+                "path": "Device.patient", 
+                "type": [
+                    {
+                        "profile": [
+                            "http://hl7.org/fhir/StructureDefinition/Patient"
+                        ], 
+                        "code": "Reference"
+                    }
+                ]
+            }, 
+            {
+                "definition": "Contact details for an organization or a particular human that is responsible for the device.", 
+                "short": "Details for human/organization for support", 
+                "min": 0, 
+                "max": "*", 
+                "mapping": [
+                    {
+                        "map": ".scopedRole[typeCode=CON].player", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "used for troubleshooting etc.", 
+                "path": "Device.contact", 
+                "type": [
+                    {
+                        "code": "ContactPoint"
+                    }
+                ]
+            }, 
+            {
+                "definition": "A network address on which the device may be contacted directly.", 
+                "short": "Network address to contact device", 
+                "min": 0, 
+                "max": "1", 
+                "mapping": [
+                    {
+                        "map": ".telecom", 
+                        "identity": "rim"
+                    }
+                ], 
+                "comments": "If the device is running a FHIR server, the network address should  be the root URL from which a conformance statement may be retrieved.", 
+                "path": "Device.url", 
+                "type": [
+                    {
+                        "code": "uri"
+                    }
+                ]
+            }
+        ]
+    }, 
+    "id": "Device"
+}

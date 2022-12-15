@@ -1,0 +1,16 @@
+{
+  "_fields" : {
+    "field1": {
+      "phone.countryCode.preserve": false
+    },
+    "field2": {
+      "phone.countryCode.preserve": true
+    }
+  },
+  "_defaults": {
+    "phone.countryCode.preserve": false,
+    "generalization.masking.hierarchyMap": {
+      "gender" : "GENDER"
+    }
+  }
+}

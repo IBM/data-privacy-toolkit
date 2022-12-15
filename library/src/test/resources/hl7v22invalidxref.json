@@ -1,0 +1,18 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader": false,
+
+  "toBeMasked" : {
+    "TOTALLYBOGUSXREF": {
+      "providerType": "RANDOM",
+      "targetPath" : "TOTALLYBOGUSXREF"
+    }
+  },
+
+  "inputFormat": "HL7",
+  "outputFormat": "HL7",
+  
+  "_fields" : {},
+  "_defaults" : {}
+}

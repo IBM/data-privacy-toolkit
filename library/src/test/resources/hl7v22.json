@@ -1,0 +1,18 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader": false,
+
+  "toBeMasked" : {
+    "/.MSH-3-1": {
+      "providerType": "RANDOM",
+      "targetPath": "/.MSH-3-1"
+    }
+  },
+
+  "inputFormat": "HL7",
+  "outputFormat": "HL7",
+  
+  "_fields" : {},
+  "_defaults" : {}
+}

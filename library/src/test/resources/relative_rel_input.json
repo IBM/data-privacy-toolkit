@@ -1,0 +1,15 @@
+{
+  "a" : {
+    "globalid" : "123",
+    "b" : [
+      {
+        "name" : "John",
+        "id" : "xyz"
+      },
+      {
+        "name" : "Jack",
+        "id" : "abc"
+      }
+    ]
+  }
+}
