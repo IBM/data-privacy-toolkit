@@ -16,8 +16,8 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.excel.ExcelMaskingProvider;
 import com.ibm.research.drl.dpt.schema.IdentifiedType;
-import com.ibm.research.drl.dpt.util.FileUtils;
 import com.ibm.research.drl.dpt.util.IdentifierUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
@@ -54,7 +54,7 @@ public class ExcelFormatProcessor extends AbstractFormatProcessor {
                 factory.getConfigurationForField(null), dataMaskingOptions.getInputFormat(),
                 dataMaskingOptions.getToBeMasked(), factory);
 
-        byte[] inputBytes = FileUtils.inputStreamToBytes(dataset);
+        byte[] inputBytes = IOUtils.toByteArray(dataset);
         byte[] outputBytes = maskingProvider.mask(inputBytes);
         output.write(outputBytes);
     }
