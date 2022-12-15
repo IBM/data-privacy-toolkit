@@ -237,7 +237,9 @@ public class ExcelMaskingProviderTest {
         String maskedValue = ExcelUtils.getValue(maskedData, DataTypeFormat.XLS, targetPath);
         assertEquals(hashMaskingProvider.mask(originalValue), maskedValue);
 
-        IOUtils.write(maskedData, new FileOutputStream("/tmp/masked.xls"));
+        try (OutputStream os = new FileOutputStream("/tmp/masked.xls")) {
+            IOUtils.write(maskedData, os);
+        }
     }
 }
 
