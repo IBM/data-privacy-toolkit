@@ -128,8 +128,9 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
 
         private ResultSet retrieveAllMappings(String SQL) throws SQLException {
-            try Statement stmt = connection.createStatement();
-            return stmt.executeQuery(SQL);
+            try (Statement stmt = connection.createStatement()) {
+                return stmt.executeQuery(SQL);
+            }
         }
 
         private ResultSet retrieveMapping(String value) throws SQLException {
