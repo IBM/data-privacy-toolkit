@@ -88,7 +88,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
 
         double value;
         try {
-            value = Double.valueOf(identifier);
+            value = Double.parseDouble(identifier);
         } catch (NumberFormatException e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
