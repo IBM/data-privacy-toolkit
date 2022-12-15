@@ -51,11 +51,6 @@ public final class MaskingProviderFactory implements Serializable {
 
     private static final String PERSISTENCE_TYPE_CONF_NAME = "persistence.type";
 
-    @Deprecated(forRemoval = true)
-    public MaskingProviderFactory() {
-        this(new ConfigurationManager(), Collections.emptyMap());
-    }
-
     /**
      * Instantiates a new Masking provider factory.
      *
