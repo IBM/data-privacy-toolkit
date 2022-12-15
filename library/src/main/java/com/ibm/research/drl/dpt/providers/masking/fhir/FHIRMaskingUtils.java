@@ -54,8 +54,7 @@ public class FHIRMaskingUtils {
         return objectMapper;
     }
 
-    public static JsonNode preprocessFHIRObject(JsonNode node) throws IOException {
-
+    public static JsonNode preprocessFHIRObject(JsonNode node) {
         JsonNode typeNode = node.get("resourceType");
 
         if (typeNode == null) {
