@@ -223,10 +223,8 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
 
         void storeValue(String value, String maskedValue) throws SQLException {
-            try {
-                String query = " insert into " + tableName + " (value, masked) values (?, ?)";
-
-                PreparedStatement preparedStmt = this.connection.prepareStatement(query);
+            String query = " insert into " + tableName + " (value, masked) values (?, ?)";
+            try (PreparedStatement preparedStmt = this.connection.prepareStatement(query)) {
                 preparedStmt.setString(1, value);
                 preparedStmt.setString(2, maskedValue);
 
