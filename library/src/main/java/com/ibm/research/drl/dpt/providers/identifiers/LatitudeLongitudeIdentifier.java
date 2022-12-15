@@ -122,11 +122,11 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
      * @param identifier the identifier
      * @return the latitude longitude
      */
-    public static LatitudeLongitude parseGPSFormat(String identifier) {
-        //GPS format is "x,y"
-        String[] parts = identifier.split(",");
-        Double latitude = Double.parseDouble(parts[0]);
-        Double longitude = Double.parseDouble(parts[1]);
+    public static LatitudeLongitude parseGPSFormat(String identifier) throws NumberFormatException {
+        //GPS format is expected as "x,y"
+        String[] parts = identifier.split(",\\s*");
+        double latitude = Double.parseDouble(parts[0]);
+        double longitude = Double.parseDouble(parts[1]);
         return new LatitudeLongitude(latitude, longitude, LatitudeLongitudeFormat.DECIMAL);
     }
 
@@ -136,14 +136,14 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
      * @param identifier the identifier
      * @return the latitude longitude
      */
-    public LatitudeLongitude parseCompassFormat(String identifier) {
-        double latitude = 0.0;
-        double longitude = 0.0;
-        double nsDegrees = 0.0, ewDegrees = 0.0;
-        double nsMinutes = 0.0, ewMinutes = 0.0;
-        double nsSeconds = 0.0, ewSeconds = 0.0;
-        String ns = null;
-        String ew = null;
+    public LatitudeLongitude parseCompassFormat(String identifier) throws NumberFormatException {
+        double latitude;
+        double longitude;
+        double nsDegrees, ewDegrees;
+        double nsMinutes, ewMinutes;
+        double nsSeconds, ewSeconds;
+        String ns;
+        String ew;
         LatitudeLongitudeFormat format = LatitudeLongitudeFormat.COMPASS;
 
         Matcher m1 = getPatternFromFormat(LatitudeLongitudeFormat.DMS).matcher(identifier);
@@ -155,9 +155,6 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
             ewDegrees = Double.parseDouble(m1.group("ewDegrees"));
             ewMinutes = Double.parseDouble(m1.group("ewMinutes"));
             ewSeconds = Double.parseDouble(m1.group("ewSeconds"));
-
-            latitude = GeoUtils.degreesToDecimal(nsDegrees, nsMinutes, nsSeconds);
-            longitude = GeoUtils.degreesToDecimal(ewDegrees, ewMinutes, ewSeconds);
 
             ns = m1.group("ns");
             ew = m1.group("ew");
