@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.ola;
@@ -38,7 +38,6 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
         int contentRequirements = this.privacyConstraintsContentRequirements;
 
         if (contentRequirements == ContentRequirements.NONE) {
-            long start = System.currentTimeMillis();
             Map<String, Integer> eqCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(dataset, columnInformationList, node.getValues());
 
             partitions = new ArrayList<>();
@@ -51,7 +50,7 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
             partitions = new ArrayList<>(partitionCollection);
         }
 
-        Double suppressedRows = 0.0d;
+        double suppressedRows = 0.0d;
 
         for (Partition partition : partitions) {
             if (!checkConstraints(partition)) {
