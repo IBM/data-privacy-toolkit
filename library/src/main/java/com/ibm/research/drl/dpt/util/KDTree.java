@@ -155,16 +155,17 @@ public class KDTree<T extends KDTree.CartesianPoint> {
             lastNode = results.last();
             lastDistance = lastNode.point.euclideanDistance(value);
         }
-        Double nodeDistance = node.point.euclideanDistance(value);
-        if (nodeDistance.compareTo(lastDistance) < 0) {
+        double nodeDistance = node.point.euclideanDistance(value);
+        if (nodeDistance< lastDistance) {
             if (results.size() == K && lastNode != null)
                 results.remove(lastNode);
             results.add(node);
-        } else if (nodeDistance.equals(lastDistance)) {
+        } else if (nodeDistance == lastDistance) {
             results.add(node);
         } else if (results.size() < K) {
             results.add(node);
         }
+
         lastNode = results.last();
         lastDistance = lastNode.point.euclideanDistance(value);
 
