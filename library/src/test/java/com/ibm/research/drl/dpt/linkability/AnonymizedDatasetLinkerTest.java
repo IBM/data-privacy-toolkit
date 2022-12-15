@@ -33,8 +33,11 @@ public class AnonymizedDatasetLinkerTest {
             columns[i] = new HashMap<>();
         }
 
-        try (InputStream source = getClass().getResourceAsStream("/florida_link.txt")) {
-            try (CSVParser parser = new CSVParser(new InputStreamReader(source), CSVFormat.RFC4180)) {
+        try (
+                InputStream source = getClass().getResourceAsStream("/florida_link.txt")) {
+            assert source != null;
+            try (Reader reader = new InputStreamReader(source);
+                 CSVParser parser = new CSVParser(reader, CSVFormat.RFC4180)) {
                 int i = 0;
                 for (CSVRecord record : parser) {
                     String[] values = {
