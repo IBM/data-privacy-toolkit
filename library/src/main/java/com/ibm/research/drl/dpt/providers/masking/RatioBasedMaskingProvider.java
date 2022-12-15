@@ -124,7 +124,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
 
             double ratio = originalBase / value;
 
-            Double masked = maskedBase / ratio;
+            double masked = maskedBase / ratio;
             return formatResult(masked);
         } catch (NumberFormatException e) {
             switch (failMode) {
@@ -146,7 +146,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
     public String mask(String identifier) {
         double value;
         try {
-            value = Double.valueOf(identifier);
+            value = Double.parseDouble(identifier);
         } catch (NumberFormatException e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
@@ -160,7 +160,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
             }
         }
 
-        Double masked = value * this.ratio;
+        double masked = value * this.ratio;
         return formatResult(masked);
     }
 
