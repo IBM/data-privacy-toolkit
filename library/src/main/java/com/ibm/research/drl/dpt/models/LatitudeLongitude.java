@@ -27,7 +27,7 @@ public class LatitudeLongitude {
      * @param latitude  the latitude
      * @param longitude the longitude
      */
-    public LatitudeLongitude(Double latitude, Double longitude) {
+    public LatitudeLongitude(double latitude, double longitude) {
         this(latitude, longitude, LatitudeLongitudeFormat.DECIMAL);
     }
 
@@ -38,7 +38,7 @@ public class LatitudeLongitude {
      * @param longitude the longitude
      * @param format    the format
      */
-    public LatitudeLongitude(Double latitude, Double longitude, LatitudeLongitudeFormat format) {
+    public LatitudeLongitude(double latitude, double longitude, LatitudeLongitudeFormat format) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.format = format;
@@ -116,7 +116,7 @@ public class LatitudeLongitude {
         Double nsSeconds = (latitude - nsDegrees - (double) nsMinutes / 60.0) * 3600;
         int ewDegrees = (int) longitude;
         int ewMinutes = (int) ((longitude - ewDegrees) * 60);
-        Double ewSeconds = (longitude - ewDegrees - (double) ewMinutes / 60.0) * 3600;
+        double ewSeconds = (longitude - ewDegrees - (double) ewMinutes / 60.0) * 3600;
 
         if (format == LatitudeLongitudeFormat.COMPASS) {
             return String.format("%s%02d.%02d.%02d %s%02d.%02d.%02d",
