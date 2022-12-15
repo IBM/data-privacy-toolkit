@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -206,7 +207,9 @@ public class ExcelMaskingProviderTest {
             assertEquals(hashMaskingProvider.mask(originalValue), maskedValue);
         }
 
-        IOUtils.write(maskedData, new FileOutputStream("/tmp/masked.xls"));
+        try (OutputStream os = new FileOutputStream("/tmp/masked.xls")) {
+            IOUtils.write(maskedData, os);
+        }
     }
 
     @Test
