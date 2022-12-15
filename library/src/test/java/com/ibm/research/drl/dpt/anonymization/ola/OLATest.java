@@ -617,12 +617,12 @@ public class OLATest {
             IPVDataset original = IPVDataset.load(is, false, ',', '"', false);
             OLA ola = new OLA();
 
-            List<ColumnInformation> columnInformations = new ArrayList<>();
+            List<ColumnInformation> columnInformation = new ArrayList<>();
             for (int i = 0; i < original.getNumberOfColumns(); ++i) {
-                columnInformations.add(new DefaultColumnInformation());
+                columnInformation.add(new DefaultColumnInformation());
             }
 
-            ola.initialize(original, columnInformations, Arrays.asList(new KAnonymity(10)), new OLAOptions(0.0));
+            ola.initialize(original, columnInformation, Arrays.asList(new KAnonymity(10)), new OLAOptions(0.0));
 
             IPVDataset anonymized = ola.apply();
 
