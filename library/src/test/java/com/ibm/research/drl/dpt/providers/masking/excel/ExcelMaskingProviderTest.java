@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2017                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.excel;
@@ -11,7 +11,6 @@ import com.ibm.research.drl.dpt.providers.masking.HashMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.util.ExcelUtils;
-import com.ibm.research.drl.dpt.util.FileUtils;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -29,30 +28,31 @@ public class ExcelMaskingProviderTest {
     
     @Test
     public void testXLSX() throws Exception {
-        InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xlsx");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        try (InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xlsx")) {
+            byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
-        String path = "/b/$D$7";
-        
-        String originalValue = ExcelUtils.getValue(inputBytes, DataTypeFormat.XLSX, path);
-        
-        Map<String, DataMaskingTarget> maskingProviders = new HashMap<>();
-        maskingProviders.put(path, new DataMaskingTarget(ProviderType.EMAIL, path));
-        
-        ExcelMaskingProvider excelMaskingProvider = new ExcelMaskingProvider(new DefaultMaskingConfiguration(),
-                DataTypeFormat.XLSX, maskingProviders, new MaskingProviderFactory(new ConfigurationManager(), maskingProviders));
-        
-        byte[] maskedData = excelMaskingProvider.mask(inputBytes);
-       
-        String maskedValue = ExcelUtils.getValue(maskedData, DataTypeFormat.XLSX, path);
-       
-        assertNotEquals(maskedValue, originalValue);
+            String path = "/b/$D$7";
+
+            String originalValue = ExcelUtils.getValue(inputBytes, DataTypeFormat.XLSX, path);
+
+            Map<String, DataMaskingTarget> maskingProviders = new HashMap<>();
+            maskingProviders.put(path, new DataMaskingTarget(ProviderType.EMAIL, path));
+
+            ExcelMaskingProvider excelMaskingProvider = new ExcelMaskingProvider(new DefaultMaskingConfiguration(),
+                    DataTypeFormat.XLSX, maskingProviders, new MaskingProviderFactory(new ConfigurationManager(), maskingProviders));
+
+            byte[] maskedData = excelMaskingProvider.mask(inputBytes);
+
+            String maskedValue = ExcelUtils.getValue(maskedData, DataTypeFormat.XLSX, path);
+
+            assertNotEquals(maskedValue, originalValue);
+        }
     }
 
     @Test
     public void testXLSXIgnoreNonExistentTrue() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xlsx");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
         String path = "/b2/$D$7";
 
@@ -77,7 +77,7 @@ public class ExcelMaskingProviderTest {
     public void testXLSXIgnoreNonExistentFalse() throws Exception {
         assertThrows(NullPointerException.class, () -> {
             InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xlsx");
-            byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+            byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String path = "/b2/$D$7";
 
@@ -102,7 +102,7 @@ public class ExcelMaskingProviderTest {
     @Test
     public void testXLSXNumericCell() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xlsx");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
         String path = "/b/$B$7";
 
@@ -125,7 +125,7 @@ public class ExcelMaskingProviderTest {
     @Test
     public void testXLS() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xls");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
         String path = "/b/$D$7";
 
@@ -147,7 +147,7 @@ public class ExcelMaskingProviderTest {
     @Test
     public void testXLSNumericCell() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xls");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        byte[] inputBytes = IOUtils.toByteArray(inputStream);
         
         String path = "/b/$B$7";
 
@@ -170,7 +170,7 @@ public class ExcelMaskingProviderTest {
     @Test
     public void testXLSRanges() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xls");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
         String rangePath = "/d/$D$7:$E$10";
         String targetPath = "/d/$D$7:$D$10";
@@ -212,7 +212,7 @@ public class ExcelMaskingProviderTest {
     @Test
     public void testXLSRespectsTarget() throws Exception {
         InputStream inputStream = this.getClass().getResourceAsStream("/sampleXLS.xls");
-        byte[] inputBytes = FileUtils.inputStreamToBytes(inputStream);
+        byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
         String path = "/b/$D$7";
         String targetPath = "/c/$D$14";
