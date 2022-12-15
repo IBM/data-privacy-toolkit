@@ -3,9 +3,14 @@
  * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
 
 ext {
     junit_jupiter_version = '5.9.0'
@@ -70,7 +75,7 @@ jar {
 }
 
 dependencies {
-    implementation "${group}:data-privacy-toolkit:${dpt_version}"
+    implementation "com.ibm.research.drl.dpt:data-privacy-toolkit:${dpt_version}"
     implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
     implementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
 
@@ -91,4 +96,11 @@ dependencies {
 repositories {
     mavenCentral()
     mavenLocal()
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'com.ibm.research.drl.dpt.toolkit.Toolkit'
+    }
+    zip64 true
 }
