@@ -9,6 +9,6 @@ ENV CONSISTENDIR=/consistency
 
 WORKDIR /app
 
-COPY ./build/libs/data-privacy-toolkit-cli-*-all.jar /app/ibm-data-privacy-toolkit-cli.jar
+COPY ./build/libs/data-privacy-toolkit-cli-*-all.jar /app/data-privacy-toolkit-cli.jar
 
-CMD java -jar /app/ibm-data-privacy-toolkit-cli.jar -i ${INPUT} -c ${CONFDIR}/config.json -o ${OUTPUT}
+CMD java -jar /app/data-privacy-toolkit-cli.jar -i ${INPUT} -c ${CONFDIR}/config.json -o ${OUTPUT}
