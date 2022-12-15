@@ -51,15 +51,11 @@ public class GeneralizedLossMetric implements InformationMetric {
     }
 
     private double getLoss(String anonymized, ColumnInformation columnInformation) {
-
-        String anonymizedValue = anonymized;
-
         if (columnInformation.isCategorical()) {
-            return getLossCategorical(anonymizedValue, (CategoricalInformation) columnInformation);
+            return getLossCategorical(anonymized, (CategoricalInformation) columnInformation);
         } else {
-            return getLossNumerical(anonymizedValue, (NumericalRange) columnInformation);
+            return getLossNumerical(anonymized, (NumericalRange) columnInformation);
         }
-
     }
 
     @Override
@@ -79,7 +75,7 @@ public class GeneralizedLossMetric implements InformationMetric {
 
     @Override
     public double getUpperBound() {
-        Double lm = 0.0;
+        double lm = 0.0;
 
         int numberOfColumns = original.getNumberOfColumns();
         List<Double> lossPerColumn = new ArrayList<>(numberOfColumns);
@@ -95,8 +91,7 @@ public class GeneralizedLossMetric implements InformationMetric {
                 continue;
             }
 
-            double loss = diff;
-            lossPerColumn.set(j, lossPerColumn.get(j) + loss);
+            lossPerColumn.set(j, lossPerColumn.get(j) + (double) diff);
         }
 
         for (int k = 0; k < numberOfColumns; k++) {
