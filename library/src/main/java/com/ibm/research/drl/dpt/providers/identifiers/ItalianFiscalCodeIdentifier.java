@@ -145,9 +145,9 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
         }
 
         // find last value
-        Character checksumCharacter = data.charAt(data.length() - 1);
+        char checksumCharacter = data.charAt(data.length() - 1);
 
-        return checksumCharacter.equals(
+        return checksumCharacter == (
                 (char) ('A' + (checksum % 26))
         );
     }
