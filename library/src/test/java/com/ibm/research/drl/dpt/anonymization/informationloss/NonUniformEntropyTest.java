@@ -352,7 +352,7 @@ public class NonUniformEntropyTest {
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
                 Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
 
-        Double ne = nonUniformEntropy.report();
+        double ne = nonUniformEntropy.report();
         assertEquals(0.0, ne, 0.01);
         assertEquals(0.0, nonUniformEntropy.getUpperBound(), 0.01);
     }
