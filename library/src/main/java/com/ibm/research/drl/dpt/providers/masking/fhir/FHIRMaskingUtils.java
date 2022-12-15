@@ -36,15 +36,16 @@ public class FHIRMaskingUtils {
     }
 
     public static Set<String> setFromString(String value, boolean toUppercase) {
-
         Set<String> set = new HashSet<>();
 
-        if (value == null || value.isEmpty()) {
-            return set;
-        }
-
-        for (String v : value.split(",")) {
-            set.add(v.toUpperCase());
+        if (value != null && !value.isEmpty()) {
+            for (String v : value.split(",")) {
+                if (toUppercase) {
+                    set.add(v.toUpperCase());
+                } else {
+                    set.add(v);
+                }
+            }
         }
 
         return set;
