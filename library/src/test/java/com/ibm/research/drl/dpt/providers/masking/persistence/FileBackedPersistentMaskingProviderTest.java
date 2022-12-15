@@ -5,11 +5,14 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.persistence;
 
+import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.EmailMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -21,7 +24,7 @@ public class FileBackedPersistentMaskingProviderTest {
         String email1 = "joedoe1@foo.com";
         String email2 = "joedoe2@foo.com";
 
-        MaskingProvider emailMaskingProvider = new EmailMaskingProvider(new MaskingProviderFactory());
+        MaskingProvider emailMaskingProvider = new EmailMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
 
         DefaultMaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("persistence.file", "/tmp");
