@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2018                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DecimalTrimmingMaskingProvider extends AbstractMaskingProvider {
-    private final static Logger log = LogManager.getLogger(DecimalTrimmingMaskingProvider.class);
+    private final static Logger logger = LogManager.getLogger(DecimalTrimmingMaskingProvider.class);
 
     public static class DecimalTrimmingRule {
         private final double lowerThreshold;
@@ -78,14 +78,14 @@ public class DecimalTrimmingMaskingProvider extends AbstractMaskingProvider {
             double upperThreshold = Double.parseDouble(tokens[1]);
 
             if (lowerThreshold > upperThreshold) {
-                log.error("lower threshold is bigger than the upper threshold");
+                logger.error("lower threshold is bigger than the upper threshold");
                 throw new RuntimeException("lower threshold is bigger than the upper threshold");
             }
 
             int digitsToKeep = Integer.parseInt(tokens[2]);
 
             if (digitsToKeep < 0) {
-                log.error("digits to keep cannot be less than zero");
+                logger.error("digits to keep cannot be less than zero");
                 throw new RuntimeException("digits to keep cannot be less than zero");
             }
 
@@ -98,8 +98,7 @@ public class DecimalTrimmingMaskingProvider extends AbstractMaskingProvider {
 
     @Override
     public String mask(String identifier) {
-
-        Double value;
+        double value;
 
         try {
             value = Double.parseDouble(identifier);
@@ -108,7 +107,7 @@ public class DecimalTrimmingMaskingProvider extends AbstractMaskingProvider {
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
                 case FailMode.THROW_ERROR:
-                    log.error("invalid numerical value");
+                    logger.error("invalid numerical value");
                     throw new IllegalArgumentException("invalid numerical value");
                 case FailMode.RETURN_EMPTY:
                 default:
