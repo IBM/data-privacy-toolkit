@@ -119,7 +119,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
         String maskedBaseValue = pair.getMasked();
 
         try {
-            Double originalBase = Double.parseDouble(originalBaseValue);
+            double originalBase = Double.parseDouble(originalBaseValue);
             Double maskedBase = Double.parseDouble(maskedBaseValue);
 
             double ratio = originalBase / value;
