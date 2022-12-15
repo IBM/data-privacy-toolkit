@@ -22,7 +22,7 @@ ext {
     log4j2_version = '2.19.0'
 
     commons_codec_version = '1.13'
-    commons_csv_version = '1.8'
+    commons_csv_version = '1.9.0'
     commons_io_version = '2.7'
     commons_lang_version = '3.10'
     commons_math_version = '3.6.1'
