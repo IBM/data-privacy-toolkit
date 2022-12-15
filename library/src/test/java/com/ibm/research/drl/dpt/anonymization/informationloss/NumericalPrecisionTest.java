@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.informationloss;
@@ -27,13 +27,12 @@ public class NumericalPrecisionTest {
         columnInformationList.add(ColumnInformationGenerator.generateNumericalRange(original, 0, ColumnType.QUASI));
         columnInformationList.add(ColumnInformationGenerator.generateNumericalRange(original, 1, ColumnType.QUASI));
 
-        Double precision = (new NumericalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
+        double precision = (new NumericalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
 
         //the precision of column 1 is (1 + 1 + 1 + 1) / 13 / 4) = 1/13 = 0.0769...
         //the precision of column 2 is (5 + 5 + 5 + 5) / 15 / 4) = 1/3 = 0.3333...
         // The total precision is (1/13 + 1/3)/2 = 0.205128...
 
-//        System.out.println("precision is " + precision);
         assertEquals((1/13.0 + 1/3.0)/2, precision, 0.00001);
     }
 }
