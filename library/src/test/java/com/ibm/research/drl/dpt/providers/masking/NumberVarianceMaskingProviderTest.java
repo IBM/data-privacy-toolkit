@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -46,7 +46,7 @@ public class NumberVarianceMaskingProviderTest {
         configuration.setValue("numvariance.mask.limitUp", margin);
         MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-        Double originalValue = 50d;
+        double originalValue = 50d;
         String value = originalValue.toString();
 
         for (int i = 0; i < 100; i++) {
