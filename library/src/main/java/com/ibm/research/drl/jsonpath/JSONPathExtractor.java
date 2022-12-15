@@ -8,10 +8,13 @@ package com.ibm.research.drl.jsonpath;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public final class JSONPathExtractor {
+    private static final Logger logger = LogManager.getLogger(JSONPathExtractor.class);
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static JsonNode extract(final JsonNode obj, final JSONPath pattern) {
@@ -58,6 +61,8 @@ public final class JSONPathExtractor {
                 break;
             case BOOLEAN:
                 return BooleanNode.valueOf(node.asBoolean());
+            default:
+                logger.info("Unexpected value: {}", type);
         }
 
         return NullNode.getInstance();
