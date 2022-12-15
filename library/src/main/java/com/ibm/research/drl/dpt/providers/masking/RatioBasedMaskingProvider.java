@@ -120,7 +120,7 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
 
         try {
             double originalBase = Double.parseDouble(originalBaseValue);
-            Double maskedBase = Double.parseDouble(maskedBaseValue);
+            double maskedBase = Double.parseDouble(maskedBaseValue);
 
             double ratio = originalBase / value;
 
