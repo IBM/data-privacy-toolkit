@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.informationloss;
@@ -92,7 +92,7 @@ public class CategoricalPrecisionTest {
         CategoricalInformation categoricalInformation = new CategoricalInformation(hierarchy, ColumnType.QUASI, weight);
         columnInformationList.add(categoricalInformation);
 
-        Double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
+        double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
 
         //the precision is (0 + 0 + 1 + 1) / 4 * 1) = 2/4 = 0.5 = 0.5
 //        System.out.println("precision is " + precision);
@@ -125,7 +125,7 @@ public class CategoricalPrecisionTest {
         CategoricalInformation categoricalInformation2 = new CategoricalInformation(hierarchy2, ColumnType.QUASI, weightSecondColumn);
         columnInformationList.add(categoricalInformation2);
 
-        Double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
+        double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
 
         //first column is (0 + 0 + 1 + 1) / 8 * 1) = 2/8 = 0.25
         //second column is (0 + 0 + 1 + 1) / 8 * 0.5 = 2/8 * 0.5 = 0.125
@@ -193,7 +193,7 @@ public class CategoricalPrecisionTest {
         CategoricalInformation categoricalInformation = new CategoricalInformation(hierarchy, ColumnType.QUASI, weight);
         columnInformationList.add(categoricalInformation);
 
-        Double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
+        double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
 
         //the precision is (0 + 0 + 1 + 1) / 4 * 1) = 2/4 = 0.5 = 0.5
 //        System.out.println("precision is " + precision);
@@ -213,7 +213,7 @@ public class CategoricalPrecisionTest {
         CategoricalInformation categoricalInformation = new CategoricalInformation(hierarchy, ColumnType.QUASI);
         columnInformationList.add(categoricalInformation);
 
-        Double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
+        double precision = (new CategoricalPrecision().initialize(original, anonymized, null, null, columnInformationList, null)).report();
 
         //the precision is ((2/3 + 2/3) / 2 * 1) = 2/3 =  0.666
 //        System.out.println("precision is " + precision);
@@ -223,8 +223,6 @@ public class CategoricalPrecisionTest {
     @Test
     public void testCategoricalWithOLA() throws Exception {
         IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
-
-//        System.out.println("original: " + original.getNumberOfRows());
 
         GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
         List<ColumnInformation> columnInformation = new ArrayList<>();
@@ -267,7 +265,7 @@ public class CategoricalPrecisionTest {
         
         int yobLevel = node.getValues()[0];
         double yobLoss = lossResults.get(0).getValue();
-        double estimatedYobLoss = (((double)yobLevel / 1.0) * nonSuppressedRows + suppressedRows * 1.0) / (double) original.getNumberOfRows(); 
+        double estimatedYobLoss = (((double) yobLevel) * nonSuppressedRows + suppressedRows * 1.0) / (double) original.getNumberOfRows();
         assertEquals(estimatedYobLoss, yobLoss, 0.0001);
         
         int heightLevel = node.getValues()[4];
@@ -308,7 +306,6 @@ public class CategoricalPrecisionTest {
         ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
 
         IPVDataset anonymized = ola.apply();
-//        System.out.println("best node: " + ola.reportBestNode());
 
         LatticeNode node = ola.reportBestNode();
 
@@ -322,7 +319,7 @@ public class CategoricalPrecisionTest {
 
         int yobLevel = node.getValues()[0];
         double yobLoss = lossResults.get(0).getValue();
-        double estimatedYobLoss = (((double)yobLevel / 1.0) * nonSuppressedRows + suppressedRows * 1.0) / (double) original.getNumberOfRows();
+        double estimatedYobLoss = (((double) yobLevel) * nonSuppressedRows + suppressedRows * 1.0) / (double) original.getNumberOfRows();
         assertEquals(estimatedYobLoss, yobLoss, 0.0001);
 
         int heightLevel = node.getValues()[4];
@@ -379,7 +376,7 @@ public class CategoricalPrecisionTest {
 
         int yobLevel = node.getValues()[0];
         double yobLoss = lossResults.get(0).getValue();
-        double estimatedYobLoss = (((double)yobLevel / 1.0) * nonSuppressedRows + suppressedRows * 1.0) / (double) original.getNumberOfRows();
+        double estimatedYobLoss = (((double) yobLevel) * nonSuppressedRows + suppressedRows * 1.0) / (double) original.getNumberOfRows();
         assertEquals(estimatedYobLoss, yobLoss, 0.0001);
 
         int heightLevel = node.getValues()[4];
