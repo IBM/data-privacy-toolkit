@@ -47,11 +47,11 @@ public class NumberVarianceMaskingProviderTest {
         MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
         double originalValue = 50d;
-        String value = originalValue.toString();
+        String value = Double.toString(originalValue);
 
         for (int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(value);
-            Double maskedDouble = Double.valueOf(maskedValue);
+            double maskedDouble = Double.parseDouble(maskedValue);
             assertTrue(maskedDouble >= (originalValue - margin));
             assertTrue(maskedDouble <= (originalValue + margin));
         }
@@ -68,7 +68,7 @@ public class NumberVarianceMaskingProviderTest {
             MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
             double originalValue = 50.456788;
-            String value = originalValue.toString();
+            String value = Double.toString(originalValue);
 
             for (int i = 0; i < 100; i++) {
                 String maskedValue = maskingProvider.mask(value);
@@ -90,8 +90,8 @@ public class NumberVarianceMaskingProviderTest {
             configuration.setValue("numvariance.mask.precisionDigits", precisionDigits);
             MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-            Double originalValue = 50.456788;
-            String value = originalValue.toString();
+            double originalValue = 50.456788;
+            String value = Double.toString(originalValue);
 
             for (int i = 0; i < 100; i++) {
                 String maskedValue = maskingProvider.mask(value);
@@ -114,8 +114,8 @@ public class NumberVarianceMaskingProviderTest {
         configuration.setValue("numvariance.mask.precisionDigits", precisionDigits);
         MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-        Double originalValue = 50.456788;
-        String value = originalValue.toString();
+        double originalValue = 50.456788;
+        String value = Double.toString(originalValue);
 
         for (int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(value);
