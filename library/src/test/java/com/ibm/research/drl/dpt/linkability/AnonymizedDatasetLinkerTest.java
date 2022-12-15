@@ -256,16 +256,16 @@ public class AnonymizedDatasetLinkerTest {
         columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
         columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ICDv9), ColumnType.QUASI));
 
-//        sourceInputStream = this.getClass().getResourceAsStream("/anonymised_dataset.csv");
-//        sourceInputStream = this.getClass().getResourceAsStream("/new_anonymised.csv");
-        sourceInputStream = new FileInputStream("/tmp/received_datasettrue.csv"); //this.getClass().getResourceAsStream("/received_datasettrue.csv");
-        source = IPVDataset.load(sourceInputStream, false, ',', '"', false);
+        try (
+            InputStream newInputStream = new FileInputStream("/tmp/received_datasettrue.csv");){
+            source = IPVDataset.load(newInputStream, false, ',', '"', false);
+        }
 
         linkResults = linker.matchesPerRecord(source, linkInformation, columnInformation);
 
-        System.out.println("Linking against anonymised done");
+        System.out.println("Linking against anonymized done");
 
-        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("/tmp/anonymised_linked.csv")))) {
+        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("/tmp/anonymized_linked.csv")))) {
             for (Integer result : linkResults) {
                 pw.println(result);
             }
