@@ -30,7 +30,7 @@ ext {
     commons_validator_version = '1.7'
     pdfbox_version = '2.0.24'
 
-    poi_version = "5.2.2"
+    poi_version = "5.2.3"
 }
 
 dependencies {
