@@ -90,8 +90,10 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
         }
 
         private void initializeTable() throws SQLException {
-            try (Statement statement = connection.createStatement();) {
-                    statement.executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)");
+            try (Statement statement = connection.createStatement();
+                 ResultSet executionResult = statement.executeQuery("CREATE TABLE " + tableName + " (value text primary key, masked text)")
+            ) {
+            ;
             }
         }
 
@@ -108,25 +110,25 @@ public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvid
                 SQL += " LIMIT " + cacheLimit;
             }
 
-            ResultSet resultSet = retrieveAllMappings(SQL);
+            try (ResultSet resultSet = retrieveAllMappings(SQL);) {
 
-            while (resultSet.next()) {
-                String value = resultSet.getString("value");
-                String masked = resultSet.getString("masked");
+                while (resultSet.next()) {
+                    String value = resultSet.getString("value");
+                    String masked = resultSet.getString("masked");
 
-                int valueCode = value.hashCode();
-                cache.put(valueCode, masked);
+                    int valueCode = value.hashCode();
+                    cache.put(valueCode, masked);
 
-                this.cacheEntries++;
-                if (cacheLimit != -1 && this.cacheEntries >= cacheLimit) {
-                    break;
+                    this.cacheEntries++;
+                    if (cacheLimit != -1 && this.cacheEntries >= cacheLimit) {
+                        break;
+                    }
                 }
             }
-
         }
 
         private ResultSet retrieveAllMappings(String SQL) throws SQLException {
-            Statement stmt = connection.createStatement();
+            try Statement stmt = connection.createStatement();
             return stmt.executeQuery(SQL);
         }
 
