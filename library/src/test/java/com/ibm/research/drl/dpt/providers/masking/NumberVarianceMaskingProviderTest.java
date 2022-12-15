@@ -67,7 +67,7 @@ public class NumberVarianceMaskingProviderTest {
             configuration.setValue("numvariance.mask.limitUp", margin);
             MaskingProvider maskingProvider = new NumberVarianceMaskingProvider(configuration);
 
-            Double originalValue = 50.456788;
+            double originalValue = 50.456788;
             String value = originalValue.toString();
 
             for (int i = 0; i < 100; i++) {
