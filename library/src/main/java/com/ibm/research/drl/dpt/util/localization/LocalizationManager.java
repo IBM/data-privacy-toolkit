@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.util.localization;
@@ -45,7 +45,6 @@ public class LocalizationManager {
             if (null != is) {
                 Properties properties = new Properties();
                 properties.load(is);
-
 
                 // load enabledCountries
                 for (final String country : properties.getProperty("country").split(",")) {
@@ -141,6 +140,8 @@ public class LocalizationManager {
             case TACDB:
             case PUBLIC_SUFFIX_LIST:
                 return Collections.singletonList(knownEntries.get(COMMON));
+            default:
+                logger.warn("Unexpected value: {}", resource);
         }
 
         for (String country : countries) {

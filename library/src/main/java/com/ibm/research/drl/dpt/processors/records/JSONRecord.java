@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.processors.records;
@@ -27,18 +27,18 @@ public final class JSONRecord extends MultipathRecord {
 
     @Override
     public byte[] getFieldValue(String fieldReference) {
-        JsonNode node;
+        JsonNode processedNode;
         try {
-            node = JSONPathExtractor.extract(this.node, fieldReference);
-            if (node.isNull()) {
+            processedNode = JSONPathExtractor.extract(this.node, fieldReference);
+            if (processedNode.isNull()) {
                 logger.debug("Field reference {} points to null", fieldReference);
                 return null;
             }
-            if (node.isArray()) {
+            if (processedNode.isArray()) {
                 logger.debug("Field reference {} points to array", fieldReference);
                 return null;
             }
-            if (node.isObject()) {
+            if (processedNode.isObject()) {
                 logger.debug("Field reference {} points to object", fieldReference);
                 return null;
             }
@@ -46,7 +46,7 @@ public final class JSONRecord extends MultipathRecord {
             logger.warn(e.getMessage(), e);
             return null;
         }
-        return node.asText().getBytes();
+        return processedNode.asText().getBytes();
     }
 
     @Override
@@ -242,13 +242,13 @@ public final class JSONRecord extends MultipathRecord {
                 case MISSING:
                 case NULL:
                     return true;
+                default:
+                    return false;
             }
         } catch (JSONPathException e) {
             logger.debug("Error extracting", e);
             throw new RuntimeException(e);
         }
-
-        return false;
     }
 
     @Override

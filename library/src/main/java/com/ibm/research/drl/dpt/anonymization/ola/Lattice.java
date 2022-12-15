@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.ola;
@@ -209,9 +209,9 @@ public class Lattice {
      * @return the boolean
      */
     private boolean checkKAnonymity(LatticeNode node) {
-        double suppressionRate = simpleAnonymityChecker.calculateSuppressionRate(node);
-        node.setSuppressionRate(suppressionRate);
-        return suppressionRate <= this.suppressionRate;
+        double nodeSuppressionRate = simpleAnonymityChecker.calculateSuppressionRate(node);
+        node.setSuppressionRate(nodeSuppressionRate);
+        return nodeSuppressionRate <= this.suppressionRate;
     }
 
 
