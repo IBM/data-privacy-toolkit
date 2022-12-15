@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.excel;
@@ -13,6 +13,8 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
@@ -26,6 +28,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class ExcelMaskingProvider extends AbstractMaskingProvider {
+    private static final Logger logger = LogManager.getLogger(ExcelMaskingProvider.class);
     private final DataTypeFormat inputFormatType;
     private final Map<String, DataMaskingTarget> toBeMasked;
     private final MaskingProviderFactory maskingProviderFactory;
@@ -172,23 +175,33 @@ public class ExcelMaskingProvider extends AbstractMaskingProvider {
         return cells;
     }
 
-    private List<Cell> getCells(Sheet sheet, String cellReference) {
+    private List<Cell> getCells(Sheet sheet, String cellReferenceSpecification) {
 
-        if (cellReference.contains(":")) {
-            return getCellRange(sheet, cellReference);
+        if (cellReferenceSpecification.contains(":")) {
+            return getCellRange(sheet, cellReferenceSpecification);
         }
 
-        CellReference cellReference1 = new CellReference(cellReference);
+        CellReference cellReference = new CellReference(cellReferenceSpecification);
 
-        Row toMaskRow = sheet.getRow(cellReference1.getRow());
-        if (toMaskRow == null && this.ignoreNonExistent) {
+        Row cellRow = sheet.getRow(cellReference.getRow());
+
+        if (cellRow != null) {
+            Cell cell = cellRow.getCell(cellReference.getCol());
+
+            if (cell != null) {
+                return Collections.singletonList(cell);
+            } else {
+                logger.trace("Cell is null: {}", cellReferenceSpecification);
+            }
+        } else {
+            logger.trace("Row is null: {}", cellReferenceSpecification);
+        }
+
+        if (this.ignoreNonExistent) {
             return Collections.emptyList();
         }
 
-        Cell toMask = toMaskRow.getCell(cellReference1.getCol());
-
-        return Collections.singletonList(toMask);
-
+        throw new IllegalArgumentException("Invalid/non existing cell reference: " + cellReferenceSpecification);
     }
 
 
