@@ -1,16 +1,20 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
 public class LOMaskingProvider extends AbstractMaskingProvider {
+    private static final Logger logger = LogManager.getLogger(LOMaskingProvider.class);
+
     private final RandomMaskingProvider randomMaskingProvider;
     private final MaskingProvider nameMaskingProvider;
     private final MaskingProvider hospitalMaskingProvider;
@@ -27,7 +31,7 @@ public class LOMaskingProvider extends AbstractMaskingProvider {
         this.entityType = DicomEntityType.valueOf(maskingConfiguration.getStringValue("dicom.lo.entityType"));
     }
 
-    public LOMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
+    public LOMaskingProvider(SecureRandom ignored, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this(maskingConfiguration, factory);
     }
 
@@ -40,6 +44,8 @@ public class LOMaskingProvider extends AbstractMaskingProvider {
                 return nameMaskingProvider.mask(identifier);
             case GENERIC:
                 return randomMaskingProvider.mask(identifier);
+            default:
+                logger.warn("Unexpected value: {}", entityType);
         }
 
         return randomMaskingProvider.mask(identifier);
