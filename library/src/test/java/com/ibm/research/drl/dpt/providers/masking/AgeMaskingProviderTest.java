@@ -99,6 +99,5 @@ public class AgeMaskingProviderTest {
         
         assertTrue(randomOK > 0);
     }
-   
 }
 
