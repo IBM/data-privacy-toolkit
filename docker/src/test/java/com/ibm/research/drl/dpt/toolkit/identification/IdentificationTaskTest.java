@@ -28,7 +28,7 @@ public class IdentificationTaskTest {
     @Test
     public void testFromFileShouldDeserializeCorrectly() throws IOException {
         final TaskToExecute taskToExecute;
-        try (InputStream inputStream = getClass().getResourceAsStream("/configuration_identification_with_headers.json")) {
+        try (InputStream inputStream = IdentificationTaskTest.class.getResourceAsStream("/configuration_identification_with_headers.json")) {
             taskToExecute = mapper.readValue(inputStream, TaskToExecute.class);
         }
 
@@ -240,8 +240,6 @@ public class IdentificationTaskTest {
                 "\"" + EmailIdentifier.class.getName() +"\"" +
                 "]} }", TaskToExecute.class);
 
-
-
         try (
                 ByteArrayInputStream input = new ByteArrayInputStream((
                         "{" +
@@ -260,7 +258,6 @@ public class IdentificationTaskTest {
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
         ) {
             task.processFile(input, output);
-
 
             Map<String, Object> report = mapper.readValue(output.toString(), new TypeReference<>() {});
 
