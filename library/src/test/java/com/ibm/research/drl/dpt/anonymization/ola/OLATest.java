@@ -600,13 +600,13 @@ public class OLATest {
                 System.out.println("anonymized: " + anonymized.getNumberOfRows());
 
                 String filename = "/tmp/random1_4q_" + k + "_" + suppressionRate;
-                CSVPrinter writer = new CSVPrinter(new FileWriter(filename), CSVFormat.RFC4180.withDelimiter(',').withQuoteMode(QuoteMode.MINIMAL));
-
-                for(int i = 0; i < anonymized.getNumberOfRows(); i++) {
-                    writer.printRecord(anonymized.getRow(i));
+                try (
+                        FileWriter fw = new FileWriter(filename);
+                CSVPrinter writer = new CSVPrinter(fw, CSVFormat.RFC4180.withDelimiter(',').withQuoteMode(QuoteMode.MINIMAL));) {
+                    for (int i = 0; i < anonymized.getNumberOfRows(); i++) {
+                        writer.printRecord(anonymized.getRow(i));
+                    }
                 }
-
-                writer.close();
             }
         }
     }
