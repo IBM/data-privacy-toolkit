@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.persistence.causal;
@@ -24,7 +24,7 @@ public class DBChainRetrieval implements ChainRetrieval {
             this.lastState = new ArrayList<>();
 
         } catch (SQLException e) {
-            throw new RuntimeException("error initializing DB cache", e);
+            throw new RuntimeException("Error initializing DB cache", e);
         }
     }
 
@@ -42,11 +42,14 @@ public class DBChainRetrieval implements ChainRetrieval {
 
     @Override
     public void append(String hashedTerm) throws SQLException {
-        PreparedStatement updateChain = connection.prepareStatement("INSERT INTO " + tableName + "(value, type) VALUES(? , ?)");
-        updateChain.setString(1, hashedTerm);
-        updateChain.setString(2, DictionaryEntryType.VALUE.toString());
+        try (
+            PreparedStatement updateChain = connection.prepareStatement("INSERT INTO " + tableName + "(value, type) VALUES(? , ?)");
+        ) {
+            updateChain.setString(1, hashedTerm);
+            updateChain.setString(2, DictionaryEntryType.VALUE.toString());
 
-        updateChain.executeUpdate();
+            updateChain.executeUpdate();
+        }
     }
 
     @Override
