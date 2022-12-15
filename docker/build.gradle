@@ -38,7 +38,7 @@ ext {
 
     dpt_version = "6.0.0"
 
-    commons_cli_version = '1.4'
+    commons_cli_version = '1.5.0'
     commons_io_version = '2.7'
 }
 
