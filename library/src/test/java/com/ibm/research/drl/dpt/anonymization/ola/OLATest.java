@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.ola;
@@ -673,9 +673,9 @@ public class OLATest {
 
                 List<InformationLossResult> lossResults = cp.reportPerQuasiColumn();
 
-                System.out.println(String.format("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f",
+                System.out.printf("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f%n",
                         k, suppression, ola.reportSuppressionRate(),
-                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue()));
+                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue());
             }
         }
     }
@@ -725,9 +725,9 @@ public class OLATest {
                 System.out.println("tags: " + ola.getTagsPerformed());
                 System.out.println("nodes checked: " + ola.getNodesChecked());
                 
-                System.out.println(String.format("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f",
+                System.out.printf("k: %d, suppression: max %f eff %f, best node: %s loss-yob: %f loss-gender: %f loss-race: %f loss-marital: %f%n",
                         k, suppression, ola.reportSuppressionRate(),
-                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue()));
+                        ola.reportBestNode(), lossResults.get(0).getValue(), lossResults.get(1).getValue(), lossResults.get(2).getValue(), lossResults.get(3).getValue());
             }
         }
     }
