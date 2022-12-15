@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.anonymization.informationloss;
@@ -12,6 +12,7 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AverageEquivalenceClassSize implements InformationMetric {
     private List<Partition> partitions;
@@ -109,10 +110,12 @@ public class AverageEquivalenceClassSize implements InformationMetric {
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, InformationMetricOptions options) {
+        if (Objects.isNull(options)) throw new RuntimeException("Options are required to be present");
+
         this.partitions = anonymizedPartitions; /* TODO: verify this */
         this.total_records = original.getNumberOfRows();
         this.k = options.getIntValue("k");
-        this.normalized = options != null && options.getBooleanValue("normalized");
+        this.normalized = options.getBooleanValue("normalized");
         this.quasiIdentifiersLength = (int) columnInformationList.stream().filter(columnInformation -> columnInformation.getColumnType().equals(ColumnType.QUASI)).count();
         return this;
     }
