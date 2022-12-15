@@ -14,12 +14,13 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FHIRMaskingProviderTest {
     private final ObjectMapper mapper = new ObjectMapper();
-    private final MaskingProviderFactory factory = new MaskingProviderFactory();
+    private final MaskingProviderFactory factory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
     @Test
     public void testLoadsCorrectRules() throws Exception {
