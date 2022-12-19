@@ -159,7 +159,7 @@ public class CsvToParquetConverterTest {
 
     @Test
     public void testExtractTimestampFormats() throws Exception {
-        try (InputStream input =  this.getClass().getResourceAsStream("/test_ts.yaml")) {
+        try (InputStream input =  CsvToParquetConverterTest.class.getResourceAsStream("/test_ts.yaml")) {
             JsonNode configuration = new ObjectMapper(new YAMLFactory()).readTree(input);
 
             Map<String, String> timestampFormats = CsvToParquetConverter.getTimestampFormats(configuration);

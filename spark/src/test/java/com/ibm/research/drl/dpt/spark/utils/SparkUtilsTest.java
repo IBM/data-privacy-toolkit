@@ -32,6 +32,7 @@ import java.util.UUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class SparkUtilsTest {
@@ -62,7 +63,7 @@ public class SparkUtilsTest {
     @Test
     public void testCorrectCSVWithHeader() {
         Dataset<Row> dataset = SparkUtils.createDataset(spark, 
-                this.getClass().getResource("/schematest.csv").getFile(), DataTypeFormat.CSV, new CSVDatasetOptions(true, ',', '"', false));
+                SparkUtilsTest.class.getResource("/schematest.csv").getFile(), DataTypeFormat.CSV, new CSVDatasetOptions(true, ',', '"', false));
         
         StructType schema = dataset.schema();
         StructField[] fields = schema.fields();
@@ -78,7 +79,7 @@ public class SparkUtilsTest {
     @Test
     public void testCorrectCSVNoHeader() {
         Dataset<Row> dataset = SparkUtils.createDataset(spark,
-                this.getClass().getResource("/schematest.csv").getFile(), DataTypeFormat.CSV, new CSVDatasetOptions(false, ',', '"', false));
+                SparkUtilsTest.class.getResource("/schematest.csv").getFile(), DataTypeFormat.CSV, new CSVDatasetOptions(false, ',', '"', false));
 
         StructType schema = dataset.schema();
         StructField[] fields = schema.fields();
@@ -94,9 +95,10 @@ public class SparkUtilsTest {
     @Test
     public void testCreatesFieldNamesParquet() {
         Dataset<Row> dataset = SparkUtils.createDataset(spark,
-                this.getClass().getResource("/schematest.parquet").getFile(), DataTypeFormat.PARQUET, null);
+                SparkUtilsTest.class.getResource("/schematest.parquet").getFile(), DataTypeFormat.PARQUET, null);
 
         List<String> fieldNames = SparkUtils.createFieldNames(dataset, DataTypeFormat.PARQUET, null);
+        assertNotNull(fieldNames);
         assertEquals(4, fieldNames.size());
     }
 
