@@ -1,0 +1,29 @@
+{
+  "task": "Masking",
+  "extension": "json",
+  "inputFormat": "JSON",
+  "inputOptions": {
+  },
+  "taskOptions": {
+    "toBeMasked": {
+      "/*/testArraydoc/_id": "REPLACE",
+      "/*/testArraydoc/name": "REDACT"
+    },
+    "predefinedRelationships": null,
+    "maskingProviders": null,
+    "maskingProvidersConfig": {
+      "_fields" : {
+        "/*/testArraydoc/_id" : {
+          "replace.mask.mode": "WITH_DETERMINISTIC",
+          "replace.mask.prefix": "id-"
+        }
+      },
+      "_defaults": {
+      }
+    }
+  },
+  "outputFormat": "JSON",
+  "outputOptions": {
+  }
+}
+

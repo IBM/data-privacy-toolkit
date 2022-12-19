@@ -1,0 +1,157 @@
+{
+  "task": "Masking",
+  "extension": "csv",
+  "inputFormat": "CSV",
+  "inputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": true,
+    "trimFields": false
+  },
+  "taskOptions": {
+    "toBeMasked": {
+      "Email": "RANDOM",
+      "Description": "FREE_TEXT",
+      "Description_EMAIL": "RANDOM",
+      "Description_ACCOUNT_ID": "HASH"
+    },
+    "predefinedRelationships": null,
+    "maskingProviders": null,
+    "maskingProvidersConfig": {
+      "_fields": {
+        "Email": {
+          "persistence.export": true,
+          "persistence.type": "memory",
+          "persistence.namespace": "ns1"
+        },
+        "Description_EMAIL": {
+          "persistence.export": true,
+          "persistence.type": "memory",
+          "persistence.namespace": "ns1"
+        }
+      },
+      "_defaults": {
+        "freetext.mask.nlp.config": {
+          "defaultLanguage": "ENGLISH",
+          "performLanguageDetection": false,
+          "identifiers": {
+            "com.ibm.research.drl.prima.nlp.opennlp.OpenNLPPOSTagger": {
+              "defaultLanguage": "ENGLISH",
+              "configuration": {
+                "ENGLISH": {
+                  "nameFinder": "/nlp/en-ner-person.bin",
+                  "locationFinder": "/nlp/en-ner-location.bin",
+                  "organizationFinder": "/nlp/en-ner-organization.bin",
+                  "timeFinder": "/nlp/en-ner-time.bin",
+                  "dateFinder": "/nlp/en-ner-date.bin",
+                  "sentenceFinder": "/nlp/en-sent.bin",
+                  "tagger": "/nlp/en-pos-maxent.bin",
+                  "tokenizer": "/nlp/en-token.bin"
+                }
+              }
+            },
+            "com.ibm.research.drl.prima.nlp.PRIMAAnnotator": {
+              "performPOSTagging": false,
+              "sentenceDetectorModel": "/nlp/en-sent.bin",
+              "mapping": {
+                "EMAIL": "Description_EMAIL",
+                "ACCOUNT_ID": "Description_ACCOUNT_ID"
+              },
+              "splitSentences": true,
+              "MIN_SHINGLE_SIZE": 2,
+              "MAX_SHINGLE_SIZE": 10,
+              "identifiers": [
+                "com.ibm.research.drl.prima.providers.identifiers.EmailIdentifier",
+                {
+                  "type": "REGEX",
+                  "providerType": "ACCOUNT_ID",
+                  "regex": [
+                    "ID(\\d+)"
+                  ]
+                }
+              ]
+            }
+          },
+          "blacklist": {
+            "DATETIME": [
+              "day",
+              "past",
+              "days",
+              "currently",
+              "date",
+              "present",
+              "current",
+              "hours",
+              "weeks",
+              "months",
+              "years",
+              "once"
+            ],
+            "ORGANIZATION": [
+              "INP",
+              "LTC"
+            ]
+          },
+          "connected": [
+            {
+              "first": "ORGANIZATION",
+              "second": "LOCATION",
+              "endType": "ORGANIZATION",
+              "endSubtype": "ORGANIZATION",
+              "particles": [
+                "in",
+                "on",
+                "of",
+                "the",
+                "to"
+              ]
+            }
+          ],
+          "unreliable": {
+          },
+          "weights": {
+            "PRIMA": {
+              "DOB": 51,
+              "DATETIME": 50,
+              "EMAIL": 90,
+              "NAME": 50,
+              "MRN": 90,
+              "PHONE": 89
+            }
+          },
+          "not_POS": [
+            "DATETIME",
+            {
+              "MONTH": [
+                "may"
+              ]
+            },
+            "DAY",
+            "PHONE",
+            "NUMERIC",
+            "NATIONAL_ID",
+            "EMAIL",
+            "MRN",
+            "URL",
+            "IP_ADDRESS",
+            "MAC_ADDRESS",
+            "CREDIT_CARD",
+            "IMSI",
+            "IMEI",
+            "VIN",
+            "IBAN",
+            "SSN_UK",
+            "SSN_US"
+          ]
+        }
+      }
+    }
+  },
+  "outputFormat": "CSV",
+  "outputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": false,
+    "trimFields": false
+  }
+}
