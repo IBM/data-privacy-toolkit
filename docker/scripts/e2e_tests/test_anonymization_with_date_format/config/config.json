@@ -1,0 +1,40 @@
+{
+  "task": "Anonymization",
+
+  "inputFormat": "CSV",
+  "inputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": true,
+    "trimFields": false
+  },
+  "outputFormat": "CSV",
+  "outputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": true,
+    "trimFields": false
+  },
+
+  "taskOptions": {
+    "algorithm":"OLA",
+    "privacyConstraints":[
+      {"type":"KAnonymity","k":5}
+    ],
+    "columnInformation":[
+      {"class":"DefaultColumnInformation","forLinking":false},
+      {"class":"DefaultColumnInformation","forLinking":false},
+      {"class":"DefaultColumnInformation","forLinking":false},
+      {"class":"DefaultColumnInformation","forLinking":false},
+      {"class":"CategoricalInformation","hierarchy": {"type": "DATE", "format": "dd/MM/yyyy"},"columnType":"QUASI","weight":1.0,"maximumLevel":-1,"forLinking":true},
+      {"class":"DefaultColumnInformation","forLinking":false},
+      {"class":"CategoricalInformation","hierarchy":"GENDER","columnType":"QUASI","weight":1.0,"maximumLevel":-1,"forLinking":true},
+      {"class":"CategoricalInformation","hierarchy":"RACE","columnType":"QUASI","weight":1.0,"maximumLevel":-1,"forLinking":true},
+      {"class":"DefaultColumnInformation","forLinking":false},
+      {"class":"CategoricalInformation","hierarchy":"MARITAL_STATUS","columnType":"QUASI","weight":1.0,"maximumLevel":-1,"forLinking":true},
+      {"class":"SensitiveColumnInformation","forLinking":false}
+    ],
+    "suppressionRate":5.0,
+    "informationLoss":"CP"
+  }
+}
