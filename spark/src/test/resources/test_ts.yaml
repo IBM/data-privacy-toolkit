@@ -1,0 +1,35 @@
+- fieldName: LEVEL_NUMBER
+  nullable: false
+  type: int64
+- fieldName: PERIOD_HIERARCHY_NAME
+  nullable: false
+  type: string
+- fieldName: WAREHOUSE_APPLIED_DATE
+  nullable: false
+  type: timestamp
+  format: dd/MM/yyyy HH:mm:ss
+- fieldName: PERIOD_NUMBER
+  nullable: true
+  type: double
+- fieldName: YEAR
+  nullable: true
+  type: string
+- fieldName: QUARTER
+  nullable: true
+  type: string
+- fieldName: MONTH
+  nullable: true
+  type: string
+- fieldName: HIERARCHY_NAME
+  nullable: true
+  type: string
+- fieldName: HIERARCHY_DATE
+  nullable: true
+  type: timestamp
+  format: dd/MM/yyyy HH:mm
+- fieldName: WEEK
+  nullable: true
+  type: string
+- fieldName: DAY
+  nullable: true
+  type: timestamp 

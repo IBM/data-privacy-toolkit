@@ -13,24 +13,21 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
 import scala.collection.JavaConverters;
-import scala.collection.Seq;
 
 import java.util.Collections;
 import java.util.List;
 
 
 public class Export {
-    private static <T> Seq<T> toSeq(List<T> values) {
-       return JavaConverters.asScalaIteratorConverter(values.iterator()).asScala().toSeq();
-    }
-
     private static void doFileExport(Dataset<Row> dataset, String outputFile,
                                      DataTypeFormat exportFormat, List<String> partitions, boolean appendMode) {
 
         DataFrameWriter<Row> writer = dataset.write().option("charset", "utf-8");
 
         if (!partitions.isEmpty()) {
-            writer.partitionBy(toSeq(partitions));
+            writer.partitionBy(
+                    JavaConverters.asScalaIteratorConverter(partitions.iterator()).asScala().toSeq()
+            );
         }
 
         if (appendMode) {
