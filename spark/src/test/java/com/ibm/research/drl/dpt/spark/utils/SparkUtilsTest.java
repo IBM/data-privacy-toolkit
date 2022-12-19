@@ -26,6 +26,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,19 +40,23 @@ public class SparkUtilsTest {
 
     @BeforeEach
     public void setUp() {
-        spark = SparkSession.builder().sparkContext(
-                new SparkContext(
-                        new SparkConf(true).
-                                setMaster("local").
-                                setAppName("testing").
-                                set("spark.driver.bindAddress", "127.0.0.1")
-                )
-        ).getOrCreate();
+        SparkConf sparkConf =
+                (new SparkConf())
+                        .setMaster("local[1]")
+                        .setAppName("test")
+                        .set("spark.ui.enabled", "false")
+                        .set("spark.app.id", UUID.randomUUID().toString())
+                        .set("spark.driver.host", "localhost")
+                        .set("spark.sql.shuffle.partitions", "1");
+
+        spark = SparkSession.builder().sparkContext(new SparkContext(sparkConf)).getOrCreate();
     }
 
     @AfterEach
     public void tearDown() {
-        spark.stop();
+        if (Objects.nonNull(spark)) {
+            spark.stop();
+        }
     }
     
     @Test
