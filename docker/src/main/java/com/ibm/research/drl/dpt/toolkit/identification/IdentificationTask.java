@@ -92,7 +92,10 @@ public class IdentificationTask extends TaskToExecute {
     }
 
     private Collection<Identifier> taskSpecificSetOfIdentifiers(IdentificationOptions taskOptions) {
-        if (null == taskOptions.getIdentifiers() || taskOptions.getIdentifiers().isEmpty()) return IdentifierFactory.defaultIdentifiers();
+        if (null == taskOptions.getIdentifiers() || taskOptions.getIdentifiers().isEmpty()) {
+            logger.warn("Using default identifiers");
+            return IdentifierFactory.defaultIdentifiers();
+        }
 
         return Stream.concat(
                 taskOptions.getIdentifiers().stream().filter(JsonNode::isTextual).map(JsonNode::asText)
