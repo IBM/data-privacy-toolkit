@@ -10,11 +10,10 @@
  *******************************************************************/
 """
 
-def test_validate(docker_run, compare_entire_content, ):
+def test_validate(docker_run, compare_csv_total_rows_and_cols, ):
     """
     The test.
     """
-    docker_run(__file__, output_folder='output1', consistency_folder='consistency')
-    docker_run(__file__, output_folder='output2', consistency_folder='consistency')
+    docker_run(__file__)
 
-    compare_entire_content(__file__, output='output1', expected='output2')
+    compare_csv_total_rows_and_cols(__file__)
