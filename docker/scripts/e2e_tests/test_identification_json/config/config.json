@@ -1,0 +1,11 @@
+{
+  "task":"Identification",
+  "extension":"json",
+  "inputFormat":"JSON",
+  "inputOptions":{
+  },
+  "taskOptions":{
+    "localization":"en-US"
+  }
+}
+

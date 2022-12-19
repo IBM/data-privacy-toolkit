@@ -1,0 +1,22 @@
+[
+  {
+    "email": "foo@gmail.com",
+    "name": "John",
+    "city": "Paris",
+    "continent": "Europe",
+    "address": "P.O. BOX 1234",
+    "atc": "A01AA01",
+    "country": "Ireland",
+    "gender": "Male",
+    "marital": "Married",
+    "county": "Bay County",
+    "dependent": "Daughter",
+    "numeric": 12345,
+    "ip_address": "127.0.0.1",
+    "race": "White",
+    "street_type": "Avenue",
+    "url": "http://www.google.com",
+    "yob": 1985,
+    "zip": "00647"
+  }
+]
