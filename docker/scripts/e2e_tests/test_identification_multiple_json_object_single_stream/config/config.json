@@ -1,0 +1,10 @@
+{
+  "task": "Identification",
+  "inputFormat": "JSON",
+  "inputOptions": {},
+  "taskOptions":{
+    "identifiers": [
+      "com.ibm.research.drl.dpt.providers.identifiers.EmailIdentifier"
+    ]
+  }
+}
