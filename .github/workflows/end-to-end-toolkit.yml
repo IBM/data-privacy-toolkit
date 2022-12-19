@@ -3,7 +3,7 @@ on: [push]
 env:
   IMAGE_NAME: data-privacy-toolkit:${{github.ref}}
 jobs:
-  build-library:
+  end-to-end-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
