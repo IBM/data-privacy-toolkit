@@ -1,7 +1,7 @@
 name: dpt-toolkit
 on: [push]
 jobs:
-  build-library:
+  build-toolkit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
