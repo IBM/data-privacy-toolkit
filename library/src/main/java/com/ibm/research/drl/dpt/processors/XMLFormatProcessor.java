@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
-public class XMLFormatProcessor extends AbstractMultipathFormatProcessor {
+public class XMLFormatProcessor extends MultipathFormatProcessor {
     private final DocumentBuilder documentBuilder;
 
     public XMLFormatProcessor() {
