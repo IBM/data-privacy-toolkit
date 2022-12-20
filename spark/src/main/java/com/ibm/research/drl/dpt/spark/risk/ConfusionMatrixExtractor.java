@@ -70,7 +70,7 @@ public class ConfusionMatrixExtractor implements Serializable {
 
             List<OutlierRemovalFilter> filters = configuration.getFilters();
 
-            Dataset<Row> withOutlierCondition = new ConfusionMatrixExtractor().computeConfusionMatrix(dataset, filters);
+            Dataset<Row> withOutlierCondition = computeConfusionMatrix(dataset, filters);
 
             List<String> partitioningFields = buildPartitioningField(partitions, configuration.getFilterColumnName());
             Export.doExport(
@@ -87,7 +87,7 @@ public class ConfusionMatrixExtractor implements Serializable {
         }
     }
 
-    public Dataset<Row> computeConfusionMatrix(final Dataset<Row> dataset, List<OutlierRemovalFilter> filters) {
+    public static Dataset<Row> computeConfusionMatrix(final Dataset<Row> dataset, List<OutlierRemovalFilter> filters) {
         final Column[] selectionColumns = new Column[filters.size()];
 
         Dataset<Row> operationalDataset = dataset;
@@ -103,9 +103,13 @@ public class ConfusionMatrixExtractor implements Serializable {
         return operationalDataset.select(selectionColumns);
     }
 
-    private Dataset<Row> augmentDatasetWithFilter(Dataset<Row> dataset, OutlierRemovalFilter filter, String columnName) {
+    private static Dataset<Row> augmentDatasetWithFilter(Dataset<Row> dataset, OutlierRemovalFilter filter, String columnName) {
+        logger.info("Augmenting dataset with filter: " + filter);
+
         List<ThresholdCondition> thresholds = filter.getThresholds();
-        if (thresholds.size() != 1) throw new UnsupportedOperationException("Each filter supports only one threshold in this installment");
+        if (thresholds.size() != 1) {
+            throw new UnsupportedOperationException("Each filter supports only one threshold in this installment");
+        }
 
         if (filter.getIdentityFields().isEmpty()) {
             return dataset.withColumn(columnName, dataset.col(thresholds.get(0).getColumnName()));
@@ -125,7 +129,7 @@ public class ConfusionMatrixExtractor implements Serializable {
         }
     }
 
-    private Column[] buildSelection(Dataset<Row> dataset, String columnName) {
+    private static Column[] buildSelection(Dataset<Row> dataset, String columnName) {
         final String[] datasetColumnNames = dataset.columns();
         final Column[] columns = new Column[datasetColumnNames.length + 1];
         
@@ -217,7 +221,7 @@ public class ConfusionMatrixExtractor implements Serializable {
         return new Tuple2<>(aggregationCondition, filterCondition);
     }
 
-    private Column[] buildAggregationCondition(Dataset<Row> dataset, List<String> identityFields) {
+    private static Column[] buildAggregationCondition(Dataset<Row> dataset, List<String> identityFields) {
         Column[] columns = new Column[identityFields.size()];
 
         for (int i = 0; i < columns.length; ++i) {
@@ -241,7 +245,7 @@ public class ConfusionMatrixExtractor implements Serializable {
         return outlierCondition;
     }
 
-    private Column buildJoinExpression(Dataset<Row> dataset, Dataset<Row> aggregatedDataset, Collection<String> identityColumns) {
+    private static Column buildJoinExpression(Dataset<Row> dataset, Dataset<Row> aggregatedDataset, Collection<String> identityColumns) {
         Column joinExpression = null;
         for (String identityColumn : identityColumns) {
             Column expression = dataset.col(identityColumn).equalTo(aggregatedDataset.col(identityColumn));
@@ -337,7 +341,7 @@ public class ConfusionMatrixExtractor implements Serializable {
         return false;
     }
 
-    private Column buildAggregation(ThresholdCondition condition) {
+    private static Column buildAggregation(ThresholdCondition condition) {
         String columnName = condition.getColumnName();
         Column column = col(columnName);
 
