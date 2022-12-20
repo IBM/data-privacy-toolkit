@@ -1,0 +1,16 @@
+{
+  "filters" : [
+    {
+      "identityFields": ["de2_card_nbr", "de42_merch_id"],
+      "thresholds" : [
+        {
+          "aggregationType": "SUM",
+          "condition": "GEQ",
+          "value": 372,
+          "columnName" :"dw_net_pd_amt"
+        }
+      ]
+    }
+  ],
+  "filterColumnName": "outliers"
+}
