@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class CSVFormatProcessor extends AbstractFormatProcessor {
+public class CSVFormatProcessor extends FormatProcessor {
     private static final Logger logger = LogManager.getLogger(CSVFormatProcessor.class);
 
     private static final CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);

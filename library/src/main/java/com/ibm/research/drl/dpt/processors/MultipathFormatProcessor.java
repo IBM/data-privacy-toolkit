@@ -28,8 +28,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-public abstract class AbstractMultipathFormatProcessor extends AbstractFormatProcessor {
-    private final static Logger logger = LogManager.getLogger(AbstractMultipathFormatProcessor.class);
+public abstract class MultipathFormatProcessor extends FormatProcessor {
+    private final static Logger logger = LogManager.getLogger(MultipathFormatProcessor.class);
 
     protected Map<String, OriginalMaskedValuePair> extractOperandsNotToBeMasked(MultipathRecord record, Map<String, FieldRelationship> predefinedRelationships,
                                                                                 Map<String, Tuple<DataMaskingTarget, String>> fieldsToMask) {
