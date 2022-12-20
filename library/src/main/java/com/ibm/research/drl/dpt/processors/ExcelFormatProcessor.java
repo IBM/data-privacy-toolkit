@@ -32,7 +32,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-public class ExcelFormatProcessor extends AbstractFormatProcessor {
+public class ExcelFormatProcessor extends FormatProcessor {
 
     @Override
     public boolean supportsStreams() {
