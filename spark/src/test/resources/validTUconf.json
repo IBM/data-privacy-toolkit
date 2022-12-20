@@ -1,0 +1,15 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader": true,
+  "trimFields": false,
+
+  "inputFormat": "CSV",
+
+  "idColumn": ["id"],
+  "targetColumns": ["chain", "date"],
+  "factor": 1,
+  "threshold": 1,
+  
+  "joinRequired": false
+}
