@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class JSONFormatProcessor extends AbstractMultipathFormatProcessor {
+public class JSONFormatProcessor extends MultipathFormatProcessor {
     protected static final ObjectMapper mapper = new ObjectMapper();
 
     private static Map<ProviderType, Long> identifyJSONArrayElement(JsonNode node) {

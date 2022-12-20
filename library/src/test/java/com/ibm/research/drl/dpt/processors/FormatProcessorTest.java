@@ -34,11 +34,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-public class AbstractFormatProcessorTest {
+public class FormatProcessorTest {
 
     @Test
     public void maskEmptyStreamIsProcessedCorrectlyStream() throws Exception {
-        FormatProcessor processor = new AbstractFormatProcessor() {
+        FormatProcessor processor = new FormatProcessor() {
             @Override
             public boolean supportsStreams() {
                 return true;
@@ -78,7 +78,7 @@ public class AbstractFormatProcessorTest {
         Record csvRecord = new CSVRecord(new String[] {"foo"}, fieldNames,
                 new CSVDatasetOptions(false, ',', '"', false), false);
 
-        FormatProcessor processor = new AbstractFormatProcessor() {
+        FormatProcessor processor = new FormatProcessor() {
             @Override
             public boolean supportsStreams() {
                 return true;
@@ -128,7 +128,7 @@ public class AbstractFormatProcessorTest {
         when(record.getFieldValue("field1")).thenReturn(ssn.getBytes());
         when(record.toString()).thenReturn("0,1");
 
-        FormatProcessor processor =  new AbstractFormatProcessor() {
+        FormatProcessor processor =  new FormatProcessor() {
             @Override
             public boolean supportsStreams() {
                 return true;
@@ -170,7 +170,7 @@ public class AbstractFormatProcessorTest {
 
     @Test 
     public void testCompoundDataMaskingDoesNotCrash() throws Exception {
-        FormatProcessor processor = mock(AbstractFormatProcessor.class);
+        FormatProcessor processor = mock(FormatProcessor.class);
 
         String ssn = JDefaultIdentity.ssn(true);
         String testData = String.format("{\"field0\":\"%s\", \"field1\":\"%s\"}",
@@ -205,7 +205,7 @@ public class AbstractFormatProcessorTest {
     public void testCompoundOperandNotInMaskedList() {
 
         assertTimeout(ofMillis(2000L), () -> {
-            AbstractFormatProcessor formatProcessor = new AbstractFormatProcessor() {
+            FormatProcessor formatProcessor = new FormatProcessor() {
                 @Override
                 public boolean supportsStreams() {
                     return true;
@@ -283,7 +283,7 @@ public class AbstractFormatProcessorTest {
     @Test
     public void testCompoundOperandIsNull() throws Exception {
 
-        AbstractFormatProcessor formatProcessor = new AbstractFormatProcessor() {
+        FormatProcessor formatProcessor = new FormatProcessor() {
             @Override
             public boolean supportsStreams() {
                 return false;
