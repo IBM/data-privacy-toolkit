@@ -30,13 +30,14 @@ import org.apache.logging.log4j.LogManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class FormatProcessor {
+public abstract class FormatProcessor implements Serializable {
     private final static Logger logger = LogManager.getLogger(FormatProcessor.class);
 
     protected void performOutputAction(Record record, OutputStream output, Iterable<String> fieldsToSuppress) throws IOException {
