@@ -1,0 +1,16 @@
+{
+  "filters" : [
+    {
+      "identityFields": [],
+      "thresholds" : [
+        {
+          "aggregationType": "NOT_AGGREGATED",
+          "condition": "GEQ",
+          "value": 372,
+          "columnName" :"dw_net_pd_amt"
+        }
+      ]
+    }
+  ],
+  "filterColumnName": "outliers"
+}

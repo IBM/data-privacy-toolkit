@@ -1,0 +1,27 @@
+{
+  "filters" : [
+    {
+      "identityFields": [],
+      "thresholds" : [
+        {
+          "aggregationType": "NOT_AGGREGATED",
+          "condition": "NEQ",
+          "value": "card6",
+          "columnName" :"de2_card_nbr"
+        }
+      ]
+    },
+    {
+      "identityFields": ["de2_card_nbr"],
+      "thresholds" : [
+        {
+          "aggregationType": "SUM",
+          "condition": "GEQ",
+          "value": 372,
+          "columnName" :"dw_net_pd_amt"
+        }
+      ]
+    }
+  ],
+  "filterColumnName": "outliers"
+}

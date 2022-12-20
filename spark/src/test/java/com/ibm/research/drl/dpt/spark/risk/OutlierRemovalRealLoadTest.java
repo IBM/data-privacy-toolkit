@@ -23,104 +23,97 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.apache.spark.sql.functions.col;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
-public class ConfusionMatrixExtractorTest {
+public class OutlierRemovalRealLoadTest {
     private static SparkSession spark;
     private static Dataset<Row> dummyDataset;
-    private static final ObjectMapper mapper = new ObjectMapper();
-
 
     @Test
     public void testNotAggregated() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_not_aggregated.json"), OutlierRemovalOptions.class);
-        Dataset<Row> outputDataset = new ConfusionMatrixExtractor().computeConfusionMatrix(
+        ObjectMapper mapper = new ObjectMapper();
+
+        Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                configuration.getFilters()
+                mapper.readValue(this.getClass().getResourceAsStream("/filter_not_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
+                "foo"
         );
 
-        assertThat(outputDataset.count(), is (dummyDataset.count()));
-        assertThat(outputDataset.columns().length, is(configuration.getFilters().size()));
-
-        outputDataset.show();
+        assertThat(outputDataset.where(col("foo").equalTo(true)).count(), is(1L));
+        assertThat(outputDataset.where(col("foo").equalTo(false)).count(), is(dummyDataset.count() - 1L));
     }
-
 
     @Test
     public void testOneAggregated() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_one_aggregated.json"), OutlierRemovalOptions.class);
+        ObjectMapper mapper = new ObjectMapper();
 
-        Dataset<Row> outputDataset = new ConfusionMatrixExtractor().computeConfusionMatrix(
+        Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                configuration.getFilters()
+                mapper.readValue(this.getClass().getResourceAsStream("/filter_one_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
+                "foo"
         );
 
-        assertThat(outputDataset.count(), is (dummyDataset.count()));
-        assertThat(outputDataset.columns().length, is(configuration.getFilters().size()));
-
-        outputDataset.show();
+        assertThat(outputDataset.where(col("foo").equalTo(true)).count(), is(2L));
+        assertThat(outputDataset.where(col("foo").equalTo(false)).count(), is(dummyDataset.count() - 2L));
     }
 
     @Test
     public void testTwoAggregatedSameID() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_two_aggregated_same_id.json"), OutlierRemovalOptions.class);
+        ObjectMapper mapper = new ObjectMapper();
 
-        Dataset<Row> outputDataset = new ConfusionMatrixExtractor().computeConfusionMatrix(
+        Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                configuration.getFilters()
+                mapper.readValue(this.getClass().getResourceAsStream("/filter_two_aggregated_same_id.json"), OutlierRemovalOptions.class).getFilters(),
+                "foo"
         );
 
-        assertThat(outputDataset.count(), is (dummyDataset.count()));
-        assertThat(outputDataset.columns().length, is(configuration.getFilters().size()));
-
-        outputDataset.show();
+        assertThat(outputDataset.where(col("foo").equalTo(true)).count(), is(5L));
+        assertThat(outputDataset.where(col("foo").equalTo(false)).count(), is(dummyDataset.count() - 5L));
     }
 
     @Test
     public void testTwoAggregatedDifferentID() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_two_aggregated_different_id.json"), OutlierRemovalOptions.class);
+        ObjectMapper mapper = new ObjectMapper();
 
-        Dataset<Row> outputDataset = new ConfusionMatrixExtractor().computeConfusionMatrix(
+        Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                configuration.getFilters()
+                mapper.readValue(this.getClass().getResourceAsStream("/filter_two_aggregated_different_id.json"), OutlierRemovalOptions.class).getFilters(),
+                "foo"
         );
 
-        assertThat(outputDataset.count(), is (dummyDataset.count()));
-        assertThat(outputDataset.columns().length, is(configuration.getFilters().size()));
-
-        outputDataset.show();
+        assertThat(outputDataset.where(col("foo").equalTo(true)).count(), is(dummyDataset.count() - 1L));
+        assertThat(outputDataset.where(col("foo").equalTo(false)).count(), is(1L));
     }
 
     @Test
     public void testAggregatedAndNotAggregated() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_aggregated_with_not_aggregated.json"), OutlierRemovalOptions.class);
+        ObjectMapper mapper = new ObjectMapper();
 
-        Dataset<Row> outputDataset = new ConfusionMatrixExtractor().computeConfusionMatrix(
+        Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                configuration.getFilters()
+                mapper.readValue(this.getClass().getResourceAsStream("/filter_aggregated_with_not_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
+                "foo"
         );
 
-        assertThat(outputDataset.count(), is (dummyDataset.count()));
-        assertThat(outputDataset.columns().length, is(configuration.getFilters().size()));
-
-        outputDataset.show();
+        assertThat(outputDataset.where(col("foo").equalTo(true)).count(), is(dummyDataset.count() - 1L));
+        assertThat(outputDataset.where(col("foo").equalTo(false)).count(), is(1L));
     }
 
     @Test
     public void testAggregatedMultipleFields() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_one_aggregated_two_fields.json"), OutlierRemovalOptions.class);
+        ObjectMapper mapper = new ObjectMapper();
 
-        Dataset<Row> outputDataset = new ConfusionMatrixExtractor().computeConfusionMatrix(
+        Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                configuration.getFilters()
+                mapper.readValue(this.getClass().getResourceAsStream("/filter_one_aggregated_two_fields.json"), OutlierRemovalOptions.class).getFilters(),
+                "foo"
         );
 
-        assertThat(outputDataset.count(), is (dummyDataset.count()));
-        assertThat(outputDataset.columns().length, is(configuration.getFilters().size()));
-
-        outputDataset.show();
+        assertThat(outputDataset.where(col("foo").equalTo(true)).count(), is(2L));
+        assertThat(outputDataset.where(col("foo").equalTo(false)).count(), is(dummyDataset.count() - 2L));
     }
 
     @BeforeEach
