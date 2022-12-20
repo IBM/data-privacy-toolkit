@@ -1,0 +1,6 @@
+Gender,Race
+Male,White
+Female,White
+Female,*
+*,White
+*,*

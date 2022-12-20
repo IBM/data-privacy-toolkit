@@ -47,8 +47,9 @@ public class DatasetLinkingRiskEstimatorTest {
     public void testFilterDistinctGeneralizationLevels() throws Exception {
         String filename = "/tmp/testDistinctLevels.csv";
 
-        OutputStream os = new FileOutputStream(filename);
-        IOUtils.copy(this.getClass().getResourceAsStream("/testDistinctLevels.csv"), os);
+        try (OutputStream os = new FileOutputStream(filename)) {
+            IOUtils.copy(DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv"), os);
+        }
         
         Dataset<Row> dataset = spark.read().option("header", "true").csv(filename);
 
@@ -71,8 +72,9 @@ public class DatasetLinkingRiskEstimatorTest {
     public void testExtractDataset() throws Exception {
         String filename = "/tmp/testExtractDataset.csv";
 
-        OutputStream os = new FileOutputStream(filename);
-        IOUtils.copy(this.getClass().getResourceAsStream("/testDistinctLevels.csv"), os);
+        try (OutputStream os = new FileOutputStream(filename);) {
+            IOUtils.copy(DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv"), os);
+        }
 
         Dataset<Row> dataset = spark.read().option("header", "true").csv(filename);
 
@@ -96,8 +98,9 @@ public class DatasetLinkingRiskEstimatorTest {
     public void testFilterDistinctGeneralizationLevels2() throws Exception {
         String filename = "/tmp/testDistinctLevels2.csv";
 
-        OutputStream os = new FileOutputStream(filename);
-        IOUtils.copy(this.getClass().getResourceAsStream("/testDistinctLevels.csv"), os);
+        try (OutputStream os = new FileOutputStream(filename);) {
+            IOUtils.copy(this.getClass().getResourceAsStream("/testDistinctLevels.csv"), os);
+        }
 
         Dataset<Row> dataset = spark.read().option("header", "true").csv(filename);
 
@@ -126,7 +129,6 @@ public class DatasetLinkingRiskEstimatorTest {
     
     @Test
     public void testConvertToList() {
-        
         String levelStr = "1:2:3:";
         List<Integer> levels = DatasetLinkingRiskEstimator.convertToList(levelStr);
         
