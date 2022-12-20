@@ -1,0 +1,13 @@
+identityFields:
+  - id
+thresholds:
+  - columnName: purchaseamount
+    aggregationType: SUM
+  - columnName: purchasequantity
+    aggregationType: SUM
+principalDescription: CC
+dimensionDescription: purchase amount
+binningCondition:
+  type: SIZE
+  binSize: 10000
+  binNumber: 100000
