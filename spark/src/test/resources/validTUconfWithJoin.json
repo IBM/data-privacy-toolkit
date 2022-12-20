@@ -1,0 +1,27 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader": true,
+  "trimFields": false,
+
+  "inputFormat": "CSV",
+
+  "idColumn": ["id"],
+  "targetColumns": ["date", "amount", "location"],
+  "factor": 1,
+  "threshold": 1,
+
+  "joinRequired": true,
+  "joinInformation" : {
+      "rightTable" : "locations.csv",
+      "rightTableInputFormat": "CSV",
+      "rightTableDatasetOptions" : {
+        "delimiter": ",",
+        "quoteChar": "\"",
+        "hasHeader": true,
+        "trimFields": false
+      },
+      "rightColumn" : "shop_id",
+      "leftColumn" : "loc_id"
+  }
+}
