@@ -1,0 +1,17 @@
+{
+  "filters": [
+    {
+      "identityFields": ["id"],
+      "thresholds": [
+        {
+          "columnName": "purchaseamount",
+          "aggregationType": "SUM",
+          "condition": "LEQ",
+          "value": 20
+        }     
+      ]
+    }
+  ],
+  
+  "filterColumnName": "filterColumn"
+}
