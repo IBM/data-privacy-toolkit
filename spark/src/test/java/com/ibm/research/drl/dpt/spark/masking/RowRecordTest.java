@@ -86,7 +86,9 @@ public class RowRecordTest {
 
         Record record = RowRecord.fromRow(row, Arrays.asList("id", "num", "desc"), fieldMap, Arrays.asList("StringType", "IntegerType", "LongType"));
 
-        record.setFieldValue("num", "abc".getBytes());
+        assertThrows(NumberFormatException.class, () -> {
+            record.setFieldValue("num", "abc".getBytes());
+        });
     }
     
     @Test
