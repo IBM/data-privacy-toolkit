@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2018                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.spark.export;
@@ -21,7 +21,6 @@ import java.util.List;
 public class Export {
     private static void doFileExport(Dataset<Row> dataset, String outputFile,
                                      DataTypeFormat exportFormat, List<String> partitions, boolean appendMode) {
-
         DataFrameWriter<Row> writer = dataset.write().option("charset", "utf-8");
 
         if (!partitions.isEmpty()) {
@@ -49,7 +48,6 @@ public class Export {
 
     public static void doExport(JavaRDD<String> rdd, String outputFile) {
         rdd.saveAsTextFile(outputFile);
-
     }
 
     public static void doExport(Dataset<Row> dataset, DataTypeFormat exportFormat, String outputFile) {
@@ -59,7 +57,4 @@ public class Export {
     public static void doExport(Dataset<Row> dataset, DataTypeFormat exportFormat, String outputFile, List<String> partitions, boolean appendMode) {
         doFileExport(dataset, outputFile, exportFormat, partitions, appendMode);
     }
-
-
-
 }
