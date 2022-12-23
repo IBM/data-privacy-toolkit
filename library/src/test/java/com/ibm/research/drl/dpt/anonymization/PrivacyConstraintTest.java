@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.anonymization;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.anonymization.constraints.*;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 class PrivacyConstraintTest {
-    private final ObjectMapper mapper = new ObjectMapper();
-
     @Test
     public void testSerializationDeSerialization() throws JsonProcessingException {
         List<PrivacyConstraint> constraints = Arrays.asList(
@@ -35,12 +34,12 @@ class PrivacyConstraintTest {
 
         for (PrivacyConstraint constraint : constraints) {
             serializedConstraints.add(
-                    mapper.writeValueAsString(constraint)
+                    JsonUtils.MAPPER.writeValueAsString(constraint)
             );
         }
 
         for (String serializedConstraint : serializedConstraints) {
-            PrivacyConstraint constraint = mapper.readValue(serializedConstraint, PrivacyConstraint.class);
+            PrivacyConstraint constraint = JsonUtils.MAPPER.readValue(serializedConstraint, PrivacyConstraint.class);
             assertNotNull(constraint);
         }
     }
