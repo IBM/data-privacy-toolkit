@@ -6,11 +6,11 @@
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,12 +19,10 @@ import java.security.SecureRandom;
 import java.util.*;
 
 public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> {
-    private static final ObjectMapper mapper = new ObjectMapper();
-
     private final Map<String, FHIRGenericMaskingProvider> maskingProviderMap;
 
     public FHIRMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
-        this("fhir", maskingConfiguration, new HashSet<String>(), factory);
+        this("fhir", maskingConfiguration, new HashSet<>(), factory);
     }
 
     public FHIRMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
@@ -156,7 +154,7 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
     public String mask(String identifier) {
 
         try {
-            JsonNode resource = mapper.readTree(identifier);
+            JsonNode resource = JsonUtils.MAPPER.readTree(identifier);
 
             String maskedResource = mask(resource);
             if (maskedResource == null) {

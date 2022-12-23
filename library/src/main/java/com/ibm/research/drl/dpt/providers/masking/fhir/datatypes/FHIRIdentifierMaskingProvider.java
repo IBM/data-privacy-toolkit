@@ -13,6 +13,7 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -74,9 +75,9 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRIdentifier obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRIdentifier.class);
+            FHIRIdentifier obj = JsonUtils.MAPPER.treeToValue(node, FHIRIdentifier.class);
             FHIRIdentifier maskedObj = mask(obj);
-            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
+            return JsonUtils.MAPPER.valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

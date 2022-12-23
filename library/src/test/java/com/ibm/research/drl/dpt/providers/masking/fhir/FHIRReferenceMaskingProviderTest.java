@@ -12,6 +12,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.datatypes.FHIRReferenceMaskingProvider;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -29,8 +30,7 @@ public class FHIRReferenceMaskingProviderTest {
                 "    \"display\": \"Central Supply\"" +
                 "}";
 
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
-        FHIRReference reference = objectMapper.readValue(json, FHIRReference.class);
+        FHIRReference reference = JsonUtils.MAPPER.readValue(json, FHIRReference.class);
 
         assertEquals("Central Supply", reference.getDisplay());
         assertEquals("Organization/2.16.840.1.113883.19.5", reference.getReference());
@@ -57,7 +57,7 @@ public class FHIRReferenceMaskingProviderTest {
 
         String organizationValue = "Organization/2.16.840.1.113883.19.5";
 
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.MAPPER;
         FHIRReference reference = objectMapper.readValue(json, FHIRReference.class);
 
         assertEquals("Central Supply", reference.getDisplay());
@@ -84,7 +84,7 @@ public class FHIRReferenceMaskingProviderTest {
 
         String organizationValue = "Organization/2.16.840.1.113883.19.5";
 
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.MAPPER;
         FHIRReference reference = objectMapper.readValue(json, FHIRReference.class);
 
         assertEquals("Central Supply", reference.getDisplay());
@@ -111,7 +111,7 @@ public class FHIRReferenceMaskingProviderTest {
 
         String organizationValue = "OrgAnization/2.16.840.1.113883.19.5";
 
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.MAPPER;
         FHIRReference reference = objectMapper.readValue(json, FHIRReference.class);
 
         assertEquals("Central Supply", reference.getDisplay());
@@ -135,7 +135,7 @@ public class FHIRReferenceMaskingProviderTest {
                 "    \"display\": \"Central Supply\"" +
                 "}";
 
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.MAPPER;
         FHIRReference reference = objectMapper.readValue(json, FHIRReference.class);
 
         assertEquals("Central Supply", reference.getDisplay());

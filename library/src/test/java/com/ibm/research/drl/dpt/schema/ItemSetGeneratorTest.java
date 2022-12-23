@@ -7,14 +7,15 @@ package com.ibm.research.drl.dpt.schema;
 
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ItemSetGeneratorTest {
     private List<IPVSchemaField> fields;

@@ -5,7 +5,6 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
@@ -14,9 +13,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class FHIRResourceMaskingConfiguration {
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     private final String basePath;
     private final List<FHIRResourceField> fields;
     private final MaskingConfiguration maskingConfiguration;

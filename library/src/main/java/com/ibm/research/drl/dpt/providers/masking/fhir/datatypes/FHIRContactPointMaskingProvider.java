@@ -14,6 +14,7 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.security.SecureRandom;
 import java.util.Set;
@@ -63,16 +64,15 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRContactPoint cc = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRContactPoint.class);
+            FHIRContactPoint cc = JsonUtils.MAPPER.treeToValue(node, FHIRContactPoint.class);
             FHIRContactPoint maskedCc = mask(cc);
-            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedCc);
+            return JsonUtils.MAPPER.valueToTree(maskedCc);
         } catch (Exception e) {
             return NullNode.getInstance();
         }
     }
 
     public FHIRContactPoint mask(FHIRContactPoint contactPoint) {
-
         if (contactPoint == null) {
             return null;
         }

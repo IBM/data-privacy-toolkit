@@ -1,25 +1,23 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.*;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.fhir.datatypes.*;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.IOException;
 import java.util.*;
 
 public class FHIRMaskingUtils {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     public static String maskResourceId(String id, boolean preserveIdPrefix, MaskingProvider maskingProvider) {
         if (!preserveIdPrefix) {
             return maskingProvider.mask(id);
@@ -51,10 +49,6 @@ public class FHIRMaskingUtils {
         return set;
     }
 
-    public static ObjectMapper getObjectMapper() {
-        return objectMapper;
-    }
-
     public static JsonNode preprocessFHIRObject(JsonNode node) {
         JsonNode typeNode = node.get("resourceType");
 
@@ -73,7 +67,7 @@ public class FHIRMaskingUtils {
     }
 
     public static String preprocessFHIRObject(String object) throws IOException {
-        JsonNode node = objectMapper.readTree(object);
+        JsonNode node = JsonUtils.MAPPER.readTree(object);
 
         JsonNode processedNode = preprocessFHIRObject(node);
 
@@ -84,7 +78,7 @@ public class FHIRMaskingUtils {
         return processedNode.toString();
     }
 
-    public static JsonNode postprocessFHIRObject(JsonNode node) throws IOException {
+    public static JsonNode postProcessFHIRObject(JsonNode node) {
         Iterator<JsonNode> iterator = node.iterator();
 
         if (!iterator.hasNext()) {
@@ -94,9 +88,9 @@ public class FHIRMaskingUtils {
         return iterator.next();
     }
 
-    public static String postprocessFHIRObject(String object) throws IOException {
-        JsonNode node = objectMapper.readTree(object);
-        JsonNode processedNode = postprocessFHIRObject(node);
+    public static String postProcessFHIRObject(String object) throws IOException {
+        JsonNode node = JsonUtils.MAPPER.readTree(object);
+        JsonNode processedNode = postProcessFHIRObject(node);
 
         if (processedNode == null) {
             return null;
@@ -105,9 +99,7 @@ public class FHIRMaskingUtils {
         return processedNode.toString();
     }
 
-    public static Collection<FHIRIdentifier>
-    maskIdentifiers(Collection<FHIRIdentifier> identifiers, FHIRIdentifierMaskingProvider maskingProvider) {
-
+    public static Collection<FHIRIdentifier> maskIdentifiers(Collection<FHIRIdentifier> identifiers, FHIRIdentifierMaskingProvider maskingProvider) {
         if (identifiers == null || identifiers.isEmpty()) {
             return identifiers;
         }
@@ -120,8 +112,7 @@ public class FHIRMaskingUtils {
         return maskedIdentifiers;
     }
 
-    public static Collection<FHIRReference>
-    maskReferences(Collection<FHIRReference> identifiers, FHIRReferenceMaskingProvider maskingProvider) {
+    public static Collection<FHIRReference> maskReferences(Collection<FHIRReference> identifiers, FHIRReferenceMaskingProvider maskingProvider) {
 
         if (identifiers == null || identifiers.isEmpty()) {
             return identifiers;
@@ -150,8 +141,7 @@ public class FHIRMaskingUtils {
         return maskedIdentifiers;
     }
 
-    public static Collection<FHIRContactPoint>
-    maskTelecoms(Collection<FHIRContactPoint> telecoms, FHIRContactPointMaskingProvider maskingProvider) {
+    public static Collection<FHIRContactPoint> maskTelecoms(Collection<FHIRContactPoint> telecoms, FHIRContactPointMaskingProvider maskingProvider) {
 
         if (telecoms == null || telecoms.isEmpty()) {
             return telecoms;
@@ -165,8 +155,7 @@ public class FHIRMaskingUtils {
         return maskedTelecoms;
     }
 
-    public static Collection<FHIRCodeableConcept>
-    maskCodeableConcepts(Collection<FHIRCodeableConcept> codeableConcepts, FHIRCodeableConceptMaskingProvider maskingProvider) {
+    public static Collection<FHIRCodeableConcept> maskCodeableConcepts(Collection<FHIRCodeableConcept> codeableConcepts, FHIRCodeableConceptMaskingProvider maskingProvider) {
 
         if (codeableConcepts == null || codeableConcepts.isEmpty()) {
             return codeableConcepts;
@@ -180,8 +169,7 @@ public class FHIRMaskingUtils {
         return maskedConcepts;
     }
 
-    public static Collection<FHIRAddress>
-    maskAddresses(Collection<FHIRAddress> telecoms, FHIRAddressMaskingProvider maskingProvider) {
+    public static Collection<FHIRAddress> maskAddresses(Collection<FHIRAddress> telecoms, FHIRAddressMaskingProvider maskingProvider) {
 
         if (telecoms == null || telecoms.isEmpty()) {
             return telecoms;
