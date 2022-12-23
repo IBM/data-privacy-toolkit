@@ -20,6 +20,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -91,11 +92,13 @@ public class DataMaskingOptions implements Serializable {
         this.toBeMasked = preserveBackCompatibility(toBeMasked);
         this.predefinedRelationships = predefinedRelationshipsFromJSON(predefinedRelationships);
 
-        Map<DataTypeFormat, DataFormatProperties> formatPropertiesMap = DataFormatPropertiesHelper.buildProperties(this.getClass().getResourceAsStream("/dataformat.json"));
-        validate(formatPropertiesMap);
+        try (InputStream inputStream = DataMaskingOptions.class.getResourceAsStream("/dataformat.json")) {
+            Map<DataTypeFormat, DataFormatProperties> formatPropertiesMap = DataFormatPropertiesHelper.buildProperties(inputStream);
+            validate(formatPropertiesMap);
 
-        if (!validateRelationships(this.predefinedRelationships)) {
-            throw new RuntimeException("Cyclic dependency detected");
+            if (!validateRelationships(this.predefinedRelationships)) {
+                throw new RuntimeException("Cyclic dependency detected");
+            }
         }
     }
 

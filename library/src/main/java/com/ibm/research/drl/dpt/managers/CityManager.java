@@ -37,6 +37,19 @@ public class CityManager extends ResourceBasedManager<City> {
         public int compareTo(CityDistancer o) {
             return Double.compare(distance, o.distance);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CityDistancer that = (CityDistancer) o;
+            return Double.compare(that.distance, distance) == 0 && Objects.equals(city, that.city);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(city, distance);
+        }
     }
 
     private static final class CityDistanceComparator implements Comparator<City> {
