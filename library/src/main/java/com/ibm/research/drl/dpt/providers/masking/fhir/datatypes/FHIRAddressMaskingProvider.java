@@ -97,7 +97,7 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
             }
 
             String randomStreetName = streetNameManager.getRandomKey();
-            String randomStreetNumber = new SecureRandom().nextInt(1000) + "";
+            String randomStreetNumber = Integer.toString(random.nextInt(1000));
 
 
             address.setLine(Arrays.asList(randomStreetNumber + " " + randomStreetName, randomCity, randomCountry));
