@@ -5,7 +5,7 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.spark.masking;
 
-import com.ibm.research.drl.prima.processors.records.Record;
+import com.ibm.research.drl.dpt.processors.records.Record;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.spark.sql.Row;
 
@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-public class RowRecord extends Record {
+public class RowRecord implements Record {
     private final List<String> fieldNames;
     private final Object[] values;
     private final Map<String, Integer> fieldMap;
@@ -51,6 +51,11 @@ public class RowRecord extends Record {
         }
         
         return value.toString().getBytes();
+    }
+
+    @Override
+    public void suppressField(String s) {
+
     }
 
     private String getIntegerPart(String v) {
@@ -113,13 +118,18 @@ public class RowRecord extends Record {
     }
 
     @Override
-    public Iterable<String> getFieldReferences() {
-        return fieldNames;
+    public String toString() {
+        return StringUtils.join(values);
     }
 
     @Override
-    protected String formatRecord() {
-        return StringUtils.join(values);
+    public byte[] toBytes() {
+        return this.toString().getBytes();
+    }
+
+    @Override
+    public Iterable<String> getFieldReferences() {
+        return fieldNames;
     }
 
     @Override

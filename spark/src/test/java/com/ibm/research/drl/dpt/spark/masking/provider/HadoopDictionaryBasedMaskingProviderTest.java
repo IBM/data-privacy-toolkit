@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.spark.masking.provider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ public class HadoopDictionaryBasedMaskingProviderTest {
     @Test
     public void readSingleDictionaryFile() throws Exception {
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
-        configuration.setValue("hadoop.dictionary.path", getClass().getResource("/test1.txt").getFile());
+        configuration.setValue("hadoop.dictionary.path", HadoopDictionaryBasedMaskingProviderTest.class.getResource("/test1.txt").getFile());
 
         HadoopDictionaryBasedMaskingProvider provider = new HadoopDictionaryBasedMaskingProvider(new SecureRandom(), configuration);
         
@@ -30,15 +31,13 @@ public class HadoopDictionaryBasedMaskingProviderTest {
     }
 
     @Test
-    @Disabled("Not now")
+    @Disabled("Require porting back handling of multiple files")
     public void readMultiplesDictionaryFile() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("hadoop.dictionary.path",
-                mapper.createArrayNode().
-                        add(getClass().getResource("/test1.txt").getFile()).
-                        add(getClass().getResource("/test2.txt").getFile())
+                JsonUtils.MAPPER.createArrayNode().
+                        add(HadoopDictionaryBasedMaskingProviderTest.class.getResource("/test1.txt").getFile()).
+                        add(HadoopDictionaryBasedMaskingProviderTest.class.getResource("/test2.txt").getFile())
         );
 
         HadoopDictionaryBasedMaskingProvider provider = new HadoopDictionaryBasedMaskingProvider(new SecureRandom(), configuration);
