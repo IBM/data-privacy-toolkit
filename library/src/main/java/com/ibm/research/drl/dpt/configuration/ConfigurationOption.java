@@ -8,15 +8,13 @@ package com.ibm.research.drl.dpt.configuration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class ConfigurationOption implements Serializable {
-    private static final ObjectMapper mapper = new ObjectMapper();
-
     private String description;
     private String category;
     private Object value;
@@ -111,7 +109,7 @@ public class ConfigurationOption implements Serializable {
         Object value = in.readObject();
 
         if (value instanceof byte[]) {
-            this.value = mapper.readTree((byte[]) value);
+            this.value = JsonUtils.MAPPER.readTree((byte[]) value);
         } else {
             this.value = value;
         }

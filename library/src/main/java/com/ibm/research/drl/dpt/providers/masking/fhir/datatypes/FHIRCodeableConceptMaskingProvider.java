@@ -13,7 +13,7 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCoding;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,9 +63,9 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRCodeableConcept cc = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRCodeableConcept.class);
+            FHIRCodeableConcept cc = JsonUtils.MAPPER.treeToValue(node, FHIRCodeableConcept.class);
             FHIRCodeableConcept maskedCc = mask(cc);
-            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedCc);
+            return JsonUtils.MAPPER.valueToTree(maskedCc);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

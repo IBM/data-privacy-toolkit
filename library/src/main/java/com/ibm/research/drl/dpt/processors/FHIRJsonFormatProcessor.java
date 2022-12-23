@@ -11,6 +11,7 @@ import com.ibm.research.drl.dpt.processors.records.JSONRecord;
 import com.ibm.research.drl.dpt.processors.records.Record;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingProvider;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -30,7 +31,7 @@ public class FHIRJsonFormatProcessor extends JSONFormatProcessor {
 
         try {
             return new JSONRecord(
-                    mapper.readTree(maskingProvider.mask(jsonRecord.getNode()))
+                    JsonUtils.MAPPER.readTree(maskingProvider.mask(jsonRecord.getNode()))
             );
         } catch (IOException e) {
             throw new RuntimeException("Error processing the response from the masking provider");

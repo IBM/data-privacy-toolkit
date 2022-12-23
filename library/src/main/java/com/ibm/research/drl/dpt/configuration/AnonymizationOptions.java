@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2017                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.configuration;
@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.anonymization.*;
 import com.ibm.research.drl.dpt.anonymization.constraints.*;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
@@ -24,7 +23,12 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.exceptions.RiskOptionsMisconfigurationException;
-import com.ibm.research.drl.dpt.risk.*;
+import com.ibm.research.drl.dpt.risk.BinomialRiskMetric;
+import com.ibm.research.drl.dpt.risk.FKRatioMetric;
+import com.ibm.research.drl.dpt.risk.KRatioMetric;
+import com.ibm.research.drl.dpt.risk.RiskMetric;
+import com.ibm.research.drl.dpt.risk.ZayatzEstimator;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Constructor;
@@ -33,8 +37,6 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AnonymizationOptions {
-    private static final ObjectMapper mapper = new ObjectMapper();
-
     private final List<PrivacyConstraint> privacyConstraints;
     private final List<ColumnInformation> columnInformation;
     private final DatasetOptions datasetOptions;
@@ -114,7 +116,7 @@ public class AnonymizationOptions {
     }
 
     private Map<String, String> generateRiskOptions(JsonNode riskMetricOptions) {
-        return mapper.convertValue(riskMetricOptions, new TypeReference<>() {
+        return JsonUtils.MAPPER.convertValue(riskMetricOptions, new TypeReference<>() {
         });
     }
 
