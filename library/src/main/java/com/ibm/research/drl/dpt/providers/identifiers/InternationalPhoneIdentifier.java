@@ -148,7 +148,7 @@ public class InternationalPhoneIdentifier extends AbstractIdentifier {
     }
 
     private Set<String> loadFromResource(String resourceName) {
-        try (InputStream inputStream = this.getClass().getResourceAsStream(resourceName)) {
+        try (InputStream inputStream = InternationalPhoneIdentifier.class.getResourceAsStream(resourceName)) {
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
             MappingIterator<String[]> termsIterator = mapper.readerFor(
