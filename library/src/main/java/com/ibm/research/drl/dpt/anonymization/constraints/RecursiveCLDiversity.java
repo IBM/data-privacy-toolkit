@@ -115,4 +115,9 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
         sanityChecks(dataset);
     }
 
+    @Override
+    public PrivacyMetric getMetricInstance() {
+        return new LDiversityMetric();
+    }
+
 }

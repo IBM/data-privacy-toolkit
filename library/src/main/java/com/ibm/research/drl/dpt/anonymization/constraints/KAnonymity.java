@@ -62,4 +62,9 @@ public class KAnonymity implements PrivacyConstraint {
     public void initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
         sanityChecks(dataset);
     }
+
+    @Override
+    public PrivacyMetric getMetricInstance() {
+        return new KAnonymityMetric();
+    }
 }

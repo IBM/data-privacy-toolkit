@@ -84,6 +84,11 @@ public class ReidentificationRisk implements PrivacyConstraint {
         sanityChecks(dataset);
     }
 
+    @Override
+    public PrivacyMetric getMetricInstance() {
+        throw new UnsupportedOperationException();
+    }
+
     public ReidentificationRisk(InputStream populationDataset,
                                 Collection<LinkInfo> linkInformation,
                                 List<ColumnInformation> columnInformation,

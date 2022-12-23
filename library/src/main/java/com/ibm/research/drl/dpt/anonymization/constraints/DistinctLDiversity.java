@@ -103,6 +103,11 @@ public class DistinctLDiversity implements PrivacyConstraint {
         sanityChecks(dataset);
     }
 
+    @Override
+    public PrivacyMetric getMetricInstance() {
+        return new LDiversityMetric();
+    }
+
 
     public String toString() {
         return "Distinct L-Diversity constraint, l value = " + l;
