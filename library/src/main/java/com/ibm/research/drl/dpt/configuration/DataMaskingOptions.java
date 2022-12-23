@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
@@ -17,6 +16,7 @@ import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -188,11 +188,9 @@ public class DataMaskingOptions implements Serializable {
         if (node != null) {
             Iterator<JsonNode> iterator = node.elements();
 
-            ObjectMapper mapper = new ObjectMapper();
-
             while (iterator.hasNext()) {
                 JsonNode element = iterator.next();
-                FieldRelationship fieldRelationship = mapper.readValue(element.toString(), FieldRelationship.class);
+                FieldRelationship fieldRelationship = JsonUtils.MAPPER.readValue(element.toString(), FieldRelationship.class);
                 String fieldName = fieldRelationship.getFieldName();
                 predefinedRelationships.put(fieldName, fieldRelationship);
             }

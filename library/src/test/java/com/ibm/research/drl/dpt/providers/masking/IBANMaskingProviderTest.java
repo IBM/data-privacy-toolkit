@@ -12,7 +12,8 @@ import org.iban4j.Iban;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled("Ignoring until we found a better generator")
 public class IBANMaskingProviderTest {

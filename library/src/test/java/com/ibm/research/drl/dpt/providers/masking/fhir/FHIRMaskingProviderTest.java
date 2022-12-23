@@ -11,6 +11,7 @@ import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
@@ -24,7 +25,7 @@ public class FHIRMaskingProviderTest {
     @Test
     public void testLoadsCorrectRules() throws Exception {
         try (InputStream inputStream = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/masking-full.json")) {
-            ConfigurationManager configurationManager = ConfigurationManager.load(FHIRMaskingUtils.getObjectMapper().readTree(inputStream));
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(inputStream));
             MaskingConfiguration maskingConfiguration = configurationManager.getDefaultConfiguration();
 
             FHIRMaskingProvider ignored = new FHIRMaskingProvider(configurationManager.getDefaultConfiguration(), this.factory);
@@ -48,7 +49,7 @@ public class FHIRMaskingProviderTest {
 
         for(String filename: filenames) {
             try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream(filename)) {
-                JsonNode node = FHIRMaskingUtils.getObjectMapper().readTree(is);
+                JsonNode node = JsonUtils.MAPPER.readTree(is);
 
                 String result = fhirMaskingProvider.mask(node);
 
@@ -60,19 +61,19 @@ public class FHIRMaskingProviderTest {
     @Test
     public void testMaintainsDataType() throws Exception {
         try (InputStream inputStream = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/masking-full.json")) {
-            ConfigurationManager configurationManager = ConfigurationManager.load(FHIRMaskingUtils.getObjectMapper().readTree(inputStream));
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(inputStream));
             MaskingConfiguration maskingConfiguration = configurationManager.getDefaultConfiguration();
 
             FHIRMaskingProvider fhirMaskingProvider = new FHIRMaskingProvider(maskingConfiguration, this.factory);
 
             try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/MedicationOrder-230986.json");) {
-                JsonNode node = FHIRMaskingUtils.getObjectMapper().readTree(is);
+                JsonNode node = JsonUtils.MAPPER.readTree(is);
 
                 assertTrue(node.get("dispenseRequest").get("numberOfRepeatsAllowed").isInt());
                 assertEquals(2, node.get("dispenseRequest").get("numberOfRepeatsAllowed").intValue());
 
                 String maskedString = fhirMaskingProvider.mask(node);
-                JsonNode maskedNode = FHIRMaskingUtils.getObjectMapper().readTree(maskedString);
+                JsonNode maskedNode = JsonUtils.MAPPER.readTree(maskedString);
 
                 assertTrue(maskedNode.get("dispenseRequest").get("numberOfRepeatsAllowed").isInt());
             }
@@ -82,19 +83,19 @@ public class FHIRMaskingProviderTest {
     @Test
     public void testMaintainsDataTypeArrays() throws Exception {
         try (InputStream inputStream = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/masking-full.json")) {
-            ConfigurationManager configurationManager = ConfigurationManager.load(FHIRMaskingUtils.getObjectMapper().readTree(inputStream));
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(inputStream));
             MaskingConfiguration maskingConfiguration = configurationManager.getDefaultConfiguration();
 
             FHIRMaskingProvider fhirMaskingProvider = new FHIRMaskingProvider(maskingConfiguration, this.factory);
 
             try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json");) {
-                JsonNode node = FHIRMaskingUtils.getObjectMapper().readTree(is);
+                JsonNode node = JsonUtils.MAPPER.readTree(is);
 
                 assertTrue(node.get("dispenseRequest").get("numberOfRepeatsAllowed").isArray());
                 assertEquals(2, node.get("dispenseRequest").get("numberOfRepeatsAllowed").get(0).intValue());
 
                 String maskedString = fhirMaskingProvider.mask(node);
-                JsonNode maskedNode = FHIRMaskingUtils.getObjectMapper().readTree(maskedString);
+                JsonNode maskedNode = JsonUtils.MAPPER.readTree(maskedString);
 
                 System.out.println(maskedNode.get("dispenseRequest").get("numberOfRepeatsAllowed"));
                 assertTrue(maskedNode.get("dispenseRequest").get("numberOfRepeatsAllowed").get(0).isInt());
@@ -105,10 +106,10 @@ public class FHIRMaskingProviderTest {
     @Test
     public void testPatientE2E() throws Exception {
         try (InputStream inputStream = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/maskingConfiguration.json")) {
-            ConfigurationManager configurationManager = ConfigurationManager.load(FHIRMaskingUtils.getObjectMapper().readTree(inputStream));
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(inputStream));
 
             FHIRMaskingProvider fhirMaskingProvider = new FHIRMaskingProvider(configurationManager.getDefaultConfiguration(), this.factory);
-            ObjectMapper mapper = FHIRMaskingUtils.getObjectMapper();
+            ObjectMapper mapper = JsonUtils.MAPPER;
 
             String filename = "/fhir/patientExample.json";
 
@@ -266,7 +267,7 @@ public class FHIRMaskingProviderTest {
 
         for(String filename: filenames) {
             try(InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream(filename)) {
-                JsonNode node = FHIRMaskingUtils.getObjectMapper().readTree(is);
+                JsonNode node = JsonUtils.MAPPER.readTree(is);
 
                 String result = fhirMaskingProvider.mask(node);
 

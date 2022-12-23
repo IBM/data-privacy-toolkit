@@ -12,6 +12,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRHumanName;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.datatypes.FHIRHumanNameMaskingProvider;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class FHIRHumanNameMaskingProviderTest {
                 "      ]\n" +
                 "    }";
 
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.MAPPER;
        
         int fnamesOK = 0;
         int gnamesOK = 0;
@@ -48,18 +49,16 @@ public class FHIRHumanNameMaskingProviderTest {
         for(int i = 0; i < 1000; i++) {
             FHIRHumanName name = objectMapper.readValue(nameJson, FHIRHumanName.class);
 
-            ArrayList<String> familyNames = new ArrayList<>();
-            familyNames.addAll(name.getFamily());
+            ArrayList<String> familyNames = new ArrayList<>(name.getFamily());
 
-            ArrayList<String> givenNames = new ArrayList<>();
-            givenNames.addAll(name.getGiven());
+            ArrayList<String> givenNames = new ArrayList<>(name.getGiven());
 
             FHIRHumanNameMaskingProvider maskingProvider = new FHIRHumanNameMaskingProvider(
-                    new DefaultMaskingConfiguration(), new HashSet<String>(), "/name", this.factory);
+                    new DefaultMaskingConfiguration(), new HashSet<>(), "/name", this.factory);
             FHIRHumanName maskedName = maskingProvider.mask(name);
 
-            assertTrue(maskedName.getFamily().size() == familyNames.size());
-            assertTrue(maskedName.getGiven().size() == givenNames.size());
+            assertEquals(maskedName.getFamily().size(), familyNames.size());
+            assertEquals(maskedName.getGiven().size(), givenNames.size());
 
             for (String fname : familyNames) {
                 if (!maskedName.getFamily().contains(fname)) {
@@ -90,13 +89,11 @@ public class FHIRHumanNameMaskingProviderTest {
                 "        \"Chalmers\"\n" +
                 "      ]\n" +
                 "    }";
-
-        ObjectMapper objectMapper = FHIRMaskingUtils.getObjectMapper();
         
         int fnamesOK = 0;
         
         for(int i =0; i < 1000; i++) {
-            FHIRHumanName name = objectMapper.readValue(nameJson, FHIRHumanName.class);
+            FHIRHumanName name = JsonUtils.MAPPER.readValue(nameJson, FHIRHumanName.class);
 
             List<String> familyNames = new ArrayList<>(name.getFamily());
 

@@ -14,6 +14,7 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,9 +83,9 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRHumanName obj = FHIRMaskingUtils.getObjectMapper().treeToValue(node, FHIRHumanName.class);
+            FHIRHumanName obj = JsonUtils.MAPPER.treeToValue(node, FHIRHumanName.class);
             FHIRHumanName maskedObj = mask(obj);
-            return FHIRMaskingUtils.getObjectMapper().valueToTree(maskedObj);
+            return JsonUtils.MAPPER.valueToTree(maskedObj);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

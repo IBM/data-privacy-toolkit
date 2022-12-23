@@ -6,12 +6,15 @@
 package com.ibm.research.drl.dpt.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 
 import java.util.*;
 
 public class JsonUtils {
+
+    public final static ObjectMapper MAPPER = new ObjectMapper();
 
     public static void validateField(JsonNode configuration, String key, JsonNodeType expectedType) throws MisconfigurationException {
         JsonNode node = configuration.get(key);
