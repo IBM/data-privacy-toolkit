@@ -31,15 +31,18 @@ public class OSIdentifier extends AbstractIdentifier {
 
     private Set<String> populateTerms() {
         try (
-                InputStream inputStream = this.getClass().getResourceAsStream("/os_processed.csv");
-                Reader reader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(reader)
+                InputStream inputStream = OSIdentifier.class.getResourceAsStream("/os_processed.csv")
         ) {
-            return bufferedReader.lines()
-                    .map(String::trim)
-                    .map(this::normalize)
-                    .collect(Collectors.toSet());
+            assert inputStream != null;
+            try (Reader reader = new InputStreamReader(inputStream);
+                 BufferedReader bufferedReader = new BufferedReader(reader)
+            ) {
+                return bufferedReader.lines()
+                        .map(String::trim)
+                        .map(this::normalize)
+                        .collect(Collectors.toSet());
 
+            }
         } catch (IOException e) {
             throw new RuntimeException("Unable to load the processed terms", e);
         }
