@@ -7,13 +7,31 @@ package com.ibm.research.drl.dpt.processors.records;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.*;
+import com.fasterxml.jackson.databind.node.BinaryNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.FloatNode;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.NumericNode;
+import com.fasterxml.jackson.databind.node.ShortNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.ibm.research.drl.dpt.datasets.DatasetOptions;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import com.ibm.research.drl.jsonpath.JSONPathException;
 import com.ibm.research.drl.jsonpath.JSONPathExtractor;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
@@ -270,5 +288,9 @@ public final class JSONRecord extends MultipathRecord {
             throw new IllegalArgumentException("The input schema does not contain the field marked as to be suppressed.");
         }
 
+    }
+
+    public static Record fromString(String input, DatasetOptions datasetOptions) throws IOException {
+        return new JSONRecord(JsonUtils.MAPPER.readTree(input));
     }
 }

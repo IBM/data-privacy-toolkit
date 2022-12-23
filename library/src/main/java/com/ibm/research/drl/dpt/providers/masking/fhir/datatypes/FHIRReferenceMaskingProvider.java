@@ -1,12 +1,11 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2022                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.fhir.datatypes;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
@@ -14,6 +13,7 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -28,8 +28,6 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
     private final MaskingProvider referenceMaskingProvider;
     private final MaskingProvider displayMaskingProvider;
     private final Set<String> maskReferenceExcludePrefixList;
-
-    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final String REFERENCE_FIELD_PATH;
     private final String DISPLAY_FIELD_PATH;
@@ -53,9 +51,9 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
 
     public JsonNode mask(JsonNode node) {
         try {
-            FHIRReference reference = objectMapper.treeToValue(node, FHIRReference.class);
+            FHIRReference reference = JsonUtils.MAPPER.treeToValue(node, FHIRReference.class);
             FHIRReference maskedReference = mask(reference);
-            return objectMapper.valueToTree(maskedReference);
+            return JsonUtils.MAPPER.valueToTree(maskedReference);
         } catch (Exception e) {
             return NullNode.getInstance();
         }

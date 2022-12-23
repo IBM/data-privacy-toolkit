@@ -12,7 +12,8 @@ import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import com.ibm.research.drl.dpt.providers.identifiers.SSNUSIdentifier;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SSNUSMaskingProviderTest {
     @Test

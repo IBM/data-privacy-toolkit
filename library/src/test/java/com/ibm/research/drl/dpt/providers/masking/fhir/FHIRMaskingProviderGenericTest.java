@@ -7,8 +7,8 @@ package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.jsonpath.JSONPathExtractor;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
+import com.ibm.research.drl.jsonpath.JSONPathExtractor;
 
 import java.util.Set;
 

@@ -38,7 +38,7 @@ public class FHIRMaskingUtilsTest {
     public void testPostprocessing() throws IOException {
         String json = "{\"/fhir/ContactPoint\":{\"resourceType\":\"ContactPoint\",\"system\":\"email\",\"value\":\"p.heuvel@gmail.com\",\"use\":\"home\"}}";
 
-        String processed = FHIRMaskingUtils.postprocessFHIRObject(json);
+        String processed = FHIRMaskingUtils.postProcessFHIRObject(json);
         System.out.println(processed);
 
         ObjectMapper objectMapper = new ObjectMapper();

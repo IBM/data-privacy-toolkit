@@ -5,11 +5,11 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.datasets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
-import org.apache.logging.log4j.Logger;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 
 public class IPVDatasetJSONSerializer {
     private static final Logger logger = LogManager.getLogger(IPVDatasetJSONSerializer.class);
-
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public void serialize(IPVDataset dataset, JSONDatasetOptions options, Writer writer) throws IOException {
         List<Map<String, Object>> jsonDataset = new ArrayList<>();
@@ -33,7 +31,7 @@ public class IPVDatasetJSONSerializer {
             );
         }
 
-        mapper.writeValue(writer, jsonDataset);
+        JsonUtils.MAPPER.writeValue(writer, jsonDataset);
     }
 
     private Map<String, Object> buildValueMap(List<String> values, List<String> fields) {
