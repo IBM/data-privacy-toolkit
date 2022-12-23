@@ -96,6 +96,11 @@ public class TCloseness implements PrivacyConstraint {
         initializeCategoricalInformation(dataset, columnInformationList);
     }
 
+    @Override
+    public PrivacyMetric getMetricInstance() {
+        throw new UnsupportedOperationException();
+    }
+
     private void initializeCategoricalInformation(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
 
         for (int i = 0; i < columnInformationList.size(); i++) {

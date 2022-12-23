@@ -107,4 +107,9 @@ public class EntropyLDiversity implements PrivacyConstraint {
         sanityChecks(dataset);
     }
 
+    @Override
+    public PrivacyMetric getMetricInstance() {
+        return new LDiversityMetric();
+    }
+
 }

@@ -28,9 +28,9 @@ public class LDiversityMetric extends KAnonymityMetric {
         super(1);
         this.histograms = new ArrayList<>();
 
-        for (int i = 0; i < sensitiveValues.size(); i++) {
+        for (String sensitiveValue : sensitiveValues) {
             Histogram histogram = new Histogram();
-            histogram.put(sensitiveValues.get(i), 1L);
+            histogram.put(sensitiveValue, 1L);
 
             this.histograms.add(histogram);
         }

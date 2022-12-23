@@ -37,4 +37,6 @@ public interface PrivacyConstraint extends Serializable {
     void sanityChecks(IPVDataset dataset);
 
     void initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList);
+
+    PrivacyMetric getMetricInstance();
 }
