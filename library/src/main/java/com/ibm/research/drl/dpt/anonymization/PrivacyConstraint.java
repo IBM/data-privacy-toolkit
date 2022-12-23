@@ -6,6 +6,7 @@
 package com.ibm.research.drl.dpt.anonymization;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ibm.research.drl.dpt.anonymization.constraints.*;
@@ -25,7 +26,8 @@ import java.util.List;
         @JsonSubTypes.Type(name = "RecursiveCLDiversity", value = RecursiveCLDiversity.class),
         @JsonSubTypes.Type(name = "TCloseness", value = TCloseness.class),
 })
-public interface PrivacyConstraint extends Serializable {
+public interface
+PrivacyConstraint extends Serializable {
     boolean check(PrivacyMetric metric);
 
     boolean check(Partition partition, List<Integer> sensitiveColumns);
@@ -38,5 +40,6 @@ public interface PrivacyConstraint extends Serializable {
 
     void initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList);
 
+    @JsonIgnore
     PrivacyMetric getMetricInstance();
 }
