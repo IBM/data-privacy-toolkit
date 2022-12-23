@@ -57,6 +57,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
     implementation 'org.lz4:lz4-java:1.8.0'
 
     implementation 'commons-cli:commons-cli:1.4'

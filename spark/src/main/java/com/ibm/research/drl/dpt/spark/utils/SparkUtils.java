@@ -13,6 +13,8 @@ import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.processors.CSVFormatProcessor;
 import com.ibm.research.drl.dpt.providers.ProviderType;
+import com.ibm.research.drl.dpt.spark.vulnerability.VulnerabilityDetectionConfiguration;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.hadoop.conf.Configuration;
@@ -65,7 +67,7 @@ public class SparkUtils {
         return path.startsWith("hdfs://");
     }
 
-    private static InputStream readFile(String path, boolean isRemote) throws IOException {
+    public static InputStream readFile(String path, boolean isRemote) throws IOException {
         if (isRemote) {
             return SparkUtils.createHDFSInputStream(path);
         }
@@ -261,5 +263,38 @@ public class SparkUtils {
 
     public static Dataset<Row> filterOnFieldValue(Dataset<Row> dataset, String fieldName, String regularExpression) {
         return dataset.where(col(fieldName).cast(DataTypes.StringType).rlike(regularExpression));
+    }
+
+    public static <T> T deserializeConfiguration(String path, boolean remoteConfiguration, Class<T> configurationClass) throws IOException {
+        try (InputStream inputStream = readFile(path, remoteConfiguration)) {
+            String lowerCasePath = path.toLowerCase();
+            final ObjectMapper mapper;
+
+            if (lowerCasePath.endsWith(".json")) {
+                mapper = JsonUtils.MAPPER;
+            } else if (lowerCasePath.endsWith(".yaml") || lowerCasePath.endsWith(".yml")) {
+                mapper = new ObjectMapper(new YAMLFactory());
+            } else {
+                throw new IllegalArgumentException("Unknown extension " + path);
+            }
+
+            return mapper.readValue(inputStream, configurationClass);
+        }
+    }
+
+    public static JsonNode readConfigurationFile(String configurationFile, boolean isRemote) throws IOException {
+        final String lowerCasePath = configurationFile.toLowerCase();
+        final ObjectMapper mapper;
+        if (lowerCasePath.endsWith(".json")) {
+            mapper = JsonUtils.MAPPER;
+        } else if (lowerCasePath.endsWith(".yaml") || lowerCasePath.endsWith(".yml")) {
+            mapper = new ObjectMapper(new YAMLFactory());
+        } else {
+            throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        }
+
+        try (InputStream inputStream = readFile(configurationFile, isRemote)) {
+            return mapper.readTree(inputStream);
+        }
     }
 }
