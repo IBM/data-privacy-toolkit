@@ -34,7 +34,7 @@ jobs:
     name: End to end test
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: dpt-image:$GITHUB_SHA
+      IMAGE_NAME: dpt-image:test
     steps:
       - uses: actions/checkout@v3
       - name: Setup java
