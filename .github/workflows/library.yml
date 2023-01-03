@@ -22,7 +22,6 @@ jobs:
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
-          check-latest: true
           cache: 'gradle'
       - name: Run gradlew build
         working-directory: ./library
