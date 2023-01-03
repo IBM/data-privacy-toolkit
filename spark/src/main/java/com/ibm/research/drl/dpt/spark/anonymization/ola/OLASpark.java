@@ -161,8 +161,7 @@ public class OLASpark {
         int k = AnonymizationUtils.getK(privacyConstraints);
 
         Long inputSize = rdd.count();
-        SparkAnonymityChecker sparkAnonymityChecker =
-                new SparkAnonymityChecker(rdd, inputSize, columnInformationList, privacyConstraints, delimiter, quoteChar);
+        SparkAnonymityChecker sparkAnonymityChecker = new SparkAnonymityChecker(rdd, inputSize, columnInformationList, privacyConstraints, delimiter, quoteChar);
         
         Lattice lattice = new Lattice(sparkAnonymityChecker, columnInformationList, suppressionRate);
         lattice.explore();

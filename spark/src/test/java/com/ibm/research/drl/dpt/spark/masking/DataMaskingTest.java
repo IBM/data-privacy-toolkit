@@ -178,16 +178,21 @@ public class DataMaskingTest {
 
     @Test
     public void testConsistencyExtraction() throws IOException {
-        ConfigurationManager configurationManager = ConfigurationManager.load(new ObjectMapper().readTree(this.getClass().getResourceAsStream("/maskingConsistencyTest.json")));
+        try (
+                InputStream configuration = this.getClass().getResourceAsStream("/maskingConsistencyTest.json");
+                InputStream options = this.getClass().getResourceAsStream("/maskingConsistencyTest.json");
+                ) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(configuration));
 
-        final DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(this.getClass().getResourceAsStream("/maskingConsistencyTest.json"), DataMaskingOptions.class);
+            final DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(options, DataMaskingOptions.class);
 
-        Map<String, Set<String>> consistentMaskingFields = DataMasking.analyzeConfiguration(maskingOptions, configurationManager);
+            Map<String, Set<String>> consistentMaskingFields = DataMasking.analyzeConfiguration(maskingOptions, configurationManager);
 
-        assertEquals(3, consistentMaskingFields.size());
-        assertEquals(3, consistentMaskingFields.get("email_ns").size());
-        assertEquals(1, consistentMaskingFields.get("date_ns").size());
-        assertEquals(1, consistentMaskingFields.get("name_ns").size());
+            assertEquals(3, consistentMaskingFields.size());
+            assertEquals(3, consistentMaskingFields.get("email_ns").size());
+            assertEquals(1, consistentMaskingFields.get("date_ns").size());
+            assertEquals(1, consistentMaskingFields.get("name_ns").size());
+        }
     }    
     
 }

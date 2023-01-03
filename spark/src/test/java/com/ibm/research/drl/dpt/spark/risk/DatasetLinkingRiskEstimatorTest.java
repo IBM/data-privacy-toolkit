@@ -18,7 +18,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,13 +48,16 @@ public class DatasetLinkingRiskEstimatorTest {
     
     @Test
     public void testFilterDistinctGeneralizationLevels() throws Exception {
-        String filename = "/tmp/testDistinctLevels.csv";
+        Path tempFile = Files.createTempFile("temp", "distinct-Levels");
 
-        try (OutputStream os = new FileOutputStream(filename)) {
-            IOUtils.copy(DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv"), os);
+        try (
+                OutputStream output = new FileOutputStream(tempFile.toString());
+                InputStream input = DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv");
+        ) {
+            IOUtils.copy(input, output);
         }
         
-        Dataset<Row> dataset = spark.read().option("header", "true").csv(filename);
+        Dataset<Row> dataset = spark.read().option("header", "true").csv(tempFile.toString());
 
         GeneralizationHierarchy genderHierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("Male", "Female"), "*");
         GeneralizationHierarchy raceHierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("White"), "*");
@@ -70,13 +76,16 @@ public class DatasetLinkingRiskEstimatorTest {
     
     @Test
     public void testExtractDataset() throws Exception {
-        String filename = "/tmp/testExtractDataset.csv";
+        Path tempFile = Files.createTempFile("temp", "distinct-Levels");
 
-        try (OutputStream os = new FileOutputStream(filename);) {
-            IOUtils.copy(DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv"), os);
+        try (
+                OutputStream output = new FileOutputStream(tempFile.toString());
+                InputStream input = DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv");
+        ) {
+            IOUtils.copy(input, output);
         }
 
-        Dataset<Row> dataset = spark.read().option("header", "true").csv(filename);
+        Dataset<Row> dataset = spark.read().option("header", "true").csv(tempFile.toString());
 
         GeneralizationHierarchy genderHierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("Male", "Female"), "*");
         GeneralizationHierarchy raceHierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("White"), "*");
@@ -96,13 +105,16 @@ public class DatasetLinkingRiskEstimatorTest {
 
     @Test
     public void testFilterDistinctGeneralizationLevels2() throws Exception {
-        String filename = "/tmp/testDistinctLevels2.csv";
+        Path tempFile = Files.createTempFile("temp", "distinct-Levels");
 
-        try (OutputStream os = new FileOutputStream(filename);) {
-            IOUtils.copy(this.getClass().getResourceAsStream("/testDistinctLevels.csv"), os);
+        try (
+                OutputStream output = new FileOutputStream(tempFile.toString());
+                InputStream input = DatasetLinkingRiskEstimatorTest.class.getResourceAsStream("/testDistinctLevels.csv");
+        ) {
+            IOUtils.copy(input, output);
         }
 
-        Dataset<Row> dataset = spark.read().option("header", "true").csv(filename);
+        Dataset<Row> dataset = spark.read().option("header", "true").csv(tempFile.toString());
 
         GeneralizationHierarchy genderHierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("Male", "Female"), "*");
 

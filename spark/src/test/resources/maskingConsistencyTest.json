@@ -1,0 +1,51 @@
+{
+  "delimiter": ",",
+  "quoteChar": "\"",
+  "hasHeader" : false,
+  "trimFields" : false,
+
+  "toBeMasked" : {
+    "email": "EMAIL",
+    "name": "HASH",
+    "date": "DATETIME",
+    "email2": "EMAIL",
+    "email3" : "EMAIL",
+    "foo" : "HASH"
+  },
+
+  "inputFormat": "CSV",
+  "outputFormat": "CSV",
+
+  "identifyRelationships": false,
+  "predefinedRelationships": [],
+
+  "_fields" : {
+    "email": {
+      "persistence.export": true,
+      "persistence.type": "memory",
+      "persistence.namespace": "email_ns"
+    },
+    "email2": {
+      "persistence.export": true,
+      "persistence.type": "memory",
+      "persistence.namespace": "email_ns"
+    },
+    "email3": {
+      "persistence.export": true,
+      "persistence.type": "memory",
+      "persistence.namespace": "email_ns"
+    },
+    "date": {
+      "persistence.export": true,
+      "persistence.type": "memory",
+      "persistence.namespace": "date_ns"
+    },
+    "name": {
+      "persistence.export": true,
+      "persistence.type": "memory",
+      "persistence.namespace": "name_ns"
+    }
+  },
+  "_defaults": {
+  }
+}
