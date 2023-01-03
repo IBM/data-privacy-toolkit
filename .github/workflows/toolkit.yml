@@ -34,6 +34,8 @@ jobs:
   end-to-end-test:
     name: End to end test
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: "dpt-toolkit:$GITHUB_SHA"
     steps:
       - uses: actions/checkout@v3
       - name: Setup java
@@ -46,21 +48,19 @@ jobs:
       - name: Run gradlew publish to maven local
         working-directory: ./library
         run: ./gradlew publishToMavenLocal
+      - name: Run gradlew to build toolkit
+        working-directory: ./docker
+        run: ./gradlew build -x test
+      - name: Build docker image
+        working-directory: ./docker
+        run: docker build -t $IMAGE_NAME .
+      - name: Setup python
+        users: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
 
 #    steps:
-#      - name: Setup java
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'adopt'
-#          java-version: '11'
-#          check-latest: true
-#          cache: 'gradle'
-#      - name: Run gradlew publish to maven local
-#        working-directory: ./library
-#        run: ./gradlew publishToMavenLocal
-#      - name: Run gradlew clean build
-#        working-directory: ./docker
-#        run: ./gradlew build
 #      - name: Build docker image
 #        working-directory: ./docker
 #        run: docker build -t $IMAGE_NAME .
