@@ -1,5 +1,13 @@
-name: dpt-toolkit
-on: [push]
+name: DataPrivacyToolkit-Toolkit
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
 jobs:
   build-toolkit:
     runs-on: ubuntu-latest
@@ -15,6 +23,7 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
           check-latest: true
+          cache: 'gradle'
       - name: Run gradlew publish to maven local
         working-directory: ./library
         run: ./gradlew publishToMavenLocal
