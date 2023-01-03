@@ -34,8 +34,6 @@ jobs:
   end-to-end-test:
     name: End to end test
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: "dpt-toolkit:$GITHUB_SHA"
     steps:
       - uses: actions/checkout@v3
       - name: Setup java
@@ -54,11 +52,6 @@ jobs:
       - name: Build docker image
         working-directory: ./docker
         run: docker build -t $IMAGE_NAME .
-      - name: Setup python
-        users: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          cache: 'pip'
 
 #    steps:
 #      - name: Build docker image
