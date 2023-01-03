@@ -65,7 +65,7 @@ public class ItemSetGeneratorTest {
         Collection<String> expected = Arrays.asList("{0}", "{1}", "{0, 1}", "{2}", "{0, 2}", "{1, 2}", "{0, 1, 2}");
 
         for (ItemSet itemSet : isg) {
-            assertTrue(expected.contains(itemSet.toString()), "\"" + itemSet.toString() + "\"");
+            assertTrue(expected.contains(itemSet.toString()), "\"" + itemSet + "\"");
 
             itemSets.add(itemSet);
         }

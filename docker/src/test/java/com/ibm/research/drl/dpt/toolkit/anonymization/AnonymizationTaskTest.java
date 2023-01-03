@@ -27,7 +27,7 @@ public class AnonymizationTaskTest {
 
             try (
                     InputStream input = AnonymizationTaskTest.class.getResourceAsStream("/healthcare-dataset.txt");
-                    OutputStream output = new ByteArrayOutputStream();
+                    OutputStream output = new ByteArrayOutputStream()
             ) {
                 task.processFile(input, output);
             }

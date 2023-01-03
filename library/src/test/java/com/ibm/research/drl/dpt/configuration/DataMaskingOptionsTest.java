@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,8 +79,8 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesCyclicDependencies() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("date"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("date"))));
 
         assertFalse(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -87,7 +88,7 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesNoCyclicDependencies() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
 
         assertTrue(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -95,9 +96,9 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesNoCyclicDependenciesChain() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("bankid"))));
-        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", Arrays.asList(new RelationshipOperand("iban"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("bankid"))));
+        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", List.of(new RelationshipOperand("iban"))));
 
         assertTrue(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -105,10 +106,10 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesCyclicDependenciesChain() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("bankid"))));
-        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", Arrays.asList(new RelationshipOperand("iban"))));
-        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", Arrays.asList(new RelationshipOperand("date"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("bankid"))));
+        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", List.of(new RelationshipOperand("iban"))));
+        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", List.of(new RelationshipOperand("date"))));
 
         assertFalse(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -116,10 +117,10 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesNoCyclicDependenciesChain2() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("bankid"))));
-        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", Arrays.asList(new RelationshipOperand("iban"))));
-        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", Arrays.asList(new RelationshipOperand("date2"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("bankid"))));
+        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", List.of(new RelationshipOperand("iban"))));
+        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", List.of(new RelationshipOperand("date2"))));
 
         assertTrue(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -133,7 +134,7 @@ public class DataMaskingOptionsTest {
 
     @Test
     public void testValidMaskingOptionsBackwardsCompatibleToBeMaskedWithMapper() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptionsToBeMaskedString.json");) {
+        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
             DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
         }
     }

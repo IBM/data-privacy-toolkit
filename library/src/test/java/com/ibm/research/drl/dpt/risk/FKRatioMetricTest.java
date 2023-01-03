@@ -71,7 +71,7 @@ public class FKRatioMetricTest {
         columnInformation.add(new DefaultColumnInformation());
 
 //        final List<Double> suppressions = Arrays.asList(5.0, 10.0, 15.0, 20.0);
-        final List<Double> suppressions = Arrays.asList(5.0);
+        final List<Double> suppressions = List.of(5.0);
 
         final InformationMetricOptions options = new InformationMetricOptions() {
             @Override

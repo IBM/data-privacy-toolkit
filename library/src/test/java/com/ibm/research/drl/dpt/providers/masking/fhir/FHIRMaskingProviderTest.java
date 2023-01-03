@@ -66,7 +66,7 @@ public class FHIRMaskingProviderTest {
 
             FHIRMaskingProvider fhirMaskingProvider = new FHIRMaskingProvider(maskingConfiguration, this.factory);
 
-            try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/MedicationOrder-230986.json");) {
+            try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/MedicationOrder-230986.json")) {
                 JsonNode node = JsonUtils.MAPPER.readTree(is);
 
                 assertTrue(node.get("dispenseRequest").get("numberOfRepeatsAllowed").isInt());
@@ -88,7 +88,7 @@ public class FHIRMaskingProviderTest {
 
             FHIRMaskingProvider fhirMaskingProvider = new FHIRMaskingProvider(maskingConfiguration, this.factory);
 
-            try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json");) {
+            try (InputStream is = FHIRMaskingProviderTest.class.getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json")) {
                 JsonNode node = JsonUtils.MAPPER.readTree(is);
 
                 assertTrue(node.get("dispenseRequest").get("numberOfRepeatsAllowed").isArray());

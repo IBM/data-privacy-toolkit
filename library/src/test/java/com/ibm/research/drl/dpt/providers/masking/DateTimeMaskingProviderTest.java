@@ -304,8 +304,8 @@ public class DateTimeMaskingProviderTest {
         }
 
         long diff = System.currentTimeMillis() - startMillis;
-        System.out.println(String.format("%s: %d operations took %d milliseconds (%f per op)",
-                maskingConfiguration.getName(), N, diff, (double) diff / N));
+        System.out.printf("%s: %d operations took %d milliseconds (%f per op)%n",
+                maskingConfiguration.getName(), N, diff, (double) diff / N);
     }
 
     @Test
@@ -397,8 +397,8 @@ public class DateTimeMaskingProviderTest {
             }
 
             long diff = System.currentTimeMillis() - startMillis;
-            System.out.println(String.format("%s: %d operations took %d milliseconds (%f per op)",
-                    configuration.getName(), N, diff, (double) diff / N));
+            System.out.printf("%s: %d operations took %d milliseconds (%f per op)%n",
+                    configuration.getName(), N, diff, (double) diff / N);
         }
     }
 

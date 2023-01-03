@@ -5,17 +5,31 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.toolkit.anonymization;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
 import com.ibm.research.drl.dpt.anonymization.ColumnType;
 import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
 import com.ibm.research.drl.dpt.anonymization.SensitiveColumnInformation;
 import com.ibm.research.drl.dpt.anonymization.constraints.DistinctLDiversity;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
-import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.*;
-import com.ibm.research.drl.dpt.anonymization.informationloss.*;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.GenderHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.MaritalStatusHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.RaceHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.ReligionHierarchy;
+import com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes.ZIPCodeMaterializedHierarchy;
+import com.ibm.research.drl.dpt.anonymization.informationloss.AverageEquivalenceClassSize;
+import com.ibm.research.drl.dpt.anonymization.informationloss.CategoricalPrecision;
+import com.ibm.research.drl.dpt.anonymization.informationloss.Discernibility;
+import com.ibm.research.drl.dpt.anonymization.informationloss.DiscernibilityStar;
+import com.ibm.research.drl.dpt.anonymization.informationloss.GeneralizedLossMetric;
+import com.ibm.research.drl.dpt.anonymization.informationloss.GlobalCertaintyPenalty;
+import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetric;
+import com.ibm.research.drl.dpt.anonymization.informationloss.NonUniformEntropy;
+import com.ibm.research.drl.dpt.anonymization.informationloss.NumericalPrecision;
+import com.ibm.research.drl.dpt.anonymization.informationloss.SensitiveSimilarityMeasure;
 import com.ibm.research.drl.dpt.anonymization.kmeans.StrategyOptions;
 import com.ibm.research.drl.dpt.anonymization.mondrian.CategoricalSplitStrategy;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -27,10 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class AnonymizationTaskOptionsTest {
-    private ObjectMapper mapper = new ObjectMapper();
-
     @Test
-    public void serializationExample() throws Exception {
+    public void serializationExample() throws JsonProcessingException {
         AnonymizationTaskOptions options = new AnonymizationTaskOptions(
                 AnonymizationTaskOptions.AnonymizationAlgorithm.OLA,
                 "/dev/null",
@@ -53,7 +65,7 @@ public class AnonymizationTaskOptionsTest {
                 0.0
         );
 
-        String  output = mapper.writeValueAsString(options);
+        String  output = JsonUtils.MAPPER.writeValueAsString(options);
 
         assertNotNull(output);
         assertFalse(output.trim().isEmpty());
@@ -63,7 +75,7 @@ public class AnonymizationTaskOptionsTest {
     public void testDeserialization() throws Exception {
         String input = "{\"algorithm\":\"OLA\",\"privacyConstraints\":[{\"type\":\"KAnonymity\",\"k\":5},{\"type\":\"DistinctLDiversity\",\"l\":5}],\"columnInformation\":[{\"class\":\"DefaultColumnInformation\",\"forLinking\":false},{\"class\":\"CategoricalInformation\",\"hierarchy\":{\"terms\":[[\"Male\",\"*\"],[\"Female\",\"*\"]]},\"columnType\":\"QUASI\",\"weight\":1.0,\"maximumLevel\":-1,\"forLinking\":false},{\"class\":\"SensitiveColumnInformation\",\"forLinking\":false}],\"suppressionRate\":0.0,\"informationLoss\":\"CP\",\"categoricalSplitStrategy\":\"HIERARCHY_BASED\",\"percentage\":0.0,\"pathToTrashFile\":\"/dev/null\",\"strategyOptions\":\"DUMMY\"}";
 
-        AnonymizationTaskOptions options = mapper.readValue(input, AnonymizationTaskOptions.class);
+        AnonymizationTaskOptions options = JsonUtils.MAPPER.readValue(input, AnonymizationTaskOptions.class);
 
         assertNotNull(options);
     }
@@ -74,7 +86,7 @@ public class AnonymizationTaskOptionsTest {
         AnonymizationTaskOptions options = new AnonymizationTaskOptions(
                 AnonymizationTaskOptions.AnonymizationAlgorithm.OLA,
                 null,
-                Arrays.asList(new KAnonymity(5)),
+                List.of(new KAnonymity(5)),
                 Arrays.asList(
                         new DefaultColumnInformation(false),
                         new DefaultColumnInformation(false),
@@ -95,7 +107,7 @@ public class AnonymizationTaskOptionsTest {
                 0.0
         );
 
-        String s = mapper.writeValueAsString(options);
+        String s = JsonUtils.MAPPER.writeValueAsString(options);
 
         System.out.println(s);
     }

@@ -47,7 +47,7 @@ public class CSVFormatProcessorTest {
         try (
                 InputStream inputStream = getClass().getResourceAsStream("/input_masking_freetext.csv");
                 InputStream configuration = getClass().getResourceAsStream("/configuration_masking_freetext.json");
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream()
         ) {
             ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(configuration));
 
@@ -113,7 +113,7 @@ public class CSVFormatProcessorTest {
                 getClass().getResourceAsStream("/100.csv"),
                 DataTypeFormat.CSV,
                 new CSVDatasetOptions(false, ',', '"', false),
-                Arrays.asList(new YOBIdentifier()),
+                List.of(new YOBIdentifier()),
                 -1
         );
     }
@@ -164,7 +164,7 @@ public class CSVFormatProcessorTest {
                         "A,E,20"
                 ).getBytes()
                 );
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             ConfigurationManager configurationManager = new ConfigurationManager(new DefaultMaskingConfiguration());
 

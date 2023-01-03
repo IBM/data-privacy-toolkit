@@ -123,8 +123,8 @@ public class AddressIdentifierTest {
             }
 
             long diff = System.currentTimeMillis() - startMillis;
-            System.out.println(String.format("%s: %d operations took %d milliseconds (%f per op)",
-                    originalValue, N, diff, (double) diff / N));
+            System.out.printf("%s: %d operations took %d milliseconds (%f per op)%n",
+                    originalValue, N, diff, (double) diff / N);
         }
     }
 }

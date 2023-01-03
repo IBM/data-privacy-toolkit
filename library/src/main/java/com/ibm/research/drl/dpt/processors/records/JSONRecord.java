@@ -290,7 +290,7 @@ public final class JSONRecord extends MultipathRecord {
 
     }
 
-    public static Record fromString(String input, DatasetOptions datasetOptions) throws IOException {
+    public static Record fromString(String input) throws IOException {
         return new JSONRecord(JsonUtils.MAPPER.readTree(input));
     }
 }

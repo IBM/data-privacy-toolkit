@@ -53,7 +53,7 @@ public class ContinentMaskingProviderTest {
 
         String greekContinent = "Ευρώπη";
 
-        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.CONTINENT, Arrays.asList(new String[]{"gr"}));
+        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.CONTINENT, Arrays.asList("gr"));
         Set<String> greekCities = new HashSet<>();
 
         for(ResourceEntry entry: entryCollection) {

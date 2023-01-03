@@ -52,7 +52,7 @@ public class ExcelMaskingProviderTest {
 
     @Test
     public void testXLSXIgnoreNonExistentTrue() throws Exception {
-        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xlsx");) {
+        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xlsx")) {
             byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String path = "/b2/$D$7";
@@ -78,7 +78,7 @@ public class ExcelMaskingProviderTest {
     @Test
     public void testXLSXIgnoreNonExistentFalse() {
         assertThrows(NullPointerException.class, () -> {
-            try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xlsx");) {
+            try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xlsx")) {
                 byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
                 String path = "/b2/$D$7";
@@ -104,7 +104,7 @@ public class ExcelMaskingProviderTest {
     
     @Test
     public void testXLSXNumericCell() throws Exception {
-        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xlsx");) {
+        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xlsx")) {
             byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String path = "/b/$B$7";
@@ -128,7 +128,7 @@ public class ExcelMaskingProviderTest {
 
     @Test
     public void testXLS() throws Exception {
-        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls");) {
+        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls")) {
             byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String path = "/b/$D$7";
@@ -151,7 +151,7 @@ public class ExcelMaskingProviderTest {
 
     @Test
     public void testXLSNumericCell() throws Exception {
-        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls");) {
+        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls")) {
             byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String path = "/b/$B$7";
@@ -175,7 +175,7 @@ public class ExcelMaskingProviderTest {
 
     @Test
     public void testXLSRanges() throws Exception {
-        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls");) {
+        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls")) {
             byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String rangePath = "/d/$D$7:$E$10";
@@ -220,7 +220,7 @@ public class ExcelMaskingProviderTest {
 
     @Test
     public void testXLSRespectsTarget() throws Exception {
-        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls");) {
+        try (InputStream inputStream = ExcelMaskingProviderTest.class.getResourceAsStream("/sampleXLS.xls")) {
             byte[] inputBytes = IOUtils.toByteArray(inputStream);
 
             String path = "/b/$D$7";

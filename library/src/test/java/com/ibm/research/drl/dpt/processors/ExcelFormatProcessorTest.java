@@ -28,7 +28,7 @@ public class ExcelFormatProcessorTest {
 
     @Test
     public void testIdentifyStreamXLS() throws Exception {
-        try (InputStream inputStream = ExcelFormatProcessorTest.class.getResourceAsStream("/sampleXLS.xls");) {
+        try (InputStream inputStream = ExcelFormatProcessorTest.class.getResourceAsStream("/sampleXLS.xls")) {
             IdentificationReport results = new ExcelFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XLS, null, IdentifierFactory.defaultIdentifiers(), -1);
 
             assertThat(results.getRawResults().size(), greaterThan(0));

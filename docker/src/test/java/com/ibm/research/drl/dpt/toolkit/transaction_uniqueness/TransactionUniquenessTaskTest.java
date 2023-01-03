@@ -47,14 +47,14 @@ public class TransactionUniquenessTaskTest {
         try (
                 InputStream conf = TransactionUniquenessTaskTest.class.getResourceAsStream("/transaction-uniqueness-ok.json");
                 InputStream input = new ByteArrayInputStream(testDataset.getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
 
             TransactionUniquenessTask uniqueness = mapper.readValue(conf, TransactionUniquenessTask.class);
 
             uniqueness.processFile(input, output);
 
-            System.out.println(output.toString());
+            System.out.println(output);
 
             TransactionUniquenessReport report = mapper.readValue(output.toString(), TransactionUniquenessReport.class);
 

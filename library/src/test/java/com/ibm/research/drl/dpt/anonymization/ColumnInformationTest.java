@@ -32,7 +32,7 @@ class ColumnInformationTest {
         ColumnInformation columnInformation = mapper.readValue("{" +
                         "\"class\":\"CategoricalInformation\"," +
                         "\"hierarchy\": \"GENDER\"," +
-                        "\"columnType\": \"" + ColumnType.QUASI.toString() + "\"," +
+                        "\"columnType\": \"" + ColumnType.QUASI + "\"," +
                         "\"weight\": 1.0," +
                         "\"maximumLevel\": 2," +
                         "\"forLinking\": false" +
@@ -52,7 +52,7 @@ class ColumnInformationTest {
         ColumnInformation columnInformation = mapper.readValue("{" +
                         "\"class\":\"CategoricalInformation\"," +
                         "\"hierarchy\": {\"terms\":[[\"Male\",\"*\"],[\"Female\",\"*\"]]}," +
-                        "\"columnType\": \"" + ColumnType.QUASI.toString() + "\"," +
+                        "\"columnType\": \"" + ColumnType.QUASI + "\"," +
                         "\"weight\": 1.0," +
                         "\"maximumLevel\": 2," +
                         "\"forLinking\": false" +

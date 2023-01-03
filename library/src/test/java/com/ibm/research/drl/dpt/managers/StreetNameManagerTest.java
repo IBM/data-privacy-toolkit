@@ -7,8 +7,7 @@ package com.ibm.research.drl.dpt.managers;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StreetNameManagerTest {
 
@@ -31,7 +30,7 @@ public class StreetNameManagerTest {
         String streetName = "Woodland";
         String randomStreetName = streetNameManager.getRandomKey();
 
-        assertFalse(randomStreetName.equals(streetName));
+        assertNotEquals(randomStreetName, streetName);
     }
 
 }

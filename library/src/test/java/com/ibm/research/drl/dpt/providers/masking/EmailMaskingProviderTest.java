@@ -43,19 +43,19 @@ public class EmailMaskingProviderTest {
         String invalidEmail = "foobar";
         String randomEmail = maskingProvider.mask(invalidEmail);
 
-        assertFalse(randomEmail.equals(invalidEmail));
+        assertNotEquals(randomEmail, invalidEmail);
         assertTrue(identifier.isOfThisType(randomEmail));
 
         invalidEmail = "foobar@";
         randomEmail = maskingProvider.mask(invalidEmail);
 
-        assertFalse(randomEmail.equals(invalidEmail));
+        assertNotEquals(randomEmail, invalidEmail);
         assertTrue(identifier.isOfThisType(randomEmail));
 
         invalidEmail = "foobar@foo";
         randomEmail = maskingProvider.mask(invalidEmail);
 
-        assertFalse(randomEmail.equals(invalidEmail));
+        assertNotEquals(randomEmail, invalidEmail);
         assertTrue(identifier.isOfThisType(randomEmail));
 
     }
@@ -200,8 +200,8 @@ public class EmailMaskingProviderTest {
             }
 
             long diff = System.currentTimeMillis() - startMillis;
-            System.out.println(String.format("%s: %d operations took %d milliseconds (%f per op)",
-                    configuration.getName(), N, diff, (double) diff / N));
+            System.out.printf("%s: %d operations took %d milliseconds (%f per op)%n",
+                    configuration.getName(), N, diff, (double) diff / N);
         }
     }
 }

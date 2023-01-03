@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CountryManagerTest {
 
@@ -56,7 +55,7 @@ public class CountryManagerTest {
         String exceptionCountry = "US";
         for(int i = 0; i < 1000; i++) {
             String randomCountry = countryManager.getRandomKey();
-            assertFalse(randomCountry.equals(exceptionCountry));
+            assertNotEquals(randomCountry, exceptionCountry);
         }
     }
 

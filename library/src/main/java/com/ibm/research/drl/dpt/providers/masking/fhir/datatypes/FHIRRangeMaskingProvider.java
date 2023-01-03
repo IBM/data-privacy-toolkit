@@ -45,6 +45,7 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
                 maskedFields, HIGH_PATH, this.factory);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRange obj = JsonUtils.MAPPER.treeToValue(node, FHIRRange.class);

@@ -34,16 +34,16 @@ public class NonUniformEntropyTest {
     @Test
     public void testNonUniformEntropy() {
         IPVDataset original = new IPVDataset(1);
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("2"));
-        original.addRow(Arrays.asList("3"));
-        original.addRow(Arrays.asList("4"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("2"));
+        original.addRow(List.of("3"));
+        original.addRow(List.of("4"));
 
         IPVDataset anonymized = new IPVDataset(1);
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("3-4"));
+        anonymized.addRow(List.of("3-4"));
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(null, ColumnType.QUASI));
@@ -54,8 +54,8 @@ public class NonUniformEntropyTest {
         originalPartition.setAnonymous(true);
         anonymizedPartition.setAnonymous(true);
         
-        InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized, 
-                Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
+        InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
+                List.of(originalPartition), List.of(anonymizedPartition), columnInformationList, null);
 
         double upperBound = 4 * (-log2(0.25));
         
@@ -69,16 +69,16 @@ public class NonUniformEntropyTest {
     public void testNonUniformEntropyWithWeights() {
 
         IPVDataset original = new IPVDataset(1);
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("2"));
-        original.addRow(Arrays.asList("3"));
-        original.addRow(Arrays.asList("4"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("2"));
+        original.addRow(List.of("3"));
+        original.addRow(List.of("4"));
 
         IPVDataset anonymized = new IPVDataset(1);
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("3-4"));
+        anonymized.addRow(List.of("3-4"));
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(null, ColumnType.QUASI, 0.5));
@@ -90,7 +90,7 @@ public class NonUniformEntropyTest {
         anonymizedPartition.setAnonymous(true);
 
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
-                Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
+                List.of(originalPartition), List.of(anonymizedPartition), columnInformationList, null);
 
         double upperBound = 4 * (-log2(0.25));
 
@@ -104,16 +104,16 @@ public class NonUniformEntropyTest {
     public void testNonUniformEntropyWithZeroWeights() {
 
         IPVDataset original = new IPVDataset(1);
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("2"));
-        original.addRow(Arrays.asList("3"));
-        original.addRow(Arrays.asList("4"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("2"));
+        original.addRow(List.of("3"));
+        original.addRow(List.of("4"));
 
         IPVDataset anonymized = new IPVDataset(1);
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("3-4"));
+        anonymized.addRow(List.of("3-4"));
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(null, ColumnType.QUASI, 0));
@@ -125,7 +125,7 @@ public class NonUniformEntropyTest {
         anonymizedPartition.setAnonymous(true);
 
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
-                Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
+                List.of(originalPartition), List.of(anonymizedPartition), columnInformationList, null);
 
         double upperBound = 4 * (-log2(0.25));
 
@@ -149,21 +149,21 @@ public class NonUniformEntropyTest {
     public void testNonUniformEntropyWithSuppressed() {
 
         IPVDataset original = new IPVDataset(1);
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("2"));
-        original.addRow(Arrays.asList("3"));
-        original.addRow(Arrays.asList("4"));
-        original.addRow(Arrays.asList("5"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("2"));
+        original.addRow(List.of("3"));
+        original.addRow(List.of("4"));
+        original.addRow(List.of("5"));
 
         Partition originalPartition1 = new InMemoryPartition(1);
-        originalPartition1.getMember().addRow(Arrays.asList("1"));
-        originalPartition1.getMember().addRow(Arrays.asList("2"));
-        originalPartition1.getMember().addRow(Arrays.asList("3"));
-        originalPartition1.getMember().addRow(Arrays.asList("4"));
+        originalPartition1.getMember().addRow(List.of("1"));
+        originalPartition1.getMember().addRow(List.of("2"));
+        originalPartition1.getMember().addRow(List.of("3"));
+        originalPartition1.getMember().addRow(List.of("4"));
         originalPartition1.setAnonymous(true);
 
         Partition originalPartition2 = new InMemoryPartition(1);
-        originalPartition2.getMember().addRow(Arrays.asList("5"));
+        originalPartition2.getMember().addRow(List.of("5"));
         originalPartition2.setAnonymous(false);
        
         List<Partition> originalPartitions = new ArrayList<>();
@@ -171,21 +171,21 @@ public class NonUniformEntropyTest {
         originalPartitions.add(originalPartition2);
         
         IPVDataset anonymized = new IPVDataset(1);
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("1-2")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
-        anonymized.addRow(Arrays.asList(new String("3-4")));
-        anonymized.addRow(Arrays.asList(new String("5-6")));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("1-2"));
+        anonymized.addRow(List.of("3-4"));
+        anonymized.addRow(List.of("3-4"));
+        anonymized.addRow(List.of("5-6"));
 
         Partition anonymizedPartition1 = new InMemoryPartition(1);
-        anonymizedPartition1.getMember().addRow(Arrays.asList("1-2"));
-        anonymizedPartition1.getMember().addRow(Arrays.asList("1-2"));
-        anonymizedPartition1.getMember().addRow(Arrays.asList("3-4"));
-        anonymizedPartition1.getMember().addRow(Arrays.asList("3-4"));
+        anonymizedPartition1.getMember().addRow(List.of("1-2"));
+        anonymizedPartition1.getMember().addRow(List.of("1-2"));
+        anonymizedPartition1.getMember().addRow(List.of("3-4"));
+        anonymizedPartition1.getMember().addRow(List.of("3-4"));
         anonymizedPartition1.setAnonymous(true);
 
         Partition anonymizedPartition2 = new InMemoryPartition(1);
-        anonymizedPartition2.getMember().addRow(Arrays.asList("5-6"));
+        anonymizedPartition2.getMember().addRow(List.of("5-6"));
         anonymizedPartition2.setAnonymous(false);
 
         List<Partition> anonymizedPartitions = new ArrayList<>();
@@ -299,17 +299,17 @@ public class NonUniformEntropyTest {
     public void testNonUniformEntropyNoLoss() {
 
         IPVDataset original = new IPVDataset(List.of(
-                Arrays.asList("1"),
-                Arrays.asList("2"),
-                Arrays.asList("3"),
-                Arrays.asList("4")),
+                List.of("1"),
+                List.of("2"),
+                List.of("3"),
+                List.of("4")),
                 new SimpleSchema("foo", List.of(new SimpleSchemaField("Column 0", IPVSchemaFieldType.STRING))), true);
 
         IPVDataset anonymized = new IPVDataset(List.of(
-                Arrays.asList("1"),
-                Arrays.asList("2"),
-                Arrays.asList("3"),
-                Arrays.asList("4")),
+                List.of("1"),
+                List.of("2"),
+                List.of("3"),
+                List.of("4")),
                 new SimpleSchema("bar", List.of(new SimpleSchemaField("Column 0", IPVSchemaFieldType.STRING))), true);
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
@@ -321,8 +321,8 @@ public class NonUniformEntropyTest {
         originalPartition.setAnonymous(true);
         anonymizedPartition.setAnonymous(true);
         
-        InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized, 
-                Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
+        InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
+                List.of(originalPartition), List.of(anonymizedPartition), columnInformationList, null);
 
         double ne = nonUniformEntropy.report();
         assertEquals(0.0, ne, 0.01);
@@ -332,16 +332,16 @@ public class NonUniformEntropyTest {
     public void testNonUniformEntropyOneValue() {
 
         IPVDataset original = new IPVDataset(1);
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("1"));
-        original.addRow(Arrays.asList("1"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("1"));
+        original.addRow(List.of("1"));
 
         IPVDataset anonymized = new IPVDataset(1);
-        anonymized.addRow(Arrays.asList("*"));
-        anonymized.addRow(Arrays.asList("*"));
-        anonymized.addRow(Arrays.asList("*"));
-        anonymized.addRow(Arrays.asList("*"));
+        anonymized.addRow(List.of("*"));
+        anonymized.addRow(List.of("*"));
+        anonymized.addRow(List.of("*"));
+        anonymized.addRow(List.of("*"));
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(null, ColumnType.QUASI));
@@ -353,7 +353,7 @@ public class NonUniformEntropyTest {
         anonymizedPartition.setAnonymous(true);
 
         InformationMetric nonUniformEntropy = new NonUniformEntropy().initialize(original, anonymized,
-                Arrays.asList(originalPartition), Arrays.asList(anonymizedPartition), columnInformationList, null);
+                List.of(originalPartition), List.of(anonymizedPartition), columnInformationList, null);
 
         double ne = nonUniformEntropy.report();
         assertEquals(0.0, ne, 0.01);

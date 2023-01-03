@@ -43,7 +43,7 @@ public class DBChainRetrieval implements ChainRetrieval {
     @Override
     public void append(String hashedTerm) throws SQLException {
         try (
-            PreparedStatement updateChain = connection.prepareStatement("INSERT INTO " + tableName + "(value, type) VALUES(? , ?)");
+            PreparedStatement updateChain = connection.prepareStatement("INSERT INTO " + tableName + "(value, type) VALUES(? , ?)")
         ) {
             updateChain.setString(1, hashedTerm);
             updateChain.setString(2, DictionaryEntryType.VALUE.toString());

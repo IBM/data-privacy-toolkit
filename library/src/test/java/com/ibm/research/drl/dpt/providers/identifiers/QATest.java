@@ -25,8 +25,8 @@ public class QATest {
     @Disabled
     public void testPerformanceOnLargeFile() throws Exception {
        
-        List<Identifier> identifiers = Arrays.asList(
-                new AddressForFreeTextIdentifier() 
+        List<Identifier> identifiers = List.of(
+                new AddressForFreeTextIdentifier()
         );
         
         for(Identifier identifier: identifiers) {
@@ -93,7 +93,7 @@ public class QATest {
                     System.out.println("value: " + value + " , identifier: " + identifier.getType().name());
                 }
 
-                assertEquals(false, match);
+                assertFalse(match);
             }
         }
 

@@ -212,7 +212,7 @@ public class FormatProcessorTest {
                 }
 
                 @Override
-                protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException {
+                protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) {
                     return null;
                 }
             };
@@ -223,7 +223,7 @@ public class FormatProcessorTest {
             toBeMasked.put("date", new DataMaskingTarget(ProviderType.DATETIME, "date"));
 
             Map<String, FieldRelationship> relationships = new HashMap<>();
-            relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
+            relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
 
             MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
@@ -245,7 +245,7 @@ public class FormatProcessorTest {
             String user1_date = null;
 
             for(int i = 0; i < 100; i++) {
-                //maskRecord returns a reference to the same object of the first argument so we need to create a new record each time
+                //maskRecord returns a reference to the same object of the first argument, so we need to create a new record each time
                 Record record = new CSVRecord(new String[]{"user1", originalDate}, fieldNames, csvOptions , false);
                 Record masked = formatProcessor.maskRecord(record, mpf, new HashSet<>(), dataMaskingOptions);
                 String maskedDate = new String(masked.getFieldValue("date"));
@@ -290,7 +290,7 @@ public class FormatProcessorTest {
             }
 
             @Override
-            protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException {
+            protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) {
                 return null;
             }
         };
@@ -302,7 +302,7 @@ public class FormatProcessorTest {
         Map<String, FieldRelationship> relationships = new HashMap<>();
         relationships.put("/date",
                 new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE, "" +
-                        "/date", Arrays.asList(new RelationshipOperand("/operand"))));
+                        "/date", List.of(new RelationshipOperand("/operand"))));
 
         MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
@@ -320,7 +320,7 @@ public class FormatProcessorTest {
 
         Record record = new JSONRecord(new ObjectMapper().readTree("{\"operand\": null, \"date\": \"" + originalDate +"\"}"));
 
-        //maskRecord returns a reference to the same object of the first argument so we need to create a new record each time
+        // maskRecord returns a reference to the same object of the first argument, so we need to create a new record each time
         Record masked = formatProcessor.maskRecord(record, mpf, new HashSet<>(), dataMaskingOptions);
         String maskedDate = new String(masked.getFieldValue("/date"));
 

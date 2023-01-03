@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LatLonKDTreeTest {
@@ -41,7 +42,7 @@ public class LatLonKDTreeTest {
 
         neighbors.sort(Comparator.comparing(City::getName));
 
-        assertTrue(neighbors.get(0).getName().equals("Damastown Industrial Park"));
-        assertTrue(neighbors.get(1).getName().equals("IBM Campus"));
+        assertEquals("Damastown Industrial Park", neighbors.get(0).getName());
+        assertEquals("IBM Campus", neighbors.get(1).getName());
     }
 }
