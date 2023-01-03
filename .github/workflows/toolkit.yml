@@ -52,18 +52,13 @@ jobs:
       - name: Build docker image
         working-directory: ./docker
         run: docker build -t $IMAGE_NAME .
-
-#    steps:
-#      - name: Build docker image
-#        working-directory: ./docker
-#        run: docker build -t $IMAGE_NAME .
-#      - name: Setup python
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.9'
-#          cache: 'pip'
-#      - name: Install pytest
-#        run: pip install pytest==7.2.0
-#      - name: Run end-to-end test
-#        working-directory: ./docker
-#        run: pytest scripts/e2e_tests
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - name: Install pytest
+        run: pip install pytest==7.2.0
+      - name: Run end-to-end tests
+        working-directory: ./docker
+        run: pytest scripts/e2e_tests
