@@ -57,8 +57,10 @@ jobs:
         with:
           python-version: '3.9'
           cache: 'pip'
+          cache-dependency-path: '**/requirements-dev.txt'
       - name: Install pytest
-        run: pip install pytest==7.2.0
+        working-directory: ./docker
+        run: pip install -r ./requirements-dev.txt
       - name: Run end-to-end tests
         working-directory: ./docker
         run: pytest scripts/e2e_tests
