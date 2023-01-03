@@ -16,11 +16,11 @@ java -jar ibm-data-privacy-toolkit-cli.jar \
 
 Where the parameters can be described as follows:
 
-|Parameter|Description|
-|---------|-----------|
-|-i,--input <arg>|Path to the input file(s). This can be the path to a specific file, or the path to a folder which contains multiple files or subfolders to be processed.|
-|-c,--config <arg>|Path to a JSON or YAML configuration file. See below section.
-|-o,--output <arg>|Path to the desired output file(s). This can be the path to a specific file, or the path to a folder which will contain multiple files or subfolders.|
+| Parameter         | Description                                                                                                                                              |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -i,--input <arg>  | Path to the input file(s). This can be the path to a specific file, or the path to a folder which contains multiple files or subfolders to be processed. |
+| -c,--config <arg> | Path to a JSON or YAML configuration file. See below section.                                                                                            |
+| -o,--output <arg> | Path to the desired output file(s). This can be the path to a specific file, or the path to a folder which will contain multiple files or subfolders.    |
 
 
 ## Writing the configuration file
@@ -50,30 +50,30 @@ The skeleton of a configuration for all the available tasks is:
 
 The following values are supported for the tasks field:
 
-|Task enumeration|
-|----|
-|[Identification](identification.md)|
-|[Masking](masking.md)|
-|[Vulnerability](vulnerability.md)|
-|[Anonymization](anonymization.md)|
-|[TransactionUniqueness](transaction_uniqueness.md)|
-|[Exploration](exploration.md)|
+| Task enumeration                                   |
+|----------------------------------------------------|
+| [Identification](identification.md)                |
+| [Masking](masking.md)                              |
+| [Vulnerability](vulnerability.md)                  |
+| [Anonymization](anonymization.md)                  |
+| [TransactionUniqueness](transaction_uniqueness.md) |
+| [Exploration](exploration.md)                      |
 
 * *inputFormat*: Defines the input format.
 
 The following data input formats are supported:
 
-|Data input format type enumeration|
-|----|
-|CSV|
-|JSON|
-|DICOM|
-|XLS|
-|XLSX|
-|XML|
-|HL7|
-|FHIR_JSON|
-|PARQUET|
+| Data input format type enumeration |
+|------------------------------------|
+| CSV                                |
+| JSON                               |
+| DICOM                              |
+| XLS                                |
+| XLSX                               |
+| XML                                |
+| HL7                                |
+| FHIR_JSON                          |
+| PARQUET                            |
 
 * *inputOptions*: Defines options that are specific to the chosen input format.
 
