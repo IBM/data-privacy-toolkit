@@ -1,6 +1,11 @@
 # IBM Data Privacy Toolkit (DPT)
-![Library](https://github.com/IBM/data-privacy-toolkit/actions/workflows/build-library.yml/badge.svg)[![dpt-toolkit](https://github.com/IBM/data-privacy-toolkit/actions/workflows/build-toolkit.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/build-toolkit.yml)![CodeQL](https://github.com/IBM/data-privacy-toolkit/actions/workflows/codeql.yml/badge.svg)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](./CODE_OF_CONDUCT.md) 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](./CODE_OF_CONDUCT.md)
+
+## Status
+[![DataPrivacyToolkit-Library](https://github.com/IBM/data-privacy-toolkit/actions/workflows/library.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/library.yml)
+[![DataPrivacyToolkit-Toolkit](https://github.com/IBM/data-privacy-toolkit/actions/workflows/toolkit.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/toolkit.yml)
+
+ 
 
 The IBM Data Privacy Toolkit, (formerly known as Privacy Masking and Anonymization, or PRIMA) is a toolkit for data type identification, privacy risk assessment, data masking and data anonymization that is exposed as a Java/Scala library and as a REST API.
 The toolkit consists of four main components:
