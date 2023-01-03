@@ -48,7 +48,7 @@ jobs:
         run: ./gradlew publishToMavenLocal --no-daemon
       - name: Run gradlew to build toolkit
         working-directory: ./docker
-        run: ./gradlew build -x test --no-daemon
+        run: ./gradlew shadowJar -x test --no-daemon
       - name: Build docker image
         working-directory: ./docker
         run: docker build -t $IMAGE_NAME .
