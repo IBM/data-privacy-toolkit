@@ -27,10 +27,10 @@ jobs:
           cache: 'gradle'
       - name: Run gradlew publish to maven local
         working-directory: ./library
-        run: ./gradlew publishToMavenLocal
+        run: ./gradlew publishToMavenLocal --no-daemon
       - name: Run gradlew clean build
         working-directory: ./docker
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
   end-to-end-test:
     name: End to end test
     runs-on: ubuntu-latest
@@ -47,10 +47,10 @@ jobs:
           cache: 'gradle'
       - name: Run gradlew publish to maven local
         working-directory: ./library
-        run: ./gradlew publishToMavenLocal
+        run: ./gradlew publishToMavenLocal --no-daemon
       - name: Run gradlew to build toolkit
         working-directory: ./docker
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test --no-daemon
       - name: Build docker image
         working-directory: ./docker
         run: docker build -t $IMAGE_NAME .
