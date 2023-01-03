@@ -23,7 +23,6 @@ jobs:
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
-          check-latest: true
           cache: 'gradle'
       - name: Run gradlew publish to maven local
         working-directory: ./library
@@ -43,7 +42,6 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
-          check-latest: true
           cache: 'gradle'
       - name: Run gradlew publish to maven local
         working-directory: ./library
