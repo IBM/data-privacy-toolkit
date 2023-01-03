@@ -26,4 +26,4 @@ jobs:
           cache: 'gradle'
       - name: Run gradlew build
         working-directory: ./library
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
