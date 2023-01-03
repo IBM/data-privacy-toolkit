@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HospitalMaskingProviderTest {
@@ -35,14 +36,14 @@ public class HospitalMaskingProviderTest {
         for(int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(hospitalName);
 
-            if (!maskedValue.toUpperCase().equals(hospitalName.toUpperCase())) {
+            if (!maskedValue.equalsIgnoreCase(hospitalName)) {
                 randomizationOK++;
             }
 
             Hospital original = hospitalManager.getKey(hospitalName);
             Hospital masked = hospitalManager.getKey(maskedValue);
 
-            assertTrue(original.getNameCountryCode().equals(masked.getNameCountryCode()));
+            assertEquals(original.getNameCountryCode(), masked.getNameCountryCode());
         }
 
         assertTrue(randomizationOK > 0);
@@ -71,7 +72,7 @@ public class HospitalMaskingProviderTest {
         int randomizationOK = 0;
         for(int i = 0; i < 100; i++) {
             String maskedHospital = maskingProvider.mask(greekHospital);
-            if (!maskedHospital.toUpperCase().equals(greekHospital.toUpperCase())) {
+            if (!maskedHospital.equalsIgnoreCase(greekHospital)) {
                 randomizationOK++;
             }
 

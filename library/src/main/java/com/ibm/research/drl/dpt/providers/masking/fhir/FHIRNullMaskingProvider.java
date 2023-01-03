@@ -18,6 +18,7 @@ public class FHIRNullMaskingProvider extends AbstractComplexMaskingProvider<Json
         super("fhir", maskingConfiguration, maskedFields, null);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         return NullNode.getInstance();
     }

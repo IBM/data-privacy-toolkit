@@ -11,6 +11,7 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * The type Country identifier.
@@ -38,7 +39,7 @@ public class CountryIdentifier extends AbstractManagerBasedIdentifier {
 
     @Override
     public Collection<ProviderType> getLinkedTypes() {
-        return Arrays.asList(ProviderType.CITY);
+        return List.of(ProviderType.CITY);
     }
 
     @Override

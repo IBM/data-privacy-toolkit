@@ -51,6 +51,7 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
         this.endMaskingProvider = this.factory.get(ProviderType.valueOf(endDefaultMaskingProvider), endMaskingConfiguration);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRPeriod obj = JsonUtils.MAPPER.treeToValue(node, FHIRPeriod.class);

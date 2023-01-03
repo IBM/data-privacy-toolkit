@@ -24,16 +24,13 @@ import com.ibm.research.drl.dpt.util.Counter;
 import com.ibm.research.drl.dpt.util.IdentifierUtils;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -166,15 +163,6 @@ public abstract class FormatProcessor implements Serializable {
     }
 
     protected abstract Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException;
-
-    protected Iterable<Record> extractRecords(String inputFilename, DatasetOptions dataOptions, int firstN) {
-        try (InputStream inputStream = Files.newInputStream(Paths.get(inputFilename), StandardOpenOption.READ)) {
-            return extractRecords(inputStream, dataOptions, firstN);
-        } catch (IOException e) {
-            logger.error("Error opening file {}", inputFilename);
-            throw new RuntimeException(e);
-        }
-    }
 
     protected void updateCounter(Map<String, Counter> columnTypes, String type) {
         Counter counter = columnTypes.computeIfAbsent(type, ignored -> new Counter(0L));

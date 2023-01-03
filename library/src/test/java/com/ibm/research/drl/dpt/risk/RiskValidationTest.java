@@ -23,8 +23,6 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.IntStream;
 
-;
-
 public class RiskValidationTest {
     private static final Logger logger = LogManager.getLogger(RiskValidationTest.class);
 

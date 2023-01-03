@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OccupationMaskingProviderTest {
@@ -97,7 +98,7 @@ public class OccupationMaskingProviderTest {
 
         String occupation = "actor";
         String maskedValue = maskingProvider.mask(occupation);
-        assertTrue(maskedValue.equals("Actors, entertainers and presenters"));
+        assertEquals("Actors, entertainers and presenters", maskedValue);
     }
 }
 

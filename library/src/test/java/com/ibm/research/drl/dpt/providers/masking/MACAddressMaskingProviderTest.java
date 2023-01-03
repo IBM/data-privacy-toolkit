@@ -10,8 +10,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.MACAddressIdentifier;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class MACAddressMaskingProviderTest {
@@ -27,7 +26,7 @@ public class MACAddressMaskingProviderTest {
         System.out.println(maskedValue);
 
         assertTrue(identifier.isOfThisType(maskedValue));
-        assertFalse(maskedValue.equals(originalValue));
+        assertNotEquals(maskedValue, originalValue);
         assertTrue(maskedValue.toLowerCase().startsWith("00:0a:95:"));
     }
 
@@ -42,7 +41,7 @@ public class MACAddressMaskingProviderTest {
 
         String maskedValue = maskingProvider.mask(originalValue);
         assertTrue(identifier.isOfThisType(maskedValue));
-        assertFalse(maskedValue.equals(originalValue));
+        assertNotEquals(maskedValue, originalValue);
         assertFalse(maskedValue.toLowerCase().startsWith("00:0a:95:"));
     }
 
@@ -54,7 +53,7 @@ public class MACAddressMaskingProviderTest {
         String invalidValue = "foobar";
         String maskedValue = maskingProvider.mask(invalidValue);
 
-        assertFalse(maskedValue.equals(invalidValue));
+        assertNotEquals(maskedValue, invalidValue);
         assertTrue(identifier.isOfThisType(maskedValue));
     }
 
@@ -84,8 +83,8 @@ public class MACAddressMaskingProviderTest {
                 }
 
                 long diff = System.currentTimeMillis() - startMillis;
-                System.out.println(String.format("%s: %s: %d operations took %d milliseconds (%f per op)",
-                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N));
+                System.out.printf("%s: %s: %d operations took %d milliseconds (%f per op)%n",
+                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N);
             }
         }
     }

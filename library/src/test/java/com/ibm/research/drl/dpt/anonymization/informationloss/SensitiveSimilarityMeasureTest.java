@@ -96,12 +96,12 @@ public class SensitiveSimilarityMeasureTest {
     @Test
     public void dummyDatasetForDebug2() throws Exception {
         final IPVDataset dataset = new IPVDataset(Arrays.asList(
-                Arrays.asList("A"),
-                Arrays.asList("A"),
-                Arrays.asList("A"),
-                Arrays.asList("B"),
-                Arrays.asList("B"),
-                Arrays.asList("B")
+                List.of("A"),
+                List.of("A"),
+                List.of("A"),
+                List.of("B"),
+                List.of("B"),
+                List.of("B")
         ), null, false);
 
         List<List<String>> lists = new ArrayList<>();
@@ -132,7 +132,7 @@ public class SensitiveSimilarityMeasureTest {
             public void setAnonymous(boolean value) {
 
             }
-        }), Arrays.asList(new SensitiveColumnInformation()), null).report();
+        }), List.of(new SensitiveColumnInformation()), null).report();
 
         assertNotNull(report);
     }

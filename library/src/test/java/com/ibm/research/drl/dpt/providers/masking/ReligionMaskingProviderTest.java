@@ -74,7 +74,7 @@ public class ReligionMaskingProviderTest {
 
         String greekReligion = "Βουδιστής";
 
-        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.RELIGION, Arrays.asList(new String[]{"gr"}));
+        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.RELIGION, Arrays.asList("gr"));
         Set<String> greekReligions = new HashSet<>();
 
         for(ResourceEntry entry: entryCollection) {
@@ -117,8 +117,8 @@ public class ReligionMaskingProviderTest {
                 }
 
                 long diff = System.currentTimeMillis() - startMillis;
-                System.out.println(String.format("%s: %s: %d operations took %d milliseconds (%f per op)",
-                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N));
+                System.out.printf("%s: %s: %d operations took %d milliseconds (%f per op)%n",
+                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N);
             }
         }
     }

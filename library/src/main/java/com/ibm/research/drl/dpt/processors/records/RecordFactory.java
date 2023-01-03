@@ -11,7 +11,7 @@ public class RecordFactory {
             case CSV:
                 return CSVRecord.fromString(input, datasetOptions, fieldNames, isHeader);
             case JSON:
-                return JSONRecord.fromString(input, datasetOptions);
+                return JSONRecord.fromString(input);
             default:
                 throw new IllegalArgumentException("Unsupported format " + inputFormat);
         }

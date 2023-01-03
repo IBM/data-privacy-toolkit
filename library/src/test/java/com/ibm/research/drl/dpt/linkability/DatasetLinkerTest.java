@@ -124,7 +124,7 @@ public class DatasetLinkerTest {
 
         DatasetLinker datasetLinker = new DatasetLinker(target, linkInformation);
 
-        List<String> row = Arrays.asList("10");
+        List<String> row = List.of("10");
         
         Integer matches = datasetLinker.matchRow(row, linkInformation);
         assertEquals(2, matches.intValue());

@@ -71,6 +71,7 @@ public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvid
         this.dataMaskingProvider = getMaskingProvider(DATA_PATH, maskingConfiguration, this.factory);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRSampledData obj = JsonUtils.MAPPER.treeToValue(node, FHIRSampledData.class);

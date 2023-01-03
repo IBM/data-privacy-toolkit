@@ -25,7 +25,7 @@ public class AnonymizedDatasetLinkerTest {
     public void testAnonymizedMixCategoricalNumericalNoRanges() throws Exception {
         try (
                 InputStream target = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv");
-                InputStream source = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv");
+                InputStream source = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv")
         ) {
 
             List<LinkInfo> linkInformation = new ArrayList<>();
@@ -66,7 +66,7 @@ public class AnonymizedDatasetLinkerTest {
     public void testAnonymizedDataset() throws Exception {
         try (
                 InputStream sourceInputStream = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/link_source_anon.csv");
-                InputStream targetInputStream = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/link_target_anon.csv");) {
+                InputStream targetInputStream = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/link_target_anon.csv")) {
 
             IPVDataset source = IPVDataset.load(sourceInputStream, false, ',', '"', false);
 
@@ -111,7 +111,7 @@ public class AnonymizedDatasetLinkerTest {
     public void testAnonymizedDataset2() throws Exception {
         try (
                 InputStream sourceInputStream = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/link_source_anon2.csv");
-                InputStream targetInputStream = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/link_target_anon2.csv");) {
+                InputStream targetInputStream = AnonymizedDatasetLinkerTest.class.getResourceAsStream("/link_target_anon2.csv")) {
             IPVDataset source = IPVDataset.load(sourceInputStream, false, ',', '"', false);
 
             List<ColumnInformation> columnInformation = new ArrayList<>();

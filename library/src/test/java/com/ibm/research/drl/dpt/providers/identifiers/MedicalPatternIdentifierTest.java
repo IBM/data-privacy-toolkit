@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MedicalPatternIdentifierTest {
-    private String[] testData = {
+    private final String[] testData = {
             "MRN: CLM-00000056055",
             "MRN:CLM-00000056055",
             "MRN:\t0001000231MDF",
@@ -65,7 +65,7 @@ public class MedicalPatternIdentifierTest {
             "Approval Number: 123123"
     };
 
-    private String[] validationData = {
+    private final String[] validationData = {
             "CLM-00000056055",
             "CLM-00000056055",
             "0001000231MDF",

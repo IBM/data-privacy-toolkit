@@ -145,9 +145,7 @@ public class IdentifierUtils {
 
             int typePriority = identificationConfiguration.getPriorityForType(typeName);
 
-            if (Objects.isNull(bestType) ||
-                    typePriority > bestTypePriority ||
-                    (typePriority == bestTypePriority && type.getCount() > bestType.getCount())) {
+            if (typePriority > bestTypePriority || typePriority == bestTypePriority && type.getCount() > bestType.getCount()) {
                 bestType = type;
                 bestTypePriority = typePriority;
             }

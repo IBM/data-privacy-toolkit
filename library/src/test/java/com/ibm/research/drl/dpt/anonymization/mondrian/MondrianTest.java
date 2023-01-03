@@ -368,7 +368,7 @@ public class MondrianTest {
         values.add(toString("Egypt"));
         values.add(toString("Singapore"));
         values.add(toString("China"));
-        values.add(Arrays.asList("Kenya"));
+        values.add(List.of("Kenya"));
 
         IPVDataset dataset = new IPVDataset(values, null, false);
 
@@ -809,27 +809,27 @@ public class MondrianTest {
         terms.add(Arrays.asList("China", "Asia", "*"));
 
         List<List<String>> values = new ArrayList<>();
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Greece"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Greece"));
 
         String commonAncestor = Mondrian.findCommonAncestor(values, 0, terms);
         assertEquals("Greece".toUpperCase(), commonAncestor.toUpperCase());
 
         values = new ArrayList<>();
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Italy"));
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Greece"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Italy"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Greece"));
 
         assertEquals("Europe".toUpperCase(), Mondrian.findCommonAncestor(values, 0, terms).toUpperCase());
 
         values = new ArrayList<>();
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Italy"));
-        values.add(Arrays.asList("Greece"));
-        values.add(Arrays.asList("Egypt"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Italy"));
+        values.add(List.of("Greece"));
+        values.add(List.of("Egypt"));
 
         assertEquals("*".toUpperCase(), Mondrian.findCommonAncestor(values, 0, terms).toUpperCase());
     }
@@ -935,7 +935,7 @@ public class MondrianTest {
                 lossMetric.initialize(sampleDataset, anonymized, mondrian.getOriginalPartitions(), mondrian.getAnonymizedPartitions(), columnInformation, null);
                 double iloss = lossMetric.report();
 
-                System.out.println(String.format("%s\t%d\t%f", categoricalSplitStrategy.name(), k, iloss));
+                System.out.printf("%s\t%d\t%f%n", categoricalSplitStrategy.name(), k, iloss);
                 for(InformationLossResult lossResult: lossMetric.reportPerQuasiColumn()) {
                     System.out.println("\t" + lossResult.getValue());
                 }

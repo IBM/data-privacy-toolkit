@@ -51,7 +51,7 @@ public class ZayatzEstimatorTest {
             for(int j = 0; j < dataset.getNumberOfColumns(); j++) {
                 System.out.print(dataset.get(i, j) + ", ");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
     
@@ -134,7 +134,7 @@ public class ZayatzEstimatorTest {
         //System.out.println("sample size:" + sample.getNumberOfRows());
         //System.out.println(sample.getNumberOfColumns());
 
-        List<ColumnInformation> columnInformations = Arrays.asList(new CategoricalInformation(YOBHierarchy.getInstance(), ColumnType.QUASI, true));
+        List<ColumnInformation> columnInformations = List.of(new CategoricalInformation(YOBHierarchy.getInstance(), ColumnType.QUASI, true));
 
         ZayatzEstimator estimator = new ZayatzEstimator();
         estimator.initialize(original, sample, columnInformations, 0, Collections.singletonMap(ZayatzEstimator.POPULATION, Integer.toString(populationSize)));
