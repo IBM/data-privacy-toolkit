@@ -62,34 +62,26 @@ public class MaskingTaskTest {
 
     @Test
     public void testExecuteShouldGenerateOutputCorrectly() throws IOException {
-        try (InputStream inputStream = MaskingOptionsTest.class.getResourceAsStream("/configuration_masking_shift.json")) {
+        try (InputStream inputStream = MaskingOptionsTest.class.getResourceAsStream("/configuration_masking_shift.json");
+             InputStream input = MaskingTaskTest.class.getResourceAsStream("/input_masking_shift.csv");
+             OutputStream output = new ByteArrayOutputStream()) {
             final TaskToExecute maskingTask = JsonUtils.MAPPER.readValue(inputStream, TaskToExecute.class);
+            maskingTask.processFile(input, output);
 
-            try (
-                    InputStream input = MaskingTaskTest.class.getResourceAsStream("/input_masking_shift.csv");
-                    OutputStream output = new ByteArrayOutputStream();
-            ) {
-                maskingTask.processFile(input, output);
+            CsvMapper mapper = new CsvMapper();
 
-                CsvMapper mapper = new CsvMapper();
+            MappingIterator<List<String>> iterator = mapper.readerForListOf(String.class).with(CsvParser.Feature.WRAP_AS_ARRAY).readValues(output.toString());
 
-                try (
-                        InputStream dataInputStream = new ByteArrayInputStream(output.toString().getBytes());
-                ) {
-                    MappingIterator<List<String>> iterator = mapper.readerForListOf(String.class).with(CsvParser.Feature.WRAP_AS_ARRAY).readValues(dataInputStream);
+            List<List<String>> records = new ArrayList<>();
 
-                    List<List<String>> records = new ArrayList<>();
+            iterator.forEachRemaining(records::add);
 
-                    iterator.forEachRemaining(records::add);
-
-                    assertThat(records.get(0).get(0), is("M"));
-                    assertThat(records.get(0).get(1), is("23.000000"));
-                    assertThat(records.get(1).get(0), is("F"));
-                    assertThat(records.get(1).get(1), is("24.000000"));
-                    assertThat(records.get(2).get(0), is("M"));
-                    assertThat(records.get(2).get(1), is("28.000000"));
-                }
-            }
+            assertThat(records.get(0).get(0), is("M"));
+            assertThat(records.get(0).get(1), is("23.000000"));
+            assertThat(records.get(1).get(0), is("F"));
+            assertThat(records.get(1).get(1), is("24.000000"));
+            assertThat(records.get(2).get(0), is("M"));
+            assertThat(records.get(2).get(1), is("28.000000"));
         }
     }
 
