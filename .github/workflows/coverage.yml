@@ -1,4 +1,4 @@
-name: DataPrivacyToolkit-Library
+name: DataPrivacyToolkit-Coverage
 on:
   push:
     tags:
