@@ -11,6 +11,7 @@ import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -23,28 +24,27 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DataMaskingOptionsTest {
-    private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final static ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
 
     @Test
     public void testValidMaskingOptionsYaml() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptions.yaml")){
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptions.yaml")){
             DataMaskingOptions dataMaskingOptions = YAML_MAPPER.readValue(in, DataMaskingOptions.class);
         }
     }
 
     @Test
     public void testValidMaskingOptionsBackwardsCompatibleToBeMasked() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
         }
     }
 
     @Test
     public void testInvalidMaskingOptionsUnsupportedOutput() throws IOException {
         assertThrows(Exception.class, () -> {
-            try (InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json")) {
-                DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json")) {
+                DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
             }
         });
     }
@@ -52,8 +52,8 @@ public class DataMaskingOptionsTest {
     @Test
     public void testInvalidMaskingOptionsWrongInput() throws IOException {
         assertThrows(Exception.class, () -> {
-            try (InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsWrongInput.json")) {
-                DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json")) {
+                DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
             }
         });
     }
@@ -61,8 +61,8 @@ public class DataMaskingOptionsTest {
     
     @Test
     public void testParsesPredefinedRelationships() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/masking_key_rel.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/masking_key_rel.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
 
             Map<String, FieldRelationship> relationshipMap = dataMaskingOptions.getPredefinedRelationships();
 
@@ -127,31 +127,31 @@ public class DataMaskingOptionsTest {
 
     @Test
     public void testValidMaskingOptionsWithMapper() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptions.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptions.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
         }
     }
 
     @Test
     public void testValidMaskingOptionsBackwardsCompatibleToBeMaskedWithMapper() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
         }
     }
 
     @Test
     public void testInvalidMaskingOptionsUnsupportedOutputWithMapper() throws IOException {
         assertThrows(Exception.class, () -> {
-            InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json");
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json");
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
         });
     }
 
     @Test
     public void testInvalidMaskingOptionsWrongInputWithMapper() throws IOException {
         assertThrows(Exception.class, () -> {
-            InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsWrongInput.json");
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json");
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
         });
     }
 }
