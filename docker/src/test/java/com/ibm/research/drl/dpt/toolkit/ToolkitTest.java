@@ -11,7 +11,6 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.AbstractHierarchy;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -21,9 +20,9 @@ public class ToolkitTest {
     @Test
     @Disabled("To be ported to new format")
     public void runningScanOnZipFile() throws Exception {
-        String target = this.getClass().getResource("/test.zip").toURI().getPath();
-        String piList = this.getClass().getResource("/personal_information_types.txt").toURI().getPath();
-        String identifiers = this.getClass().getResource("/identifiersPI.json").toURI().getPath();
+        String target = ToolkitTest.class.getResource("/test.zip").toURI().getPath();
+        String piList = ToolkitTest.class.getResource("/personal_information_types.txt").toURI().getPath();
+        String identifiers = ToolkitTest.class.getResource("/identifiersPI.json").toURI().getPath();
 
         String[] args = Arrays.asList("-d", target, "-C", "SCAN", "--identifiers", identifiers, "--piList", piList, "-n", "4").toArray(new String[]{});
 
@@ -33,21 +32,20 @@ public class ToolkitTest {
     @Disabled("Because missing licence file")
     @Test
     public void runningMaskingWithConfiguration() throws Exception {
-        String testFile = this.getClass().getResource("/100.csv").toURI().getPath();
-        String configuration = this.getClass().getResource("/testMaskingConfiguration.json").toURI().getPath();
-        String license = this.getClass().getResource("/license.mac").toURI().getPath();
+        String testFile = ToolkitTest.class.getResource("/100.csv").toURI().getPath();
+        String configuration = ToolkitTest.class.getResource("/testMaskingConfiguration.json").toURI().getPath();
 
-        String[] args = Arrays.asList("-l", license, "-d", testFile, "-C", "MASK", "-M", configuration).toArray(new String[]{});
+        String[] args = Arrays.asList("-d", testFile, "-C", "MASK", "-M", configuration).toArray(new String[]{});
 
         Toolkit.main(args);
     }
 
-    @Disabled("Because missing licence file")
+    @Disabled("Because using old parameters")
     @Test
     public void runningMaskingWithConfigurationAndUserDefinedProviders() throws Exception {
-        String testFile = this.getClass().getResource("/100.csv").toURI().getPath();
-        String configuration = this.getClass().getResource("/testMaskingConfigurationWithUserDefined.json").toURI().getPath();
-        String userDefinedProviders = this.getClass().getResource("/testUserDefinedMaskingProviders.txt").toURI().getPath();
+        String testFile = ToolkitTest.class.getResource("/100.csv").toURI().getPath();
+        String configuration = ToolkitTest.class.getResource("/testMaskingConfigurationWithUserDefined.json").toURI().getPath();
+        String userDefinedProviders = ToolkitTest.class.getResource("/testUserDefinedMaskingProviders.txt").toURI().getPath();
 
         String[] args = Arrays.asList("-d", testFile, "-C", "MASK", "-M", configuration, "-p", userDefinedProviders).toArray(new String[]{});
 
@@ -57,9 +55,9 @@ public class ToolkitTest {
     @Disabled("Because missing licence file")
     @Test
     public void runningAnonymizationWithConfiguration() throws Exception {
-        String testFile = this.getClass().getResource("/healthcare-dataset.txt").toURI().getPath();
-        String configurationFile = this.getClass().getResource("/testConfiguration.json").toURI().getPath();
-        String licenseFile = this.getClass().getResource("/license.mac").toURI().getPath();
+        String testFile = ToolkitTest.class.getResource("/healthcare-dataset.txt").toURI().getPath();
+        String configurationFile = ToolkitTest.class.getResource("/testConfiguration.json").toURI().getPath();
+        String licenseFile = ToolkitTest.class.getResource("/license.mac").toURI().getPath();
 
         String[] args = Arrays.asList(
                 "-l", licenseFile,
@@ -113,15 +111,13 @@ public class ToolkitTest {
         }
     }
 
-    @Disabled("Because missing licence file")
+    @Disabled("Because using old parameters")
     @Test
     public void runningAnonymizationWithConfigurationAndUserDefinedHierarchy() throws Exception {
-        String testFile = this.getClass().getResource("/healthcare-dataset.txt").toURI().getPath();
-        String configurationFile = this.getClass().getResource("/testConfigurationWithUserDefinedHierarchy.json").toURI().getPath();
-        String licenseFile = this.getClass().getResource("/license.mac").toURI().getPath();
+        String testFile = ToolkitTest.class.getResource("/healthcare-dataset.txt").toURI().getPath();
+        String configurationFile = ToolkitTest.class.getResource("/testConfigurationWithUserDefinedHierarchy.json").toURI().getPath();
 
         String[] args = Arrays.asList(
-                "-l", licenseFile,
                 "-d", testFile,
                 "-C", "ANONYMIZE", "-F", configurationFile, "-A", "OLA", "-o", "healthcare-dataset.anonymized.csv"
 
@@ -131,35 +127,29 @@ public class ToolkitTest {
         Toolkit.main(args);
     }
 
-    @Disabled("Because missing licence file")
+    @Disabled("Because using old parameters")
     @Test
     public void testIdentification() throws Exception {
-        String testFile = this.getClass().getResource("/healthcare-dataset.txt").toURI().getPath();
-        String licenseFile = this.getClass().getResource("/license.mac").toURI().getPath();
+        String testFile = ToolkitTest.class.getResource("/healthcare-dataset.txt").toURI().getPath();
 
-        //-C IDENTIFY_TYPES -d input_identification.csv -l license.mac -h
         String[] args = {
-                "-l", licenseFile,
                 "-d", testFile,
                 "-C", "IDENTIFY_TYPES"
-
         };
 
         Toolkit.main(args);
     }
 
-    @Disabled("Because missing licence file")
+    @Disabled("Because using old parameters")
     @Test
     public void testWithHighSuppressionAndTrashFile() throws Exception {
-        String testFile = this.getClass().getResource("/healthcare-dataset.txt").toURI().getPath();
-        String licenseFile = this.getClass().getResource("/license.mac").toURI().getPath();
+        String testFile = ToolkitTest.class.getResource("/healthcare-dataset.txt").toURI().getPath();
 
-        String configuration = this.getClass().getResource("/configuration_anonymization_healthcare_sup10.json").toURI().getPath();
+        String configuration = ToolkitTest.class.getResource("/configuration_anonymization_healthcare_sup10.json").toURI().getPath();
 
-        String trashFile = Files.createTempFile("__trash", "trash__").toAbsolutePath().toString();
+        String trashFile = Files.createTempFile("__trash", "trash__").toString();
 
         String[] args = {
-                "-l", licenseFile,
                 "-d", testFile,
                 "-C", "ANONYMIZE",
                 "-T", trashFile,
@@ -174,9 +164,9 @@ public class ToolkitTest {
     public void testMain() throws IOException {
         Toolkit.main(new String[] {
                 "-i",
-                getClass().getResource("/transactions.csv").getPath(),
+                ToolkitTest.class.getResource("/transactions.csv").getPath(),
                 "-c",
-                getClass().getResource("/transaction-uniqueness-ok.json").getPath(),
+                ToolkitTest.class.getResource("/transaction-uniqueness-ok.json").getPath(),
                 "-o",
                 Files.createTempFile("transaction-uniqueness", "report").toAbsolutePath().toString()});
     }
@@ -185,9 +175,9 @@ public class ToolkitTest {
     public void testMainForFlow() throws IOException {
         Toolkit.main(new String[] {
                 "-i",
-                getClass().getResource("/healthcare-dataset.txt").getPath(),
+                ToolkitTest.class.getResource("/healthcare-dataset.txt").getPath(),
                 "-c",
-                getClass().getResource("/test-flow.json").getPath(),
+                ToolkitTest.class.getResource("/test-flow.json").getPath(),
                 "-o",
                 Files.createTempFile("test-flow", "report").toAbsolutePath().toString()});
     }
