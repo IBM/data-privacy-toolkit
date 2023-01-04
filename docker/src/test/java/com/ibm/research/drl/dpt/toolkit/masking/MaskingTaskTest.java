@@ -66,7 +66,7 @@ public class MaskingTaskTest {
             final TaskToExecute maskingTask = JsonUtils.MAPPER.readValue(inputStream, TaskToExecute.class);
 
             try (
-                    InputStream input = this.getClass().getResourceAsStream("/input_masking_shift.csv");
+                    InputStream input = MaskingTaskTest.class.getResourceAsStream("/input_masking_shift.csv");
                     OutputStream output = new ByteArrayOutputStream();
             ) {
                 maskingTask.processFile(input, output);
@@ -96,7 +96,7 @@ public class MaskingTaskTest {
     @Test
     @Disabled("DICOM not fully supported in this version")
     public void testWithDICOM() throws Exception {
-        try (InputStream inputStream = getClass().getResourceAsStream("/config_demo_dicom.json")) {
+        try (InputStream inputStream = MaskingTaskTest.class.getResourceAsStream("/config_demo_dicom.json")) {
             final TaskToExecute maskingTask = JsonUtils.MAPPER.readValue(inputStream, TaskToExecute.class);
             try (
                     InputStream input = MaskingTaskTest.class.getResourceAsStream("/test.dcm");
