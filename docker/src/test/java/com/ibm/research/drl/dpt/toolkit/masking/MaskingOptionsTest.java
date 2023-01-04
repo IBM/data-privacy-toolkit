@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class MaskingOptionsTest {
     @Test
     public void testShouldDeserializeCorrectly() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/configuration_masking_shift.json")) {
+        try (InputStream inputStream = MaskingOptionsTest.class.getResourceAsStream("/configuration_masking_shift.json")) {
             JsonNode treeNode = JsonUtils.MAPPER.readTree(inputStream);
             JsonNode taskOptionsTreeNode = treeNode.get("taskOptions");
 
