@@ -22,6 +22,9 @@ jobs:
       - name: Run Coverage for Library
         working-directory: ./library
         run: ./gradlew testCoverage --no-daemon
+      - name: Save library to mavenLocal()
+        working-directory: ./library
+        run: ./gradlew publishToMavenLocal --no-daemon
       - name: Run Coverage for Toolkit
         working-directory: ./docker
         run: ./gradlew testCoverage --no-daemon
