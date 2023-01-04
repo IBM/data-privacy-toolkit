@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DataMaskingOptionsTest {
@@ -45,6 +47,8 @@ public class DataMaskingOptionsTest {
         assertThrows(Exception.class, () -> {
             try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json")) {
                 DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+                assertNull(dataMaskingOptions);
             }
         });
     }
@@ -54,6 +58,8 @@ public class DataMaskingOptionsTest {
         assertThrows(Exception.class, () -> {
             try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json")) {
                 DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+                assertNull(dataMaskingOptions);
             }
         });
     }
@@ -129,6 +135,10 @@ public class DataMaskingOptionsTest {
     public void testValidMaskingOptionsWithMapper() throws IOException {
         try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptions.json")) {
             DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
+            assertThat(dataMaskingOptions.getToBeMasked().size(), is(1));
+            assertThat(dataMaskingOptions.getToBeMasked().get("f1").getProviderType().getName(), is("BINNING"));
         }
     }
 
@@ -136,22 +146,30 @@ public class DataMaskingOptionsTest {
     public void testValidMaskingOptionsBackwardsCompatibleToBeMaskedWithMapper() throws IOException {
         try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
             DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
+            assertThat(dataMaskingOptions.getToBeMasked().size(), is(1));
+            assertThat(dataMaskingOptions.getToBeMasked().get("f1").getProviderType().getName(), is("BINNING"));
         }
     }
 
     @Test
-    public void testInvalidMaskingOptionsUnsupportedOutputWithMapper() throws IOException {
+    public void testInvalidMaskingOptionsUnsupportedOutputWithMapper() {
         assertThrows(Exception.class, () -> {
             InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json");
             DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNull(dataMaskingOptions);
         });
     }
 
     @Test
-    public void testInvalidMaskingOptionsWrongInputWithMapper() throws IOException {
+    public void testInvalidMaskingOptionsWrongInputWithMapper() {
         assertThrows(Exception.class, () -> {
             InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json");
             DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNull(dataMaskingOptions);
         });
     }
 }
