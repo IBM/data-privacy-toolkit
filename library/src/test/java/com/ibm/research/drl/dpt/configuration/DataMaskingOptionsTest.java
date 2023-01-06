@@ -32,6 +32,8 @@ public class DataMaskingOptionsTest {
     public void testValidMaskingOptionsYaml() throws IOException {
         try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptions.yaml")){
             DataMaskingOptions dataMaskingOptions = YAML_MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
         }
     }
 
@@ -39,11 +41,13 @@ public class DataMaskingOptionsTest {
     public void testValidMaskingOptionsBackwardsCompatibleToBeMasked() throws IOException {
         try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
             DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
         }
     }
 
     @Test
-    public void testInvalidMaskingOptionsUnsupportedOutput() throws IOException {
+    public void testInvalidMaskingOptionsUnsupportedOutput() {
         assertThrows(Exception.class, () -> {
             try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json")) {
                 DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
@@ -54,7 +58,7 @@ public class DataMaskingOptionsTest {
     }
 
     @Test
-    public void testInvalidMaskingOptionsWrongInput() throws IOException {
+    public void testInvalidMaskingOptionsWrongInput() {
         assertThrows(Exception.class, () -> {
             try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json")) {
                 DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
