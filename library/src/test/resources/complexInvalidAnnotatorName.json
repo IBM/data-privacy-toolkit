@@ -1,0 +1,84 @@
+{
+  "blacklist": {
+    "DATETIME": [
+      "day",
+      "past",
+      "days",
+      "currently",
+      "date",
+      "present",
+      "current",
+      "hours",
+      "weeks",
+      "months",
+      "years",
+      "once"
+    ],
+    "ORGANIZATION": [
+      "INP",
+      "LTC"
+    ]
+  },
+  "connected": [
+    {
+      "first": "ORGANIZATION",
+      "second": "LOCATION",
+      "endType": "ORGANIZATION",
+      "endSubtype": "ORGANIZATION",
+      "particles": ["in", "on", "of", "the", "to"]
+    }
+  ],
+  "unreliable": {
+    "Stanford": [
+      "O",
+      "DURATION",
+      "MISC",
+      "NUMERIC"
+    ],
+    "MEDIUS": [
+      "NAME",
+      "OCCUPATION"
+    ],
+    "ACI": [
+      "NUMBER"
+    ],
+    "OpenNLP_POS": [
+      "UNKNOWN"
+    ]
+  },
+  "weights": {
+    "Stanford": {
+      "DATETIME": 50,
+      "NAME": 95,
+      "LOCATION": 90
+    },
+    "FOO": {
+      "DATETIME": 50,
+      "EMAIL": 90,
+      "NAME": 50
+    },
+    "ACI": {
+      "ADDRESS": 50,
+      "NAME": 70,
+      "EMAIL": 90,
+      "SYMPTOM": 50,
+      "PROCEDURE": 50
+    },
+    "MEDIUS": {
+      "DATETIME": 50,
+      "SYMPTOM": 50,
+      "PROCEDURE": 50
+    },
+    "OpenNLP": {},
+    "SystemT": {}
+  },
+  "not_POS": [
+    "DATETIME",
+    {"MONTH": ["may"]},
+    "DAY",
+    "PHONE",
+    "NUMERIC",
+    "NATIONAL_ID",
+    "EMAIL"
+  ]
+}

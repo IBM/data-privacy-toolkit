@@ -1,0 +1,92 @@
+{
+  "defaultLanguage" : "ENGLISH",
+  "performLanguageDetection": false,
+
+  "identifiers": {
+    "com.ibm.research.drl.dpt.nlp.opennlp.OpenNLPPOSTagger" : {
+      "defaultLanguage": "ENGLISH",
+      "configuration" : {
+        "ENGLISH" : {
+          "sentenceFinder" : "/nlp/en/en-sent.bin",
+          "tagger" : "/nlp/en/en-pos-maxent.bin",
+          "tokenizer" : "/nlp/en/en-token.bin"
+        }
+      }
+    },
+    "com.ibm.research.drl.dpt.nlp.PRIMAIdentifier": {
+      "performPOSTagging": true,
+      "sentenceDetectorModel": "/nlp/en/en-sent.bin",
+      "mapping": {
+        "ADDRESS": "LOCATION",
+        "STATES_US": "LOCATION",
+        "CITY": "LOCATION",
+        "DAY": "DATETIME",
+        "MONTH": "DATETIME",
+        "SSN_US": "NATIONAL_ID",
+        "SSN_UK": "NATIONAL_ID"
+      },
+      "identifiers": {
+        "path" : "/identifiersHIPAA.properties",
+        "resourceType": "INTERNAL_RESOURCE"
+      },
+
+      "splitSentences": true,
+      "MIN_SHINGLE_SIZE": 2,
+      "MAX_SHINGLE_SIZE": 10
+    }
+  },
+
+  "blacklist": {
+    "DATETIME": [
+      "day",
+      "past",
+      "days",
+      "currently",
+      "date",
+      "present",
+      "current",
+      "hours",
+      "weeks",
+      "months",
+      "years",
+      "once"
+    ],
+    "ORGANIZATION": [
+      "INP",
+      "LTC"
+    ]
+  },
+  "connected": [
+    {
+      "first": "ORGANIZATION",
+      "second": "LOCATION",
+      "endType": "ORGANIZATION",
+      "endSubtype": "ORGANIZATION",
+      "particles": ["in", "on", "of", "the", "to"]
+    }
+  ],
+  "unreliable": {
+    "OpenNLP_POS" : [
+      "UNKNOWN"
+    ]
+  },
+  "weights": {
+    "PRIMA": {
+      "DATETIME": 50,
+      "EMAIL": 90,
+      "NAME": 50
+    }
+  },
+  "not_POS": [
+    "DATETIME",
+    {"MONTH": ["may"]},
+    "DAY",
+    "PHONE",
+    "NUMERIC",
+    "NATIONAL_ID",
+    "EMAIL"
+  ],
+  "doNotReport": [
+    "SNOMED_ENTRY"
+  ]
+}
