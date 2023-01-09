@@ -6,7 +6,6 @@
 package com.ibm.research.drl.dpt.nlp.opennlp;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.Language;
 import com.ibm.research.drl.dpt.nlp.NLPAnnotator;

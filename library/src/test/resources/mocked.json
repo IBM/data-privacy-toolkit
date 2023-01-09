@@ -1,0 +1,88 @@
+{
+  "defaultLanguage": "ENGLISH",
+  "performLanguageDetection": false,
+  "identifiers": {
+    "com.ibm.research.drl.dpt.nlp.PRIMAIdentifier": {
+      "sentenceDetectorModel": "/nlp/en-sent.bin",
+      "mapping": {
+        "ADDRESS": "LOCATION",
+        "STATES_US": "LOCATION",
+        "CITY": "LOCATION",
+        "DAY": "DATETIME",
+        "MONTH": "DATETIME",
+        "SSN_US": "NATIONAL_ID",
+        "SSN_UK": "NATIONAL_ID"
+      },
+      "MIN_SHINGLE_SIZE": 2,
+      "MAX_SHINGLE_SIZE": 10
+    },
+    "com.ibm.research.drl.dpt.nlp.stanford.StanfordNLPIdentifier": {
+      "configuration": [
+        "annotators", "tokenize,ssplit,pos,lemma,ner",
+        "tokenize.language", "en"
+      ],
+      "mapping": {
+        "PERSON" : "NAME",
+        "DATE" : "DATETIME",
+        "TIME" : "DATETIME",
+        "SET" : "DATETIME",
+        "PERCENT" : "NUMERIC",
+        "NUMBER" : "NUMERIC",
+        "ORDINAL" : "O"
+      },
+      "subtypeMapping": {
+        "SET": "TEMPORAL",
+        "TIME": "TIME"
+      }
+    }
+  },
+  "blacklist": {
+    "DATETIME": [
+      "day",
+      "past",
+      "days",
+      "currently",
+      "date",
+      "present",
+      "current",
+      "hours",
+      "weeks",
+      "months",
+      "years",
+      "once"
+    ],
+    "ORGANIZATION": [
+      "INP",
+      "LTC"
+    ]
+  },
+  "connected": [
+    {
+      "first": "ORGANIZATION",
+      "second": "LOCATION",
+      "endType": "ORGANIZATION",
+      "endSubtype": "ORGANIZATION",
+      "particles": ["in", "on", "of", "the", "to"]
+    },
+    {
+      "first": "NAME",
+      "second": "LOCATION",
+      "endType": "NAME",
+      "endSubtype": "NAME",
+      "particles": ["of", "the", "to"]
+    }
+  ],
+  "unreliable": {
+  },
+  "weights": {
+  },
+  "not_POS": [
+    "DATETIME",
+    {"MONTH": ["may"]},
+    "DAY",
+    "PHONE",
+    "NUMERIC",
+    "NATIONAL_ID",
+    "EMAIL"
+  ]
+}

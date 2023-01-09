@@ -1,0 +1,115 @@
+{
+  "performPOSTagging": false,
+  "sentenceDetectorModel": "/nlp/en/en-sent.bin",
+  "minSpanSize": 2,
+  "mapping": {
+    "ADDRESS": "SYSIBM_STREET_ADDRESS",
+    "AGE": "SYSIBM_AGE",
+    "ANIMAL": "SYSIBM_ANIMAL_SPECIES",
+    "ATC": "SYSIBM_ATC",
+    "CITY": "SYSIBM_CITY_NAME",
+    "CONTINENT": "SYSIBM_CONTINENT_NAME",
+    "COUNTRY": "SYSIBM_COUNTRY_NAME",
+    "COUNTY": "SYSIBM_USA_COUNTY",
+    "CREDIT_CARD": "SYSIBM_CREDIT_CARD_NUMBER",
+    "CREDIT_CARD_TYPE": "SYSIBM_CREDIT_CARD_TYPE",
+    "DATETIME": "SYSIBM_DATE_REFERENCE",
+    "DAY": "SYSIBM_DAY_REFERENCE",
+    "DEPENDENT": "SYSIBM_DEPENDENT_REFERENCE",
+    "EMAIL": "SYSIBM_EMAIL_ADDRESS",
+    "GENDER": "SYSIBM_PERSON_GENDER",
+    "HOSPITAL": "SYSIBM_HOSPITAL_NAME",
+    "IBAN": "SYSIBM_BANKING_IBAN_NUMBER",
+    "ICDv10": "SYSIBM_DISEASE_REFERENCE",
+    "ICDv9": "SYSIBM_DISEASE_REFERENCE",
+    "IMEI": "SYSIBM_MOBILE_PHONE_IMEI_NUMBER",
+    "IMSI": "SYSIBM_MOBILE_PHONE_IMSI_NUMBER",
+    "IP_ADDRESS": "SYSIBM_IP_ADDRESS",
+    "ITALIAN_FISCAL_CODE": "SYSIBM_ITALY_TAX_CODE_NUMBER",
+    "ITALIAN_VAT": "SYSIBM_ITALY_VAT_NUMBER",
+    "LATITUDE_LONGITUDE": "SYSIBM_GEOGRAPHIC_LOCATION",
+    "LOCATION": "SYSIBM_GEOGRAPHIC_LOCATION",
+    "MAC_ADDRESS": "SYSIBM_MAC_ADDRESS",
+    "MARITAL_STATUS": "SYSIBM_MARITAL_STATUS",
+    "MEDICAL_ABBREVIATION": "SYSIBM_MEDICAL_ABBREVIATION",
+    "MEDICINE": "SYSIBM_MEDICINE_AND_DRUG_NAMES",
+    "MONTH": "SYSIBM_MONTH_REFERENCE",
+    "NAME": "SYSIBM_PERSON_REFERENCE",
+    "NRIC": "SYSIBM_NATIONAL_ID",
+    "OCCUPATION": "SYSIBM_PERSON_OCCUPATION",
+    "ORGANIZATION": "SYSIBM_ORGANIZATION_REFERENCE",
+    "OS-NAMES": "SYSIBM_COMPUTER_OS",
+    "PERSON": "SYSIBM_PERSON_REFERENCE",
+    "PHONE": "SYSIBM_PHONE_NUMBER",
+    "POSTCODE": "SYSIBM_UK_POSTAL_CODE",
+    "RACE": "SYSIBM_PERSON_RACE_ETHNICITY",
+    "RELIGION": "SYSIBM_PERSON_FAITH_RELIGION",
+    "SNOMED_ENTRY": "SYSIBM_UMLS_REFERENCE",
+    "SORT_CODE": "SYSIBM_UK_BANKING_SORTCODE",
+    "SSN_UK": "SYSIBM_UK_SSN",
+    "SSN_US": "SYSIBM_USA_SSN_NUMBER",
+    "STATES_US": "SYSIBM_USA_STATE",
+    "STREET_TYPES": "SYSIBM_STREET_TYPE",
+    "SWIFT": "SYSIBM_BANKING_SWIFT_CODE",
+    "URL": "SYSIBM_URL",
+    "VIN": "SYSIBM_VEHICLE_IDENTIFICATION_NUMBER",
+    "YOB": "SYSIBM_GENERIC_YEAR_OF_BIRTH",
+    "ZIPCODE": "SYSIBM_USA_ZIPCODE"
+  },
+  "splitSentences": false,
+  "MIN_SHINGLE_SIZE": 2,
+  "MAX_SHINGLE_SIZE": 10,
+  "identifiers": [
+    "com.ibm.research.drl.dpt.providers.identifiers.AddressForFreeTextIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.CityIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.CreditCardIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.DateTimeIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.DependentIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.EmailIdentifier",
+
+    "com.ibm.research.drl.dpt.providers.identifiers.GenderIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.IBANIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.IPAddressIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.LatitudeLongitudeIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.MACAddressIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.MaritalStatusIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.NameIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.RaceEthnicityIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.SSNUSIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.SSNUKIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.URLIdentifier",
+    "com.ibm.research.drl.dpt.providers.identifiers.USPhoneIdentifier",
+    {
+      "type": "REGEX",
+      "regex": [
+        "\\s*[Ss][Ee][Xx]\\s*:?\\s+([fFmM])\\s*",
+        "\\s*[gG][eE][nN][dD][eE][rR]\\s*:?\\s+([fFmM])\\s*"
+      ],
+      "providerType": "GENDER"
+    },
+    {
+      "type": "REGEX",
+      "regex": [
+        "From:"
+      ],
+      "providerType": "MAIL_FROM"
+    },
+    {
+      "type": "REGEX",
+      "regex": [
+        "Hi",
+        "Hello",
+        "Greetings"
+      ],
+      "providerType": "GREETINGS"
+    },
+    {
+      "type": "REGEX",
+      "regex": [
+        "[fF]igures?\\s+\\d+[a-zA-Z]*",
+        "[fF]ig\\.?\\s+\\d+[a-zA-Z]*"
+      ],
+      "providerType": "FiguresRef"
+    }
+  ]
+}
