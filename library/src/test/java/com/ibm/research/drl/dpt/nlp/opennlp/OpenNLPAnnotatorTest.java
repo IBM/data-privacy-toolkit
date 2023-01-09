@@ -18,21 +18,6 @@ import java.io.InputStream;
 import java.util.List;
 
 public class OpenNLPAnnotatorTest {
-    private final static String email = "From: john_doe@us.ibm.com\n" +
-            "\n" +
-            "To: jane_doe@us.ibm.com\n" +
-            "\n" +
-            "Subject: On the topic of Suzanne Doe\n" +
-            "\n" +
-            "Last week on Monday (08-12-1981) in Timbucktoo, we decided to call Spiros at 235-555-1245. He woke up at 8am.\n" +
-            "\n" +
-            "Regards,\n" +
-            "\n" +
-            "John Doe\n" +
-            "\n" +
-            "Senior Research Scientist\n" +
-            "IBM";
-
     private final String note1 = "Peter was not home at present. His wife picked up the phone and took a message for him to return my call so that I could talk to him about his healthcare management. I will try to reach out to Peter again next week if no call returned  prior. Peter appears to work so I might have to try him at a later hour";
 
     private final String note2 = "Called pt home phone number listed at 555-000-1111.  I asked for Ms. Ball and the phone was handed off to what sound ed like an elderly women from someone who appeared to be a caregiver.  I asked if it was Ms. Ball and she said yes and  I told her who I was and that I was calling with Dr. Hammonds office where then she told me that she doesnt know who that is.  I then asked if her first name was Chloe and she responded in a way that I couldnt understand what she was saying.  But that is not her first name and she didnt know who I was asking for.  She thanked me and hung up the phone.   Because this isnt my doctor and I have never spoken with pt before I did not want to try the cell phone that was listed.  This message will be written so that Lilian the primary RN CC can read it and decide what she would like to do from here";
@@ -99,7 +84,7 @@ public class OpenNLPAnnotatorTest {
     public void testNLPIdentifier() throws Exception {
         String text = "John is married, 35 years old and works at IBM. Last week he went to Rome, Italy for a conference. His e-mail is santonat@ie.ibm.com.";
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/opennlp.json")) {
+        try (InputStream inputStream = OpenNLPAnnotatorTest.class.getResourceAsStream("/opennlp.json")) {
             NLPAnnotator identifier = new OpenNLPAnnotator(JsonUtils.MAPPER.readTree(inputStream));
             System.out.println(NLPUtils.createString(identifier.identify(text, Language.UNKNOWN)));
         }
@@ -108,7 +93,22 @@ public class OpenNLPAnnotatorTest {
     @Test
     @Disabled
     public void testNLPIdentifierEmail() throws Exception {
-        try (InputStream inputStream = getClass().getResourceAsStream("/opennlp.json")) {
+        String email = "From: john_doe@us.ibm.com\n" +
+                "\n" +
+                "To: jane_doe@us.ibm.com\n" +
+                "\n" +
+                "Subject: On the topic of Suzanne Doe\n" +
+                "\n" +
+                "Last week on Monday (08-12-1981) in Timbucktoo, we decided to call Spiros at 235-555-1245. He woke up at 8am.\n" +
+                "\n" +
+                "Regards,\n" +
+                "\n" +
+                "John Doe\n" +
+                "\n" +
+                "Senior Research Scientist\n" +
+                "IBM";
+
+        try (InputStream inputStream = OpenNLPAnnotatorTest.class.getResourceAsStream("/opennlp.json")) {
             NLPAnnotator identifier = new OpenNLPAnnotator(JsonUtils.MAPPER.readTree(inputStream));
             System.out.println(NLPUtils.createString(identifier.identify(email, Language.UNKNOWN)));
         }
