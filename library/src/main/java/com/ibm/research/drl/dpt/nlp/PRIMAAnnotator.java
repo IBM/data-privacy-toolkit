@@ -48,6 +48,7 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator implements Serializable
     private transient SentenceDetectorME sentenceDetector;
 
     private final String sentenceModelReference;
+    private final String tokenizerModelReference;
     private final int minSpanSize;
 
     private final boolean performPOSTagging = false;
@@ -65,6 +66,8 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator implements Serializable
         this.customSentenceSplitPatterns = buildSplitPatterns(customSentenceSplitAbbreviations);
 
         this.sentenceModelReference = properties.get("sentenceDetectorModel").asText();
+        this.tokenizerModelReference = properties.get("tokenizerModel").asText("/nlp/en/en-token.bin");
+
         this.sentenceDetector = buildSentenceDetector();
         this.tokenizer = buildTokenizer();
         this.minSpanSize = Optional.ofNullable(properties.get("minSpanSize")).orElse(NullNode.getInstance()).asInt(3);
@@ -93,7 +96,7 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator implements Serializable
     }
 
     private TokenizerME buildTokenizer() {
-        try (InputStream inputStream = PRIMAAnnotator.class.getResourceAsStream("/nlp/en-token.bin")) {
+        try (InputStream inputStream = PRIMAAnnotator.class.getResourceAsStream(tokenizerModelReference)) {
             return new TokenizerME(new TokenizerModel(Objects.requireNonNull(inputStream)));
         } catch (IOException e) {
             logger.debug("Error creating tokenizer model", e);
