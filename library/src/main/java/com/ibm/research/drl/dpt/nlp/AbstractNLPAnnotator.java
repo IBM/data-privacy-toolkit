@@ -48,11 +48,13 @@ public abstract class AbstractNLPAnnotator implements NLPAnnotator {
 
         return typeMap;
     }
-    
+
+    @Override
     public List<IdentifiedEntity> identifyMissing(List<IdentifiedEntity> identifiedEntities, String text, Language language) {
         return identifiedEntities;
     }
 
+    @Override
     public List<IdentifiedEntity> mergeEntities(List<IdentifiedEntity> identifiedEntities, String text) {
         return identifiedEntities;
     }

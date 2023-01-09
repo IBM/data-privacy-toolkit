@@ -22,7 +22,7 @@ public interface NLPAnnotator extends Serializable {
 
     String getName();
 
-    default List<IdentifiedEntity> identify(String text, Language language, NLPAnnotator... customIdentifiers) throws IOException {
+    default List<IdentifiedEntity> identify(String text, Language language, NLPAnnotator ... customIdentifiers) throws IOException {
         return identify(text, language);
     }
 
