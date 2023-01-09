@@ -1,6 +1,7 @@
 {
   "performPOSTagging": false,
   "sentenceDetectorModel": "/nlp/en/en-sent.bin",
+  "tokenizerModel": "/nlp/en/en-token.bin",
   "minSpanSize": 2,
   "mapping": {
     "ADDRESS": "SYSIBM_STREET_ADDRESS",
