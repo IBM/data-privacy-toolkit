@@ -7,15 +7,16 @@
       "defaultLanguage": "ENGLISH",
       "configuration" : {
         "ENGLISH" : {
-          "sentenceFinder" : "/nlp/en-sent.bin",
-          "tagger" : "/nlp/en-pos-maxent.bin",
-          "tokenizer" : "/nlp/en-token.bin"
+          "sentenceFinder" : "/nlp/en/en-sent.bin",
+          "tagger" : "/nlp/en/en-pos-maxent.bin",
+          "tokenizer" : "/nlp/en/en-token.bin"
         }
       }
     },
     "com.ibm.research.drl.dpt.nlp.PRIMAAnnotator": {
       "performPOSTagging": true,
-      "sentenceDetectorModel": "/nlp/en-sent.bin",
+      "sentenceDetectorModel": "/nlp/en/en-sent.bin",
+      "tokenizerModel": "/nlp/en/en-token.bin",
       "mapping": {
         "ADDRESS": "LOCATION",
         "STATES_US": "LOCATION",
