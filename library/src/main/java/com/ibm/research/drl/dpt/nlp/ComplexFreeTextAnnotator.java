@@ -325,15 +325,6 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
         ).collect(Collectors.toList());
     }
 
-    @Override
-    public List<IdentifiedEntity> mergeEntities(List<IdentifiedEntity> identifiedEntities, String text) {
-        List<IdentifiedEntity> r = splitAndMergeOverlapping(mergeEntityListsAndOverlappingEntities(identifiedEntities))
-                .stream().map(this::resolveType).filter(Objects::nonNull).collect(Collectors.toList());
-        
-        return mergeAdjacentEntities(r, text);
-    }
-
-    @Override
     public List<IdentifiedEntity> identifyMissing(List<IdentifiedEntity> identifiedEntities,
                                                   String text, Language language) {
         return identifyMissedRepetitions(identifiedEntities, text, true);

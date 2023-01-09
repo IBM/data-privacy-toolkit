@@ -17,9 +17,6 @@ public interface NLPAnnotator extends Serializable {
         return identify(text, language, new NLPAnnotator[0]);
     }
 
-    List<IdentifiedEntity> identifyMissing(List<IdentifiedEntity> identifiedEntities, String text, Language language) throws IOException;
-    List<IdentifiedEntity> mergeEntities(List<IdentifiedEntity> identifiedEntities, String text);
-
     String getName();
 
     default List<IdentifiedEntity> identify(String text, Language language, NLPAnnotator ... customIdentifiers) throws IOException {
