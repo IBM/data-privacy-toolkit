@@ -1,0 +1,83 @@
+{
+  "defaultLanguage": "ENGLISH",
+  "performLanguageDetection": false,
+  "identifiers": {
+    "com.ibm.research.drl.dpt.nlp.PRIMAAnnotator": {
+      "performPOSTagging": true,
+      "sentenceDetectorModel": "/nlp/en-sent.bin",
+      "mapping": {
+        "ADDRESS": "LOCATION",
+        "STATES_US": "LOCATION",
+        "CITY": "LOCATION",
+        "DAY": "DATETIME",
+        "MONTH": "DATETIME",
+        "SSN_US": "NATIONAL_ID",
+        "SSN_UK": "NATIONAL_ID"
+      },
+      "splitSentences" : true,
+      "MIN_SHINGLE_SIZE": 2,
+      "MAX_SHINGLE_SIZE": 10
+    }
+  },
+  "blacklist": {
+    "DATETIME": [
+      "day",
+      "past",
+      "days",
+      "currently",
+      "date",
+      "present",
+      "current",
+      "hours",
+      "weeks",
+      "months",
+      "years",
+      "once"
+    ],
+    "ORGANIZATION": [
+      "INP",
+      "LTC"
+    ]
+  },
+  "connected": [
+    {
+      "first": "ORGANIZATION",
+      "second": "LOCATION",
+      "endType": "ORGANIZATION",
+      "endSubtype": "ORGANIZATION",
+      "particles": ["in", "on", "of", "the", "to"]
+    }
+  ],
+  "unreliable": {
+  },
+  "weights": {
+    "PRIMA": {
+      "DOB" : 51,
+      "DATETIME": 50,
+      "EMAIL": 90,
+      "NAME": 50,
+      "MRN": 90,
+      "PHONE": 89
+    }
+  },
+  "not_POS": [
+    "DATETIME",
+    {"MONTH": ["may"]},
+    "DAY",
+    "PHONE",
+    "NUMERIC",
+    "NATIONAL_ID",
+    "EMAIL",
+    "MRN",
+    "URL",
+    "IP_ADDRESS",
+    "MAC_ADDRESS",
+    "CREDIT_CARD",
+    "IMSI",
+    "IMEI",
+    "VIN",
+    "IBAN",
+    "SSN_UK",
+    "SSN_US"
+  ]
+}
