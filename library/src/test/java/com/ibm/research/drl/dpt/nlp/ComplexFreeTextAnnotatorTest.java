@@ -41,6 +41,7 @@ public class ComplexFreeTextAnnotatorTest {
                         "    \"com.ibm.research.drl.dpt.nlp.PRIMAAnnotator\": {" +
                         "      \"performPOSTagging\": true," +
                         "      \"sentenceDetectorModel\": \"/nlp/en/en-sent.bin\"," +
+                        "      \"tokenizerModel\": \"/nlp/en/en-token.bin\"," +
                         "      \"mapping\": {" +
                         "        \"ADDRESS\": \"LOCATION\"," +
                         "        \"STATES_US\": \"LOCATION\"," +
@@ -330,7 +331,7 @@ public class ComplexFreeTextAnnotatorTest {
                 "John Doe MD\n" + "Cool Office\n" + "Company Rocks Medical Associates",
         };
 
-        ComplexFreeTextAnnotator identifier = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/hipaaaPRIMAWithPOS.json")));
+        ComplexFreeTextAnnotator identifier = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/hipaaPRIMAwithPos.json")));
 
         for(String input: inputs) {
             List<IdentifiedEntity> results = identifier.identify(input, Language.ENGLISH);
