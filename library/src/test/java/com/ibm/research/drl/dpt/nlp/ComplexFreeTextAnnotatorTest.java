@@ -12,20 +12,12 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,7 +40,7 @@ public class ComplexFreeTextAnnotatorTest {
                         "  \"identifiers\": {" +
                         "    \"com.ibm.research.drl.dpt.nlp.PRIMAAnnotator\": {" +
                         "      \"performPOSTagging\": true," +
-                        "      \"sentenceDetectorModel\": \"/nlp/en-sent.bin\"," +
+                        "      \"sentenceDetectorModel\": \"/nlp/en/en-sent.bin\"," +
                         "      \"mapping\": {" +
                         "        \"ADDRESS\": \"LOCATION\"," +
                         "        \"STATES_US\": \"LOCATION\"," +
@@ -247,16 +239,6 @@ public class ComplexFreeTextAnnotatorTest {
         assertEquals(0, results.size());
     }
     
-    @Test
-    @Disabled
-    public void testZurichNotes() throws IOException {
-        String input = IOUtils.toString(new InputStreamReader(new FileInputStream("/Users/santonat/dev/examples-named-entities.txt")));
-        
-        ComplexFreeTextAnnotator identifier = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/hipaaPRIMAStanford.json")));
-
-        List<IdentifiedEntity> results = identifier.identify(input, Language.ENGLISH);
-        System.out.println(NLPUtils.applyFunction(input, results, NLPUtils.ANNOTATE_FUNCTION));
-    }
 
     @Test
     @Disabled
@@ -754,41 +736,7 @@ public class ComplexFreeTextAnnotatorTest {
             assertNotNull(identifier);
         }
     }
-    
-    @Disabled("Useful to refine the result, not to check the correctness")
-    @Test
-    public void testSLSystemT() throws Exception {
-        ComplexFreeTextAnnotator identifier;
 
-        try (InputStream primaAnnotatorConfig = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/PRIMA.json");
-             InputStream openNLPPOSTaggerConfig = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/opennlp.json");
-                InputStream inputStream = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/complex.json")
-        ) {
-             identifier = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(inputStream),
-            new OpenNLPPOSTagger(JsonUtils.MAPPER.readTree(openNLPPOSTaggerConfig)),
-                    new PRIMAAnnotator(JsonUtils.MAPPER.readTree(primaAnnotatorConfig))
-            );
-        }
-
-        try (
-                InputStream inputStream = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/sl_dataset.csv");
-                Reader reader = new InputStreamReader(inputStream)) {
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String line;
-
-            while((line = bufferedReader.readLine()) != null) {
-                List<IdentifiedEntity> result = identifier.identify(line, Language.UNKNOWN);
-
-                System.out.println("----- NOTE ----");
-                System.out.println(line);
-                System.out.println("---------");
-
-                for (IdentifiedEntity entity : result) {
-                    System.out.println(entity);
-                }
-            }
-        }
-    }
 
     @Test
     public void correctlyIdentifySSNEvenWhenInGarbageText() throws Exception {
@@ -813,7 +761,7 @@ public class ComplexFreeTextAnnotatorTest {
 
     @Test
     public void verifiesOrganization_Something_LocationIsMergedToOrganization() throws Exception {
-        final String text = "John works for Healthcare Center of Washington, which is a greate place of work";
+        final String text = "John works for Healthcare Center of Washington, which is a great place of work";
         final NLPAnnotator mockedIdentifier = mock(NLPAnnotator.class);
 
         when(mockedIdentifier.identify(eq(text), any())).thenReturn(Arrays.asList(
@@ -841,7 +789,7 @@ public class ComplexFreeTextAnnotatorTest {
         final String text = "John is also known as John";
         final NLPAnnotator mockedIdentifier = mock(NLPAnnotator.class);
 
-        when(mockedIdentifier.identify(eq(text), any())).thenReturn(Arrays.asList(new IdentifiedEntity("John", 0, "John".length(), 
+        when(mockedIdentifier.identify(eq(text), any())).thenReturn(List.of(new IdentifiedEntity("John", 0, "John".length(),
                 Collections.singleton(new IdentifiedEntityType("NAME", "NAME", IdentifiedEntityType.UNKNOWN_SOURCE)), Collections.singleton(PartOfSpeechType.valueOf("NN")))));
         when(mockedIdentifier.getName()).thenReturn("MOCKED");
 
@@ -866,57 +814,4 @@ public class ComplexFreeTextAnnotatorTest {
             assertTrue(begin == 0 && end == ("John".length()) || (begin == "John is also known as ".length() && end == text.length()));
         }
     }
-
-//    @Test
-//    public void testListsAreMerged() throws Exception {
-//        PRIMAAnnotator identifier1 = mock(PRIMAAnnotator.class);
-//        ACDAnnotator identifier2 = mock(ACDAnnotator.class);
-//        final String mockData = "XXX MOCKING DATA";
-//
-//        IdentifiedEntity mockedIdentifiedElement1 = new IdentifiedEntity("XXX", 0, "XXX".length(), Collections.singleton(new IdentifiedEntityType("???", "???", IdentifiedEntityType.UNKNOWN_SOURCE)), Collections.singleton(PartOfSpeechType.valueOf("NN")));
-//        when(identifier1.identify(anyString(), any())).thenReturn(Arrays.asList(mockedIdentifiedElement1));
-//        when(identifier2.identify(anyString(), any())).thenReturn(Arrays.asList(mockedIdentifiedElement1));
-//        when(identifier1.getName()).thenReturn("Stanford");
-//        when(identifier2.getName()).thenReturn("ACI");
-//
-//
-//        final ComplexFreeTextAnnotator complex;
-//        try (InputStream inputStream = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/aci_stanford.json")) {
-//            complex = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(inputStream), identifier1, identifier2);
-//        }
-//
-//        List<IdentifiedEntity> result = complex.identify(mockData, Language.UNKNOWN);
-//
-//        assertNotNull(result);
-//        assertFalse(result.isEmpty());
-//        assertThat(result.size(), is(1));
-//
-//        verify(identifier1).identify(mockData, Language.ENGLISH);
-//        verify(identifier2).identify(mockData, Language.ENGLISH);
-//    }
-//
-//    @Test
-//    public void testIdentifiersAreInvoked() throws Exception {
-//        PRIMAAnnotator identifier1 = mock(PRIMAAnnotator.class);
-//        ACDAnnotator identifier2 = mock(ACDAnnotator.class);
-//        final String mockData = "MOCKING DATA";
-//
-//        IdentifiedEntity mockedIdentifiedElement = new IdentifiedEntity("XXX", -1, -1, Collections.singleton(new IdentifiedEntityType("???", "???", IdentifiedEntityType.UNKNOWN_SOURCE)), Collections.singleton(PartOfSpeechType.valueOf("NN")));
-//        when(identifier1.identify(anyString(), any())).thenReturn(Arrays.asList(mockedIdentifiedElement));
-//        when(identifier2.identify(anyString(), any())).thenReturn(Arrays.asList(mockedIdentifiedElement));
-//        when(identifier1.getName()).thenReturn("foo");
-//        when(identifier2.getName()).thenReturn("foo");
-//
-//        final ComplexFreeTextAnnotator complex;
-//        try ( InputStream inputStream = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/mocked.json")) {
-//            complex = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(inputStream), identifier1, identifier2);
-//        }
-//
-//        List<IdentifiedEntity> result = complex.identify(mockData, Language.UNKNOWN);
-//
-//        assertNotNull(result);
-//
-//        verify(identifier1).identify(mockData, Language.ENGLISH);
-//        verify(identifier2).identify(mockData, Language.ENGLISH);
-//    }
 }
