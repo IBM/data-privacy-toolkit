@@ -115,7 +115,6 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator implements Serializable
     }
 
     private List<Tuple<Set<IdentifiedEntityType>, Tuple<Integer, Integer>>> detectTypes(String term, boolean posOK) {
-        logger.debug("Detecting types for \"{}\" with POS information decided as {}", term, posOK);
         final Collection<Identifier> identifiers = identifierFactory.availableIdentifiers();
         
         final List<Tuple<Set<IdentifiedEntityType>, Tuple<Integer, Integer>>> finalResults = new ArrayList<>();
