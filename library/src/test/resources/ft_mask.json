@@ -1,0 +1,46 @@
+{
+  "toBeMasked":{
+    "NAME":"NAME",
+    "EMAIL":"EMAIL",
+    "IP_ADDRESS":"IP_ADDRESS",
+    "URL":"URL"
+  },
+  "inputFormat":"PLAIN",
+  "outputFormat":"PLAIN",
+  "_fields":{
+    "__name_token__": {
+      "default.masking.provider": "NAME",
+      "persistence.export":true,
+      "persistence.type":"file",
+      "persistence.namespace":"namespace",
+      "persistence.file":"/tmp"
+    },
+    "NAME":{
+      "names.mask.virtualField": "__name_token__",
+      "names.masking.allowAnyGender":true
+    },
+    "EMAIL":{
+      "persistence.export":true,
+      "persistence.type":"file",
+      "persistence.namespace":"emailspace",
+      "persistence.file":"/tmp",
+      "email.preserve.domains":2
+    },
+    "IP_ADDRESS":{
+      "persistence.export":true,
+      "persistence.type":"file",
+      "persistence.namespace":"ipspace",
+      "persistence.file":"/tmp",
+      "ipaddress.subnets.preserve":2
+    },
+    "URL":{
+      "persistence.export":true,
+      "persistence.type":"file",
+      "persistence.namespace":"urlspace",
+      "persistence.file":"/tmp",
+      "url.preserve.domains":2,
+      "url.mask.usernamePassword":true
+    }
+  },
+  "_defaults":{}
+}
