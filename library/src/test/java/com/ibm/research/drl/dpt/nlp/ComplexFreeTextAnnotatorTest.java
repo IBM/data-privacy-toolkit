@@ -691,7 +691,7 @@ public class ComplexFreeTextAnnotatorTest {
                 "2 days and taken off by Marvis because Marvis wanted",
                 "IRON 140  39-150 umol/L",
                 "Sincerely, John Doe MD",
-                "John Doe MD" + "Cool Office" + "Company Rocks Medical Associates"
+                "John Doe MD Cool Office Company Rocks Medical Associates"
         };
         try (InputStream inputStream = ComplexFreeTextAnnotatorTest.class.getResourceAsStream("/hipaaPRIMAwithPos.json")) {
             ComplexFreeTextAnnotator identifier = new ComplexFreeTextAnnotator(JsonUtils.MAPPER.readTree(inputStream));
