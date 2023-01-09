@@ -1,6 +1,7 @@
 {
   "performPOSTagging": false,
   "sentenceDetectorModel": "/nlp/en/en-sent.bin",
+  "tokenizerModel": "/nlp/en/en-token.bin",
   "mapping": {
     "ADDRESS": "LOCATION",
     "STATES_US": "LOCATION",
