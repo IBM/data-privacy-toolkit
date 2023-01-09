@@ -6,12 +6,7 @@
 package com.ibm.research.drl.dpt.nlp.masking;
 
 
-import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
-import com.ibm.research.drl.dpt.configuration.DataMaskingOptions;
-import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
-import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
-import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
-import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
+import com.ibm.research.drl.dpt.configuration.*;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntityType;
 import com.ibm.research.drl.dpt.nlp.PartOfSpeechType;
@@ -24,7 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -58,30 +58,33 @@ public class MaskIdentifiedEntitiesTest {
 
     @Test
     public void testMixed() throws Exception {
-        InputStream conf = this.getClass().getResourceAsStream("/ft_mask.json");
-        ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(conf));
+        try (
+                InputStream conf = MaskIdentifiedEntitiesTest.class.getResourceAsStream("/ft_mask.json");
+                InputStream dmo = MaskIdentifiedEntitiesTest.class.getResourceAsStream("/ft_mask.json");
+        ) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(conf));
 
-        DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(this.getClass().getResourceAsStream("/ft_mask.json"), DataMaskingOptions.class);
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(dmo, DataMaskingOptions.class);
 
-        MaskIdentifiedEntities ftMask = new MaskIdentifiedEntities(configurationManager, dataMaskingOptions, new MaskingProviderFactory(
-                new ConfigurationManager(new DefaultMaskingConfiguration()),
-                Collections.emptyMap()
-        ));
+            MaskIdentifiedEntities ftMask = new MaskIdentifiedEntities(configurationManager, dataMaskingOptions, new MaskingProviderFactory(
+                    new ConfigurationManager(new DefaultMaskingConfiguration()),
+                    Collections.emptyMap()
+            ));
 
-        List<IdentifiedEntity> toMask = List.of(
-                new IdentifiedEntity("foo", 0, 0, Collections.singleton(nameType), Collections.singleton(PartOfSpeechType.UNKNOWN)));
+            List<IdentifiedEntity> toMask = List.of(
+                    new IdentifiedEntity("foo", 0, 0, Collections.singleton(nameType), Collections.singleton(PartOfSpeechType.UNKNOWN)));
 
-        List<IdentifiedEntity> masked = ftMask.maskEntities(toMask);
+            List<IdentifiedEntity> masked = ftMask.maskEntities(toMask);
 
-        assertEquals(1, masked.size());
-        String first = masked.get(0).getText();
+            assertEquals(1, masked.size());
+            String first = masked.get(0).getText();
 
-        masked = ftMask.maskEntities(toMask);
-        assertEquals(1, masked.size());
-        String second = masked.get(0).getText();
+            masked = ftMask.maskEntities(toMask);
+            assertEquals(1, masked.size());
+            String second = masked.get(0).getText();
 
-        assertEquals(first, second);
-
+            assertEquals(first, second);
+        }
     }
 
     @Test

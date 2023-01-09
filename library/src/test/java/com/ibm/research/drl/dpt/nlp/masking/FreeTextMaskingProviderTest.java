@@ -6,7 +6,6 @@
 package com.ibm.research.drl.dpt.nlp.masking;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
@@ -17,6 +16,7 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.RedactMaskingProvider;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -112,8 +112,8 @@ class FreeTextMaskingProviderTest {
 
         JsonNode nlpConfig;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/complexWithIdentifiersPRIMAOnlyEmailOnly.json")) {
-            nlpConfig = new ObjectMapper().readTree(inputStream);
+        try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnlyEmailOnly.json")) {
+            nlpConfig = JsonUtils.MAPPER.readTree(inputStream);
         }
 
         when(configuration.getJsonNodeValue(anyString())).thenReturn(nlpConfig);
