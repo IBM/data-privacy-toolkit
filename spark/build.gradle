@@ -6,6 +6,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
+apply plugin: 'jacoco'
 
 sourceCompatibility = '11'
 targetCompatibility = '11'
@@ -98,4 +99,30 @@ test {
         showStackTraces true
         showStandardStreams false
     }
+}
+
+tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
+
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for the test build."
+
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+
+    def excludes = [
+            '**/*Test*.*',
+            '**/actions/*.*',
+    ]
+
+    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    classDirectories.from = files([javaClasses])
+
+    sourceDirectories.from = files([
+            "$project.projectDir/src/main/java",
+    ])
+
+    executionData.from = files("${project.buildDir}/jacoco/test.exec")
 }
