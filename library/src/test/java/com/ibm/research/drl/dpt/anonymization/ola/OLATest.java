@@ -173,8 +173,8 @@ public class OLATest {
                 int nodesChecked = ola.getNodesChecked();
                 int totalNodes = ola.getTotalNodes();
 
-                System.out.println(String.format("n=%d: k=%d: OLA took %d milliseconds (%d out of %d) projected worst: %.0f",
-                        n, k,  diff, nodesChecked, totalNodes, diff * ((double)totalNodes/(double)nodesChecked)));
+                System.out.printf("n=%d: k=%d: OLA took %d milliseconds (%d out of %d) projected worst: %.0f%n",
+                        n, k,  diff, nodesChecked, totalNodes, diff * ((double)totalNodes/(double)nodesChecked));
             }
         }
     }
@@ -602,7 +602,7 @@ public class OLATest {
                 String filename = "/tmp/random1_4q_" + k + "_" + suppressionRate;
                 try (
                         FileWriter fw = new FileWriter(filename);
-                CSVPrinter writer = new CSVPrinter(fw, CSVFormat.RFC4180.withDelimiter(',').withQuoteMode(QuoteMode.MINIMAL));) {
+                CSVPrinter writer = new CSVPrinter(fw, CSVFormat.RFC4180.withDelimiter(',').withQuoteMode(QuoteMode.MINIMAL))) {
                     for (int i = 0; i < anonymized.getNumberOfRows(); i++) {
                         writer.printRecord(anonymized.getRow(i));
                     }
@@ -622,7 +622,7 @@ public class OLATest {
                 columnInformation.add(new DefaultColumnInformation());
             }
 
-            ola.initialize(original, columnInformation, Arrays.asList(new KAnonymity(10)), new OLAOptions(0.0));
+            ola.initialize(original, columnInformation, List.of(new KAnonymity(10)), new OLAOptions(0.0));
 
             IPVDataset anonymized = ola.apply();
 
@@ -975,7 +975,7 @@ public class OLATest {
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new CategoricalInformation(hierarchy, ColumnType.QUASI));
         
-        List<PrivacyConstraint> privacyConstraints = Arrays.asList(new KAnonymity(6));
+        List<PrivacyConstraint> privacyConstraints = List.of(new KAnonymity(6));
         
         OLA ola = new OLA();
         OLAOptions olaOptions = new OLAOptions(2.0);
@@ -1019,7 +1019,7 @@ public class OLATest {
             List<ColumnInformation> columnInformation = new ArrayList<>();
             columnInformation.add(new CategoricalInformation(hierarchy, ColumnType.QUASI));
 
-            List<PrivacyConstraint> privacyConstraints = Arrays.asList(new KAnonymity(dataset.getNumberOfRows() + 1));
+            List<PrivacyConstraint> privacyConstraints = List.of(new KAnonymity(dataset.getNumberOfRows() + 1));
 
             OLA ola = new OLA();
             OLAOptions olaOptions = new OLAOptions(2.0);

@@ -106,8 +106,8 @@ public class IPAddressMaskingProviderTest {
                 }
 
                 long diff = System.currentTimeMillis() - startMillis;
-                System.out.println(String.format("%s: %s: %d operations took %d milliseconds (%f per op)",
-                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N));
+                System.out.printf("%s: %s: %d operations took %d milliseconds (%f per op)%n",
+                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N);
             }
         }
     }

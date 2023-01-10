@@ -25,20 +25,20 @@ public class LatitudeLongitudeMaskingProviderTest {
 
         String gpsCoords = "10.0000,12.0000";
         String maskedResult = latlonMaskingProvider.mask(gpsCoords);
-        assertFalse(maskedResult.equals(gpsCoords));
+        assertNotEquals(maskedResult, gpsCoords);
         assertTrue(latitudeLongitudeIdentifier.isOfThisType(maskedResult), maskedResult);
         assertTrue(latitudeLongitudeIdentifier.isGPSFormat(maskedResult), maskedResult);
 
         String compassCoords = "N90.00.00 E180.00.00";
         maskedResult = latlonMaskingProvider.mask(compassCoords);
-        assertFalse(maskedResult.equals(compassCoords));
+        assertNotEquals(maskedResult, compassCoords);
         assertTrue(latitudeLongitudeIdentifier.isOfThisType(maskedResult));
         assertTrue(latitudeLongitudeIdentifier.isCompassFormat(maskedResult));
 
         String dmsCoords = "12:30'23.256547S 12:30'23.256547E";
         assertTrue(latitudeLongitudeIdentifier.isOfThisType(dmsCoords));
         maskedResult = latlonMaskingProvider.mask(dmsCoords);
-        assertFalse(maskedResult.equals(dmsCoords));
+        assertNotEquals(maskedResult, dmsCoords);
         assertTrue(latitudeLongitudeIdentifier.isOfThisType(maskedResult));
         assertTrue(latitudeLongitudeIdentifier.isDMSFormat(maskedResult));
     }
@@ -60,7 +60,7 @@ public class LatitudeLongitudeMaskingProviderTest {
         String invalidValue = "junk";
         String maskedResult = latlonMaskingProvider.mask(invalidValue);
 
-        assertFalse(maskedResult.equals(invalidValue));
+        assertNotEquals(maskedResult, invalidValue);
         assertTrue(latitudeLongitudeIdentifier.isOfThisType(maskedResult));
     }
 
@@ -89,8 +89,8 @@ public class LatitudeLongitudeMaskingProviderTest {
                 }
 
                 long diff = System.currentTimeMillis() - startMillis;
-                System.out.println(String.format("%s: %s: %d operations took %d milliseconds (%f per op)",
-                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N));
+                System.out.printf("%s: %s: %d operations took %d milliseconds (%f per op)%n",
+                        maskingConfiguration.getName(), originalValue, N, diff, (double) diff / N);
             }
         }
     }

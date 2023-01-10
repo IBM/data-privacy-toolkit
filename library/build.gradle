@@ -7,6 +7,7 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'jacoco'
 
 ext {
     junit_jupiter_version = '5.9.1'
@@ -34,9 +35,6 @@ ext {
 }
 
 dependencies {
-    // implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
-    // implementation "com.fasterxml.jackson.core:jackson-core:${jackson_version}"
-    // implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
 
@@ -120,4 +118,30 @@ publishing {
             }
         }
     }
+}
+
+tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
+
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for the test build."
+
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+
+    def excludes = [
+            '**/*Test*.*',
+            '**/actions/*.*',
+    ]
+
+    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    classDirectories.from = files([javaClasses])
+
+    sourceDirectories.from = files([
+            "$project.projectDir/src/main/java",
+    ])
+
+    executionData.from = files("${project.buildDir}/jacoco/test.exec")
 }

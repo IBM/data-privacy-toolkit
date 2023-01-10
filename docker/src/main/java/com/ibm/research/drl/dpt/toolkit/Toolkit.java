@@ -174,7 +174,7 @@ public class Toolkit {
     private static void processFile(File inputFile, File outputFile, TaskToExecute taskToExecute) {
         try (
                 InputStream input = new FileInputStream(inputFile);
-                OutputStream output = new FileOutputStream(outputFile);
+                OutputStream output = new FileOutputStream(outputFile)
         ) {
             taskToExecute.processFile(input, output);
         } catch (IOException e) {

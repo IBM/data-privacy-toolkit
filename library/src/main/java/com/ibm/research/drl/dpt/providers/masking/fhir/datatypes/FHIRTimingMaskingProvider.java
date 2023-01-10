@@ -43,6 +43,7 @@ public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<Js
                 maskedFields, CODE_PATH, this.factory);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRTiming obj = JsonUtils.MAPPER.treeToValue(node, FHIRTiming.class);

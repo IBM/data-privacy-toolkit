@@ -49,6 +49,7 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
         this.displayMaskingProvider = getMaskingProvider(DISPLAY_FIELD_PATH, maskingConfiguration, this.factory);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRReference reference = JsonUtils.MAPPER.treeToValue(node, FHIRReference.class);

@@ -431,7 +431,7 @@ public static IPVDataset load(
 
 ### Anomymizing a dataset using OLA and 2% maximum suppression rate
 
-For this example, we assume a dataset with the name  with 4 columns. The first column is a patient ID which is already hashed, and we consider it as non-quasi and non-sensitive. The next three columns are quasi-identifiers: gender, race and ZIP code. We will use the pre-defined hierarchies available in the toolkit. 
+For this example, we assume a dataset with the name  with 4 columns. The first column is a patient ID which is already hashed, and we consider it as non-quasi and non-sensitive. The next three columns are quasi-identifiers: gender, race and ZIP code. We will use the pre-defined hierarchies available in the toolkit.
 
 ```java
 import com.ibm.research.drl.dpt.anonymization.*;
@@ -450,7 +450,7 @@ import java.util.List;
 
 public class OLAAnonymizationExample {
     
-    public static IPVDataset anonymizeDataset(String filename) throws FileNotFoundException, IOException {
+    public static IPVDataset anonymizeDataset(String filename) throws  IOException {
     
         GeneralizationHierarchy genderHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER);
         GeneralizationHierarchy raceHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE);
@@ -486,7 +486,7 @@ public class OLAAnonymizationExample {
 
 ### Anonymizing a dataset using Mondrian
 
-For this example, we assume a dataset with the name  with 5 columns. The first column is a patient ID which is already hashed and we consider it as non-quasi and non-sensitive. The next four columns are quasi-identifiers: gender (categorical), race (categorical), ZIP code (categorical) and height (numerical). We will use the pre-defined hierarchies available in the toolkit for the categorical quasis. 
+For this example, we assume a dataset with the name  with 5 columns. The first column is a patient ID which is already hashed and we consider it as non-quasi and non-sensitive. The next four columns are quasi-identifiers: gender (categorical), race (categorical), ZIP code (categorical) and height (numerical). We will use the pre-defined hierarchies available in the toolkit for the categorical quasis.
 
 ```java
 import com.ibm.research.drl.dpt.anonymization.*;
@@ -505,31 +505,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MondrianAnonymizationExample {
-    
-    public static IPVDataset anonymizeDataset(String filename) throws FileNotFoundException, IOException {
+
+    public static IPVDataset anonymizeDataset(String filename) throws IOException {
         IPVDataset originalDataset = IPVDataset.load(new FileInputStream(new File(filename))); //we load the file
-        
+
         GeneralizationHierarchy genderHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER);
         GeneralizationHierarchy raceHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE);
         GeneralizationHierarchy zipcodeHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ZIPCODE);
         ColumnInformation heightInformation = ColumnInformationGenerator.generateNumericalRange(originalDataset, 4, ColumnType.QUASI, 1.0, true); //we generate the height column information from the data
-        
+
         List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation(false)); 
+        columnInformation.add(new DefaultColumnInformation(false));
         columnInformation.add(new CategoricalInformation(genderHierarchy, ColumnType.QUASI, 1.0, -1, true));
         columnInformation.add(new CategoricalInformation(raceHierarchy, ColumnType.QUASI, 1.0, -1, true));
         columnInformation.add(new CategoricalInformation(zipcodeHierarchy, ColumnType.QUASI, 1.0, -1, true));
         columnInformation.add(heightInformation);
-        
+
         int k = 10;
-       
+
         List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
         privacyConstraints.add(new KAnonymity(k)); // we add the k-anonymity constraint
-        
+
         AnonymizationAlgorithm mondrian = new Mondrian(); //we instantiate and initialize the anonymization algorithm
         mondrian.initialize(originalDataset, columnInformation, privacyConstraints, null);
-        
-        IPVDataset anonymizedDataset = mondrian.apply(); 
+
+        IPVDataset anonymizedDataset = mondrian.apply();
 
         return anonymizedDataset;
     }

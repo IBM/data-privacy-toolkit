@@ -1,0 +1,29 @@
+{
+  "task": "Masking",
+  "extension": "csv",
+  "inputFormat": "CSV",
+  "inputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": false,
+    "trimFields": false
+  },
+  "outputFormat": "CSV",
+  "outputOptions": {
+    "fieldDelimiter": ",",
+    "quoteChar": "\"",
+    "hasHeader": false,
+    "trimFields": false
+  },
+  "taskOptions": {
+    "toBeMasked": {
+      "Column 1": "SHIFT"
+    },
+    "maskingProvidersConfig": {
+      "_fields": {
+      },
+      "_defaults": {
+      }
+    }
+  }
+}

@@ -77,7 +77,7 @@ public class LocalizationManagerTest {
 
     @Test
     public void userCanRegisterNewExternalResources() {
-        String filePath = Objects.requireNonNull(getClass().getResource("/identifier/races_fantasy.csv")).getPath();
+        String filePath = Objects.requireNonNull(LocalizationManagerTest.class.getResource("/identifier/races_fantasy.csv")).getPath();
         String newCountryCode = "fantasy";
 
         manager.registerCountryCode(newCountryCode);

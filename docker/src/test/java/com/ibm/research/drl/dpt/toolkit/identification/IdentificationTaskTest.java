@@ -116,7 +116,7 @@ public class IdentificationTaskTest {
                         "email,number,name\n" +
                                 "foo@gmail.com,123123123,John"
                 ).getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             task.processFile(input, output);
 
@@ -162,7 +162,7 @@ public class IdentificationTaskTest {
                         "email,number,name\n" +
                                 "foo@gmail.com,123123123,John"
                 ).getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             task.processFile(input, output);
 
@@ -208,7 +208,7 @@ public class IdentificationTaskTest {
                         "email,number,name\n" +
                                 "foo@gmail.com,123123123,John"
                 ).getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             task.processFile(input, output);
 
@@ -255,7 +255,7 @@ public class IdentificationTaskTest {
                             "  \"email\": \"bar@gmail.com\"\n" +
                         "}"
                 ).getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             task.processFile(input, output);
 

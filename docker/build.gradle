@@ -10,6 +10,8 @@ plugins {
     id 'eclipse'
 
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+
+    id 'jacoco'
 }
 
 ext {
@@ -81,6 +83,8 @@ dependencies {
 
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
+
 
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "commons-io:commons-io:${commons_io_version}"
@@ -103,4 +107,30 @@ shadowJar {
         attributes 'Main-Class': 'com.ibm.research.drl.dpt.toolkit.Toolkit'
     }
     zip64 true
+}
+
+tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
+
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for the test build."
+
+    reports {
+        html.required = true
+        xml.required = true
+        csv.required = false
+    }
+
+    def excludes = [
+            '**/*Test*.*',
+            '**/actions/*.*',
+    ]
+
+    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    classDirectories.from = files([javaClasses])
+
+    sourceDirectories.from = files([
+            "$project.projectDir/src/main/java",
+    ])
+
+    executionData.from = files("${project.buildDir}/jacoco/test.exec")
 }

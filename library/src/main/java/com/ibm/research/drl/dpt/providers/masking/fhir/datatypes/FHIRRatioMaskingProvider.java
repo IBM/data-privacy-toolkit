@@ -42,6 +42,7 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
         this.denominatorMaskingProvider = new FHIRQuantityMaskingProvider(getConfigurationForSubfield(DENOMINATOR_PATH, maskingConfiguration), maskedFields, DENOMINATOR_PATH, this.factory);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRatio obj = JsonUtils.MAPPER.treeToValue(node, FHIRRatio.class);

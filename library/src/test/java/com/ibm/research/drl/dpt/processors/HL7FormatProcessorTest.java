@@ -248,7 +248,7 @@ public class HL7FormatProcessorTest {
                 + "IN1||022254P|4558PD|BLUE CROSS|STREET^OTHER STREET^CITY^ST^00990||(333)333-6666||221K|LENIX|||19980515|19990515|||PATIENT01 TEST D||||||||||||||||||02LL|022LP554"
             ).getBytes());
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            PrintStream output = new PrintStream(outputStream);
+            PrintStream output = new PrintStream(outputStream)
         ) {
             ConfigurationManager configurationManager = new ConfigurationManager(new DefaultMaskingConfiguration());
 

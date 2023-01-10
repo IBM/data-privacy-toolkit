@@ -80,7 +80,7 @@ public class IdentificationConfiguration {
     /**
      * Gets consider empty for confidence.
      *
-     * @return the consider empty for confidence
+     * @return to consider empty for confidence
      */
     public boolean getConsiderEmptyForFrequency() {
         return considerEmptyForFrequency;

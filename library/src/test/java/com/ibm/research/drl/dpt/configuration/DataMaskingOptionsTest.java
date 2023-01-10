@@ -11,48 +11,59 @@ import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DataMaskingOptionsTest {
-    private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final static ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
 
     @Test
     public void testValidMaskingOptionsYaml() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptions.yaml")){
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptions.yaml")){
             DataMaskingOptions dataMaskingOptions = YAML_MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
         }
     }
 
     @Test
     public void testValidMaskingOptionsBackwardsCompatibleToBeMasked() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
         }
     }
 
     @Test
-    public void testInvalidMaskingOptionsUnsupportedOutput() throws IOException {
+    public void testInvalidMaskingOptionsUnsupportedOutput() {
         assertThrows(Exception.class, () -> {
-            try (InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json")) {
-                DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json")) {
+                DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+                assertNull(dataMaskingOptions);
             }
         });
     }
 
     @Test
-    public void testInvalidMaskingOptionsWrongInput() throws IOException {
+    public void testInvalidMaskingOptionsWrongInput() {
         assertThrows(Exception.class, () -> {
-            try (InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsWrongInput.json")) {
-                DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json")) {
+                DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+                assertNull(dataMaskingOptions);
             }
         });
     }
@@ -60,8 +71,8 @@ public class DataMaskingOptionsTest {
     
     @Test
     public void testParsesPredefinedRelationships() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/masking_key_rel.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/masking_key_rel.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
 
             Map<String, FieldRelationship> relationshipMap = dataMaskingOptions.getPredefinedRelationships();
 
@@ -78,8 +89,8 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesCyclicDependencies() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("date"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("date"))));
 
         assertFalse(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -87,7 +98,7 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesNoCyclicDependencies() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
 
         assertTrue(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -95,9 +106,9 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesNoCyclicDependenciesChain() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("bankid"))));
-        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", Arrays.asList(new RelationshipOperand("iban"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("bankid"))));
+        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", List.of(new RelationshipOperand("iban"))));
 
         assertTrue(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -105,10 +116,10 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesCyclicDependenciesChain() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("bankid"))));
-        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", Arrays.asList(new RelationshipOperand("iban"))));
-        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", Arrays.asList(new RelationshipOperand("date"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("bankid"))));
+        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", List.of(new RelationshipOperand("iban"))));
+        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", List.of(new RelationshipOperand("date"))));
 
         assertFalse(DataMaskingOptions.validateRelationships(relationships));
     }
@@ -116,41 +127,53 @@ public class DataMaskingOptionsTest {
     @Test
     public void testValidatesNoCyclicDependenciesChain2() {
         Map<String, FieldRelationship> relationships = new HashMap<>();
-        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", Arrays.asList(new RelationshipOperand("userid"))));
-        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", Arrays.asList(new RelationshipOperand("bankid"))));
-        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", Arrays.asList(new RelationshipOperand("iban"))));
-        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", Arrays.asList(new RelationshipOperand("date2"))));
+        relationships.put("date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "date", List.of(new RelationshipOperand("userid"))));
+        relationships.put("userid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "userid", List.of(new RelationshipOperand("bankid"))));
+        relationships.put("bankid", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "bankid", List.of(new RelationshipOperand("iban"))));
+        relationships.put("iban", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "iban", List.of(new RelationshipOperand("date2"))));
 
         assertTrue(DataMaskingOptions.validateRelationships(relationships));
     }
 
     @Test
     public void testValidMaskingOptionsWithMapper() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptions.json")) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptions.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
+            assertThat(dataMaskingOptions.getToBeMasked().size(), is(1));
+            assertThat(dataMaskingOptions.getToBeMasked().get("f1").getProviderType().getName(), is("BINNING"));
         }
     }
 
     @Test
     public void testValidMaskingOptionsBackwardsCompatibleToBeMaskedWithMapper() throws IOException {
-        try (InputStream in = this.getClass().getResourceAsStream("/validMaskingOptionsToBeMaskedString.json");) {
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+        try (InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/validMaskingOptionsToBeMaskedString.json")) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNotNull(dataMaskingOptions);
+            assertThat(dataMaskingOptions.getToBeMasked().size(), is(1));
+            assertThat(dataMaskingOptions.getToBeMasked().get("f1").getProviderType().getName(), is("BINNING"));
         }
     }
 
     @Test
-    public void testInvalidMaskingOptionsUnsupportedOutputWithMapper() throws IOException {
+    public void testInvalidMaskingOptionsUnsupportedOutputWithMapper() {
         assertThrows(Exception.class, () -> {
-            InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json");
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsUnsupportedOutput.json");
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNull(dataMaskingOptions);
         });
     }
 
     @Test
-    public void testInvalidMaskingOptionsWrongInputWithMapper() throws IOException {
+    public void testInvalidMaskingOptionsWrongInputWithMapper() {
         assertThrows(Exception.class, () -> {
-            InputStream in = this.getClass().getResourceAsStream("/invalidMaskingOptionsWrongInput.json");
-            DataMaskingOptions dataMaskingOptions = OBJECT_MAPPER.readValue(in, DataMaskingOptions.class);
+            InputStream in = DataMaskingOptionsTest.class.getResourceAsStream("/invalidMaskingOptionsWrongInput.json");
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(in, DataMaskingOptions.class);
+
+            assertNull(dataMaskingOptions);
         });
     }
 }

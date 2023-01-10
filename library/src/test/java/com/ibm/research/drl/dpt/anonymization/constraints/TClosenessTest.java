@@ -85,7 +85,7 @@ public class TClosenessTest {
             columnInformationList.add(new DefaultColumnInformation());
         }
         
-        List<Integer> sensitiveColumns = Arrays.asList(0);
+        List<Integer> sensitiveColumns = List.of(0);
         
         TCloseness tCloseness = new TCloseness(0.5);
         tCloseness.initialize(dataset, columnInformationList);
@@ -104,7 +104,7 @@ public class TClosenessTest {
             columnInformationList.add(new DefaultColumnInformation());
         }
 
-        List<Integer> sensitiveColumns = Arrays.asList(0);
+        List<Integer> sensitiveColumns = List.of(0);
 
         TCloseness tCloseness = new TCloseness(0.5);
         tCloseness.initialize(dataset, columnInformationList);
@@ -124,7 +124,7 @@ public class TClosenessTest {
             columnInformationList.add(new DefaultColumnInformation());
         }
 
-        List<Integer> sensitiveColumns = Arrays.asList(0);
+        List<Integer> sensitiveColumns = List.of(0);
 
         TCloseness tCloseness = new TCloseness(0.1);
         tCloseness.initialize(dataset, columnInformationList);

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +30,7 @@ public class PluggableLookupIdentifierTest {
         }
 
         Collection<String> patterns = Arrays.asList("test", "xyzw");
-        Identifier pluggableRegexIdentifier = new PluggableLookupIdentifier("FOOBAR", Arrays.asList(new String[] {}), patterns, true,
+        Identifier pluggableRegexIdentifier = new PluggableLookupIdentifier("FOOBAR", List.of(), patterns, true,
                 ValueClass.TEXT);
         assertTrue(pluggableRegexIdentifier.isOfThisType(value));
         identifierFactory.registerIdentifier(pluggableRegexIdentifier);

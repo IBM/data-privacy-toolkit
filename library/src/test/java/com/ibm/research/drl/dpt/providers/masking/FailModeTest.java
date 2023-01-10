@@ -10,8 +10,7 @@ import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FailModeTest {
     
@@ -74,8 +73,8 @@ public class FailModeTest {
             } catch (RuntimeException e) {
                 continue;
             }
-            
-            assertFalse(true, "should fail");
+
+            fail("should fail");
         }
     }
 }

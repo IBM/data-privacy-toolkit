@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,7 +49,7 @@ public class RatioBasedMaskingProviderTest {
         String fieldName = "Euro";
         
         FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.LINKED, 
-                fieldName, Arrays.asList(new RelationshipOperand("Dollar")));
+                fieldName, List.of(new RelationshipOperand("Dollar")));
         
         Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
         originalMaskedValues.put("Dollar", new OriginalMaskedValuePair("8.0", "12.0"));
@@ -68,7 +69,7 @@ public class RatioBasedMaskingProviderTest {
         String fieldName = "Euro";
 
         FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.LINKED,
-                fieldName, Arrays.asList(new RelationshipOperand("Dollar")));
+                fieldName, List.of(new RelationshipOperand("Dollar")));
 
         Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
         originalMaskedValues.put("Dollar", new OriginalMaskedValuePair("", ""));
@@ -91,7 +92,7 @@ public class RatioBasedMaskingProviderTest {
         String fieldName = "Euro";
 
         FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.LINKED,
-                fieldName, Arrays.asList(new RelationshipOperand("Dollar")));
+                fieldName, List.of(new RelationshipOperand("Dollar")));
 
         Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
         originalMaskedValues.put("Dollar", new OriginalMaskedValuePair("5.0", "12.0"));
@@ -112,7 +113,7 @@ public class RatioBasedMaskingProviderTest {
         String fieldName = "Euro";
 
         FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.KEY,
-                fieldName, Arrays.asList(new RelationshipOperand("Rate")));
+                fieldName, List.of(new RelationshipOperand("Rate")));
 
         Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
         originalMaskedValues.put("Rate", new OriginalMaskedValuePair("3.0", "3.0"));

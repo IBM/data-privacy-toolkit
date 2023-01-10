@@ -47,6 +47,7 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
 
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRQuantity obj = JsonUtils.MAPPER.treeToValue(node, FHIRQuantity.class);

@@ -98,6 +98,5 @@ public class LocallyPersistentMaskingProviderTest {
         assertEquals(maskedValue, maskedValueDifferentCase);
 
         verify(maskingProvider, times(1)).mask(anyString(), anyString());
-        ;
     }
 }

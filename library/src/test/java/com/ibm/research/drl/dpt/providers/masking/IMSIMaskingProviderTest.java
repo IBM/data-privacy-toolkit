@@ -39,8 +39,8 @@ public class IMSIMaskingProviderTest {
         for (int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(value);
             assertTrue(identifier.isOfThisType(maskedValue));
-            assertTrue(maskedValue.substring(0, 3).equals("310"));
-            if(!maskedValue.substring(3, 6).equals("150")) {
+            assertTrue(maskedValue.startsWith("310"));
+            if(!maskedValue.startsWith("150", 3)) {
                 randomMNCOK++;
             }
         }
@@ -64,10 +64,10 @@ public class IMSIMaskingProviderTest {
         for (int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(value);
             assertTrue(identifier.isOfThisType(maskedValue));
-            if(!maskedValue.substring(0, 3).equals("310")) {
+            if(!maskedValue.startsWith("310")) {
                 randomizationOKMCC++;
             }
-            if(!maskedValue.substring(3, 6).equals("150")) {
+            if(!maskedValue.startsWith("150", 3)) {
                 randomizationOKMNC++;
             }
         }

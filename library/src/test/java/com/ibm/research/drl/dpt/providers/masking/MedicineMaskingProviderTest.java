@@ -41,7 +41,7 @@ public class MedicineMaskingProviderTest {
 
         String greekOriginalValue = "Παρακεταμόλη";
 
-        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.MEDICINES, Arrays.asList(new String[]{"gr"}));
+        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.MEDICINES, Arrays.asList("gr"));
         Set<String> greekValues = new HashSet<>();
 
         for(ResourceEntry entry: entryCollection) {

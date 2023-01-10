@@ -62,7 +62,7 @@ public class JSONFormatProcessorTest {
 
         JSONFormatProcessor processor = new JSONFormatProcessor();
 
-        try (InputStream input = new ByteArrayInputStream(json.getBytes());) {
+        try (InputStream input = new ByteArrayInputStream(json.getBytes())) {
             for (Record record : processor.extractRecords(
                     input, new JSONDatasetOptions()
             )) {
@@ -94,7 +94,7 @@ public class JSONFormatProcessorTest {
 
         try (
                 InputStream input = new ByteArrayInputStream(json.getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             new JSONFormatProcessor().maskStream(
                     input, output,
@@ -127,8 +127,8 @@ public class JSONFormatProcessorTest {
         JSONFormatProcessor processor = new JSONFormatProcessor();
 
         try (InputStream input = new ByteArrayInputStream(json.getBytes());
-             ByteArrayOutputStream output = new ByteArrayOutputStream();
-  ) {
+             ByteArrayOutputStream output = new ByteArrayOutputStream()
+        ) {
             ConfigurationManager configurationManager = new ConfigurationManager(new DefaultMaskingConfiguration());
 
             Map<String, DataMaskingTarget> toBeMasked = new HashMap<>();
@@ -460,7 +460,7 @@ public class JSONFormatProcessorTest {
                 );
             }
 
-            System.out.println(baos.toString());
+            System.out.println(baos);
         }
     }
 
@@ -513,7 +513,7 @@ public class JSONFormatProcessorTest {
                 );
             }
 
-            System.out.println(baos.toString());
+            System.out.println(baos);
         }
     }
 
@@ -527,7 +527,7 @@ public class JSONFormatProcessorTest {
             toBeMasked.put("/date", new DataMaskingTarget(ProviderType.DATETIME, "/date"));
 
             Map<String, FieldRelationship> relationships = new HashMap<>();
-            relationships.put("/date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "/date", Arrays.asList(new RelationshipOperand("userid"))));
+            relationships.put("/date", new FieldRelationship(ValueClass.DATE, RelationshipType.KEY, "/date", List.of(new RelationshipOperand("userid"))));
 
             MaskingProviderFactory mpf = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(
@@ -593,7 +593,7 @@ public class JSONFormatProcessorTest {
         Map<String, FieldRelationship> relationships = new HashMap<>();
         relationships.put("/date",
                 new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE, "" +
-                        "/date", Arrays.asList(new RelationshipOperand("/operand"))));
+                        "/date", List.of(new RelationshipOperand("/operand"))));
 
         MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap());
 
@@ -848,7 +848,7 @@ public class JSONFormatProcessorTest {
 
         try (
                 InputStream input = new ByteArrayInputStream(json.getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             new JSONFormatProcessor().maskStream(
                     input, output,
@@ -889,7 +889,7 @@ public class JSONFormatProcessorTest {
 
         try (
                 InputStream input = new ByteArrayInputStream(json.getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             new JSONFormatProcessor().maskStream(
                     input, output,
@@ -937,7 +937,7 @@ public class JSONFormatProcessorTest {
 
         try (
                 InputStream input = new ByteArrayInputStream(json.getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             new JSONFormatProcessor().maskStream(
                     input, output,
@@ -979,7 +979,7 @@ public class JSONFormatProcessorTest {
 
         try (
                 InputStream input = new ByteArrayInputStream(json.getBytes());
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
         ) {
             new JSONFormatProcessor().maskStream(
                     input, output,
