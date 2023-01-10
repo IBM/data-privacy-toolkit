@@ -14,16 +14,17 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public abstract class Executor {
-    private static final Logger log = LoggerFactory.getLogger(Executor.class);
+    private static final Logger logger = LogManager.getLogger(Executor.class);
+
     protected final Options options =  SparkUtils.buildCommonCommandLineOptions();
 
     protected String input;
@@ -45,23 +46,23 @@ public abstract class Executor {
         output = cmd.getOptionValue("output");
         conf = cmd.getOptionValue("conf");
 
-        log.info("input: " + input);
-        log.info("output: " + output);
-        log.info("conf: " + conf);
+        logger.info("input: " + input);
+        logger.info("output: " + output);
+        logger.info("conf: " + conf);
 
         // Read config
         confJson = SparkUtils.readConfigurationFile(conf);
         configurationManager = ConfigurationManager.load(confJson);
 
         inputRef = DatasetReference.fromFile(input);
-        log.info("input configuration: " + inputRef);
+        logger.info("input configuration: " + inputRef);
 
         outputRef = DatasetReference.fromFile(output);
-        log.info("output configuration: " + outputRef.toString());
+        logger.info("output configuration: " + outputRef.toString());
     }
 
     public void run(SparkSession sparkSession) throws IOException {
         Dataset<Row> inputDataset = inputRef.readDataset(sparkSession);
-        log.info("input dataset: " + inputDataset.count() + " rows");
+        logger.info("input dataset: " + inputDataset.count() + " rows");
     }
 }
