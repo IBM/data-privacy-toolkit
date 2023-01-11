@@ -16,7 +16,7 @@ Each feature will be briefly described in the remaining of this text.
 
 ## Type identification
 Our toolkit provides a type identification mechanism that frees the user from the burden of specifying the types of the fields of the data to be analysed.
-This is a core feature of our toolkit for it was designed to operate in a modern infrastructure where dynamic and heterogenous schema coexist.
+This is a core feature of our toolkit for it was designed to operate in a modern infrastructure where dynamic and heterogeneous schema coexist.
 Our toolkit identifies more than 30 types; from general types like name, race, date and time to industry-specific attributes like ICD codes (medical diseases) and credit card numbers.
 The type identification mechanism is extensible; it provides a programming interface for users to implement their own identifiers based on either regular expressions or dictionaries.
 
@@ -43,8 +43,6 @@ Our toolkit includes a set of algorithms that perform privacy risk identificatio
 Masking providers protect unique identifiers, like names, e-mails etc.
 Combinations of attributes that lead to privacy risks (also known as quasi-identifiers), such as the ones that are detected by the privacy risk identification algorithms of our toolkit, require a separate anonymization process.
 Our toolkit includes anonymization algorithms that can be applied to a dataset and protect the quasi-identifiers by replacing them with generalised values.
-
-
 
 ## References
 - [Documentation](docs/README.md)
