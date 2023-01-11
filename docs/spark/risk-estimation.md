@@ -1,6 +1,7 @@
 ## Invoking the Risk Estimation Spark executor
 
-The Spark JAR was built for Java 1.8 and Spark 2.2. The toolkit is packaged together with its dependencies so there is no requirement for additional configuration of classpaths or internet connection to artifact repositories.
+The Spark JAR was built for Java 11 and Spark 3.2.3.
+The toolkit is packaged together with its dependencies so there is no requirement for additional configuration of classpaths or internet connection to artifact repositories.
 
 The executor requires the input path as well as the configuration file. It can be invoked as:
 
