@@ -13,7 +13,13 @@ import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -24,7 +30,12 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -56,7 +67,7 @@ public class DataMaskingExecutor {
         options.addOption("basePath", true, "Base path for reading partitioned data");
         
         try {
-            CommandLineParser parser = new PosixParser();
+            CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
             boolean remoteConfiguration = cmd.hasOption("remoteConf");

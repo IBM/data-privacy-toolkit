@@ -33,8 +33,7 @@ public class MondrianExecutor {
 
         if (args.length >=4 && args[3].equals("remoteConf")) {
             confStream = SparkUtils.createHDFSInputStream(confFile);
-        }
-        else {
+        } else {
             confStream = new FileInputStream(confFile);
         }
 
@@ -49,8 +48,7 @@ public class MondrianExecutor {
 
         if(!output.equals("/dev/null")) {
             outputRDD.saveAsTextFile(output);
-        }
-        else {
+        } else {
             System.out.println("rdd size after anon: " + outputRDD.count());
         }
 

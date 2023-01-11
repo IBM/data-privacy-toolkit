@@ -6,6 +6,8 @@
 package com.ibm.research.drl.dpt.spark.anonymization;
 
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
+import com.ibm.research.drl.dpt.spark.anonymization.mondrian.MondrianExecutor;
+import com.ibm.research.drl.dpt.spark.anonymization.mondrian.MondrianSpark;
 import com.ibm.research.drl.dpt.spark.anonymization.ola.OLASpark;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
@@ -54,11 +56,16 @@ public class AnonymizationExecutor {
 
             String algorithmName = cmd.getOptionValue("a");
 
-            switch (algorithmName) {
+            JavaRDD<String> outputRDD;
+
+            switch (algorithmName.toUpperCase()) {
                 case "OLA":
-                    JavaRDD<String> outputRDD = OLASpark.run(confStream, inputRDD);
+                    outputRDD = OLASpark.run(confStream, inputRDD);
                     Export.doExport(outputRDD, cmd.getOptionValue("o"));
                     break;
+                case "MONDRIAN":
+                    outputRDD = MondrianSpark.run(confStream, inputRDD);
+                    Export.doExport(outputRDD, cmd.getOptionValue("o"));
                 default:
                     throw new RuntimeException("invalid algorithm name: " + algorithmName);
             }
