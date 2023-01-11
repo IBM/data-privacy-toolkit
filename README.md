@@ -50,8 +50,10 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 - [Spark wrappers](spark)
 
 ## Academic References:
-- S. Antonatos, S. Braghin, N. Holohan, Y. Gkoufas and P. Mac Aonghusa, "PRIMA: An End-to-End Framework for Privacy at Scale," 2018 IEEE 34th International Conference on Data Engineering (ICDE), 2018, pp. 1531-1542, doi: 10.1109/ICDE.2018.00171.
-- N. Holohan, S. Antonatos, S. Braghin, P. Mac Aonghusa, "(k, ϵ)-anonymity: k-anonymity with ϵ-differential privacy,", 2017, arXiv preprint arXiv:1710.01615.
-- A. Gkoulalas-Divanis and S. Braghin, "IPV: A system for identifying privacy vulnerabilities in datasets," in IBM Journal of Research and Development, vol. 60, no. 4, pp. 14:1-14:10, July-Aug. 2016, doi: 10.1147/JRD.2016.2576818.
-- A. Gkoulalas-Divanis, S. Braghin and S. Antonatos, "FPVI: A scalable method for discovering privacy vulnerabilities in microdata," 2016 IEEE International Smart Cities Conference (ISC2), 2016, pp. 1-8, doi: 10.1109/ISC2.2016.7580849.
-- A. Gkoulalas-Divanis and S. Braghin, "Efficient algorithms for identifying privacy vulnerabilities," 2015 IEEE First International Smart Cities Conference (ISC2), 2015, pp. 1-8, doi: 10.1109/ISC2.2015.7366170.
+- Braghin, S., Bettencourt-Silva, J. H., Levacher, K., & Antonatos, S. (2019). An Extensible De-Identification Framework for Privacy Protection of Unstructured Health Information: Creating Sustainable Privacy Infrastructures. In MEDINFO 2019: Health and Wellbeing e-Networks for All (pp. 1140-1144). IOS Press.
+- Antonatos, S., Braghin, S., Holohan, N. and MacAonghusa, P., 2019. AnonTokens: tracing re-identification attacks through decoy records. arXiv preprint arXiv:1906.09829.
+- Antonatos, S., Braghin, S., Holohan, N., Gkoufas, Y. and Mac Aonghusa, P., 2018, April. PRIMA: an end-to-end framework for privacy at scale. In 2018 IEEE 34th International Conference on Data Engineering (ICDE) (pp. 1531-1542). IEEE.
+- Holohan, N., Antonatos, S., Braghin, S. and Mac Aonghusa, P., 2017. ($ k $, $\epsilon $)-Anonymity: $ k $-Anonymity with $\epsilon $-Differential Privacy. arXiv preprint arXiv:1710.01615.
+- Gkoulalas-Divanis, A. and Braghin, S., 2016. IPV: a system for identifying privacy vulnerabilities in datasets. IBM Journal of Research and Development, 60(4), pp.14-1.
+- Gkoulalas-Divanis, A., Braghin, S. and Antonatos, S., 2016, September. FPVI: A scalable method for discovering privacy vulnerabilities in microdata. In 2016 IEEE International Smart Cities Conference (ISC2) (pp. 1-8). IEEE.
+- Gkoulalas-Divanis, A. and Braghin, S., 2015, October. Efficient algorithms for identifying privacy vulnerabilities. In 2015 IEEE First International Smart Cities Conference (ISC2) (pp. 1-8). IEEE.

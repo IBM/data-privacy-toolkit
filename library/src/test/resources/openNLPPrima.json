@@ -1,0 +1,61 @@
+{
+  "defaultLanguage": "ENGLISH",
+  "performLanguageDetection": false,
+  "blacklist": {
+    "DATETIME": [
+      "day",
+      "past",
+      "days",
+      "currently",
+      "date",
+      "present",
+      "current",
+      "hours",
+      "weeks",
+      "months",
+      "years",
+      "once"
+    ],
+    "ORGANIZATION": [
+      "INP",
+      "LTC"
+    ]
+  },
+  "connected": [
+    {
+      "first": "ORGANIZATION",
+      "second": "LOCATION",
+      "endType": "ORGANIZATION",
+      "endSubtype": "ORGANIZATION",
+      "particles": ["in", "on", "of", "the", "to"]
+    },
+    {
+      "first": "NAME",
+      "second": "LOCATION",
+      "endType": "NAME",
+      "endSubtype": "NAME",
+      "particles": ["of", "the", "to"]
+    }
+  ],
+  "unreliable": {
+    "OpenNLP_POS": [
+      "UNKNOWN"
+    ]
+  },
+  "weights": {
+    "PRIMA": {
+      "DATETIME": 50,
+      "EMAIL": 90,
+      "NAME": 50
+    }
+  },
+  "not_POS": [
+    "DATETIME",
+    {"MONTH": ["may"]},
+    "DAY",
+    "PHONE",
+    "NUMERIC",
+    "NATIONAL_ID",
+    "EMAIL"
+  ]
+}

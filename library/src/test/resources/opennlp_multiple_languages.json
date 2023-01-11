@@ -1,0 +1,25 @@
+{
+  "defaultLanguage": "ENGLISH",
+  "configuration" : {
+    "ENGLISH" : {
+      "nameFinder": "/nlp/en/en-ner-person.bin",
+      "locationFinder" : "/nlp/en/en-ner-location.bin",
+      "organizationFinder" : "/nlp/en/en-ner-organization.bin",
+      "timeFinder" : "/nlp/en/en-ner-time.bin",
+      "dateFinder" : "/nlp/en/en-ner-date.bin",
+      "sentenceFinder" : "/nlp/en/en-sent.bin",
+      "tagger" : "/nlp/en/en-pos-maxent.bin",
+      "tokenizer" : "/nlp/en/en-token.bin"
+    },
+    "DUTCH" : {
+      "nameFinder": "/nlp/nl/nl-ner-person.bin",
+      "locationFinder" : "/nlp/nl/nl-ner-location.bin",
+      "organizationFinder" : "/nlp/nl/nl-ner-organization.bin",
+      "timeFinder" : "/nlp/en/en-ner-time.bin",
+      "dateFinder" : "/nlp/en/en-ner-date.bin",
+      "sentenceFinder" : "/nlp/nl/nl-sent.bin",
+      "tagger" : "/nlp/nl/nl-pos-maxent.bin",
+      "tokenizer" : "/nlp/nl/nl-token.bin"
+    }
+  }
+}
