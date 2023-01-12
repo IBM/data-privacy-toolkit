@@ -50,7 +50,7 @@ public abstract class TaskToExecute {
     private final DataTypeFormat inputFormat;
     private final DatasetOptions inputOptions;
     private final DataTypeFormat outputFormat;
-    private final DatasetOptions outputOptions ;
+    private final DatasetOptions outputOptions;
 
     public String getTask() {
         return task;
