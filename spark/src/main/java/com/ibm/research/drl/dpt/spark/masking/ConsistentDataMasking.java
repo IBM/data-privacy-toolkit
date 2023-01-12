@@ -19,7 +19,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaUtils;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructField;
@@ -192,24 +195,17 @@ public class ConsistentDataMasking {
                                                     final String fieldName,
                                                     final Map<String, Integer> fieldPaths,
                                                     final DataMaskingOptions maskingOptions) {
-        return dataset;
-       
-     /*
-        JavaRDD<Row> rdd = dataset.javaRDD().mapToPair(s -> createMapPairForSingleConsistency(s, maskingOptions, fieldName, fieldPaths))
+
+        JavaRDD<String> rdd = dataset.javaRDD().mapToPair(s -> createMapPairForSingleConsistency(s, maskingOptions, fieldName, fieldPaths))
                 .groupByKey()
                 .map((Function<Tuple2<String, Iterable<Row>>, List<String>>) tuple2 -> {
                     String key = tuple2._1();
                     Iterable<Row> records = tuple2._2();
                     return writeMaskedKeyForSingleConsistency(key, fieldName, maskingProviders, records, maskingOptions, fieldName, fieldPaths);
-                }).flatMap(new FlatMapFunction<List<String>, String>() {
-                    @Override
-                    public Iterator<String> call(List<String> strings) throws Exception {
-                        return strings.iterator();
-                    }
-                });
+                }).flatMap((FlatMapFunction<List<String>, String>) List::iterator);
         
-        return sparkSession.createDataset(rdd.rdd(), Encoders.STRING());
+        return sparkSession.createDataset(rdd.rdd(), Encoders.STRING()).toDF();
 
-    */
+
     }
 }
