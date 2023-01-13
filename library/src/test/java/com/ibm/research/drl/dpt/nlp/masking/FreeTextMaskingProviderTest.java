@@ -6,16 +6,23 @@
 package com.ibm.research.drl.dpt.nlp.masking;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
+import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
+import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntityType;
 import com.ibm.research.drl.dpt.nlp.NLPAnnotator;
 import com.ibm.research.drl.dpt.providers.ProviderType;
+import com.ibm.research.drl.dpt.providers.masking.HashMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.RedactMaskingProvider;
+import com.ibm.research.drl.dpt.schema.FieldRelationship;
+import com.ibm.research.drl.dpt.schema.RelationshipOperand;
+import com.ibm.research.drl.dpt.schema.RelationshipType;
 import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -24,12 +31,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -154,111 +163,144 @@ class FreeTextMaskingProviderTest {
         assertThat(entities.get(0).getText(), is("smith"));
     }
 
-//    @Test
-//    public void testCompoundGrepAndMask() {
-//        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-//        maskingConfiguration.setValue("freetext.mask.complexConfigurationFilename", "/complexWithIdentifiersPRIMAOnlyEmailOnly.json");
-//        maskingConfiguration.setValue("freetext.mask.maskingConfigurationFilename", "/testFreetextMaskName.json");
-//        maskingConfiguration.setValue("generic.lookupTokensType", "NAME");
-//        maskingConfiguration.setValue("generic.lookupTokensSeparator", " ");
-//        maskingConfiguration.setValue("generic.lookupTokensIgnoreCase", false);
-//        maskingConfiguration.setValue("generic.lookupTokensFindAnywhere", false);
-//
-//        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
-//
-//        String value = "XYZ went to work. Mr. QWE is a professor.";
-//
-//        FieldRelationship fieldRelationship = new FieldRelationship(
-//                ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", Arrays.asList(new RelationshipOperand("name"))
-//        );
-//
-//        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-//        maskedValues.put("name", new OriginalMaskedValuePair("XYZ QWE", "abc def"));
-//
-//        String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
-//
-//        assertEquals(-1, masked.indexOf("XYZ"));
-//        assertEquals(-1, masked.indexOf("QWE"));
-//
-//    }
+    @Test
+    public void testCompoundGrepAndMask() throws IOException {
+        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
 
-//    @Test
-//    public void testCompoundGrepAndMaskNoDoubleMasking() throws IOException {
-//        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-//        maskingConfiguration.setValue("freetext.mask.complexConfigurationFilename", "/complexWithIdentifiersPRIMAOnlyEmailOnly.json");
+        try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnlyEmailOnly.json")) {
+            maskingConfiguration.setValue("freetext.mask.nlp.config", JsonUtils.MAPPER.readTree(inputStream));
+        }
+
+        maskingConfiguration.setValue("freetext.mask.maskingConfigurationFilename", "/testFreetextMaskName.json");
+        maskingConfiguration.setValue("generic.lookupTokensType", "NAME");
+        maskingConfiguration.setValue("generic.lookupTokensSeparator", " ");
+        maskingConfiguration.setValue("generic.lookupTokensIgnoreCase", false);
+        maskingConfiguration.setValue("generic.lookupTokensFindAnywhere", false);
+
+
+
+        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
+                new ConfigurationManager(new DefaultMaskingConfiguration()),
+                Collections.emptyMap()
+        ), maskingConfiguration, Collections.emptyMap());
+
+        String value = "XYZ went to work. Mr. QWE is a professor.";
+
+        FieldRelationship fieldRelationship = new FieldRelationship(
+                ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", List.of(new RelationshipOperand("name"))
+        );
+
+        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
+        maskedValues.put("name", new OriginalMaskedValuePair("XYZ QWE", "abc def"));
+
+        String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
+
+        assertEquals(-1, masked.indexOf("XYZ"));
+        assertEquals(-1, masked.indexOf("QWE"));
+
+    }
+
+    @Test
+    public void testCompoundGrepAndMaskNoDoubleMasking() throws IOException {
+        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
 //        maskingConfiguration.setValue("freetext.mask.maskingConfigurationFilename", "/testFreetextMaskEmail.json");
-//
-//        maskingConfiguration.setValue("generic.lookupTokensType", "NAME");
-//        maskingConfiguration.setValue("generic.lookupTokensSeparator", " ");
-//        maskingConfiguration.setValue("generic.lookupTokensIgnoreCase", false);
-//        maskingConfiguration.setValue("generic.lookupTokensFindAnywhere", false);
-//
-//        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
-//
-//        String emailValue = "xyz@ie.ibm.com";
-//        String value = "XYZ went to work. His e-mail is " + emailValue;
-//
-//        FieldRelationship fieldRelationship = new FieldRelationship(
-//                ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", Arrays.asList(new RelationshipOperand("email"))
-//        );
-//
-//        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-//        maskedValues.put("email", new OriginalMaskedValuePair(emailValue, "junkhere@mail.com"));
-//
-//        String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
-//
-//        assertEquals(-1, masked.indexOf(emailValue));
-//
-//        //we need to make sure it does not double-mask
-//        String hashedEmail = (new HashMaskingProvider()).mask(emailValue);
-//        assertTrue(masked.contains(hashedEmail));
-//    }
 
-//    @Test
-//    public void testGrepMatchCase() {
-//        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-//        maskingConfiguration.setValue("freetext.mask.complexConfigurationFilename", "/complexWithIdentifiersPRIMAOnly.json");
-//        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
-//
-//        boolean ignoreCase = false;
-//
-//        String value = "John went to work. Mr. Smith is a professor.";
-//        List<IdentifiedEntity> entities = freeTextMaskingProvider.grep("John Smith", value, "\\s+", ignoreCase, false, "NAME");
-//        assertEquals(2, entities.size());
-//        assertEquals(0, entities.get(0).getStart());
-//        assertEquals(value.indexOf("Smith"), entities.get(1).getStart());
-//    }
+        try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnlyEmailOnly.json")) {
+            maskingConfiguration.setValue("freetext.mask.nlp.config", JsonUtils.MAPPER.readTree(inputStream));
+        }
 
-//    @Test
-//    public void testGrepMatchCaseEmptySource() throws IOException {
-//        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-//        maskingConfiguration.setValue("freetext.mask.complexConfigurationFilename", "/complexWithIdentifiersPRIMAOnly.json");
-//        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
-//
-//        boolean ignoreCase = false;
-//
-//        String value = "John went to work. Mr. Smith is a professor.";
-//        List<IdentifiedEntity> entities = freeTextMaskingProvider.grep("", value, " ", ignoreCase, false, "NAME");
-//        assertEquals(0, entities.size());
-//    }
+        maskingConfiguration.setValue("generic.lookupTokensType", "NAME");
+        maskingConfiguration.setValue("generic.lookupTokensSeparator", " ");
+        maskingConfiguration.setValue("generic.lookupTokensIgnoreCase", false);
+        maskingConfiguration.setValue("generic.lookupTokensFindAnywhere", false);
 
-//    @Test
-//    public void testGrepAndMaskIgnoreCase() throws IOException {
-//
-//        //ignore case
-//        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-//        maskingConfiguration.setValue("freetext.mask.complexConfigurationFilename", "/complexWithIdentifiersPRIMAOnly.json");
-//        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(maskingConfiguration, new MaskingProviderFactory());
-//
-//        //ignore case
-//        boolean ignoreCase = true;
-//
-//        String value = "John went to work. Mr. Smith is a professor.";
-//        List<IdentifiedEntity> entities = freeTextMaskingProvider.grep("john smith", value, " ", ignoreCase, false, "NAME");
-//        assertEquals(2, entities.size());
-//        assertEquals(0, entities.get(0).getStart());
-//        assertEquals(value.indexOf("Smith"), entities.get(1).getStart());
-//    }
+        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
+                new ConfigurationManager(maskingConfiguration),
+                Collections.emptyMap()
+        ), maskingConfiguration, Collections.emptyMap());
+
+        String emailValue = "xyz@ie.ibm.com";
+        String value = "XYZ went to work. His e-mail is " + emailValue;
+
+        FieldRelationship fieldRelationship = new FieldRelationship(
+                ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", List.of(new RelationshipOperand("email"))
+        );
+
+        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
+        maskedValues.put("email", new OriginalMaskedValuePair(emailValue, "junkhere@mail.com"));
+
+        String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
+
+        assertEquals(-1, masked.indexOf(emailValue));
+
+        //we need to make sure it does not double-mask
+        String hashedEmail = (new HashMaskingProvider()).mask(emailValue);
+        assertTrue(masked.contains(hashedEmail));
+    }
+
+    @Test
+    public void testGrepMatchCase() throws IOException {
+        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+
+        try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnly.json")) {
+            maskingConfiguration.setValue("freetext.mask.nlp.config", JsonUtils.MAPPER.readTree(inputStream));
+        }
+
+        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
+                new ConfigurationManager(maskingConfiguration),
+                Collections.emptyMap()
+        ), maskingConfiguration, Collections.emptyMap());
+
+        boolean ignoreCase = false;
+
+        String value = "John went to work. Mr. Smith is a professor.";
+        List<IdentifiedEntity> entities = freeTextMaskingProvider.grep("John Smith", value, "\\s+", ignoreCase, false, "NAME");
+        assertEquals(2, entities.size());
+        assertEquals(0, entities.get(0).getStart());
+        assertEquals(value.indexOf("Smith"), entities.get(1).getStart());
+    }
+
+    @Test
+    public void testGrepMatchCaseEmptySource() throws IOException {
+        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+
+        try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnly.json")) {
+            maskingConfiguration.setValue("freetext.mask.nlp.config", JsonUtils.MAPPER.readTree(inputStream));
+        }
+
+        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
+                new ConfigurationManager(maskingConfiguration),
+                Collections.emptyMap()
+        ), maskingConfiguration, Collections.emptyMap());
+
+        boolean ignoreCase = false;
+
+        String value = "John went to work. Mr. Smith is a professor.";
+        List<IdentifiedEntity> entities = freeTextMaskingProvider.grep("", value, " ", ignoreCase, false, "NAME");
+        assertEquals(0, entities.size());
+    }
+
+    @Test
+    public void testGrepAndMaskIgnoreCase() throws IOException {
+        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+
+        try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnly.json")) {
+            maskingConfiguration.setValue("freetext.mask.nlp.config", JsonUtils.MAPPER.readTree(inputStream));
+        }
+        FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
+                new ConfigurationManager(maskingConfiguration),
+                Collections.emptyMap()
+        ), maskingConfiguration, Collections.emptyMap());
+
+        //ignore case
+        boolean ignoreCase = true;
+
+        String value = "John went to work. Mr. Smith is a professor.";
+        List<IdentifiedEntity> entities = freeTextMaskingProvider.grep("john smith", value, " ", ignoreCase, false, "NAME");
+        assertEquals(2, entities.size());
+        assertEquals(0, entities.get(0).getStart());
+        assertEquals(value.indexOf("Smith"), entities.get(1).getStart());
+    }
 
     @Test
     @Disabled

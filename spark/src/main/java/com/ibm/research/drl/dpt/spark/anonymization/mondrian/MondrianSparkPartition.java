@@ -399,9 +399,7 @@ public class MondrianSparkPartition implements Serializable {
         this.privacyConstraintsContentRequirements = AnonymizationUtils.buildPrivacyConstraintContentRequirements(privacyConstraints);
 
         this.allow = new int[qiLen];
-        for(int i = 0; i < allow.length; i++) {
-            allow[i] = 1;
-        }
+        Arrays.fill(allow, 1);
 
         this.privacyMetrics = new ArrayList<>();
         for(PrivacyConstraint constraint: privacyConstraints) {

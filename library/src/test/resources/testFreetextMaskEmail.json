@@ -1,0 +1,14 @@
+{
+  "inputFormat": "PLAIN",
+  "outputFormat": "PLAIN",
+
+  "toBeMasked" : {
+    "EMAIL" : "HASH"
+  },
+
+  "_fields": {},
+
+  "_defaults": {
+    "default.masking.provider": "HASH"
+  }
+}

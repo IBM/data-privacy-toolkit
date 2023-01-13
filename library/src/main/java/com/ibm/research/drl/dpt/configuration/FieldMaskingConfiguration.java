@@ -91,4 +91,9 @@ public class FieldMaskingConfiguration implements MaskingConfiguration, Serializ
     public ConfigurationManager getConfigurationManager() {
         return parent.getConfigurationManager();
     }
+
+    @Override
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.parent.setConfigurationManager(configurationManager);
+    }
 }

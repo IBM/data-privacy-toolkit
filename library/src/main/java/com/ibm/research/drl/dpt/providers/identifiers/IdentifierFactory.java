@@ -166,16 +166,16 @@ public final class IdentifierFactory implements Serializable {
                                     factory.registerIdentifier(buildRegexBasedUserDefinedIdentifier(identifier));
                                     break;
                                 default:
+                                    logger.error("Unknown type: " + type);
                                     throw new RuntimeException("Unknown type " + type);
                             }
                         } else {
+                            logger.error("Not supported node type: " + identifier.getNodeType().toString());
                             throw new RuntimeException("Not supported node type");
                         }
                     }
             );
-        }
-
-        if (identifiers.isObject()) {
+        } else if (identifiers.isObject()) {
             JsonNode resourceTypeNode = identifiers.get("resourceType");
             if (resourceTypeNode == null) {
                 throw new RuntimeException("Missing resourceType from identifiers");
