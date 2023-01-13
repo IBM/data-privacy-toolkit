@@ -65,4 +65,6 @@ public interface MaskingConfiguration {
      * @return the configuration manager that generated this configuration
      */
     ConfigurationManager getConfigurationManager();
+
+    void setConfigurationManager(ConfigurationManager configurationManager);
 }

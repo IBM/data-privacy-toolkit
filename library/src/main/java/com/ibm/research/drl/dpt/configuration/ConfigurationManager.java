@@ -28,7 +28,7 @@ public class ConfigurationManager implements Serializable {
      *
      * @param defaults the defaults
      */
-    public ConfigurationManager(DefaultMaskingConfiguration defaults) {
+    public ConfigurationManager(MaskingConfiguration defaults) {
         this.defaults = defaults;
         this.fields = new HashMap<>();
         defaults.setConfigurationManager(this);
