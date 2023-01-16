@@ -11,7 +11,7 @@ apply plugin: 'jacoco'
 
 ext {
     junit_jupiter_version = '5.9.1'
-    junit_platform_launcher_version = '1.9.1'
+    junit_platform_launcher_version = '1.9.2'
 
     mockito_version = '4.11.0'
     jdefault_version = '2.0.0'
