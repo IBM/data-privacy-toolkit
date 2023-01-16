@@ -29,7 +29,7 @@ ext {
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
-    pdfbox_version = '2.0.24'
+    pdfbox_version = '2.0.27'
 
     poi_version = "5.2.3"
 

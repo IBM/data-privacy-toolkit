@@ -10,17 +10,23 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.NLPAnnotator;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
+import org.apache.fontbox.ttf.TrueTypeCollection;
+import org.apache.fontbox.ttf.TrueTypeFont;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDCIDFontType0;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
+import org.apache.pdfbox.text.PDFTextStripperByArea;;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -53,10 +59,12 @@ public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
             int numOfPages = document.getNumberOfPages();
 
             PDDocument maskedDocument = new PDDocument();
-            PDFont font = loadFont(maskedDocument);
+
+            PDFont font = loadFont(document, maskedDocument);
 
             for (int pageNumber = 0; pageNumber < numOfPages; ++pageNumber) {
-                String input = extractPageContent(document, pageNumber + 1);
+                PDPage page = document.getPage(pageNumber);
+                String input = extractPageContent(page, pageNumber);
 
                 String maskedInput = maskingProvider.mask(input);
 
@@ -79,28 +87,27 @@ public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
                 .trim();
     }
 
-    private PDFont loadFont(PDDocument document) {
-        try (InputStream fontStream = this.getClass().getResourceAsStream("/calibri.ttf")) {
-            return PDType0Font.load(document, fontStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return PDType1Font.TIMES_ROMAN;
-        }
+    private PDFont loadFont(PDDocument original, PDDocument masked) {
+        // TODO: add loading fonts from original document
+        return PDType1Font.HELVETICA;
     }
 
     private PDPage createMaskedPage(PDDocument document, String text, PDFont font) {
         PDPage page = new PDPage();
         try {
-            PDRectangle mediabox = page.getMediaBox();
+            PDRectangle mediaBox = page.getMediaBox();
             float margin = 72;
-            float startX = mediabox.getLowerLeftX() + margin;
-            float startY = mediabox.getUpperRightY() - margin;
+            float startX = mediaBox.getLowerLeftX() + margin;
+            float startY = mediaBox.getUpperRightY() - margin;
 
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
 
-            int fontSize = 10;
-            contentStream.setFont(font, fontSize);
+            float fontSize = 10.0f;
+            contentStream.setFont(
+                    font,
+                    fontSize
+            );
             float leading = 1.5f * fontSize;
 
             contentStream.newLineAtOffset(startX, startY);
@@ -117,18 +124,24 @@ public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
         return page;
     }
 
-    private String extractPageContent(PDDocument document, int pageNumber) {
+    String extractPageContent(PDPage page, int pageNumber) throws IOException {
+        logger.trace("Extracting text from page " + page);
         try {
-            PDFTextStripper pdfTextStripper = new PDFTextStripper();
+            PDFTextStripperByArea textStripper = new PDFTextStripperByArea();
 
-            pdfTextStripper.setStartPage(pageNumber);
-            pdfTextStripper.setEndPage(pageNumber);
+            PDRectangle boundingBox = page.getBBox();
 
-            return pdfTextStripper.getText(document);
+            Rectangle region = new Rectangle(
+                    (int) boundingBox.getLowerLeftX(), (int) boundingBox.getLowerLeftY(), (int) boundingBox.getWidth(), (int) boundingBox.getHeight()
+            );
+
+            textStripper.addRegion("all_page", region);
+            textStripper.extractRegions(page);
+
+            return textStripper.getTextForRegion("all_page");
         } catch (IOException e) {
             logger.error("Unable to extract page {}", pageNumber);
-            e.printStackTrace();
+            throw e;
         }
-        return "";
     }
 }
