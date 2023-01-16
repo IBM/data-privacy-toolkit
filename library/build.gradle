@@ -10,7 +10,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 
 ext {
-    junit_jupiter_version = '5.9.1'
+    junit_jupiter_version = '5.9.2'
     junit_platform_launcher_version = '1.9.2'
 
     mockito_version = '5.0.0'
