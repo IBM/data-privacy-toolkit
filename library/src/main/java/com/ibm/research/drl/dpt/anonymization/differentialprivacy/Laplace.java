@@ -60,7 +60,7 @@ public class Laplace implements DPMechanism {
 
         double diameter = this.upperBound - this.lowerBound;
 
-        this.shape = diameter/this.epsilon;
+        this.shape = diameter / this.epsilon;
     }
 
     @Override
