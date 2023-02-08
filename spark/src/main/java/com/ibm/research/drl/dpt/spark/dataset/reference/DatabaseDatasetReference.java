@@ -52,7 +52,8 @@ public class DatabaseDatasetReference extends DatasetReference {
     @JsonIgnore
     public DatasetOptions getOptions() { throw new NotImplementedException(); }
 
-    public Dataset<Row> readDataset(SparkSession sparkSession) {
+    @Override
+    public Dataset<Row> readDataset(SparkSession sparkSession, String inputReference) {
         throw new NotImplementedException();
     }
 

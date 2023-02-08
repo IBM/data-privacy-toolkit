@@ -6,7 +6,7 @@ import com.ibm.research.drl.dpt.schema.FieldRelationship;
 
 import java.util.Map;
 
-public class MaskingOptions {
+public class MaskingOptions implements TaskOptions {
     private final Map<String, DataMaskingTarget> toBeMasked;
     private final Map<String, FieldRelationship> predefinedRelationships;
     private final String maskingProviders;
