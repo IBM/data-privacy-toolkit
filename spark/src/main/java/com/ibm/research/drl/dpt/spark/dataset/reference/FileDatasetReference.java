@@ -140,7 +140,7 @@ public class FileDatasetReference extends DatasetReference {
         return SparkUtils.createDataset(sparkSession, datasourceURL, format, options, basePath);
     }
 
-    public void writeDataset(SparkSession sparkSession, Dataset<Row> outputDataset) {
+    public void writeDataset(Dataset<Row> outputDataset, String path) {
         // Prepare partitions
         List<String> partitions;
         if (this.partitionBy != null && !this.partitionBy.isEmpty()) {
@@ -152,7 +152,6 @@ public class FileDatasetReference extends DatasetReference {
         Export.doExport(outputDataset, format, datasourceURL, partitions, this.append);
     }
 
-    @Override
     public OutputStream asOutputStream() throws IOException {
         return isDatasourceURLRemote() ? SparkUtils.createHDFSOutputStream(datasourceURL) : new FileOutputStream(datasourceURL);
     }

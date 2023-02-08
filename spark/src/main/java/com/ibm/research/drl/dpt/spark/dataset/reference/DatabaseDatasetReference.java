@@ -17,8 +17,6 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
-import java.io.OutputStream;
-
 public class DatabaseDatasetReference extends DatasetReference {
     private final String datasourceURL;
     private final AuthenticationCredential credentials;
@@ -57,12 +55,7 @@ public class DatabaseDatasetReference extends DatasetReference {
         throw new NotImplementedException();
     }
 
-    public void writeDataset(SparkSession sparkSession, Dataset<Row> outputDataset) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public OutputStream asOutputStream() {
+    public void writeDataset(Dataset<Row> outputDataset, String path) {
         throw new NotImplementedException();
     }
 
