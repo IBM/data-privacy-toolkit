@@ -17,6 +17,7 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,19 +28,23 @@ public class InMemoryDatasetReference extends DatasetReference {
     private Dataset<Row> dataset;
 
     public InMemoryDatasetReference(List<List<String>> data, List<String> columnNames) {
-        if (!data.isEmpty()) {
-            for (List<String> row : data) {
-                if (row.size() != columnNames.size())
-                    throw new IllegalArgumentException("data rows and columnNames must have same size");
+        if (data != null && columnNames != null) {
+            if (!data.isEmpty()) {
+                for (List<String> row : data) {
+                    if (row.size() != columnNames.size())
+                        throw new IllegalArgumentException("data rows and columnNames must have same size");
+                }
             }
-        }
 
-        this.data = data;
-        this.columnNames = columnNames;
+            this.data = data;
+            this.columnNames = columnNames;
+        } else {
+            throw new IllegalArgumentException("Data or column names are undefined");
+        }
     }
 
     public InMemoryDatasetReference() {
-        this(null, null);
+        this(Collections.emptyList(), Collections.emptyList());
     }
 
     @Override

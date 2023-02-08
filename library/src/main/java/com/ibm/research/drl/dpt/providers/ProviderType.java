@@ -16,6 +16,15 @@ import java.util.*;
 public final class ProviderType implements Serializable {
     private static final Map<String, ProviderType> registeredTypes = new HashMap<>();
 
+    /**
+     * The constant UNKNOWN.
+     */
+    public static final ProviderType UNKNOWN = new ProviderType("UNKNOWN", "Unknown", "for internal puposes", TypeClass.CATEGORICAL, true);
+    /**
+     * The constant EMPTY.
+     */
+    public static final ProviderType EMPTY = new ProviderType("EMPTY", "Empty", "Empty", TypeClass.CATEGORICAL, true);
+
     public static final ProviderType SORT_CODE = new ProviderType("SORT_CODE", "SORT CODE", "");
 
     public static final ProviderType AGE = new ProviderType("AGE", "Age", "Masks age values", TypeClass.NUMERICAL);
@@ -156,10 +165,6 @@ public final class ProviderType implements Serializable {
      */
     public static final ProviderType UNSUPPORTED = new ProviderType("UNSUPPORTED", "dummy", "for internal purposes", TypeClass.CATEGORICAL, true);
     /**
-     * The constant EMPTY.
-     */
-    public static final ProviderType EMPTY = new ProviderType("EMPTY", "Empty", "Empty", TypeClass.CATEGORICAL, true);
-    /**
      * The constant ATC.
      */
     public static final ProviderType ATC = new ProviderType("ATC", "ATC codes", "Masks ATC codes");
@@ -171,10 +176,6 @@ public final class ProviderType implements Serializable {
      * The constant IMSI.
      */
     public static final ProviderType IMSI = new ProviderType("IMSI", "IMSI", "Masks IMSI values");
-    /**
-     * The constant UNKNOWN.
-     */
-    public static final ProviderType UNKNOWN = new ProviderType("UNKNOWN", "Unknown", "for internal puposes", TypeClass.CATEGORICAL, true);
     /**
      * The constant REPLACE.
      */
