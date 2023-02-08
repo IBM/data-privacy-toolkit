@@ -33,7 +33,7 @@ public abstract class DatasetReference {
 
     public abstract DatasetOptions getOptions();
 
-    public abstract Dataset<Row> readDataset(SparkSession sparkSession);
+    public abstract Dataset<Row> readDataset(SparkSession sparkSession, String inputReference);
 
     public abstract void writeDataset(SparkSession sparkSession, Dataset<Row> outputDataset);
 

@@ -8,8 +8,12 @@ package com.ibm.research.drl.dpt.spark;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ibm.research.drl.dpt.spark.task.SparkTaskToExecute;
-import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -102,7 +106,13 @@ public class DPTSparkDriver {
 
                 final SparkTaskToExecute taskToExecute = mapper.readValue(configuration, SparkTaskToExecute.class);
 
-                taskToExecute.process(commandLine.getOptionValue(CommandLineOptions.Input.shortOption));
+                Dataset<Row> processedDataset = taskToExecute.process(
+                        taskToExecute.readInputDataset(
+                                commandLine.getOptionValue(CommandLineOptions.Input.shortOption)
+                        )
+                );
+
+                taskToExecute.writeProcessedDataset(processedDataset, commandLine.getOptionValue(CommandLineOptions.Output.shortOption));
 
                 return;
             }
@@ -117,6 +127,6 @@ public class DPTSparkDriver {
     }
 
     private static InputStream readConfiguration(String configurationFile, SparkSession session) {
-        SparkUtils.readConfigurationFile()
+        return null;
     }
 }

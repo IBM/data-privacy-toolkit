@@ -5,7 +5,7 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.spark.risk;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.sql.Dataset;
@@ -33,12 +33,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ConfusionMatrixExtractorTest {
     private SparkSession spark;
     private Dataset<Row> dummyDataset;
-    private static final ObjectMapper mapper = new ObjectMapper();
 
 
     @Test
     public void testNotAggregated() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_not_aggregated.json"), OutlierRemovalOptions.class);
+        OutlierRemovalOptions configuration = JsonUtils.MAPPER.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_not_aggregated.json"), OutlierRemovalOptions.class);
         Dataset<Row> outputDataset = ConfusionMatrixExtractor.computeConfusionMatrix(
                 dummyDataset,
                 configuration.getFilters()
@@ -53,7 +52,7 @@ public class ConfusionMatrixExtractorTest {
 
     @Test
     public void testOneAggregated() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_one_aggregated.json"), OutlierRemovalOptions.class);
+        OutlierRemovalOptions configuration = JsonUtils.MAPPER.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_one_aggregated.json"), OutlierRemovalOptions.class);
 
         Dataset<Row> outputDataset = ConfusionMatrixExtractor.computeConfusionMatrix(
                 dummyDataset,
@@ -69,7 +68,7 @@ public class ConfusionMatrixExtractorTest {
     @Test
     public void testTwoAggregatedSameID() throws IOException {
         try (InputStream inputStream = ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_two_aggregated_same_id.json")) {
-            OutlierRemovalOptions configuration = mapper.readValue(inputStream, OutlierRemovalOptions.class);
+            OutlierRemovalOptions configuration = JsonUtils.MAPPER.readValue(inputStream, OutlierRemovalOptions.class);
 
             Dataset<Row> outputDataset = ConfusionMatrixExtractor.computeConfusionMatrix(
                     dummyDataset,
@@ -83,7 +82,7 @@ public class ConfusionMatrixExtractorTest {
 
     @Test
     public void testTwoAggregatedDifferentID() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_two_aggregated_different_id.json"), OutlierRemovalOptions.class);
+        OutlierRemovalOptions configuration = JsonUtils.MAPPER.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_two_aggregated_different_id.json"), OutlierRemovalOptions.class);
 
         Dataset<Row> outputDataset = ConfusionMatrixExtractor.computeConfusionMatrix(
                 dummyDataset,
@@ -98,7 +97,7 @@ public class ConfusionMatrixExtractorTest {
 
     @Test
     public void testAggregatedAndNotAggregated() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_aggregated_with_not_aggregated.json"), OutlierRemovalOptions.class);
+        OutlierRemovalOptions configuration = JsonUtils.MAPPER.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_aggregated_with_not_aggregated.json"), OutlierRemovalOptions.class);
 
         Dataset<Row> outputDataset = ConfusionMatrixExtractor.computeConfusionMatrix(
                 dummyDataset,
@@ -113,7 +112,7 @@ public class ConfusionMatrixExtractorTest {
 
     @Test
     public void testAggregatedMultipleFields() throws IOException {
-        OutlierRemovalOptions configuration = mapper.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_one_aggregated_two_fields.json"), OutlierRemovalOptions.class);
+        OutlierRemovalOptions configuration = JsonUtils.MAPPER.readValue(ConfusionMatrixExtractorTest.class.getResourceAsStream("/filter_one_aggregated_two_fields.json"), OutlierRemovalOptions.class);
 
         Dataset<Row> outputDataset = ConfusionMatrixExtractor.computeConfusionMatrix(
                 dummyDataset,

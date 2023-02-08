@@ -14,6 +14,7 @@ import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.spark.sql.Dataset;
@@ -120,6 +121,11 @@ public class FileDatasetReference extends DatasetReference {
 
     public DatasetOptions getOptions() {
         return options;
+    }
+
+    @Override
+    public Dataset<Row> readDataset(SparkSession sparkSession, String inputReference) {
+        throw new NotImplementedException();
     }
 
     public String getPartitionBy() {
