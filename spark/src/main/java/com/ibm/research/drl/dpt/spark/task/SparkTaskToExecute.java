@@ -15,6 +15,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
+import java.io.Serializable;
+
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         property = "task")
@@ -22,7 +24,7 @@ import org.apache.spark.sql.SparkSession;
 //        @JsonSubTypes.Type(value = MaskingTask.class, name = "Masking"),
         @JsonSubTypes.Type(value = IdentificationTask.class, name = "Identification"),
 })
-public abstract class SparkTaskToExecute {
+public abstract class SparkTaskToExecute implements Serializable {
     private static final Logger logger = LogManager.getLogger(SparkTaskToExecute.class);
 
     private final String task;

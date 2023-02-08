@@ -8,10 +8,11 @@ package com.ibm.research.drl.dpt.configuration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
-public class IdentificationConfiguration {
+public class IdentificationConfiguration implements Serializable {
     /**
      * The constant DEFAULT.
      */

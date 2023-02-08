@@ -1,4 +1,6 @@
 package com.ibm.research.drl.dpt.spark.task.option;
 
-public interface TaskOptions {
+import java.io.Serializable;
+
+public interface TaskOptions extends Serializable {
 }

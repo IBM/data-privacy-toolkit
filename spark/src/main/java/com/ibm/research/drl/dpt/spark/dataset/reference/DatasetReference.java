@@ -13,6 +13,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -20,6 +21,7 @@ import org.apache.spark.sql.SparkSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -28,7 +30,7 @@ import java.io.OutputStream;
         @JsonSubTypes.Type(value = FileDatasetReference.class, name = "File"),
         @JsonSubTypes.Type(value = DatabaseDatasetReference.class, name = "DB")
 })
-public abstract class DatasetReference {
+public abstract class DatasetReference implements Serializable {
     public abstract DataTypeFormat getFormat();
 
     public abstract DatasetOptions getOptions();
@@ -56,7 +58,7 @@ public abstract class DatasetReference {
         final ObjectMapper mapper;
 
         if (format.equals("json")) {
-            mapper = new ObjectMapper();
+            mapper = JsonUtils.MAPPER;
         } else if (format.equals("yaml")) {
             mapper = new ObjectMapper(new YAMLFactory());
         } else {
@@ -69,7 +71,7 @@ public abstract class DatasetReference {
                 DeserializationFeature.FAIL_ON_MISSING_EXTERNAL_TYPE_ID_PROPERTY,
                 false);
 
-        // Wee need this for now - something changed with the latest 2.11.3 and it now fails by default with unknown properties
+        // We need this for now - something changed with the latest 2.11.3, and it now fails by default with unknown properties
         // i.e. for now we need mixed-json that can be deserialized in two different classes with different props
         mapper.configure(
             DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
