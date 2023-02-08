@@ -17,10 +17,9 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InMemoryDatasetReference extends DatasetReference {
     private final List<String> columnNames;
@@ -28,6 +27,13 @@ public class InMemoryDatasetReference extends DatasetReference {
     private Dataset<Row> dataset;
 
     public InMemoryDatasetReference(List<List<String>> data, List<String> columnNames) {
+        if (!data.isEmpty()) {
+            for (List<String> row : data) {
+                if (row.size() != columnNames.size())
+                    throw new IllegalArgumentException("data rows and columnNames must have same size");
+            }
+        }
+
         this.data = data;
         this.columnNames = columnNames;
     }
@@ -75,12 +81,22 @@ public class InMemoryDatasetReference extends DatasetReference {
     }
 
     @Override
-    public void writeDataset(SparkSession sparkSession, Dataset<Row> outputDataset) {
-
+    public void writeDataset(Dataset<Row> outputDataset, String path) {
+        this.dataset = outputDataset;
     }
 
     @Override
-    public OutputStream asOutputStream() throws IOException {
-        return null;
+    public String toString() {
+        if (this.dataset != null) {
+            return this.dataset.toString();
+        } else {
+            if (this.data != null && this.columnNames != null) {
+                Stream<String> headers = Stream.of(String.join(",", columnNames));
+                Stream<String> dataRows = this.data.stream().map(row -> String.join(",", row));
+
+                return Stream.concat(headers, dataRows).collect(Collectors.joining("\n"));
+            }
+        }
+        return "InMemoryDatasetReference[NotInitialized]";
     }
 }

@@ -7,9 +7,12 @@ package com.ibm.research.drl.dpt.spark.dataset.reference;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
+import org.apache.spark.sql.catalyst.encoders.RowEncoder;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.Metadata;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +23,7 @@ import java.util.UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InMemoryDatasetReferenceTest {
     private SparkSession sparkSession;
@@ -65,5 +69,41 @@ class InMemoryDatasetReferenceTest {
 
         assertThat(dataframe.count(), is(5L));
         assertThat(dataframe.columns().length, is(2));
+    }
+
+    @Test
+    public void verifyWriting() {
+        InMemoryDatasetReference datasetReference = new InMemoryDatasetReference();
+
+        assertNotNull(datasetReference);
+
+        Dataset<Row> dataframe = sparkSession.createDataset(
+                List.of(RowFactory.create("FOO1", "BAR1"),
+                        RowFactory.create("FOO2", "BAR2"),
+                        RowFactory.create("FOO3", "BAR3"),
+                        RowFactory.create("FOO4", "BAR4"),
+                        RowFactory.create("FOO5", "BAR5")
+                ), RowEncoder.apply(new StructType(new StructField[]{
+                        new StructField("name", DataTypes.StringType, false, Metadata.empty()),
+                        new StructField("surname", DataTypes.StringType, false, Metadata.empty()),
+                }))
+        );
+
+        datasetReference.writeDataset(dataframe, "FOOO");
+    }
+
+    @Test
+    public void testDefensive() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            InMemoryDatasetReference ignored = new InMemoryDatasetReference(
+                    List.of(
+                            List.of("A", "B"),
+                            List.of("A", "B"),
+                            List.of("A")
+                    ), List.of("Col1", "Col2")
+            );
+
+            assertNotNull(ignored);
+        });
     }
 }

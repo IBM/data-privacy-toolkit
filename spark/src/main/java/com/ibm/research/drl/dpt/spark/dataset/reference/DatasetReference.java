@@ -35,9 +35,7 @@ public abstract class DatasetReference {
 
     public abstract Dataset<Row> readDataset(SparkSession sparkSession, String inputReference);
 
-    public abstract void writeDataset(SparkSession sparkSession, Dataset<Row> outputDataset);
-
-    public abstract OutputStream asOutputStream() throws IOException;
+    public abstract void writeDataset(Dataset<Row> outputDataset, String path);
 
     public static DatasetReference fromFile(String path) throws IOException {
         try (InputStream inputStream = SparkUtils.readFile(path)) {
