@@ -21,7 +21,7 @@ import java.io.Serializable;
         use = JsonTypeInfo.Id.NAME,
         property = "task")
 @JsonSubTypes({
-//        @JsonSubTypes.Type(value = MaskingTask.class, name = "Masking"),
+        @JsonSubTypes.Type(value = MaskingTask.class, name = "Masking"),
         @JsonSubTypes.Type(value = IdentificationTask.class, name = "Identification"),
 })
 public abstract class SparkTaskToExecute implements Serializable {
@@ -54,7 +54,7 @@ public abstract class SparkTaskToExecute implements Serializable {
         return this.inputDatasetReference.readDataset(getSparkSession(), inputReference);
     }
 
-    public void writeProcessedDataset(Dataset<Row> processedDataset, String optionValue) {
-
+    public void writeProcessedDataset(Dataset<Row> processedDataset, String outputReference) {
+        this.outputDatasetReference.writeDataset(processedDataset, outputReference);
     }
 }
