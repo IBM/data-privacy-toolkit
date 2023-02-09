@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.spark;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ibm.research.drl.dpt.spark.task.SparkTaskToExecute;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -80,7 +81,7 @@ public class DPTSparkDriver {
         final String extension = extractFileExtension(configurationFile);
 
         if (extension.equalsIgnoreCase("json")) {
-            return new ObjectMapper();
+            return JsonUtils.MAPPER;
         } else if (extension.equalsIgnoreCase("yaml") || extension.equalsIgnoreCase("yml")) {
             return new ObjectMapper(new YAMLFactory());
         }
@@ -114,7 +115,7 @@ public class DPTSparkDriver {
 
                 taskToExecute.writeProcessedDataset(processedDataset, commandLine.getOptionValue(CommandLineOptions.Output.shortOption));
 
-                return;
+                System.exit(0);
             }
         } catch (IOException | ParseException | RuntimeException e) {
             logger.error("Execution failed " + e.getMessage());
