@@ -1,12 +1,9 @@
 package com.ibm.research.drl.dpt.spark.task;
 
-import com.fasterxml.jackson.databind.node.TextNode;
-import com.ibm.research.drl.dpt.configuration.IdentificationConfiguration;
-import com.ibm.research.drl.dpt.providers.identifiers.EmailIdentifier;
-import com.ibm.research.drl.dpt.providers.identifiers.NameIdentifier;
-import com.ibm.research.drl.dpt.providers.masking.dicom.DAMaskingProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.spark.dataset.reference.InMemoryDatasetReference;
-import com.ibm.research.drl.dpt.spark.task.option.IdentificationOptions;
 import com.ibm.research.drl.dpt.spark.task.option.MaskingOptions;
 import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.spark.SparkConf;
@@ -18,12 +15,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class MaskingTaskTest {
     private SparkSession sparkSession;
@@ -50,7 +51,7 @@ class MaskingTaskTest {
     }
 
     @Test
-    public void testHappyPath() {
+    public void simpleOneColumnMasking() throws JsonProcessingException {
         InMemoryDatasetReference output = new InMemoryDatasetReference();
 
         List<String> columnNames = List.of("EMAIL", "Names");
@@ -69,13 +70,68 @@ class MaskingTaskTest {
                 input,
                 output,
                 new MaskingOptions(
-                    Map.of("EMAIL", new DAMaskingProvider())
+                        Map.of("EMAIL", new DataMaskingTarget(ProviderType.EMAIL, "EMAIL")),
+                        Collections.emptyMap(),
+                        "",
+                        JsonUtils.MAPPER.readTree("{\"_fields\": {}, \"_defaults\": {}}")
                 ));
 
         Dataset<Row> result = task.process(input.readDataset(sparkSession, "USELESS_REFERENCE"));
 
         assertNotNull(result);
-        assertThat(result.count(), is((long) data.get(0).size()));
-        result.show();
+        assertThat(result.count(), is((long) data.size()));
+
+        List<Row> values = result.collectAsList();
+
+        for (Row row : values) {
+            String email = row.getString(row.fieldIndex("EMAIL"));
+            String name = row.getString(row.fieldIndex("Names"));
+
+            boolean match = false;
+
+            for (List<String> originalRow : data) {
+                assertThat(email, is(not(originalRow.get(0))));
+
+                match |= name.equals(originalRow.get(1));
+            }
+
+            assertThat(match, is(true));
+        }
+    }
+
+    @Test
+    public void columnSuppression() throws JsonProcessingException {
+        InMemoryDatasetReference output = new InMemoryDatasetReference();
+
+        List<String> columnNames = List.of("EMAIL", "Names");
+        List<List<String>> data = List.of(
+                List.of("jsmith@gmail.com", "John Smith"),
+                List.of("j.doe@hotmail.com", "Jane Doe"),
+                List.of("bobby@gmail.com", "Robert Tucker"),
+                List.of("smitty@gmail.com", "Richard Smith"),
+                List.of("d.camp@gmail.com", "Dorothy Campbell")
+        );
+
+        InMemoryDatasetReference input = new InMemoryDatasetReference(data, columnNames);
+
+        MaskingTask task = new MaskingTask(
+                "Masking",
+                input,
+                output,
+                new MaskingOptions(
+                        Map.of("EMAIL", new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, "EMAIL")),
+                        Collections.emptyMap(),
+                        "",
+                        JsonUtils.MAPPER.readTree("{\"_fields\": {}, \"_defaults\": {}}")
+                ));
+
+        Dataset<Row> result = task.process(input.readDataset(sparkSession, "USELESS_REFERENCE"));
+
+        assertNotNull(result);
+        assertThat(result.count(), is((long) data.size()));
+
+        assertThat(result.columns().length, is(1));
+
+        assertThat("EMAIL", not(in(result.columns())));
     }
 }
