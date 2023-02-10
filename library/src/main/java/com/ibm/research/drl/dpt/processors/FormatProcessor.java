@@ -38,7 +38,6 @@ public abstract class FormatProcessor implements Serializable {
     private final static Logger logger = LogManager.getLogger(FormatProcessor.class);
 
     protected void performOutputAction(Record record, OutputStream output, Iterable<String> fieldsToSuppress) throws IOException {
-
         for (String field : fieldsToSuppress) {
             record.suppressField(field);
         }
