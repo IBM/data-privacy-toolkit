@@ -58,7 +58,6 @@ public abstract class FormatProcessor implements Serializable {
 
         List<String> fieldsToSuppress = getFieldsToSuppress(dataMaskingOptions);
 
-
         for (Record record : extractRecords(dataset, dataMaskingOptions.getDatasetOptions())) {
             if (!record.isHeader()) {
                 record = maskRecord(record, factory, alreadyMaskedFields, dataMaskingOptions);
