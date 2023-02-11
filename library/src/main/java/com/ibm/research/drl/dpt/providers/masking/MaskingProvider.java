@@ -22,6 +22,7 @@ public interface MaskingProvider extends Serializable {
      * @param data the data
      * @return the string [ ]
      */
+    @Deprecated(forRemoval = true)
     String[] mask(final String[] data);
 
     /**
@@ -47,7 +48,9 @@ public interface MaskingProvider extends Serializable {
      * @param fieldName  the field name
      * @return the string
      */
-    String mask(String identifier, String fieldName);
+    default String mask(String identifier, String fieldName) {
+        return mask(identifier);
+    }
 
     /**
      * Mask string.
@@ -58,7 +61,10 @@ public interface MaskingProvider extends Serializable {
      * @param values            the values
      * @return the string
      */
-    String mask(String identifier, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values);
+    @Deprecated(forRemoval = true)
+    default String mask(String identifier, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values) {
+        return mask(identifier, fieldName);
+    }
 
     default boolean supportsObject() {
         return false;
@@ -66,5 +72,33 @@ public interface MaskingProvider extends Serializable {
 
     default byte[] mask(Object complex, String fieldName) {
         throw new UnsupportedOperationException();
+    }
+
+    default String maskWithKey(String identifier, String key) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskLinked(String identifier, String linkedValue) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskProduct(String identifier, String product) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskLess(String identifier, String lesserValue) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskEqual(String identifier, String equalValue) {
+        return equalValue;
+    }
+
+    default String maskGreater(String identifier, String greaterValue) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskDistance(String identifier, String distance) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 }
