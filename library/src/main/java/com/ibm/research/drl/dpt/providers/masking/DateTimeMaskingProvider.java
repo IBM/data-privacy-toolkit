@@ -320,9 +320,8 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
         return dtf.toFormatter().withZone(zone);
     }
 
-    private String keyBasedMasking(String identifier, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-        String operand = fieldRelationship.getOperands()[0].getName();
-
+    @Override
+    public String maskWithKey(String identifier, String keyValue) {
         DateTimeFormatter f;
 
         if (this.fixedDateFormat != null) {
@@ -335,13 +334,6 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
 
             f = matchingFormat.getFirst();
         }
-
-        OriginalMaskedValuePair pair = maskedValues.get(operand);
-        if (pair == null) {
-            return RandomGenerators.generateRandomDate(f);
-        }
-
-        String keyValue = pair.getOriginal();
 
         long minMaxDistance = this.keyBasedMaxDays - this.keyBasedMinDays;
 
@@ -375,7 +367,7 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
         RelationshipType relationshipType = fieldRelationship.getRelationshipType();
 
         if (relationshipType == RelationshipType.KEY) {
-            return keyBasedMasking(identifier, fieldName, fieldRelationship, maskedValues);
+            return maskWithKey(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
         }
 
         String operand = fieldRelationship.getOperands()[0].getName();

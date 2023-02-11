@@ -34,10 +34,4 @@ public abstract class AbstractMaskingProvider implements MaskingProvider, Serial
     public byte[] mask(byte[] data) {
         return mask(new String(data)).getBytes();
     }
-
-    @Override
-    public String mask(String identifier, String fieldName,
-                       FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-        return mask(identifier);
-    }
 }
