@@ -370,6 +370,14 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
             return maskWithKey(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
         }
 
+        if (relationshipType == RelationshipType.DISTANCE) {
+            return maskDistance(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getOriginal(), maskedValues.get(fieldRelationship.getOperands()[0].getName()).getMasked());
+        }
+
+        if (relationshipType == RelationshipType.EQUALS) {
+            return maskEqual(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getMasked());
+        }
+
         String operand = fieldRelationship.getOperands()[0].getName();
 
         OriginalMaskedValuePair pair = maskedValues.get(operand);
@@ -378,10 +386,6 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
         }
 
         String baseMaskedValue = pair.getMasked();
-
-        if (relationshipType == RelationshipType.EQUALS) {
-            return baseMaskedValue;
-        }
 
         LocalDateTime d;
         LocalDateTime originalDate;
@@ -426,15 +430,6 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
             case GREATER:
                 d = d.plus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
                 break;
-            case DISTANCE:
-                if (operandOriginalDate.isAfter(originalDate)) {
-                    //diff is positive
-                    d = d.minus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
-                } else {
-                    //diff is zero or negative
-                    d = d.plus(-diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
-                }
-                break;
             default:
                 //XXX we should never reach this point!
                 return mask(identifier);
@@ -443,6 +438,54 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
         return d.format(f);
     }
 
+    @Override
+    public String maskDistance(String identifier, String baseOriginal, String baseMaskedValue) {
+        LocalDateTime d;
+        LocalDateTime originalDate;
+        LocalDateTime operandOriginalDate;
+        DateTimeFormatter f;
+
+        if (this.fixedDateFormat != null) {
+            f = buildFormatter(this.fixedDateFormat);
+
+            if (baseMaskedValue == null) {
+                return RandomGenerators.generateRandomDate(f);
+            }
+
+            originalDate = LocalDateTime.parse(identifier, f);
+            operandOriginalDate = LocalDateTime.parse(baseOriginal, f);
+
+            d = LocalDateTime.parse(baseMaskedValue, f);
+        } else {
+            if (baseMaskedValue == null) {
+                return RandomGenerators.generateRandomDate(defaultDateFormat);
+            }
+
+            Tuple<DateTimeFormatter, TemporalAccessor> matchingFormat = dateTimeIdentifier.matchingFormat(baseMaskedValue);
+            if (matchingFormat == null) {
+                return RandomGenerators.generateRandomDate(defaultDateFormat);
+            }
+
+            f = matchingFormat.getFirst();
+
+            d = LocalDateTime.from(matchingFormat.getSecond());
+
+            originalDate = LocalDateTime.parse(identifier, f);
+            operandOriginalDate = LocalDateTime.parse(baseOriginal, f);
+        }
+
+        long diff = (operandOriginalDate.toInstant(ZoneOffset.UTC).toEpochMilli() - originalDate.toInstant(ZoneOffset.UTC).toEpochMilli());
+
+        if (operandOriginalDate.isAfter(originalDate)) {
+            //diff is positive
+            d = d.minus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
+        } else {
+            //diff is zero or negative
+            d = d.plus(-diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
+        }
+
+        return d.format(f);
+    }
 
     private String handleError(String identifier, DateTimeFormatter defaultDateFormat) {
         switch (this.failMode) {
