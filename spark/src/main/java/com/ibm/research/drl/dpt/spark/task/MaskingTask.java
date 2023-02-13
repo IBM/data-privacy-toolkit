@@ -39,7 +39,8 @@ public class MaskingTask extends SparkTaskToExecute {
     private static final String[] PREFIX = {
             "___",
             "###",
-            "PREFIX_"
+            "PREFIX_",
+            UUID.randomUUID().toString().substring(0, 5)
     };
     private final MaskingOptions taskOptions;
 
@@ -152,22 +153,27 @@ public class MaskingTask extends SparkTaskToExecute {
             switch (relationship.getRelationshipType()) {
 
                 case KEY:
-                    String operandFieldName = relationship.getOperands()[0].getName();
+                    String keyFieldName = relationship.getOperands()[0].getName();
 
                     UDF2<String, String, String> keyedUDF = provider::maskWithKey;
 
-                    return dataset.withColumn(prefix + fieldName, dataset.col(fieldName)).
-                            withColumn(target.getTargetPath(),
-                                    udf(keyedUDF, DataTypes.StringType).apply(
-                                    dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(operandFieldName).cast(DataTypes.StringType)
-                            ).cast(targetDataType));
+                    return dataset.withColumn(target.getTargetPath(),
+                                        udf(keyedUDF, DataTypes.StringType).apply(
+                                        dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(prefix + keyFieldName).cast(DataTypes.StringType)
+                                    ).cast(targetDataType));
+                case DISTANCE:
+                    String relativeDistanceFieldName = relationship.getOperands()[0].getName();
+                    UDF2<String, String, String> distanceUDF = provider::maskDistance;
+                    return dataset.withColumn(target.getTargetPath(),
+                            udf(distanceUDF, DataTypes.StringType).apply(
+                                dataset.col(fieldName).cast(DataTypes.StringType), dataset.col
+                            ).cast(targetDataType);
                 case GREP_AND_MASK:
                 case SUM:
                 case SUM_APPROXIMATE:
                 case PRODUCT:
                 case EQUALS:
                 case GREATER:
-                case DISTANCE:
                 case LESS:
                 case LINKED:
                 default:

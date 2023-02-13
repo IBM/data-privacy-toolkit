@@ -98,7 +98,7 @@ public interface MaskingProvider extends Serializable {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
-    default String maskDistance(String identifier, String distance) {
+    default String maskDistance(String identifier, String original, String masked) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 }
