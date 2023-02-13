@@ -28,17 +28,9 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.udf;
 
@@ -64,12 +56,15 @@ public class MaskingTask extends SparkTaskToExecute {
     @Override
     public Dataset<Row> process(Dataset<Row> dataset) {
         final MaskingProviderFactory factory = buildMaskingProviderFactory();
-        final Set<String> alreadyMaskedFields = new HashSet<>();
+
         final Queue<String> fieldsToMask = new ArrayDeque<>(this.taskOptions.getToBeMasked().keySet());
 
         final String prefix = findPrefix(dataset.columns());
 
+        dataset = expandDatasetWithFieldsToPreserve(dataset, prefix);
+
         final Collection<String> fieldsToSuppress = getFieldsToSuppress(this.taskOptions.getToBeMasked());
+        final Set<String> alreadyMaskedFields = new HashSet<>();
 
         while (! fieldsToMask.isEmpty()) {
             String fieldName = Objects.requireNonNull(fieldsToMask.poll());
@@ -88,6 +83,30 @@ public class MaskingTask extends SparkTaskToExecute {
         }
 
         return suppressFields(dataset, fieldsToSuppress);
+    }
+
+    private Dataset<Row> expandDatasetWithFieldsToPreserve(Dataset<Row> dataset, String prefix) {
+        final Collection<String> requiresOriginal = findFieldsMaskedButAlsoRequiredAsOriginal(dataset.columns(), this.taskOptions.getToBeMasked(), this.taskOptions.getPredefinedRelationships());
+
+        for (String requiredOriginal : requiresOriginal) {
+            dataset = dataset.withColumn(prefix + requiredOriginal, dataset.col(requiredOriginal));
+        }
+
+        return dataset;
+    }
+
+    private Collection<String> findFieldsMaskedButAlsoRequiredAsOriginal(String[] columnNames, Map<String, DataMaskingTarget> columnToBeMasked, Map<String, FieldRelationship> relationships) {
+        // TODO: this operation can be further refined if we also consider the relationship type
+
+        final Set<String> operands = relationships.values().stream()
+                .map(FieldRelationship::getOperands)
+                .flatMap(Arrays::stream)
+                .map(RelationshipOperand::getName)
+                .collect(Collectors.toSet());
+
+        return Arrays.stream(columnNames).filter(columnToBeMasked::containsKey)
+                .filter(operands::contains)
+                .collect(Collectors.toList());
     }
 
     private String findPrefix(String[] columnNames) {
@@ -131,36 +150,29 @@ public class MaskingTask extends SparkTaskToExecute {
                     ).cast(targetDataType));
         } else {
             switch (relationship.getRelationshipType()) {
-                case SUM:
-                    break;
-                case SUM_APPROXIMATE:
-                    break;
-                case PRODUCT:
-                    break;
-                case EQUALS:
-                    break;
-                case GREATER:
-                    break;
-                case DISTANCE:
-                    break;
-                case LESS:
-                    break;
-                case LINKED:
-                    break;
+
                 case KEY:
                     String operandFieldName = relationship.getOperands()[0].getName();
 
-                    UDF2<String, String, String> keydUDF = (toMask, key) -> provider.maskWithKey(toMask, key);
+                    UDF2<String, String, String> keyedUDF = provider::maskWithKey;
 
                     return dataset.withColumn(prefix + fieldName, dataset.col(fieldName)).
                             withColumn(target.getTargetPath(),
-                                    udf(keydUDF, DataTypes.StringType).apply(
+                                    udf(keyedUDF, DataTypes.StringType).apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(operandFieldName).cast(DataTypes.StringType)
-                            ).cast(targetDataType));)
+                            ).cast(targetDataType));
                 case GREP_AND_MASK:
-                    break;
+                case SUM:
+                case SUM_APPROXIMATE:
+                case PRODUCT:
+                case EQUALS:
+                case GREATER:
+                case DISTANCE:
+                case LESS:
+                case LINKED:
+                default:
+                    throw new UnsupportedOperationException();
             }
-
         }
     }
 
