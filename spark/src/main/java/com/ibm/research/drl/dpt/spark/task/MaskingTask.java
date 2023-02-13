@@ -23,6 +23,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.api.java.UDF1;
 import org.apache.spark.sql.api.java.UDF2;
+import org.apache.spark.sql.api.java.UDF3;
 import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
@@ -83,7 +84,7 @@ public class MaskingTask extends SparkTaskToExecute {
             alreadyMaskedFields.add(fieldName);
         }
 
-        return suppressFields(dataset, fieldsToSuppress);
+        return suppressFields(dataset, fieldsToSuppress, prefix);
     }
 
     private Dataset<Row> expandDatasetWithFieldsToPreserve(Dataset<Row> dataset, String prefix) {
@@ -97,8 +98,6 @@ public class MaskingTask extends SparkTaskToExecute {
     }
 
     private Collection<String> findFieldsMaskedButAlsoRequiredAsOriginal(String[] columnNames, Map<String, DataMaskingTarget> columnToBeMasked, Map<String, FieldRelationship> relationships) {
-        // TODO: this operation can be further refined if we also consider the relationship type
-
         final Set<String> operands = relationships.values().stream()
                 .map(FieldRelationship::getOperands)
                 .flatMap(Arrays::stream)
@@ -163,11 +162,13 @@ public class MaskingTask extends SparkTaskToExecute {
                                     ).cast(targetDataType));
                 case DISTANCE:
                     String relativeDistanceFieldName = relationship.getOperands()[0].getName();
-                    UDF2<String, String, String> distanceUDF = provider::maskDistance;
+                    UDF3<String, String, String, String> distanceUDF = provider::maskDistance;
                     return dataset.withColumn(target.getTargetPath(),
                             udf(distanceUDF, DataTypes.StringType).apply(
-                                dataset.col(fieldName).cast(DataTypes.StringType), dataset.col
-                            ).cast(targetDataType);
+                                dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(prefix + relativeDistanceFieldName).cast(DataTypes.StringType),
+                                    dataset.col(relativeDistanceFieldName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
                 case GREP_AND_MASK:
                 case SUM:
                 case SUM_APPROXIMATE:
@@ -188,20 +189,15 @@ public class MaskingTask extends SparkTaskToExecute {
                 ].dataType();
     }
 
-    private boolean isSameTargetField(String fieldName, String targetPath) {
-        // strong assumption, works with traditional dataframes
-        return fieldName.equals(targetPath);
-    }
-
-    private Dataset<Row> suppressFields(Dataset<Row> dataset, Collection<String> fieldsToSuppress) {
+    private Dataset<Row> suppressFields(Dataset<Row> dataset, Collection<String> fieldsToSuppress, String prefix) {
         return dataset.select(
-                findRemainingColumnNames(dataset.columns(), fieldsToSuppress)
+                findRemainingColumnNames(dataset.columns(), fieldsToSuppress, prefix)
         );
     }
 
-    private Column[] findRemainingColumnNames(String[] columns, Collection<String> fieldsToSuppress) {
+    private Column[] findRemainingColumnNames(String[] columns, Collection<String> fieldsToSuppress, String prefix) {
         return Arrays.stream(columns).filter(
-                ((Predicate<String>) fieldsToSuppress::contains).negate()
+                ((Predicate<String>) fieldsToSuppress::contains).or(v -> v.startsWith(prefix)).negate()
         ).map(functions::col).toArray(Column[]::new);
     }
 
