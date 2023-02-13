@@ -54,43 +54,33 @@ public class DateTimeMaskingProviderTest {
         String[] values = new String[]{"year", "month", "day", "hour", "minutes", "seconds"};
         
         for(String value: values) {
-            MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-            maskingConfiguration.setValue("datetime." + value + ".mask", true);
-            maskingConfiguration.setValue("datetime." + value + ".rangeUp", -1);
-            
-            try {
-                MaskingProvider maskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
-            } catch (RuntimeException e) {
-                continue;
-            }
+            assertThrows(RuntimeException.class, () -> {
+                MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+                maskingConfiguration.setValue("datetime." + value + ".mask", true);
+                maskingConfiguration.setValue("datetime." + value + ".rangeUp", -1);
 
-            fail("no exception caught for rangeUp: " + value);
-        }
 
-        for(String value: values) {
-            MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-            maskingConfiguration.setValue("datetime." + value + ".mask", true);
-            maskingConfiguration.setValue("datetime." + value + ".rangeDown", -1);
+                new DateTimeMaskingProvider(maskingConfiguration);
+            });
+            assertThrows(RuntimeException.class, () -> {
+                MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+                maskingConfiguration.setValue("datetime." + value + ".mask", true);
+                maskingConfiguration.setValue("datetime." + value + ".rangeDown", -1);
 
-            try {
-                MaskingProvider maskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
-            } catch (RuntimeException e) {
-                continue;
-            }
-
-            fail("no exception caught for rangeDown : " + value);
+                new DateTimeMaskingProvider(maskingConfiguration);
+            });
         }
     }
     
     
     @Test
     public void testTrimToIntervalThrowsExceptionForNegativeNumberOfIntervals() {
-        assertThrows(Exception.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             DefaultMaskingConfiguration configuration = new DefaultMaskingConfiguration();
             configuration.setValue("datetime.mask.trimTimeToHourInterval", true);
             configuration.setValue("datetime.mask.numberOfIntervals", -10);
 
-            DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider(configuration);
+            new DateTimeMaskingProvider(configuration);
         });
     }
 
@@ -101,7 +91,7 @@ public class DateTimeMaskingProviderTest {
             configuration.setValue("datetime.mask.trimTimeToHourInterval", true);
             configuration.setValue("datetime.mask.numberOfIntervals", 1000);
 
-            DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider(configuration);
+            new DateTimeMaskingProvider(configuration);
         });
     }
 
@@ -394,6 +384,8 @@ public class DateTimeMaskingProviderTest {
 
             for (int i = 0; i < N; i++) {
                 String maskedDateTime = maskingProvider.mask(originalDateTime);
+
+                assertNotNull(maskedDateTime);
             }
 
             long diff = System.currentTimeMillis() - startMillis;
@@ -632,7 +624,7 @@ public class DateTimeMaskingProviderTest {
     }
 
     @Test
-    public void testCompoundMaskingDistanceEqualFixedFormatHours() throws Exception {
+    public void testCompoundMaskingDistanceEqualFixedFormatHours() {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("datetime.format.fixed", "HHmmss");
         DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
@@ -817,6 +809,8 @@ public class DateTimeMaskingProviderTest {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("datetime.format.fixed", "dd-MM-yyyy");
         int maxDays = maskingConfiguration.getIntValue("datetime.mask.keyBasedMaxDays");
+
+        assertThat(maxDays, is(100));
 
         DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
 
