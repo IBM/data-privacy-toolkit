@@ -2,7 +2,11 @@ package com.ibm.research.drl.dpt.spark.task;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
+import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.providers.ProviderType;
+import com.ibm.research.drl.dpt.schema.FieldRelationship;
+import com.ibm.research.drl.dpt.schema.RelationshipOperand;
+import com.ibm.research.drl.dpt.schema.RelationshipType;
 import com.ibm.research.drl.dpt.spark.dataset.reference.InMemoryDatasetReference;
 import com.ibm.research.drl.dpt.spark.task.option.MaskingOptions;
 import com.ibm.research.drl.dpt.util.JsonUtils;
@@ -133,5 +137,44 @@ class MaskingTaskTest {
         assertThat(result.columns().length, is(1));
 
         assertThat("EMAIL", not(in(result.columns())));
+    }
+
+    @Test
+    public void relationshipDistance() throws JsonProcessingException {
+        InMemoryDatasetReference output = new InMemoryDatasetReference();
+
+        List<String> columnNames = List.of("EMAIL", "Date1", "Date2");
+        List<List<String>> data = List.of(
+                List.of("jsmith@gmail.com", "2022-10-13", "2023-10-13"),
+                List.of("j.doe@hotmail.com", "2022-10-13", "2023-10-13"),
+                List.of("bobby@gmail.com", "2022-10-13", "2023-10-13"),
+                List.of("smitty@gmail.com", "2022-10-13", "2023-10-13"),
+                List.of("d.camp@gmail.com", "2022-10-13", "2023-10-13")
+        );
+
+        InMemoryDatasetReference input = new InMemoryDatasetReference(data, columnNames);
+
+        MaskingTask task = new MaskingTask(
+                "Masking",
+                input,
+                output,
+                new MaskingOptions(
+                        Map.of(
+                                "Date1", new DataMaskingTarget(ProviderType.DATETIME, "Date1"),
+                                "Date2", new DataMaskingTarget(ProviderType.DATETIME, "Date2")),
+                        Map.of(
+                                "Date1", new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE, "Date1", new RelationshipOperand[]{
+                                        new RelationshipOperand("Date2", ProviderType.DATETIME)
+                                })
+                        ),
+                        "",
+                        JsonUtils.MAPPER.readTree("{\"_fields\": {}, \"_defaults\": {" +
+                                "\"datetime.format.fixed\": \"yyyy-MM-dd\"}}")
+                ));
+
+        Dataset<Row> result = task.process(input.readDataset(sparkSession, "USELESS_REFERENCE"));
+
+        assertNotNull(result);
+        assertThat(result.count(), is((long) data.size()));
     }
 }
