@@ -48,13 +48,13 @@ public abstract class SparkTaskToExecute implements Serializable {
         return this.sparkSession;
     }
 
-    public abstract Dataset<Row> process(Dataset<Row> inputDataset);
+    public abstract Dataset<Row> process(Dataset<Row> dataset);
 
-    public Dataset<Row> readInputDataset(String inputReference) {
-        return this.inputDatasetReference.readDataset(getSparkSession(), inputReference);
+    public Dataset<Row> readInputDataset(String input) {
+        return this.inputDatasetReference.readDataset(getSparkSession(), input);
     }
 
-    public void writeProcessedDataset(Dataset<Row> processedDataset, String outputReference) {
-        this.outputDatasetReference.writeDataset(processedDataset, outputReference);
+    public void writeProcessedDataset(Dataset<Row> dataset, String output) {
+        this.outputDatasetReference.writeDataset(dataset, output);
     }
 }

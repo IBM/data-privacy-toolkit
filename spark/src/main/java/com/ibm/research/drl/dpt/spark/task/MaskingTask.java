@@ -49,8 +49,8 @@ public class MaskingTask extends SparkTaskToExecute {
     public MaskingTask(
             @JsonProperty("task") String task,
             @JsonProperty("inputOptions") DatasetReference inputOptions,
-            @JsonProperty("inputOptions") DatasetReference outputOptions,
-            @JsonProperty("inputOptions") MaskingOptions taskOptions) {
+            @JsonProperty("outputOptions") DatasetReference outputOptions,
+            @JsonProperty("taskOptions") MaskingOptions taskOptions) {
         super(task, inputOptions, outputOptions);
         this.taskOptions = taskOptions;
     }
