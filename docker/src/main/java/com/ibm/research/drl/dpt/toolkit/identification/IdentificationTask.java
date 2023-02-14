@@ -27,6 +27,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.PluggableLookupIdentifier;
 import com.ibm.research.drl.dpt.providers.identifiers.PluggableRegexIdentifier;
 import com.ibm.research.drl.dpt.toolkit.dataset.GenericDatasetOptions;
 import com.ibm.research.drl.dpt.toolkit.task.TaskToExecute;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,7 +69,7 @@ public class IdentificationTask extends TaskToExecute {
     ) {
         super(task, extension, inputFormat, inputOptions, null, null );
         this.taskOptions = identificationOptions;
-        mapper = new ObjectMapper();
+        mapper = JsonUtils.MAPPER;
         identifiers = taskSpecificSetOfIdentifiers(taskOptions);
     }
 

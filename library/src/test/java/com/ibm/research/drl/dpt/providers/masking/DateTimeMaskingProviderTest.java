@@ -635,13 +635,8 @@ public class DateTimeMaskingProviderTest {
 
         String maskedOperandTime = "070000";
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskDistance(originalDateTime, originalOperandTime, maskedOperandTime);
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
-
-        String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
         assertEquals("060000", maskedDateTime);
     }
 
@@ -655,19 +650,13 @@ public class DateTimeMaskingProviderTest {
         // different values
         String originalDateTime = "04-03-2014 00:00:00";
         Date originalDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(originalDateTime);
-        
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.KEY,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.GUID)});
 
         String user1_lastValue = null;
         
         for(int i = 0; i < 100; i++) {
             String operandValue = "user1";
 
-            Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-            maskedValues.put("field1", new OriginalMaskedValuePair(operandValue, operandValue));
-
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
+            String maskedDateTime = maskingProvider.maskWithKey(originalDateTime, operandValue);
             Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
             
             long maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24*60*60*1000);
@@ -688,10 +677,7 @@ public class DateTimeMaskingProviderTest {
         for(int i = 0; i < 100; i++) {
             String operandValue = "user2";
 
-            Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-            maskedValues.put("field1", new OriginalMaskedValuePair(operandValue, operandValue));
-
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
+            String maskedDateTime = maskingProvider.maskWithKey(originalDateTime, operandValue);
             Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
             
             long maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24*60*60*1000);
