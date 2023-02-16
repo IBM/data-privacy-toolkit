@@ -53,8 +53,11 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 - [Spark wrappers](spark)
 
 ## Academic References:
+- M. Kesarwani, A. Kaul, S. Braghin, N. Holohan, and S. Antonatos, "Secure k-anonymization over encrypted databases," 2021 IEEE 14th International Conference on Cloud Computing (CLOUD), 2021, pp. 20-30, doi: 10.1109/CLOUD53861.2021.00015.
+- M. Pachilakis, S. Antonatos, K. Levacher, and S. Braghin, "PrivLeAD: Privacy Leakage Detection on the Web," Intelligent Systems and Applications. IntelliSys 2020. Advances in Intelligent Systems and Computing, vol 1250. Springer, Cham. doi: 10.1007/978-3-030-55180-3_32.
+- S. Braghin, J. H. Bettencourt-Silva, K. Levacher, and S. Antonatos, "An Extensible De-Identification Framework for Privacy Protection of Unstructured Health Information: Creating Sustainable Privacy Infrastructures", In MEDINFO 2019: Health and Wellbeing e-Networks for All (pp. 1140-1144). IOS Press. doi: 10.3233/SHTI190404.
 - S. Antonatos, S. Braghin, N. Holohan, Y. Gkoufas and P. Mac Aonghusa, "PRIMA: An End-to-End Framework for Privacy at Scale," 2018 IEEE 34th International Conference on Data Engineering (ICDE), 2018, pp. 1531-1542, doi: 10.1109/ICDE.2018.00171.
-- N. Holohan, S. Antonatos, S. Braghin, P. Mac Aonghusa, "(k, ϵ)-anonymity: k-anonymity with ϵ-differential privacy,", 2017, arXiv preprint arXiv:1710.01615.
+- N. Holohan, S. Antonatos, S. Braghin, and P. Mac Aonghusa, "(k, ϵ)-anonymity: k-anonymity with ϵ-differential privacy,", 2017, arXiv preprint arXiv:1710.01615.
 - A. Gkoulalas-Divanis and S. Braghin, "IPV: A system for identifying privacy vulnerabilities in datasets," in IBM Journal of Research and Development, vol. 60, no. 4, pp. 14:1-14:10, July-Aug. 2016, doi: 10.1147/JRD.2016.2576818.
 - A. Gkoulalas-Divanis, S. Braghin and S. Antonatos, "FPVI: A scalable method for discovering privacy vulnerabilities in microdata," 2016 IEEE International Smart Cities Conference (ISC2), 2016, pp. 1-8, doi: 10.1109/ISC2.2016.7580849.
 - A. Gkoulalas-Divanis and S. Braghin, "Efficient algorithms for identifying privacy vulnerabilities," 2015 IEEE First International Smart Cities Conference (ISC2), 2015, pp. 1-8, doi: 10.1109/ISC2.2015.7366170.
