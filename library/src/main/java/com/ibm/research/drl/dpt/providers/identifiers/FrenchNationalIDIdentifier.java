@@ -6,7 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FrenchNationalIDIdentifier extends AbstractIdentifier {
-    private static final Pattern pattern = Pattern.compile("([12])\\d{2}(0[1-9]|1[0-2]|2[0-9])(\\d{2}|\\d[a-zA-Z]|\\d{3})(\\d{3}|\\d{2})(\\d{3})\\s?(0[1-9]|[1-8]\\d|9[0-7])");
+    // http://resoo.org/docs/_docs/regles-numero-insee.pdf
+    private static final Pattern pattern = Pattern.compile("([12]\\s?\\d{2}\\s?(?:0[1-9]|1[0-2]|2[0-9])\\s?(?:\\d{2}|\\d[a-zA-Z]|\\d{3})\\s?(?:\\d{3}|\\d{2})\\d{3})\\s?(0[1-9]|[1-8]\\d|9[0-7])");
 
     @Override
     public ProviderType getType() {
@@ -23,10 +24,39 @@ public class FrenchNationalIDIdentifier extends AbstractIdentifier {
         Matcher matcher = pattern.matcher(data);
 
         if (matcher.matches()) {
-            return true;
+            return this.isCheckDigitCorrect(matcher.group(1), matcher.group(2));
         }
 
         return false;
+    }
+
+    private boolean isCheckDigitCorrect(String data, String parityString) {
+        final int parity;
+
+        try {
+            parity = Integer.parseInt(parityString, 10);
+        } catch (NumberFormatException exception) {
+            return false;
+        }
+
+        int number = 0;
+
+        for (int i = 0; i < data.length(); ++i) {
+            if (!Character.isDigit(data.charAt(i))) continue;
+
+            int digit = data.charAt(i) - '0';
+
+            number *= 10;
+            number += digit;
+        }
+        
+        number %= 97;
+        
+        if (number == 0) {
+            number = 97;
+        }
+        
+        return number == parity;
     }
 
     @Override
