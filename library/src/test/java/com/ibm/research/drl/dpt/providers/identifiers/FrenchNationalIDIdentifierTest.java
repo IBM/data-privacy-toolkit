@@ -10,6 +10,7 @@ class FrenchNationalIDIdentifierTest {
         String[] invalidValues = new String[] {
                 "FOO BAR",
                 "123456+78978945",
+
         };
 
         FrenchNationalIDIdentifier identifier = new FrenchNationalIDIdentifier();
@@ -22,7 +23,9 @@ class FrenchNationalIDIdentifierTest {
     @Test
     public void valid() {
         String[] validValues = new String[] {
-
+                "379058496820192",
+                "2 79 05 84 968 201 91",
+                "279053A96820192",
         };
 
         FrenchNationalIDIdentifier identifier = new FrenchNationalIDIdentifier();
