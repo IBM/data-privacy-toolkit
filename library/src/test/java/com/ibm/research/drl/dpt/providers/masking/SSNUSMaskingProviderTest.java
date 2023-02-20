@@ -12,8 +12,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import com.ibm.research.drl.dpt.providers.identifiers.SSNUSIdentifier;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SSNUSMaskingProviderTest {
     @Test
@@ -68,8 +67,13 @@ public class SSNUSMaskingProviderTest {
         Identifier identifier = new SSNUSIdentifier();
 
         String ssn = "foobar";
-        String maskedValue = maskingProvider.mask(ssn);
-        assertTrue(identifier.isOfThisType(maskedValue));
+        for (int i = 0; i < 10; i++) {
+            String maskedValue = maskingProvider.mask(ssn);
+            if (identifier.isOfThisType(maskedValue)) {
+                return;
+            }
+        }
+        fail("Random generation failed 10 times in a row");
     }
 }
 

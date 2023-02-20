@@ -51,6 +51,4 @@ public class SSNUKMaskingProviderTest {
 
         assertTrue(count > 0);
     }
-
 }
-
