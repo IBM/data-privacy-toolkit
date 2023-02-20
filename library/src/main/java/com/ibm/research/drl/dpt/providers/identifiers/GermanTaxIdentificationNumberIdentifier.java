@@ -7,8 +7,8 @@ import java.text.StringCharacterIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier  {
-    private static final Pattern pattern = Pattern.compile("([1-9]\\d{9})(\\d)");
+public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier {
+    private static final Pattern pattern = Pattern.compile("([1-9]\\d ?\\d{3} ?\\d{3} ?\\d{2})(\\d)");
     @Override
     public ProviderType getType() {
         return ProviderType.valueOf("GERMAN_TIN");
@@ -16,19 +16,23 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
 
     @Override
     public boolean isOfThisType(String data) {
-        if (data.length() == getMaximumLength()) {
+        if (data.length() >= getMinimumLength() && data.length() <= getMaximumLength()) {
             Matcher matcher = pattern.matcher(data);
 
             if (matcher.matches()) {
-                return this.checkLastDigit(matcher.group(1), matcher.group(2));
+                if (correctRepetitions(matcher.group(1))) {
+                    return this.checkLastDigit(matcher.group(1), matcher.group(2));
+                }
             }
         }
         return false;
     }
 
-    private boolean checkLastDigit(String firstTenDigits, String parityString) {
-        if (firstTenDigits.length() != 10) return false;
+    private boolean correctRepetitions(String firstTenDigits) {
+        return true;
+    }
 
+    private boolean checkLastDigit(String firstTenDigits, String parityString) {
         final int checkDigit;
         try {
             checkDigit = Integer.parseInt(parityString, 10);
@@ -39,6 +43,8 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
         int product = 10;
 
         for (int i = 0; i < firstTenDigits.length(); ++i) {
+            if (!Character.isDigit(firstTenDigits.charAt(i))) continue;
+
             int digit = firstTenDigits.charAt(i) - '0';
 
             int sum = (digit + product) % 10;
@@ -72,6 +78,6 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
 
     @Override
     public int getMaximumLength() {
-        return 11;
+        return 14;
     }
 }

@@ -12,10 +12,8 @@ class GermanTaxIdentificationNumberIdentifierTest {
         Identifier identifier = new GermanTaxIdentificationNumberIdentifier();
 
         String[] correctValues = new String[] {
-                "96480255173",
-                "96480255173",
-                "96580255173",
-                "96580255173",
+                "12 345 678 901",
+                "12345678901",
         };
 
         for (String value : correctValues) {
@@ -28,6 +26,7 @@ class GermanTaxIdentificationNumberIdentifierTest {
         Identifier identifier = new GermanTaxIdentificationNumberIdentifier();
 
         String[] invalidValues = new String[] {
+                "96480255173",
                 "06480255173",
                 "96480255171",
                 "96480255573",
