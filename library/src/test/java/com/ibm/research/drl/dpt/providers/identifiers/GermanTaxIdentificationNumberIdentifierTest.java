@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class GermanTaxIdentificationNumberIdentifierTest {
@@ -12,12 +13,13 @@ class GermanTaxIdentificationNumberIdentifierTest {
         Identifier identifier = new GermanTaxIdentificationNumberIdentifier();
 
         String[] correctValues = new String[] {
-                "12 345 678 901",
-                "12345678901",
+                "12 345 678 903",
+                "12345678903",
+                "96480255173",
         };
 
         for (String value : correctValues) {
-            assertThat(value, identifier.isOfThisType(value), is(true));
+            assertTrue(identifier.isOfThisType(value), value);
         }
     }
 
@@ -26,7 +28,7 @@ class GermanTaxIdentificationNumberIdentifierTest {
         Identifier identifier = new GermanTaxIdentificationNumberIdentifier();
 
         String[] invalidValues = new String[] {
-                "96480255173",
+                "12 345 678 901",
                 "06480255173",
                 "96480255171",
                 "96480255573",
