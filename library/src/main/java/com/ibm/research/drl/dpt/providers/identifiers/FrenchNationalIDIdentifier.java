@@ -7,7 +7,9 @@ import java.util.regex.Pattern;
 
 public class FrenchNationalIDIdentifier extends AbstractIdentifier {
     // http://resoo.org/docs/_docs/regles-numero-insee.pdf
-    private static final Pattern pattern = Pattern.compile("([12]\\s?\\d{2}\\s?(?:0[1-9]|1[0-2]|2[0-9])\\s?(?:\\d{2}|\\d[a-zA-Z]|\\d{3})\\s?(?:\\d{3}|\\d{2})\\d{3})\\s?(0[1-9]|[1-8]\\d|9[0-7])");
+    private static final Pattern pattern = Pattern.compile(//"([12]\\s?\\d{2}\\s?(?:0[1-9]|1[0-2]|2[0-9])\\s?(?:\\d{2}|\\d[a-zA-Z]|\\d{3})\\s?(?:\\d{3}|\\d{2})\\d{3})\\s?(0[1-9]|[1-8]\\d|9[0-7])");
+            "([12]\\s?\\d{2}\\s?(?:0[1-9]|1[0-2]|3[1-9]|4[0-2]|2[0-9]|3[0-9]|50)\\s?[0-9a-zA-Z]{5}\\s?\\d{3})\\s?(\\d{2})"
+    );
 
     @Override
     public ProviderType getType() {
@@ -39,7 +41,7 @@ public class FrenchNationalIDIdentifier extends AbstractIdentifier {
             return false;
         }
 
-        int number = 0;
+        long number = 0;
 
         for (int i = 0; i < data.length(); ++i) {
             if (!Character.isDigit(data.charAt(i))) continue;
@@ -76,6 +78,6 @@ public class FrenchNationalIDIdentifier extends AbstractIdentifier {
 
     @Override
     public int getMaximumLength() {
-        return 15;
+        return 20;
     }
 }
