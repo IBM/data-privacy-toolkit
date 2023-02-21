@@ -54,8 +54,8 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
         boolean found = false;
         for (int count : counts.values()) {
             if (count == 2 || count == 3) {
-                if (found) return false;
-                found = true;
+                if (found) return false;  // more than one repetition is not allowed
+                found = true;  // one repetition allowed
             }
         }
 
