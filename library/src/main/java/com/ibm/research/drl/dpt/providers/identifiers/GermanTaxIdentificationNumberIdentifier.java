@@ -2,6 +2,8 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,37 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
     }
 
     private boolean correctRepetitions(String firstTenDigits) {
-        return true;
+        Map<Integer, Integer> counts = new HashMap<>(10);
+
+        Integer i_m1 = null;
+        Integer i_m2 = null;
+
+        for (int i = 0; i < firstTenDigits.length(); ++i) {
+            char currentChar = firstTenDigits.charAt(i);
+
+            if (!Character.isDigit(currentChar)) continue;
+
+            Integer current = currentChar - '0';
+
+            counts.merge(current, 1, Integer::sum);
+
+            if (i_m1 != null && i_m2 != null && i_m1.equals(current) && i_m2.equals(current)) {
+                return false; // three consecutive appearances of the same value
+            }
+
+            i_m2 = i_m1;
+            i_m1 = current;
+        }
+
+        boolean found = false;
+        for (int count : counts.values()) {
+            if (count == 2 || count == 3) {
+                if (found) return false;
+                found = true;
+            }
+        }
+
+        return found;
     }
 
     private boolean checkLastDigit(String firstTenDigits, String parityString) {
