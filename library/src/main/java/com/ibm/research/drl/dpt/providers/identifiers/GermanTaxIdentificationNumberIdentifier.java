@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier {
-    private static final Pattern pattern = Pattern.compile("([1-9]\\d ?\\d{3} ?\\d{3} ?\\d{2})(\\d)");
+    private static final Pattern pattern = Pattern.compile("([1-9]\\d\\s?\\d{3}\\s?\\d{3}\\s?\\d{2})(\\d)");
     @Override
     public ProviderType getType() {
         return ProviderType.valueOf("GERMAN_TIN");
@@ -59,7 +59,7 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
             }
         }
 
-        return found;
+        return true;
     }
 
     private boolean checkLastDigit(String firstTenDigits, String parityString) {
