@@ -39,7 +39,7 @@ public class GermanTaxIdentificationNumberIdentifier extends AbstractIdentifier 
 
             if (!Character.isDigit(currentChar)) continue;
 
-            Integer current = currentChar - '0';
+            int current = currentChar - '0';
 
             counts.merge(current, 1, Integer::sum);
 
