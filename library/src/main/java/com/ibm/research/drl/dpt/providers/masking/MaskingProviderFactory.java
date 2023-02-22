@@ -9,6 +9,8 @@ import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
+import com.ibm.research.drl.dpt.nlp.masking.AnnotateMaskingProvider;
+import com.ibm.research.drl.dpt.nlp.masking.FreeTextMaskingProvider;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.dicom.CSMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.dicom.DAMaskingProvider;
@@ -361,17 +363,7 @@ public final class MaskingProviderFactory implements Serializable {
                 return new TemporalAnnotationMaskingProvider(random, configuration);
 
             case "DIFFERENTIAL_PRIVACY":
-                try {
-                    Constructor<? extends MaskingProvider> constructor =
-                            (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.DifferentialPrivacyMaskingProvider")
-                                    .getConstructor(MaskingProviderFactory.class, MaskingConfiguration.class, Map.class);
-                    return constructor.newInstance(this, configuration, identifiedTypes);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
-                    logger.error("Unable to instantiate masking provider for FREE_TEXT");
-
-                    throw new RuntimeException(e);
-                }
+                return new DifferentialPrivacyMaskingProvider(random, configuration);
 
             case "SUPPRESS_FIELD":
                 return new SuppressFieldMaskingProvider(random, configuration);
@@ -393,7 +385,7 @@ public final class MaskingProviderFactory implements Serializable {
                     return constructor.newInstance(this, configuration, identifiedTypes);
                 } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
                          InstantiationException | InvocationTargetException e) {
-                    logger.error("Unable to instantiate masking provider for FREE_TEXT");
+                    logger.error("Unable to instantiate masking provider for GENERALIZATION");
 
                     throw new RuntimeException(e);
                 }
@@ -402,31 +394,14 @@ public final class MaskingProviderFactory implements Serializable {
                 return new TimeStampMaskingProvider(random, configuration);
 
             case "FREE_TEXT":
-                try {
-                    Constructor<? extends MaskingProvider> constructor =
-                            (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.FreeTextMaskingProvider")
-                                    .getConstructor(MaskingProviderFactory.class, MaskingConfiguration.class, Map.class);
-                    return constructor.newInstance(this, configuration, identifiedTypes);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
-                    logger.error("Unable to instantiate masking provider for FREE_TEXT");
-
-                    throw new RuntimeException(e);
-                }
+                return new FreeTextMaskingProvider(this, configuration, identifiedTypes);
 
             case "TAG":
                 return new TagMaskingProvider(random, configuration);
 
             case "ANNOTATE":
-                try {
-                    Constructor<? extends MaskingProvider> constructor =
-                            (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.AnnotateMaskingProvider").getConstructor(SecureRandom.class, MaskingConfiguration.class);
-                    return constructor.newInstance(random, configuration);
-                } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
-                         InstantiationException | InvocationTargetException e) {
-                    logger.error("Unable to load AnnotateMaskingProvider", e);
-                    throw new RuntimeException(e);
-                }
+                return new AnnotateMaskingProvider(random, configuration);
+
             case "ICDv10":
                 try {
                     Constructor<? extends MaskingProvider> constructor =

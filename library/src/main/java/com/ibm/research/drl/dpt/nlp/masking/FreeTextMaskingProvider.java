@@ -7,6 +7,7 @@ package com.ibm.research.drl.dpt.nlp.masking;
 
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
+import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
 import com.ibm.research.drl.dpt.nlp.ComplexFreeTextAnnotator;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntityType;
@@ -16,6 +17,9 @@ import com.ibm.research.drl.dpt.nlp.NLPUtils;
 import com.ibm.research.drl.dpt.nlp.PartOfSpeechType;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import com.ibm.research.drl.dpt.schema.FieldRelationship;
+import com.ibm.research.drl.dpt.schema.RelationshipOperand;
+import com.ibm.research.drl.dpt.schema.RelationshipType;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;;
 
@@ -27,13 +31,22 @@ import java.util.stream.Collectors;
 
 public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final static Logger logger = LogManager.getLogger(FreeTextMaskingProvider.class);
-    private final NLPAnnotator annotator;
+    private final ComplexFreeTextAnnotator annotator;
     private final Map<String, DataMaskingTarget> toBeMasked;
+    private final String lookupTokensSeparator;
+    private final boolean lookupTokensIgnoreCase;
+    private final boolean lookupTokensFindAnywhere;
+    private final String lookupTokensType;
 
-    public FreeTextMaskingProvider(MaskingProviderFactory factory, NLPAnnotator annotator, Map<String, DataMaskingTarget> toBeMasked) {
+    public FreeTextMaskingProvider(MaskingProviderFactory factory, ComplexFreeTextAnnotator annotator, Map<String, DataMaskingTarget> toBeMasked) {
         super("freetext", factory.getConfigurationForField(""), Collections.emptySet(), factory);
         this.annotator = annotator;
         this.toBeMasked = toBeMasked;
+
+        this.lookupTokensSeparator = factory.getConfigurationForField("").getStringValue("generic.lookupTokensSeparator");
+        this.lookupTokensIgnoreCase = factory.getConfigurationForField("").getBooleanValue("generic.lookupTokensIgnoreCase");
+        this.lookupTokensFindAnywhere = factory.getConfigurationForField("").getBooleanValue("generic.lookupTokensFindAnywhere");
+        this.lookupTokensType = factory.getConfigurationForField("").getStringValue("generic.lookupTokensType");
 
         logger.info("Initialization of FreeTextMaskingProvider completed");
     }
@@ -42,7 +55,7 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
         this(factory, buildNLPAnnotator(configuration), toBeMasked);
     }
 
-    private static NLPAnnotator buildNLPAnnotator(MaskingConfiguration configuration) {
+    private static ComplexFreeTextAnnotator buildNLPAnnotator(MaskingConfiguration configuration) {
         return  new ComplexFreeTextAnnotator(configuration.getJsonNodeValue("freetext.mask.nlp.config"));
     }
 
@@ -56,6 +69,39 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
         } catch (IOException e) {
             logger.error("Problem when masking text");
             throw new RuntimeException(e);
+        }
+    }
+
+    public String mask(String text, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
+        //grepAndMask(record, tokenSources, lookupTarget, separator, ignoreCase, findAnywhere, maskingProvidersFactory, tokenType);
+        RelationshipType relationshipType = fieldRelationship.getRelationshipType();
+
+        if (relationshipType != RelationshipType.GREP_AND_MASK) {
+            return mask(text);
+        }
+
+        List<IdentifiedEntity> greppedEntities = new ArrayList<>();
+
+        for(RelationshipOperand operand: fieldRelationship.getOperands()) {
+            final String operandName = operand.getName();
+
+            final OriginalMaskedValuePair originalMaskedValuePair = maskedValues.get(operandName);
+            final String originalOperandValue = originalMaskedValuePair.getOriginal();
+
+            greppedEntities.addAll(grep(originalOperandValue, text,
+                    this.lookupTokensSeparator, this.lookupTokensIgnoreCase, this.lookupTokensFindAnywhere, this.lookupTokensType));
+        }
+
+        try {
+            final List<IdentifiedEntity> identifiedEntities = identifyEntities(text);
+            identifiedEntities.addAll(greppedEntities);
+
+            final List<IdentifiedEntity> maskedEntities = maskIdentifiedEntities(annotator.merge(identifiedEntities));
+
+            return NLPUtils.applyFunction(text, maskedEntities, NLPUtils.IDENTITY_FUNCTION);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
