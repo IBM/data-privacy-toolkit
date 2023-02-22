@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public interface Identifier {
     /**
@@ -45,7 +46,9 @@ public interface Identifier {
      *
      * @return the linked types
      */
-    Collection<ProviderType> getLinkedTypes();
+    default Collection<ProviderType> getLinkedTypes() {
+        return Collections.emptyList();
+    }
 
     /**
      * Gets priority.

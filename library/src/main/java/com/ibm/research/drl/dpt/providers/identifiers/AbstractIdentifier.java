@@ -26,18 +26,13 @@ public abstract class AbstractIdentifier implements Identifier, Serializable {
         return 100;
     }
 
-    @Override
-    public Collection<ProviderType> getLinkedTypes() {
-        return null;
-    }
 
     @Override
     public boolean isAppropriateName(String fieldName) {
         Collection<String> appropriateNames = getAppropriateNames();
-        String fieldNameLowercase = fieldName.toLowerCase();
 
         for (String name : appropriateNames) {
-            if (name.toLowerCase().equals(fieldNameLowercase)) {
+            if (name.equalsIgnoreCase(fieldName)) {
                 return true;
             }
         }
