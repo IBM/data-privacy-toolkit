@@ -14,14 +14,22 @@ import org.apache.logging.log4j.LogManager;;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 
 public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
@@ -465,7 +473,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
         return identifiedEntity -> identifiedEntity.getStart() < end && identifiedEntity.getEnd() > start;
     }
 
-    private List<IdentifiedEntity> merge(List<IdentifiedEntity> unorderedEntities) {
+    public List<IdentifiedEntity> merge(List<IdentifiedEntity> unorderedEntities) {
         List<IdentifiedEntity> toReturn = new ArrayList<>();
 
         List<IdentifiedEntity> identifiedEntities = sortEndStart(unorderedEntities);
