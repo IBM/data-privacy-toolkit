@@ -72,7 +72,6 @@ public class ATCMaskingProvider extends AbstractMaskingProvider {
         }
 
         return identifier.substring(0, prefixPreserveLength);
-
     }
 }
 
