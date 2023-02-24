@@ -192,7 +192,7 @@ class FreeTextMaskingProviderTest {
     }
 
     @Test
-    @Disabled("Needs to be adjusted with the new structure")
+    @Disabled("STILL BROKEN")
     public void testCompoundGrepAndMaskNoDoubleMasking() throws IOException {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
 
@@ -207,7 +207,7 @@ class FreeTextMaskingProviderTest {
 
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
-                Map.of("EMAIL", new DataMaskingTarget(ProviderType.REPLACE, "EMAIL"))
+                Map.of("EMAIL", new DataMaskingTarget(ProviderType.HASH, "EMAIL"))
         ), maskingConfiguration);
 
         String emailValue = "xyz@ie.ibm.com";
@@ -217,8 +217,7 @@ class FreeTextMaskingProviderTest {
                 ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", List.of(new RelationshipOperand("email"))
         );
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("email", new OriginalMaskedValuePair(emailValue, "junkhere@mail.com"));
+        Map<String, OriginalMaskedValuePair> maskedValues = Map.of("email", new OriginalMaskedValuePair(emailValue, "junkhere@mail.com"));
 
         String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
 
