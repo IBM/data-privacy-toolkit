@@ -35,7 +35,6 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.SecureRandom;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +45,11 @@ public final class MaskingProviderFactory implements Serializable {
     private static final DummyMaskingProvider dummy = new DummyMaskingProvider();
     private final ConfigurationManager configurationManager;
 
-    private final Map<String, DataMaskingTarget> identifiedTypes;
+    public Map<String, DataMaskingTarget> getToBeMasked() {
+        return toBeMasked;
+    }
+
+    private final Map<String, DataMaskingTarget> toBeMasked;
     private final Map<String, MaskingProvider> cachedProviders;
     private final Map<ProviderType, Class<? extends MaskingProvider>> registeredMaskingProviders;
     private final HashMap<String, MaskingProvider> globalPersistent;
@@ -57,11 +60,11 @@ public final class MaskingProviderFactory implements Serializable {
      * Instantiates a new Masking provider factory.
      *
      * @param configurationManager the configuration manager
-     * @param identifiedTypes      the identified types
+     * @param toBeMasked      the identified types
      */
-    public MaskingProviderFactory(ConfigurationManager configurationManager, Map<String, DataMaskingTarget> identifiedTypes) {
+    public MaskingProviderFactory(ConfigurationManager configurationManager, Map<String, DataMaskingTarget> toBeMasked) {
         this.configurationManager = configurationManager;
-        this.identifiedTypes = identifiedTypes;
+        this.toBeMasked = toBeMasked;
 
         cachedProviders = new HashMap<>();
         registeredMaskingProviders = new HashMap<>();
@@ -76,7 +79,7 @@ public final class MaskingProviderFactory implements Serializable {
      */
     @Deprecated
     public MaskingProvider get(final String fieldName) {
-        final DataMaskingTarget dataMaskingTarget = identifiedTypes.get(fieldName);
+        final DataMaskingTarget dataMaskingTarget = toBeMasked.get(fieldName);
         final ProviderType providerType = (null == dataMaskingTarget) ? null : dataMaskingTarget.getProviderType();
 
         return get(fieldName, providerType);
@@ -382,7 +385,7 @@ public final class MaskingProviderFactory implements Serializable {
                     Constructor<? extends MaskingProvider> constructor =
                             (Constructor<? extends MaskingProvider>) Class.forName("com.ibm.research.drl.dpt.providers.masking.GeneralizationMaskingProvider")
                                     .getConstructor(MaskingProviderFactory.class, MaskingConfiguration.class, Map.class);
-                    return constructor.newInstance(this, configuration, identifiedTypes);
+                    return constructor.newInstance(this, configuration, toBeMasked);
                 } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException |
                          InstantiationException | InvocationTargetException e) {
                     logger.error("Unable to instantiate masking provider for GENERALIZATION");
@@ -394,7 +397,7 @@ public final class MaskingProviderFactory implements Serializable {
                 return new TimeStampMaskingProvider(random, configuration);
 
             case "FREE_TEXT":
-                return new FreeTextMaskingProvider(this, configuration, identifiedTypes);
+                return new FreeTextMaskingProvider(this, configuration);
 
             case "TAG":
                 return new TagMaskingProvider(random, configuration);

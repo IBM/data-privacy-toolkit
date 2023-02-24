@@ -60,15 +60,15 @@ class FreeTextMaskingProviderTest {
                 Collections.singleton(new IdentifiedEntityType("TEST", "", "")),
                 Collections.emptySet()
         )));
+        Map<String, DataMaskingTarget> toBeMasked = Map.of("TEST", new DataMaskingTarget(ProviderType.REDACT, "TEST"));
+
         when(factory.get(anyString(), any())).thenReturn(new RedactMaskingProvider(new DefaultMaskingConfiguration()));
         when(factory.getConfigurationForField(anyString())).thenReturn(new DefaultMaskingConfiguration());
+        when(factory.getToBeMasked()).thenReturn(toBeMasked);
 
         FreeTextMaskingProvider provider = new FreeTextMaskingProvider(
                 factory,
-                annotator,
-                new HashMap<>() {{
-                    put("TEST", new DataMaskingTarget(ProviderType.REDACT, "TEST"));
-                }}
+                annotator
         );
 
         String masked = provider.mask(test);
@@ -93,13 +93,11 @@ class FreeTextMaskingProviderTest {
         when(factory.get(anyString(), any())).thenReturn(mp);
         when(factory.getConfigurationForField(anyString())).thenReturn(new DefaultMaskingConfiguration());
         when(mp.mask(anyString())).thenReturn("X");
+        when(factory.getToBeMasked()).thenReturn(Map.of("TEST", new DataMaskingTarget(ProviderType.REDACT, "TEST")));
 
         FreeTextMaskingProvider provider = new FreeTextMaskingProvider(
                 factory,
-                annotator,
-                new HashMap<>() {{
-                    put("TEST", new DataMaskingTarget(ProviderType.REDACT, "TEST"));
-                }}
+                annotator
         );
 
         String masked = provider.mask(test);
@@ -126,18 +124,15 @@ class FreeTextMaskingProviderTest {
         }
 
         when(configuration.getJsonNodeValue(anyString())).thenReturn(nlpConfig);
+        when(factory.getToBeMasked()).thenReturn(Map.of("EMAIL", new DataMaskingTarget(ProviderType.REDACT, "EMAIL")));
 
         FreeTextMaskingProvider provider = new FreeTextMaskingProvider(
                 factory,
-                configuration,
-                new HashMap<>() {{
-                    put("EMAIL", new DataMaskingTarget(ProviderType.REDACT, "EMAIL"));
-                }}
+                configuration
         );
 
         String masked = provider.mask(test);
 
-        System.out.println(masked);
         assertThat(masked, not(test));
         assertThat(masked.length(), is(test.length()));
     }
@@ -147,13 +142,11 @@ class FreeTextMaskingProviderTest {
         ComplexFreeTextAnnotator annotator = mock(ComplexFreeTextAnnotator.class);
         MaskingProviderFactory factory = mock(MaskingProviderFactory.class);
         when(factory.getConfigurationForField(anyString())).thenReturn(new DefaultMaskingConfiguration());
+        when(factory.getToBeMasked()).thenReturn(Map.of("TEST", new DataMaskingTarget(ProviderType.REDACT, "TEST")));
 
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(
                 factory,
-                annotator,
-                new HashMap<>() {{
-                    put("TEST", new DataMaskingTarget(ProviderType.REDACT, "TEST"));
-                }}
+                annotator
         );
 
         String value = "john went to work. Mr. smith is a professor.";
@@ -164,7 +157,6 @@ class FreeTextMaskingProviderTest {
     }
 
     @Test
-    @Disabled("Needs to be adjusted with the new structure")
     public void testCompoundGrepAndMask() throws IOException {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
 
@@ -177,10 +169,12 @@ class FreeTextMaskingProviderTest {
         maskingConfiguration.setValue("generic.lookupTokensIgnoreCase", false);
         maskingConfiguration.setValue("generic.lookupTokensFindAnywhere", false);
 
+        Map<String, DataMaskingTarget> toBeMasked = Map.of("NAME", new DataMaskingTarget(ProviderType.REPLACE, "NAME"));
+
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
-                Collections.emptyMap()
-        ), maskingConfiguration, Collections.emptyMap());
+                toBeMasked
+        ), maskingConfiguration);
 
         String value = "XYZ went to work. Mr. QWE is a professor.";
 
@@ -201,7 +195,6 @@ class FreeTextMaskingProviderTest {
     @Disabled("Needs to be adjusted with the new structure")
     public void testCompoundGrepAndMaskNoDoubleMasking() throws IOException {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-//        maskingConfiguration.setValue("freetext.mask.maskingConfigurationFilename", "/testFreetextMaskEmail.json");
 
         try (InputStream inputStream = FreeTextMaskingProviderTest.class.getResourceAsStream("/complexWithIdentifiersPRIMAOnlyEmailOnly.json")) {
             maskingConfiguration.setValue("freetext.mask.nlp.config", JsonUtils.MAPPER.readTree(inputStream));
@@ -214,8 +207,8 @@ class FreeTextMaskingProviderTest {
 
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
-                Collections.emptyMap()
-        ), maskingConfiguration, Collections.emptyMap());
+                Map.of("EMAIL", new DataMaskingTarget(ProviderType.REPLACE, "EMAIL"))
+        ), maskingConfiguration);
 
         String emailValue = "xyz@ie.ibm.com";
         String value = "XYZ went to work. His e-mail is " + emailValue;
@@ -247,7 +240,7 @@ class FreeTextMaskingProviderTest {
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
                 Collections.emptyMap()
-        ), maskingConfiguration, Collections.emptyMap());
+        ), maskingConfiguration);
 
         boolean ignoreCase = false;
 
@@ -269,7 +262,7 @@ class FreeTextMaskingProviderTest {
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
                 Collections.emptyMap()
-        ), maskingConfiguration, Collections.emptyMap());
+        ), maskingConfiguration);
 
         boolean ignoreCase = false;
 
@@ -288,7 +281,7 @@ class FreeTextMaskingProviderTest {
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
                 Collections.emptyMap()
-        ), maskingConfiguration, Collections.emptyMap());
+        ), maskingConfiguration);
 
         //ignore case
         boolean ignoreCase = true;
@@ -432,9 +425,9 @@ TODO: MOVE TO PROCESSORS
 
          */
     }
-//
+
 //    @Test
-//    public void testOnNotIntelligebleText() {
+//    public void testOnNotIntelligibleText() {
 //        String text = "THIS IS NOT TEXT CONTAINING ANY PHI";
 //
 //        String maskedText = new OldFreeTextMaskingProvider(new DefaultMaskingConfiguration(), new MaskingProviderFactory()).mask(text);
@@ -485,7 +478,7 @@ TODO: MOVE TO PROCESSORS
 //
 //    @Test
 //    public void testTextWithEmail() {
-//        String phi = "A colleage of mine (johndoe@gr.ibm.com) in Finland is not able to connect to SSO, and it seems this is the case for all of Finland";
+//        String phi = "A colleague of mine (johndoe@gr.ibm.com) in Finland is not able to connect to SSO, and it seems this is the case for all of Finland";
 //        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
 //        maskingConfiguration.setValue("freetext.mask.maskingConfigurationFilename", "/testFreetextMaskEmail.json");
 //
