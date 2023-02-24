@@ -1,16 +1,12 @@
-/*******************************************************************
- *                                                                 *
- * Copyright IBM Corp. 2019                                        *
- *                                                                 *
- *******************************************************************/
 package com.ibm.research.drl.dpt.providers.identifiers;
 
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class NationalRegistrationIdentityCardIdentifierTest {
+class SingaporeNRICTest {
     @Test
     public void identifiesValidNumbers() {
         String[] validValues = {
@@ -23,7 +19,7 @@ public class NationalRegistrationIdentityCardIdentifierTest {
                 "S0000007H",
         };
 
-        Identifier identifier = new NationalRegistrationIdentityCardIdentifier();
+        Identifier identifier = new SingaporeNRIC();
 
         for (String validValue : validValues) {
             assertThat(validValue, identifier.isOfThisType(validValue), is(true));
@@ -37,7 +33,7 @@ public class NationalRegistrationIdentityCardIdentifierTest {
                 "foo@gmail.com",
         };
 
-        Identifier identifier = new NationalRegistrationIdentityCardIdentifier();
+        Identifier identifier = new SingaporeNRIC();
 
         for (String invalidValue : invalidValues) {
             assertThat(invalidValue, identifier.isOfThisType(invalidValue), is(false));
