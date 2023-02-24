@@ -5,7 +5,6 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
@@ -14,6 +13,7 @@ import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -22,8 +22,10 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isIn;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.in;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ReplaceMaskingProviderTest {
 
@@ -68,8 +70,7 @@ public class ReplaceMaskingProviderTest {
 
     @Test
     public void testMaskIfInSet() {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode list = mapper.createArrayNode();
+        ArrayNode list = JsonUtils.MAPPER.createArrayNode();
         list.add("FOO");
         list.add("BAR");
 
@@ -89,8 +90,7 @@ public class ReplaceMaskingProviderTest {
 
     @Test
     public void testMaskIfNotInSet() {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode list = mapper.createArrayNode();
+        ArrayNode list = JsonUtils.MAPPER.createArrayNode();
         list.add("FOO");
         list.add("BAR");
 
@@ -110,12 +110,11 @@ public class ReplaceMaskingProviderTest {
 
     @Test
     public void testCompound() {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode valuesSet = mapper.createArrayNode();
+        ArrayNode valuesSet = JsonUtils.MAPPER.createArrayNode();
         valuesSet.add("FOO");
         valuesSet.add("BAR");
 
-        ArrayNode testSet = mapper.createArrayNode();
+        ArrayNode testSet = JsonUtils.MAPPER.createArrayNode();
         testSet.add("XXXX");
         testSet.add("YYYY");
 
@@ -130,17 +129,16 @@ public class ReplaceMaskingProviderTest {
 
         FieldRelationship relationship = new FieldRelationship(ValueClass.TEXT, RelationshipType.KEY, "foo", Collections.singletonList(new RelationshipOperand("bar")));
         Map<String, OriginalMaskedValuePair> values1 = Collections.singletonMap("bar", new OriginalMaskedValuePair("XXXX", "XXXX"));
-        assertThat(provider.mask("asdf", "foo", relationship, values1), isIn(new String[]{"FOO", "BAR"}));
+        assertThat(provider.mask("asdf", "foo", relationship, values1), in(new String[]{"FOO", "BAR"}));
 
         Map<String, OriginalMaskedValuePair> values2 = Collections.singletonMap("bar", new OriginalMaskedValuePair("asfd", "asdf"));
-        assertThat(provider.mask("asdf", "foo", relationship, values2), not(isIn(new String[]{"FOO", "BAR"})));
+        assertThat(provider.mask("asdf", "foo", relationship, values2), not(in(new String[]{"FOO", "BAR"})));
 
     }
 
     @Test
     public void testMaskReplacementFromSet() {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayNode list = mapper.createArrayNode();
+        ArrayNode list = JsonUtils.MAPPER.createArrayNode();
         list.add("FOO");
         list.add("BAR");
 
@@ -151,9 +149,9 @@ public class ReplaceMaskingProviderTest {
 
         MaskingProvider provider = new ReplaceMaskingProvider(configuration);
 
-        assertThat(provider.mask("asdf"), isIn(new String[]{"FOO", "BAR"}));
-        assertThat(provider.mask("dfasfa"), isIn(new String[]{"FOO", "BAR"}));
-        assertThat(provider.mask(""), isIn(new String[]{"FOO", "BAR"}));
+        assertThat(provider.mask("asdf"), in(new String[]{"FOO", "BAR"}));
+        assertThat(provider.mask("dfasfa"), in(new String[]{"FOO", "BAR"}));
+        assertThat(provider.mask(""), in(new String[]{"FOO", "BAR"}));
     }
 
     @Test
