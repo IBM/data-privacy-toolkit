@@ -1,3 +1,8 @@
+/*******************************************************************
+ *                                                                 *
+ * Copyright IBM Corp. 2023                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.providers.ProviderType;

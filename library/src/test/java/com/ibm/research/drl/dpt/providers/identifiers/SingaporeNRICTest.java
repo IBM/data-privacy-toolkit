@@ -1,10 +1,14 @@
+/*******************************************************************
+ *                                                                 *
+ * Copyright IBM Corp. 2023                                        *
+ *                                                                 *
+ *******************************************************************/
 package com.ibm.research.drl.dpt.providers.identifiers;
 
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SingaporeNRICTest {
     @Test
