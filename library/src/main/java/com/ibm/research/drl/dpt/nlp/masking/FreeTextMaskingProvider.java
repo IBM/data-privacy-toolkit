@@ -32,16 +32,14 @@ import java.util.stream.Collectors;
 public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final static Logger logger = LogManager.getLogger(FreeTextMaskingProvider.class);
     private final ComplexFreeTextAnnotator annotator;
-    private final Map<String, DataMaskingTarget> toBeMasked;
     private final String lookupTokensSeparator;
     private final boolean lookupTokensIgnoreCase;
     private final boolean lookupTokensFindAnywhere;
     private final String lookupTokensType;
 
-    public FreeTextMaskingProvider(MaskingProviderFactory factory, ComplexFreeTextAnnotator annotator, Map<String, DataMaskingTarget> toBeMasked) {
+    public FreeTextMaskingProvider(MaskingProviderFactory factory, ComplexFreeTextAnnotator annotator) {
         super("freetext", factory.getConfigurationForField(""), Collections.emptySet(), factory);
         this.annotator = annotator;
-        this.toBeMasked = toBeMasked;
 
         this.lookupTokensSeparator = factory.getConfigurationForField("").getStringValue("generic.lookupTokensSeparator");
         this.lookupTokensIgnoreCase = factory.getConfigurationForField("").getBooleanValue("generic.lookupTokensIgnoreCase");
@@ -51,8 +49,8 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
         logger.info("Initialization of FreeTextMaskingProvider completed");
     }
 
-    public FreeTextMaskingProvider(MaskingProviderFactory factory, MaskingConfiguration configuration, Map<String, DataMaskingTarget> toBeMasked) {
-        this(factory, buildNLPAnnotator(configuration), toBeMasked);
+    public FreeTextMaskingProvider(MaskingProviderFactory factory, MaskingConfiguration configuration) {
+        this(factory, buildNLPAnnotator(configuration));
     }
 
     private static ComplexFreeTextAnnotator buildNLPAnnotator(MaskingConfiguration configuration) {
@@ -110,8 +108,8 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
                 .map(
                         entity -> {
                             String type = entity.getType().iterator().next().getType();
-                            if (toBeMasked.containsKey(type)) {
-                                String maskedValue = factory.get(type, toBeMasked.get(type).getProviderType()).mask(entity.getText());
+                            if (factory.getToBeMasked().containsKey(type)) {
+                                String maskedValue = factory.get(type, factory.getToBeMasked().get(type).getProviderType()).mask(entity.getText());
 
                                 return new IdentifiedEntity(
                                         truncateOrPad(maskedValue, entity.getEnd() - entity.getStart()),
