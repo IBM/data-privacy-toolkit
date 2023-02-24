@@ -62,10 +62,11 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
         this.random = random;
         this.offset = configuration.getIntValue("replace.mask.offset");
         this.preservedCharacters = configuration.getIntValue("replace.mask.preserve");
-        String star = configuration.getStringValue("replace.mask.asteriskValue");
-        this.asterisk = Objects.isNull(star) ? "*" : star;
-        String mode = configuration.getStringValue("replace.mask.mode");
-        this.replaceMode = ReplaceMode.valueOf(Objects.isNull(mode) ? "WITH_PARTIAL" : configuration.getStringValue("replace.mask.mode"));
+        this.asterisk = Objects.requireNonNullElse(configuration.getStringValue("replace.mask.asteriskValue"), "*");
+        this.replaceMode = ReplaceMode.valueOf(
+                Objects.requireNonNullElse(
+                        configuration.getStringValue("replace.mask.mode"),
+                        "WITH_PARTIAL"));
         this.replaceOnValueInSet = configuration.getBooleanValue("replace.mask.replaceOnValueInSet");
         this.replaceOnValueNotInSet = configuration.getBooleanValue("replace.mask.replaceOnValueNotInSet");
         this.testValues = new HashSet<>();
@@ -82,11 +83,8 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
         }
 
         // "000-0000-0000-000-00" -> <prefix>-[UNIQUE]
-
         if (this.replaceOnValueInSet || this.replaceOnValueNotInSet) {
-            configuration.getJsonNodeValue("replace.mask.testValues").elements().forEachRemaining(node -> {
-                testValues.add(node.asText());
-            });
+            configuration.getJsonNodeValue("replace.mask.testValues").elements().forEachRemaining(node -> testValues.add(node.asText()));
         }
 
         /*
@@ -160,9 +158,7 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
 
         if (this.offset > 0) {
             if (this.replaceMode == ReplaceMode.WITH_ASTERISKS) {
-                for (int i = 0; i < this.offset; i++) {
-                    builder.append(asterisk);
-                }
+                builder.append(String.valueOf(asterisk).repeat(this.offset));
             } else {
                 if (this.replaceMode == ReplaceMode.WITH_RANDOM) {
                     builder.append(RandomGenerators.randomReplacement(identifier.substring(0, this.offset)));
@@ -176,9 +172,7 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
 
         if (stop < identifierLength) {
             if (this.replaceMode == ReplaceMode.WITH_ASTERISKS) {
-                for (int i = stop; i < identifierLength; i++) {
-                    builder.append(asterisk);
-                }
+                builder.append(String.valueOf(asterisk).repeat(identifierLength - stop));
             } else if (this.replaceMode == ReplaceMode.WITH_RANDOM) {
                 builder.append(RandomGenerators.randomReplacement(identifier.substring(stop, identifierLength)));
             } else if (this.replaceMode == ReplaceMode.WITH_DETERMINISTIC) {
