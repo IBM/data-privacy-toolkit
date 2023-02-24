@@ -169,7 +169,7 @@ class FreeTextMaskingProviderTest {
         maskingConfiguration.setValue("generic.lookupTokensIgnoreCase", false);
         maskingConfiguration.setValue("generic.lookupTokensFindAnywhere", false);
 
-        Map<String, DataMaskingTarget> toBeMasked = Map.of("NAME", new DataMaskingTarget(ProviderType.REPLACE, "NAME"));
+        Map<String, DataMaskingTarget> toBeMasked = Map.of("NAME", new DataMaskingTarget(ProviderType.REDACT, "NAME"));
 
         FreeTextMaskingProvider freeTextMaskingProvider = new FreeTextMaskingProvider(new MaskingProviderFactory(
                 new ConfigurationManager(maskingConfiguration),
