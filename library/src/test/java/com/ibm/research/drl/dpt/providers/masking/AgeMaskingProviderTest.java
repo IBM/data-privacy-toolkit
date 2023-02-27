@@ -16,32 +16,47 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AgeMaskingProviderTest {
-    private static final AgePortion MISSING_AGE_PORTION = new AgePortion(false, -1, -1, AgePortionFormat.NUMERICAL);
     private static final AgeIdentifier AGE_IDENTIFIER = new AgeIdentifier();
     
     @Test
     public void testMaskAgeRedact() {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("age.mask.redactNumbers", true);
-        
+
         AgeMaskingProvider ageMaskingProvider = new AgeMaskingProvider(maskingConfiguration);
-        
-        Age age = new Age(new AgePortion(true, 0, 1, AgePortionFormat.NUMERICAL), MISSING_AGE_PORTION, MISSING_AGE_PORTION, MISSING_AGE_PORTION);
-        
-        String masked = ageMaskingProvider.mask("9 years old", age);
-        assertEquals("XX years old", masked);
-        
-        
+
+        assertEquals("XX years old", ageMaskingProvider.mask("9 years old"));
+        assertEquals("XX years and XX months", ageMaskingProvider.mask("5 years and 6 months"));
+        assertEquals("XX years, XX months, and XX days", ageMaskingProvider.mask("5 years, 6 months, and 11 days"));
+
+    }
+
+    @Test
+    public void testForcedMissingPortion() {
+        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+        maskingConfiguration.setValue("age.mask.redactNumbers", true);
+
+        AgeMaskingProvider ageMaskingProvider = new AgeMaskingProvider(maskingConfiguration);
+
         String originalValue = "5 year and 6 month";
-        age = new Age(new AgePortion(true, 0, 1, AgePortionFormat.NUMERICAL), new AgePortion(true, 11, 12, AgePortionFormat.NUMERICAL), MISSING_AGE_PORTION, MISSING_AGE_PORTION);
-        masked = ageMaskingProvider.mask(originalValue, age);
-        assertEquals("XX year and XX month", masked);
-        masked = ageMaskingProvider.mask(originalValue);
-        assertEquals("XX year and XX month", masked);
-        
-        originalValue = "five years old";
-        masked = ageMaskingProvider.mask(originalValue);
-        assertEquals("XX years old", masked);
+
+        assertEquals("XX year and XX month", ageMaskingProvider.mask(originalValue));
+
+        Age age = AGE_IDENTIFIER.parseAge(originalValue);
+
+        assertEquals("XX year and 6 month", ageMaskingProvider.mask(originalValue, new Age(
+                age.getYearPortion(),
+                new AgePortion(false, -1, -1, AgePortionFormat.NUMERICAL),
+                age.getWeeksPortion(),
+                age.getDaysPortion()
+        )));
+
+        assertEquals("5 year and 6 month", ageMaskingProvider.mask(originalValue, new Age(
+                new AgePortion(false, -1, -1, AgePortionFormat.NUMERICAL),
+                new AgePortion(false, -1, -1, AgePortionFormat.NUMERICAL),
+                age.getWeeksPortion(),
+                age.getDaysPortion()
+        )));
     }
 
     @Test
@@ -51,6 +66,8 @@ public class AgeMaskingProviderTest {
         maskingConfiguration.setValue("age.mask.randomNumbers", true);
 
         AgeMaskingProvider ageMaskingProvider = new AgeMaskingProvider(maskingConfiguration);
+
+        final AgePortion MISSING_AGE_PORTION = new AgePortion(false, -1, -1, AgePortionFormat.NUMERICAL);
 
         String originalValue = "9 years old";
         Age age = new Age(new AgePortion(true, 0, 1, AgePortionFormat.NUMERICAL), MISSING_AGE_PORTION, MISSING_AGE_PORTION, MISSING_AGE_PORTION);
