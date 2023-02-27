@@ -102,8 +102,8 @@ public class AgeIdentifier extends AbstractRegexBasedIdentifier implements Ident
                     Pattern.compile("^died\\s+of\\s+(?<cause>[\\w|'|-]+\\s+){1,3}at\\s+(?<year>[0-9]+)$"),
                     Pattern.compile("^died\\s+of\\s+(?<cause>[\\w|'|-]+\\s+){1,3}at\\s+age\\s+(of\\s+)?(?<year>[0-9]+)$"),
                     Pattern.compile("^passed\\s+away\\s+at\\s+age\\s+(?<year>[0-9]+)"),
-                    Pattern.compile("^passed\\s+away\\s+from\\s+(?<cause>[\\w|'|-]+\\s+){1,3}at\\s+age\\s+(of\\s+)?(?<year>[0-9]+)")
-
+                    Pattern.compile("^passed\\s+away\\s+from\\s+(?<cause>[\\w|'|-]+\\s+){1,3}at\\s+age\\s+(of\\s+)?(?<year>[0-9]+)"),
+                    Pattern.compile("(?<year>\\d{1,3})\\s+year(:?s)?,?\\s+(?<month>\\d{1,2})\\s+month(:?s)?,?\\s+(:?and\\s+)?(?<day>\\d{1,3})\\s+day(:?s?)")
             )
     );
 
@@ -126,14 +126,13 @@ public class AgeIdentifier extends AbstractRegexBasedIdentifier implements Ident
     }
 
     public Age parseAge(String identifier) {
-
         AgePortion yearPortion = MISSING_AGE_PORTION;
         AgePortion monthPortion = MISSING_AGE_PORTION;
         AgePortion weekPortion = MISSING_AGE_PORTION;
         AgePortion daysPortion = MISSING_AGE_PORTION;
 
-        for (Pattern p : getPatterns()) {
-            Matcher matcher = p.matcher(identifier);
+        for (Pattern pattern : getPatterns()) {
+            Matcher matcher = pattern.matcher(identifier);
             if (matcher.matches()) {
                 try {
                     int start = matcher.start("year");

@@ -28,7 +28,6 @@ public class AgeMaskingProviderTest {
         assertEquals("XX years old", ageMaskingProvider.mask("9 years old"));
         assertEquals("XX years and XX months", ageMaskingProvider.mask("5 years and 6 months"));
         assertEquals("XX years, XX months, and XX days", ageMaskingProvider.mask("5 years, 6 months, and 11 days"));
-
     }
 
     @Test
@@ -72,19 +71,19 @@ public class AgeMaskingProviderTest {
         String originalValue = "9 years old";
         Age age = new Age(new AgePortion(true, 0, 1, AgePortionFormat.NUMERICAL), MISSING_AGE_PORTION, MISSING_AGE_PORTION, MISSING_AGE_PORTION);
         
-        int randomOK = 0;
+        int equal = 0;
         
         for(int i = 0; i < 100; i++) {
             String masked = ageMaskingProvider.mask(originalValue, age);
             assertTrue(AGE_IDENTIFIER.isOfThisType(masked));
-            if (!masked.equals(originalValue)) {
-                randomOK++;
+            if (masked.equals(originalValue)) {
+                equal += 1;
             }
         }
         
-        assertTrue(randomOK > 0);
+        assertTrue(equal < 10);
 
-        randomOK = 0;
+        int randomOK = 0;
         for(int i = 0; i < 100; i++) {
             String masked = ageMaskingProvider.mask(originalValue);
             if (!masked.equals(originalValue)) {
