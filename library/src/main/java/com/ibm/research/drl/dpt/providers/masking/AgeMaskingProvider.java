@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2018                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -19,6 +19,8 @@ import org.apache.logging.log4j.Logger;
 import java.security.SecureRandom;
 
 public class AgeMaskingProvider extends AbstractMaskingProvider {
+    private static final Logger logger = LogManager.getLogger(AgeMaskingProvider.class);
+
     private static final AgeIdentifier AGE_IDENTIFIER = new AgeIdentifier();
     private static final Logger log = LogManager.getLogger(AgeMaskingProvider.class);
     private final boolean redactNumbers;
@@ -46,8 +48,14 @@ public class AgeMaskingProvider extends AbstractMaskingProvider {
         }
     }
 
-    public String mask(String identifier, Age age) {
-        AgePortion[] portions = new AgePortion[]{age.getYearPortion(), age.getMonthPortion(), age.getWeeksPortion(), age.getDaysPortion()};
+    protected String mask(String identifier, Age age) {
+        AgePortion[] portions = new AgePortion[]{
+                age.getYearPortion(),
+                age.getMonthPortion(),
+                age.getWeeksPortion(),
+                age.getDaysPortion()
+        };
+
         int[] upperBound = new int[]{100, 12, 48, 365};
         int[] lowerBound = new int[]{1, 1, 0, 0};
 
@@ -96,8 +104,8 @@ public class AgeMaskingProvider extends AbstractMaskingProvider {
         if (age == null) {
             switch (failMode) {
                 case FailMode.THROW_ERROR:
-                    log.error("invalid age");
-                    throw new RuntimeException("invalid age");
+                    log.error("Invalid age");
+                    throw new IllegalArgumentException("Invalid age");
                 case FailMode.RETURN_ORIGINAL:
                     return identifier;
                 case FailMode.RETURN_EMPTY:
