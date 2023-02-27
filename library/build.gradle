@@ -34,7 +34,7 @@ ext {
     poi_version = "5.2.3"
 
     lucene_version = "6.5.0"
-    open_nlp_version = "1.9.3"
+    open_nlp_version = "2.1.1"
 }
 
 dependencies {
