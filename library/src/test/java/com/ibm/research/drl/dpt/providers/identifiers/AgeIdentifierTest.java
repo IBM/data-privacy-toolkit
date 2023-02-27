@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.identifiers;
@@ -9,6 +9,8 @@ import com.ibm.research.drl.dpt.models.Age;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AgeIdentifierTest {
@@ -150,5 +152,20 @@ public class AgeIdentifierTest {
 
         assertFalse(age.getDaysPortion().exists());
         assertFalse(age.getWeeksPortion().exists());
+    }
+
+    @Test
+    public void testMissedFromMasking() {
+        AgeIdentifier identifier = new AgeIdentifier();
+
+        String target = "5 years, 6 months, and 11 days";
+
+        Age age = identifier.parseAge(target);
+
+        assertNotNull(age);
+
+        assertThat(target.substring(age.getYearPortion().getStart(), age.getYearPortion().getEnd()), is("5"));
+        assertThat(target.substring(age.getMonthPortion().getStart(), age.getMonthPortion().getEnd()), is("6"));
+        assertThat(target.substring(age.getDaysPortion().getStart(), age.getDaysPortion().getEnd()), is("11"));
     }
 }
