@@ -102,6 +102,7 @@ public class CategoricalPrecision implements InformationMetric {
      *
      * @return the double
      */
+    @Override
     public double report() {
         List<InformationLossResult> columnResults = reportPerQuasiColumn();
 
