@@ -53,7 +53,7 @@ public class TruncatedGeometricTest {
     }
 
     @Test
-    public void testCorrectResultsWithOptions() {
+    public void testCorrectResultsWithOptions() throws NumberFormatException {
         TruncatedGeometric mechanism = new TruncatedGeometric();
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
         options.setEpsilon(10);

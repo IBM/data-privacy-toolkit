@@ -54,7 +54,7 @@ public class TruncatedLaplaceTest {
     }
 
     @Test
-    public void testCorrectResultsWithOptions() {
+    public void testCorrectResultsWithOptions() throws NumberFormatException {
 
         TruncatedLaplace mechanism = new TruncatedLaplace();
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
