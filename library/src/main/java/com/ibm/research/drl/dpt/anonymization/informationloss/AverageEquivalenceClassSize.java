@@ -79,6 +79,7 @@ public class AverageEquivalenceClassSize implements InformationMetric {
      *
      * @return the double
      */
+    @Override
     public double report() {
         int equivalence_classes = 0;
 

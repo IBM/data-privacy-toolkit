@@ -72,6 +72,7 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
      * @return the top term
      */
     @JsonIgnore
+    @Override
     public String getTopTerm() {
         return this.topTerm;
     }
@@ -97,6 +98,7 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
         this.termsAdded++;
     }
 
+    @Override
     public int getNodeLevel(String value) {
         GeneralizationNode node = nodes.get(value.toUpperCase());
 
