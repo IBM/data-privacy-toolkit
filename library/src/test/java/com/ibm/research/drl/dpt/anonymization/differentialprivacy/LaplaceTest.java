@@ -55,7 +55,7 @@ public class LaplaceTest {
     }
 
     @Test
-    public void testCorrectResultsWithOptions() {
+    public void testCorrectResultsWithOptions() throws NumberFormatException {
 
         Laplace mechanism = new Laplace();
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
