@@ -47,11 +47,10 @@ public class DateHierarchy implements GeneralizationHierarchy {
     private static final SimpleDateFormat dayOnlySimpleDateFormat = new SimpleDateFormat("dd");
 
     public DateHierarchy() {
-        this("yyyy-MM-dd");
+        this("yyyy-MM-dd"); // because it is the sanest format!
     }
 
     public DateHierarchy(String pattern) {
-
         if (pattern.contains("y")) {
             if (pattern.contains("M")) {
                 if (pattern.contains("d")) {

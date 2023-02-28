@@ -95,20 +95,24 @@ public class GeneralizationHierarchyFactory {
             case "LAT_LON":
                 return new LatitudeLongitudeHierarchy();
             default:
-                try {
-                    Class<? extends GeneralizationHierarchy> hierarchyClass = (Class<? extends GeneralizationHierarchy>) Class.forName(hierarchyType);
+                return constructHierarchy(hierarchyType);
+        }
+    }
 
-                    return hierarchyClass.getConstructor().newInstance();
-                } catch (ClassNotFoundException e) {
-                    logger.error("Unable to instantiate hierarchy class {}", hierarchyType);
-                    throw new RuntimeException(e);
-                } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                    logger.error("Unable to create instance of hierarchy {}", hierarchyType);
-                    throw new RuntimeException(e);
-                } catch (NoSuchMethodException e) {
-                    logger.error("Unable to retrieve empty constructor for hierarchy {}", hierarchyType);
-                    throw new RuntimeException(e);
-                }
+    private static GeneralizationHierarchy constructHierarchy(String hierarchyType) {
+        try {
+            Class<? extends GeneralizationHierarchy> hierarchyClass = (Class<? extends GeneralizationHierarchy>) Class.forName(hierarchyType);
+
+            return hierarchyClass.getConstructor().newInstance();
+        } catch (ClassNotFoundException e) {
+            logger.error("Unable to instantiate hierarchy class {}", hierarchyType);
+            throw new RuntimeException(e);
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+            logger.error("Unable to create instance of hierarchy {}", hierarchyType);
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            logger.error("Unable to retrieve empty constructor for hierarchy {}", hierarchyType);
+            throw new RuntimeException(e);
         }
     }
 
