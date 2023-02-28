@@ -89,19 +89,13 @@ public class CategoricalTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     public void testPerformance() {
-
         Categorical mechanism = new Categorical();
 
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
 
         List<String> terms = Arrays.asList("Red", "Green", "Blue");
-        Set<String> values = new HashSet<>();
-
-        for (String s : terms) {
-            values.add(s.toUpperCase());
-        }
 
         options.setHierarchy(GeneralizationHierarchyFactory.getGenericFromFixedSet(terms));
         options.setEpsilon(5);
@@ -109,7 +103,7 @@ public class CategoricalTest {
         
         long start = System.currentTimeMillis();
 
-        for(int i = 0; i < 1000000; i++) {
+        for(int i = 0; i < 1_000_000; i++) {
             String randomized = mechanism.randomise(terms.get(i % 3));
             if (randomized == null) {
                 System.out.println("oops");
