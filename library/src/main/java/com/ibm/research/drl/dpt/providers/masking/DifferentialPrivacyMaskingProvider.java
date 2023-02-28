@@ -71,7 +71,11 @@ public class DifferentialPrivacyMaskingProvider implements MaskingProvider  {
                 double upperBound = configuration.getDoubleValue("differentialPrivacy.range.max");
                 options.setBounds(lowerBound, upperBound);
                 break;
+            case GEOMETRIC_NATIVE:
+            case GEOMETRIC_TRUNCATED:
+                throw new UnsupportedOperationException("Not supported at the moment");
         }
+
         this.mechanism = DPMechanismFactory.getMechanism(mechanism);
         this.mechanism.setOptions(options);
     }
