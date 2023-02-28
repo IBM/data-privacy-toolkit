@@ -97,6 +97,7 @@ public class TCloseness implements PrivacyConstraint {
         return t;
     }
 
+    @Override
     public void initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
         this.columnInformationList = columnInformationList;
         this.totalCount = (long) dataset.getNumberOfRows();
