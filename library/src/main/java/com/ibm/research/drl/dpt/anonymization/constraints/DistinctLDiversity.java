@@ -85,6 +85,7 @@ public class DistinctLDiversity implements PrivacyConstraint {
         return true;
     }
 
+    @Override
     public boolean check(Partition partition, List<Integer> sensitiveColumns) {
         if (sensitiveColumns == null) {
             return true;
@@ -122,6 +123,7 @@ public class DistinctLDiversity implements PrivacyConstraint {
     }
 
 
+    @Override
     public String toString() {
         return "Distinct L-Diversity constraint, l value = " + l;
     }

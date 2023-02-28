@@ -82,6 +82,7 @@ public class CategoricalInformation implements ColumnInformation {
         return GeneralizationHierarchyFactory.getDefaultHierarchy(hierarchy);
     }
 
+    @Override
     public double getWeight() {
         return weight;
     }
