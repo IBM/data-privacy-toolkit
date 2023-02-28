@@ -21,8 +21,11 @@ package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TruncatedGeometricTest {
     @Test
@@ -61,17 +64,17 @@ public class TruncatedGeometricTest {
 
         for(int i = 0; i < 1000; i++) {
             String randomized = mechanism.randomise("1.0");
-            Double d = Double.parseDouble(randomized);
+            double d = Double.parseDouble(randomized);
 
-            assertTrue(d >= -10.0);
-            assertTrue(d <= 10.0);
+            assertThat(d, greaterThanOrEqualTo(-10.0));
+            assertThat(d, lessThanOrEqualTo(10.0));
 
             if (d != 1.0) {
                 count++;
             }
         }
 
-        assertTrue(count > 0);
+        assertThat(count, greaterThan(0));
     }
 
     @Test
