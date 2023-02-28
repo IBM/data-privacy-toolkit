@@ -35,7 +35,6 @@ import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -142,10 +141,9 @@ public class DifferentialPrivacyMaskingProviderTest {
         configuration.setValue("differentialPrivacy.range.max", 1);
         DifferentialPrivacyMaskingProvider provider = new DifferentialPrivacyMaskingProvider(configuration);
         String valueString = provider.mask("0.5");
-        Double value = Double.parseDouble(valueString);
+        double value = Double.parseDouble(valueString);
 
-        assertNotNull(value);
-        assertFalse(value.isNaN());
+        assertThat(value, is(0.5)); // useless, as it should throw earlier
     }
 
     @Test
@@ -157,10 +155,8 @@ public class DifferentialPrivacyMaskingProviderTest {
         configuration.setValue("differentialPrivacy.range.max", 1);
         DifferentialPrivacyMaskingProvider provider = new DifferentialPrivacyMaskingProvider(configuration);
         String valueString = provider.mask("0.5");
-        Double value = Double.parseDouble(valueString);
+        double value = Double.parseDouble(valueString);
 
-        assertNotNull(value);
-        assertFalse(value.isNaN());
         assertThat(value, lessThanOrEqualTo(1.0));
         assertThat(value, greaterThanOrEqualTo(0.0));
     }
@@ -174,10 +170,8 @@ public class DifferentialPrivacyMaskingProviderTest {
         configuration.setValue("differentialPrivacy.range.max", 1);
         DifferentialPrivacyMaskingProvider provider = new DifferentialPrivacyMaskingProvider(configuration);
         String valueString = provider.mask("0.5");
-        Double value = Double.parseDouble(valueString);
+        double value = Double.parseDouble(valueString);
 
-        assertNotNull(value);
-        assertFalse(value.isNaN());
         assertThat(value, lessThanOrEqualTo(1.0));
         assertThat(value, greaterThanOrEqualTo(0.0));
     }
@@ -192,10 +186,9 @@ public class DifferentialPrivacyMaskingProviderTest {
             configuration.setValue("differentialPrivacy.range.max", 0);
             DifferentialPrivacyMaskingProvider provider = new DifferentialPrivacyMaskingProvider(configuration);
             String valueString = provider.mask("0.5");
-            Double value = Double.parseDouble(valueString);
+            double value = Double.parseDouble(valueString);
 
-            assertNotNull(value);
-            assertFalse(value.isNaN());
+            assertThat(value, is(0.5)); // useless, as it should throw earlier
         });
     }
 
