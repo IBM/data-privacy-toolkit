@@ -70,19 +70,8 @@ public class CountryMaskingProviderTest {
     }
 
     @Test
-    @Disabled
-    public void testHashCode() {
-        String a = "Γκάμπια";
-        String b = "Γεωργία";
-
-        System.out.println(a.hashCode());
-        System.out.println(b.hashCode());
-    }
-
-    @Test
     public void testLocalization() throws Exception {
         //this test assumes that GR is loaded by default
-
         MaskingProvider maskingProvider = new CountryMaskingProvider();
 
         String greekOriginalValue = "Ελλάδα";
@@ -125,17 +114,14 @@ public class CountryMaskingProviderTest {
 
         String originalCountry = "GB";
         String randomCountry = countryMaskingProvider.mask(originalCountry);
-        //assertFalse(randomCountry.equals(originalCountry));
         assertTrue(countryManager.isValidCountry(randomCountry, CountryNameSpecification.ISO2));
 
         originalCountry = "ITA";
         randomCountry = countryMaskingProvider.mask(originalCountry);
-        //assertFalse(randomCountry.equals(originalCountry));
         assertTrue(countryManager.isValidCountry(randomCountry, CountryNameSpecification.ISO3));
 
         originalCountry = "ITALY";
         randomCountry = countryMaskingProvider.mask(originalCountry);
-        //assertFalse(randomCountry.equals(originalCountry));
         assertTrue(countryManager.isValidCountry(randomCountry, CountryNameSpecification.NAME));
 
     }
@@ -166,13 +152,8 @@ public class CountryMaskingProviderTest {
 
         String originalCountry = "Italy";
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("city", new OriginalMaskedValuePair("Rome", "Athens"));
+        String maskedCountry = maskingProvider.maskLinked(originalCountry, "Athens");
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.LOCATION, RelationshipType.LINKED,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("city", ProviderType.CITY)});
-
-        String maskedCountry = maskingProvider.mask(originalCountry, "field0", fieldRelationship, maskedValues);
         assertEquals("Greece".toUpperCase(), maskedCountry.toUpperCase());
     }
 
