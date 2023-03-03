@@ -133,7 +133,6 @@ public class ReplaceMaskingProviderTest {
 
         Map<String, OriginalMaskedValuePair> values2 = Collections.singletonMap("bar", new OriginalMaskedValuePair("asfd", "asdf"));
         assertThat(provider.mask("asdf", "foo", relationship, values2), not(in(new String[]{"FOO", "BAR"})));
-
     }
 
     @Test

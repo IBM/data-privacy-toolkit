@@ -58,19 +58,8 @@ public class CountryMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName,
-                       FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values) {
-
-        String cityFieldName = fieldRelationship.getOperands()[0].getName();
-
-        OriginalMaskedValuePair pair = values.get(cityFieldName);
-        if (pair == null) {
-            return mask(identifier);
-        }
-
-        String maskedCity = pair.getMasked();
-
-        City city = cityManager.getKey(maskedCity);
+    public String maskLinked(String identifier, String linkedValue) {
+        City city = cityManager.getKey(linkedValue);
         if (city == null) {
             return mask(identifier);
         }
