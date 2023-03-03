@@ -160,7 +160,7 @@ public class CountryMaskingProviderTest {
     @Test
     @Disabled
     public void testPerformance() {
-        int N = 1000000;
+        int N = 1_000_000;
         DefaultMaskingConfiguration defaultConfiguration = new DefaultMaskingConfiguration("default");
         DefaultMaskingConfiguration closestMaskingConfiguration = new DefaultMaskingConfiguration("closest");
         closestMaskingConfiguration.setValue("country.mask.closest", true);
