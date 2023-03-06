@@ -158,7 +158,7 @@ public class DataMaskingTest {
     @Test
     @Disabled
     public void testReadTreePerformance() throws Exception {
-        int N = 1000000;
+        int N = 1_000_000;
 
         InputStream is = this.getClass().getResourceAsStream("/testInputFHIR.json");
         String input = IOUtils.toString(new InputStreamReader(is));
@@ -193,6 +193,5 @@ public class DataMaskingTest {
             assertEquals(1, consistentMaskingFields.get("date_ns").size());
             assertEquals(1, consistentMaskingFields.get("name_ns").size());
         }
-    }    
-    
+    }
 }

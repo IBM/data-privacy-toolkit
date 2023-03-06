@@ -48,16 +48,6 @@ public class InMemoryDatasetReference extends DatasetReference {
     }
 
     @Override
-    public DataTypeFormat getFormat() {
-        return DataTypeFormat.CSV;
-    }
-
-    @Override
-    public DatasetOptions getOptions() {
-        return new GenericDatasetOptions();
-    }
-
-    @Override
     public Dataset<Row> readDataset(SparkSession sparkSession, String inputReference) {
         if (null == this.dataset) {
             this.dataset = createDataset(sparkSession);

@@ -31,6 +31,8 @@ public class Export {
 
         if (appendMode) {
             writer.mode(SaveMode.Append);
+        } else {
+            writer.mode(SaveMode.Overwrite);
         }
 
         switch (exportFormat) {
