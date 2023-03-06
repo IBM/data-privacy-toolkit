@@ -31,52 +31,7 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = DatabaseDatasetReference.class, name = "DB")
 })
 public abstract class DatasetReference implements Serializable {
-    public abstract DataTypeFormat getFormat();
-
-    public abstract DatasetOptions getOptions();
-
     public abstract Dataset<Row> readDataset(SparkSession sparkSession, String inputReference);
 
     public abstract void writeDataset(Dataset<Row> outputDataset, String path);
-
-    public static DatasetReference fromFile(String path) throws IOException {
-        try (InputStream inputStream = SparkUtils.readFile(path)) {
-            String lowerCasePath = path.toLowerCase();
-            final ObjectMapper mapper;
-
-            if (lowerCasePath.endsWith(".json")) {
-                return fromInputStream(inputStream, "json");
-            } else if (lowerCasePath.endsWith(".yaml") || lowerCasePath.endsWith(".yml")) {
-                return fromInputStream(inputStream, "yaml");
-            } else {
-                throw new IllegalArgumentException("Unknown extension " + path);
-            }
-        }
-    }
-
-    public static DatasetReference fromInputStream(InputStream inputStream, String format) throws IOException {
-        final ObjectMapper mapper;
-
-        if (format.equals("json")) {
-            mapper = JsonUtils.MAPPER;
-        } else if (format.equals("yaml")) {
-            mapper = new ObjectMapper(new YAMLFactory());
-        } else {
-            throw new IllegalArgumentException("Unknown format " + format);
-        }
-
-        // We need this for configurations as for example Parquet, where Format=PARQUET but there is no need for the linked property Options
-        // i.e. it can be omitted from the json
-        mapper.configure(
-                DeserializationFeature.FAIL_ON_MISSING_EXTERNAL_TYPE_ID_PROPERTY,
-                false);
-
-        // We need this for now - something changed with the latest 2.11.3, and it now fails by default with unknown properties
-        // i.e. for now we need mixed-json that can be deserialized in two different classes with different props
-        mapper.configure(
-            DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-        false);
-
-        return mapper.readValue(inputStream, DatasetReference.class);
-    }
 }

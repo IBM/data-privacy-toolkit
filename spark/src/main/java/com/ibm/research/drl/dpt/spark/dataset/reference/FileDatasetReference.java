@@ -12,11 +12,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
+import com.ibm.research.drl.dpt.processors.CSVFormatProcessor;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.spark.sql.DataFrameReader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -66,25 +68,6 @@ public class FileDatasetReference extends DatasetReference {
 
     public FileDatasetReference(
             String datasourceURL,
-            String basePath,
-            DataTypeFormat format,
-            DatasetOptions options,
-            String partitionBy,
-            boolean append
-    ) {
-        this(
-                datasourceURL,
-                null,
-                basePath,
-                format,
-                options,
-                partitionBy,
-                append
-        );
-    }
-
-    public FileDatasetReference(
-            String datasourceURL,
             DataTypeFormat format,
             DatasetOptions options,
             String partitionBy,
@@ -101,43 +84,42 @@ public class FileDatasetReference extends DatasetReference {
         );
     }
 
-    public String getDatasourceURL() {
-        return datasourceURL;
-    }
-
-    public boolean isDatasourceURLRemote() { return datasourceURL != null && datasourceURL.toLowerCase().startsWith("hdfs://"); }
-
-    public AuthenticationCredential getCredentials() {
-        return credentials;
-    }
-
-    public String getBasePath() {
-        return basePath;
-    }
-
-    public DataTypeFormat getFormat() {
-        return format;
-    }
-
-    public DatasetOptions getOptions() {
-        return options;
-    }
+    private boolean isDatasourceURLRemote() { return datasourceURL != null && datasourceURL.substring(0, "hdfs://".length()).equalsIgnoreCase("hdfs://"); }
 
     @Override
-    public Dataset<Row> readDataset(SparkSession sparkSession, String inputReference) {
-        throw new NotImplementedException();
-    }
+    public Dataset<Row> readDataset(SparkSession sparkSession, String input) {
+        DataFrameReader reader = sparkSession.read();
 
-    public String getPartitionBy() {
-        return partitionBy;
-    }
+        if (basePath != null) {
+            reader = reader.option("basePath", basePath);
+        }
 
-    public boolean isAppend() {
-        return append;
-    }
+        switch (this.format) {
+            case CSV:
+                CSVDatasetOptions csvDatasetOptions = (CSVDatasetOptions) this.options;
+                reader = reader
+                        .option("sep", Character.toString(csvDatasetOptions.getFieldDelimiter()))
+                        .option("quote", Character.toString(csvDatasetOptions.getQuoteChar()))
+                        .option("header", csvDatasetOptions.isHasHeader());
 
-    public Dataset<Row> readDataset(SparkSession sparkSession) {
-        return SparkUtils.createDataset(sparkSession, datasourceURL, format, options, basePath);
+                if (csvDatasetOptions.isTrimFields()) {
+                    reader = reader
+                            .option("ignoreLeadingWhiteSpace", true)
+                            .option("ignoreTrailingWhiteSpace", true);
+                }
+
+                Dataset<Row> dataset = reader.csv(input);
+
+                if (csvDatasetOptions.isHasHeader()) {
+                    return dataset;
+                } else {
+                    return dataset.toDF(CSVFormatProcessor.generateColumnNames(dataset.schema().fields().length));
+                }
+            case PARQUET:
+                return reader.parquet(input);
+            default:
+                return reader.text(input);
+        }
     }
 
     public void writeDataset(Dataset<Row> outputDataset, String path) {
@@ -149,11 +131,20 @@ public class FileDatasetReference extends DatasetReference {
             partitions = Collections.emptyList();
         }
 
-        Export.doExport(outputDataset, format, datasourceURL, partitions, this.append);
+        Export.doExport(outputDataset, format, buildFinalPath(path), partitions, this.append);
     }
 
-    public OutputStream asOutputStream() throws IOException {
-        return isDatasourceURLRemote() ? SparkUtils.createHDFSOutputStream(datasourceURL) : new FileOutputStream(datasourceURL);
+    private String buildFinalPath(String path) {
+        if (null != datasourceURL) {
+            if (path.startsWith("/")) {
+                path = path.substring(1);
+            }
+            if (datasourceURL.endsWith("/")) {
+                return datasourceURL + path;
+            }
+            return datasourceURL + "/" + path;
+        }
+        return path;
     }
 
     @Override
