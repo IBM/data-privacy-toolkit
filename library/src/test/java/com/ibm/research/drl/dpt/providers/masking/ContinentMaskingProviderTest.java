@@ -117,9 +117,6 @@ public class ContinentMaskingProviderTest {
 
         String originalContinent = "Europe";
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.LOCATION, RelationshipType.LINKED,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("city", ProviderType.CITY)});
-
         for(int i = 0; i < 100; i++) {
             String maskedContinent = maskingProvider.maskLinked(originalContinent, "Sydney", ProviderType.CITY);
             assertTrue("Oceania".equalsIgnoreCase(maskedContinent));
