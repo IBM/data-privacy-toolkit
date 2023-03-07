@@ -62,29 +62,31 @@ public class ContinentMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName,
-                       FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values) {
+    public String maskLinked(String identifier, String linkedValue) {
+        return maskLinked(identifier, linkedValue, ProviderType.COUNTRY);
+    }
 
-        RelationshipOperand relationshipOperand = fieldRelationship.getOperands()[0];
+    @Override
+    public String maskLinked(String identifier, String maskedValue, ProviderType providerType) {
+        if (null == providerType) {
+            providerType = ProviderType.COUNTRY;
+        }
 
-        String operandFieldName = fieldRelationship.getOperands()[0].getName();
-        String operandMaskedValue = values.get(operandFieldName).getMasked();
-
-        if (relationshipOperand.getType() == ProviderType.COUNTRY) {
+        if (providerType == ProviderType.COUNTRY) {
             Continent continent = continentManager.getKey(identifier);
             String locale = null;
             if (continent != null) {
                 locale = continent.getNameCountryCode();
             }
 
-            Country country = countryManager.lookupCountry(operandMaskedValue, locale);
+            Country country = countryManager.lookupCountry(maskedValue, locale);
             if (country == null) {
                 return mask(identifier);
             }
 
             return country.getContinent();
-        } else if (relationshipOperand.getType() == ProviderType.CITY) {
-            City city = cityManager.getKey(operandMaskedValue);
+        } else if (providerType == ProviderType.CITY) {
+            City city = cityManager.getKey(maskedValue);
             if (city != null) {
                 String countryCode = city.getCountryCode();
                 Country country = countryManager.lookupCountry(countryCode, city.getNameCountryCode());
