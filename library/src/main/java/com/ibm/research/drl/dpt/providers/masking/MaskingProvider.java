@@ -80,11 +80,11 @@ public interface MaskingProvider extends Serializable {
     }
 
     default String maskLinked(String identifier, String linkedValue) {
-        throw new UnsupportedOperationException("This relationship operation is not supported");
+        return maskLinked(identifier, linkedValue, null);
     }
 
     default String maskLinked(String identifier, String linkedValue, ProviderType providerType) {
-        return maskLinked(identifier, linkedValue);
+        throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
     default String maskProduct(String identifier, String product) {
