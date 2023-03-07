@@ -41,14 +41,7 @@ public class DummyMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-        if (fieldRelationship.getRelationshipType().equals(RelationshipType.EQUALS)) {
-            RelationshipOperand operand = fieldRelationship.getOperands()[0];
-            OriginalMaskedValuePair operandValues = maskedValues.get(operand.getName());
-
-            return operandValues.getMasked();
-        }
-
-        return mask(identifier);
+    public String maskEqual(String identifier, String equalValue) {
+        return equalValue;
     }
 }
