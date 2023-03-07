@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.processors;
@@ -9,13 +9,11 @@ package com.ibm.research.drl.dpt.processors;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DataMaskingOptions;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
-import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.datasets.JSONDatasetOptions;
 import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.processors.records.JSONRecord;
@@ -27,6 +25,7 @@ import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.IdentifiedType;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -38,11 +37,13 @@ import java.util.stream.Collectors;
 
 import static java.time.Duration.ofMillis;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JSONFormatProcessorTest {
-    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Test
     public void identificationOfMultipleObjects() throws Exception {
@@ -104,15 +105,14 @@ public class JSONFormatProcessorTest {
                     Collections.emptyMap()
             );
 
-            JsonParser parser = mapper.getFactory().createParser(output.toString());
-            MappingIterator<JsonNode> iterator = new ObjectMapper().readerFor(JsonNode.class).readValues(parser);
+            JsonParser parser = JsonUtils.MAPPER.getFactory().createParser(output.toString());
+            MappingIterator<JsonNode> iterator = JsonUtils.MAPPER.readerFor(JsonNode.class).readValues(parser);
 
             assertThat(iterator, is(not(nullValue())));
             assertThat(iterator.hasNext(),is(true));
 
             while(iterator.hasNext()) {
                 JsonNode currentNode = iterator.next();
-                System.out.println(currentNode);
                 assertThat(currentNode.get("a"), is(not(nullValue())));
                 assertThat(currentNode.get("a").get("b"), is(not(nullValue())));
                 assertThat(currentNode.get("a").get("b").isNull(), is(true));
@@ -150,22 +150,20 @@ public class JSONFormatProcessorTest {
                     Collections.emptySet(),
                     Collections.emptyMap()
             );
-
-            //System.out.println(baos.toString());
         }
     }
 
     @Test
     public void testMaskJSONFile() throws Exception {
         try (
-                InputStream inputStream = this.getClass().getResourceAsStream("/input.json");
+                InputStream inputStream = JSONFormatProcessorTest.class.getResourceAsStream("/input.json");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PrintStream output = new PrintStream(baos)
         ) {
             JSONFormatProcessor formatProcessor = new JSONFormatProcessor();
 
 
-            JsonNode configurationTree = mapper.readTree("{\n" +
+            JsonNode configurationTree = JsonUtils.MAPPER.readTree("{\n" +
                     "\"toBeMasked\":{\n" +
                     "\"/dialogs/0/dialogContent/dialog/0/user\": \"HASH\",\n" +
                     "\"/dialogs/0/dialogContent/dialog/0/message\": \"REDACT\"\n" +
@@ -177,13 +175,13 @@ public class JSONFormatProcessorTest {
                     "}");
 
             final ConfigurationManager configurationManager = ConfigurationManager.load(configurationTree);
-            final DataMaskingOptions maskingOptions = mapper.treeToValue(configurationTree, DataMaskingOptions.class);
+            final DataMaskingOptions maskingOptions = JsonUtils.MAPPER.treeToValue(configurationTree, DataMaskingOptions.class);
             MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, Collections.emptyMap());
             formatProcessor.maskStream(inputStream, output, factory, maskingOptions, new HashSet<>(), null);
 
-            try (InputStream originalStream = this.getClass().getResourceAsStream("/input.json")) {
-                JsonNode original = mapper.readTree(originalStream);
-                JsonNode masked = mapper.readTree(baos.toByteArray());
+            try (InputStream originalStream = JSONFormatProcessorTest.class.getResourceAsStream("/input.json")) {
+                JsonNode original = JsonUtils.MAPPER.readTree(originalStream);
+                JsonNode masked = JsonUtils.MAPPER.readTree(baos.toByteArray());
 
                 String path1 = "/dialogs/0/dialogContent/dialog/0/user";
                 String path2 = "/dialogs/0/dialogContent/dialog/0/message";
@@ -295,7 +293,7 @@ public class JSONFormatProcessorTest {
 
     @Test
     public void testIdentifyStreamJSON() throws Exception {
-        InputStream inputStream = this.getClass().getResourceAsStream("/fhir/deviceExampleOneLine.json");
+        InputStream inputStream = JSONFormatProcessorTest.class.getResourceAsStream("/fhir/deviceExampleOneLine.json");
 
         IdentificationReport results = new JSONFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.JSON, new JSONDatasetOptions(), IdentifierFactory.defaultIdentifiers(), -1);
 
@@ -304,7 +302,7 @@ public class JSONFormatProcessorTest {
 
     @Test
     public void testMultipleReads() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/fhir/deviceExampleOneLine.json") ) {
+        try (InputStream inputStream = JSONFormatProcessorTest.class.getResourceAsStream("/fhir/deviceExampleOneLine.json") ) {
             JSONFormatProcessor processor = new JSONFormatProcessor();
 
             List<Record> records = new ArrayList<>();
@@ -322,7 +320,7 @@ public class JSONFormatProcessorTest {
         String jsonS = "{\"a\": 2}";
 
         List<String> references = new ArrayList<>();
-        new JSONRecord(mapper.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
+        new JSONRecord(JsonUtils.MAPPER.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
 
 
         assertEquals(1, references.size());
@@ -334,7 +332,7 @@ public class JSONFormatProcessorTest {
         String jsonS = "[\"a\", 2]";
 
         List<String> references = new ArrayList<>();
-        new JSONRecord(mapper.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
+        new JSONRecord(JsonUtils.MAPPER.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
 
         assertEquals(2, references.size());
         assertTrue(references.contains("/0"));
@@ -347,7 +345,7 @@ public class JSONFormatProcessorTest {
 
 
         List<String> references = new ArrayList<>();
-        new JSONRecord(mapper.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
+        new JSONRecord(JsonUtils.MAPPER.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
 
         assertEquals(3, references.size());
         assertTrue(references.contains("/2/d"));
@@ -359,7 +357,7 @@ public class JSONFormatProcessorTest {
         String jsonS = "{\"b\": [{\"c\": 2, \"d\": 3}]}";
 
         List<String> references = new ArrayList<>();
-        new JSONRecord(mapper.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
+        new JSONRecord(JsonUtils.MAPPER.readTree(jsonS)).getFieldReferences().iterator().forEachRemaining(references::add);
 
         assertEquals(2, references.size());
         assertTrue(references.contains("/b/0/c"));
@@ -542,11 +540,10 @@ public class JSONFormatProcessorTest {
             String originalDate = "28-11-2017";
 
             String user1_date = null;
-            ObjectMapper mapper = new ObjectMapper();
 
             for (int i = 0; i < 100; i++) {
-                //maskRecord returns a reference to the same object of the first argument so we need to create a new record each time
-                Record record = new JSONRecord(mapper.readTree("{\"userid\": \"user1\", \"date\" : \"" + originalDate + "\"}"));
+                // maskRecord returns a reference to the same object of the first argument, so we need to create a new record each time
+                Record record = new JSONRecord(JsonUtils.MAPPER.readTree("{\"userid\": \"user1\", \"date\" : \"" + originalDate + "\"}"));
                 Record masked = formatProcessor.maskRecord(record, mpf, new HashSet<>(), dataMaskingOptions);
                 String maskedDate = new String(masked.getFieldValue("/date"));
 
@@ -563,7 +560,7 @@ public class JSONFormatProcessorTest {
             String user2_date = null;
 
             for (int i = 0; i < 100; i++) {
-                Record record = new JSONRecord(mapper.readTree("{\"userid\": \"user2\", \"date\" : \"" + originalDate + "\"}"));
+                Record record = new JSONRecord(JsonUtils.MAPPER.readTree("{\"userid\": \"user2\", \"date\" : \"" + originalDate + "\"}"));
                 Record masked = formatProcessor.maskRecord(record, mpf, new HashSet<>(), dataMaskingOptions);
                 String maskedDate = new String(masked.getFieldValue("/date"));
 
@@ -609,7 +606,7 @@ public class JSONFormatProcessorTest {
 
         String originalDate = "28-11-2017";
 
-        JSONRecord record = new JSONRecord(new ObjectMapper().readTree("{\"operand\": null, \"date\": \"" + originalDate +"\"}"));
+        JSONRecord record = new JSONRecord(JsonUtils.MAPPER.readTree("{\"operand\": null, \"date\": \"" + originalDate +"\"}"));
 
         //maskRecord returns a reference to the same object of the first argument, so we need to create a new record each time
         Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, new HashSet<>(), dataMaskingOptions);
@@ -621,13 +618,12 @@ public class JSONFormatProcessorTest {
 
     @Test
     public void testRelationshipRelative() throws  Exception {
-
-        DataMaskingOptions dataMaskingOptions  = mapper.readValue(this.getClass().getResourceAsStream("/relative_rel_masking.json"), DataMaskingOptions.class);
+        DataMaskingOptions dataMaskingOptions  = JsonUtils.MAPPER.readValue(JSONFormatProcessorTest.class.getResourceAsStream("/relative_rel_masking.json"), DataMaskingOptions.class);
         MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), dataMaskingOptions.getToBeMasked());
 
         JSONFormatProcessor formatProcessor = new JSONFormatProcessor();
 
-        Record record = new JSONRecord(mapper.readTree(this.getClass().getResourceAsStream("/relative_rel_input.json")));
+        Record record = new JSONRecord(JsonUtils.MAPPER.readTree(JSONFormatProcessorTest.class.getResourceAsStream("/relative_rel_input.json")));
 
         Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
 
@@ -638,12 +634,12 @@ public class JSONFormatProcessorTest {
     @Test
     public void testRelationshipAbsolute() throws  Exception {
 
-        DataMaskingOptions dataMaskingOptions  = mapper.readValue(this.getClass().getResourceAsStream("/relative_abs_masking.json"), DataMaskingOptions.class);
+        DataMaskingOptions dataMaskingOptions  = JsonUtils.MAPPER.readValue(JSONFormatProcessorTest.class.getResourceAsStream("/relative_abs_masking.json"), DataMaskingOptions.class);
         MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), dataMaskingOptions.getToBeMasked());
 
         JSONFormatProcessor formatProcessor = new JSONFormatProcessor();
 
-        Record record = new JSONRecord(mapper.readTree(this.getClass().getResourceAsStream("/relative_rel_input.json")));
+        Record record = new JSONRecord(JsonUtils.MAPPER.readTree(JSONFormatProcessorTest.class.getResourceAsStream("/relative_rel_input.json")));
 
         Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
 
@@ -654,12 +650,12 @@ public class JSONFormatProcessorTest {
     @Test
     public void testRelationshipAbsoluteOperandMissing() throws  Exception {
 
-        DataMaskingOptions dataMaskingOptions  = mapper.readValue(this.getClass().getResourceAsStream("/relative_abs_masking.json"), DataMaskingOptions.class);
+        DataMaskingOptions dataMaskingOptions  = JsonUtils.MAPPER.readValue(JSONFormatProcessorTest.class.getResourceAsStream("/relative_abs_masking.json"), DataMaskingOptions.class);
         MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), dataMaskingOptions.getToBeMasked());
 
         JSONFormatProcessor formatProcessor = new JSONFormatProcessor();
 
-        Record record = new JSONRecord(mapper.readTree(this.getClass().getResourceAsStream("/global_rel_missing.json")));
+        Record record = new JSONRecord(JsonUtils.MAPPER.readTree(JSONFormatProcessorTest.class.getResourceAsStream("/global_rel_missing.json")));
 
         Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
 
@@ -669,18 +665,21 @@ public class JSONFormatProcessorTest {
 
     @Test
     public void testRelationshipRelativeOperandMissing() throws  Exception {
+        try (InputStream relative_rel_masking = JSONFormatProcessorTest.class.getResourceAsStream("/relative_rel_masking.json");
+            InputStream records = JSONFormatProcessorTest.class.getResourceAsStream("/global_rel_missing.json");
+        ) {
+            DataMaskingOptions dataMaskingOptions = JsonUtils.MAPPER.readValue(relative_rel_masking, DataMaskingOptions.class);
+            MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), dataMaskingOptions.getToBeMasked());
 
-        DataMaskingOptions dataMaskingOptions  = mapper.readValue(this.getClass().getResourceAsStream("/relative_rel_masking.json"), DataMaskingOptions.class);
-        MaskingProviderFactory maskingProviderFactory = new MaskingProviderFactory(new ConfigurationManager(), dataMaskingOptions.getToBeMasked());
+            JSONFormatProcessor formatProcessor = new JSONFormatProcessor();
 
-        JSONFormatProcessor formatProcessor = new JSONFormatProcessor();
+            Record record = new JSONRecord(JsonUtils.MAPPER.readTree(records));
 
-        Record record = new JSONRecord(mapper.readTree(this.getClass().getResourceAsStream("/global_rel_missing.json")));
+            Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
 
-        Record masked = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
-
-        assertEquals("", new String(masked.getFieldValue("/a/b/0/name")));
-        assertEquals("abc", new String(masked.getFieldValue("/a/b/1/name")));
+            assertEquals("", new String(masked.getFieldValue("/a/b/0/name")));
+            assertEquals("abc", new String(masked.getFieldValue("/a/b/1/name")));
+        }
     }
 
     @Test
@@ -690,10 +689,10 @@ public class JSONFormatProcessorTest {
                 "{\"a\": \"goo@gmail.com\"}\n";
 
         JSONFormatProcessor processor = new JSONFormatProcessor();
-        Map<String, DataMaskingTarget> toBeMasked = new HashMap<String, DataMaskingTarget>() {{
+        Map<String, DataMaskingTarget> toBeMasked = new HashMap<>() {{
             put("/a", new DataMaskingTarget(ProviderType.REDACT, "/a"));
         }};
-        MaskingConfiguration configuration = new DefaultMaskingConfiguration();
+
         MaskingProviderFactory factory = new MaskingProviderFactory(
             new ConfigurationManager(),
                 toBeMasked
@@ -738,10 +737,10 @@ public class JSONFormatProcessorTest {
                 "{\"a\": [{\"a\":\"foo@gmail.com\"}]}\n";
 
         JSONFormatProcessor processor = new JSONFormatProcessor();
-        Map<String, DataMaskingTarget> toBeMasked = new HashMap<String, DataMaskingTarget>() {{
+        Map<String, DataMaskingTarget> toBeMasked = new HashMap<>() {{
             put("/a/*/a", new DataMaskingTarget(ProviderType.REDACT, "/a/*/a"));
         }};
-        MaskingConfiguration configuration = new DefaultMaskingConfiguration();
+
         MaskingProviderFactory factory = new MaskingProviderFactory(
                 new ConfigurationManager(),
                 toBeMasked
@@ -786,7 +785,7 @@ public class JSONFormatProcessorTest {
                 "{\"a\": \"foo@gmail.com\"}\n";
 
         JSONFormatProcessor processor = new JSONFormatProcessor();
-        Map<String, DataMaskingTarget> toBeMasked = new HashMap<String, DataMaskingTarget>() {{
+        Map<String, DataMaskingTarget> toBeMasked = new HashMap<>() {{
             put("/a", new DataMaskingTarget(ProviderType.REDACT, "/b"));
         }};
 
@@ -858,7 +857,7 @@ public class JSONFormatProcessorTest {
                     Collections.emptyMap()
             );
 
-            JsonNode masked = mapper.readTree(output.toString());
+            JsonNode masked = JsonUtils.MAPPER.readTree(output.toString());
 
             assertThat(masked.get("a"), is(not(nullValue())));
             assertThat(masked.get("a").get("b"), is(nullValue()));
@@ -899,7 +898,7 @@ public class JSONFormatProcessorTest {
                     Collections.emptyMap()
             );
 
-            JsonNode masked = mapper.readTree(output.toString());
+            JsonNode masked = JsonUtils.MAPPER.readTree(output.toString());
 
             assertThat(masked.get(0).get("a"), is(not(nullValue())));
             assertThat(masked.get(0).get("a").get("b"), is(nullValue()));
@@ -947,7 +946,7 @@ public class JSONFormatProcessorTest {
                     Collections.emptyMap()
             );
 
-            JsonNode masked = mapper.readTree(output.toString());
+            JsonNode masked = JsonUtils.MAPPER.readTree(output.toString());
 
             assertThat(masked.get("a"), is(not(nullValue())));
             assertThat(masked.get("a").get("b"), is(not(nullValue())));
@@ -989,7 +988,7 @@ public class JSONFormatProcessorTest {
                     Collections.emptyMap()
             );
 
-            JsonNode masked = mapper.readTree(output.toString());
+            JsonNode masked = JsonUtils.MAPPER.readTree(output.toString());
 
             assertThat(masked.get("a"), is(not(nullValue())));
             assertThat(masked.get("a").get("b"), is(not(nullValue())));

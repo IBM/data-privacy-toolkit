@@ -67,6 +67,11 @@ public class HashMaskingProvider extends AbstractMaskingProvider {
 
     @Override
     public String mask(String identifier) {
+        return maskWithKey(identifier, this.salt);
+    }
+
+    @Override
+    public String maskWithKey(String identifier, String key) {
         try {
             MessageDigest md = MessageDigest.getInstance(this.algorithm);
 
@@ -74,7 +79,7 @@ public class HashMaskingProvider extends AbstractMaskingProvider {
                 identifier = identifier.toLowerCase();
             }
 
-            md.update((identifier + this.salt).getBytes());
+            md.update((identifier + key).getBytes());
             byte[] shaDig = md.digest();
 
             return bytesToHex(shaDig);
