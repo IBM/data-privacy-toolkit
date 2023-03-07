@@ -1,13 +1,12 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
 import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
@@ -23,9 +22,14 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class ContinentMaskingProviderTest {
@@ -53,7 +57,7 @@ public class ContinentMaskingProviderTest {
 
         String greekContinent = "Ευρώπη";
 
-        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.CONTINENT, Arrays.asList("gr"));
+        Collection<ResourceEntry> entryCollection = LocalizationManager.getInstance().getResources(Resource.CONTINENT, List.of("gr"));
         Set<String> greekCities = new HashSet<>();
 
         for(ResourceEntry entry: entryCollection) {
@@ -101,15 +105,9 @@ public class ContinentMaskingProviderTest {
 
         String originalContinent = "Europe";
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("country", new OriginalMaskedValuePair("Italy", "Australia"));
-
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.LOCATION, RelationshipType.LINKED,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("country", ProviderType.COUNTRY)});
-
         for(int i = 0; i < 100; i++) {
-            String maskedContinent = maskingProvider.mask(originalContinent, "field0", fieldRelationship, maskedValues);
-            assertEquals("Oceania".toUpperCase(), maskedContinent.toUpperCase());
+            String maskedContinent = maskingProvider.maskLinked(originalContinent,  "Australia");
+            assertTrue("Oceania".equalsIgnoreCase(maskedContinent));
         }
     }
 
@@ -119,15 +117,12 @@ public class ContinentMaskingProviderTest {
 
         String originalContinent = "Europe";
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("city", new OriginalMaskedValuePair("Rome", "Sydney"));
-
         FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.LOCATION, RelationshipType.LINKED,
                 "field0", new RelationshipOperand[] {new RelationshipOperand("city", ProviderType.CITY)});
 
         for(int i = 0; i < 100; i++) {
-            String maskedContinent = maskingProvider.mask(originalContinent, "field0", fieldRelationship, maskedValues);
-            assertEquals("Oceania".toUpperCase(), maskedContinent.toUpperCase());
+            String maskedContinent = maskingProvider.maskLinked(originalContinent, "Sydney", ProviderType.CITY);
+            assertTrue("Oceania".equalsIgnoreCase(maskedContinent));
         }
     }
 

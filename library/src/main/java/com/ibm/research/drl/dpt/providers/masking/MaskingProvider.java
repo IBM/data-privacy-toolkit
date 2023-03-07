@@ -6,6 +6,7 @@
 package com.ibm.research.drl.dpt.providers.masking;
 
 import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 
 import java.io.Serializable;
@@ -80,6 +81,10 @@ public interface MaskingProvider extends Serializable {
 
     default String maskLinked(String identifier, String linkedValue) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskLinked(String identifier, String linkedValue, ProviderType providerType) {
+        return maskLinked(identifier, linkedValue);
     }
 
     default String maskProduct(String identifier, String product) {
