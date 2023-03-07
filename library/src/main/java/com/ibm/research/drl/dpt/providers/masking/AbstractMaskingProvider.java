@@ -1,16 +1,13 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
-import java.util.Map;
 
 public abstract class AbstractMaskingProvider implements MaskingProvider, Serializable {
     protected SecureRandom random;
