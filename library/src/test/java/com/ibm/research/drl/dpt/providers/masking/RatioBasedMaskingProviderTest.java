@@ -42,7 +42,6 @@ public class RatioBasedMaskingProviderTest {
 
     @Test
     public void testMaskCompound() {
-
         MaskingProvider maskingProvider = new RatioBasedMaskingProvider();
         
         String identifier = "5.0";
@@ -63,8 +62,6 @@ public class RatioBasedMaskingProviderTest {
 
     @Test
     public void testMaskCompoundEmptyOperand() {
-
-
         String identifier = "5.0";
         String fieldName = "Euro";
 
@@ -85,7 +82,6 @@ public class RatioBasedMaskingProviderTest {
 
     @Test
     public void testMaskCompoundGreater() {
-
         MaskingProvider maskingProvider = new RatioBasedMaskingProvider();
 
         String identifier = "15.0";
@@ -106,19 +102,11 @@ public class RatioBasedMaskingProviderTest {
 
     @Test
     public void testMaskWithRatioAsOperand() {
-
         MaskingProvider maskingProvider = new RatioBasedMaskingProvider();
 
         String identifier = "15.0";
-        String fieldName = "Euro";
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.KEY,
-                fieldName, List.of(new RelationshipOperand("Rate")));
-
-        Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
-        originalMaskedValues.put("Rate", new OriginalMaskedValuePair("3.0", "3.0"));
-
-        String masked = maskingProvider.mask(identifier, fieldName, fieldRelationship, originalMaskedValues);
+        String masked = maskingProvider.maskWithKey(identifier, "3.0");
 
         //Rate holds the ratio, so masked result = 15.0 * 3
         assertEquals(15.0 * 3.0, Double.parseDouble(masked), 0.000001);

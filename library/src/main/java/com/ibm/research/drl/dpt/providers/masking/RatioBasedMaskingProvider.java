@@ -9,6 +9,7 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
@@ -83,9 +84,28 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
+    public String maskWithKey(String value, String operandValueString) {
+        try {
+            double operandValue = Double.parseDouble(operandValueString);
+            double masked = Double.parseDouble(value) * operandValue;
+            return formatResult(masked);
+        } catch (NumberFormatException e) {
+            switch (failMode) {
+                case FailMode.RETURN_ORIGINAL:
+                    return value;
+                case FailMode.THROW_ERROR:
+                    logger.error("invalid numerical value");
+                    throw new IllegalArgumentException("invalid numerical value");
+                case FailMode.RETURN_EMPTY:
+                default:
+                    return "";
+            }
+        }
+    }
+
+    @Override
     public String mask(String identifier, String fieldName,
                        FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values) {
-
         double value;
         try {
             value = Double.parseDouble(identifier);
@@ -101,11 +121,6 @@ public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
                     return "";
             }
         }
-
-        if (fieldRelationship.getRelationshipType() == RelationshipType.KEY) {
-            return maskWithRatioAsOperand(value, fieldRelationship, values, identifier);
-        }
-
 
         RelationshipOperand[] operands = fieldRelationship.getOperands();
         String baseValueField = operands[0].getName();
