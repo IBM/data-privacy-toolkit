@@ -1,23 +1,13 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.models.ValueClass;
-import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.CreditCardTypeIdentifier;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CreditCardTypeMaskingProviderTest {
@@ -46,9 +36,6 @@ public class CreditCardTypeMaskingProviderTest {
         CreditCardTypeMaskingProvider maskingProvider = new CreditCardTypeMaskingProvider();
 
         String originalCCType = "VISA";
-
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("cc", new OriginalMaskedValuePair("41223333333312345", "5523527012345678"));
 
         for (int i = 0; i < 100; i++) {
             String maskedCCType = maskingProvider.maskLinked(originalCCType, "5523527012345678");
