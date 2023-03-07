@@ -285,9 +285,7 @@ public abstract class MultipathFormatProcessor extends FormatProcessor {
 
         final MultipathRecord multipathRecord = (MultipathRecord) record;
 
-        if (existOperandsWithNonFixedPath(relationships, multipathRecord))
-            throw new UnsupportedOperationException("Only fixed path operands are supported");
-
+        if (existOperandsWithNonFixedPath(relationships, multipathRecord)) throw new UnsupportedOperationException("Only fixed path operands are supported");
 
         Map<String, Tuple<DataMaskingTarget, String>> fieldsToMask = expandToBeMasked(dataMaskingOptions.getToBeMasked(), multipathRecord);
         Queue<String> fieldsToProcess = new LinkedList<>(fieldsToMask.keySet());

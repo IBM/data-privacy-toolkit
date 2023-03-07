@@ -150,7 +150,6 @@ public class MaskingTask extends SparkTaskToExecute {
                     ).cast(targetDataType));
         } else {
             switch (relationship.getRelationshipType()) {
-
                 case KEY:
                     String keyFieldName = relationship.getOperands()[0].getName();
 
@@ -169,14 +168,23 @@ public class MaskingTask extends SparkTaskToExecute {
                                     dataset.col(prefix + relativeDistanceFieldName).cast(DataTypes.StringType),
                                     dataset.col(relativeDistanceFieldName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
+                case EQUALS:
+                    String equalFieldName = relationship.getOperands()[0].getName();
+                    UDF2<String, String, String> equalUDF = provider::maskEqual;
+                    return dataset.withColumn(target.getTargetPath(),
+                            udf(equalUDF, DataTypes.StringType).apply(
+                                    dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(equalFieldName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
                 case GREP_AND_MASK:
                 case SUM:
                 case SUM_APPROXIMATE:
                 case PRODUCT:
-                case EQUALS:
                 case GREATER:
                 case LESS:
                 case LINKED:
+//                    String linkedFieldName = relationship.getOperands()[0].getName();
+//                    UDF3<String, String, String, ProviderType> linkedUDF = provider::maskLinked;
+                    // TODO: missing code for this
                 default:
                     throw new UnsupportedOperationException();
             }

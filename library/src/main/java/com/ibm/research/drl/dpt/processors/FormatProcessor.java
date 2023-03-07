@@ -152,7 +152,26 @@ public abstract class FormatProcessor implements Serializable {
         if (null == fieldRelationship) {
             return provider.mask(originalValue, fieldIdentifier);
         } else {
-            return provider.mask(originalValue, fieldIdentifier, fieldRelationship, processedFields);
+            switch (fieldRelationship.getRelationshipType()) {
+                case KEY:
+                    return provider.maskWithKey(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
+                case DISTANCE:
+                    return provider.maskDistance(
+                            originalValue,
+                            processedFields.get(fieldRelationship.getOperands()[0].getName()).getOriginal(),
+                            processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked());
+                case EQUALS:
+                    return provider.maskEqual(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked());
+                case SUM:
+                case SUM_APPROXIMATE:
+                case PRODUCT:
+                case GREATER:
+                case LESS:
+                case LINKED:
+                case GREP_AND_MASK:
+                default:
+                    throw new UnsupportedOperationException();
+            }
         }
     }
 

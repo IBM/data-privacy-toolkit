@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class HashMaskingProviderTest {
-
     @Test
     public void testMask() throws Exception {
         HashMaskingProvider maskingProvider = new HashMaskingProvider();
