@@ -10,6 +10,7 @@ import com.ibm.research.drl.dpt.managers.CreditCardManager;
 import com.ibm.research.drl.dpt.managers.CreditCardTypeManager;
 import com.ibm.research.drl.dpt.models.CreditCard;
 import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 
 import java.security.SecureRandom;
@@ -37,18 +38,8 @@ public class CreditCardTypeMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName, FieldRelationship fieldRelationship,
-                       Map<String, OriginalMaskedValuePair> values) {
-
-        String ccFieldName = fieldRelationship.getOperands()[0].getName();
-
-        OriginalMaskedValuePair pair = values.get(ccFieldName);
-        if (pair == null) {
-            return mask(identifier);
-        }
-
-        String maskedCC = pair.getMasked();
-        CreditCard creditCard = creditCardManager.lookupInfo(maskedCC);
+    public String maskLinked(String identifier, String maskedValue, ProviderType providerType) {
+        CreditCard creditCard = creditCardManager.lookupInfo(maskedValue);
 
         if (creditCard == null) {
             return mask(identifier);

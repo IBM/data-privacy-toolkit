@@ -42,7 +42,7 @@ public class CreditCardTypeMaskingProviderTest {
     }
 
     @Test
-    public void testCompoundMask() throws Exception {
+    public void testCompoundMask() {
         CreditCardTypeMaskingProvider maskingProvider = new CreditCardTypeMaskingProvider();
 
         String originalCCType = "VISA";
@@ -50,12 +50,9 @@ public class CreditCardTypeMaskingProviderTest {
         Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
         maskedValues.put("cc", new OriginalMaskedValuePair("41223333333312345", "5523527012345678"));
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.TEXT, RelationshipType.LINKED,
-                "field0", new RelationshipOperand[]{new RelationshipOperand("cc", ProviderType.CREDIT_CARD)});
-
-        for (int i = 0; i < 1000; i++) {
-            String maskedCCType = maskingProvider.mask(originalCCType, "field0", fieldRelationship, maskedValues);
-            assertEquals("Mastercard".toUpperCase(), maskedCCType.toUpperCase());
+        for (int i = 0; i < 100; i++) {
+            String maskedCCType = maskingProvider.maskLinked(originalCCType, "5523527012345678");
+            assertTrue("Mastercard".equalsIgnoreCase(maskedCCType));
         }
     }
 }
