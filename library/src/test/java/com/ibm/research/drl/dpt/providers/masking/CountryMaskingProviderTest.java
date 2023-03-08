@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.providers.masking;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.CountryManager;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.util.CountryNameSpecification;
 import com.ibm.research.drl.dpt.util.Readers;
 import com.ibm.research.drl.dpt.util.localization.LocalizationManager;
@@ -153,7 +154,7 @@ public class CountryMaskingProviderTest {
 
         String originalCountry = "Italy";
 
-        String maskedCountry = maskingProvider.maskLinked(originalCountry, "Athens");
+        String maskedCountry = maskingProvider.maskLinked(originalCountry, "Athens", ProviderType.CITY);
 
         assertEquals("Greece".toUpperCase(), maskedCountry.toUpperCase());
     }

@@ -62,11 +62,6 @@ public class ContinentMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String maskLinked(String identifier, String linkedValue) {
-        return maskLinked(identifier, linkedValue, ProviderType.COUNTRY);
-    }
-
-    @Override
     public String maskLinked(String identifier, String maskedValue, ProviderType providerType) {
         if (null == providerType) {
             providerType = ProviderType.COUNTRY;
