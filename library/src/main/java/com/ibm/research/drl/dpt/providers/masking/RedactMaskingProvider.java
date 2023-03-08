@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import java.security.SecureRandom;
 
 
-public class RedactMaskingProvider extends AbstractMaskingProvider {
+public class RedactMaskingProvider implements MaskingProvider {
     private final boolean preserveLength;
     private final String replacementCharacter;
     private final int replacementLength;

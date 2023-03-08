@@ -15,7 +15,7 @@ import java.security.SecureRandom;
 /**
  * The type City masking provider.
  */
-public class CityMaskingProvider extends AbstractMaskingProvider {
+public class CityMaskingProvider implements MaskingProvider {
     private static final CityManager cityManager = CityManager.getInstance();
     private final boolean getClosest;
     private final int closestK;
@@ -44,7 +44,6 @@ public class CityMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public CityMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.getClosest = configuration.getBooleanValue("city.mask.closest");
         this.closestK = configuration.getIntValue("city.mask.closestK");
         this.getPseudorandom = configuration.getBooleanValue("city.mask.pseudorandom");

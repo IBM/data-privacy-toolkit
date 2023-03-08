@@ -17,7 +17,7 @@ import java.security.SecureRandom;
  * The type Ic dv 9 masking provider.
  *
  */
-public class ICDv9MaskingProvider extends AbstractMaskingProvider {
+public class ICDv9MaskingProvider implements MaskingProvider {
     private final static ICDv9Manager icdV9Manager = ICDv9Manager.getInstance();
     private final boolean randomizeToCategory;
     private final boolean randomizeToRange;
@@ -46,7 +46,6 @@ public class ICDv9MaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public ICDv9MaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.randomizeToCategory = configuration.getBooleanValue("icd.randomize.category");
         this.randomizeToRange = configuration.getBooleanValue("icd.randomize.chapter");
     }

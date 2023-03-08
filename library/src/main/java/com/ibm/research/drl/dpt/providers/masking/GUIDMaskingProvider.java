@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import java.security.SecureRandom;
 import java.util.UUID;
 
-public class GUIDMaskingProvider extends AbstractMaskingProvider {
+public class GUIDMaskingProvider implements MaskingProvider {
 
     /**
      * Instantiates a new Guid masking provider.

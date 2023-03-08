@@ -9,14 +9,11 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.CreditCardManager;
 import com.ibm.research.drl.dpt.managers.CreditCardTypeManager;
 import com.ibm.research.drl.dpt.models.CreditCard;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
 
 import java.security.SecureRandom;
-import java.util.Map;
 
-public class CreditCardTypeMaskingProvider extends AbstractMaskingProvider {
+public class CreditCardTypeMaskingProvider implements MaskingProvider {
     private static final CreditCardTypeManager ccTypeManager = CreditCardTypeManager.getInstance();
     private static final CreditCardManager creditCardManager = CreditCardManager.getInstance();
 

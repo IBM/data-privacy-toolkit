@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
-public class SSNUKMaskingProvider extends AbstractMaskingProvider {
+public class SSNUKMaskingProvider implements MaskingProvider {
     /*
     The format of the number is two prefix letters, six digits, and one suffix letter.[5]
     The example used is typically AB123456C. Often, the number is printed with spaces to pair off
@@ -27,6 +27,7 @@ public class SSNUKMaskingProvider extends AbstractMaskingProvider {
     private static final char[] allowedSecondLetters = "ABCEGHJKLMNPRSTWXYZ".toCharArray();
     private static final char[] allowedSuffixLetters = "ABCD".toCharArray();
     private final boolean preservePrefix;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Ssnuk masking provider.

@@ -12,7 +12,9 @@ import java.security.SecureRandom;
 /**
  * The type National identifier masking provider.
  */
-public class NationalIdentifierMaskingProvider extends AbstractMaskingProvider {
+public class NationalIdentifierMaskingProvider implements MaskingProvider {
+    private final SecureRandom random;
+
     /**
      * Instantiates a new National identifier masking provider.
      *

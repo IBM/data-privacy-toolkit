@@ -16,11 +16,12 @@ import java.security.SecureRandom;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
-public class PhoneMaskingProvider extends AbstractMaskingProvider {
+public class PhoneMaskingProvider implements MaskingProvider {
     private final static PhoneIdentifier phoneIdentifier = new PhoneIdentifier();
     private static final MSISDNManager msisdnManager = MSISDNManager.getInstance();
     private final boolean preserveCountryCode;
     private final boolean preserveAreaCode;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Phone masking provider.

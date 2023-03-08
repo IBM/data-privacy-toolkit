@@ -16,12 +16,13 @@ import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
-public class IPAddressMaskingProvider extends AbstractMaskingProvider {
+public class IPAddressMaskingProvider implements MaskingProvider {
     private final static Logger logger = LogManager.getLogger(IPAddressMaskingProvider.class);
 
     private final static IPAddressIdentifier ipAddressIdentifier = new IPAddressIdentifier();
     private final int preservedPrefixes;
     private final int failMode;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Ip address masking provider.

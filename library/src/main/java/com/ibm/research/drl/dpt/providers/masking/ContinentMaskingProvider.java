@@ -13,19 +13,15 @@ import com.ibm.research.drl.dpt.managers.CountryManager;
 import com.ibm.research.drl.dpt.models.City;
 import com.ibm.research.drl.dpt.models.Continent;
 import com.ibm.research.drl.dpt.models.Country;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 
 import java.security.SecureRandom;
-import java.util.Map;
 
 /**
  * The type Continent masking provider.
  *
  */
-public class ContinentMaskingProvider extends AbstractMaskingProvider {
+public class ContinentMaskingProvider implements MaskingProvider {
     private static final CountryManager countryManager = CountryManager.getInstance();
     private static final CityManager cityManager = CityManager.getInstance();
     private final boolean getClosest;
@@ -56,7 +52,6 @@ public class ContinentMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public ContinentMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.getClosest = configuration.getBooleanValue("continent.mask.closest");
         this.getClosestK = configuration.getIntValue("continent.mask.closestK");
     }

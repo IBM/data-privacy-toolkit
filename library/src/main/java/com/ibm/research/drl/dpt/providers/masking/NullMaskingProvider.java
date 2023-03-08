@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 import java.security.SecureRandom;
 
-public class NullMaskingProvider extends AbstractMaskingProvider {
+public class NullMaskingProvider implements MaskingProvider {
 
     private final boolean returnNull;
 

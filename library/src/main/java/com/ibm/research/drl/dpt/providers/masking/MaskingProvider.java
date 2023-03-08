@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -10,10 +10,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
- * The interface Masking provider.
+ * The interface Masking provider
  *
  */
 public interface MaskingProvider extends Serializable {
@@ -24,7 +25,14 @@ public interface MaskingProvider extends Serializable {
      * @return the string [ ]
      */
     @Deprecated(forRemoval = true)
-    String[] mask(final String[] data);
+    default String[] mask(final String[] data) {
+        final String[] maskedData = new String[data.length];
+
+        for (int i = 0; i < data.length; ++i)
+            maskedData[i] = mask(data[i]);
+
+        return maskedData;
+    }
 
     /**
      * Mask string.
@@ -40,7 +48,9 @@ public interface MaskingProvider extends Serializable {
      * @param data the data
      * @return the byte [ ]
      */
-    byte[] mask(byte[] data);
+    default byte[] mask(byte[] data) {
+        return mask(new String(data)).getBytes();
+    }
 
     /**
      * Mask string.
@@ -100,6 +110,10 @@ public interface MaskingProvider extends Serializable {
     }
 
     default String maskDistance(String identifier, String original, String masked) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
+
+    default String maskGrepAndMask(String identifier, List<String> targetToken) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 }

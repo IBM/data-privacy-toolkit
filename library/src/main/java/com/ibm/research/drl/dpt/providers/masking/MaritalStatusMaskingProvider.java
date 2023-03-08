@@ -15,7 +15,7 @@ import java.security.SecureRandom;
 /**
  * The type Marital status masking provider.
  */
-public class MaritalStatusMaskingProvider extends AbstractMaskingProvider {
+public class MaritalStatusMaskingProvider implements MaskingProvider {
     private static final MaritalStatusManager statusManager = MaritalStatusManager.getInstance();
 
     /**

@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ConditionalMaskingProvider extends AbstractMaskingProvider {
+public class ConditionalMaskingProvider implements MaskingProvider {
     private final MaskingProvider maskingProvider;
     private final boolean isWhiteListEnabled;
 

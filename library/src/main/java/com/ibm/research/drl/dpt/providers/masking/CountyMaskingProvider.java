@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2021                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.County;
 
 import java.security.SecureRandom;
 
-public class CountyMaskingProvider extends AbstractMaskingProvider {
+public class CountyMaskingProvider implements MaskingProvider {
     private final static CountyManager countyManager = CountyManager.getInstance();
     private final boolean getPseudorandom;
 
@@ -39,7 +39,6 @@ public class CountyMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public CountyMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.getPseudorandom = configuration.getBooleanValue("county.mask.pseudorandom");
     }
 

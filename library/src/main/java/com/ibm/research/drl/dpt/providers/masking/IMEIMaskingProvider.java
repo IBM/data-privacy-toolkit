@@ -13,7 +13,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
-public class IMEIMaskingProvider extends AbstractMaskingProvider {
+public class IMEIMaskingProvider implements MaskingProvider {
     private static final IMEIIdentifier IMEI_IDENTIFIER = new IMEIIdentifier();
     private static final IMEIManager imeiManager = IMEIManager.getInstance();
     private final boolean preserveTAC;
@@ -50,7 +50,6 @@ public class IMEIMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public IMEIMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.preserveTAC = configuration.getBooleanValue("imei.mask.preserveTAC");
     }
 

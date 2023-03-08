@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 
 
-public class TimeStampMaskingProvider extends AbstractMaskingProvider {
+public class TimeStampMaskingProvider implements MaskingProvider {
     private DateTimeFormatter formatter;
     private final boolean year;
     private final boolean month;

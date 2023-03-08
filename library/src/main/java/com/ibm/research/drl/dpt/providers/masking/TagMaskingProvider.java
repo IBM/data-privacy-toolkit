@@ -10,7 +10,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import java.security.SecureRandom;
 import java.util.HashMap;
 
-public class TagMaskingProvider extends AbstractMaskingProvider {
+public class TagMaskingProvider implements MaskingProvider {
     private static class CacheEntry extends HashMap<String, String> {
     }
 

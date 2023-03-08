@@ -15,7 +15,7 @@ import java.security.SecureRandom;
 /**
  * The type Religion masking provider.
  */
-public class ReligionMaskingProvider extends AbstractMaskingProvider {
+public class ReligionMaskingProvider implements MaskingProvider {
     private static final ReligionManager religionManager = ReligionManager.getInstance();
     private final boolean probabilityBasedMasking;
 

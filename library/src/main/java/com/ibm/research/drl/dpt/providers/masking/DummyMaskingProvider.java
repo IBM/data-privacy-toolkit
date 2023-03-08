@@ -1,23 +1,16 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
-
 package com.ibm.research.drl.dpt.providers.masking;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
-
-import java.util.Map;
 
 /**
  * The type Dummy masking provider.
  */
-public class DummyMaskingProvider extends AbstractMaskingProvider {
+public class DummyMaskingProvider implements MaskingProvider {
 
     /**
      * Instantiates a new Dummy masking provider.
