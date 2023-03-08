@@ -106,7 +106,7 @@ public class ContinentMaskingProviderTest {
         String originalContinent = "Europe";
 
         for(int i = 0; i < 100; i++) {
-            String maskedContinent = maskingProvider.maskLinked(originalContinent,  "Australia");
+            String maskedContinent = maskingProvider.maskLinked(originalContinent,  "Australia", ProviderType.COUNTRY);
             assertTrue("Oceania".equalsIgnoreCase(maskedContinent));
         }
     }

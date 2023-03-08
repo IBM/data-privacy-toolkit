@@ -56,11 +56,6 @@ public class CountryMaskingProvider extends AbstractMaskingProvider {
     }
 
     @Override
-    public String maskLinked(String identifier, String linkedValue) {
-        return maskLinked(identifier, linkedValue, ProviderType.CITY);
-    }
-
-    @Override
     public String maskLinked(String identifier, String linkedValue, ProviderType linkedType) {
         City city = cityManager.getKey(linkedValue);
         if (city == null) {

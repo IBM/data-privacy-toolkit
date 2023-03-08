@@ -5,6 +5,7 @@
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
+import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.CreditCardTypeIdentifier;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +39,7 @@ public class CreditCardTypeMaskingProviderTest {
         String originalCCType = "VISA";
 
         for (int i = 0; i < 100; i++) {
-            String maskedCCType = maskingProvider.maskLinked(originalCCType, "5523527012345678");
+            String maskedCCType = maskingProvider.maskLinked(originalCCType, "5523527012345678", ProviderType.CREDIT_CARD);
             assertTrue("Mastercard".equalsIgnoreCase(maskedCCType));
         }
     }
