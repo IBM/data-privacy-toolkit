@@ -8,6 +8,7 @@ package com.ibm.research.drl.dpt.nlp;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
