@@ -16,7 +16,7 @@ import java.security.SecureRandom;
  * The type Race ethnicity masking provider.
  *
  */
-public class RaceEthnicityMaskingProvider extends AbstractMaskingProvider {
+public class RaceEthnicityMaskingProvider implements MaskingProvider {
     private static final RaceManager raceManager = RaceManager.getInstance();
     private final boolean probabilityBasedMasking;
 
@@ -43,7 +43,6 @@ public class RaceEthnicityMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public RaceEthnicityMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.probabilityBasedMasking = configuration.getBooleanValue("race.mask.probabilityBased");
     }
 

@@ -22,7 +22,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FoobarMaskingProvider extends AbstractMaskingProvider {
+class FoobarMaskingProvider implements MaskingProvider {
 
     public FoobarMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {}
 

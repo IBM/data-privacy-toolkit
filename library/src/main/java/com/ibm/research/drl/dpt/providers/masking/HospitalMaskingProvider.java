@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.Hospital;
 
 import java.security.SecureRandom;
 
-public class HospitalMaskingProvider extends AbstractMaskingProvider {
+public class HospitalMaskingProvider implements MaskingProvider {
     private final static HospitalManager hospitalManager = HospitalManager.getInstance();
     private final boolean preserveCountry;
 

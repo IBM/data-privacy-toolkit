@@ -11,7 +11,7 @@ import com.ibm.research.drl.dpt.managers.SWIFTCodeManager;
 
 import java.security.SecureRandom;
 
-public class SWIFTCodeMaskingProvider extends AbstractMaskingProvider {
+public class SWIFTCodeMaskingProvider implements MaskingProvider {
     private static final SWIFTCodeManager swiftCodeManager = SWIFTCodeManager.getInstance();
     private final boolean preserveCountry;
 

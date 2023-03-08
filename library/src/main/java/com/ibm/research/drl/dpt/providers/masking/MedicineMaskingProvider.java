@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.Medicine;
 
 import java.security.SecureRandom;
 
-public class MedicineMaskingProvider extends AbstractMaskingProvider {
+public class MedicineMaskingProvider implements MaskingProvider {
     private static final MedicineManager medicineManager = MedicineManager.getInstance();
 
     /**

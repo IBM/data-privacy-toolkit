@@ -16,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 
-public class HashIntMaskingProvider extends AbstractMaskingProvider {
+public class HashIntMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(HashIntMaskingProvider.class);
     private final String algorithm;
     private final boolean useBudget;

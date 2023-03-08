@@ -8,7 +8,7 @@ package com.ibm.research.drl.dpt.providers.masking;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 
-public class MonetaryMaskingProvider extends AbstractMaskingProvider {
+public class MonetaryMaskingProvider implements MaskingProvider {
     private final String replacingCharacter;
     private final boolean preserveSize;
 

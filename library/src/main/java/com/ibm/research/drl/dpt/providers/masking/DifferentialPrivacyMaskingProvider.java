@@ -22,13 +22,12 @@ import java.security.SecureRandom;
 import java.util.Map;
 
 
-public class DifferentialPrivacyMaskingProvider extends AbstractMaskingProvider  {
+public class DifferentialPrivacyMaskingProvider implements MaskingProvider  {
     private final static Logger logger = LogManager.getLogger(DifferentialPrivacyMaskingProvider.class);
 
     private final DPMechanism mechanism;
 
     public DifferentialPrivacyMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
         options.setEpsilon(configuration.getDoubleValue("differentialPrivacy.parameter.epsilon"));
 

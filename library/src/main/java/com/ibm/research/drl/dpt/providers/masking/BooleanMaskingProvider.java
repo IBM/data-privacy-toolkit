@@ -10,7 +10,9 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 import java.security.SecureRandom;
 
-public class BooleanMaskingProvider extends AbstractMaskingProvider {
+public class BooleanMaskingProvider implements MaskingProvider {
+
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Number variance masking provider.
@@ -40,7 +42,7 @@ public class BooleanMaskingProvider extends AbstractMaskingProvider {
 
     @Override
     public String mask(String identifier) {
-        return random.nextBoolean() ? "true" : "false";
+        return String.valueOf(random.nextBoolean());
     }
 }
 

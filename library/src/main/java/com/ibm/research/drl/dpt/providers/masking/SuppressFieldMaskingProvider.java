@@ -9,7 +9,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 import java.security.SecureRandom;
 
-public class SuppressFieldMaskingProvider extends AbstractMaskingProvider {
+public class SuppressFieldMaskingProvider implements MaskingProvider {
     public SuppressFieldMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
     }
 

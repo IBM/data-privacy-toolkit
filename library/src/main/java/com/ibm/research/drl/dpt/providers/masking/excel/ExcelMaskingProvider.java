@@ -10,7 +10,6 @@ import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import org.apache.logging.log4j.LogManager;
@@ -25,9 +24,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-public class ExcelMaskingProvider extends AbstractMaskingProvider {
+public class ExcelMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(ExcelMaskingProvider.class);
     private final DataTypeFormat inputFormatType;
     private final Map<String, DataMaskingTarget> toBeMasked;

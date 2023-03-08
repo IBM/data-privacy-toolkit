@@ -11,10 +11,11 @@ import com.ibm.research.drl.dpt.providers.identifiers.MACAddressIdentifier;
 
 import java.security.SecureRandom;
 
-public class MACAddressMaskingProvider extends AbstractMaskingProvider {
+public class MACAddressMaskingProvider implements MaskingProvider {
     private static final char[] allowedCharacters = "abcdef0123456789".toCharArray();
     private static final MACAddressIdentifier macAddressIdentifier = new MACAddressIdentifier();
     private final boolean preserveVendor;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Mac address masking provider.

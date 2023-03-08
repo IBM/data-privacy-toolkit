@@ -16,7 +16,7 @@ import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Objects;
 
-public class GeneralizationMaskingProvider  extends AbstractMaskingProvider {
+public class GeneralizationMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(GeneralizationMaskingProvider.class);
 
     private final int hierarchyLevel;
