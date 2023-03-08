@@ -14,13 +14,14 @@ import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
-public class NumberVarianceMaskingProvider extends AbstractMaskingProvider {
+public class NumberVarianceMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(NumberVarianceMaskingProvider.class);
 
     private final double limitDown;
     private final double limitUp;
     private final int precisionDigits;
     private final int failMode;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Number variance masking provider.

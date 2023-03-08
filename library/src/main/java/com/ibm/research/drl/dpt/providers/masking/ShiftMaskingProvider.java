@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 /**
  * The type Shift masking provider.
  */
-public class ShiftMaskingProvider extends AbstractMaskingProvider {
+public class ShiftMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(ShiftMaskingProvider.class);
 
     private final double shiftValue;

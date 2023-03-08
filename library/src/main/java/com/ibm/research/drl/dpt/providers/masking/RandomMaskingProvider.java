@@ -11,7 +11,8 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
-public class RandomMaskingProvider extends AbstractMaskingProvider {
+public class RandomMaskingProvider implements MaskingProvider {
+
     /**
      * Instantiates a new Random masking provider.
      */
@@ -44,7 +45,6 @@ public class RandomMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public RandomMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
     }
 
     @Override

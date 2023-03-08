@@ -12,11 +12,12 @@ import com.ibm.research.drl.dpt.providers.identifiers.SSNUSIdentifier;
 
 import java.security.SecureRandom;
 
-public class SSNUSMaskingProvider extends AbstractMaskingProvider {
+public class SSNUSMaskingProvider implements MaskingProvider {
     private static final SSNUSIdentifier ssnUSIdentifier = new SSNUSIdentifier();
 
     private final boolean preserveAreaNumber;
     private final boolean preserveGroup;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Ssnus masking provider.

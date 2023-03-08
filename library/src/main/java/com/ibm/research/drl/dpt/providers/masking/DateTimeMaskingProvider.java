@@ -34,7 +34,7 @@ import java.util.Objects;
 /**
  * The type Date time masking provider.
  */
-public class DateTimeMaskingProvider extends AbstractMaskingProvider {
+public class DateTimeMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(DateTimeMaskingProvider.class);
     private final static DateTimeIdentifier dateTimeIdentifier = new DateTimeIdentifier();
 
@@ -85,6 +85,7 @@ public class DateTimeMaskingProvider extends AbstractMaskingProvider {
     private final boolean trimTimeToHourInterval;
     private final int numberOfHourIntervals;
     private final String timeZone;
+    private final SecureRandom random;
 
     private String fixedDateFormat = null;
     private final static DateTimeFormatter defaultDateFormat = new DateTimeFormatterBuilder()

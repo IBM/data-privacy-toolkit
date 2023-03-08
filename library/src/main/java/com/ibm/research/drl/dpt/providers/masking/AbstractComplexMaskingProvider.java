@@ -11,7 +11,7 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Set;
 
-public abstract class AbstractComplexMaskingProvider<K> extends AbstractMaskingProvider {
+public abstract class AbstractComplexMaskingProvider<K> implements MaskingProvider {
     private final String prefixGUID;
     private final Set<String> maskedFields;
     protected final MaskingProviderFactory factory;

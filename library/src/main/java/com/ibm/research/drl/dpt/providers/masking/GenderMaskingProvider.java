@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
-public class GenderMaskingProvider extends AbstractMaskingProvider {
+public class GenderMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(GenderMaskingProvider.class);
 
     private static final GenderManager genderManager = GenderManager.getInstance();

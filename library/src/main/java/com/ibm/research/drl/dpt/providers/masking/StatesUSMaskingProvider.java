@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.models.State;
 
 import java.security.SecureRandom;
 
-public class StatesUSMaskingProvider extends AbstractMaskingProvider {
+public class StatesUSMaskingProvider implements MaskingProvider {
     private final static StatesUSManager statesUSManager = StatesUSManager.getInstance();
 
     public StatesUSMaskingProvider() {
@@ -20,7 +20,6 @@ public class StatesUSMaskingProvider extends AbstractMaskingProvider {
     }
 
     public StatesUSMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
-
     }
 
     @Override

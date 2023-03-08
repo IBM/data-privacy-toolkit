@@ -19,7 +19,7 @@ import java.security.SecureRandom;
  * The type Country masking provider.
  *
  */
-public class CountryMaskingProvider extends AbstractMaskingProvider {
+public class CountryMaskingProvider implements MaskingProvider {
     private static final CountryManager countryManager = CountryManager.getInstance();
     private final boolean getClosest;
     private final int closestK;
@@ -49,7 +49,6 @@ public class CountryMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public CountryMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.getClosest = configuration.getBooleanValue("country.mask.closest");
         this.closestK = configuration.getIntValue("country.mask.closestK");
         this.getPseudorandom = configuration.getBooleanValue("country.mask.pseudorandom");

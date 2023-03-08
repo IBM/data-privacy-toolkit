@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-public class BinningMaskingProvider extends AbstractMaskingProvider {
+public class BinningMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(BinningMaskingProvider.class);
 
     private final int binSize;

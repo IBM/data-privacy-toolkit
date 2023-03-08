@@ -16,7 +16,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 import java.security.SecureRandom;
 import java.util.*;
 
-public class ReplaceMaskingProvider extends AbstractMaskingProvider {
+public class ReplaceMaskingProvider implements MaskingProvider {
     private final int preservedCharacters;
     private final int offset;
     private final boolean replaceOnValueInSet;
@@ -27,6 +27,7 @@ public class ReplaceMaskingProvider extends AbstractMaskingProvider {
     private final String asterisk;
 
     private final String prefix;
+    private final SecureRandom random;
 
     public enum ReplaceMode {
         WITH_PARTIAL,

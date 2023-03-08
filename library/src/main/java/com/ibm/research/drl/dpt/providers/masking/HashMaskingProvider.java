@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 /**
  * The type Hash masking provider.
  */
-public class HashMaskingProvider extends AbstractMaskingProvider {
+public class HashMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(HashMaskingProvider.class);
 
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();

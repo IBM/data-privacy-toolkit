@@ -1,15 +1,14 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2019                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking.persistence;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
-public abstract class AbstractPersistentMaskingProvider extends AbstractMaskingProvider {
+public abstract class AbstractPersistentMaskingProvider implements MaskingProvider {
     private final MaskingProvider maskingProvider;
     private final boolean normalizeToLowerCase;
 

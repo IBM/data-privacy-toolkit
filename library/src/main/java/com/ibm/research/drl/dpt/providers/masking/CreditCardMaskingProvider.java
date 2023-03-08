@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -14,8 +14,9 @@ import java.security.SecureRandom;
 /**
  * The type Credit card masking provider.
  */
-public class CreditCardMaskingProvider extends AbstractMaskingProvider {
+public class CreditCardMaskingProvider implements MaskingProvider {
     private final boolean preserveIssuer;
+    private final SecureRandom random;
     private int preservedDigits = 0;
 
     /**

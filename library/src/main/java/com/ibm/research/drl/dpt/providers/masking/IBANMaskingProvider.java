@@ -13,7 +13,7 @@ import org.iban4j.Iban;
 
 import java.security.SecureRandom;
 
-public class IBANMaskingProvider extends AbstractMaskingProvider {
+public class IBANMaskingProvider implements MaskingProvider {
     private static final IBANIdentifier ibanIdentifier = new IBANIdentifier();
     private final boolean preserveCountry;
 
@@ -49,7 +49,6 @@ public class IBANMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public IBANMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.preserveCountry = configuration.getBooleanValue("iban.mask.preserveCountry");
     }
 

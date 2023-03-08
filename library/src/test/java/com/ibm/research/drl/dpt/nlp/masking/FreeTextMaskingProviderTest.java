@@ -10,8 +10,6 @@ import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.nlp.ComplexFreeTextAnnotator;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntityType;
@@ -20,9 +18,6 @@ import com.ibm.research.drl.dpt.providers.masking.HashMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.RedactMaskingProvider;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -30,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -178,14 +172,7 @@ class FreeTextMaskingProviderTest {
 
         String value = "XYZ went to work. Mr. QWE is a professor.";
 
-        FieldRelationship fieldRelationship = new FieldRelationship(
-                ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", List.of(new RelationshipOperand("name"))
-        );
-
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("name", new OriginalMaskedValuePair("XYZ QWE", "abc def"));
-
-        String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
+        String masked = freeTextMaskingProvider.maskGrepAndMask(value, List.of("XYZ QWE"));
 
         assertEquals(-1, masked.indexOf("XYZ"));
         assertEquals(-1, masked.indexOf("QWE"));
@@ -213,13 +200,7 @@ class FreeTextMaskingProviderTest {
         String emailValue = "xyz@ie.ibm.com";
         String value = "XYZ went to work. His e-mail is " + emailValue;
 
-        FieldRelationship fieldRelationship = new FieldRelationship(
-                ValueClass.TEXT, RelationshipType.GREP_AND_MASK, "msg", List.of(new RelationshipOperand("email"))
-        );
-
-        Map<String, OriginalMaskedValuePair> maskedValues = Map.of("email", new OriginalMaskedValuePair(emailValue, "junkhere@mail.com"));
-
-        String masked = freeTextMaskingProvider.mask(value, "msg", fieldRelationship, maskedValues);
+        String masked = freeTextMaskingProvider.maskGrepAndMask(value, List.of(emailValue));
 
         assertEquals(-1, masked.indexOf(emailValue));
 

@@ -70,23 +70,13 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
         }
     }
 
-    public String mask(String text, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-        //grepAndMask(record, tokenSources, lookupTarget, separator, ignoreCase, findAnywhere, maskingProvidersFactory, tokenType);
-        RelationshipType relationshipType = fieldRelationship.getRelationshipType();
 
-        if (relationshipType != RelationshipType.GREP_AND_MASK) {
-            return mask(text);
-        }
-
+    @Override
+    public String maskGrepAndMask(String text, List<String> targetTokens) {
         List<IdentifiedEntity> greppedEntities = new ArrayList<>();
 
-        for(RelationshipOperand operand: fieldRelationship.getOperands()) {
-            final String operandName = operand.getName();
-
-            final OriginalMaskedValuePair originalMaskedValuePair = maskedValues.get(operandName);
-            final String originalOperandValue = originalMaskedValuePair.getOriginal();
-
-            greppedEntities.addAll(grep(originalOperandValue, text,
+        for(String targetText : targetTokens) {
+            greppedEntities.addAll(grep(targetText, text,
                     this.lookupTokensSeparator, this.lookupTokensIgnoreCase, this.lookupTokensFindAnywhere, this.lookupTokensType));
         }
 

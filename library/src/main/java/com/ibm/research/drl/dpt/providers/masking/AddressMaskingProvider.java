@@ -19,7 +19,7 @@ import java.security.SecureRandom;
 /**
  * The type Address masking provider.
  */
-public class AddressMaskingProvider extends AbstractMaskingProvider {
+public class AddressMaskingProvider implements MaskingProvider {
     private static final AddressIdentifier addressIdentifier = new AddressIdentifier();
     private static final PostalCodeManager postalCodeManager = PostalCodeManager.getInstance();
     private static final StreetNameManager streetNameManager = StreetNameManager.getInstance();
@@ -34,6 +34,7 @@ public class AddressMaskingProvider extends AbstractMaskingProvider {
     private final boolean randomizeCity;
     private final boolean randomizeName;
     private final boolean getPseudorandom;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Address masking provider.

@@ -13,7 +13,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
-public class VINMaskingProvider extends AbstractMaskingProvider {
+public class VINMaskingProvider implements MaskingProvider {
     private static final char[] allowedCharacters = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789".toCharArray();
     private final boolean preserveWMI;
     private final boolean preserveVDS;
@@ -52,7 +52,6 @@ public class VINMaskingProvider extends AbstractMaskingProvider {
      * @param configuration the configuration
      */
     public VINMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
-        this.random = random;
         this.preserveWMI = configuration.getBooleanValue("vin.wmi.preserve");
         this.preserveVDS = configuration.getBooleanValue("vin.vds.preserve");
     }

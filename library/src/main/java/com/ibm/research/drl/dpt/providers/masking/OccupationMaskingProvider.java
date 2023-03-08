@@ -13,12 +13,13 @@ import com.ibm.research.drl.dpt.models.Occupation;
 import java.security.SecureRandom;
 import java.util.List;
 
-public class OccupationMaskingProvider extends AbstractMaskingProvider {
+public class OccupationMaskingProvider implements MaskingProvider {
     /**
      * The constant occupationManager.
      */
     public static final OccupationManager occupationManager = OccupationManager.getInstance();
     private final boolean generalizeToCategory;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Occupation masking provider.

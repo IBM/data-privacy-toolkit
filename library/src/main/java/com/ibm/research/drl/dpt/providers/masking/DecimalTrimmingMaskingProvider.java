@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2022                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecimalTrimmingMaskingProvider extends AbstractMaskingProvider {
+public class DecimalTrimmingMaskingProvider implements MaskingProvider {
     private final static Logger logger = LogManager.getLogger(DecimalTrimmingMaskingProvider.class);
 
     public static class DecimalTrimmingRule {
@@ -53,10 +53,6 @@ public class DecimalTrimmingMaskingProvider extends AbstractMaskingProvider {
 
     public DecimalTrimmingMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
-    }
-
-    public DecimalTrimmingMaskingProvider(SecureRandom random) {
-        this(random, new DefaultMaskingConfiguration());
     }
 
     public DecimalTrimmingMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
