@@ -282,7 +282,7 @@ public class CSVFormatProcessorTest {
 
     @Test
     public void testCompoundMasking() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/test_compound.csv");
+        try (InputStream inputStream = CSVFormatProcessorTest.class.getResourceAsStream("/test_compound.csv");
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              PrintStream output = new PrintStream(outputStream)) {
             ConfigurationManager configurationManager = new ConfigurationManager(new DefaultMaskingConfiguration());

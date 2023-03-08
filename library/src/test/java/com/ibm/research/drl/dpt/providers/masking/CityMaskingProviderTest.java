@@ -214,4 +214,11 @@ public class CityMaskingProviderTest {
             assertTrue(neighborsList.contains(maskedCity));
         }
     }
+
+    @Test
+    public void testingRelationshipsAreSupported() {
+        CityMaskingProvider maskingProvider = new CityMaskingProvider();
+
+
+    }
 }

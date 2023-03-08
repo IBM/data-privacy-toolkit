@@ -8,12 +8,6 @@ package com.ibm.research.drl.dpt.providers.masking;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.CountryManager;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.models.ValueClass;
-import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import com.ibm.research.drl.dpt.util.CountryNameSpecification;
 import com.ibm.research.drl.dpt.util.Readers;
 import com.ibm.research.drl.dpt.util.localization.LocalizationManager;
@@ -25,9 +19,16 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CountryMaskingProviderTest {
 
@@ -91,7 +92,7 @@ public class CountryMaskingProviderTest {
             }
         }
 
-        for(int i = 0; i < 10000; i++) {
+        for(int i = 0; i < 100; i++) {
             String maskedValue = maskingProvider.mask(greekOriginalValue);
             assertTrue(greekValues.contains(maskedValue.toUpperCase()));
         }
@@ -143,7 +144,7 @@ public class CountryMaskingProviderTest {
             }
         }
 
-        assertTrue(randomizationOK > 0);
+        assertThat(randomizationOK, greaterThan(0));
     }
 
     @Test

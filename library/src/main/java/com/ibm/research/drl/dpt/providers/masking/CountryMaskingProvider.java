@@ -11,11 +11,9 @@ import com.ibm.research.drl.dpt.managers.CityManager;
 import com.ibm.research.drl.dpt.managers.CountryManager;
 import com.ibm.research.drl.dpt.models.City;
 import com.ibm.research.drl.dpt.models.Country;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
+import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.security.SecureRandom;
-import java.util.Map;
 
 /**
  * The type Country masking provider.
@@ -59,6 +57,11 @@ public class CountryMaskingProvider extends AbstractMaskingProvider {
 
     @Override
     public String maskLinked(String identifier, String linkedValue) {
+        return maskLinked(identifier, linkedValue, ProviderType.CITY);
+    }
+
+    @Override
+    public String maskLinked(String identifier, String linkedValue, ProviderType linkedType) {
         City city = cityManager.getKey(linkedValue);
         if (city == null) {
             return mask(identifier);

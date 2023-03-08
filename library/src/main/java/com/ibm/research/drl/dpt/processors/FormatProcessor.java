@@ -162,12 +162,14 @@ public abstract class FormatProcessor implements Serializable {
                             processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked());
                 case EQUALS:
                     return provider.maskEqual(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked());
+                case LINKED:
+                    return provider.maskLinked(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked(), fieldRelationship.getOperands()[0].getType());
                 case SUM:
                 case SUM_APPROXIMATE:
                 case PRODUCT:
                 case GREATER:
                 case LESS:
-                case LINKED:
+
                 case GREP_AND_MASK:
                 default:
                     throw new UnsupportedOperationException();
