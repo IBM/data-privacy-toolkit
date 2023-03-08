@@ -1,13 +1,12 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2020                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.processors;
 
 
 import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -23,16 +22,29 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CSVFormatProcessorTest {
     @Test
@@ -41,15 +53,13 @@ public class CSVFormatProcessorTest {
     }
 
     @Test
-    @Disabled("Free text support to be re-enabled")
     public void testWithMaskingAndFreetext() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         try (
-                InputStream inputStream = getClass().getResourceAsStream("/input_masking_freetext.csv");
-                InputStream configuration = getClass().getResourceAsStream("/configuration_masking_freetext.json");
+                InputStream inputStream = CSVFormatProcessorTest.class.getResourceAsStream("/input_masking_freetext.csv");
+                InputStream configuration = CSVFormatProcessorTest.class.getResourceAsStream("/configuration_masking_freetext.json");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream()
         ) {
-            ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(configuration));
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(configuration));
 
             Map<String, DataMaskingTarget> toBeMasked = new HashMap<>();
 
