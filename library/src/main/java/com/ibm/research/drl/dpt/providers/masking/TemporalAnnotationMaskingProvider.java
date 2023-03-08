@@ -11,7 +11,7 @@ import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TemporalAnnotationMaskingProvider extends AbstractMaskingProvider {
+public class TemporalAnnotationMaskingProvider implements MaskingProvider {
     private final static String DAY = "day";
     private final static String WEEK = "week";
     private final static String MONTH = "month";
@@ -21,6 +21,7 @@ public class TemporalAnnotationMaskingProvider extends AbstractMaskingProvider {
     private final static Pattern daysBefore = Pattern.compile("\\bdays\\s+before\\b");
 
     final static Pattern getNumber = Pattern.compile("(\\d+)");
+    private final SecureRandom random;
 
     public TemporalAnnotationMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
         this.random = random;

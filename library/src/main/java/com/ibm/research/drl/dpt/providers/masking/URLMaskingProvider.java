@@ -28,6 +28,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final Map<ProviderType, MaskingProvider> providerMap =
             new HashMap<>(ProviderType.values().length);
     private final MaskingProviderFactory maskingProviderFactory;
+    private final SecureRandom random;
 
 
     public URLMaskingProvider(String complexType, MaskingConfiguration configuration, Set<String> maskedFields, MaskingProviderFactory factory) {

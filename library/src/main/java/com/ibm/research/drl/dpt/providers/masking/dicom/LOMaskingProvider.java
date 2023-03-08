@@ -6,13 +6,17 @@
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.*;
+import com.ibm.research.drl.dpt.providers.masking.HospitalMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import com.ibm.research.drl.dpt.providers.masking.NameMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.RandomMaskingProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
-public class LOMaskingProvider extends AbstractMaskingProvider {
+public class LOMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(LOMaskingProvider.class);
 
     private final RandomMaskingProvider randomMaskingProvider;

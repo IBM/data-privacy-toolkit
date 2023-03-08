@@ -26,8 +26,6 @@ import java.util.Collections;
 import java.util.Set;
 
 public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
-    private final boolean removeExtensions;
-
     private final static CityManager cityManager = CityManager.getInstance();
     private final static CountryManager countryManager = CountryManager.getInstance();
 
@@ -35,15 +33,17 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
     private final MaskingProvider postalCodeMaskingProvider;
     private static final StreetNameManager streetNameManager = StreetNameManager.getInstance();
     private final boolean preserveStateOnly;
+    private final SecureRandom random;
 
     public FHIRAddressMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
-        this.removeExtensions = maskingConfiguration.getBooleanValue("fhir.address.removeExtensions");
+        boolean removeExtensions = maskingConfiguration.getBooleanValue("fhir.address.removeExtensions");
         this.preserveStateOnly = maskingConfiguration.getBooleanValue("fhir.address.preserveStateOnly");
 
         this.cityMaskingProvider = this.factory.get(ProviderType.CITY, maskingConfiguration);
         this.postalCodeMaskingProvider = this.factory.get(ProviderType.RANDOM, maskingConfiguration);
+        this.random = new SecureRandom();
     }
 
     public JsonNode mask(JsonNode node) {

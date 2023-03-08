@@ -16,10 +16,11 @@ import java.security.SecureRandom;
  * The type Patient id masking provider.
  *
  */
-public class PatientIDMaskingProvider extends AbstractMaskingProvider {
+public class PatientIDMaskingProvider implements MaskingProvider {
 
     private static final PatientIDIdentifier patientIDIdentifier = new PatientIDIdentifier();
     private final int preservedGroups;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Patient id masking provider.

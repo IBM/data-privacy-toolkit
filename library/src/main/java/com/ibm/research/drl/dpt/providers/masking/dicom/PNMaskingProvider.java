@@ -6,7 +6,6 @@
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.NameMaskingProvider;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PNMaskingProvider extends AbstractMaskingProvider {
+public class PNMaskingProvider implements MaskingProvider {
     private final MaskingProvider nameMaskingProvider;
 
     public PNMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {

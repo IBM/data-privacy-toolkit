@@ -12,7 +12,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
-public class IMSIMaskingProvider extends AbstractMaskingProvider {
+public class IMSIMaskingProvider implements MaskingProvider {
     private static final IMSIManager imsiManager = IMSIManager.getInstance();
     private final boolean preserveMCC;
     private final boolean preserveMNC;

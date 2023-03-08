@@ -9,7 +9,7 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.ZIPCodeManager;
 
-public class ZIPCodeMaskingProvider extends AbstractMaskingProvider {
+public class ZIPCodeMaskingProvider implements MaskingProvider {
     private final String countryCode;
     private final int minimumPopulation;
     private final boolean requireMinimumPopulation;

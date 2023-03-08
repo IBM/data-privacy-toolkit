@@ -18,8 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
-public class AgeMaskingProvider extends AbstractMaskingProvider {
-    private static final Logger logger = LogManager.getLogger(AgeMaskingProvider.class);
+public class AgeMaskingProvider implements MaskingProvider {
 
     private static final AgeIdentifier AGE_IDENTIFIER = new AgeIdentifier();
     private static final Logger log = LogManager.getLogger(AgeMaskingProvider.class);

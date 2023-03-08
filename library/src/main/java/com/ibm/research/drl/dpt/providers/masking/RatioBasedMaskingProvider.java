@@ -9,17 +9,15 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 import java.util.Map;
 
-public class RatioBasedMaskingProvider extends AbstractMaskingProvider {
+public class RatioBasedMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(RatioBasedMaskingProvider.class);
 
     private final int failMode;

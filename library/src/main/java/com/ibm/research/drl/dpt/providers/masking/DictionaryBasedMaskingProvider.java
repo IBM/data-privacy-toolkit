@@ -18,7 +18,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryBasedMaskingProvider extends AbstractMaskingProvider {
+public class DictionaryBasedMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(DictionaryBasedMaskingProvider.class);
 
     private final SecureRandom random;

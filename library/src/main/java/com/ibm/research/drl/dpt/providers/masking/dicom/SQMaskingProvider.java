@@ -6,11 +6,11 @@
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.security.SecureRandom;
 
-public class SQMaskingProvider extends AbstractMaskingProvider {
+public class SQMaskingProvider implements MaskingProvider {
     @Override
     public String mask(String identifier) {
         return null;

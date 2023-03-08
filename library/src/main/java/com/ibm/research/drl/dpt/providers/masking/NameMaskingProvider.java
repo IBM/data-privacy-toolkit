@@ -27,6 +27,7 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
     private final String virtualField;
     private final MaskingProvider virtualFieldMaskingProvider;
     private final boolean getPseudorandom;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Name masking provider.

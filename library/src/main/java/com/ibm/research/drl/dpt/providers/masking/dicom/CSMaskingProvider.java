@@ -6,20 +6,21 @@
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.RandomMaskingProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
-public class CSMaskingProvider extends AbstractMaskingProvider {
+public class CSMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(CSMaskingProvider.class);
     private final RandomMaskingProvider randomMaskingProvider;
     private final char[] genders = "FMO".toCharArray();
     private final String[] sexNeutered = {"ALTERED", "UNALTERED"};
 
     private final DicomEntityType entityType;
+    private final SecureRandom random;
 
     /**
      * Instantiates a new Cs masking provider.

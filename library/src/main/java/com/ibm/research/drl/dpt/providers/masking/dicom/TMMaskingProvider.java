@@ -6,12 +6,12 @@
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.DateTimeMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.security.SecureRandom;
 
-public class TMMaskingProvider extends AbstractMaskingProvider {
+public class TMMaskingProvider implements MaskingProvider {
     private final DateTimeMaskingProvider dateTimeMaskingProvider;
 
     /**
