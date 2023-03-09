@@ -18,19 +18,19 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NumberUtilsTest {
 
     @Test
-    @Disabled
     public void testParse() {
         String v = "-.13";
         Double d = Double.parseDouble(v);
-        System.out.println(d);
+        assertThat(d.toString(), is("-0.13"));
     }
 
     @Test
@@ -76,10 +76,10 @@ public class NumberUtilsTest {
     @Test
     public void testDecimalTrimming() {
         String value = "1.234455";
-        assertEquals(value, NumberUtils.trimDecimalDigitis(value, -1));
+        assertEquals(value, NumberUtils.trimDecimalDigits(value, -1));
 
-        assertEquals("1", NumberUtils.trimDecimalDigitis(value, 0));
-        assertEquals("1.23", NumberUtils.trimDecimalDigitis(value, 2));
-        assertEquals(value, NumberUtils.trimDecimalDigitis(value, 200));
+        assertEquals("1", NumberUtils.trimDecimalDigits(value, 0));
+        assertEquals("1.23", NumberUtils.trimDecimalDigits(value, 2));
+        assertEquals(value, NumberUtils.trimDecimalDigits(value, 200));
     }
 }

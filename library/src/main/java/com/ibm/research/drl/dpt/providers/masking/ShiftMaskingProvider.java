@@ -71,7 +71,7 @@ public class ShiftMaskingProvider implements MaskingProvider {
         try {
             double k = Double.parseDouble(identifier);
             String maskedValue = String.format("%f", k + shiftValue);
-            return NumberUtils.trimDecimalDigitis(maskedValue, this.digitsToKeep);
+            return NumberUtils.trimDecimalDigits(maskedValue, this.digitsToKeep);
         } catch (Exception e) {
             switch (failMode) {
                 case FailMode.RETURN_ORIGINAL:
