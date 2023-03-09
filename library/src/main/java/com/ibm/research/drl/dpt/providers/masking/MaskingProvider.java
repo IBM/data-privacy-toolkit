@@ -19,22 +19,6 @@ import java.util.Map;
  */
 public interface MaskingProvider extends Serializable {
     /**
-     * Mask string [ ].
-     *
-     * @param data the data
-     * @return the string [ ]
-     */
-    @Deprecated(forRemoval = true)
-    default String[] mask(final String[] data) {
-        final String[] maskedData = new String[data.length];
-
-        for (int i = 0; i < data.length; ++i)
-            maskedData[i] = mask(data[i]);
-
-        return maskedData;
-    }
-
-    /**
      * Mask string.
      *
      * @param identifier the identifier to mask
