@@ -74,7 +74,7 @@ public class RatioBasedMaskingProviderTest {
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("fail.mode", FailMode.RETURN_EMPTY);
 
-        MaskingProvider maskingProvider = new RatioBasedMaskingProvider(maskingConfiguration);
+        RatioBasedMaskingProvider maskingProvider = new RatioBasedMaskingProvider(maskingConfiguration);
         String masked = maskingProvider.mask(identifier, fieldName, fieldRelationship, originalMaskedValues);
 
         assertEquals("", masked);
@@ -82,7 +82,7 @@ public class RatioBasedMaskingProviderTest {
 
     @Test
     public void testMaskCompoundGreater() {
-        MaskingProvider maskingProvider = new RatioBasedMaskingProvider();
+        RatioBasedMaskingProvider maskingProvider = new RatioBasedMaskingProvider();
 
         String identifier = "15.0";
         String fieldName = "Euro";
@@ -102,7 +102,7 @@ public class RatioBasedMaskingProviderTest {
 
     @Test
     public void testMaskWithRatioAsOperand() {
-        MaskingProvider maskingProvider = new RatioBasedMaskingProvider();
+        RatioBasedMaskingProvider maskingProvider = new RatioBasedMaskingProvider();
 
         String identifier = "15.0";
 

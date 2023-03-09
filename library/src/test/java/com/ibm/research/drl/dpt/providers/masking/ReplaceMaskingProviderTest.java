@@ -127,12 +127,9 @@ public class ReplaceMaskingProviderTest {
 
         MaskingProvider provider = new ReplaceMaskingProvider(configuration);
 
-        FieldRelationship relationship = new FieldRelationship(ValueClass.TEXT, RelationshipType.KEY, "foo", Collections.singletonList(new RelationshipOperand("bar")));
-        Map<String, OriginalMaskedValuePair> values1 = Collections.singletonMap("bar", new OriginalMaskedValuePair("XXXX", "XXXX"));
-        assertThat(provider.mask("asdf", "foo", relationship, values1), in(new String[]{"FOO", "BAR"}));
+        assertThat(provider.maskWithKey("asdf", "XXXX"), in(new String[]{"FOO", "BAR"}));
 
-        Map<String, OriginalMaskedValuePair> values2 = Collections.singletonMap("bar", new OriginalMaskedValuePair("asfd", "asdf"));
-        assertThat(provider.mask("asdf", "foo", relationship, values2), not(in(new String[]{"FOO", "BAR"})));
+        assertThat(provider.maskWithKey("asdf", "asfd"), not(in(new String[]{"FOO", "BAR"})));
     }
 
     @Test
