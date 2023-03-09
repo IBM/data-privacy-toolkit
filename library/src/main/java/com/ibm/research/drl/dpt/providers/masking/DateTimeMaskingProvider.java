@@ -362,32 +362,7 @@ public class DateTimeMaskingProvider implements MaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName,
-                       FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-
-        RelationshipType relationshipType = fieldRelationship.getRelationshipType();
-
-        if (relationshipType == RelationshipType.KEY) {
-            return maskWithKey(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
-        }
-
-        if (relationshipType == RelationshipType.DISTANCE) {
-            return maskDistance(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getOriginal(), maskedValues.get(fieldRelationship.getOperands()[0].getName()).getMasked());
-        }
-
-        if (relationshipType == RelationshipType.EQUALS) {
-            return maskEqual(identifier, maskedValues.get(fieldRelationship.getOperands()[0].getName()).getMasked());
-        }
-
-        String operand = fieldRelationship.getOperands()[0].getName();
-
-        OriginalMaskedValuePair pair = maskedValues.get(operand);
-        if (pair == null) {
-            return RandomGenerators.generateRandomDate(defaultDateFormat);
-        }
-
-        String baseMaskedValue = pair.getMasked();
-
+    public String maskLess(String identifier, String baseMaskedValue, String originalGreater) {
         LocalDateTime d;
         LocalDateTime originalDate;
         LocalDateTime operandOriginalDate;
@@ -401,7 +376,7 @@ public class DateTimeMaskingProvider implements MaskingProvider {
             }
 
             originalDate = LocalDateTime.parse(identifier, f);
-            operandOriginalDate = LocalDateTime.parse(maskedValues.get(operand).getOriginal(), f);
+            operandOriginalDate = LocalDateTime.parse(originalGreater, f);
 
             d = LocalDateTime.parse(baseMaskedValue, f);
         } else {
@@ -419,22 +394,55 @@ public class DateTimeMaskingProvider implements MaskingProvider {
             d = LocalDateTime.from(matchingFormat.getSecond());
 
             originalDate = LocalDateTime.parse(identifier, f);
-            operandOriginalDate = LocalDateTime.parse(maskedValues.get(operand).getOriginal(), f);
+            operandOriginalDate = LocalDateTime.parse(originalGreater, f);
         }
 
         long diff = (operandOriginalDate.toInstant(ZoneOffset.UTC).toEpochMilli() - originalDate.toInstant(ZoneOffset.UTC).toEpochMilli());
 
-        switch (relationshipType) {
-            case LESS:
-                d = d.minus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
-                break;
-            case GREATER:
-                d = d.plus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
-                break;
-            default:
-                //XXX we should never reach this point!
-                return mask(identifier);
+        d = d.minus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
+        return d.format(f);
+    }
+
+    @Override
+    public String maskGreater(String identifier, String baseMaskedValue, String originalGreater) {
+        LocalDateTime d;
+        LocalDateTime originalDate;
+        LocalDateTime operandOriginalDate;
+        DateTimeFormatter f;
+
+        if (this.fixedDateFormat != null) {
+            f = buildFormatter(this.fixedDateFormat);
+
+            if (baseMaskedValue == null) {
+                return RandomGenerators.generateRandomDate(f);
+            }
+
+            originalDate = LocalDateTime.parse(identifier, f);
+            operandOriginalDate = LocalDateTime.parse(originalGreater, f);
+
+            d = LocalDateTime.parse(baseMaskedValue, f);
+        } else {
+            if (baseMaskedValue == null) {
+                return RandomGenerators.generateRandomDate(defaultDateFormat);
+            }
+
+            Tuple<DateTimeFormatter, TemporalAccessor> matchingFormat = dateTimeIdentifier.matchingFormat(baseMaskedValue);
+            if (matchingFormat == null) {
+                return RandomGenerators.generateRandomDate(defaultDateFormat);
+            }
+
+            f = matchingFormat.getFirst();
+
+            d = LocalDateTime.from(matchingFormat.getSecond());
+
+            originalDate = LocalDateTime.parse(identifier, f);
+            operandOriginalDate = LocalDateTime.parse(originalGreater, f);
         }
+
+        long diff = (operandOriginalDate.toInstant(ZoneOffset.UTC).toEpochMilli() - originalDate.toInstant(ZoneOffset.UTC).toEpochMilli());
+
+
+        d = d.plus(diff, ChronoField.MILLI_OF_DAY.getBaseUnit());
 
         return d.format(f);
     }

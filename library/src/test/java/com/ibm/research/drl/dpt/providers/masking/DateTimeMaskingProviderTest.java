@@ -1,19 +1,13 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2015                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
 
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.models.ValueClass;
-import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.DateTimeIdentifier;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -22,11 +16,15 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DateTimeMaskingProviderTest {
@@ -395,7 +393,7 @@ public class DateTimeMaskingProviderTest {
     }
 
     @Test
-    public void testCompoundMaskingLessAndEquals() throws Exception {
+    public void testCompoundMaskingLess() throws Exception {
         DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider();
 
         // different values
@@ -410,35 +408,29 @@ public class DateTimeMaskingProviderTest {
         String maskedOperandTime = "08-12-2015 00:00:00";
         Date maskedOperandDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedOperandTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.LESS,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskLess(originalDateTime, maskedOperandTime, originalOperandTime);
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
+        assertNotEquals(originalDateTime, maskedDateTime);
+        assertTrue(maskedDate.before(maskedOperandDate));
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
-
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
-            assertNotEquals(originalDateTime, maskedDateTime);
-            assertTrue(maskedDate.before(maskedOperandDate));
-
-            long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
-            assertEquals(maskedDiff, originalDiff);
-        }
-
-        fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.EQUALS,
-                "field0", new RelationshipOperand[]{new RelationshipOperand("field1", ProviderType.DATETIME)});
-
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            assertEquals(maskedOperandTime, maskedDateTime);
-        }
-
+        long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
+        assertEquals(maskedDiff, originalDiff);
     }
 
+    @Test
+    public void testCompoundMaskingEquals() {
+        DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider();
+
+        // different values
+        String originalDateTime = "04-03-2014 00:00:00";
+        String maskedOperandTime = "08-12-2015 00:00:00";
+
+        String maskedDateTime = maskingProvider.maskEqual(originalDateTime, maskedOperandTime);
+        assertEquals(maskedOperandTime, maskedDateTime);
+    }
 
     @Test
-    public void testCompoundMaskingLessAndEqualsDateFormat() throws Exception {
+    public void testCompoundMaskingLessDateFormat() throws Exception {
         DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider();
 
         // different values
@@ -453,30 +445,22 @@ public class DateTimeMaskingProviderTest {
         String maskedOperandTime = "08-12-2015";
         Date maskedOperandDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedOperandTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.LESS,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskLess(originalDateTime, maskedOperandTime, originalOperandTime);
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
+        assertNotEquals(originalDateTime, maskedDateTime);
+        assertTrue(maskedDate.before(maskedOperandDate));
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
+        long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
+        assertEquals(maskedDiff, originalDiff);
+    }
 
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
-            assertNotEquals(originalDateTime, maskedDateTime);
-            assertTrue(maskedDate.before(maskedOperandDate));
-
-            long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
-            assertEquals(maskedDiff, originalDiff);
-        }
-
-        fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.EQUALS,
-                "field0", new RelationshipOperand[]{new RelationshipOperand("field1", ProviderType.DATETIME)});
-
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            assertEquals(maskedOperandTime, maskedDateTime);
-        }
-
+    @Test
+    public void testCompoundMaskingEqualDateFormat() {
+        DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider();
+        String originalDateTime = "04-03-2014";
+        String maskedOperandTime = "08-12-2015";
+        String maskedDateTime = maskingProvider.maskEqual(originalDateTime, maskedOperandTime);
+        assertEquals(maskedOperandTime, maskedDateTime);
     }
 
     @Test
@@ -495,24 +479,14 @@ public class DateTimeMaskingProviderTest {
         String maskedOperandTime = "08-12-2015";
         Date maskedOperandDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedOperandTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskDistance(originalDateTime, originalOperandTime, maskedOperandTime);
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
+        assertNotEquals(originalDateTime, maskedDateTime);
+        assertTrue(maskedDate.before(maskedOperandDate));
 
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
-            assertNotEquals(originalDateTime, maskedDateTime);
-            assertTrue(maskedDate.before(maskedOperandDate));
-
-            long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
-            assertEquals(maskedDiff, originalDiff);
-        }
-
-
+        long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
+        assertEquals(maskedDiff, originalDiff);
     }
 
     @Test
@@ -531,24 +505,14 @@ public class DateTimeMaskingProviderTest {
         String maskedOperandTime = "08-12-2015";
         Date maskedOperandDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedOperandTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskDistance(originalDateTime, originalOperandTime, maskedOperandTime);
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
+        assertNotEquals(originalDateTime, maskedDateTime);
+        assertTrue(maskedDate.after(maskedOperandDate));
 
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
-            assertNotEquals(originalDateTime, maskedDateTime);
-            assertTrue(maskedDate.after(maskedOperandDate));
-
-            long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
-            assertEquals(maskedDiff, originalDiff);
-        }
-
-
+        long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
+        assertEquals(maskedDiff, originalDiff);
     }
 
     @Test
@@ -567,23 +531,13 @@ public class DateTimeMaskingProviderTest {
         String maskedOperandTime = "08-12-2015";
         Date maskedOperandDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedOperandTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskDistance(originalDateTime, originalOperandTime, maskedOperandTime);
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
+        long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
+        assertEquals(maskedDiff, originalDiff);
 
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
-
-            long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
-            assertEquals(maskedDiff, originalDiff);
-
-            assertEquals(0L, maskedDiff);
-        }
-
-
+        assertEquals(0L, maskedDiff);
     }
 
     @Test
@@ -604,23 +558,13 @@ public class DateTimeMaskingProviderTest {
         String maskedOperandTime = "08-12-2015";
         Date maskedOperandDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedOperandTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.DISTANCE,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.DATETIME)});
+        String maskedDateTime = maskingProvider.maskDistance(originalDateTime, originalOperandTime, maskedOperandTime);
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
 
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(originalOperandTime, maskedOperandTime));
+        long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
+        assertEquals(maskedDiff, originalDiff);
 
-        for(int i = 0; i < 100; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy").parse(maskedDateTime);
-
-            long maskedDiff = maskedOperandDate.getTime() - maskedDate.getTime();
-            assertEquals(maskedDiff, originalDiff);
-
-            assertEquals(0L, maskedDiff);
-        }
-
-
+        assertEquals(0L, maskedDiff);
     }
 
     @Test
@@ -706,14 +650,7 @@ public class DateTimeMaskingProviderTest {
         String originalDateTime = "04-03-2014 00:00:00";
         Date originalDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(originalDateTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.KEY,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.GUID)});
-
-
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-        maskedValues.put("field1", new OriginalMaskedValuePair(null, null));
-
-        String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
+        String maskedDateTime = maskingProvider.maskWithKey(originalDateTime, null);
         Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
 
         long maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24*60*60*1000);
@@ -723,103 +660,42 @@ public class DateTimeMaskingProviderTest {
 
     @Test
     public void testCompoundMaskingKeyWithMinDays() throws Exception {
-        int maxDays = 7; 
-        int minDays = 2; 
-        
+        int maxDays = 7;
+        int minDays = 2;
+
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("datetime.mask.keyBasedMaxDays", maxDays);
         maskingConfiguration.setValue("datetime.mask.keyBasedMinDays", minDays);
-        
+
         DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
 
         // different values
         String originalDateTime = "04-03-2014 00:00:00";
         Date originalDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(originalDateTime);
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.KEY,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.GUID)});
+        String operandValue = "user1";
 
-        String user1_lastValue = null;
+        String user1_lastValue = maskingProvider.maskWithKey(originalDateTime, operandValue);
+        Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(user1_lastValue);
 
-        for(int i = 0; i < 100; i++) {
-            String operandValue = "user1";
+        long maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24 * 60 * 60 * 1000);
+        assertTrue(maskedDiff < maxDays);
+        assertTrue(maskedDiff >= minDays);
 
-            Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-            maskedValues.put("field1", new OriginalMaskedValuePair(operandValue, operandValue));
+        assertTrue(maskedDate.before(originalDate));
+        assertNotEquals(originalDateTime, user1_lastValue);
 
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
-            
-            long maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24*60*60*1000);
-            assertTrue(maskedDiff < maxDays);
-            assertTrue(maskedDiff >= minDays);
 
-            assertTrue(maskedDate.before(originalDate));
-            assertNotEquals(originalDateTime, maskedDateTime);
+        operandValue = "user2";
 
-            if (user1_lastValue != null) {
-                assertEquals(maskedDateTime, user1_lastValue);
-            }
-
-            user1_lastValue = maskedDateTime;
-        }
-
-        String user2_lastValue = null;
-
-        for(int i = 0; i < 100; i++) {
-            String operandValue = "user2";
-
-            Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-            maskedValues.put("field1", new OriginalMaskedValuePair(operandValue, operandValue));
-
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            Date maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(maskedDateTime);
-            long maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24*60*60*1000);
-            assertTrue(maskedDiff < maxDays);
-            assertTrue(maskedDiff >= minDays);
-            assertNotEquals(originalDateTime, maskedDateTime);
-
-            if (user2_lastValue != null) {
-                assertEquals(maskedDateTime, user2_lastValue);
-            }
-
-            user2_lastValue = maskedDateTime;
-        }
+        String user2_lastValue = maskingProvider.maskWithKey(originalDateTime, operandValue);
+        maskedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(user2_lastValue);
+        maskedDiff = (originalDate.getTime() - maskedDate.getTime()) / (24 * 60 * 60 * 1000);
+        assertTrue(maskedDiff < maxDays);
+        assertTrue(maskedDiff >= minDays);
+        assertNotEquals(originalDateTime, user2_lastValue);
 
         assertNotEquals(user1_lastValue, user2_lastValue);
-    }
-    
-    @Test
-    @Disabled
-    public void testCompoundMaskingKeyETL() {
-        MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
-        maskingConfiguration.setValue("datetime.format.fixed", "dd-MM-yyyy");
-        int maxDays = maskingConfiguration.getIntValue("datetime.mask.keyBasedMaxDays");
-
-        assertThat(maxDays, is(100));
-
-        DateTimeMaskingProvider maskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
-
-        // different values
-        String originalDateTime = "04-03-2014";
-        String operandValue = "user1";
-        
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.DATE, RelationshipType.KEY,
-                "field0", new RelationshipOperand[] {new RelationshipOperand("field1", ProviderType.GUID)});
-         
-        Map<String, OriginalMaskedValuePair> maskedValues = new HashMap<>();
-         maskedValues.put("field1", new OriginalMaskedValuePair(operandValue, operandValue));
- 
-        long start = System.currentTimeMillis();
-        int s = 0;
-        for(int i = 0; i < 1000000; i++) {
-            String maskedDateTime = maskingProvider.mask(originalDateTime, "field0", fieldRelationship, maskedValues);
-            s += maskedDateTime.length();
-        }
-        
-        long end = System.currentTimeMillis();
-        System.out.println(s);
-        System.out.println(end - start); 
     }
 
     @Test
