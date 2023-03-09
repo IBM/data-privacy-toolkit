@@ -142,17 +142,11 @@ public class NumberUtils {
         int thousands = Integer.parseInt(snumber.substring(9, 12));
 
         String tradBillions;
-        switch (billions) {
-            case 0:
-                tradBillions = "";
-                break;
-            case 1:
-                tradBillions = convertLessThanOneThousand(billions)
-                        + " billion ";
-                break;
-            default:
-                tradBillions = convertLessThanOneThousand(billions)
-                        + " billion ";
+        if (billions == 0) {
+            tradBillions = "";
+        } else {
+            tradBillions = convertLessThanOneThousand(billions)
+                    + " billion ";
         }
         String result = tradBillions;
 
@@ -306,9 +300,9 @@ public class NumberUtils {
 
         input = input.replaceAll("-", " ");
         input = input.toLowerCase().replaceAll(" and", " ");
-        String[] splittedParts = input.trim().split("\\s+");
+        String[] splitParts = input.trim().split("\\s+");
 
-        for (String str : splittedParts) {
+        for (String str : splitParts) {
             if (!allowedStrings.contains(str)) {
                 isValidInput = false;
                 break;
@@ -319,7 +313,7 @@ public class NumberUtils {
             return null;
         }
 
-        for (String str : splittedParts) {
+        for (String str : splitParts) {
             if (str.equalsIgnoreCase("zero")) {
                 result += 0;
             } else if (str.equalsIgnoreCase("one")) {
@@ -417,7 +411,7 @@ public class NumberUtils {
     Returns the value with only the digits to keep
     -1 means keep all digits
      */
-    public static String trimDecimalDigitis(String identifier, int digitsToKeep) {
+    public static String trimDecimalDigits(String identifier, int digitsToKeep) {
 
         if (digitsToKeep == -1) {
             return identifier;

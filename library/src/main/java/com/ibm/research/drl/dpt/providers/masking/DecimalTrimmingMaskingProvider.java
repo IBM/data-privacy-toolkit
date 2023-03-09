@@ -126,7 +126,7 @@ public class DecimalTrimmingMaskingProvider implements MaskingProvider {
 
         for (DecimalTrimmingRule rule : this.rules) {
             if (value >= rule.getLowerThreshold() && value < rule.getUpperThreshold()) {
-                return NumberUtils.trimDecimalDigitis(identifier, rule.getDigitsToKeep());
+                return NumberUtils.trimDecimalDigits(identifier, rule.getDigitsToKeep());
             }
         }
 
