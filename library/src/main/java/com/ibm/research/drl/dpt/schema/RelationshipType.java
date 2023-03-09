@@ -39,5 +39,7 @@ public enum RelationshipType {
 
     KEY,
 
+    RATIO,
+
     GREP_AND_MASK /* for freetext */
 }

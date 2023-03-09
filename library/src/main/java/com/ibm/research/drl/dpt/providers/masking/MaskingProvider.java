@@ -100,4 +100,8 @@ public interface MaskingProvider extends Serializable {
     default String maskGrepAndMask(String identifier, List<String> targetToken) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
+
+    default String maskWithRatio(String identifier, String operandMasked, String operandOriginal) {
+        throw new UnsupportedOperationException("This relationship operation is not supported");
+    }
 }

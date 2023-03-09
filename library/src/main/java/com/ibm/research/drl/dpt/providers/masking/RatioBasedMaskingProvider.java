@@ -102,8 +102,7 @@ public class RatioBasedMaskingProvider implements MaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName,
-                       FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values) {
+    public String maskWithRatio(String identifier, String operandMasked, String operandOriginal) {
         double value;
         try {
             value = Double.parseDouble(identifier);
@@ -120,20 +119,9 @@ public class RatioBasedMaskingProvider implements MaskingProvider {
             }
         }
 
-        RelationshipOperand[] operands = fieldRelationship.getOperands();
-        String baseValueField = operands[0].getName();
-
-        OriginalMaskedValuePair pair = values.get(baseValueField);
-        if (pair == null) {
-            return mask(identifier);
-        }
-
-        String originalBaseValue = pair.getOriginal();
-        String maskedBaseValue = pair.getMasked();
-
         try {
-            double originalBase = Double.parseDouble(originalBaseValue);
-            double maskedBase = Double.parseDouble(maskedBaseValue);
+            double originalBase = Double.parseDouble(operandOriginal);
+            double maskedBase = Double.parseDouble(operandMasked);
 
             double ratio = originalBase / value;
 
@@ -176,7 +164,6 @@ public class RatioBasedMaskingProvider implements MaskingProvider {
         double masked = value * this.ratio;
         return formatResult(masked);
     }
-
 }
 
 
