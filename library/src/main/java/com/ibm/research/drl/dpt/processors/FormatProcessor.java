@@ -168,6 +168,8 @@ public abstract class FormatProcessor implements Serializable {
                     return provider.maskLess(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked(), processedFields.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
                 case GREATER:
                     return provider.maskGreater(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked(), processedFields.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
+                case RATIO:
+                    return provider.maskWithRatio(originalValue, processedFields.get(fieldRelationship.getOperands()[0].getName()).getMasked(), processedFields.get(fieldRelationship.getOperands()[0].getName()).getOriginal());
                 case SUM:
                 case SUM_APPROXIMATE:
                 case PRODUCT:

@@ -199,6 +199,14 @@ public class MaskingTask extends SparkTaskToExecute {
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     lit(relationship.getOperands()[0].getType())
                             ).cast(targetDataType));
+                case RATIO:
+                    UDF3<String, String, String, String> ratioUDF = provider::maskWithRatio;
+                    return dataset.withColumn(target.getTargetPath(),
+                            udf(ratioUDF, DataTypes.StringType).apply(
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
                 case GREP_AND_MASK:
                 case SUM:
                 case SUM_APPROXIMATE:

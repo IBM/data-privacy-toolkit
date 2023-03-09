@@ -1,6 +1,6 @@
 /*******************************************************************
  *                                                                 *
- * Copyright IBM Corp. 2018                                        *
+ * Copyright IBM Corp. 2023                                        *
  *                                                                 *
  *******************************************************************/
 package com.ibm.research.drl.dpt.providers.masking;
@@ -8,17 +8,7 @@ package com.ibm.research.drl.dpt.providers.masking;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.FailMode;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.models.OriginalMaskedValuePair;
-import com.ibm.research.drl.dpt.models.ValueClass;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,13 +37,7 @@ public class RatioBasedMaskingProviderTest {
         String identifier = "5.0";
         String fieldName = "Euro";
         
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.LINKED, 
-                fieldName, List.of(new RelationshipOperand("Dollar")));
-        
-        Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
-        originalMaskedValues.put("Dollar", new OriginalMaskedValuePair("8.0", "12.0"));
-        
-        String masked = maskingProvider.mask(identifier, fieldName, fieldRelationship, originalMaskedValues);
+        String masked = maskingProvider.maskWithRatio(identifier, "12.0", "8.0");
         //the original ratio was 8/5 = 1.6
         //the masked value for Euro must be 12/1.6 = 7.5
         
@@ -65,17 +49,11 @@ public class RatioBasedMaskingProviderTest {
         String identifier = "5.0";
         String fieldName = "Euro";
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.LINKED,
-                fieldName, List.of(new RelationshipOperand("Dollar")));
-
-        Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
-        originalMaskedValues.put("Dollar", new OriginalMaskedValuePair("", ""));
-
         MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
         maskingConfiguration.setValue("fail.mode", FailMode.RETURN_EMPTY);
 
         RatioBasedMaskingProvider maskingProvider = new RatioBasedMaskingProvider(maskingConfiguration);
-        String masked = maskingProvider.mask(identifier, fieldName, fieldRelationship, originalMaskedValues);
+        String masked = maskingProvider.maskWithRatio(identifier, "", "");
 
         assertEquals("", masked);
     }
@@ -87,13 +65,7 @@ public class RatioBasedMaskingProviderTest {
         String identifier = "15.0";
         String fieldName = "Euro";
 
-        FieldRelationship fieldRelationship = new FieldRelationship(ValueClass.NUMERIC, RelationshipType.LINKED,
-                fieldName, List.of(new RelationshipOperand("Dollar")));
-
-        Map<String, OriginalMaskedValuePair> originalMaskedValues = new HashMap<>();
-        originalMaskedValues.put("Dollar", new OriginalMaskedValuePair("5.0", "12.0"));
-
-        String masked = maskingProvider.mask(identifier, fieldName, fieldRelationship, originalMaskedValues);
+        String masked = maskingProvider.maskWithRatio(identifier, "12.0", "5.0");
         //the original ratio was 5/15 = 0.33333
         //the masked value for Euro must be 12/0.3333 = 36 
 
