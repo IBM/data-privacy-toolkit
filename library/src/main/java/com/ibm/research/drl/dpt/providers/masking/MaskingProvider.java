@@ -47,20 +47,6 @@ public interface MaskingProvider extends Serializable {
         return mask(identifier);
     }
 
-    /**
-     * Mask string.
-     *
-     * @param identifier        the identifier
-     * @param fieldName         the field name
-     * @param fieldRelationship the field relationship
-     * @param values            the values
-     * @return the string
-     */
-    @Deprecated(forRemoval = true)
-    default String mask(String identifier, String fieldName, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> values) {
-        return mask(identifier, fieldName);
-    }
-
     default boolean supportsObject() {
         return false;
     }

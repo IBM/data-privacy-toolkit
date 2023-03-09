@@ -6,7 +6,7 @@
 package com.ibm.research.drl.dpt.spark.masking.provider;
 
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.providers.masking.AbstractMaskingProvider;
+import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 
 import java.io.BufferedReader;
@@ -20,8 +20,9 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class HadoopDictionaryBasedMaskingProvider extends AbstractMaskingProvider {
+public class HadoopDictionaryBasedMaskingProvider implements MaskingProvider {
     private final List<String> dictionary;
+    private final SecureRandom random;
 
     public HadoopDictionaryBasedMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) throws IOException {
         this.dictionary = loadDictionary(maskingConfiguration.getStringValue("hadoop.dictionary.path"));
