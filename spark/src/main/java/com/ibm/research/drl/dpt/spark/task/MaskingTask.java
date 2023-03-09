@@ -207,7 +207,7 @@ public class MaskingTask extends SparkTaskToExecute {
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
-                case GREP_AND_MASK:
+                case GREP_AND_MASK: // TODO: needs to be revisited
                 case SUM:
                 case SUM_APPROXIMATE:
                 case PRODUCT:
