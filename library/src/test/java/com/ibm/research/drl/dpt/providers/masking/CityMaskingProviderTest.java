@@ -209,7 +209,7 @@ public class CityMaskingProviderTest {
 
         List<String> neighborsList = Arrays.asList(neighbors);
 
-        for(int i =0; i < 1000; i++) {
+        for(int i =0; i < 1_000; i++) {
             String maskedCity = cityMaskingProvider.mask(originalCity);
             assertTrue(neighborsList.contains(maskedCity));
         }
