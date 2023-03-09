@@ -81,7 +81,7 @@ public interface MaskingProvider extends Serializable {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
-    default String maskLess(String identifier, String lesserValue) {
+    default String maskLess(String identifier, String greaterValue, String originalGreaterValue) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
@@ -89,7 +89,7 @@ public interface MaskingProvider extends Serializable {
         return equalValue;
     }
 
-    default String maskGreater(String identifier, String greaterValue) {
+    default String maskGreater(String identifier, String lesserValue, String originalLesserValue) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
