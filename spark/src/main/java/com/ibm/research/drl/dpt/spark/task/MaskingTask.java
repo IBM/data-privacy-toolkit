@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static org.apache.spark.sql.functions.lit;
 import static org.apache.spark.sql.functions.udf;
 
 public class MaskingTask extends SparkTaskToExecute {
@@ -149,42 +150,59 @@ public class MaskingTask extends SparkTaskToExecute {
                             dataset.col(fieldName).cast(DataTypes.StringType)
                     ).cast(targetDataType));
         } else {
+            String operandFieldName = relationship.getOperands()[0].getName();
+            String operandFieldPreservedValueName = prefix + operandFieldName;
+
             switch (relationship.getRelationshipType()) {
                 case KEY:
-                    String keyFieldName = relationship.getOperands()[0].getName();
-
                     UDF2<String, String, String> keyedUDF = provider::maskWithKey;
 
                     return dataset.withColumn(target.getTargetPath(),
                                         udf(keyedUDF, DataTypes.StringType).apply(
-                                        dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(prefix + keyFieldName).cast(DataTypes.StringType)
+                                        dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                                     ).cast(targetDataType));
                 case DISTANCE:
-                    String relativeDistanceFieldName = relationship.getOperands()[0].getName();
                     UDF3<String, String, String, String> distanceUDF = provider::maskDistance;
                     return dataset.withColumn(target.getTargetPath(),
                             udf(distanceUDF, DataTypes.StringType).apply(
                                 dataset.col(fieldName).cast(DataTypes.StringType),
-                                    dataset.col(prefix + relativeDistanceFieldName).cast(DataTypes.StringType),
-                                    dataset.col(relativeDistanceFieldName).cast(DataTypes.StringType)
+                                    dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
                 case EQUALS:
-                    String equalFieldName = relationship.getOperands()[0].getName();
                     UDF2<String, String, String> equalUDF = provider::maskEqual;
                     return dataset.withColumn(target.getTargetPath(),
                             udf(equalUDF, DataTypes.StringType).apply(
-                                    dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(equalFieldName).cast(DataTypes.StringType)
+                                    dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(operandFieldName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
+                case GREATER:
+                    UDF3<String, String, String, String> greaterUDF = provider::maskGreater;
+                    return dataset.withColumn(target.getTargetPath(),
+                            udf(greaterUDF, DataTypes.StringType).apply(
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
+                case LESS:
+                    UDF3<String, String, String, String> lesserUDF = provider::maskLess;
+                    return dataset.withColumn(target.getTargetPath(),
+                            udf(lesserUDF, DataTypes.StringType).apply(
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
+                case LINKED:
+                    UDF3<String, String, ProviderType, String> linkedUDF = provider::maskLinked;
+                    return dataset.withColumn(target.getTargetPath(),
+                            udf(linkedUDF, DataTypes.StringType).apply(
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldName).cast(DataTypes.StringType),
+                                    lit(relationship.getOperands()[0].getType())
                             ).cast(targetDataType));
                 case GREP_AND_MASK:
                 case SUM:
                 case SUM_APPROXIMATE:
                 case PRODUCT:
-                case GREATER:
-                case LESS:
-                case LINKED:
-//                    String linkedFieldName = relationship.getOperands()[0].getName();
-//                    UDF3<String, String, String, ProviderType> linkedUDF = provider::maskLinked;
-                    // TODO: missing code for this
                 default:
                     throw new UnsupportedOperationException();
             }
