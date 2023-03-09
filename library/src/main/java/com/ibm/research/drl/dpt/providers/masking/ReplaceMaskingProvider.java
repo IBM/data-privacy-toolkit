@@ -185,19 +185,11 @@ public class ReplaceMaskingProvider implements MaskingProvider {
     }
 
     @Override
-    public String mask(String identifier, String fieldName,
-                       FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> maskedValues) {
-        if (fieldRelationship.getRelationshipType() == RelationshipType.KEY) {
-            String operandFieldName = fieldRelationship.getOperands()[0].getName();
-            OriginalMaskedValuePair originalMaskedValuePair = maskedValues.get(operandFieldName);
-            String operandValue = originalMaskedValuePair.getOriginal();
-
-            if (shouldValueBePreserved(operandValue)) {
-                return identifier;
-            }
-            return mask(identifier, false);
+    public String maskWithKey(String identifier, String key) {
+        if (shouldValueBePreserved(key)) {
+            return identifier;
         }
-        return mask(identifier);
+        return mask(identifier, false);
     }
 
     private boolean shouldValueBePreserved(String value) {
