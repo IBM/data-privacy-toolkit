@@ -111,7 +111,9 @@ public class NumberUtils {
         String soFar;
 
         if (number % 100 < 20) {
-            soFar = numNames[number % 100];
+            int remainder = number % 100;
+            if (remainder > numNames.length) return "";
+            soFar = numNames[remainder];
             number /= 100;
         } else {
             soFar = numNames[number % 10];
