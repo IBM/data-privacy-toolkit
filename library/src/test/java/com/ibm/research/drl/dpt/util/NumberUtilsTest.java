@@ -29,8 +29,8 @@ public class NumberUtilsTest {
     @Test
     public void testParse() {
         String v = "-.13";
-        Double d = Double.parseDouble(v);
-        assertThat(d.toString(), is("-0.13"));
+        double d = Double.parseDouble(v);
+        assertThat(Double.toString(d), is("-0.13"));
     }
 
     @Test

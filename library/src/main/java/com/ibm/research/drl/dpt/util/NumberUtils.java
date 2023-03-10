@@ -19,22 +19,24 @@ under the License.
 package com.ibm.research.drl.dpt.util;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class NumberUtils {
+    private static final Set<String> allowedStrings = Set.of(
+            "zero", "one", "two", "three", "four", "five", "six", "seven",
+            "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen",
+            "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty",
+            "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety",
+            "hundred", "thousand", "million", "billion", "trillion");
 
-    private static final Set<String> allowedStrings = new HashSet<>(Arrays.asList
-            (
-                    "zero", "one", "two", "three", "four", "five", "six", "seven",
-                    "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen",
-                    "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty",
-                    "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety",
-                    "hundred", "thousand", "million", "billion", "trillion"
-            ));
+    private final static Map<String, String> ordinalNumbers = initOrdinalNumbers();
 
-    private final static Map<String, String> ordinalNumbers = new HashMap<>();
-
-    static {
+    private static Map<String, String> initOrdinalNumbers() {
+        Map<String, String> ordinalNumbers = new HashMap<>();
         ordinalNumbers.put("first", "one");
         ordinalNumbers.put("second", "two");
         ordinalNumbers.put("third", "three");
@@ -65,6 +67,8 @@ public class NumberUtils {
         ordinalNumbers.put("hundredth", "hundred");
         ordinalNumbers.put("thousandth", "thousand");
         ordinalNumbers.put("millionth", "million");
+
+        return ordinalNumbers;
     }
 
     private static final String[] tensNames = {
@@ -125,28 +129,25 @@ public class NumberUtils {
             return "zero";
         }
 
-        String snumber = Long.toString(number);
-
         // pad with "0"
         String mask = "000000000000";
         DecimalFormat df = new DecimalFormat(mask);
-        snumber = df.format(number);
+        String sNumber = df.format(number);
 
         // XXXnnnnnnnnn
-        int billions = Integer.parseInt(snumber.substring(0, 3));
+        int billions = Integer.parseInt(sNumber.substring(0, 3));
         // nnnXXXnnnnnn
-        int millions = Integer.parseInt(snumber.substring(3, 6));
+        int millions = Integer.parseInt(sNumber.substring(3, 6));
         // nnnnnnXXXnnn
-        int hundredThousands = Integer.parseInt(snumber.substring(6, 9));
+        int hundredThousands = Integer.parseInt(sNumber.substring(6, 9));
         // nnnnnnnnnXXX
-        int thousands = Integer.parseInt(snumber.substring(9, 12));
+        int thousands = Integer.parseInt(sNumber.substring(9, 12));
 
         String tradBillions;
         if (billions == 0) {
             tradBillions = "";
         } else {
-            tradBillions = convertLessThanOneThousand(billions)
-                    + " billion ";
+            tradBillions = convertLessThanOneThousand(billions) + " billion ";
         }
         String result = tradBillions;
 
@@ -170,8 +171,7 @@ public class NumberUtils {
                 tradHundredThousands = "one thousand ";
                 break;
             default:
-                tradHundredThousands = convertLessThanOneThousand(hundredThousands)
-                        + " thousand ";
+                tradHundredThousands = convertLessThanOneThousand(hundredThousands) + " thousand ";
         }
         result = result + tradHundredThousands;
 
@@ -194,20 +194,20 @@ public class NumberUtils {
 
         input = input.replaceAll("-", " ");
         input = input.toLowerCase().replaceAll(" and", " ");
-        String[] splittedParts = input.trim().split("\\s+");
+        String[] splitParts = input.trim().split("\\s+");
 
-        for (int i = 0; i < splittedParts.length; i++) {
-            String str = splittedParts[i];
+        for (int i = 0; i < splitParts.length; i++) {
+            String str = splitParts[i];
             if (ordinalNumbers.containsKey(str)) {
-                splittedParts[i] = ordinalNumbers.get(str);
+                splitParts[i] = ordinalNumbers.get(str);
             }
 
-            if (!allowedStrings.contains(splittedParts[i])) {
+            if (!allowedStrings.contains(splitParts[i])) {
                 return null;
             }
         }
 
-        for (String str : splittedParts) {
+        for (String str : splitParts) {
             if (str.equalsIgnoreCase("zero")) {
                 result += 0;
             } else if (str.equalsIgnoreCase("one")) {
