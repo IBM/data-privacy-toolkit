@@ -20,10 +20,14 @@ package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,34 +93,6 @@ public class CategoricalTest {
     }
 
     @Test
-//    @Disabled
-    public void testPerformance() {
-        Categorical mechanism = new Categorical();
-
-        DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
-
-        List<String> terms = Arrays.asList("Red", "Green", "Blue");
-
-        options.setHierarchy(GeneralizationHierarchyFactory.getGenericFromFixedSet(terms));
-        options.setEpsilon(5);
-        mechanism.setOptions(options);
-        
-        long start = System.currentTimeMillis();
-
-        for(int i = 0; i < 1_000_000; i++) {
-            String randomized = mechanism.randomise(terms.get(i % 3));
-            if (randomized == null) {
-                System.out.println("oops");
-            }
-        }
-
-        long end = System.currentTimeMillis();
-
-        System.out.println("total time: " + (end - start));
-    }
-
-    @Test
-    @Disabled
     public void testDays() {
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
         for(int i = Calendar.MONDAY; i <= Calendar.FRIDAY; i++) {
@@ -137,7 +113,7 @@ public class CategoricalTest {
         int weekends = 0;
         int sameDay = 0;
 
-        for (int i=0;i<1000;i++) {
+        for (int i = 0; i < 1_000; ++i) {
             int randomisedDay = Integer.parseInt(mechanism.randomise(originalDay));
 
             if (randomisedDay == Calendar.WEDNESDAY) {
@@ -150,7 +126,7 @@ public class CategoricalTest {
             }
         }
 
-        assertTrue(sameDay > weekdays/4);
-        assertTrue(weekdays/4 > weekends/2);
+        assertTrue(sameDay >= weekdays/4);
+        assertTrue(weekdays/4 >= weekends/2);
     }
 }

@@ -27,11 +27,18 @@ import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.constraints.RecursiveCLDiversity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DemoGenTest {
 
@@ -51,7 +58,7 @@ public class DemoGenTest {
           }
         */
 
-        Map<String, MaterializedHierarchy> hierarchyMap = new HashMap();
+        Map<String, MaterializedHierarchy> hierarchyMap = new HashMap<>();
 
         Iterator<Map.Entry<String, JsonNode>> iterator = hierarchies.fields();
 
@@ -73,7 +80,7 @@ public class DemoGenTest {
                 }
 
                 if (entries.size() == 0) {
-                    throw new RuntimeException("empty entries for hierarchy");
+                    throw new RuntimeException("Empty entries for hierarchy");
                 }
 
                 materializedHierarchy.add(entries);
@@ -141,9 +148,7 @@ public class DemoGenTest {
 
         List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
 
-        Iterator<JsonNode> iterator = node.iterator();
-        while(iterator.hasNext()) {
-            JsonNode element = iterator.next();
+        for (JsonNode element : node) {
             if (element.isNull() || !element.isObject()) {
                 throw new RuntimeException("Element in privacy constraints array is null or not an object");
             }
@@ -155,7 +160,7 @@ public class DemoGenTest {
 
             String name = nameNode.asText();
 
-            switch(name) {
+            switch (name) {
                 case "k":
                     JsonNode kNode = element.get("k");
                     if (kNode == null || kNode.isNull() || !kNode.isInt()) {
@@ -200,21 +205,25 @@ public class DemoGenTest {
     @Test
     @Disabled
     public void testGenData() throws Exception {
-        InputStream is = this.getClass().getResourceAsStream("/olaDemogen.json");
-        JsonNode confContents = (new ObjectMapper()).readTree(is);
+        try (InputStream configuration = this.getClass().getResourceAsStream("/olaDemogen.json");) {
+            JsonNode confContents = JsonUtils.MAPPER.readTree(configuration);
 
-        Map<String, MaterializedHierarchy> hierarchies = hierarchiesFromJSON(confContents);
-        List<ColumnInformation> columnInformationList = columnInformationFromJSON(confContents);
-        List<PrivacyConstraint> privacyConstraints = privacyConstraintsFromJSON(confContents);
-        double suppression = confContents.get("options").get("suppression").asDouble();
+            // Map<String, MaterializedHierarchy> hierarchies = hierarchiesFromJSON(confContents);
+            List<ColumnInformation> columnInformationList = columnInformationFromJSON(confContents);
+            List<PrivacyConstraint> privacyConstraints = privacyConstraintsFromJSON(confContents);
+            double suppression = confContents.get("options").get("suppression").asDouble();
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+            try (InputStream data = DemoGenTest.class.getResourceAsStream("/random1.txt")) {
+                IPVDataset original = IPVDataset.load(data, false, ',', '"', false);
 
-        OLA ola = initOLA(privacyConstraints, suppression, original, columnInformationList);
-        IPVDataset anonymized = ola.apply();
+                OLA ola = initOLA(privacyConstraints, suppression, original, columnInformationList);
+                IPVDataset anonymized = ola.apply();
 
-        System.out.println("OLA best node: " + ola.reportBestNode());
+                assertNotNull(anonymized);
 
+                System.out.println("OLA best node: " + ola.reportBestNode());
+            }
+        }
     }
 }
 
