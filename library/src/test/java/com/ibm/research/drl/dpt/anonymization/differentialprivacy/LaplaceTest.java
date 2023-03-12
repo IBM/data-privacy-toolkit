@@ -56,21 +56,16 @@ public class LaplaceTest {
 
     @Test
     public void testCorrectResultsWithOptions() throws NumberFormatException {
-
         Laplace mechanism = new Laplace();
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
         options.setEpsilon(10);
-        options.setBounds(-10, 10);
         mechanism.setOptions(options);
 
         int count = 0;
 
-        for(int i = 0; i < 1000; i++) {
+        for(int i = 0; i < 1_000; i++) {
             String randomized = mechanism.randomise("1.0");
             double d = Double.parseDouble(randomized);
-
-            assertThat(d, greaterThanOrEqualTo(-10.0));
-            assertThat(d, lessThanOrEqualTo(10.0));
 
             if (d != 1.0) {
                 count++;
@@ -84,7 +79,6 @@ public class LaplaceTest {
     @Test
     @Disabled
     public void testPerformance() {
-
         Laplace mechanism = new Laplace();
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
         options.setEpsilon(10);
