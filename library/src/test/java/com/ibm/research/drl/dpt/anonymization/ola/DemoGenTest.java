@@ -19,8 +19,12 @@ under the License.
 package com.ibm.research.drl.dpt.anonymization.ola;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
+import com.ibm.research.drl.dpt.anonymization.SensitiveColumnInformation;
 import com.ibm.research.drl.dpt.anonymization.constraints.DistinctLDiversity;
 import com.ibm.research.drl.dpt.anonymization.constraints.EntropyLDiversity;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
@@ -205,7 +209,7 @@ public class DemoGenTest {
     @Test
     @Disabled
     public void testGenData() throws Exception {
-        try (InputStream configuration = this.getClass().getResourceAsStream("/olaDemogen.json");) {
+        try (InputStream configuration = DemoGenTest.class.getResourceAsStream("/olaDemogen.json");) {
             JsonNode confContents = JsonUtils.MAPPER.readTree(configuration);
 
             List<ColumnInformation> columnInformationList = columnInformationFromJSON(confContents);
