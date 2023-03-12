@@ -208,7 +208,6 @@ public class DemoGenTest {
         try (InputStream configuration = this.getClass().getResourceAsStream("/olaDemogen.json");) {
             JsonNode confContents = JsonUtils.MAPPER.readTree(configuration);
 
-            // Map<String, MaterializedHierarchy> hierarchies = hierarchiesFromJSON(confContents);
             List<ColumnInformation> columnInformationList = columnInformationFromJSON(confContents);
             List<PrivacyConstraint> privacyConstraints = privacyConstraintsFromJSON(confContents);
             double suppression = confContents.get("options").get("suppression").asDouble();
