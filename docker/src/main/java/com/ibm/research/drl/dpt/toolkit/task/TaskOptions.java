@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 
 public abstract class TaskOptions {
     public void setOption(String optionName, Object optionValue) throws IllegalAccessException, IntrospectionException, InvocationTargetException {
-        PropertyDescriptor pd = new PropertyDescriptor(optionName, this.getClass());
+        PropertyDescriptor pd = new PropertyDescriptor(optionName, TaskOptions.class);
         Method setter = pd.getWriteMethod();
         setter.invoke(this, optionValue);
     }
