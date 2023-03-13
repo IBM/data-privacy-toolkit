@@ -38,9 +38,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class InternationalPhoneIdentifier extends AbstractIdentifier {
-    private static final Pattern pattern = Pattern.compile("^(\\+|00)(?<countrycode>\\d{1,3})[ -](?<number>(\\(\\d{1,4}\\))?([\\s|-]*)?(\\d{1,4}([\\s|-]*)?){1,})$");
+    private static final Pattern pattern = Pattern.compile("^((\\+|00|011)\\s?(?<countrycode>\\d{1,3})([-|\\s]*)?(?<number>(\\(\\d{1,4}\\))?([-|\\s]*)?(\\d{1,4}([-|\\s]*)?){1,}))$");
     private final Set<String> validCountryCodes;
-
 
     public InternationalPhoneIdentifier() {
         this.validCountryCodes = loadFromResource("/identifier/common/phone_country_codes.csv");
