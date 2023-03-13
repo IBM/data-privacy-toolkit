@@ -34,6 +34,13 @@ public class InternationalPhoneIdentifierTest {
         InternationalPhoneIdentifier identifier = new InternationalPhoneIdentifier();
 
         String[] validNumbers = {
+                "0044 0876653255",
+                "00 1 340 1234567",
+                "011 44 340 1234567",
+                "00 44-1481 1234567",
+                "+44-1481 1234567",
+                "+44 1481 1234567",
+                "00 1-441 1234567",
                 "+353-0876653255",
                 "+353 0876653255",
                 "+353 087 665 3255",
@@ -42,7 +49,6 @@ public class InternationalPhoneIdentifierTest {
                 "+353-(087)6653255",
                 "0044-(087)6653255",
                 "0044 (087)6653255",
-                "0044 0876653255",
                 "+622125669098"
         };
 
@@ -58,7 +64,9 @@ public class InternationalPhoneIdentifierTest {
                 "622125669098",
                 "+622125669098a",
                 "+999125669098",
-                "+62123"
+                "+62123",
+                "021 44 340 1234567",
+                "00 11-1481 1234567",
         };
 
         for(String invalidNumber: invalidNumbers) {
