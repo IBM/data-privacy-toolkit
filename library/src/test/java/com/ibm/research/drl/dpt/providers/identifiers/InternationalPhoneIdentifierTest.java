@@ -46,8 +46,7 @@ public class InternationalPhoneIdentifierTest {
                 "+622125669098"
         };
 
-        for (int i = 0; i < validNumbers.length; ++i) {
-            String number = validNumbers[i];
+        for (String number : validNumbers) {
             assertTrue(identifier.isOfThisType(number), number);
         }
 

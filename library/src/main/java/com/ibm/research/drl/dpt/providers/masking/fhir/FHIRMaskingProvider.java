@@ -51,18 +51,6 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
         this("fhir", maskingConfiguration, maskedFields, factory);
     }
 
-//    private InputStream loadResource(String name, boolean external) {
-//        if (external) {
-//            try {
-//                return new FileInputStream(name);
-//            } catch (Exception e) {
-//                throw new RuntimeException("unable to load external resource: " + name);
-//            }
-//        }
-//
-//        return this.getClass().getResourceAsStream(name);
-//    }
-
     public static Collection<String> loadRulesForResource(String resourceName, MaskingConfiguration maskingConfiguration) {
         return maskingConfiguration.getStringValueWithPrefixMatch("fhir.maskingConf." + resourceName + ".");
     }

@@ -18,15 +18,12 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util.localization;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class ResourceEntry {
-    private static final Logger logger = LogManager.getLogger(ResourceEntry.class);
 
     private final String filename;
     private final String countryCode;
@@ -51,14 +48,10 @@ public class ResourceEntry {
      * @return the input stream
      */
     public InputStream createStream() {
-        //logger.debug("Creating stream for {} {}", filename, countryCode);
-
         switch (resourceEntryType) {
             case INTERNAL_RESOURCE:
-                //logger.debug("Returning internal resource");
-                return this.getClass().getResourceAsStream(filename);
+                return ResourceEntry.class.getResourceAsStream(filename);
             case EXTERNAL_FILENAME:
-//                logger.debug("External resource");
                 try {
                     return new FileInputStream(filename);
                 } catch (FileNotFoundException e) {
