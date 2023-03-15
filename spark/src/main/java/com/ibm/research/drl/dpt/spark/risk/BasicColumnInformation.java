@@ -16,10 +16,6 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
- * The source code for this program is not published or otherwise  *
- * divested of its trade secrets, irrespective of what has         *
- * been deposited with the U.S. Copyright Office.                  *
- *******************************************************************/
 package com.ibm.research.drl.dpt.spark.risk;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
