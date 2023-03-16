@@ -33,7 +33,7 @@ ext {
 
     poi_version = "5.2.3"
 
-    lucene_version = "6.5.0"
+    lucene_version = "8.11.2"
     open_nlp_version = "2.1.1"
 }
 
