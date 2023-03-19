@@ -38,13 +38,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Identify {
-    private CSVFormatProcessor csvFormatProcessor;
+    private final CSVFormatProcessor csvFormatProcessor;
 
     private final static CsvMapper csvMapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
@@ -88,7 +94,7 @@ public class Identify {
 
         try (
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
-                Writer writer = new BufferedWriter(new OutputStreamWriter(output));
+                Writer writer = new BufferedWriter(new OutputStreamWriter(output))
         ){
             CsvSchema schema = CsvSchema.emptySchema().withSkipFirstDataRow(false).withQuoteChar(options.getQuoteChar()).withColumnSeparator(options.getFieldDelimiter());
 
