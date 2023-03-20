@@ -11,6 +11,7 @@ group = 'com.ibm.research.drl.dpt'
 version = '6.0.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
@@ -22,7 +23,6 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
 
