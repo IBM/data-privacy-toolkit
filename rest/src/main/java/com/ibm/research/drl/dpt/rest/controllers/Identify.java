@@ -19,8 +19,6 @@ under the License.
 package com.ibm.research.drl.dpt.rest.controllers;
 
 import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -32,16 +30,20 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.rest.exceptions.InvalidRequestException;
 import com.ibm.research.drl.dpt.util.Tuple;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -90,24 +92,17 @@ public class Identify {
         if (-1L == sampleSize) return datasetContent;
         if (options.isHasHeader()) sampleSize += 1L;
 
-        return datasetContent;
-
-        /*
         try (StringWriter output = new StringWriter()) {
             CsvSchema schema = CsvSchema.emptySchema().withSkipFirstDataRow(false).withQuoteChar(options.getQuoteChar()).withColumnSeparator(options.getFieldDelimiter());
-
             try (
                     MappingIterator<String[]> reader = csvMapper.readerFor(String[].class).with(schema).with(CsvParser.Feature.WRAP_AS_ARRAY).readValues(datasetContent);
+                    CSVPrinter printer = new CSVPrinter(output, CSVFormat.Builder.create().setDelimiter(options.getFieldDelimiter()).setQuote(options.getQuoteChar()).build())
                 ) {
-                SequenceWriter writer = csvMapper.writer(
-                        csvMapper.schemaFor(String[].class).withQuoteChar(options.getQuoteChar()).withColumnSeparator(options.getFieldDelimiter())
-                ).writeValues(output);
 
                 for (int i = 0; i < sampleSize; ++i) {
                     if (reader.hasNext()) {
                         String[] record = reader.next();
-
-
+                        printer.printRecords(Arrays.asList(record));
                     }
                 }
             }
@@ -117,6 +112,5 @@ public class Identify {
             logger.error(e);
             throw new RuntimeException(e);
         }
-        */
     }
 }
