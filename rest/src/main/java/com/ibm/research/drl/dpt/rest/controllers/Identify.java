@@ -31,12 +31,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.rest.exceptions.InvalidRequestException;
 import com.ibm.research.drl.dpt.util.Tuple;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -49,7 +48,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@RestController
 public class Identify {
+    private static final Logger logger = LogManager.getLogger(Identify.class);
+
     private final CSVFormatProcessor csvFormatProcessor;
 
     private final static CsvMapper csvMapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
@@ -65,6 +67,7 @@ public class Identify {
             @RequestParam(value = "quoteChar", defaultValue = "\"") char quoteChar,
             @RequestParam(value = "sampleSize", defaultValue = "-1") Long sampleSize,
             @RequestBody String datasetContent) {
+        logger.info("Executing identify on CSV dataset with hasColumnNames={} delimiter={} quoteChar={} sampleSize={}", hasColumnNames, delimiter, quoteChar, sampleSize);
         CSVDatasetOptions options = new CSVDatasetOptions(hasColumnNames, delimiter, quoteChar, false);
         try (InputStream input = new ByteArrayInputStream(limitContentLength(datasetContent, options, sampleSize).getBytes())) {
             IdentificationReport identificationReport = csvFormatProcessor.identifyTypesStream(
@@ -82,7 +85,7 @@ public class Identify {
                     Tuple::getSecond
             ));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e);
             throw new InvalidRequestException(e.getMessage());
         }
     }

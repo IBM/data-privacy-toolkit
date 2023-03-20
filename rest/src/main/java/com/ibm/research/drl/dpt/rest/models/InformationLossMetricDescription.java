@@ -38,4 +38,15 @@ public class InformationLossMetricDescription {
         this.supportsSuppressedDatasets = supportsSuppressedDatasets;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public boolean isSupportsSuppressedDatasets() {
+        return supportsSuppressedDatasets;
+    }
 }
