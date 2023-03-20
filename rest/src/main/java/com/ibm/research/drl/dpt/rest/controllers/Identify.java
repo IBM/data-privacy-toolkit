@@ -19,6 +19,7 @@ under the License.
 package com.ibm.research.drl.dpt.rest.controllers;
 
 import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
@@ -37,13 +38,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -90,32 +86,37 @@ public class Identify {
         }
     }
 
-    private String limitContentLength(String datasetContent, CSVDatasetOptions options, Long sampleSize) {
-        if (Objects.isNull(sampleSize)) return datasetContent;
-
+    private String limitContentLength(String datasetContent, CSVDatasetOptions options, long sampleSize) {
+        if (-1L == sampleSize) return datasetContent;
         if (options.isHasHeader()) sampleSize += 1L;
 
-        try (
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
-                Writer writer = new BufferedWriter(new OutputStreamWriter(output))
-        ){
+        return datasetContent;
+
+        /*
+        try (StringWriter output = new StringWriter()) {
             CsvSchema schema = CsvSchema.emptySchema().withSkipFirstDataRow(false).withQuoteChar(options.getQuoteChar()).withColumnSeparator(options.getFieldDelimiter());
 
-            try (MappingIterator<String[]> recordReader = csvMapper.readerFor(String[].class).with(schema).readValues(datasetContent)) {
-                SequenceWriter recordWriter = csvMapper.writerFor(String[].class).with(schema).writeValues(writer);
+            try (
+                    MappingIterator<String[]> reader = csvMapper.readerFor(String[].class).with(schema).with(CsvParser.Feature.WRAP_AS_ARRAY).readValues(datasetContent);
+                ) {
+                SequenceWriter writer = csvMapper.writer(
+                        csvMapper.schemaFor(String[].class).withQuoteChar(options.getQuoteChar()).withColumnSeparator(options.getFieldDelimiter())
+                ).writeValues(output);
 
-                for (long i = 0; recordReader.hasNext() && i < sampleSize; ++i) {
-                    String[] record = recordReader.next();
+                for (int i = 0; i < sampleSize; ++i) {
+                    if (reader.hasNext()) {
+                        String[] record = reader.next();
 
-                    recordWriter.write(record);
+
+                    }
                 }
-
-                recordWriter.flush();
-
-                return output.toString();
             }
+
+            return output.toString();
         } catch (IOException e) {
-            throw new IllegalArgumentException("Unable to trim the dataset to the required length", e);
+            logger.error(e);
+            throw new RuntimeException(e);
         }
+        */
     }
 }
