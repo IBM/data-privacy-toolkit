@@ -101,6 +101,15 @@ repositories {
     maven {
         url = uri('https://www.dcm4che.org/maven2')
     }
+
+    maven {
+        name = "OSSRH"
+        url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        credentials {
+            username = System.getenv("MAVEN_USERNAME")
+            password = System.getenv("MAVEN_PASSWORD")
+        }
+    }
 }
 
 task sourceJar(type: Jar) {
@@ -112,6 +121,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            artifact sourceJar
             pom {
                 name = 'Data Privacy Toolkit'
                 description = 'The IBM Data Privacy Toolkit (DPT)'
@@ -121,7 +131,12 @@ publishing {
                         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
+                scm {
+                    developerConnection = "https://github.com/IBM/data-privacy-toolkit.git"
+                    url = "https://github.com/IBM/data-privacy-toolkit"
+                }
             }
+            ext.repo = 'OSSRH'
         }
     }
 }
