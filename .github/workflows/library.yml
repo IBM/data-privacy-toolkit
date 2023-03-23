@@ -27,10 +27,4 @@ jobs:
       - name: Run gradlew build
         working-directory: ./library
         run: ./gradlew build --no-daemon
-      - name: Publish to Maven Central
-        working-directory: ./library
-        uses: ./gradlew publish
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 
