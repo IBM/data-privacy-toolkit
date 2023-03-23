@@ -1,0 +1,46 @@
+{
+  "name": "ibm-data-privacy-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "FileSaver": "^0.10.0",
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
+    "font-awesome-sass": "^4.7.0",
+    "highcharts": "^6.0.2",
+    "lodash": "^4.17.4",
+    "lz-string": "^1.4.4",
+    "react": "^16.2.0",
+    "react-bootstrap": "^0.31.3",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.6",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "sass": "^1.55.0",
+    "treant-js": "^1.0.1",
+    "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "npm-run-all": "^4.1.1",
+    "react-scripts": "^1.0.13",
+    "react-test-renderer": "^16.0.0",
+    "standard": "*"
+  },
+  "scripts": {
+    "build-css": "sass -I ./node_modules src:src",
+    "watch-css": "npm run build-css && sass -I ./node_modules src:src --watch",
+    "start-js": "react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build": "npm run build-css && react-scripts build",
+    "test": "standard && react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "homepage": ".",
+  "proxy": "http://localhost:8080/"
+}
