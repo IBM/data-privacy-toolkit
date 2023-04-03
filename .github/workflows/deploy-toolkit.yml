@@ -24,16 +24,16 @@ jobs:
         run: ./gradlew shadowJar -x test --no-daemon
       - name: Build image
         working-directory: ./docker
-        run: docker build -t dpt-cli:${{ github.sha }} .
+        run: docker build -t cli:${{ github.sha }} .
       - name: Tag image
-        run: docker tag dpt-cli:${{ github.sha }} dpt-cli:latest
+        run: docker tag cli:${{ github.sha }} cli:latest
       - name: Push To quay.io
         id: push-to-quay
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: dpt-cli
+          image: cli
           tags: latest ${{ github.sha }}
-          registry: quay.io/data-privacy-toolkit/cli
+          registry: quay.io/data_privacy_toolkit
           username: ${{ secrets.QUAYIO_USER }}
           password: ${{ secrets.QUAYIO_PASSWORD }}
       - name: Print image url
