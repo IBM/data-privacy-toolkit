@@ -1,0 +1,47 @@
+name: Deploy Toolkit
+on:
+  branch: [main]
+  workflow_run:
+    workflows: [DataPrivacyToolkit-Toolkit]
+    types:
+      - completed
+jobs:
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'gradle'
+      - name: Run gradlew publish to maven local
+        working-directory: ./library
+        run: ./gradlew publishToMavenLocal --no-daemon
+      - name: Run gradlew to build toolkit
+        working-directory: ./docker
+        run: ./gradlew shadowJar -x test --no-daemon
+      - name: Build Image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        working-directory: ./docker
+        with:
+          image: dpt-cli
+          tags: latest ${{ github.sha }}
+          containerfiles: |
+            ./Dockerfile
+      - name: Push To quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/data-privacy-toolkit/cli
+          username: ${{ secrets.QUAYIO_USER }}
+          password: ${{ secrets.QUAYIO_PASSWORD }}
+      - name: Print image url
+        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+
+
