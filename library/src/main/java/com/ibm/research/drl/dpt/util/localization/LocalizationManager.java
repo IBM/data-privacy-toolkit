@@ -124,7 +124,6 @@ public class LocalizationManager {
      * @param resource    the resource
      * @param countryCode the country code
      * @param filename    the filename
-     * @return the boolean
      */
     public synchronized void registerResource(Resource resource, String countryCode, String filename) {
         registerResource(resource, new ResourceEntry(filename, countryCode, ResourceEntryType.EXTERNAL_FILENAME));
