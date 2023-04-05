@@ -107,8 +107,8 @@ repositories {
         name = "OSSRH"
         url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
         credentials {
-            username = System.getenv("MAVEN_USERNAME")
-            password = System.getenv("MAVEN_PASSWORD")
+            username = "$System.env.OSSRH_USERNAME"
+            password = "$System.env.OSSRH_PASSWORD"
         }
     }
 }
@@ -123,32 +123,38 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     archiveClassifier = "javadoc"
 }
 
-signing {
-    def signingKeyId = findProperty("signingKeyId")
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-    sign configurations.archives
-}
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
             artifact sourcesJar
-//            artifact javadocJar
+            artifact javadocJar
             pom {
                 name = 'Data Privacy Toolkit'
-                description = 'The IBM Data Privacy Toolkit (DPT)'
+                packaging = 'jar'
+                description = 'The IBM Data Privacy Toolkit (DPT).'
+                url = "https://github.com/IBM/data-privacy-toolkit"
+
+                scm {
+                    connection = "https://github.com/IBM/data-privacy-toolkit.git"
+                    developerConnection = "https://github.com/IBM/data-privacy-toolkit.git"
+                    url = "https://github.com/IBM/data-privacy-toolkit"
+                }
+
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
                         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
-                scm {
-                    developerConnection = "https://github.com/IBM/data-privacy-toolkit.git"
-                    url = "https://github.com/IBM/data-privacy-toolkit"
+
+                developers {
+                    developer {
+                        id = 'stefano'
+                        name = 'Stefano Braghin'
+                        email = 'stefanob@ie.ibm.com'
+                    }
                 }
             }
             ext.repo = 'OSSRH'
@@ -156,8 +162,15 @@ publishing {
     }
 }
 
-tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
 
+signing {
+    def signingKey = "$System.env.OSSRH_GPG_SECRET_KEY"
+    def signingPassword = "$System.env.OSSRH_GPG_SECRET_KEY_PASSWORD"
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
+
+task testCoverage(type: JacocoReport, dependsOn: "test") {
     group = "Reporting"
     description = "Generate Jacoco coverage reports for the test build."
 
