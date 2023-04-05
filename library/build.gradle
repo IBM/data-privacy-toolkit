@@ -8,6 +8,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
+apply plugin: 'signing'
 
 ext {
     junit_jupiter_version = '5.9.2'
@@ -112,16 +113,30 @@ repositories {
     }
 }
 
-task sourceJar(type: Jar) {
+task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
-    archiveClassifier = "sources"
+    archiveClassifier "sources"
+}
+
+task javadocJar(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classifier "javadoc"
+}
+
+signing {
+    def signingKeyId = findProperty("signingKeyId")
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign configurations.archives
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            artifact sourceJar
+            artifact sourcesJar
+            artifact javadocJar
             pom {
                 name = 'Data Privacy Toolkit'
                 description = 'The IBM Data Privacy Toolkit (DPT)'
