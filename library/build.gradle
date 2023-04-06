@@ -169,7 +169,7 @@ publishing {
                     }
                     developer {
                         id = 'marco'
-                        name = 'Marco Simionio'
+                        name = 'Marco Simioni'
                         email = 'marco.simioni@ibm.com'
                     }
                 }
