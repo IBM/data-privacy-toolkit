@@ -17,10 +17,10 @@ jobs:
         java: [ '11', '17']
         distribution: ['adopt', 'corretto', 'microsoft']
     env:
-      - OSSRH_USERNAME: ${{ secret.OSSRH_USERNAME }}
-      - OSSRH_PASSWORD: ${{ secret.OSSRH_PASSWORD }}
-      - OSSRH_GPG_SECRET_KEY: ${{ secret.OSSRH_GPG_SECRET_KEY }}
-      - OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secret.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+      OSSRH_USERNAME: ${{ secret.OSSRH_USERNAME }}
+      OSSRH_PASSWORD: ${{ secret.OSSRH_PASSWORD }}
+      OSSRH_GPG_SECRET_KEY: ${{ secret.OSSRH_GPG_SECRET_KEY }}
+      OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secret.OSSRH_GPG_SECRET_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup java
