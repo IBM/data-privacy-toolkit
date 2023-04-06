@@ -10,6 +10,19 @@ apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'signing'
 
+apply plugin: 'org.barfuin.gradle.taskinfo'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.barfuin.gradle.taskinfo:gradle-taskinfo:2.1.0"
+    }
+}
+
 ext {
     junit_jupiter_version = '5.9.2'
     junit_platform_launcher_version = '1.9.2'
@@ -125,7 +138,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        mavenCentral(MavenPublication) {
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -154,19 +167,39 @@ publishing {
                         name = 'Stefano Braghin'
                         email = 'stefanob@ie.ibm.com'
                     }
+                    developer {
+                        id = 'marco'
+                        name = 'Marco Simionio'
+                        email = 'marco.simioni@ibm.com'
+                    }
                 }
             }
             ext.repo = 'OSSRH'
+        }
+    }
+    repositories {
+        maven {
+            name = "OSSRH"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl =  "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = "$System.env.OSSRH_USERNAME"
+                password = "$System.env.OSSRH_PASSWORD"
+            }
         }
     }
 }
 
 
 signing {
-    def signingKey = "$System.env.OSSRH_GPG_SECRET_KEY"
-    def signingPassword = "$System.env.OSSRH_GPG_SECRET_KEY_PASSWORD"
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.mavenJava
+    if ("$System.env.OSSRH_GPG_SECRET_KEY" != "null" && "$System.env.OSSRH_GPG_SECRET_KEY_PASSWORD" != "null") {
+        def signingKey = "$System.env.OSSRH_GPG_SECRET_KEY"
+        def signingPassword = "$System.env.OSSRH_GPG_SECRET_KEY_PASSWORD"
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign publishing.publications.mavenCentral
+    }
 }
 
 task testCoverage(type: JacocoReport, dependsOn: "test") {
