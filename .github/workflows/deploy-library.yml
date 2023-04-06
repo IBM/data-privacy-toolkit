@@ -24,7 +24,7 @@ jobs:
           cache: 'gradle'
       - name: Push to OSSRH
         working-directory: ./library
-        run: ./gradlew --no-daemon publish publish
+        run: ./gradlew --no-daemon publish
 
 
 
