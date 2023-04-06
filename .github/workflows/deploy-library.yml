@@ -1,0 +1,30 @@
+name: Deploy Library
+on:
+  workflow_run:
+    workflows: [DataPrivacyToolkit-Library]
+    types:
+      - completed
+    branches: [main]
+jobs:
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      - OSSRH_USERNAME: ${{ secret.OSSRH_USERNAME }}
+      - OSSRH_PASSWORD: ${{ secret.OSSRH_PASSWORD }}
+      - OSSRH_GPG_SECRET_KEY: ${{ secret.OSSRH_GPG_SECRET_KEY }}
+      - OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secret.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'gradle'
+      - name: Push to OSSRH
+        working-directory: ./library
+        run: ./gradlew --no-daemon publish publish
+
+
+
