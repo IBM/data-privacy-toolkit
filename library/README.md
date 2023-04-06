@@ -29,7 +29,7 @@ the final jar file in the `/build/libs` subfolder.
 ## Dependency declaration
 
 DPT library is publicly available in MavenCentral.
-Therefore, the library can be used in any Java/Scala/Kotlin project by adding it as a traditional dependencies.
+Therefore, the library can be used in any Java/Scala/Kotlin project by adding it as a traditional dependency.
 Examples are in the following.
 
 ### Gradle:
