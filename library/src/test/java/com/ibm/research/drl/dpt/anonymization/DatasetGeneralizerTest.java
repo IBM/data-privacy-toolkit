@@ -42,7 +42,7 @@ public class DatasetGeneralizerTest {
     public void testMaintainsOrder() throws Exception {
         // 0:0:1:2:2
 
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
+        IPVDataset originalDataset = IPVDataset.load(DatasetGeneralizerTest.class.getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
 
         GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
         List<ColumnInformation> columnInformation = new ArrayList<>();
