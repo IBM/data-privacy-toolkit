@@ -66,6 +66,7 @@ public class FHIRCodingMaskingProvider extends AbstractComplexMaskingProvider<Js
         this.codeMaskingProvider = getMaskingProvider(CODE_PATH, maskingConfiguration, this.factory);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRCoding cc = JsonUtils.MAPPER.treeToValue(node, FHIRCoding.class);

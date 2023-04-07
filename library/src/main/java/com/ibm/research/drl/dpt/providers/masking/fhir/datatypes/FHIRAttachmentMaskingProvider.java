@@ -45,6 +45,7 @@ public class FHIRAttachmentMaskingProvider extends AbstractComplexMaskingProvide
         this.removeTitle = maskingConfiguration.getBooleanValue("fhir.attachment.removeTitle");
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAttachment cc = JsonUtils.MAPPER.treeToValue(node, FHIRAttachment.class);
