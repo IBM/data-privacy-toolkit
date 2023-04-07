@@ -74,6 +74,7 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
         concept.setCoding(maskedCodings);
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRCodeableConcept cc = JsonUtils.MAPPER.treeToValue(node, FHIRCodeableConcept.class);

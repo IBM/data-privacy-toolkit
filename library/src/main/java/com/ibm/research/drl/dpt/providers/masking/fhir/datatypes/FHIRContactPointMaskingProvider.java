@@ -26,14 +26,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.security.SecureRandom;
 import java.util.Set;
 
 public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
-
     private final boolean randomizeUse;
     private final boolean removeExtensions;
     private final boolean maskValue;

@@ -59,6 +59,7 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
         this.random = new SecureRandom();
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAddress obj = JsonUtils.MAPPER.treeToValue(node, FHIRAddress.class);

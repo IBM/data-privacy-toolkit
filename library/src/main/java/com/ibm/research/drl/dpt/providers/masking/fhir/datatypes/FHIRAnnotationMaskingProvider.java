@@ -66,6 +66,7 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
         this.timeMaskingProvider = this.factory.get(ProviderType.DATETIME, getConfigurationForSubfield(TIME_FIELD_PATH, maskingConfiguration));
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAnnotation obj = JsonUtils.MAPPER.treeToValue(node, FHIRAnnotation.class);

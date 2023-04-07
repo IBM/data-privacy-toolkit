@@ -94,6 +94,7 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
         return builder.toString().trim();
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         try {
             FHIRHumanName obj = JsonUtils.MAPPER.treeToValue(node, FHIRHumanName.class);
@@ -133,8 +134,6 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
 
         return name;
     }
-
-
 }
 
 
