@@ -60,7 +60,6 @@ ext {
 
     poi_version = "5.2.3"
 
-    lucene_version = "8.11.2"
     open_nlp_version = "2.1.1"
 }
 
@@ -82,7 +81,6 @@ dependencies {
     implementation "ca.uhn.hapi:hapi-structures-v23:2.3"
     implementation 'org.iban4j:iban4j:3.2.4-RELEASE'
 
-    implementation "org.apache.lucene:lucene-analyzers-common:${lucene_version}"
     implementation "org.apache.opennlp:opennlp-tools:${open_nlp_version}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"

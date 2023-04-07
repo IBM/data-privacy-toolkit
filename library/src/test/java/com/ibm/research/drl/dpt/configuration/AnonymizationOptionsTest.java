@@ -22,11 +22,16 @@ package com.ibm.research.drl.dpt.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.DummyHierarchy;
+import com.ibm.research.drl.dpt.anonymization.informationloss.CategoricalPrecision;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
+import com.ibm.research.drl.dpt.risk.KRatioMetric;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AnonymizationOptionsTest {
@@ -34,137 +39,142 @@ public class AnonymizationOptionsTest {
     private final static ObjectMapper YAML_MAPPER = new ObjectMapper(new YAMLFactory());
 
     @Test
-    public void testPrivacyConstraintsNegativeK() throws Exception {
-        assertThrows(MisconfigurationException.class, () -> {
-            AnonymizationOptions.privacyConstraintsFromJSON(OBJECT_MAPPER.readTree(
-                    "[{\"name\": \"k\", \"k\": -2}]"
-            ));
-        });
+    public void testPrivacyConstraintsNegativeK() {
+        assertThrows(MisconfigurationException.class, () -> AnonymizationOptions.privacyConstraintsFromJSON(
+                OBJECT_MAPPER.readTree(
+                "[{\"name\": \"k\", \"k\": -2}]"
+        )));
     }
 
     @Test
-    public void testPrivacyConstraintsKEqualsToOne() throws Exception {
-        assertThrows(MisconfigurationException.class, () -> {
-            AnonymizationOptions.privacyConstraintsFromJSON(OBJECT_MAPPER.readTree(
-                    "[{\"name\": \"k\", \"k\": 1}]"
-            ));
-        });
+    public void testPrivacyConstraintsKEqualsToOne() {
+        assertThrows(MisconfigurationException.class, () -> AnonymizationOptions.privacyConstraintsFromJSON(
+                OBJECT_MAPPER.readTree(
+                "[{\"name\": \"k\", \"k\": 1}]"
+        )));
     }
 
     @Test
-    public void testPrivacyConstraintsNotAnArray() throws Exception {
-        assertThrows(MisconfigurationException.class, () -> {
-            AnonymizationOptions.privacyConstraintsFromJSON(OBJECT_MAPPER.readTree(
-                    "{\"name\": \"k\", \"k\": 2}"
-            ));
-        });
+    public void testPrivacyConstraintsNotAnArray() {
+        assertThrows(MisconfigurationException.class, () -> AnonymizationOptions.privacyConstraintsFromJSON(
+                OBJECT_MAPPER.readTree(
+                "{\"name\": \"k\", \"k\": 2}"
+        )));
     }
 
     @Test
-    public void testPrivacyConstraintsUnknownName() throws Exception {
-        assertThrows(MisconfigurationException.class, () -> {
-            AnonymizationOptions.privacyConstraintsFromJSON(OBJECT_MAPPER.readTree(
-                    "{\"name\": \"foobar\", \"k\": 2}"
-            ));
-        });
+    public void testPrivacyConstraintsUnknownName() {
+        assertThrows(MisconfigurationException.class, () -> AnonymizationOptions.privacyConstraintsFromJSON(
+                OBJECT_MAPPER.readTree(
+                "{\"name\": \"foobar\", \"k\": 2}"
+        )));
     }
 
     @Test
-    public void testPrivacyConstraintsLEqualsToZero() throws Exception {
-        assertThrows(MisconfigurationException.class, () -> {
-            AnonymizationOptions.privacyConstraintsFromJSON(OBJECT_MAPPER.readTree(
-                    "[{\"name\": \"distinctL\", \"l\": 0}]"
-            ));
-        });
+    public void testPrivacyConstraintsLEqualsToZero() {
+        assertThrows(MisconfigurationException.class, () -> AnonymizationOptions.privacyConstraintsFromJSON(
+                OBJECT_MAPPER.readTree(
+                "[{\"name\": \"distinctL\", \"l\": 0}]"
+        )));
     }
 
     @Test
     public void testValid() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsValid.json")) {
+        try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsValid.json")) {
             AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+            assertNotNull(anonymizationOptions);
         }
     }
 
     @Test
-    public void testWeightNotNumeric() throws Exception {
+    public void testWeightNotNumeric() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsWeightNotNumeric.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsWeightNotNumeric.json")) {
 
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testWeightNegative() throws Exception {
+    public void testWeightNegative() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsWeightNegative.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsWeightNegative.json")) {
 
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testMaximumLevelNotNumeric() throws Exception {
+    public void testMaximumLevelNotNumeric() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsMaximumLevelNotNumeric.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsMaximumLevelNotNumeric.json")) {
 
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testMaximumLevelInvalid() throws Exception {
+    public void testMaximumLevelInvalid() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsMaximumLevelInvalid.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsMaximumLevelInvalid.json")) {
 
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testInvalidColumnType() throws Exception {
+    public void testInvalidColumnType() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsInvalidColumnType.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsInvalidColumnType.json")) {
 
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testMissingColumnType() throws Exception {
+    public void testMissingColumnType() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsMissingColumnType.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsMissingColumnType.json")) {
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testMissingHierarchy() throws Exception {
+    public void testMissingHierarchy() {
         assertThrows(Exception.class, () -> {
-            try (InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsMissingHierarchy.json")) {
+            try (InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsMissingHierarchy.json")) {
                 AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+                assertNotNull(anonymizationOptions);
             }
         });
     }
 
     @Test
-    public void testUndefinedHierarchyName() throws Exception {
+    public void testUndefinedHierarchyName() {
         assertThrows(Exception.class, () -> {
-            InputStream inputStream = this.getClass().getResourceAsStream("/anonymizationOptionsUndefinedHierarchyName.json");
+            InputStream inputStream = AnonymizationOptionsTest.class.getResourceAsStream("/anonymizationOptionsUndefinedHierarchyName.json");
             AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue(inputStream, AnonymizationOptions.class);
+            assertNotNull(anonymizationOptions);
         });
     }
 
     @Test
-    public void failsForHierarchiesFieldDelimiter() throws Exception {
+    public void failsForHierarchiesFieldDelimiter() {
         assertThrows(Exception.class, () -> {
             AnonymizationOptions anonymizationOptions = OBJECT_MAPPER.readValue("{}", AnonymizationOptions.class);
+            assertNotNull(anonymizationOptions);
         });
     }
 
@@ -183,6 +193,9 @@ public class AnonymizationOptionsTest {
                 "\"riskMetric\": \"KRM\"," +
                 "\"riskMetricOptions\": {\"gamma\": \"0.1\"}" +
                 "}", AnonymizationOptions.class);
+        assertNotNull(options);
+
+        assertThat(options.getRiskMetric().getShortName(), is(new KRatioMetric().getShortName()));
     }
 
     @Test
@@ -202,5 +215,9 @@ public class AnonymizationOptionsTest {
                 "\"riskMetric\": null," +
                 "\"riskMetricOptions\": {\"gamma\":0.1}" +
                 "}",  AnonymizationOptions.class);
+
+        assertNotNull(options);
+
+        assertThat(options.getInformationLoss().getShortName(), is(new CategoricalPrecision().getShortName()));
     }
 }
