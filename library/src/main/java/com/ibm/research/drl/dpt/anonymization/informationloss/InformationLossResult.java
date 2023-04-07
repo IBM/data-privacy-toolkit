@@ -41,6 +41,7 @@ public class InformationLossResult {
         this.upperBound = upperBound;
     }
 
+    @Override
     public String toString() {
         return "[" + lowerBound + ", " + value + ", " + upperBound + "]";
     }

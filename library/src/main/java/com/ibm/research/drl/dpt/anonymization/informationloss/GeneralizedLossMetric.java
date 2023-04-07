@@ -141,6 +141,7 @@ public class GeneralizedLossMetric implements InformationMetric {
      *
      * @return the double
      */
+    @Override
     public double report() {
 
         int numberOfColumns = original.getNumberOfColumns();
