@@ -143,6 +143,7 @@ public class XMLRecord extends MultipathRecord {
 
     }
 
+    @Override
     public Iterable<String> generatePaths(String pattern) {
         List<String> pointers = Arrays.asList(pattern.split("/"));
 

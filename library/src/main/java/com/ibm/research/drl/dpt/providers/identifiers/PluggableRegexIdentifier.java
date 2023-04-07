@@ -123,6 +123,7 @@ public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier imple
         return new Tuple<>(false, null);
     }
 
+    @Override
     public boolean isPOSIndependent() {
         return this.isPOSIndependent;
     }

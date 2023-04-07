@@ -113,6 +113,7 @@ public class PluggableLookupIdentifier extends AbstractIdentifier {
         return Integer.MAX_VALUE;
     }
 
+    @Override
     public boolean isPOSIndependent() {
         return this.isPOSIndependent;
     }
