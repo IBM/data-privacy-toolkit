@@ -465,6 +465,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         return null;
     }
 
+    @Override
     public Collection<String> getStringValueWithPrefixMatch(String prefix) {
         Collection<String> values = new ArrayList<>();
 
@@ -565,6 +566,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         return resultMap;
     }
 
+    @Override
     public void setConfigurationManager(ConfigurationManager configurationManager) {
         this.configurationManager = configurationManager;
     }
