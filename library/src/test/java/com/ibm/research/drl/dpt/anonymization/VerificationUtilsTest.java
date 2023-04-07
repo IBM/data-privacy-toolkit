@@ -23,7 +23,11 @@ import com.ibm.research.drl.dpt.generators.ItemSet;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +35,7 @@ public class VerificationUtilsTest {
 
     @Test
     public void testBuildValueMap() throws Exception {
-        try (InputStream is = this.getClass().getResourceAsStream("/adult-10-30000.data.csv")) {
+        try (InputStream is = VerificationUtilsTest.class.getResourceAsStream("/adult-10-30000.data.csv")) {
             IPVDataset dataset = IPVDataset.load(is, false, ',', '"', false);
             assertEquals(30000, dataset.getNumberOfRows());
 
