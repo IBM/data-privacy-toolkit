@@ -29,6 +29,7 @@ public class ATC {
         this.code = code;
     }
 
+    @Override
     public String toString() {
         return code;
     }

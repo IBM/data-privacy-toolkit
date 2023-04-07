@@ -51,6 +51,7 @@ public class Interval implements Serializable {
         this.median = median;
     }
 
+    @Override
     public Interval clone() {
         return new Interval(this.low, this.high);
     }

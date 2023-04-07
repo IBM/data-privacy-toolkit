@@ -18,7 +18,19 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.ola;
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithm;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformationGenerator;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DatasetGeneralizer;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
+import com.ibm.research.drl.dpt.anonymization.SensitiveColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.TransformationType;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
@@ -190,10 +202,12 @@ public class OLA implements AnonymizationAlgorithm {
      * @return the partitions
      */
 
+    @Override
     public List<Partition> getOriginalPartitions() {
         return this.originalPartitions;
     }
 
+    @Override
     public List<Partition> getAnonymizedPartitions() {
         return this.anonymizedPartitions;
     }

@@ -32,12 +32,11 @@ import java.util.stream.Collectors;
 
 public class CityManager extends ResourceBasedManager<City> {
 
-    private static final class CityDistancer implements Comparable<CityDistancer> {
-
+    private static final class CityDistanceFinder implements Comparable<CityDistanceFinder> {
         private final City city;
         private final double distance;
 
-        CityDistancer(KDTree.CartesianPoint centroid, City city, KDTree.CartesianPoint cityPoint) {
+        CityDistanceFinder(KDTree.CartesianPoint centroid, City city, KDTree.CartesianPoint cityPoint) {
             this.city = city;
             this.distance = centroid.euclideanDistance(cityPoint);
         }
@@ -47,7 +46,7 @@ public class CityManager extends ResourceBasedManager<City> {
         }
 
         @Override
-        public int compareTo(CityDistancer o) {
+        public int compareTo(CityDistanceFinder o) {
             return Double.compare(distance, o.distance);
         }
 
@@ -55,7 +54,7 @@ public class CityManager extends ResourceBasedManager<City> {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            CityDistancer that = (CityDistancer) o;
+            CityDistanceFinder that = (CityDistanceFinder) o;
             return Double.compare(that.distance, distance) == 0 && Objects.equals(city, that.city);
         }
 
@@ -78,13 +77,7 @@ public class CityManager extends ResourceBasedManager<City> {
             double dist1 = cityDistance(centroid, c1);
             double dist2 = cityDistance(centroid, c2);
 
-            if (dist1 < dist2) {
-                return -1;
-            } else if (dist1 == dist2) {
-                return 0;
-            } else {
-                return 1;
-            }
+            return Double.compare(dist1, dist2);
         }
 
         private static double cityDistance(City city1, City city2) {
@@ -138,10 +131,12 @@ public class CityManager extends ResourceBasedManager<City> {
         }
     }
 
+    @Override
     public void init() {
         this.cityListMap = new HashMap<>();
     }
 
+    @Override
     public void postInit() {
         precomputeNearest1();
     }
@@ -158,14 +153,14 @@ public class CityManager extends ResourceBasedManager<City> {
                 final City city = cityList.get(i);
                 final KDTree.CartesianPoint cityPoint = cityListPoints.get(i);
 
-                final List<CityDistancer> otherCities = new ArrayList<>(cityList.size());
+                final List<CityDistanceFinder> otherCities = new ArrayList<>(cityList.size());
                 for (int j = 0; j < cityList.size(); j++) {
                     // Original includes self as well as other cities... not filtering self
-                    otherCities.add(new CityDistancer(cityPoint, cityList.get(j), cityListPoints.get(j)));
+                    otherCities.add(new CityDistanceFinder(cityPoint, cityList.get(j), cityListPoints.get(j)));
                 }
                 Collections.sort(otherCities);
 
-                city.setNeighbors(otherCities.stream().map(CityDistancer::getCity).collect(Collectors.toList()));
+                city.setNeighbors(otherCities.stream().map(CityDistanceFinder::getCity).collect(Collectors.toList()));
             }
         }
     }

@@ -88,7 +88,7 @@ public class PostalCodeManager implements Manager {
     }
 
     private Map<? extends String, ? extends PostalCode> readPostalCodeCodeList(Collection<ResourceEntry> entries) {
-        Map<String, PostalCode> postals = new HashMap<>();
+        Map<String, PostalCode> postalCodes = new HashMap<>();
 
         for (ResourceEntry entry : entries) {
             InputStream inputStream = entry.createStream();
@@ -103,7 +103,7 @@ public class PostalCodeManager implements Manager {
                     /* TODO : replace hardcoded locale */
                     PostalCode postalCode = new PostalCode(code, latitude, longitude);
                     this.postalCodeList.add(postalCode);
-                    postals.put(code.toUpperCase(), postalCode);
+                    postalCodes.put(code.toUpperCase(), postalCode);
                 }
                 inputStream.close();
             } catch (IOException | NullPointerException e) {
@@ -111,7 +111,7 @@ public class PostalCodeManager implements Manager {
             }
         }
 
-        return postals;
+        return postalCodes;
     }
 
     public String getPseudorandom(String identifier) {
@@ -135,10 +135,10 @@ public class PostalCodeManager implements Manager {
             return new ArrayList<>();
         }
 
-        LatitudeLongitude latlon = lookup.getLocation();
-        double[] latlonKey = new double[]{latlon.getLatitude(), latlon.getLongitude(), 0};
+        LatitudeLongitude latitudeLongitude = lookup.getLocation();
+        double[] latLonKey = new double[]{latitudeLongitude.getLatitude(), latitudeLongitude.getLongitude(), 0};
 
-        return this.latLonTree.findNearestK(latlonKey, k);
+        return this.latLonTree.findNearestK(latLonKey, k);
     }
 
     /**
@@ -163,10 +163,12 @@ public class PostalCodeManager implements Manager {
         return neighbors.get(random.nextInt(k)).getName();
     }
 
+    @Override
     public String getRandomKey() {
         return this.postalCodeMap.getRandomKey();
     }
 
+    @Override
     public boolean isValidKey(String postalCode) {
         return postalCodeMap.getMap().containsKey(postalCode.toUpperCase());
     }

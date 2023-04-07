@@ -238,6 +238,7 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         }
     }
 
+    @Override
     public String getRandomKey() {
         return getRandomKey(allCountriesName);
     }
@@ -265,6 +266,7 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return null;
     }
 
+    @Override
     public boolean isValidKey(String key) {
         MapWithRandomPick<String, K> map = resourceMap.get(allCountriesName);
         return map != null && map.getMap().containsKey(key.toUpperCase());

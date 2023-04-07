@@ -18,12 +18,23 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.mondrian;
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.NumericalRange;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationNode;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MondrianPartition implements Partition {
 
@@ -54,6 +65,7 @@ public class MondrianPartition implements Partition {
         return sum != 0;
     }
 
+    @Override
     public IPVDataset getMember() {
         return this.member;
     }
@@ -77,6 +89,7 @@ public class MondrianPartition implements Partition {
         return middle;
     }
 
+    @Override
     public int size() {
         return member.getNumberOfRows();
     }
@@ -446,6 +459,7 @@ public class MondrianPartition implements Partition {
         }
     }
 
+    @Override
     public double getNormalizedWidth(int columnIndex) {
         ColumnInformation columnInformation = columnInformationList.get(columnIndex);
         double dividend;
