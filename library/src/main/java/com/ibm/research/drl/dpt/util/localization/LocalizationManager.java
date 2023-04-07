@@ -23,7 +23,16 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 public class LocalizationManager {
     private static final String COMMON = "_common";
@@ -54,7 +63,7 @@ public class LocalizationManager {
         this.registeredResources = new HashMap<>();
         this.countryCommonMap = new HashMap<>();
 
-        try (InputStream is = getClass().getResourceAsStream("/localization.properties")) {
+        try (InputStream is = LocalizationManager.class.getResourceAsStream("/localization.properties")) {
             if (null != is) {
                 Properties properties = new Properties();
                 properties.load(is);
