@@ -28,6 +28,7 @@ public class Race implements LocalizedEntity, ProbabilisticEntity {
      *
      * @return the name country code
      */
+    @Override
     public String getNameCountryCode() {
         return nameCountryCode;
     }

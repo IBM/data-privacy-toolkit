@@ -27,6 +27,7 @@ public class Hospital implements LocalizedEntity {
      *
      * @return the country code
      */
+    @Override
     public String getNameCountryCode() {
         return countryCode;
     }
