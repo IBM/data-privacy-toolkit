@@ -41,49 +41,50 @@ public class DatasetGeneralizerTest {
     @Test
     public void testMaintainsOrder() throws Exception {
         // 0:0:1:2:2
+        try (InputStream inputStream = DatasetGeneralizerTest.class.getResourceAsStream("/random1_height_weight_with_index.txt")) {
+            IPVDataset originalDataset = IPVDataset.load(inputStream, false, ',', '"', false);
 
-        IPVDataset originalDataset = IPVDataset.load(DatasetGeneralizerTest.class.getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
+            GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation()); //index, 0
+            columnInformation.add(new DefaultColumnInformation()); // 1
+            columnInformation.add(new DefaultColumnInformation()); // 2
+            columnInformation.add(new DefaultColumnInformation()); // 3
+            columnInformation.add(new DefaultColumnInformation()); // 4
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation()); //zipcode, 6
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation()); // 9
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(heightHierarchy, ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
 
-        GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation()); //index, 0
-        columnInformation.add(new DefaultColumnInformation()); // 1
-        columnInformation.add(new DefaultColumnInformation()); // 2
-        columnInformation.add(new DefaultColumnInformation()); // 3
-        columnInformation.add(new DefaultColumnInformation()); // 4
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation()); //zipcode, 6
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation()); // 9
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(heightHierarchy, ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
+            int raceIndex = 8;
 
-        int raceIndex = 8;
+            IPVDataset anonymizedDataset = DatasetGeneralizer.generalize(originalDataset, columnInformation, new int[]{0, 0, 1, 2, 2});
 
-        IPVDataset anonymizedDataset = DatasetGeneralizer.generalize(originalDataset, columnInformation, new int[]{0, 0, 1, 2, 2});
+            assertEquals(anonymizedDataset.getNumberOfRows(), originalDataset.getNumberOfRows());
 
-        assertEquals(anonymizedDataset.getNumberOfRows(), originalDataset.getNumberOfRows());
+            for (int i = 0; i < anonymizedDataset.getNumberOfRows(); i++) {
+                String originalIndex = originalDataset.get(i, 0);
+                String anonIndex = anonymizedDataset.get(i, 0);
 
-        for (int i = 0; i < anonymizedDataset.getNumberOfRows(); i++) {
-            String originalIndex = originalDataset.get(i, 0);
-            String anonIndex = anonymizedDataset.get(i, 0);
+                assertEquals(originalIndex, anonIndex);
 
-            assertEquals(originalIndex, anonIndex);
+                String originalRace = originalDataset.get(i, raceIndex);
+                String anonymizedRace = anonymizedDataset.get(i, raceIndex);
 
-            String originalRace = originalDataset.get(i, raceIndex);
-            String anonymizedRace = anonymizedDataset.get(i, raceIndex);
-
-            assertNotEquals(originalRace, anonymizedRace);
+                assertNotEquals(originalRace, anonymizedRace);
+            }
         }
     }
 
     @Test
     public void testShouldPropagateHeaders() throws Exception {
         IPVDataset originalDataset;
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/olaAges.csv")) {
+        try (InputStream inputStream = DatasetGeneralizerTest.class.getResourceAsStream("/olaAges.csv")) {
             originalDataset = IPVDataset.load(inputStream, true, ',', '"', false);
         }
 
