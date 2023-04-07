@@ -59,6 +59,7 @@ public class HypergeometricRiskMetric implements RiskMetric {
         return Fk;
     }
 
+    @Override
     public double report() {
         double risk = 0.0;
 

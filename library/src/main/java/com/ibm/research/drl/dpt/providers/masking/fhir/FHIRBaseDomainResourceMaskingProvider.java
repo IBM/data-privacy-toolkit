@@ -58,6 +58,7 @@ public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskin
     }
 
 
+    @Override
     public JsonNode mask(JsonNode obj) {
         if (obj == null || obj.isNull()) {
             return NullNode.getInstance();

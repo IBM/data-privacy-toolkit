@@ -68,6 +68,7 @@ public class LOMaskingProvider implements MaskingProvider {
         return randomMaskingProvider.mask(identifier);
     }
 
+    @Override
     public String toString() {
         return "LO," + this.entityType.toString();
     }
