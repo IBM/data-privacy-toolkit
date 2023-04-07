@@ -66,6 +66,7 @@ public final class IdentifiedType implements Comparable<IdentifiedType>, Seriali
         return Long.compare(this.count, o.count);
     }
 
+    @Override
     public int hashCode() {
         return this.typeName.hashCode();
     }

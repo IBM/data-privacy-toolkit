@@ -67,6 +67,7 @@ public class RelationshipOperand implements Serializable {
         return this.type;
     }
 
+    @Override
     public String toString() {
         if (this.type != null)
             return this.name + ":" + this.type.name();
