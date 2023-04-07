@@ -31,6 +31,7 @@ public interface Record {
 
     void setFieldValue(String fieldReference, byte[] value);
 
+    @Override
     String toString();
 
     byte[] toBytes();

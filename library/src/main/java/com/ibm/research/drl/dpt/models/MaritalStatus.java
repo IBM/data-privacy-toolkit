@@ -32,6 +32,7 @@ public class MaritalStatus implements LocalizedEntity {
      *
      * @return the name country code
      */
+    @Override
     public String getNameCountryCode() {
         return nameCountryCode;
     }

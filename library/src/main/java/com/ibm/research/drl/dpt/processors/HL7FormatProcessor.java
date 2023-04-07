@@ -47,6 +47,7 @@ public class HL7FormatProcessor extends FormatProcessor {
         return true;
     }
 
+    @Override
     public Record maskRecord(Record record, MaskingProviderFactory maskingProvidersFactory, Set<String> alreadyMaskedFields, DataMaskingOptions dataMaskingOptions) {
         MaskingConfiguration maskingConfiguration = maskingProvidersFactory.getConfigurationForField("");
         Record masked = super.maskRecord(record, maskingProvidersFactory, alreadyMaskedFields, dataMaskingOptions);

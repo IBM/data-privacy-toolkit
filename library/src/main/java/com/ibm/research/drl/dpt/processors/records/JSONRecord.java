@@ -97,6 +97,7 @@ public final class JSONRecord extends MultipathRecord {
         return node;
     }
 
+    @Override
     public Iterable<String> generatePaths(String pattern) {
         List<String> pointers = Arrays.asList(pattern.split("/"));
 
@@ -248,15 +249,18 @@ public final class JSONRecord extends MultipathRecord {
         return node.toString();
     }
 
+    @Override
     public String getBasepath(String path) {
         int idx = path.lastIndexOf('/');
         return path.substring(0, idx + 1);
     }
 
+    @Override
     public boolean isAbsolute(String fieldName) {
         return fieldName.startsWith("/");
     }
 
+    @Override
     public boolean isSingleElement(String fieldIdentifier) {
         return !fieldIdentifier.contains("*");
     }
