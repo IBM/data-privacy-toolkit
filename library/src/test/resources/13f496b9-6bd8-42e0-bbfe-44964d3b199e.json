@@ -1,0 +1,66 @@
+{
+  "hierarchies" : {
+    "AgasGroups" : [ [ "1", "0-9", "0-99" ], [ "2", "0-9", "0-99" ], [ "3", "0-9", "0-99" ], [ "4", "0-9", "0-99" ], [ "5", "0-9", "0-99" ], [ "6", "0-9", "0-99" ], [ "7", "0-9", "0-99" ], [ "8", "0-9", "0-99" ], [ "9", "0-9", "0-99" ], [ "10", "10-19", "0-99" ], [ "11", "10-19", "0-99" ], [ "12", "10-19", "0-99" ], [ "13", "10-19", "0-99" ], [ "14", "10-19", "0-99" ], [ "15", "10-19", "0-99" ], [ "16", "10-19", "0-99" ], [ "17", "10-19", "0-99" ], [ "18", "10-19", "0-99" ], [ "19", "10-19", "0-99" ], [ "20", "20-99", "0-99" ], [ "99", "20-99", "0-99" ] ],
+    "GendersSingleCharGenderHebrew" : [ [ "ז", "*" ], [ "נ", "*" ] ]
+  },
+  "columnInformation" : [ {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "QUASI",
+    "isCategorical" : true,
+    "hierarchy" : "AgasGroups",
+    "weight" : 0.15,
+    "maximumLevel" : 3,
+    "isForLinking" : true
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "QUASI",
+    "isCategorical" : true,
+    "hierarchy" : "GendersSingleCharGenderHebrew",
+    "weight" : 0.25,
+    "maximumLevel" : 2,
+    "isForLinking" : true
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  }, {
+    "type" : "NORMAL"
+  } ],
+  "privacyConstraints" : [ {
+    "name" : "k",
+    "k" : 2
+  } ],
+  "options" : {
+    "supression" : 0.0
+  },
+  "informationLoss" : "NUE",
+  "delimiter" : ",",
+  "hasHeader" : true,
+  "quoteChar" : "\"",
+  "trimFields": false,
+  
+  "estimateUniqueness" : true,
+  "riskMetric" : "BINOM",
+  "riskMetricOptions" : {
+    "useGlobalP" : false,
+    "N" : 8000000
+  }
+}

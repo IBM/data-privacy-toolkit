@@ -226,68 +226,27 @@ public class NonUniformEntropyTest {
 
     @Test
     public void testWithOLAAndSuppression() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        try (InputStream inputStream = NonUniformEntropyTest.class.getResourceAsStream("/random1_height_weight.txt")) {
+            IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
 
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation()); //zipcode
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation()); //zipcode
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
 
-        int k = 10;
-        double suppression = 20.0;
-        
-        List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-        privacyConstraints.add(new KAnonymity(k));
+            int k = 10;
+            double suppression = 20.0;
 
-        OLA ola = new OLA();
-        OLAOptions olaOptions = new OLAOptions(suppression);
-        ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
-
-        IPVDataset anonymized = ola.apply();
-
-        assertTrue(ola.reportSuppressionRate() > 0);
-        
-        NonUniformEntropy entropy = new NonUniformEntropy();
-        entropy.initialize(original, anonymized, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformation, ola.reportBestNode().getValues(), null);
-
-        assertNotEquals(0.0, entropy.report());
-    }
-
-    @Test
-    public void testWithOLAAndSuppressionUpperBoundUnchanged() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
-
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation()); //zipcode
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-
-        int[] kValues  = new int[] {2, 4, 5, 8, 10};
-        double suppression = 20.0;
-
-        double lastUpper = Double.NaN;
-        
-        for(int k: kValues) {
             List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
             privacyConstraints.add(new KAnonymity(k));
 
@@ -297,14 +256,59 @@ public class NonUniformEntropyTest {
 
             IPVDataset anonymized = ola.apply();
 
+            assertTrue(ola.reportSuppressionRate() > 0);
+
             NonUniformEntropy entropy = new NonUniformEntropy();
             entropy.initialize(original, anonymized, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformation, ola.reportBestNode().getValues(), null);
-            
-            if (!Double.isNaN(lastUpper)) {
-                assertEquals(lastUpper, entropy.getUpperBound(), 0.000000001);
+
+            assertNotEquals(0.0, entropy.report());
+        }
+    }
+
+    @Test
+    public void testWithOLAAndSuppressionUpperBoundUnchanged() throws Exception {
+        try (InputStream inputStream = NonUniformEntropyTest.class.getResourceAsStream("/random1_height_weight.txt")) {
+            IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
+
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation()); //zipcode
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+
+            int[] kValues = new int[]{2, 4, 5, 8, 10};
+            double suppression = 20.0;
+
+            double lastUpper = Double.NaN;
+
+            for (int k : kValues) {
+                List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+                privacyConstraints.add(new KAnonymity(k));
+
+                OLA ola = new OLA();
+                OLAOptions olaOptions = new OLAOptions(suppression);
+                ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
+
+                IPVDataset anonymized = ola.apply();
+
+                NonUniformEntropy entropy = new NonUniformEntropy();
+                entropy.initialize(original, anonymized, ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformation, ola.reportBestNode().getValues(), null);
+
+                if (!Double.isNaN(lastUpper)) {
+                    assertEquals(lastUpper, entropy.getUpperBound(), 0.000000001);
+                }
+
+                lastUpper = entropy.getUpperBound();
             }
-            
-            lastUpper = entropy.getUpperBound();
         }
     }
     
@@ -374,12 +378,10 @@ public class NonUniformEntropyTest {
     }
     
     @Test
-    @Disabled("Dataset requires validation")
     public void testIssueWithUpperBound() throws Exception {
-        InputStream is = this.getClass().getResourceAsStream("/13f496b9-6bd8-42e0-bbfe-44964d3b199e.csv");
-        IPVDataset dataset = IPVDataset.load(is, true, ',', '"', false);
-
-        try (InputStream confStream = this.getClass().getResourceAsStream("/13f496b9-6bd8-42e0-bbfe-44964d3b199e.json")) {
+        try (InputStream confStream = DatasetGeneralizerTest.class.getResourceAsStream("/13f496b9-6bd8-42e0-bbfe-44964d3b199e.json");
+             InputStream is = DatasetGeneralizerTest.class.getResourceAsStream("/13f496b9-6bd8-42e0-bbfe-44964d3b199e.csv");) {
+            IPVDataset dataset = IPVDataset.load(is, true, ',', '"', false);
             AnonymizationOptions anonymizationOptions = new ObjectMapper().readValue(confStream, AnonymizationOptions.class);
 
             OLA ola = new OLA();

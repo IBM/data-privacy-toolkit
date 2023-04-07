@@ -19,9 +19,9 @@ under the License.
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,18 +31,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class FHIRNullMaskingProviderTest {
-    private final ObjectMapper mapper = new ObjectMapper();
     private FHIRNullMaskingProvider maskingProvider;
 
     @BeforeEach
     public void setUp() {
-        maskingProvider = new FHIRNullMaskingProvider(new DefaultMaskingConfiguration(), Collections.EMPTY_SET, null);
+        maskingProvider = new FHIRNullMaskingProvider(new DefaultMaskingConfiguration(), Collections.emptySet(), null);
     }
 
     @Test
     public void theMaskingProvidersReplaceANodeWithNull() throws Exception {
         String testJson1 = "{\"test\":\"something\"}";
-        JsonNode tree = mapper.readTree(testJson1);
+        JsonNode tree = JsonUtils.MAPPER.readTree(testJson1);
 
         JsonNode node = maskingProvider.mask(tree.get("test"));
 
