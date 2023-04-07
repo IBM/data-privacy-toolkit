@@ -28,7 +28,21 @@ the final jar file in the `/build/libs` subfolder.
 
 ## Dependency declaration
 
-DPT library is publicly available in MavenCentral.
+DPT library is publicly available in the OSS repositories of MavenCentral.
+
+```kotlin
+repositories {
+    repository {
+        maven {
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+        }
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+        }
+    }
+}
+```
+
 Therefore, the library can be used in any Java/Scala/Kotlin project by adding it as a traditional dependency.
 Examples are in the following.
 
@@ -49,4 +63,4 @@ dependencies {
 </dependency>
 ```
 
-where `dpt_version` is a variable specifying the latest version of the library, currently `6.0.0`.
+where `dpt_version` is a variable specifying the latest version of the library, currently `6.0.0-SNAPSHOT`.
