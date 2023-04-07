@@ -18,7 +18,21 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.mondrian;
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithm;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ClusteringAnonUtils;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformationGenerator;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.InMemoryPartition;
+import com.ibm.research.drl.dpt.anonymization.NumericalRange;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
+import com.ibm.research.drl.dpt.anonymization.SensitiveColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.TransformationType;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
@@ -29,7 +43,12 @@ import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Mondrian implements AnonymizationAlgorithm {
     private IPVDataset dataset;
@@ -70,10 +89,12 @@ public class Mondrian implements AnonymizationAlgorithm {
      *
      * @return the partitions
      */
+    @Override
     public List<Partition> getOriginalPartitions() {
         return this.partitions;
     }
 
+    @Override
     public List<Partition> getAnonymizedPartitions() {
         return this.anonymizedPartitions;
     }
@@ -243,9 +264,6 @@ public class Mondrian implements AnonymizationAlgorithm {
         return 0.0;
     }
 
-    private void initialize() {
-    }
-
     private List<ColumnInformation> buildColumnInformationList(IPVDataset dataset, Collection<IPVVulnerability> vulnerabilities,
                                                                Collection<String> sensitiveFields, Map<String, ProviderType> fieldTypes) {
         List<ColumnInformation> columnInformationList = new ArrayList<>(dataset.getNumberOfColumns());
@@ -326,8 +344,6 @@ public class Mondrian implements AnonymizationAlgorithm {
         this.anonymizedPartitions = new ArrayList<>();
 
         AnonymizationUtils.initializeConstraints(dataset, columnInformationList, privacyConstraints);
-
-        initialize();
 
         return this;
 

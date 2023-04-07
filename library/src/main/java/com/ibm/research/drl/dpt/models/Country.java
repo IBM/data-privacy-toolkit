@@ -37,6 +37,7 @@ public class Country implements Location, LocalizedEntity {
      *
      * @return the name country code
      */
+    @Override
     public String getNameCountryCode() {
         return nameCountryCode;
     }
@@ -88,6 +89,7 @@ public class Country implements Location, LocalizedEntity {
         return this.continent;
     }
 
+    @Override
     public LatitudeLongitude getLocation() {
         return this.latitudeLongitude;
     }

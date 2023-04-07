@@ -50,6 +50,7 @@ public class City implements Location, LocalizedEntity {
      *
      * @return the name country code
      */
+    @Override
     public String getNameCountryCode() {
         return this.nameCountryCode;
     }
@@ -72,6 +73,7 @@ public class City implements Location, LocalizedEntity {
         this.neighbors = neighbors;
     }
 
+    @Override
     public LatitudeLongitude getLocation() {
         return this.latitudeLongitude;
     }

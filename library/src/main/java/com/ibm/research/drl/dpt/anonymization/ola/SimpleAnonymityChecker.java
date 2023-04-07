@@ -18,7 +18,14 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.ola;
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.ContentRequirements;
+import com.ibm.research.drl.dpt.anonymization.DatasetGeneralizer;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
+import com.ibm.research.drl.dpt.anonymization.VirtualPartition;
 import com.ibm.research.drl.dpt.anonymization.informationloss.DiscernibilityStar;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetric;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
@@ -45,6 +52,7 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
         return true;
     }
 
+    @Override
     public double calculateSuppressionRate(LatticeNode node) {
         List<Partition> partitions;
 
@@ -95,7 +103,6 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
         this.privacyConstraintsContentRequirements = AnonymizationUtils.buildPrivacyConstraintContentRequirements(this.privacyConstraints);
         this.sensitiveColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.SENSITIVE);
     }
-
 }
 
 

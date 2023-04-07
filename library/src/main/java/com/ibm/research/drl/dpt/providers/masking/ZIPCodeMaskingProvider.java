@@ -56,7 +56,7 @@ public class ZIPCodeMaskingProvider implements MaskingProvider {
                 identifier = identifier.substring(0, this.requireMinimumPopulationPrefixDigits);
             }
 
-            Integer population = null;
+            int population;
 
             if (this.requireMinimumPopulationUsePrefix) {
                 population = zipCodeManager.getPopulationByPrefix(countryCode, identifier);
@@ -78,8 +78,6 @@ public class ZIPCodeMaskingProvider implements MaskingProvider {
 
         return randomZip;
     }
-
-
 }
 
 

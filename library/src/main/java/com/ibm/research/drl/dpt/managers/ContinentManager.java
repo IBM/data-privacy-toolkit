@@ -47,6 +47,7 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
         super();
     }
 
+    @Override
     public Collection<Continent> getItemList() {
         return getValues();
     }
@@ -128,6 +129,7 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
         }
     }
 
+    @Override
     public void postInit() {
         precomputeNearest();
     }
@@ -156,5 +158,4 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
 
         return neighbors.get(random.nextInt(k)).getName();
     }
-
 }

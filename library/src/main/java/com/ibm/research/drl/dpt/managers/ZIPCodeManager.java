@@ -109,6 +109,7 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
     }
 
 
+    @Override
     public void init() {
         this.zipCodeMapThreeDigits = new HashMap<String, Map<String, ZIPCode>>();
     }
@@ -124,7 +125,7 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
         return zipCode.getPopulation();
     }
 
-    public Integer getPopulationByPrefix(String countryCode, String zipCode) {
+    public int getPopulationByPrefix(String countryCode, String zipCode) {
         if (zipCode.length() < this.prefixDigits) {
             return 0;
         }
@@ -141,8 +142,7 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
             return 0;
         }
 
-        Integer population = results.getPopulation();
-        return population;
+        return results.getPopulation();
     }
 
     @Override
