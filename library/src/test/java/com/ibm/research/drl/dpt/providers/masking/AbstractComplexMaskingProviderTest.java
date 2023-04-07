@@ -40,6 +40,7 @@ public class AbstractComplexMaskingProviderTest {
             this.fieldConfiguration = getConfigurationForSubfield("fhir.location.identifier", maskingConfiguration);
         }
 
+        @Override
         public String mask(String obj) { return null; }
 
         public MaskingConfiguration getFieldConfigurationForTest() {

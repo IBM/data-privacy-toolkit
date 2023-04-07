@@ -65,6 +65,7 @@ public abstract class AbstractComplexMaskingProvider<K> implements MaskingProvid
         return maskedFields.contains(fieldPath);
     }
 
+    @Override
     public String mask(String identifier) {
         return null;
     }

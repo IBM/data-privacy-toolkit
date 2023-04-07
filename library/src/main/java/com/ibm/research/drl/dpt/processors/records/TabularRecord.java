@@ -27,6 +27,7 @@ public abstract class TabularRecord implements Record {
     protected String[] data;
     protected Map<String, Integer> fieldNames;
 
+    @Override
     public Iterable<String> getFieldReferences() {
         return fieldNames.keySet();
     }
@@ -79,6 +80,7 @@ public abstract class TabularRecord implements Record {
 
     protected abstract String formatRecord();
 
+    @Override
     public final String toString() {
         return formatRecord();
     }
