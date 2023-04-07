@@ -19,11 +19,21 @@ under the License.
 package com.ibm.research.drl.dpt.anonymization.kmeans;
 
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ClusteringAnonUtils;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DummySuppressionReassignment extends StrategyImpl {
@@ -51,14 +61,17 @@ public class DummySuppressionReassignment extends StrategyImpl {
         this.sensitiveColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.SENSITIVE);
     }
 
+    @Override
     public Long getSuppressedRows() {
         return suppressedRows;
     }
 
+    @Override
     public List<Partition> getOriginalPartitions() {
         return partitions;
     }
 
+    @Override
     public List<Partition> getAnonymizedPartitions() {
         return anonymizedPartitions;
     }

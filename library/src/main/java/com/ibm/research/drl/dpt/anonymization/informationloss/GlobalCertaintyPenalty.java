@@ -101,6 +101,7 @@ public class GlobalCertaintyPenalty implements InformationMetric {
      *
      * @return the double
      */
+    @Override
     public double report() {
         int totalRecords = anonymized.getNumberOfRows();
         int d = numberOfQuasiColumns();

@@ -87,6 +87,7 @@ public class Discernibility implements InformationMetric {
      *
      * @return the double
      */
+    @Override
     public double report() {
         double value = 0.0;
 
