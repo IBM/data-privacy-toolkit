@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.util.Histogram;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,7 +34,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TClosenessTest {
-  
     @Test
     @Disabled
     public void testHierarchicalDistance() {
@@ -83,67 +83,70 @@ public class TClosenessTest {
         long totalCount = 9L;
 
         double distance = TCloseness.equalDistance(partitionValues, totalHistogram, totalCount);
-        System.out.println(distance);
-
     }
     
     @Test
     public void testNumeric() throws Exception {
+        try (InputStream input = TClosenessTest.class.getResourceAsStream("/100_with_id.csv")) {
+            IPVDataset dataset = IPVDataset.load(input, false, ',', '"', false);
 
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/100_with_id.csv"), false, ',', '"', false);
-        
-        List<ColumnInformation> columnInformationList = new ArrayList<>();
-        columnInformationList.add(new NumericalRange(Collections.emptyList(), ColumnType.SENSITIVE));
-        for(int i = 1; i < dataset.getNumberOfColumns(); i++) {
-            columnInformationList.add(new DefaultColumnInformation());
+            List<ColumnInformation> columnInformationList = new ArrayList<>();
+            columnInformationList.add(new NumericalRange(Collections.emptyList(), ColumnType.SENSITIVE));
+            for (int i = 1; i < dataset.getNumberOfColumns(); i++) {
+                columnInformationList.add(new DefaultColumnInformation());
+            }
+
+            List<Integer> sensitiveColumns = List.of(0);
+
+            TCloseness tCloseness = new TCloseness(0.5);
+            tCloseness.initialize(dataset, columnInformationList);
+
+            Partition partition = new InMemoryPartition(dataset.getValues());
+            assertTrue(tCloseness.check(partition, sensitiveColumns));
         }
-        
-        List<Integer> sensitiveColumns = List.of(0);
-        
-        TCloseness tCloseness = new TCloseness(0.5);
-        tCloseness.initialize(dataset, columnInformationList);
-
-        Partition partition = new InMemoryPartition(dataset.getValues());
-        assertTrue(tCloseness.check(partition, sensitiveColumns));
     }
 
     @Test
     public void testCategorical() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/100_with_id.csv"), false, ',', '"', false);
+        try (InputStream input = TClosenessTest.class.getResourceAsStream("/100_with_id.csv")) {
+            IPVDataset dataset = IPVDataset.load(input, false, ',', '"', false);
 
-        List<ColumnInformation> columnInformationList = new ArrayList<>();
-        columnInformationList.add(new CategoricalInformation(null, ColumnType.SENSITIVE)); 
-        for(int i = 1; i < dataset.getNumberOfColumns(); i++) {
-            columnInformationList.add(new DefaultColumnInformation());
+            List<ColumnInformation> columnInformationList = new ArrayList<>();
+            columnInformationList.add(new CategoricalInformation(null, ColumnType.SENSITIVE));
+            for (int i = 1; i < dataset.getNumberOfColumns(); i++) {
+                columnInformationList.add(new DefaultColumnInformation());
+            }
+
+            List<Integer> sensitiveColumns = List.of(0);
+
+            TCloseness tCloseness = new TCloseness(0.5);
+            tCloseness.initialize(dataset, columnInformationList);
+
+            Partition partition = new InMemoryPartition(dataset.getValues());
+            assertTrue(tCloseness.check(partition, sensitiveColumns));
         }
-
-        List<Integer> sensitiveColumns = List.of(0);
-
-        TCloseness tCloseness = new TCloseness(0.5);
-        tCloseness.initialize(dataset, columnInformationList);
-
-        Partition partition = new InMemoryPartition(dataset.getValues());
-        assertTrue(tCloseness.check(partition, sensitiveColumns));
     }
 
     @Test
     public void testNumericFail() throws Exception {
+        try (InputStream input = TClosenessTest.class.getResourceAsStream("/tcloseness_fail.csv");
+             InputStream partitionInputStream = TClosenessTest.class.getResourceAsStream("/tcloseness_fail_partition.csv")) {
+            IPVDataset dataset = IPVDataset.load(input, false, ',', '"', false);
 
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/tcloseness_fail.csv"), false, ',', '"', false);
+            List<ColumnInformation> columnInformationList = new ArrayList<>();
+            columnInformationList.add(new NumericalRange(Collections.emptyList(), ColumnType.SENSITIVE));
+            for (int i = 1; i < dataset.getNumberOfColumns(); i++) {
+                columnInformationList.add(new DefaultColumnInformation());
+            }
 
-        List<ColumnInformation> columnInformationList = new ArrayList<>();
-        columnInformationList.add(new NumericalRange(Collections.emptyList(), ColumnType.SENSITIVE));
-        for(int i = 1; i < dataset.getNumberOfColumns(); i++) {
-            columnInformationList.add(new DefaultColumnInformation());
+            List<Integer> sensitiveColumns = List.of(0);
+
+            TCloseness tCloseness = new TCloseness(0.1);
+            tCloseness.initialize(dataset, columnInformationList);
+
+            Partition partition = new InMemoryPartition(IPVDataset.load(partitionInputStream, false, ',', '"', false));
+            assertFalse(tCloseness.check(partition, sensitiveColumns));
         }
-
-        List<Integer> sensitiveColumns = List.of(0);
-
-        TCloseness tCloseness = new TCloseness(0.1);
-        tCloseness.initialize(dataset, columnInformationList);
-
-        Partition partition = new InMemoryPartition(IPVDataset.load(this.getClass().getResourceAsStream("/tcloseness_fail_partition.csv"), false, ',', '"', false));
-        assertFalse(tCloseness.check(partition, sensitiveColumns));
     }
 
 
