@@ -1,6 +1,6 @@
 # Data Privacy Toolkit - CLI
 
-This project contains the command line interface (CLI), and the corresponding Docker image, of the Data Privacy Toolkit (DPT).
+This project contains the command line interface (CLI) and the corresponding Docker image of the Data Privacy Toolkit (DPT)
 Refer to the [documentation](../docs/toolkit/README.md) for information about the offered capabilities.
 
 ## Requirements
@@ -13,7 +13,7 @@ The DPT library is a Java project, and it is currently being tested against the 
 * Amazon Corretto Build of OpenJDK 11
 * Amazon Corretto Build of OpenJDK 17
 
-and it currently builds using gradle version 8.0.2, offering gradle wrapper as a convenience tool.
+It currently builds using gradle version 8.0.2, offering gradle wrapper as a convenience tool.
 
 ## Building the project as self-contained jar
 
@@ -25,8 +25,7 @@ The CLI can be tested by running:
 ./gradlew build
 ```
 
-This gradle task will compile the project, execute all the tests specified in the `/src/test/java` subfolder, and create
-the final jar file in the `/build/libs` subfolder.
+This gradle task will compile the project, execute all the tests specified in the `/src/test/java` subfolder, and it will create the final jar file in the `/build/libs` subfolder.
 
 Running the following command gradle will create the uberjar, i.e. a jar file that also contains all the dependencies required to run DPT as an application.
 ```bash
@@ -40,7 +39,7 @@ java -jar build/libs/data-privacy-toolkit-cli-${VERSION}-all.jar
 ```
 
 where `VERSION` is the current version of the project. At the moment of writing this value is set to `6.0.0-SNAPSHOT`.
-Refer to the `version` value in `build.gradle` for more updated reference.
+Refer to the `version` value in `build.gradle` for an updated reference.
 
 ### Note
 The process of creating the jar with the dependencies does not pack models that might be required by the free text processing capabilities of the toolkit.
@@ -67,9 +66,9 @@ docker run --rm -it data-privacy-toolkit:local
 ## Pulling image from Quay.io
 
 New versions of the DPT docker image are automatically deployed to the image registry [`https://quay.io`](https://quay.io) by the CI/CD pipeline.
-Namely, every PR to the `main` branch will cause a new docker image to tbe available in the registry.
+Namely, every PR to the `main` branch will cause a new docker image to be available in the registry.
 More precisely, the deployment steps of the CI/CD pipeline (see corresponding [workflow](../.github/workflows/deploy-toolkit.yml)) will deploy two tags for the image.
-First, it will push an image having tag set to the current GIT commit hash, and it will then tag the same image as the new `latest`.
+First, it will push an image having tag set to the current GIT commit hash, and then it will tag the same image new `latest`.
 
 The following command allows the retrieval of the image currently labeled as `latest`.
 
@@ -89,10 +88,10 @@ The DPT docker image expects certain information to be provided through volume m
 Namely, the image expects the following:
 * The input dataset to be available within a folder mounted as `/input`;
 * The result of the task execution will be made available in folder mounted as `/output`, note that it is generally not recommended to mount `/input` and `/output` on the same folder;
-* The configuration should to be written in a file named `config.json` and it should be made available within a folder mounted as `/config`;
+* The configuration should be written in a file named `config.json` and it should be made available within a folder mounted as `/config`;
 * Optionally, the file structures created by the persistency/consistency features of DPT can be saved by mounting a folder as `/consistency` 
 
-Thus, the following is docker run command using all options, and assuming the folder local folder `input`, `output`, `config`, and `consistency` are available.
+Thus, the following command is the docker run command using all options and assuming the folders `input`, `output`, `config`, and `consistency` are available in the working directory.
 
 ```bash
 docker run --rm -it \
