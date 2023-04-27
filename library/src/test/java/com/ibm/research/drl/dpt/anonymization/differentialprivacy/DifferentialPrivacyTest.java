@@ -16,7 +16,6 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-
 package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
 import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithm;
@@ -36,13 +35,14 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class DifferentialPrivacyTest {
-    private static String quasiSelection[] = {
+    private static final String[] quasiSelection = {
             "", // Patient Id
             "", // First Name
             "", // Surname
@@ -105,7 +105,7 @@ public class DifferentialPrivacyTest {
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
 
-        for(String quasi: quasiSelection) {
+        for (String quasi : quasiSelection) {
             switch (quasi) {
                 case "":
                     columnInformation.add(new DefaultColumnInformation());
@@ -142,44 +142,46 @@ public class DifferentialPrivacyTest {
         DPError errorFunction = new DPErrorAverageRelative();
 //        long startTime = System.currentTimeMillis();
 
-        for (DPMechanism mechanism: mechanisms) {
+        for (DPMechanism mechanism : mechanisms) {
             System.out.println("\n" + mechanism.getName());
 
             for (int k : kValues) {
                 System.out.printf("k = %d", k);
 
-                IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream(filename), false, ',', '"', false);
-                List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-                privacyConstraints.add(new KAnonymity(k));
+                try (InputStream inputStream = DifferentialPrivacyTest.class.getResourceAsStream(filename)) {
+                    IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
+                    List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+                    privacyConstraints.add(new KAnonymity(k));
 
-                AnonymizationAlgorithm algorithm  = runOLA ?
-                        new OLA().initialize(original, columnInformation, privacyConstraints, olaOptions) :
-                        new Mondrian().initialize(original, columnInformation, privacyConstraints, null);
+                    AnonymizationAlgorithm algorithm = runOLA ?
+                            new OLA().initialize(original, columnInformation, privacyConstraints, olaOptions) :
+                            new Mondrian().initialize(original, columnInformation, privacyConstraints, null);
 
-                final IPVDataset anonymizedDataset = algorithm.apply();
+                    final IPVDataset anonymizedDataset = algorithm.apply();
 
-                System.out.println("\nEps\tAbs\tRel");
+                    System.out.println("\nEps\tAbs\tRel");
 
-                DifferentialPrivacyMechanismOptions dpOptions = new DifferentialPrivacyMechanismOptions(mechanism);
-                dpOptions.getBoundsFromData();
-                dpOptions.DPPerEquivalenceClass(true);
+                    DifferentialPrivacyMechanismOptions dpOptions = new DifferentialPrivacyMechanismOptions(mechanism);
+                    dpOptions.getBoundsFromData();
+                    dpOptions.DPPerEquivalenceClass(true);
 
-                for (double e : epsilonValues) {
-                    double averageRelativeError = 0.0;
+                    for (double e : epsilonValues) {
+                        double averageRelativeError = 0.0;
 
-                    for (int i=0; i<runs; i++) {
-                        dpOptions.setEpsilon(e);
+                        for (int i = 0; i < runs; i++) {
+                            dpOptions.setEpsilon(e);
 
-                        DifferentialPrivacy differentialPrivacy = new DifferentialPrivacy();
-                        differentialPrivacy.initialize(anonymizedDataset, columnInformation, null, dpOptions);
-                        differentialPrivacy.apply();
+                            DifferentialPrivacy differentialPrivacy = new DifferentialPrivacy();
+                            differentialPrivacy.initialize(anonymizedDataset, columnInformation, null, dpOptions);
+                            differentialPrivacy.apply();
 
-                        averageRelativeError += errorFunction.reportError(differentialPrivacy);
+                            averageRelativeError += errorFunction.reportError(differentialPrivacy);
 //                        System.out.printf("Run %2d, post-error, %8d\n", i, System.currentTimeMillis()  - startTime);
-                    }
+                        }
 
-                    System.out.printf("%f\t%f", e, averageRelativeError/runs);
-                    System.out.println("");
+                        System.out.printf("%f\t%f", e, averageRelativeError / runs);
+                        System.out.println();
+                    }
                 }
             }
         }
@@ -282,35 +284,36 @@ public class DifferentialPrivacyTest {
         for (int k : kValues) {
             System.out.printf("k = %d", k);
 
-            IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream(filename), false, ',', '"', false);
-            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-            privacyConstraints.add(new KAnonymity(k));
+            try (InputStream inputStream = DifferentialPrivacyTest.class.getResourceAsStream(filename)) {
+                IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
+                List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+                privacyConstraints.add(new KAnonymity(k));
 
-            AnonymizationAlgorithm algorithm  = runOLA ?
-                    new OLA().initialize(original, columnInformation, privacyConstraints, olaOptions) :
-                    new Mondrian().initialize(original, columnInformation, privacyConstraints, null);
+                AnonymizationAlgorithm algorithm = runOLA ?
+                        new OLA().initialize(original, columnInformation, privacyConstraints, olaOptions) :
+                        new Mondrian().initialize(original, columnInformation, privacyConstraints, null);
 
 
-            final IPVDataset anonymizedDataset = algorithm.apply();
+                final IPVDataset anonymizedDataset = algorithm.apply();
 
-            System.out.println("\nEps\tAbs\tRel");
+                System.out.println("\nEps\tAbs\tRel");
 
-            for (double e : epsilonValues) {
-                double error = 0.0;
-                for (int i=0; i<runs; i++) {
-                    dpOptions.setEpsilon(e);
+                for (double e : epsilonValues) {
+                    double error = 0.0;
+                    for (int i = 0; i < runs; i++) {
+                        dpOptions.setEpsilon(e);
 
-                    DifferentialPrivacy differentialPrivacy = new DifferentialPrivacy();
-                    differentialPrivacy.initialize(anonymizedDataset, columnInformation, null, dpOptions);
-                    differentialPrivacy.apply();
+                        DifferentialPrivacy differentialPrivacy = new DifferentialPrivacy();
+                        differentialPrivacy.initialize(anonymizedDataset, columnInformation, null, dpOptions);
+                        differentialPrivacy.apply();
 
-                    error += errorFunction.reportError(differentialPrivacy);
+                        error += errorFunction.reportError(differentialPrivacy);
+                    }
+
+                    System.out.printf("%f\t%f\n", e, error / runs);
                 }
-
-                System.out.printf("%f\t%f\n", e, error / runs);
             }
         }
-
     }
 
     @Test
@@ -338,7 +341,7 @@ public class DifferentialPrivacyTest {
 
 //      Colorado
         filename = "/colorado_sample_height_weight.txt";
-        String quasiSelection[] = {
+        String[] quasiSelection = {
                 "", // First Name
                 "", // Surname
                 "ZIPCODE",
@@ -406,35 +409,37 @@ public class DifferentialPrivacyTest {
         dpOptions.DPPerEquivalenceClass(true);
 
         for (int k : kValues) {
-            IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream(filename), false, ',', '"', false);
+            try (InputStream inputStream = DifferentialPrivacyTest.class.getResourceAsStream(filename)) {
+                IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
 
-            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-            privacyConstraints.add(new KAnonymity(k));
+                List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+                privacyConstraints.add(new KAnonymity(k));
 
-            AnonymizationAlgorithm algorithm  = runOLA ?
-                    new OLA().initialize(original, columnInformation, privacyConstraints, olaOptions) :
-                    new Mondrian().initialize(original, columnInformation, privacyConstraints, null);
-            final IPVDataset anonymizedDataset = algorithm.apply();
+                AnonymizationAlgorithm algorithm = runOLA ?
+                        new OLA().initialize(original, columnInformation, privacyConstraints, olaOptions) :
+                        new Mondrian().initialize(original, columnInformation, privacyConstraints, null);
+                final IPVDataset anonymizedDataset = algorithm.apply();
 
-            System.out.printf("%d", k);
+                System.out.printf("%d", k);
 
-            for (double e : epsilonValues) {
-                double totalRelMeanError = 0.0;
+                for (double e : epsilonValues) {
+                    double totalRelMeanError = 0.0;
 
-                dpOptions.setEpsilon(e);
+                    dpOptions.setEpsilon(e);
 
-                for (int r=0;r<runs;r++) {
-                    DifferentialPrivacy differentialPrivacy = new DifferentialPrivacy();
-                    differentialPrivacy.initialize(anonymizedDataset, columnInformation, null, dpOptions);
-                    differentialPrivacy.apply();
+                    for (int r = 0; r < runs; r++) {
+                        DifferentialPrivacy differentialPrivacy = new DifferentialPrivacy();
+                        differentialPrivacy.initialize(anonymizedDataset, columnInformation, null, dpOptions);
+                        differentialPrivacy.apply();
 
-                    totalRelMeanError += errorFunction.reportError(differentialPrivacy);
+                        totalRelMeanError += errorFunction.reportError(differentialPrivacy);
+                    }
+
+                    System.out.printf("\t%f", totalRelMeanError / runs);
                 }
 
-                System.out.printf("\t%f", totalRelMeanError / runs);
+                System.out.println();
             }
-
-            System.out.println("");
         }
     }
 }
