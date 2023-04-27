@@ -33,14 +33,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DateOPMTest {
 
     @Test
-    public void testLoadMapping() {
-        InputStream is  = this.getClass().getResourceAsStream("/dateOPM.csv");
+    public void testLoadMapping() throws Exception {
+        try (InputStream is = DateOPMTest.class.getResourceAsStream("/dateOPM.csv");) {
 
-        Map<String, String> map = DateOPM.loadMapping(is);
+            Map<String, String> map = DateOPM.loadMapping(is);
 
-        assertEquals(2, map.size());
-        assertEquals("20130101", map.get("20140101"));
-        assertEquals("20141101", map.get("20150101"));
+            assertEquals(2, map.size());
+            assertEquals("20130101", map.get("20140101"));
+            assertEquals("20141101", map.get("20150101"));
+        }
     }
 
     @Test
