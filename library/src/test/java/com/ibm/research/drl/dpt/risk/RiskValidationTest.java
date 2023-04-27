@@ -18,8 +18,13 @@ under the License.
 */
 package com.ibm.research.drl.dpt.risk;
 
-
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DatasetGeneralizer;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.anonymization.ola.OLA;
@@ -33,7 +38,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 public class RiskValidationTest {
@@ -75,67 +85,70 @@ public class RiskValidationTest {
         riskMetricOptions.put("HRMConfidence", Double.toString(confidence));
        
         String populationResourceName = "/population_10k.txt";
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/sample_1k.txt"), false, ',', '"', false); //TODO: create
-        
-        List<ColumnInformation> columnInformation = getFloridaColumnInformation(); 
-        
-        IntStream.rangeClosed(minK, maxK)
-                .boxed()
-                .forEach(k -> {
-                    for (double suppression = minSuppression; suppression <= maxSuppression; suppression += suppressionInterval) {
-                        final List<PrivacyConstraint> privacyConstraints = Collections.singletonList(new KAnonymity(k));
-                        final OLAOptions options = new OLAOptions(suppression);
+        try (InputStream inputStream = RiskValidationTest.class.getResourceAsStream("/sample_1k.txt")) {
+            IPVDataset originalDataset = IPVDataset.load(inputStream, false, ',', '"', false); //TODO: create
 
-                        final OLA ola = new OLA();
-                        ola.initialize(originalDataset,
-                                columnInformation,
-                                privacyConstraints,
-                                options);
+            List<ColumnInformation> columnInformation = getFloridaColumnInformation();
 
-                        logger.debug("Applying OLA with k = {} and suppression = {}", k, suppression);
+            IntStream.rangeClosed(minK, maxK)
+                    .boxed()
+                    .forEach(k -> {
+                        for (double suppression = minSuppression; suppression <= maxSuppression; suppression += suppressionInterval) {
+                            final List<PrivacyConstraint> privacyConstraints = Collections.singletonList(new KAnonymity(k));
+                            final OLAOptions options = new OLAOptions(suppression);
 
-                        IPVDataset anonymizedDataset = ola.apply();
+                            final OLA ola = new OLA();
+                            ola.initialize(originalDataset,
+                                    columnInformation,
+                                    privacyConstraints,
+                                    options);
 
-                        final List<RiskMetric> metrics = Arrays.asList(
-                                new KRatioMetric(),
-                                new FKRatioMetric(),
-                                new BinomialRiskMetric()
-                        );
+                            logger.debug("Applying OLA with k = {} and suppression = {}", k, suppression);
 
-                        for (RiskMetric metric : metrics) {
-                            String shortName = metric.getShortName();
-                            double riskValue = metric.initialize(originalDataset, anonymizedDataset, columnInformation, k, riskMetricOptions).report();
-                            System.out.printf("%d\t%f\t%s\t%f%n", k, suppression, shortName, riskValue);
+                            IPVDataset anonymizedDataset = ola.apply();
+
+                            final List<RiskMetric> metrics = Arrays.asList(
+                                    new KRatioMetric(),
+                                    new FKRatioMetric(),
+                                    new BinomialRiskMetric()
+                            );
+
+                            for (RiskMetric metric : metrics) {
+                                String shortName = metric.getShortName();
+                                double riskValue = metric.initialize(originalDataset, anonymizedDataset, columnInformation, k, riskMetricOptions).report();
+                                System.out.printf("%d\t%f\t%s\t%f%n", k, suppression, shortName, riskValue);
+                            }
+
+                            try {
+                                double realRisk = calculateRealRisk("/population_10k.txt", anonymizedDataset, columnInformation,
+                                        ola.reportBestNode().getValues());
+                                System.out.printf("%d\t%f\t%s\t%f%n", k, suppression, "REAL", realRisk);
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            }
+                            System.out.println();
                         }
-
-                        try {
-                            double realRisk = calculateRealRisk("/population_10k.txt", anonymizedDataset, columnInformation, 
-                                    ola.reportBestNode().getValues());
-                            System.out.printf("%d\t%f\t%s\t%f%n", k, suppression, "REAL", realRisk);
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        System.out.println();
-                    }
-                });
+                    });
+        }
     }
 
     private double calculateRealRisk(String populationResourceName, IPVDataset anonymizedDataset, 
                                      List<ColumnInformation> columnInformation, int[] levels) throws IOException {
 
-        InputStream originalIS = this.getClass().getResourceAsStream(populationResourceName);
-        
-        Map<String, Integer> anonEQCounters = AnonymizationUtils.generateEQCounters(anonymizedDataset, columnInformation);
-        Map<String, Integer> populationEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(originalIS, columnInformation, levels);
+        try (InputStream originalIS = RiskValidationTest.class.getResourceAsStream(populationResourceName);) {
 
-        int minimumLink = anonEQCounters.values().stream().mapToInt(Integer::intValue).min().orElse(Integer.MAX_VALUE);
-        
-        for(String key: anonEQCounters.keySet()) {
-            Integer linkedWith = populationEQCounters.get(key);
-            minimumLink = Math.min(minimumLink, linkedWith);
+            Map<String, Integer> anonEQCounters = AnonymizationUtils.generateEQCounters(anonymizedDataset, columnInformation);
+            Map<String, Integer> populationEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(originalIS, columnInformation, levels);
+
+            int minimumLink = anonEQCounters.values().stream().mapToInt(Integer::intValue).min().orElse(Integer.MAX_VALUE);
+
+            for (String key : anonEQCounters.keySet()) {
+                Integer linkedWith = populationEQCounters.get(key);
+                minimumLink = Math.min(minimumLink, linkedWith);
+            }
+
+            return 1.0 / (double) minimumLink;
         }
-        
-        return 1.0/(double)minimumLink;
     }
 }
 
