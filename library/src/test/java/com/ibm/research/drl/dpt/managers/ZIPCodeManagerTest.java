@@ -20,7 +20,8 @@ package com.ibm.research.drl.dpt.managers;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ZIPCodeManagerTest {
 
@@ -34,9 +35,8 @@ public class ZIPCodeManagerTest {
     public void testPopulation() {
         ZIPCodeManager zipCodeManager = new ZIPCodeManager(3);
 
-        Integer population = zipCodeManager.getPopulation("US", "00601");
-        assertNotNull(population);
-        assertEquals(18570, population.intValue());
+        int population = zipCodeManager.getPopulation("US", "00601");
+        assertEquals(18570, population);
     }
 
     @Test
@@ -44,30 +44,29 @@ public class ZIPCodeManagerTest {
 
         ZIPCodeManager zipCodeManager = new ZIPCodeManager(3);
 
-        Integer population = zipCodeManager.getPopulationByPrefix("US", "00601");
-        assertNotNull(population);
-        assertEquals(1214568, population.intValue());
+        int population = zipCodeManager.getPopulationByPrefix("US", "00601");
+        assertEquals(1214568, population);
     }
 
     @Test
     public void testInvalidCountry() {
         ZIPCodeManager zipCodeManager = new ZIPCodeManager(3);
 
-        Integer population = zipCodeManager.getPopulationByPrefix("#$@", "00601");
-        assertEquals(0, population.intValue());
+        int population = zipCodeManager.getPopulationByPrefix("#$@", "00601");
+        assertEquals(0, population);
 
         population = zipCodeManager.getPopulation("#$@", "00601");
-        assertEquals(0, population.intValue());
+        assertEquals(0, population);
     }
 
     @Test
     public void testInvalidCode() {
         ZIPCodeManager zipCodeManager = new ZIPCodeManager(3);
 
-        Integer population = zipCodeManager.getPopulationByPrefix("US", "!@$@%%");
-        assertEquals(0, population.intValue());
+        int population = zipCodeManager.getPopulationByPrefix("US", "!@$@%%");
+        assertEquals(0, population);
 
         population = zipCodeManager.getPopulation("US", "!#!#!@#!#!");
-        assertEquals(0, population.intValue());
+        assertEquals(0, population);
     }
 }
