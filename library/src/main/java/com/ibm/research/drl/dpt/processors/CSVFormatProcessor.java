@@ -90,7 +90,7 @@ public class CSVFormatProcessor extends FormatProcessor {
                         logger.debug("Skipping record {} because it contains no fields (corrupt row?)", seenSoFar);
                         continue;
                     }
-                    if (fields == null && 1 == values.length && values[0].trim().equals("")) {
+                    if (fields == null && 1 == values.length && values[0].trim().isEmpty()) {
                         logger.debug("Skipping record {} because it contains only one empty field (corrupt row?)", seenSoFar);
                         continue;
                     }

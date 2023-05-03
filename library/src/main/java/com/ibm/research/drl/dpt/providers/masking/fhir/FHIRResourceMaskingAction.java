@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
@@ -31,7 +32,7 @@ public class FHIRResourceMaskingAction implements Serializable {
     private final boolean delete;
 
     private final MaskingProvider maskingProvider;
-    private final AbstractComplexMaskingProvider abstractComplexMaskingProvider;
+    private final AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider;
 
     public boolean isDelete() {
         return delete;
@@ -53,12 +54,12 @@ public class FHIRResourceMaskingAction implements Serializable {
         return maskingProvider;
     }
 
-    public AbstractComplexMaskingProvider getAbstractComplexMaskingProvider() {
+    public AbstractComplexMaskingProvider<JsonNode> getAbstractComplexMaskingProvider() {
         return abstractComplexMaskingProvider;
     }
 
     public FHIRResourceMaskingAction(String fullPath, String path,
-                                     MaskingProvider maskingProvider, AbstractComplexMaskingProvider abstractComplexMaskingProvider,
+                                     MaskingProvider maskingProvider, AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider,
                                      boolean delete) {
         this.fullPath = fullPath;
         this.path = path;

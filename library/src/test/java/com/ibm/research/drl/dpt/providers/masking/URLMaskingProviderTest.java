@@ -266,7 +266,7 @@ public class URLMaskingProviderTest {
         String maskedResult = urlMaskingProvider.mask(url);
         URL maskedURL = new URL(maskedResult);
         String maskedFile = maskedURL.getFile();
-        assertTrue(maskedFile.equals("") || maskedFile.equals("/"));
+        assertTrue(maskedFile.isEmpty() || maskedFile.equals("/"));
     }
 
     @Test

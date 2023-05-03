@@ -40,7 +40,7 @@ public class KMeans {
     private List<MutableTuple<Double, Double>> findMinMax() {
         List<MutableTuple<Double, Double>> minMaxValues = new ArrayList<>(this.columnsToCluster.size());
 
-        for (Integer column : columnsToCluster) {
+        for (int i = 0; i < columnsToCluster.size(); ++i) {
             minMaxValues.add(new MutableTuple<>(Double.MAX_VALUE, Double.MIN_VALUE));
         }
 

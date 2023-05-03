@@ -47,7 +47,7 @@ public class LatLonKDTree<T extends Location> {
         this.tree = new KDTree<>(points);
     }
 
-    private class LatLonCartesianPoint<T extends Location> extends KDTree.CartesianPoint {
+    private static class LatLonCartesianPoint<T extends Location> extends KDTree.CartesianPoint {
         private final T location;
 
         public LatLonCartesianPoint(T location) {

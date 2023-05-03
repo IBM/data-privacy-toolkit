@@ -148,7 +148,7 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
             }
 
             String[] parts = token.split("=");
-            if (parts.length == 1 || parts[1].equals("")) {
+            if (parts.length == 1 || parts[1].isEmpty()) {
                 maskedTokens[i] = token;
                 continue;
             }
