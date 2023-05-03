@@ -199,7 +199,7 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/sample.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/sample.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream outputStream = new PrintStream(output);) {
@@ -231,7 +231,7 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/books.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream outputStream = new PrintStream(output);) {
@@ -263,7 +263,7 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/books.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream outputStream = new PrintStream(output);) {

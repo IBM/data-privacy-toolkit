@@ -140,6 +140,8 @@ public class CSVFormatProcessorTest {
                     List.of(new YOBIdentifier()),
                     -1
             );
+
+            assertNotNull(identifiedTypes);
         }
     }
 
@@ -252,8 +254,8 @@ public class CSVFormatProcessorTest {
     public void testFirstN() throws Exception {
         try (InputStream inputStream = this.getClass().getResourceAsStream("/random1.txt")) {
 
-            FormatProcessor formatProcessor = new CSVFormatProcessor();
-            Iterable<Record> records = ((CSVFormatProcessor) formatProcessor).extractRecords(inputStream, new CSVDatasetOptions(false, ',', '"', false), 2);
+            CSVFormatProcessor formatProcessor = new CSVFormatProcessor();
+            Iterable<Record> records = formatProcessor.extractRecords(inputStream, new CSVDatasetOptions(false, ',', '"', false), 2);
            
             Iterator<Record> iterator = records.iterator();
             int counter = 0;
@@ -365,19 +367,19 @@ public class CSVFormatProcessorTest {
 
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
-            MappingIterator<String[]> reader = mapper.readerFor(String[].class)
+            try (MappingIterator<String[]> reader = mapper.readerFor(String[].class)
                     .with(
                             CsvSchema.emptySchema()
                                     .withColumnSeparator(',')
                                     .withQuoteChar('"')
-                    )
-                    .readValues(outputStream.toString());
+                    ).readValues(outputStream.toString());) {
 
-            assertThat(reader.next(), is(new String[]{"One","Two","Three"}));
-            assertThat(reader.next(), is(new String[]{"A","","18"}));
-            assertThat(reader.next(), is(new String[]{"B","","20"}));
-            assertThat(reader.next(), is(new String[]{"A","","40"}));
-            assertThat(reader.next(), is(new String[]{"A","","50"}));
+                assertThat(reader.next(), is(new String[]{"One", "Two", "Three"}));
+                assertThat(reader.next(), is(new String[]{"A", "", "18"}));
+                assertThat(reader.next(), is(new String[]{"B", "", "20"}));
+                assertThat(reader.next(), is(new String[]{"A", "", "40"}));
+                assertThat(reader.next(), is(new String[]{"A", "", "50"}));
+            }
         }
     }
 
@@ -406,17 +408,17 @@ public class CSVFormatProcessorTest {
 
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
-            MappingIterator<String[]> reader = mapper.readerFor(String[].class)
+            try (MappingIterator<String[]> reader = mapper.readerFor(String[].class)
                     .with(
                             CsvSchema.emptySchema()
                                     .withColumnSeparator(',')
                                     .withQuoteChar('"')
                     )
-                    .readValues(outputStream.toString());
-
-            assertThat(reader.next(), is(new String[]{"B","20"}));
-            assertThat(reader.next(), is(new String[]{"A","40"}));
-            assertThat(reader.next(), is(new String[]{"A","50"}));
+                    .readValues(outputStream.toString());) {
+                assertThat(reader.next(), is(new String[]{"B", "20"}));
+                assertThat(reader.next(), is(new String[]{"A", "40"}));
+                assertThat(reader.next(), is(new String[]{"A", "50"}));
+            }
         }
 
     }
@@ -447,18 +449,19 @@ public class CSVFormatProcessorTest {
 
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
-            MappingIterator<String[]> reader = mapper.readerFor(String[].class)
+            try (MappingIterator<String[]> reader = mapper.readerFor(String[].class)
                     .with(
                             CsvSchema.emptySchema()
                                     .withColumnSeparator(',')
                                     .withQuoteChar('"')
                     )
-                    .readValues(outputStream.toString());
+                    .readValues(outputStream.toString());) {
 
-            assertThat(reader.next(), is(new String[]{"One","Three"}));
-            assertThat(reader.next(), is(new String[]{"B","20"}));
-            assertThat(reader.next(), is(new String[]{"A","40"}));
-            assertThat(reader.next(), is(new String[]{"A","50"}));
+                assertThat(reader.next(), is(new String[]{"One", "Three"}));
+                assertThat(reader.next(), is(new String[]{"B", "20"}));
+                assertThat(reader.next(), is(new String[]{"A", "40"}));
+                assertThat(reader.next(), is(new String[]{"A", "50"}));
+            }
         }
     }
 
@@ -494,17 +497,18 @@ public class CSVFormatProcessorTest {
 
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
-            MappingIterator<String[]> reader = mapper.readerFor(String[].class)
+            try (MappingIterator<String[]> reader = mapper.readerFor(String[].class)
                     .with(
                             CsvSchema.emptySchema()
                                     .withColumnSeparator(',')
                                     .withQuoteChar('"')
                     )
-                    .readValues(outputStream.toString());
+                    .readValues(outputStream.toString());) {
 
-            assertThat(reader.next(), is(new String[]{"A","B","18"}));
-            assertThat(reader.next(), is(new String[]{"B","C","F5CA38F748A1D6EAF726B8A42FB575C3C71F1864A8143301782DE13DA2D9202B"}));
-            assertThat(reader.next(), is(new String[]{"A","D","D59ECED1DED07F84C145592F65BDF854358E009C5CD705F5215BF18697FED103"}));
+                assertThat(reader.next(), is(new String[]{"A", "B", "18"}));
+                assertThat(reader.next(), is(new String[]{"B", "C", "F5CA38F748A1D6EAF726B8A42FB575C3C71F1864A8143301782DE13DA2D9202B"}));
+                assertThat(reader.next(), is(new String[]{"A", "D", "D59ECED1DED07F84C145592F65BDF854358E009C5CD705F5215BF18697FED103"}));
+            }
         }
     }
 
@@ -536,22 +540,23 @@ public class CSVFormatProcessorTest {
             DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.CSV, DataTypeFormat.CSV,
                     identifiedTypes, false, null, new CSVDatasetOptions(true, ',', '"', false));
 
-            new CSVFormatProcessor().maskStream(inputStream, output, factory, dataMaskingOptions,  Collections.emptySet(),  Collections.emptyMap());
+            new CSVFormatProcessor().maskStream(inputStream, output, factory, dataMaskingOptions, Collections.emptySet(), Collections.emptyMap());
 
             CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
-            MappingIterator<String[]> reader = mapper.readerFor(String[].class)
+            try (MappingIterator<String[]> reader = mapper.readerFor(String[].class)
                     .with(
                             CsvSchema.emptySchema()
                                     .withColumnSeparator(',')
                                     .withQuoteChar('"')
                     )
-                    .readValues(outputStream.toString());
+                    .readValues(outputStream.toString());) {
 
-            assertThat(reader.next(), is(new String[]{"name","surname","age"}));
-            assertThat(reader.next(), is(new String[]{"A","B","4EC9599FC203D176A301536C2E091A19BC852759B255BD6818810A42C5FED14A"}));
-            assertThat(reader.next(), is(new String[]{"B","C","F5CA38F748A1D6EAF726B8A42FB575C3C71F1864A8143301782DE13DA2D9202B"}));
-            assertThat(reader.next(), is(new String[]{"A","D","D59ECED1DED07F84C145592F65BDF854358E009C5CD705F5215BF18697FED103"}));
+                assertThat(reader.next(), is(new String[]{"name", "surname", "age"}));
+                assertThat(reader.next(), is(new String[]{"A", "B", "4EC9599FC203D176A301536C2E091A19BC852759B255BD6818810A42C5FED14A"}));
+                assertThat(reader.next(), is(new String[]{"B", "C", "F5CA38F748A1D6EAF726B8A42FB575C3C71F1864A8143301782DE13DA2D9202B"}));
+                assertThat(reader.next(), is(new String[]{"A", "D", "D59ECED1DED07F84C145592F65BDF854358E009C5CD705F5215BF18697FED103"}));
+            }
         }
     }
 
