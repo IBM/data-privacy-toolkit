@@ -111,7 +111,7 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
             String fullPath = basePath + path;
 
             MaskingProvider maskingProvider = null;
-            AbstractComplexMaskingProvider abstractComplexMaskingProvider = null;
+            AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider = null;
             boolean isDelete = false;
 
             String fhirType = field.getFhirType();
@@ -266,6 +266,7 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
 
     }
 
+    @Override
     public JsonNode mask(JsonNode node) {
         this.fhirBaseDomainResourceMaskingProvider.mask(node);
 

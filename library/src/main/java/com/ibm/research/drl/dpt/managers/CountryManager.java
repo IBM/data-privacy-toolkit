@@ -89,7 +89,7 @@ public class CountryManager extends AbstractManager<Country> {
         MapWithRandomPick<String, Country>[] mapWithRandomPicks = new MapWithRandomPick[specSize];
 
         for (int i = 0; i < mapWithRandomPicks.length; i++) {
-            mapWithRandomPicks[i] = new MapWithRandomPick<>(new HashMap<String, Country>());
+            mapWithRandomPicks[i] = new MapWithRandomPick<>(new HashMap<>());
         }
 
         return mapWithRandomPicks;
@@ -200,7 +200,7 @@ public class CountryManager extends AbstractManager<Country> {
                     addToCountryMap(country, iso2Letter, CountryNameSpecification.ISO2, getAllCountriesName());
                     addToCountryMap(country, iso3Letter, CountryNameSpecification.ISO3, getAllCountriesName());
 
-                    if (!friendlyName.equals("")) {
+                    if (!friendlyName.isEmpty()) {
                         addToCountryMap(country, friendlyName, CountryNameSpecification.NAME, locale);
                         addToCountryMap(country, friendlyName, CountryNameSpecification.NAME, getAllCountriesName());
                     }
@@ -329,7 +329,7 @@ public class CountryManager extends AbstractManager<Country> {
     }
 
     /**
-     * Lookup country country.
+     * Lookup country.
      *
      * @param country the country
      * @param locale  the locale

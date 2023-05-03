@@ -63,7 +63,7 @@ public class FileBackedPersistentMaskingProvider extends AbstractPersistentMaski
         }
     }
 
-    private class FileCache {
+    private static class FileCache {
         private final Map<Integer, String> mappings;
         private final CSVPrinter csvPrinter;
 
