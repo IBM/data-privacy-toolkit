@@ -19,9 +19,9 @@ under the License.
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRHumanName;
 import com.ibm.research.drl.dpt.models.fhir.resources.FHIRPatient;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -32,28 +32,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FHIRPatientMaskingProviderTest {
 
     private String getFileContents(InputStream inputStream) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        try (
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader reader = new BufferedReader(inputStreamReader);
+        ) {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        String         ls = System.getProperty("line.separator");
-        String line;
-        while((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-            stringBuilder.append(ls);
+            StringBuilder stringBuilder = new StringBuilder();
+            String ls = System.getProperty("line.separator");
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append(ls);
+            }
+
+            return stringBuilder.toString();
         }
-
-        return stringBuilder.toString();
 
     }
 
     @Test
     public void testMapping() throws IOException {
-        InputStream inputStream = this.getClass().getResourceAsStream("/fhir/patientExample.json");
-        String contents = getFileContents(inputStream);
+        String contents;
+        try (InputStream inputStream = FHIRPatientMaskingProviderTest.class.getResourceAsStream("/fhir/patientExample.json");) {
+            contents = getFileContents(inputStream);
+        }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        FHIRPatient fhirPatient = objectMapper.readValue(contents, FHIRPatient.class);
+        FHIRPatient fhirPatient = JsonUtils.MAPPER.readValue(contents, FHIRPatient.class);
 
         Collection<FHIRHumanName> names = fhirPatient.getName();
 
@@ -66,10 +70,10 @@ public class FHIRPatientMaskingProviderTest {
         assertEquals(2, name1.getGiven().size());
 
         StringWriter stringWriter = new StringWriter();
-        objectMapper.writeValue(stringWriter, fhirPatient);
+        JsonUtils.MAPPER.writeValue(stringWriter, fhirPatient);
 
         String jsonString = stringWriter.toString();
-        JsonNode node = objectMapper.readTree(jsonString);
+        JsonNode node = JsonUtils.MAPPER.readTree(jsonString);
 
         assertEquals("patient", node.get("resourceType").asText().toLowerCase());
     }

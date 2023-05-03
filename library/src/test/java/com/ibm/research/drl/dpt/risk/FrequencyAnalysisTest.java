@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,50 +35,53 @@ public class FrequencyAnalysisTest {
     
     @Test
     public void testMatches() throws IOException {
-        
-        IPVDataset maskedDataset = IPVDataset.load(this.getClass().getResourceAsStream("/freqAnalysisTest.csv"), false, ',', '"', false);
-        Map<String, String> originalToMasked = new HashMap<>();
-        originalToMasked.put("John", "abc");
-        originalToMasked.put("Jack", "cde");
-        originalToMasked.put("George", "efg");
-        
-        List<String> auxiliaryDataRanked = new ArrayList<>();
-        auxiliaryDataRanked.add("John");
-        auxiliaryDataRanked.add("Jack");
-        auxiliaryDataRanked.add("Thomas");
-        
-        //abc appears 3 times and should match auxiliary John
-        //cde appears 2 times and should match auxiliary Jack
-        //efg appears 1 time and should not match auxiliary Thomas
-        //total records reversed: 5
-        FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis(originalToMasked, auxiliaryDataRanked);
-        
-        assertEquals(5, frequencyAnalysis.successfulMatches(maskedDataset, 0));
+        try (InputStream inputStream = FrequencyAnalysisTest.class.getResourceAsStream("/freqAnalysisTest.csv")) {
+            IPVDataset maskedDataset = IPVDataset.load(inputStream, false, ',', '"', false);
+            Map<String, String> originalToMasked = new HashMap<>();
+            originalToMasked.put("John", "abc");
+            originalToMasked.put("Jack", "cde");
+            originalToMasked.put("George", "efg");
+
+            List<String> auxiliaryDataRanked = new ArrayList<>();
+            auxiliaryDataRanked.add("John");
+            auxiliaryDataRanked.add("Jack");
+            auxiliaryDataRanked.add("Thomas");
+
+            //abc appears 3 times and should match auxiliary John
+            //cde appears 2 times and should match auxiliary Jack
+            //efg appears 1 time and should not match auxiliary Thomas
+            //total records reversed: 5
+            FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis(originalToMasked, auxiliaryDataRanked);
+
+            assertEquals(5, frequencyAnalysis.successfulMatches(maskedDataset, 0));
+        }
     }
 
 
     @Test
     @Disabled
     public void testFloridaExperiment() throws IOException {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/names_1989.txt"), false, ',', '"', false);
+        try (InputStream inputStream = FrequencyAnalysisTest.class.getResourceAsStream("/names_1989.txt");
+             InputStream auxiliaryDataset = FrequencyAnalysisTest.class.getResourceAsStream("/names_auxiliary_ranked.txt")) {
+            IPVDataset originalDataset = IPVDataset.load(inputStream, false, ',', '"', false);
 
-        Map<String, String> originalToMasked = new HashMap<>();
-        for(int i = 0; i < originalDataset.getNumberOfRows(); i++) {
-            String name = originalDataset.get(i, 1).toLowerCase();
-            String maskedName = "" + name.hashCode();
-            originalToMasked.put(name, maskedName);
-            originalDataset.set(i, 1, maskedName); //replace
-        }
+            Map<String, String> originalToMasked = new HashMap<>();
+            for (int i = 0; i < originalDataset.getNumberOfRows(); i++) {
+                String name = originalDataset.get(i, 1).toLowerCase();
+                String maskedName = "" + name.hashCode();
+                originalToMasked.put(name, maskedName);
+                originalDataset.set(i, 1, maskedName); //replace
+            }
 
-        List<String> auxiliaryDataRanked = new ArrayList<>();
-        IPVDataset auxiliary = IPVDataset.load(this.getClass().getResourceAsStream("/names_auxiliary_ranked.txt"), false, ',', '"', false);
-        for(int i = 0; i < auxiliary.getNumberOfRows(); i++) {
-            auxiliaryDataRanked.add(auxiliary.get(i, 0));
+            List<String> auxiliaryDataRanked = new ArrayList<>();
+            IPVDataset auxiliary = IPVDataset.load(auxiliaryDataset, false, ',', '"', false);
+            for (int i = 0; i < auxiliary.getNumberOfRows(); i++) {
+                auxiliaryDataRanked.add(auxiliary.get(i, 0));
+            }
+
+            FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis(originalToMasked, auxiliaryDataRanked);
+            System.out.println(frequencyAnalysis.successfulMatches(originalDataset, 1));
         }
-        
-        FrequencyAnalysis frequencyAnalysis = new FrequencyAnalysis(originalToMasked, auxiliaryDataRanked);
-        System.out.println(frequencyAnalysis.successfulMatches(originalDataset, 1));
     }
-
 }
 
