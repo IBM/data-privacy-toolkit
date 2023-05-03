@@ -37,9 +37,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MondrianTest {
 
@@ -73,43 +85,40 @@ public class MondrianTest {
     public void testMondrianColumnInformationAutoBuild() throws Exception {
         Collection<String> sensitiveFields = new ArrayList<>();
         MondrianOptions options = new MondrianOptions();
+        try (InputStream input = MondrianTest.class.getResourceAsStream("/testNumericOriginal.csv")) {
+            IPVDataset dataset = IPVDataset.load(input, false, ',', '"', false);
 
-        IPVDataset dataset = IPVDataset.load(getClass().getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
+            List<? extends IPVSchemaField> fields = dataset.getSchema().getFields();
 
-        List<? extends IPVSchemaField> fields = dataset.getSchema().getFields();
-        for (IPVSchemaField field : fields) {
-            System.out.println("field: " + field.getName());
-        }
+            ItemSet itemSet = new ItemSet();
+            itemSet.addItem(0);
+            itemSet.addItem(1);
+            IPVVulnerability vulnerability = new IPVVulnerability(itemSet);
+            Collection<IPVVulnerability> vulnerabilities = new ArrayList<>();
+            vulnerabilities.add(vulnerability);
 
-        ItemSet itemSet = new ItemSet();
-        itemSet.addItem(0);
-        itemSet.addItem(1);
-        IPVVulnerability vulnerability = new IPVVulnerability(itemSet);
-        Collection<IPVVulnerability> vulnerabilities = new ArrayList<>();
-        vulnerabilities.add(vulnerability);
+            Map<String, ProviderType> fieldTypes = new HashMap<>();
+            fieldTypes.put("Column 0", ProviderType.NUMERIC);
+            fieldTypes.put("Column 1", ProviderType.NUMERIC);
 
-        Map<String, ProviderType> fieldTypes = new HashMap<>();
-        fieldTypes.put("Column 0", ProviderType.NUMERIC);
-        fieldTypes.put("Column 1", ProviderType.NUMERIC);
+            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+            privacyConstraints.add(new KAnonymity(2));
 
-        List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-        privacyConstraints.add(new KAnonymity(2));
+            Mondrian mondrian = new Mondrian();
+            mondrian.initialize(dataset, vulnerabilities, sensitiveFields, fieldTypes, privacyConstraints, options);
 
-        Mondrian mondrian = new Mondrian();
-        mondrian.initialize(dataset, vulnerabilities, sensitiveFields, fieldTypes, privacyConstraints, options);
+            IPVDataset anonymizedDataset = mondrian.apply();
 
-        IPVDataset anonymizedDataset = mondrian.apply();
+            System.out.println("====== Anonymized Dataset ========");
 
-        System.out.println("====== Anonymized Dataset ========");
+            for (int k = 0; k < anonymizedDataset.getNumberOfRows(); k++) {
+                for (int j = 0; j < anonymizedDataset.getNumberOfColumns(); j++) {
+                    System.out.print(anonymizedDataset.get(k, j) + ",");
+                }
 
-        for (int k = 0; k < anonymizedDataset.getNumberOfRows(); k++) {
-            for (int j = 0; j < anonymizedDataset.getNumberOfColumns(); j++) {
-                System.out.print(anonymizedDataset.get(k, j) + ",");
+                System.out.println();
             }
-
-            System.out.println();
         }
-
     }
 
     @Test
@@ -211,7 +220,7 @@ public class MondrianTest {
                 2,
                 4);
 
-        IPVDataset dataset = IPVDataset.load(getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
 
         Map<String, ProviderType> fieldTypes = new HashMap<>();
         fieldTypes.put("Column 0", ProviderType.NUMERIC);
@@ -233,7 +242,7 @@ public class MondrianTest {
 
         Mondrian mondrian = new Mondrian();
         MondrianOptions mondrianOptions = new MondrianOptions();
-        mondrian.initialize(dataset, vulnerabilities, new ArrayList<String>(), fieldTypes, privacyConstraints, mondrianOptions);
+        mondrian.initialize(dataset, vulnerabilities, new ArrayList<>(), fieldTypes, privacyConstraints, mondrianOptions);
 
         IPVDataset anonymizedDataset = mondrian.apply();
 
@@ -329,6 +338,8 @@ public class MondrianTest {
             mondrian.initialize(dataset, columnInformationList, privacyConstraints, new MondrianOptions()); //dataset, 2, 1, columnInformationList);
 
             IPVDataset anonymizedDataset = mondrian.apply();
+
+            assertThat(anonymizedDataset.getNumberOfRows(), is(dataset.getNumberOfRows()));
         });
     }
 
@@ -408,7 +419,7 @@ public class MondrianTest {
         Map<String, Integer> counters = new HashMap<>();
         for (int i = 0; i < anonymizedDataset.getNumberOfRows(); i++) {
             String value = anonymizedDataset.get(i, 0);
-            counters.merge(value, 1, (a, b) -> a + b);
+            counters.merge(value, 1, Integer::sum);
         }
 
         System.out.println("====== Anonymized Dataset ========");
@@ -473,9 +484,9 @@ public class MondrianTest {
 
     @Test
     public void testMondrianCategoricalCorrectness() throws Exception {
-        IPVDataset dataset = IPVDataset.load(getClass().getResourceAsStream("/testCategoricalOriginal.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/testCategoricalOriginal.csv"), false, ',', '"', false);
 
-        List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();
+        List<ColumnInformation> columnInformationList = new ArrayList<>();
 
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
         hierarchy.add("Scientist", "Worker", "*");
@@ -507,10 +518,9 @@ public class MondrianTest {
     @Test
     @Disabled("Missing data file")
     public void testMondrianCategoricalCorrectness2() throws Exception {
-        IPVDataset dataset = IPVDataset.load(getClass().getResourceAsStream("/testCategoricalOriginal3plus1.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/testCategoricalOriginal3plus1.csv"), false, ',', '"', false);
 
-
-        List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();
+        List<ColumnInformation> columnInformationList = new ArrayList<>();
 
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
         hierarchy.add("Scientist", "Worker");
@@ -539,8 +549,6 @@ public class MondrianTest {
 
     @Test
     public void testMondrianOriginalIsNotMutated() throws Exception {
-
-        GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new DefaultColumnInformation());
@@ -553,16 +561,16 @@ public class MondrianTest {
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
         columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(ColumnInformationGenerator.generateNumericalRange(IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false),
+        columnInformation.add(ColumnInformationGenerator.generateNumericalRange(IPVDataset.load(MondrianTest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false),
                 11, ColumnType.QUASI));
         columnInformation.add(new DefaultColumnInformation());
 
         int[] kValues = {2, 5, 10};
 
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(MondrianTest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
         int originalRows = original.getNumberOfRows();
 
-        IPVDataset reloaded = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset reloaded = IPVDataset.load(MondrianTest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
 
         for (int k : kValues) {
             List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
@@ -594,21 +602,10 @@ public class MondrianTest {
         return map;
     }
 
-    public static Map<String, List<String>> createIndex(IPVDataset dataset, int columnIndex) {
-        Map<String, List<String>> map = new HashMap<>();
-
-        for (int i = 0; i < dataset.getNumberOfRows(); i++) {
-            String indexValue = dataset.get(i, columnIndex);
-            map.put(indexValue, dataset.getRow(i));
-        }
-
-        return map;
-    }
-
     @Test
     @Disabled("Missing data file")
     public void testNumericOnlySimple() throws Exception {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/mondrianNumeric4.csv"), false, ',', '"', false);
+        IPVDataset originalDataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/mondrianNumeric4.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(ColumnInformationGenerator.generateNumericalRange(originalDataset, 0, ColumnType.QUASI)); //height
@@ -624,7 +621,7 @@ public class MondrianTest {
         IPVDataset anonymizedDataset = mondrian.apply();
         assertEquals(anonymizedDataset.getNumberOfRows(), originalDataset.getNumberOfRows());
 
-        //input is 2, 2, 3, 3, 4 so we expect anon to be 2, 2, 3-4, 3-4, 3-4
+        //input is 2, 2, 3, 3, 4, so we expect anon to be 2, 2, 3-4, 3-4, 3-4
         Histogram<String> histogram = Histogram.createHistogram(anonymizedDataset, 0);
 
         assertEquals(2, histogram.size());
@@ -634,8 +631,7 @@ public class MondrianTest {
 
     @Test
     public void testNumericOnly() throws Exception {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
-        Map<String, String> indexMap = createIndexMap(originalDataset, 0);
+        IPVDataset originalDataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
 
         System.out.println("original: " + originalDataset.getNumberOfRows());
 
@@ -652,7 +648,7 @@ public class MondrianTest {
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(ColumnInformationGenerator.generateNumericalRange(IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false),
+        columnInformation.add(ColumnInformationGenerator.generateNumericalRange(IPVDataset.load(MondrianTest.class.getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false),
                 12, ColumnType.QUASI)); //height
         columnInformation.add(new DefaultColumnInformation());
 
@@ -672,10 +668,10 @@ public class MondrianTest {
 
     @Test
     public void testCategoricalOnly() throws Exception {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
-        Map<String, String> indexMap = createIndexMap(originalDataset, 0);
-
-        System.out.println("original: " + originalDataset.getNumberOfRows());
+        IPVDataset originalDataset;
+        try (InputStream input = MondrianTest.class.getResourceAsStream("/random1_height_weight_with_index.txt")) {
+            originalDataset = IPVDataset.load(input, false, ',', '"', false);
+        }
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new DefaultColumnInformation()); //index, 0
@@ -708,10 +704,10 @@ public class MondrianTest {
 
     @Test
     public void testMixNumericalCategorical() throws Exception {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
-        Map<String, String> indexMap = createIndexMap(originalDataset, 0);
-
-        System.out.println("original: " + originalDataset.getNumberOfRows());
+        IPVDataset originalDataset;
+        try (InputStream input = MondrianTest.class.getResourceAsStream("/random1_height_weight_with_index.txt")) {
+            originalDataset = IPVDataset.load(input, false, ',', '"', false);
+        }
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new DefaultColumnInformation()); //index, 0
@@ -726,7 +722,7 @@ public class MondrianTest {
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(ColumnInformationGenerator.generateNumericalRange(IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false),
+        columnInformation.add(ColumnInformationGenerator.generateNumericalRange(IPVDataset.load(MondrianTest.class.getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false),
                 12, ColumnType.QUASI)); //height
         columnInformation.add(new DefaultColumnInformation());
 
@@ -745,10 +741,11 @@ public class MondrianTest {
 
     @Test
     public void testPartitions() throws Exception {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
+        IPVDataset originalDataset;
+        try (InputStream input = MondrianTest.class.getResourceAsStream("/random1_height_weight_with_index.txt")) {
+            originalDataset = IPVDataset.load(input, false, ',', '"', false);
+        }
         Map<String, String> indexMap = createIndexMap(originalDataset, 0);
-
-        System.out.println("original: " + originalDataset.getNumberOfRows());
 
         GeneralizationHierarchy raceHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE);
 
@@ -848,7 +845,7 @@ public class MondrianTest {
     }
 
     @Test
-    public void testCorrectMiddleValues() throws Exception {
+    public void testCorrectMiddleValues() {
         List<List<String>> values = new ArrayList<>();
         values.add(toString(new Long[]{1L, 0L, 2L, 4L}));
         values.add(toString(new Long[]{5L, 1L, 11L, 4L}));
@@ -879,13 +876,13 @@ public class MondrianTest {
         List<Partition> anonymizedPartitions = mondrian.getAnonymizedPartitions();
         List<Partition> originalPartitions = mondrian.getOriginalPartitions();
         
-        List<Integer> quasiColums = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
+        List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         
         for(int i = 0; i < anonymizedPartitions.size(); i++) {
             Partition anonymized = anonymizedPartitions.get(i);
             Partition original = originalPartitions.get(i);
             
-            for(Integer q: quasiColums) {
+            for(Integer q: quasiColumns) {
                 List<Double> originalValues = extractValues(original.getMember(), q);
                 Collections.sort(originalValues);
                 double min = originalValues.get(0);
@@ -937,7 +934,7 @@ public class MondrianTest {
                 List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
                 privacyConstraints.add(new KAnonymity(k));
 
-                IPVDataset sampleDataset = IPVDataset.load(this.getClass().getResourceAsStream("/riskPCSample.csv"), false, ',', '"', false);
+                IPVDataset sampleDataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/riskPCSample.csv"), false, ',', '"', false);
 
                 Mondrian mondrian = new Mondrian();
                 mondrian.initialize(sampleDataset, columnInformation, privacyConstraints, new MondrianOptions(categoricalSplitStrategy));
@@ -974,7 +971,7 @@ public class MondrianTest {
         privacyConstraints.add(new KAnonymity(k));
 
         long start = System.currentTimeMillis();
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/florida_12M.txt"), false, ',', '"', false);
+        IPVDataset originalDataset = IPVDataset.load(MondrianTest.class.getResourceAsStream("/florida_12M.txt"), false, ',', '"', false);
         System.out.println("loading done");
         System.out.println("loading finished in " + (System.currentTimeMillis() - start));
 

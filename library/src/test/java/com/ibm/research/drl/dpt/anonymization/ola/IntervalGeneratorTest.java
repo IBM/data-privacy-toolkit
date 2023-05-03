@@ -22,14 +22,25 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class IntervalGeneratorTest {
 
     @Test
     public void testGenerator() throws Exception {
+        try (InputStream input = IntervalGeneratorTest.class.getResourceAsStream("/100.csv")) {
+            IPVDataset original = IPVDataset.load(input, false, ',', '"', false);
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+            MaterializedHierarchy hierarchy = IntervalGenerator.generateHierarchy(original, 0);
 
-        MaterializedHierarchy hierarchy = IntervalGenerator.generateHierarchy(original, 0);
+            assertNotNull(hierarchy);
+            assertThat(hierarchy.getHeight(), is(7));
+            assertThat(hierarchy.getTopTerm(), is("1919-1998"));
+        }
     }
 }
 
