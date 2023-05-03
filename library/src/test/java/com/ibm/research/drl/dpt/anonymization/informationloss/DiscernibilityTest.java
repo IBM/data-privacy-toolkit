@@ -28,6 +28,7 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +47,6 @@ public class DiscernibilityTest {
 
     @Test
     public void testDiscernibilityNumericNoSuppression() throws Exception {
-        int K = 2;
-
         List<List<String>> values = new ArrayList<>();
         values.add(toString(new Long[]{1L, 7L, 2L, 4L}));
         values.add(toString(new Long[]{6L, 7L, 12L, 4L}));
@@ -63,22 +62,24 @@ public class DiscernibilityTest {
         columnInformationList.add(ColumnInformationGenerator.generateNumericalRange(dataset, 2, ColumnType.QUASI));
         columnInformationList.add(new DefaultColumnInformation());
 
-        IPVDataset anonymizedDataset = IPVDataset.load(this.getClass().getResourceAsStream("/discernibilityAnonymized.csv"), false, ',', '"', false);
+        try (InputStream input = DiscernibilityTest.class.getResourceAsStream("/discernibilityAnonymized.csv")) {
+            IPVDataset anonymizedDataset = IPVDataset.load(input, false, ',', '"', false);
 
-        Tuple<List<Partition>, List<Partition>> bothPartitions = OLAUtils.generatePartitions(dataset, anonymizedDataset, columnInformationList);
-        List<Partition> originalPartitions = bothPartitions.getFirst();
-        List<Partition> anonymizedPartitions = bothPartitions.getSecond();
+            Tuple<List<Partition>, List<Partition>> bothPartitions = OLAUtils.generatePartitions(dataset, anonymizedDataset, columnInformationList);
+            List<Partition> originalPartitions = bothPartitions.getFirst();
+            List<Partition> anonymizedPartitions = bothPartitions.getSecond();
 
-        for(Partition p: originalPartitions) p.setAnonymous(true);
-        for(Partition p: anonymizedPartitions) p.setAnonymous(true);
-        
-        InformationMetric discernibility = new Discernibility().initialize(dataset, anonymizedDataset,
-                originalPartitions, anonymizedPartitions, columnInformationList, null);
+            for (Partition p : originalPartitions) p.setAnonymous(true);
+            for (Partition p : anonymizedPartitions) p.setAnonymous(true);
 
-        double discernibilityValue = discernibility.report();
+            InformationMetric discernibility = new Discernibility().initialize(dataset, anonymizedDataset,
+                    originalPartitions, anonymizedPartitions, columnInformationList, null);
 
-        double expected = 2*2 + 3*3;
-        assertEquals(expected, discernibilityValue, 0.001);
+            double discernibilityValue = discernibility.report();
+
+            double expected = 2 * 2 + 3 * 3;
+            assertEquals(expected, discernibilityValue, 0.001);
+        }
     }
 
     @Test
@@ -106,28 +107,30 @@ public class DiscernibilityTest {
         columnInformationList.add(new CategoricalInformation(genderHierarchy, ColumnType.QUASI));
         columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testOLA.csv"), false, ',', '"', false);
+        try (InputStream input = DiscernibilityTest.class.getResourceAsStream("/testOLA.csv")) {
+            IPVDataset original = IPVDataset.load(input, false, ',', '"', false);
 
-        List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-        privacyConstraints.add(new KAnonymity(k));
+            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+            privacyConstraints.add(new KAnonymity(k));
 
-        OLAOptions olaOptions = new OLAOptions(20.0d);
+            OLAOptions olaOptions = new OLAOptions(20.0d);
 
-        OLA ola = new OLA();
-        ola.initialize(original, columnInformationList, privacyConstraints, olaOptions);
+            OLA ola = new OLA();
+            ola.initialize(original, columnInformationList, privacyConstraints, olaOptions);
 
-        IPVDataset anonymized = ola.apply();
+            IPVDataset anonymized = ola.apply();
 
-        InformationMetric discernibility = new Discernibility().initialize(original, anonymized,
-                ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformationList, null);
+            InformationMetric discernibility = new Discernibility().initialize(original, anonymized,
+                    ola.getOriginalPartitions(), ola.getAnonymizedPartitions(), columnInformationList, null);
 
-        double discernibilityValue = discernibility.report();
+            double discernibilityValue = discernibility.report();
 
-        // the anonymized dataset contains two clusters: one with 3 rows and another with 5 rows
-        // and also two suppressed partitions, each one with one row
+            // the anonymized dataset contains two clusters: one with 3 rows and another with 5 rows
+            // and also two suppressed partitions, each one with one row
 
-        double expected = 3.0*3.0 + 5.0*5.0 + 10.0*1.0*1.0 + 10.0*1.0*1.0;
-        assertEquals(discernibilityValue, expected);
+            double expected = 3.0 * 3.0 + 5.0 * 5.0 + 10.0 * 1.0 * 1.0 + 10.0 * 1.0 * 1.0;
+            assertEquals(discernibilityValue, expected);
+        }
     }
 }
 
