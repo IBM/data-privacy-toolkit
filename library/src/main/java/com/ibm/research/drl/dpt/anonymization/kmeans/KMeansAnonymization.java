@@ -83,14 +83,17 @@ public class KMeansAnonymization implements AnonymizationAlgorithm {
         return this;
     }
 
+    @Override
     public String getName() {
         return "K-Means";
     }
 
+    @Override
     public String getDescription() {
         return "K-Means based anonymization";
     }
 
+    @Override
     public IPVDataset apply() {
 
         KMeans kMeans = new KMeans(this.original, this.numberOfClusters, 1000, this.columnInformationList,
@@ -107,6 +110,7 @@ public class KMeansAnonymization implements AnonymizationAlgorithm {
         return this.strategyImpl.buildAnonymizedDataset(clusters);
     }
 
+    @Override
     public double reportSuppressionRate() {
         return 100.0 * (double) this.strategyImpl.getSuppressedRows() / (double) original.getNumberOfRows();
     }
