@@ -246,11 +246,12 @@ public class GeneralizedLossMetric implements InformationMetric {
      * @param anonymized            the anonymized
      * @param columnInformationList the column information list
      */
+    @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, InformationMetricOptions options) {
 
         if (original.getNumberOfColumns() != anonymized.getNumberOfColumns()) {
-            throw new RuntimeException("mismatch on columns");
+            throw new RuntimeException("Mismatch on columns");
         }
 
         this.original = original;

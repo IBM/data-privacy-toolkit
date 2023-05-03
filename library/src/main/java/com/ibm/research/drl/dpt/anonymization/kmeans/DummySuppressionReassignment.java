@@ -44,7 +44,6 @@ public class DummySuppressionReassignment extends StrategyImpl {
     private final List<PrivacyConstraint> privacyConstraints;
     private final List<Integer> sensitiveColumns;
 
-    private List<List<Set<String>>> categoricalVariables;
     private Long suppressedRows = 0L;
     private final List<Partition> partitions = new ArrayList<>();
     private final List<Partition> anonymizedPartitions = new ArrayList<>();
@@ -234,6 +233,7 @@ public class DummySuppressionReassignment extends StrategyImpl {
     }
 
 
+    @Override
     public IPVDataset buildAnonymizedDataset(List<KMeansCluster> clusters) {
 
 

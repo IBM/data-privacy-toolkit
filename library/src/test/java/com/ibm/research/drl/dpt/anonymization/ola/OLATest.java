@@ -19,8 +19,16 @@ under the License.
 package com.ibm.research.drl.dpt.anonymization.ola;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DatasetGeneralizer;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
+import com.ibm.research.drl.dpt.anonymization.SensitiveColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ValidationUtils;
 import com.ibm.research.drl.dpt.anonymization.constraints.DistinctLDiversity;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
@@ -34,6 +42,7 @@ import com.ibm.research.drl.dpt.configuration.AnonymizationOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
@@ -44,14 +53,28 @@ import org.junit.jupiter.api.Test;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OLATest {
     private MaterializedHierarchy dateHierarchy;
@@ -213,7 +236,7 @@ public class OLATest {
         columnInformationList.add(new CategoricalInformation(genderHierarchy, ColumnType.QUASI));
         columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testOLA.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/testOLA.csv"), false, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(20.0d);
 
@@ -227,12 +250,12 @@ public class OLATest {
         IPVDataset anonymized = ola.apply();
 
         int n = anonymized.getNumberOfRows();
-        //with 20% suppression rate, we must have at least 10*0.8 rows on the final dataset
+        // with 20% suppression rate, we must have at least 10*0.8 rows on the final dataset
         assertTrue(n >= 8);
 
         assertThat(ola.reportSuppressionRate(), lessThanOrEqualTo(20.0));
+        assertThat(anonymized.getNumberOfColumns(), is(original.getNumberOfColumns()));
 
-        int na = anonymized.getNumberOfColumns();
         ValidationUtils.validateIsKAnonymous(anonymized, columnInformationList, k);
     }
 
@@ -257,7 +280,7 @@ public class OLATest {
         columnInformationList.add(new CategoricalInformation(genderHierarchy, ColumnType.QUASI));
         columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testOLA_with_header.csv"), true, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/testOLA_with_header.csv"), true, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(20.0d);
 
@@ -283,8 +306,8 @@ public class OLATest {
         assertTrue(n >= 8);
 
         assertThat(ola.reportSuppressionRate(), lessThanOrEqualTo(20.0));
+        assertThat(anonymized.getNumberOfColumns(), is(original.getNumberOfColumns()));
 
-        int na = anonymized.getNumberOfColumns();
         ValidationUtils.validateIsKAnonymous(anonymized, columnInformationList, k);
     }
 
@@ -311,7 +334,7 @@ public class OLATest {
         columnInformationList.add(new CategoricalInformation(genderHierarchy, ColumnType.QUASI, 1.0, maxGenderLevel));
         columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI, 1.0, maxAgeLevel));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testOLA.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/testOLA.csv"), false, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(20.0d);
 
@@ -357,7 +380,7 @@ public class OLATest {
         columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI));
         columnInformationList.add(new CategoricalInformation(new ZIPCodeCompBasedHierarchy(), ColumnType.QUASI));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testOLACompBased.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/testOLACompBased.csv"), false, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(10.0d);
 
@@ -373,11 +396,11 @@ public class OLATest {
 
         int n = anonymized.getNumberOfRows();
         //with 20% suppression rate, we must have at least 10*0.8 rows on the final dataset
-        //assertTrue(n >= 8);
+        assertTrue(n >= 8);
 
         assertThat(ola.reportSuppressionRate(), lessThanOrEqualTo(20.0));
 
-        int na = anonymized.getNumberOfColumns();
+        assertThat(anonymized.getNumberOfColumns(), is(original.getNumberOfColumns()));
     }
 
     @Test
@@ -402,7 +425,7 @@ public class OLATest {
         columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI));
         columnInformationList.add(new SensitiveColumnInformation());
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testOLALDiversity.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/testOLALDiversity.csv"), false, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(20.0d);
 
@@ -437,7 +460,7 @@ public class OLATest {
     }
 
     @Test
-    @Disabled
+
     public void testDemoDatasetOLA() throws Exception {
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new DefaultColumnInformation());
@@ -452,7 +475,7 @@ public class OLATest {
         columnInformationList.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
         columnInformationList.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ICDv9), ColumnType.QUASI));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1.txt"), false, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(15.0d);
 
@@ -465,8 +488,8 @@ public class OLATest {
 
         IPVDataset anonymized = ola.apply();
 
-        System.out.println("suppression rate: " + ola.reportSuppressionRate());
-        System.out.println("best node: " + ola.reportBestNode());
+        assertThat(ola.reportSuppressionRate(), lessThan((20d)));
+        assertThat(anonymized.getNumberOfColumns(), is(original.getNumberOfColumns()));;
     }
 
     @Test
@@ -478,7 +501,7 @@ public class OLATest {
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(dateHierarchy, ColumnType.QUASI));
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/olaSingleAttributeData.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/olaSingleAttributeData.csv"), false, ',', '"', false);
 
         OLAOptions olaOptions = new OLAOptions(0.0d);
 
@@ -493,11 +516,12 @@ public class OLATest {
         assertEquals(0.0, ola.reportSuppressionRate(), 0.01);
 
         assertEquals(ola.reportBestNode(), new LatticeNode(new int[]{0}));
+        assertThat(anonymized.getNumberOfColumns(), is(original.getNumberOfColumns()));
     }
 
     @Test
     public void testPartitionAnonymousFlags() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1.txt"), false, ',', '"', false);
         
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new DefaultColumnInformation());
@@ -539,7 +563,7 @@ public class OLATest {
     @Test
     @Disabled
     public void testDemo() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1.txt"), false, ',', '"', false);
 
         System.out.println("original: " + original.getNumberOfRows());
 
@@ -575,7 +599,7 @@ public class OLATest {
     @Test
     @Disabled
     public void testDumpForDecoy() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1.txt"), false, ',', '"', false);
 
         System.out.println("original: " + original.getNumberOfRows());
 
@@ -626,7 +650,7 @@ public class OLATest {
 
     @Test
     public void verifyNoTransformationIsAppliedIfNoQuasiArePresent() throws Exception {
-        try (InputStream is = this.getClass().getResourceAsStream("/random1.txt")) {
+        try (InputStream is = OLATest.class.getResourceAsStream("/random1.txt")) {
             IPVDataset original = IPVDataset.load(is, false, ',', '"', false);
             OLA ola = new OLA();
 
@@ -648,7 +672,7 @@ public class OLATest {
     @Test
     @Disabled
     public void testOLAMultipleDimensions() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
 
         System.out.println("original: " + original.getNumberOfRows());
 
@@ -696,7 +720,7 @@ public class OLATest {
     @Test
     @Disabled
     public void testOLAMultipleDimensionsWithHeight() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
 
         System.out.println("original: " + original.getNumberOfRows());
 
@@ -749,7 +773,7 @@ public class OLATest {
     
     @Test
     public void testOLAOriginalIsNotMutated() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
 
         GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
         List<ColumnInformation> columnInformation = new ArrayList<>();
@@ -770,7 +794,7 @@ public class OLATest {
         int[] kValues = {2, 5, 10};
         double[] suppressionValues = {10.0};
         
-        IPVDataset reloaded = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset reloaded = IPVDataset.load(OLATest.class.getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
 
         for(int k: kValues) {
             for (double suppression : suppressionValues) {
@@ -793,7 +817,7 @@ public class OLATest {
 
     @Test
     public void testPartitions() throws Exception {
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
+        IPVDataset originalDataset = IPVDataset.load(OLATest.class.getResourceAsStream("/random1_height_weight_with_index.txt"), false, ',', '"', false);
         Map<String, String> indexMap = MondrianTest.createIndexMap(originalDataset, 0);
 
         GeneralizationHierarchy raceHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE);
@@ -873,11 +897,13 @@ public class OLATest {
     }
     
     @Test
-    @Disabled
     public void testChecker() throws Exception {
-        //0:1:1:0:1 
+        //0:1:1:0:1
 
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1_height_weight.txt"), false, ',', '"', false);
+        IPVDataset original;
+        try(InputStream input = OLATest.class.getResourceAsStream("/random1_height_weight.txt")) {
+            original = IPVDataset.load(input, false, ',', '"', false);
+        }
         
         GeneralizationHierarchy heightHierarchy = GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.HEIGHT);
         List<ColumnInformation> columnInformation = new ArrayList<>();
@@ -898,9 +924,8 @@ public class OLATest {
         IPVDataset anonymized = DatasetGeneralizer.generalize(original, columnInformation, new int[] { 0, 1, 1, 0, 1});
         
         int k = 10;
-        double suppression = 50;
         
-        int suppressed = 0;
+        double suppressed = 0;
         
         Map<String, Integer> anonEQCounters = AnonymizationUtils.generateEQCounters(anonymized, columnInformation);
         
@@ -912,8 +937,8 @@ public class OLATest {
             }
         }
 
-        System.out.println("suppressed: " + suppressed + " = " + ((double) suppressed / (double) original.getNumberOfRows()));
-        
+        assertThat(suppressed, lessThan(17_000d));
+        assertThat(suppressed/original.getNumberOfRows(), closeTo(0.5, 0.01));
     }
     
     @Test
@@ -933,7 +958,10 @@ public class OLATest {
         privacyConstraints.add(new KAnonymity(k));
 
         long start = System.currentTimeMillis();
-        IPVDataset originalDataset = IPVDataset.load(this.getClass().getResourceAsStream("/florida_12M.txt"), false, ',', '"', false);
+        IPVDataset originalDataset;
+        try (InputStream inputOriginal = OLATest.class.getResourceAsStream("/florida_12M.txt")) {
+            originalDataset = IPVDataset.load(inputOriginal, false, ',', '"', false);
+        }
         System.out.println("loading done");
         System.out.println("loading finished in " + (System.currentTimeMillis() - start));
         
@@ -959,12 +987,12 @@ public class OLATest {
         //this is working
         String goodConfName = "/a71577ba-2eda-47d3-b55b-613e34a3d3e9.json";
 
-        AnonymizationOptions goodOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream(goodConfName), AnonymizationOptions.class);
+        AnonymizationOptions goodOptions = JsonUtils.MAPPER.readValue(OLATest.class.getResourceAsStream(goodConfName), AnonymizationOptions.class);
 
         OLA ola = new OLA();
         OLAOptions olaOptions = new OLAOptions(goodOptions.getSuppressionRate());
 
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/a71577ba-2eda-47d3-b55b-613e34a3d3e9.csv"), true, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(OLATest.class.getResourceAsStream("/a71577ba-2eda-47d3-b55b-613e34a3d3e9.csv"), true, ',', '"', false);
         ola.initialize(dataset, goodOptions.getColumnInformation(), goodOptions.getPrivacyConstraints(), olaOptions);
 
         IPVDataset anonymizedDataset = ola.apply();
@@ -976,28 +1004,32 @@ public class OLATest {
     
     @Test
     public void testOLAAgesClientIL() throws Exception {
-        
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
-        
-        JsonNode hierarchiesNode = (new ObjectMapper()).readTree(this.getClass().getResourceAsStream("/olaAgesLevels.json")).get("hierarchies");
-       
-        Map<String, GeneralizationHierarchy> hierarchyMap = AnonymizationOptions.hierarchiesFromJSON(hierarchiesNode);
-        
-        MaterializedHierarchy hierarchy = (MaterializedHierarchy)hierarchyMap.get("age");
-        
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new CategoricalInformation(hierarchy, ColumnType.QUASI));
-        
-        List<PrivacyConstraint> privacyConstraints = List.of(new KAnonymity(6));
-        
-        OLA ola = new OLA();
-        OLAOptions olaOptions = new OLAOptions(2.0);
-        
-        ola.initialize(dataset, columnInformation, privacyConstraints, olaOptions);
-        
-        IPVDataset anonymized = ola.apply();
-        
-        assertEquals(0.0, ola.reportSuppressionRate(), 0.000001);
+        try (InputStream datasetInputStream = OLATest.class.getResourceAsStream("/olaAges.csv");
+        InputStream ageLevels = OLATest.class.getResourceAsStream("/olaAgesLevels.json")) {
+
+            IPVDataset dataset = IPVDataset.load(datasetInputStream, true, ',', '"', false);
+
+            JsonNode hierarchiesNode = JsonUtils.MAPPER.readTree(ageLevels).get("hierarchies");
+
+            Map<String, GeneralizationHierarchy> hierarchyMap = AnonymizationOptions.hierarchiesFromJSON(hierarchiesNode);
+
+            MaterializedHierarchy hierarchy = (MaterializedHierarchy) hierarchyMap.get("age");
+
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new CategoricalInformation(hierarchy, ColumnType.QUASI));
+
+            List<PrivacyConstraint> privacyConstraints = List.of(new KAnonymity(6));
+
+            OLA ola = new OLA();
+            OLAOptions olaOptions = new OLAOptions(2.0);
+
+            ola.initialize(dataset, columnInformation, privacyConstraints, olaOptions);
+
+            IPVDataset anonymized = ola.apply();
+
+            assertEquals(0.0, ola.reportSuppressionRate(), 0.000001);
+            assertThat(anonymized.getNumberOfColumns(), is(dataset.getNumberOfColumns()));
+        }
     }
 
     @Test
@@ -1005,12 +1037,12 @@ public class OLATest {
     public void testClientILBug20180208Bad() throws Exception {
         // this is crashing
         String badConfName = "/2bac2243-fcfc-455d-a096-33b53d795179.json";
-        AnonymizationOptions badOptions = new ObjectMapper().readValue(this.getClass().getResourceAsStream(badConfName), AnonymizationOptions.class);
+        AnonymizationOptions badOptions = JsonUtils.MAPPER.readValue(OLATest.class.getResourceAsStream(badConfName), AnonymizationOptions.class);
 
         OLA ola = new OLA();
         OLAOptions olaOptions = new OLAOptions(badOptions.getSuppressionRate());
 
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/2bac2243-fcfc-455d-a096-33b53d795179.csv"), true, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(OLATest.class.getResourceAsStream("/2bac2243-fcfc-455d-a096-33b53d795179.csv"), true, ',', '"', false);
         ola.initialize(dataset, badOptions.getColumnInformation(), badOptions.getPrivacyConstraints(), olaOptions);
 
         IPVDataset anonymizedDataset = ola.apply();
@@ -1026,7 +1058,7 @@ public class OLATest {
     public void testSanityChecks() {
         assertThrows(RuntimeException.class, () -> {
 
-            IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
+            IPVDataset dataset = IPVDataset.load(OLATest.class.getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
 
             GeneralizationHierarchy hierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("17", "18", "19", "48", "49", "101"));
             List<ColumnInformation> columnInformation = new ArrayList<>();
@@ -1040,7 +1072,7 @@ public class OLATest {
             ola.initialize(dataset, columnInformation, privacyConstraints, olaOptions);
 
             IPVDataset anonymized = ola.apply();
-
+            assertThat(anonymized.getNumberOfColumns(), is(dataset.getNumberOfColumns()));
         });
     }
 
@@ -1048,7 +1080,7 @@ public class OLATest {
     public void testSanityChecksLDiversity() {
         assertThrows(RuntimeException.class, () -> {
 
-            IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
+            IPVDataset dataset = IPVDataset.load(OLATest.class.getResourceAsStream("/olaAges.csv"), true, ',', '"', false);
 
             GeneralizationHierarchy hierarchy = GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("17", "18", "19", "48", "49", "101"));
             List<ColumnInformation> columnInformation = new ArrayList<>();
@@ -1065,6 +1097,7 @@ public class OLATest {
             ola.initialize(dataset, columnInformation, privacyConstraints, olaOptions);
 
             IPVDataset anonymized = ola.apply();
+            assertThat(anonymized.getNumberOfColumns(), is(dataset.getNumberOfColumns()));
         });
     }
 }
