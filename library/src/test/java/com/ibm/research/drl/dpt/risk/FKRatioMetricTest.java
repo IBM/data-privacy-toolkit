@@ -30,8 +30,8 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,16 +49,16 @@ public class FKRatioMetricTest {
     }
 
     @Test
-    public void generationOfPartitionsForLinkingWithLinkColumnInformationThrows() throws Exception {
+    public void generationOfPartitionsForLinkingWithLinkColumnInformationThrows() {
         assertThrows(RuntimeException.class, () -> {
             IPVDataset dataset = new IPVDataset(Collections.emptyList(), null, false);
-            List<ColumnInformation> columnInformations = new ArrayList<>();
+            List<ColumnInformation> columnInformation = new ArrayList<>();
 
             for (int i = 0; i < 10; ++i) {
-                columnInformations.add(new CategoricalInformation(GenderHierarchy.getInstance(), ColumnType.QUASI));
+                columnInformation.add(new CategoricalInformation(GenderHierarchy.getInstance(), ColumnType.QUASI));
             }
 
-            new FKRatioMetric().initialize(dataset, dataset, columnInformations, 10, Collections.singletonMap(FKRatioMetric.POPULATION, Integer.toString(POPULATION)));
+            new FKRatioMetric().initialize(dataset, dataset, columnInformation, 10, Collections.singletonMap(FKRatioMetric.POPULATION, Integer.toString(POPULATION)));
         });
     }
 
@@ -68,60 +68,62 @@ public class FKRatioMetricTest {
     @Test
     @Disabled
     public void testFKRatioMetric() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        try (InputStream inputStream = FKRatioMetricTest.class.getResourceAsStream("/random1.txt")) {
+            IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
 
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation()); //zipcode
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation()); //zipcode
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
 
 //        final List<Double> suppressions = Arrays.asList(5.0, 10.0, 15.0, 20.0);
-        final List<Double> suppressions = List.of(5.0);
+            final List<Double> suppressions = List.of(5.0);
 
-        final InformationMetricOptions options = new InformationMetricOptions() {
-            @Override
-            public int getIntValue(String key) {
-                return POPULATION;
-            }
+            final InformationMetricOptions options = new InformationMetricOptions() {
+                @Override
+                public int getIntValue(String key) {
+                    return POPULATION;
+                }
 
-            @Override
-            public String getStringValue(String key) {
-                return null;
-            }
+                @Override
+                public String getStringValue(String key) {
+                    return null;
+                }
 
-            @Override
-            public boolean getBooleanValue(String key) {
-                return false;
-            }
-        };
+                @Override
+                public boolean getBooleanValue(String key) {
+                    return false;
+                }
+            };
 
-        System.out.println("::: iteration k suppression ola.reportSuppressionRate() i_risk kRatio.report() categoricalPrecision.report()  ola.reportBestNode().toString()");
+            System.out.println("::: iteration k suppression ola.reportSuppressionRate() i_risk kRatio.report() categoricalPrecision.report()  ola.reportBestNode().toString()");
 
-        for (int k = 2; k < 100; k += 1) {
-            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-            privacyConstraints.add(new KAnonymity(k));
+            for (int k = 2; k < 100; k += 1) {
+                List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+                privacyConstraints.add(new KAnonymity(k));
 
-            for (final double suppression : suppressions) {
-                OLAOptions olaOptions = new OLAOptions(suppression);
-                OLA ola = new OLA();
-                ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
+                for (final double suppression : suppressions) {
+                    OLAOptions olaOptions = new OLAOptions(suppression);
+                    OLA ola = new OLA();
+                    ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
 
-                IPVDataset anonymized = ola.apply();
+                    IPVDataset anonymized = ola.apply();
 
-                FKRatioMetric fkRatioMetric = new FKRatioMetric();
+                    FKRatioMetric fkRatioMetric = new FKRatioMetric();
 
-                fkRatioMetric.initialize(original, anonymized, ola.getColumnInformationList(), k, Collections.singletonMap(FKRatioMetric.POPULATION, Integer.toString(POPULATION)));
+                    fkRatioMetric.initialize(original, anonymized, ola.getColumnInformationList(), k, Collections.singletonMap(FKRatioMetric.POPULATION, Integer.toString(POPULATION)));
 
-                for (int i = 0; i < 30; ++i) {
-                    System.out.println("::: " + i + " " + k + " " + suppression + " " + ola.reportSuppressionRate() + " " + fkRatioMetric.report());
+                    for (int i = 0; i < 30; ++i) {
+                        System.out.println("::: " + i + " " + k + " " + suppression + " " + ola.reportSuppressionRate() + " " + fkRatioMetric.report());
+                    }
                 }
             }
         }

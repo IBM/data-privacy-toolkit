@@ -97,19 +97,20 @@ public class EstimatedRiskTest {
     public void testDumpAnonymizedInput() throws Exception {
         LatticeNode node = new LatticeNode(new int[]{2, 0, 0, 1});
         
-        InputStream population = this.getClass().getResourceAsStream("/florida_original.txt");
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ZIPCODE), ColumnType.QUASI, true));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("M", "F", "U")), ColumnType.QUASI, true));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI, true));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "9")),
-                ColumnType.QUASI, true));
+        try (InputStream population = EstimatedRiskTest.class.getResourceAsStream("/florida_original.txt");) {
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ZIPCODE), ColumnType.QUASI, true));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("M", "F", "U")), ColumnType.QUASI, true));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI, true));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "9")),
+                    ColumnType.QUASI, true));
 
-        FileWriter fileWriter = new FileWriter("/tmp/florida_anonymized.txt");
-        DatasetGeneralizer.generalizeCSVInputStream(population, fileWriter, columnInformation, node.getValues());
-        fileWriter.close(); 
+            try (FileWriter fileWriter = new FileWriter("/tmp/florida_anonymized.txt");) {
+                DatasetGeneralizer.generalizeCSVInputStream(population, fileWriter, columnInformation, node.getValues());
+            }
+        }
     }
     
     private void writeDataset(IPVDataset dataset, String filename) throws Exception {
@@ -152,9 +153,9 @@ public class EstimatedRiskTest {
         for(int i = 1; i <= 50; i++) {
             String filename = "/florida_samples/sample" + i;
             resources.add(filename);
-            InputStream sample = this.getClass().getResourceAsStream(filename);
-            assertNotNull(sample);
-            sample.close();
+            try (InputStream sample = EstimatedRiskTest.class.getResourceAsStream(filename);) {
+                assertNotNull(sample);
+            }
         }
         
         
@@ -172,94 +173,84 @@ public class EstimatedRiskTest {
                 Map<String, Integer> lastCounters = null;
                 
                 for(String resource: resources) {
-                    InputStream sample = this.getClass().getResourceAsStream(resource);
-                    IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
-                    //System.out.println("loading done");
-                    
-                    List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-                    privacyConstraints.add(new KAnonymity(k));
+                    try (InputStream sample = EstimatedRiskTest.class.getResourceAsStream(resource);) {
+                        IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
 
-                    OLAOptions olaOptions = new OLAOptions(suppression);
-                    OLA ola = new OLA();
-                    ola.initialize(sampleDataset, columnInformation, privacyConstraints, olaOptions);
+                        List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+                        privacyConstraints.add(new KAnonymity(k));
 
-                    IPVDataset anonymizedSampleDataset = ola.apply();
+                        OLAOptions olaOptions = new OLAOptions(suppression);
+                        OLA ola = new OLA();
+                        ola.initialize(sampleDataset, columnInformation, privacyConstraints, olaOptions);
 
-                    Map<String, Integer> anonEQCounters = AnonymizationUtils.generateEQCounters(anonymizedSampleDataset, columnInformation);
+                        IPVDataset anonymizedSampleDataset = ola.apply();
 
-                    //System.out.println("best node: " + ola.reportBestNode());
+                        Map<String, Integer> anonEQCounters = AnonymizationUtils.generateEQCounters(anonymizedSampleDataset, columnInformation);
 
-                    BinomialRiskMetric risk = new BinomialRiskMetric();
-                    Map<String, String> options = new HashMap<>(2);
-                    options.put(BinomialRiskMetric.POPULATION, Integer.toString(POPULATION));
-                    options.put(BinomialRiskMetric.USE_GLOBAL_P, Boolean.toString(Boolean.FALSE));
-                    risk.initialize(null, anonymizedSampleDataset, columnInformation, k, options);
+                        BinomialRiskMetric risk = new BinomialRiskMetric();
+                        Map<String, String> options = new HashMap<>(2);
+                        options.put(BinomialRiskMetric.POPULATION, Integer.toString(POPULATION));
+                        options.put(BinomialRiskMetric.USE_GLOBAL_P, Boolean.toString(Boolean.FALSE));
+                        risk.initialize(null, anonymizedSampleDataset, columnInformation, k, options);
 
-                    //System.out.println("binomial: " + risk.report());
+                        ApproximationRiskMetric approximationRiskMetric = new ApproximationRiskMetric();
+                        Map<String, String> approximateRiskOptions = new HashMap<>(2);
+                        approximateRiskOptions.put(ApproximationRiskMetric.POPULATION, Integer.toString(POPULATION));
+                        approximateRiskOptions.put(ApproximationRiskMetric.USE_GLOBAL_P, Boolean.toString(Boolean.FALSE));
+                        approximationRiskMetric.initialize(null, anonymizedSampleDataset, columnInformation, k, approximateRiskOptions);
 
-                    ApproximationRiskMetric approximationRiskMetric = new ApproximationRiskMetric();
-                    Map<String, String> approximateRiskOptions = new HashMap<>(2);
-                    approximateRiskOptions.put(ApproximationRiskMetric.POPULATION, Integer.toString(POPULATION));
-                    approximateRiskOptions.put(ApproximationRiskMetric.USE_GLOBAL_P, Boolean.toString(Boolean.FALSE));
-                    approximationRiskMetric.initialize(null, anonymizedSampleDataset, columnInformation, k, approximateRiskOptions);
+                        FKRatioMetric fkRatioMetric = new FKRatioMetric();
+                        Map<String, String> fkRatioOptions = new HashMap<>(2);
+                        fkRatioOptions.put(FKRatioMetric.POPULATION, Integer.toString(POPULATION));
+                        fkRatioMetric.initialize(null, anonymizedSampleDataset, columnInformation, k, fkRatioOptions);
 
-                    //System.out.println("Approximate: " + approximationRiskMetric.report());
+                        Map<String, Integer> originalEQCounters;
 
-                    FKRatioMetric fkRatioMetric = new FKRatioMetric();
-                    Map<String, String> fkRatioOptions = new HashMap<>(2);
-                    fkRatioOptions.put(FKRatioMetric.POPULATION, Integer.toString(POPULATION));
-                    fkRatioMetric.initialize(null, anonymizedSampleDataset, columnInformation, k, fkRatioOptions);
-
-                    Map<String, Integer> originalEQCounters;
-                    
-                    if (lastNode != null && lastNode.equals(ola.reportBestNode())) {
-                        originalEQCounters = lastCounters;
-                    }
-                    else {
-                        InputStream population = this.getClass().getResourceAsStream("/florida_original.txt");
-                        originalEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(population, columnInformation, ola.reportBestNode().getValues());
-                        population.close();
-                    }
-                    
-                    lastNode = ola.reportBestNode();
-                    lastCounters = originalEQCounters;
-
-                    int minEQSize = Integer.MAX_VALUE;
-                    for (Map.Entry<String, Integer> entry : originalEQCounters.entrySet()) {
-                        Integer counter = entry.getValue();
-
-                        if (counter >= k) {
-                            if (anonEQCounters.containsKey(entry.getKey()) && counter < minEQSize) {
-                                minEQSize = counter;
+                        if (lastNode != null && lastNode.equals(ola.reportBestNode())) {
+                            originalEQCounters = lastCounters;
+                        } else {
+                            try (InputStream population = EstimatedRiskTest.class.getResourceAsStream("/florida_original.txt");) {
+                                originalEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(population, columnInformation, ola.reportBestNode().getValues());
                             }
                         }
+
+                        lastNode = ola.reportBestNode();
+                        lastCounters = originalEQCounters;
+
+                        int minEQSize = Integer.MAX_VALUE;
+                        for (Map.Entry<String, Integer> entry : originalEQCounters.entrySet()) {
+                            Integer counter = entry.getValue();
+
+                            if (counter >= k) {
+                                if (anonEQCounters.containsKey(entry.getKey()) && counter < minEQSize) {
+                                    minEQSize = counter;
+                                }
+                            }
+                        }
+
+                        double binomialRisk = risk.report();
+                        riskValues.get("binomial").add(binomialRisk);
+
+                        double approximationRisk = approximationRiskMetric.report();
+                        riskValues.get("approximation").add(approximationRisk);
+
+                        double fkRisk = fkRatioMetric.report();
+                        riskValues.get("fk").add(fkRisk);
+
+                        double realRisk = (1.0 / (double) minEQSize);
+                        riskValues.get("real").add(realRisk);
                     }
-                    
-                    double binomialRisk = risk.report();
-                    riskValues.get("binomial").add(binomialRisk);
-                    
-                    double approximationRisk = approximationRiskMetric.report();
-                    riskValues.get("approximation").add(approximationRisk);
-                    
-                    double fkRisk = fkRatioMetric.report();
-                    riskValues.get("fk").add(fkRisk);
-                    
-                    double realRisk = (1.0 / (double) minEQSize);
-                    riskValues.get("real").add(realRisk);
 
-                    sample.close();
+                    System.out.printf("%d\t%f", k, suppression);
+
+                    for (Map.Entry<String, List<Double>> entry : riskValues.entrySet()) {
+                        String key = entry.getKey();
+                        List<Double> values = entry.getValue();
+                        System.out.printf("\t%s\t%f\t%f\t%f", key,
+                                Collections.min(values), Collections.max(values), values.stream().mapToDouble(Double::doubleValue).sum() / (double) values.size());
+                    }
+                    System.out.println();
                 }
-
-                System.out.printf("%d\t%f", k, suppression);
-
-                for(Map.Entry<String, List<Double>> entry: riskValues.entrySet()) {
-                    String key = entry.getKey();
-                    List<Double> values = entry.getValue();
-                    System.out.printf("\t%s\t%f\t%f\t%f", key,
-                            Collections.min(values), Collections.max(values), values.stream().mapToDouble(Double::doubleValue).sum() / (double) values.size());
-                }
-                System.out.println();
-                
             }
         }
     }
@@ -267,7 +258,6 @@ public class EstimatedRiskTest {
     @Test
     @Disabled
     public void testDistCheck() throws Exception {
-        
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new DefaultColumnInformation());
         columnInformation.add(new DefaultColumnInformation());
@@ -279,17 +269,15 @@ public class EstimatedRiskTest {
         System.out.println("columnInformation done");
 
         //0:1:2:1
-        
         LatticeNode node = new LatticeNode(new int[]{0, 1, 2, 1});
         
-        InputStream population = this.getClass().getResourceAsStream("/florida_original.txt");
-        Map<String, Integer> originalEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(population, columnInformation, node.getValues());
-        population.close();
-        
-        for(Map.Entry<String, Integer> entry: originalEQCounters.entrySet()) {
-            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        try (InputStream population = EstimatedRiskTest.class.getResourceAsStream("/florida_original.txt");) {
+            Map<String, Integer> originalEQCounters = DatasetGeneralizer.generalizeCSVAndCountEQ(population, columnInformation, node.getValues());
+
+            for (Map.Entry<String, Integer> entry : originalEQCounters.entrySet()) {
+                System.out.println(entry.getKey() + " -> " + entry.getValue());
+            }
         }
-        
     }
     
     
@@ -332,59 +320,60 @@ public class EstimatedRiskTest {
 
         risk.initialize(original, anonymized, ola.getColumnInformationList(), k, options);
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(risk.report());
-        }
+//        for (int i = 0; i < 10; i++) {
+//            System.out.println(risk.report());
+//        }
     }
 
     @Test
     @Disabled
     public void testEstimation() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        try (InputStream inputStream = EstimatedRiskTest.class.getResourceAsStream("/random1.txt")) {
+            IPVDataset original = IPVDataset.load(inputStream, false, ',', '"', false);
 
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation()); //zipcode
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
-        columnInformation.add(new DefaultColumnInformation());
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation()); //zipcode
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.GENDER), ColumnType.QUASI));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.RACE), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.MARITAL_STATUS), ColumnType.QUASI));
+            columnInformation.add(new DefaultColumnInformation());
 
-        double suppression = 15.0;
+            double suppression = 15.0;
 
-        int k = 10;
-        List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-        privacyConstraints.add(new KAnonymity(k));
-
-
-        OLAOptions olaOptions = new OLAOptions(suppression);
-        OLA ola = new OLA();
-        ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
-
-        IPVDataset anonymized = ola.apply();
+            int k = 10;
+            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+            privacyConstraints.add(new KAnonymity(k));
 
 
-        final int N = POPULATION;
-        final double n = anonymized.getNumberOfRows();
-        for (int t = 0; t < 30; ++t) {
-            int tot = 0;
-            for (final Partition partition : ola.getOriginalPartitions()) {
-                if (partition.size() < k) continue;
+            OLAOptions olaOptions = new OLAOptions(suppression);
+            OLA ola = new OLA();
+            ola.initialize(original, columnInformation, privacyConstraints, olaOptions);
 
-                final double pi_k = partition.size() / n;
+            IPVDataset anonymized = ola.apply();
 
-                tot += new PoissonDistribution(N * pi_k).sample();
 
+            final int N = POPULATION;
+            final double n = anonymized.getNumberOfRows();
+            for (int t = 0; t < 30; ++t) {
+                int tot = 0;
+                for (final Partition partition : ola.getOriginalPartitions()) {
+                    if (partition.size() < k) continue;
+
+                    final double pi_k = partition.size() / n;
+
+                    tot += new PoissonDistribution(N * pi_k).sample();
+
+                }
+
+                System.out.println(Math.abs(tot - N));
             }
-
-            System.out.println(Math.abs(tot - N));
         }
-
     }
 
     @Test

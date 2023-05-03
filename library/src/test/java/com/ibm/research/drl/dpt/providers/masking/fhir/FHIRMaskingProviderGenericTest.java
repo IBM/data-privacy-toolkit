@@ -19,17 +19,16 @@ under the License.
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import com.ibm.research.drl.jsonpath.JSONPathExtractor;
 
+import java.io.InputStream;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FHIRMaskingProviderGenericTest<K> {
-
-    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     public void testAlreadyMasked(Set<String> maskedFields,
                                   Set<String> paths,
@@ -37,19 +36,21 @@ public class FHIRMaskingProviderGenericTest<K> {
                                   String resourceFilename,
                                   Class<K> genericType) throws Exception {
 
-        K original = objectMapper.readValue(this.getClass().getResourceAsStream(resourceFilename), genericType);
-        JsonNode originalTree = objectMapper.readTree(this.getClass().getResourceAsStream(resourceFilename));
+        try (
+                InputStream originalIS = FHIRMaskingProviderGenericTest.class.getResourceAsStream(resourceFilename);
+                InputStream maskedIS = FHIRMaskingProviderGenericTest.class.getResourceAsStream(resourceFilename)) {
+            K original = JsonUtils.MAPPER.readValue(originalIS, genericType);
+            JsonNode originalTree = JsonUtils.MAPPER.readTree(this.getClass().getResourceAsStream(resourceFilename));
 
-        K masked = maskingProvider.mask(
-                objectMapper.readValue(this.getClass().getResourceAsStream(resourceFilename), genericType));
-        JsonNode maskedTree = objectMapper.valueToTree(masked);
+            K masked = maskingProvider.mask(
+                    JsonUtils.MAPPER.readValue(maskedIS, genericType));
+            JsonNode maskedTree = JsonUtils.MAPPER.valueToTree(masked);
 
-        for(String path: paths) {
-            assertEquals(JSONPathExtractor.extract(originalTree, path), JSONPathExtractor.extract(maskedTree, path));
+            for (String path : paths) {
+                assertEquals(JSONPathExtractor.extract(originalTree, path), JSONPathExtractor.extract(maskedTree, path));
+            }
         }
-
     }
-
 }
 
 

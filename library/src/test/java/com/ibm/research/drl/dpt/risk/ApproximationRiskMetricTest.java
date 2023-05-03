@@ -39,43 +39,41 @@ public class ApproximationRiskMetricTest {
     @Test
     @Disabled
     public void testAccuracy() throws Exception {
-        InputStream sample = this.getClass().getResourceAsStream("/florida_sample_0.01.txt");
-        //InputStream population = this.getClass().getResourceAsStream("/florida_original.txt");
-        IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
+        try (InputStream sample = ApproximationRiskMetricTest.class.getResourceAsStream("/florida_sample_0.01.txt");) {
+            IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
 
-        System.out.println("loading done");
-        int k = 10;
+            int k = 10;
 
-        ApproximationRiskMetric risk = new ApproximationRiskMetric();
+            ApproximationRiskMetric risk = new ApproximationRiskMetric();
 
-        List<ColumnInformation> columnInformation = new ArrayList<>();
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new DefaultColumnInformation());
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ZIPCODE), ColumnType.QUASI, true));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("M", "F", "U")), ColumnType.QUASI, true));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI, true));
-        columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "9")),
-                ColumnType.QUASI, true));
-        System.out.println("columnInformation done");
+            List<ColumnInformation> columnInformation = new ArrayList<>();
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new DefaultColumnInformation());
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.ZIPCODE), ColumnType.QUASI, true));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("M", "F", "U")), ColumnType.QUASI, true));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getDefaultHierarchy(ProviderType.YOB), ColumnType.QUASI, true));
+            columnInformation.add(new CategoricalInformation(GeneralizationHierarchyFactory.getGenericFromFixedSet(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "9")),
+                    ColumnType.QUASI, true));
 
-        double suppression = 5.0;
+            double suppression = 5.0;
 
-        List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
-        privacyConstraints.add(new KAnonymity(k));
+            List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
+            privacyConstraints.add(new KAnonymity(k));
 
-        OLAOptions olaOptions = new OLAOptions(suppression);
-        OLA ola = new OLA();
-        ola.initialize(sampleDataset, columnInformation, privacyConstraints, olaOptions);
+            OLAOptions olaOptions = new OLAOptions(suppression);
+            OLA ola = new OLA();
+            ola.initialize(sampleDataset, columnInformation, privacyConstraints, olaOptions);
 
-        IPVDataset anonymizedSampleDataset = ola.apply();
+            IPVDataset anonymizedSampleDataset = ola.apply();
 
-        System.out.println("best node: " + ola.reportBestNode());
+            System.out.println("best node: " + ola.reportBestNode());
 
-        Map<String, String> options = new HashMap<>(2);
-        options.put(ApproximationRiskMetric.POPULATION, Integer.toString(POPULATION));
-        options.put(ApproximationRiskMetric.USE_GLOBAL_P, Boolean.toString(Boolean.FALSE));
-        risk.initialize(null, anonymizedSampleDataset, columnInformation, k, options);
+            Map<String, String> options = new HashMap<>(2);
+            options.put(ApproximationRiskMetric.POPULATION, Integer.toString(POPULATION));
+            options.put(ApproximationRiskMetric.USE_GLOBAL_P, Boolean.toString(Boolean.FALSE));
+            risk.initialize(null, anonymizedSampleDataset, columnInformation, k, options);
 
-        System.out.println(risk.report());
+            System.out.println(risk.report());
+        }
     }
 }
