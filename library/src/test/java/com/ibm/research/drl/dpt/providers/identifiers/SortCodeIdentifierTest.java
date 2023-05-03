@@ -31,7 +31,7 @@ public class SortCodeIdentifierTest {
     @Test
     public void validatesKnownUKISortCodes() throws Exception {
         try (
-                InputStream is = getClass().getResourceAsStream("/known-uki-sort-codes.csv");
+                InputStream is = SortCodeIdentifierTest.class.getResourceAsStream("/known-uki-sort-codes.csv");
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr)) {
 

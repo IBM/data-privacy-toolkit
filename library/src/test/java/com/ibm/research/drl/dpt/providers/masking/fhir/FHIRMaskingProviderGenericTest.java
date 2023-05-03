@@ -37,13 +37,10 @@ public class FHIRMaskingProviderGenericTest<K> {
                                   Class<K> genericType) throws Exception {
 
         try (
-                InputStream originalIS = FHIRMaskingProviderGenericTest.class.getResourceAsStream(resourceFilename);
-                InputStream maskedIS = FHIRMaskingProviderGenericTest.class.getResourceAsStream(resourceFilename)) {
-            K original = JsonUtils.MAPPER.readValue(originalIS, genericType);
-            JsonNode originalTree = JsonUtils.MAPPER.readTree(this.getClass().getResourceAsStream(resourceFilename));
-
-            K masked = maskingProvider.mask(
-                    JsonUtils.MAPPER.readValue(maskedIS, genericType));
+                InputStream maskedIS = FHIRMaskingProviderGenericTest.class.getResourceAsStream(resourceFilename);
+                InputStream originalIS = FHIRMaskingProviderGenericTest.class.getResourceAsStream(resourceFilename)) {
+            JsonNode originalTree = JsonUtils.MAPPER.readTree(originalIS);
+            K masked = maskingProvider.mask(JsonUtils.MAPPER.readValue(maskedIS, genericType));
             JsonNode maskedTree = JsonUtils.MAPPER.valueToTree(masked);
 
             for (String path : paths) {

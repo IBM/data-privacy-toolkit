@@ -43,7 +43,7 @@ public class ZIPCodeIdentifierTest {
 
     @Test
     public void testAgainstKnownDataset() throws Exception {
-        try (InputStream inputStream = getClass().getResourceAsStream("/healthcare-dataset.csv")) {
+        try (InputStream inputStream = ZIPCodeIdentifierTest.class.getResourceAsStream("/healthcare-dataset.csv")) {
             IPVDataset dataset = IPVDataset.load(inputStream, true, ',', '"', false);
 
             Identifier identifier = new ZIPCodeIdentifier();

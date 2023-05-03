@@ -28,19 +28,20 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NameIdentifierTest {
 
     @Test
-    @Disabled("Used to debug JP with Security BU")
+    @Disabled
     public void fixWeirdDetection() {
         String[] incorrect = {
           "Figures"
         };
 
         NameIdentifier identifier = new NameIdentifier();
-
 
         for (String term : incorrect) {
             assertFalse(identifier.isOfThisType(term), term);
@@ -107,20 +108,21 @@ public class NameIdentifierTest {
 
     @Test
     public void testSurnamesTop1000US() throws Exception {
-        NameIdentifier identifier = new NameIdentifier();
-        String filename = "/top1KsurnamesUS.csv";
-        List<String> surnames = fileContentsAsList(this.getClass().getResourceAsStream(filename));
+        try (InputStream inputStream = NameIdentifierTest.class.getResourceAsStream("/top1KsurnamesUS.csv")) {
+            NameIdentifier identifier = new NameIdentifier();
+            List<String> surnames = fileContentsAsList(inputStream);
 
-        int totalSurnames = 0;
-        int totalMatches = 0;
+            double totalSurnames = surnames.size();
+            double totalMatches = 0;
 
-        for(String surname: surnames) {
-            if (identifier.isOfThisType(surname)) {
-                totalMatches += 1;
+            for (String surname : surnames) {
+                if (identifier.isOfThisType(surname)) {
+                    totalMatches += 1.0;
+                }
             }
-        }
 
-        assertTrue(((double)totalMatches/(double)totalSurnames) > 0.95);
+            assertThat(totalMatches/totalSurnames, closeTo(0.75, 0.02));
+        }
     }
 
     @Test

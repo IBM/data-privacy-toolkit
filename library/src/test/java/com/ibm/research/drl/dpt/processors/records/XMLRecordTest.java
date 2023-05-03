@@ -26,7 +26,9 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,10 @@ public class XMLRecordTest {
     public void xmlDocumentsAreListedCorrectly() throws Exception {
         String testXML = "<document><name>Name</name><surname>Surname</surname></document>";
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(testXML.getBytes()));
+        Document document;
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(testXML.getBytes())) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(bais);
+        }
 
         Record record = new XMLRecord(document);
 
@@ -63,7 +68,10 @@ public class XMLRecordTest {
         String surname = "Silly Surname";
         String testXML = "<document><name>" + name + "</name><surname>" + surname + "</surname></document>";
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(testXML.getBytes()));
+        Document document;
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(testXML.getBytes())) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(bais);
+        }
 
         Record record = new XMLRecord(document);
 
@@ -80,7 +88,10 @@ public class XMLRecordTest {
         String surname = "Silly Surname";
         String testXML = "<document><name>" + name + "</name><surname>" + surname + "</surname></document>";
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(testXML.getBytes()));
+        Document document;
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(testXML.getBytes())) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(bais);
+        }
 
         Record record = new XMLRecord(document);
 
@@ -109,7 +120,10 @@ public class XMLRecordTest {
         String surname = "Silly Surname";
         String testXML = "<document><name>" + name + "</name><surname>" + surname + "</surname></document>";
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(testXML.getBytes()));
+        Document document;
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(testXML.getBytes())) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(bais);
+        }
 
         Record record = new XMLRecord(document);
 
@@ -121,7 +135,10 @@ public class XMLRecordTest {
 
     @Test
     public void testGeneratesPathsAsterisk() throws Exception {
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream("/sample.xml"));
+        Document document;
+        try (InputStream inputStream = XMLRecordTest.class.getResourceAsStream("/sample.xml");) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
         XMLRecord record = new XMLRecord(document);
 
         String path = "/note/*";
@@ -142,7 +159,10 @@ public class XMLRecordTest {
 
     @Test
     public void testGeneratesPathsArray() throws Exception {
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream("/sample.xml"));
+        Document document;
+        try (InputStream inputStream = XMLRecordTest.class.getResourceAsStream("/sample.xml");) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
         XMLRecord record = new XMLRecord(document);
 
         String path = "/note/numbers/value";
@@ -160,7 +180,10 @@ public class XMLRecordTest {
 
     @Test
     public void testGeneratesPathsNoArray() throws Exception {
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream("/sample.xml"));
+        Document document;
+        try (InputStream inputStream = XMLRecordTest.class.getResourceAsStream("/sample.xml");) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
         XMLRecord record = new XMLRecord(document);
 
         String path = "/note/email";
@@ -176,7 +199,10 @@ public class XMLRecordTest {
 
     @Test
     public void testGeneratesPathsArrayWithChildren() throws Exception {
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream("/books.xml"));
+        Document document;
+        try (InputStream inputStream = XMLRecordTest.class.getResourceAsStream("/books.xml");) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
         XMLRecord record = new XMLRecord(document);
 
         String path = "/bookstore/book/title";
@@ -224,7 +250,10 @@ public class XMLRecordTest {
 
     @Test
     public void testGeneratesPathsDoesNotExist() throws Exception {
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(this.getClass().getResourceAsStream("/sample.xml"));
+        Document document;
+        try (InputStream inputStream = XMLRecordTest.class.getResourceAsStream("/sample.xml");) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
         XMLRecord record = new XMLRecord(document);
 
         String path = "/note/email2";
@@ -244,7 +273,11 @@ public class XMLRecordTest {
         String surname = "Silly Surname";
         String testXML = "<document><name>" + name + "</name><surname>" + surname + "</surname></document>";
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(testXML.getBytes()));
+        Document document;
+        try (
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(testXML.getBytes())) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
 
         Record record = new XMLRecord(document);
 
@@ -266,7 +299,11 @@ public class XMLRecordTest {
         String surname = "Silly Surname";
         String testXML = "<document><name>" + name + "</name><surname>" + surname + "</surname></document>";
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(testXML.getBytes()));
+        Document document;
+        try (
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(testXML.getBytes())) {
+            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+        }
 
         Record record = new XMLRecord(document);
 

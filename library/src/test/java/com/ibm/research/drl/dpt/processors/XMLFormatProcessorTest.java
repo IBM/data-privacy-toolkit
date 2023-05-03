@@ -50,35 +50,38 @@ public class XMLFormatProcessorTest {
     
     @Test
     public void testIdentification() throws IOException {
-        InputStream inputStream = this.getClass().getResourceAsStream("/sample.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/sample.xml");) {
 
-        IdentificationReport results =
-                new XMLFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XML, null, IdentifierFactory.defaultIdentifiers(),  -1);
+            IdentificationReport results =
+                    new XMLFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.XML, null, IdentifierFactory.defaultIdentifiers(), -1);
 
-        assertThat(results.getRawResults().size(), greaterThan(0));
+            assertThat(results.getRawResults().size(), greaterThan(0));
+        }
     }
     
     @Test
     public void testMasking() throws IOException {
-        InputStream inputStream = this.getClass().getResourceAsStream("/sample.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/sample.xml");
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
-        
-        ConfigurationManager configurationManager = new ConfigurationManager(new DefaultMaskingConfiguration());
-       
-        String path = "/note/email";
-        
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.HASH, path));
+             ByteArrayOutputStream output = new ByteArrayOutputStream();
+             PrintStream outputStream = new PrintStream(output);
+        ) {
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            ConfigurationManager configurationManager = new ConfigurationManager(new DefaultMaskingConfiguration());
 
-        String maskedXML = output.toString();
-        assertFalse(maskedXML.contains("lala@gmail.com"));
+            String path = "/note/email";
+
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.HASH, path));
+
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+
+            String maskedXML = output.toString();
+            assertFalse(maskedXML.contains("lala@gmail.com"));
+        }
     }
 
     @Test
@@ -86,33 +89,34 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        InputStream inputStream = this.getClass().getResourceAsStream("/sample.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/sample.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
+        PrintStream outputStream = new PrintStream(output);) {
 
-        DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
-        defaultMaskingConfiguration.setValue("shift.mask.value", 1);
-        defaultMaskingConfiguration.setValue("shift.mask.digitsToKeep", 0);
+            DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
+            defaultMaskingConfiguration.setValue("shift.mask.value", 1);
+            defaultMaskingConfiguration.setValue("shift.mask.digitsToKeep", 0);
 
-        ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
+            ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
 
-        String path = "/note/numbers/value";
+            String path = "/note/numbers/value";
 
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SHIFT, path));
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SHIFT, path));
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
 
-        String maskedXML = output.toString();
-        Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
+            String maskedXML = output.toString();
+            Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
 
-        assertEquals("2", xPath.compile("/note/numbers/value[1]").evaluate(document, XPathConstants.STRING));
-        assertEquals("3", xPath.compile("/note/numbers/value[2]").evaluate(document, XPathConstants.STRING));
-        assertEquals("4", xPath.compile("/note/numbers/value[3]").evaluate(document, XPathConstants.STRING));
+            assertEquals("2", xPath.compile("/note/numbers/value[1]").evaluate(document, XPathConstants.STRING));
+            assertEquals("3", xPath.compile("/note/numbers/value[2]").evaluate(document, XPathConstants.STRING));
+            assertEquals("4", xPath.compile("/note/numbers/value[3]").evaluate(document, XPathConstants.STRING));
+        }
     }
 
     @Test
@@ -120,34 +124,35 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/books.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
+        PrintStream outputStream = new PrintStream(output);) {
 
-        DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
-        defaultMaskingConfiguration.setValue("shift.mask.value", 1);
-        defaultMaskingConfiguration.setValue("shift.mask.digitsToKeep", 2);
+            DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
+            defaultMaskingConfiguration.setValue("shift.mask.value", 1);
+            defaultMaskingConfiguration.setValue("shift.mask.digitsToKeep", 2);
 
-        ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
+            ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
 
-        String path = "/bookstore/book/price";
+            String path = "/bookstore/book/price";
 
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SHIFT, path));
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SHIFT, path));
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
 
-        String maskedXML = output.toString();
-        Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
+            String maskedXML = output.toString();
+            Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
 
-        assertEquals("31.00", xPath.compile("/bookstore/book[1]/price").evaluate(document, XPathConstants.STRING));
-        assertEquals("30.99", xPath.compile("/bookstore/book[2]/price").evaluate(document, XPathConstants.STRING));
-        assertEquals("50.99", xPath.compile("/bookstore/book[3]/price").evaluate(document, XPathConstants.STRING));
-        assertEquals("40.95", xPath.compile("/bookstore/book[4]/price").evaluate(document, XPathConstants.STRING));
+            assertEquals("31.00", xPath.compile("/bookstore/book[1]/price").evaluate(document, XPathConstants.STRING));
+            assertEquals("30.99", xPath.compile("/bookstore/book[2]/price").evaluate(document, XPathConstants.STRING));
+            assertEquals("50.99", xPath.compile("/bookstore/book[3]/price").evaluate(document, XPathConstants.STRING));
+            assertEquals("40.95", xPath.compile("/bookstore/book[4]/price").evaluate(document, XPathConstants.STRING));
+        }
     }
 
     @Test
@@ -155,37 +160,38 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
+        try (InputStream inputStream = XMLFormatProcessorTest.class.getResourceAsStream("/books.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
+        PrintStream outputStream = new PrintStream(output);) {
 
-        DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
-        defaultMaskingConfiguration.setValue("redact.preserve.length", false);
+            DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
+            defaultMaskingConfiguration.setValue("redact.preserve.length", false);
 
-        ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
+            ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
 
-        String path = "/bookstore/book/author";
+            String path = "/bookstore/book/author";
 
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.REDACT, path));
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.REDACT, path));
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
 
-        String maskedXML = output.toString();
-        Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
+            String maskedXML = output.toString();
+            Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
 
-        assertEquals("*", xPath.compile("/bookstore/book[1]/author").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[2]/author").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[3]/author[1]").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[3]/author[2]").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[3]/author[3]").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[3]/author[4]").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[3]/author[5]").evaluate(document, XPathConstants.STRING));
-        assertEquals("*", xPath.compile("/bookstore/book[4]/author").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[1]/author").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[2]/author").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[3]/author[1]").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[3]/author[2]").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[3]/author[3]").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[3]/author[4]").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[3]/author[5]").evaluate(document, XPathConstants.STRING));
+            assertEquals("*", xPath.compile("/bookstore/book[4]/author").evaluate(document, XPathConstants.STRING));
+        }
     }
 
     @Test
@@ -193,30 +199,31 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        InputStream inputStream = this.getClass().getResourceAsStream("/sample.xml");
+        try (InputStream inputStream = this.getClass().getResourceAsStream("/sample.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
+        PrintStream outputStream = new PrintStream(output);) {
 
-        DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
+            DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
 
-        ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
+            ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
 
-        String path = "/note/numbers/value";
+            String path = "/note/numbers/value";
 
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, path));
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, path));
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
 
-        String maskedXML = output.toString();
-        Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
+            String maskedXML = output.toString();
+            Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
 
-        assertThat(((NodeList)xPath.compile("/note/numbers").evaluate(document, XPathConstants.NODESET)).getLength(), is(1));
-        assertThat(((NodeList)xPath.compile("/note/numbers/value").evaluate(document, XPathConstants.NODESET)).getLength(), is(0));
+            assertThat(((NodeList) xPath.compile("/note/numbers").evaluate(document, XPathConstants.NODESET)).getLength(), is(1));
+            assertThat(((NodeList) xPath.compile("/note/numbers/value").evaluate(document, XPathConstants.NODESET)).getLength(), is(0));
+        }
     }
 
     @Test
@@ -224,30 +231,31 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
+        try (InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
+        PrintStream outputStream = new PrintStream(output);) {
 
-        DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
+            DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
 
-        ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
+            ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
 
-        String path = "/bookstore/book/title";
+            String path = "/bookstore/book/title";
 
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, path));
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, path));
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
 
-        String maskedXML = output.toString();
-        Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
+            String maskedXML = output.toString();
+            Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
 
-        assertThat(((NodeList)xPath.compile("/bookstore/book/author").evaluate(document, XPathConstants.NODESET)).getLength(), is(8));
-        assertThat(((NodeList)xPath.compile("/bookstore/book/title").evaluate(document, XPathConstants.NODESET)).getLength(), is(0));
+            assertThat(((NodeList) xPath.compile("/bookstore/book/author").evaluate(document, XPathConstants.NODESET)).getLength(), is(8));
+            assertThat(((NodeList) xPath.compile("/bookstore/book/title").evaluate(document, XPathConstants.NODESET)).getLength(), is(0));
+        }
     }
 
     @Test
@@ -255,29 +263,30 @@ public class XMLFormatProcessorTest {
         final XPath xPath = XPathFactory.newInstance().newXPath();
         DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-        InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
+        try (InputStream inputStream = this.getClass().getResourceAsStream("/books.xml");
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        PrintStream outputStream = new PrintStream(output);
+        PrintStream outputStream = new PrintStream(output);) {
 
-        DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
+            DefaultMaskingConfiguration defaultMaskingConfiguration = new DefaultMaskingConfiguration();
 
-        ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
+            ConfigurationManager configurationManager = new ConfigurationManager(defaultMaskingConfiguration);
 
-        String path = "/bookstore/book/author";
+            String path = "/bookstore/book/author";
 
-        Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
-        identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, path));
+            Map<String, DataMaskingTarget> identifiedTypes = new HashMap<>();
+            identifiedTypes.put(path, new DataMaskingTarget(ProviderType.SUPPRESS_FIELD, path));
 
-        DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
-                identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
-        MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
-        new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
+            DataMaskingOptions dataMaskingOptions = new DataMaskingOptions(DataTypeFormat.XML, DataTypeFormat.XML,
+                    identifiedTypes, false, null, new CSVDatasetOptions(false, ',', '"', false));
+            MaskingProviderFactory factory = new MaskingProviderFactory(configurationManager, identifiedTypes);
+            new XMLFormatProcessor().maskStream(inputStream, outputStream, factory, dataMaskingOptions, new HashSet<>(), null);
 
-        String maskedXML = output.toString();
-        Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
+            String maskedXML = output.toString();
+            Document document = documentBuilder.parse(new ByteArrayInputStream(maskedXML.getBytes()));
 
-        assertThat(((NodeList)xPath.compile("/bookstore/book/author").evaluate(document, XPathConstants.NODESET)).getLength(), is(0));
-        assertThat(((NodeList)xPath.compile("/bookstore/book/title").evaluate(document, XPathConstants.NODESET)).getLength(), is(4));
+            assertThat(((NodeList) xPath.compile("/bookstore/book/author").evaluate(document, XPathConstants.NODESET)).getLength(), is(0));
+            assertThat(((NodeList) xPath.compile("/bookstore/book/title").evaluate(document, XPathConstants.NODESET)).getLength(), is(4));
+        }
     }
 }
