@@ -18,12 +18,12 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.NamesManager;
 import com.ibm.research.drl.dpt.models.Gender;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import com.ibm.research.drl.dpt.util.Readers;
 import com.ibm.research.drl.dpt.util.localization.LocalizationManager;
 import com.ibm.research.drl.dpt.util.localization.Resource;
@@ -41,7 +41,9 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NameMaskingProviderTest {
     private final NamesManager.Names names = NamesManager.instance();
@@ -118,22 +120,24 @@ public class NameMaskingProviderTest {
 
     @Test
     public void testMaskVirtualFieldFromConfFile() throws Exception {
-        ConfigurationManager configurationManager = ConfigurationManager.load(new ObjectMapper().readTree(this.getClass().getResourceAsStream("/name_virtualfield.json")));
+        try (InputStream inputStream = NameMaskingProviderTest.class.getResourceAsStream("/name_virtualfield.json")) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(inputStream));
 
-        MaskingConfiguration maskingConfiguration = configurationManager.getDefaultConfiguration();
+            MaskingConfiguration maskingConfiguration = configurationManager.getDefaultConfiguration();
 
-        NameMaskingProvider nameMaskingProvider = new NameMaskingProvider(maskingConfiguration, factory);
-        HashMaskingProvider hashMaskingProvider = new HashMaskingProvider();
+            NameMaskingProvider nameMaskingProvider = new NameMaskingProvider(maskingConfiguration, factory);
+            HashMaskingProvider hashMaskingProvider = new HashMaskingProvider();
 
-        String originalValue = "John Smith";
-        String[] originalTokens = originalValue.split(" ");
+            String originalValue = "John Smith";
+            String[] originalTokens = originalValue.split(" ");
 
-        String maskedValue = nameMaskingProvider.mask(originalValue);
+            String maskedValue = nameMaskingProvider.mask(originalValue);
 
-        String[] tokens = maskedValue.split(" ");
-        assertEquals(2, tokens.length);
-        assertEquals(hashMaskingProvider.mask(originalTokens[0]), tokens[0]);
-        assertEquals(hashMaskingProvider.mask(originalTokens[1]), tokens[1]);
+            String[] tokens = maskedValue.split(" ");
+            assertEquals(2, tokens.length);
+            assertEquals(hashMaskingProvider.mask(originalTokens[0]), tokens[0]);
+            assertEquals(hashMaskingProvider.mask(originalTokens[1]), tokens[1]);
+        }
     }
     
     @Test
@@ -220,7 +224,7 @@ public class NameMaskingProviderTest {
     }
 
     @Test
-    public void testMaskNameAndSurname() throws  Exception {
+    public void testMaskNameAndSurname() {
         NameMaskingProvider nameMaskingProvider = new NameMaskingProvider(factory);
 
         String name = "John Smith";
@@ -261,7 +265,7 @@ public class NameMaskingProviderTest {
     }
 
     @Test
-    public void testMaskAnyGenderNotAllowed() throws Exception {
+    public void testMaskAnyGenderNotAllowed() {
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
         configuration.setValue("names.masking.allowAnyGender", false);
 
@@ -287,7 +291,7 @@ public class NameMaskingProviderTest {
     }
 
     @Test
-    public void testFromAdrian() throws Exception {
+    public void testFromAdrian() {
         MaskingConfiguration configuration = new DefaultMaskingConfiguration();
 
         String name = "Vamshi Thotempudi";
@@ -311,7 +315,7 @@ public class NameMaskingProviderTest {
     }
 
     @Test
-    public void pseudoRandom() throws Exception {
+    public void pseudoRandom() {
         String original1 = "John Doe";
         String original2 = "John James Smith";
         String original3 = "Frederik Smith";

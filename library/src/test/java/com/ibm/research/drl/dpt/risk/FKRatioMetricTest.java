@@ -87,25 +87,6 @@ public class FKRatioMetricTest {
 //        final List<Double> suppressions = Arrays.asList(5.0, 10.0, 15.0, 20.0);
             final List<Double> suppressions = List.of(5.0);
 
-            final InformationMetricOptions options = new InformationMetricOptions() {
-                @Override
-                public int getIntValue(String key) {
-                    return POPULATION;
-                }
-
-                @Override
-                public String getStringValue(String key) {
-                    return null;
-                }
-
-                @Override
-                public boolean getBooleanValue(String key) {
-                    return false;
-                }
-            };
-
-            System.out.println("::: iteration k suppression ola.reportSuppressionRate() i_risk kRatio.report() categoricalPrecision.report()  ola.reportBestNode().toString()");
-
             for (int k = 2; k < 100; k += 1) {
                 List<PrivacyConstraint> privacyConstraints = new ArrayList<>();
                 privacyConstraints.add(new KAnonymity(k));

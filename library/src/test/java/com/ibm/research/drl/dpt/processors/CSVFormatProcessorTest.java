@@ -132,13 +132,15 @@ public class CSVFormatProcessorTest {
 
     @Test
     public void testIdentification() throws Exception {
-        IdentificationReport identifiedTypes = new CSVFormatProcessor().identifyTypesStream(
-                getClass().getResourceAsStream("/100.csv"),
-                DataTypeFormat.CSV,
-                new CSVDatasetOptions(false, ',', '"', false),
-                List.of(new YOBIdentifier()),
-                -1
-        );
+        try (InputStream inputStream = CSVFormatProcessorTest.class.getResourceAsStream("/100.csv")) {
+            IdentificationReport identifiedTypes = new CSVFormatProcessor().identifyTypesStream(
+                    inputStream,
+                    DataTypeFormat.CSV,
+                    new CSVDatasetOptions(false, ',', '"', false),
+                    List.of(new YOBIdentifier()),
+                    -1
+            );
+        }
     }
 
     @Test

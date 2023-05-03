@@ -18,9 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
@@ -51,8 +51,8 @@ public class AbstractComplexMaskingProviderTest {
 
     @Test
     public void testGetSubfieldConfiguration() throws Exception {
-        try (InputStream is = this.getClass().getResourceAsStream("/complexConfiguration.json")) {
-            ConfigurationManager configurationManager = ConfigurationManager.load(new ObjectMapper().readTree(is));
+        try (InputStream is = AbstractComplexMaskingProviderTest.class.getResourceAsStream("/complexConfiguration.json")) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(is));
 
             assertEquals("RANDOM", configurationManager.getDefaultConfiguration().getStringValue("default.masking.provider"));
 

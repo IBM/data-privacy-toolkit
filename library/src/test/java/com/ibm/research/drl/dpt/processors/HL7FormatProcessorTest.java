@@ -24,7 +24,6 @@ import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DataMaskingOptions;
 import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
@@ -33,6 +32,7 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.HashMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -48,11 +48,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class HL7FormatProcessorTest {
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
     public void testFromProcessorFactory() throws Exception {
-        
+
         FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
 
         String msg = "MSH|^~\\&|HIS|RIH|EKG|EKG|199904140038||ADT^A01||P|2.2\r"
@@ -65,31 +64,35 @@ public class HL7FormatProcessorTest {
                 + "GT1||0222PL|NOTREAL^BOB^B||STREET^OTHER STREET^CITY^ST^77787|(444)999-3333|(222)777-5555||||MO|111-33-5555||||NOTREAL GILL N|STREET^OTHER STREET^CITY^ST^99999|(111)222-3333\r"
                 + "IN1||022254P|4558PD|BLUE CROSS|STREET^OTHER STREET^CITY^ST^00990||(333)333-6666||221K|LENIX|||19980515|19990515|||PATIENT01 TEST D||||||||||||||||||02LL|022LP554";
 
-        FileOutputStream fos = new FileOutputStream("/tmp/hl7.txt");
-        fos.write(msg.getBytes());
-        fos.close();
-        
+        try (FileOutputStream fos = new FileOutputStream("/tmp/hl7.txt");) {
+            fos.write(msg.getBytes());
+        }
+
         InputStream inputStream = new ByteArrayInputStream(msg.getBytes());
-        
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(getClass().getResourceAsStream("/hl7mask.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/hl7options.json"), DataMaskingOptions.class);
+        try (InputStream configInputStream = HL7FormatProcessorTest.class.getResourceAsStream("/hl7mask.json");
+        InputStream optionsInputStream = HL7FormatProcessorTest.class.getResourceAsStream("/hl7options.json");) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(configInputStream));
+            DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(optionsInputStream, DataMaskingOptions.class);
 
-        formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
-        
-        String masked = outputStream.toString();
+            formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
 
-        HapiContext context = new DefaultHapiContext();
-        Parser p = context.getGenericParser();
-        Message maskedMessage = p.parse(masked);
-        Terser terser = new Terser(maskedMessage);
-        
-        String xref = "/.MSH-3-1";
+            String masked = outputStream.toString();
 
-        String maskedSendingApp = terser.get(xref);
-        assertNotEquals("HIS", maskedSendingApp);
+            try (HapiContext context = new DefaultHapiContext();) {
+                Parser p = context.getGenericParser();
+                Message maskedMessage = p.parse(masked);
+                Terser terser = new Terser(maskedMessage);
+
+                String xref = "/.MSH-3-1";
+
+                String maskedSendingApp = terser.get(xref);
+                assertNotEquals("HIS", maskedSendingApp);
+            }
+        }
     }
 
     @Test
@@ -112,23 +115,27 @@ public class HL7FormatProcessorTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/hl7v22.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/hl7v22.json"), DataMaskingOptions.class);
+        try (InputStream config = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22.json");
+        InputStream options = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22.json")) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(config));
+            DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(options, DataMaskingOptions.class);
 
-        FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
-        formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
+            FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
+            formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
 
-        String masked = outputStream.toString();
+            String masked = outputStream.toString();
 
-        HapiContext context = new DefaultHapiContext();
-        Parser p = context.getGenericParser();
-        Message maskedMessage = p.parse(masked);
-        Terser terser = new Terser(maskedMessage);
+            try (HapiContext context = new DefaultHapiContext();) {
+                Parser p = context.getGenericParser();
+                Message maskedMessage = p.parse(masked);
+                Terser terser = new Terser(maskedMessage);
 
-        String maskedSendingApp = terser.get(xref);
+                String maskedSendingApp = terser.get(xref);
 
-        assertNotEquals("HIS", maskedSendingApp);
-        assertEquals(3, maskedSendingApp.length());
+                assertNotEquals("HIS", maskedSendingApp);
+                assertEquals(3, maskedSendingApp.length());
+            }
+        }
     }
 
     @Test
@@ -148,22 +155,26 @@ public class HL7FormatProcessorTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/hl7v22.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/hl7v22.json"), DataMaskingOptions.class);
+        try (InputStream config = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22.json");
+             InputStream options = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22.json")) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(config));
+            DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(options, DataMaskingOptions.class);
 
-        FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
-        formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
+            FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
+            formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
 
-        String masked = outputStream.toString();
+            String masked = outputStream.toString();
 
-        HapiContext context = new DefaultHapiContext();
-        Parser p = context.getGenericParser();
-        Message maskedMessage = p.parse(masked);
-        Terser terser = new Terser(maskedMessage);
+            try (HapiContext context = new DefaultHapiContext();) {
+                Parser p = context.getGenericParser();
+                Message maskedMessage = p.parse(masked);
+                Terser terser = new Terser(maskedMessage);
 
-        String maskedSendingApp = terser.get(xref);
-        assertNotEquals("ULTRA", maskedSendingApp);
-        assertEquals(5, maskedSendingApp.length());
+                String maskedSendingApp = terser.get(xref);
+                assertNotEquals("ULTRA", maskedSendingApp);
+                assertEquals(5, maskedSendingApp.length());
+            }
+        }
     }
 
     @Test
@@ -183,21 +194,25 @@ public class HL7FormatProcessorTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/hl7v22invalidxref.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/hl7v22invalidxref.json"), DataMaskingOptions.class);
+        try (InputStream config = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22invalidxref.json");
+        InputStream options = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22invalidxref.json")) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(config));
+            DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(options, DataMaskingOptions.class);
 
-        FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
-        formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
+            FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
+            formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
 
-        String masked = outputStream.toString();
+            String masked = outputStream.toString();
 
-        HapiContext context = new DefaultHapiContext();
-        Parser p = context.getGenericParser();
-        Message maskedMessage = p.parse(masked);
-        Terser terser = new Terser(maskedMessage);
+            try (HapiContext context = new DefaultHapiContext();) {
+                Parser p = context.getGenericParser();
+                Message maskedMessage = p.parse(masked);
+                Terser terser = new Terser(maskedMessage);
 
-        String maskedSendingApp = terser.get(xref);
-        assertEquals("ULTRA", maskedSendingApp);
+                String maskedSendingApp = terser.get(xref);
+                assertEquals("ULTRA", maskedSendingApp);
+            }
+        }
     }
 
 
@@ -216,34 +231,36 @@ public class HL7FormatProcessorTest {
 
         String xref = "/.MSH-3-1";
 
-        InputStream inputStream = new ByteArrayInputStream(msg.getBytes());
+        try (InputStream inputStream = new ByteArrayInputStream(msg.getBytes());
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
+        InputStream config = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22perfield.json");
+        InputStream options = HL7FormatProcessorTest.class.getResourceAsStream("/hl7v22perfield.json");
+        ) {
+            ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(config));
+            DataMaskingOptions maskingOptions = JsonUtils.MAPPER.readValue(options, DataMaskingOptions.class);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/hl7v22perfield.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/hl7v22perfield.json"), DataMaskingOptions.class);
+            FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
+            formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
 
-        FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.HL7);
-        formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
+            String masked = outputStream.toString();
 
-        String masked = outputStream.toString();
+            try (HapiContext context = new DefaultHapiContext();) {
+                Parser p = context.getGenericParser();
+                Message maskedMessage = p.parse(masked);
+                Terser terser = new Terser(maskedMessage);
 
-        System.out.println(masked);
+                String maskedSendingApp = terser.get(xref);
+                assertNotEquals("HIS", maskedSendingApp);
 
-        HapiContext context = new DefaultHapiContext();
-        Parser p = context.getGenericParser();
-        Message maskedMessage = p.parse(masked);
-        Terser terser = new Terser(maskedMessage);
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update("HIS".getBytes());
+                byte[] expected = md.digest();
 
-        String maskedSendingApp = terser.get(xref);
-        assertNotEquals("HIS", maskedSendingApp);
-
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update("HIS".getBytes());
-        byte[] expected = md.digest();
-        
-        assertEquals(maskedSendingApp, HashMaskingProvider.bytesToHex(expected));
+                assertEquals(maskedSendingApp, HashMaskingProvider.bytesToHex(expected));
+            }
+        }
     }
 
     @Test
@@ -277,13 +294,14 @@ public class HL7FormatProcessorTest {
 
             String masked = outputStream.toString();
 
-            HapiContext context = new DefaultHapiContext();
-            Parser p = context.getGenericParser();
-            Message maskedMessage = p.parse(masked);
-            Terser terser = new Terser(maskedMessage);
+            try (HapiContext context = new DefaultHapiContext();) {
+                Parser p = context.getGenericParser();
+                Message maskedMessage = p.parse(masked);
+                Terser terser = new Terser(maskedMessage);
 
-            String maskedValue = terser.get(xref);
-            assertThat(maskedValue, nullValue());
+                String maskedValue = terser.get(xref);
+                assertThat(maskedValue, nullValue());
+            }
         }
     }
 }

@@ -19,11 +19,29 @@ under the License.
 package com.ibm.research.drl.dpt.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.dpt.models.fhir.resources.*;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRAuditEvent;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRBodySite;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRContract;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRDevice;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRDeviceComponent;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRDeviceMetric;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRGoal;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRGroup;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRLocation;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRMedication;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRMedicationAdministration;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRMedicationOrder;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRObservation;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIROrganization;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRPatient;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRPractitioner;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRQuestionnaire;
+import com.ibm.research.drl.dpt.models.fhir.resources.FHIRQuestionnaireResponse;
+import com.ibm.research.drl.dpt.util.JsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -123,9 +141,8 @@ public class FHIRValidationTest {
 
     }
 
-    private Collection<ElementDefinition> getListOfFields(InputStream is) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode contents = objectMapper.readTree(is);
+    private Collection<ElementDefinition> getListOfFields(InputStream is) throws IOException {
+        JsonNode contents = JsonUtils.MAPPER.readTree(is);
 
         JsonNode elements = contents.get("snapshot").get("element");
 
@@ -180,7 +197,7 @@ public class FHIRValidationTest {
     @Test
     public void testValidation() throws Exception {
         for(String key: this.profileToClass.keySet()) {
-            try (InputStream is = this.getClass().getResourceAsStream(key)) {
+            try (InputStream is = FHIRValidationTest.class.getResourceAsStream(key)) {
                 Collection<ElementDefinition> fields = getListOfFields(is);
 
                 Class objectClass = this.profileToClass.get(key);

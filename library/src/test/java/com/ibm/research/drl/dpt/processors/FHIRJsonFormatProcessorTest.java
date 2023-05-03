@@ -39,7 +39,7 @@ public class FHIRJsonFormatProcessorTest {
     private final ObjectMapper mapper = new ObjectMapper();
     @Test
     public void testDoesNotCrash() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/fhir/deviceExample.json");
+        try (InputStream inputStream = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/deviceExample.json");
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              PrintStream printStream = new PrintStream(outputStream)
         ) {
@@ -82,7 +82,7 @@ public class FHIRJsonFormatProcessorTest {
 
         for(String filename: filenames) {
             try (
-                    InputStream inputStream = this.getClass().getResourceAsStream(filename);
+                    InputStream inputStream = FHIRJsonFormatProcessorTest.class.getResourceAsStream(filename);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     PrintStream outputStream = new PrintStream(baos)
             ) {
@@ -96,9 +96,9 @@ public class FHIRJsonFormatProcessorTest {
     @Test
     public void testMaintainsDataType() throws Exception {
         try (
-                InputStream configurationStream = this.getClass().getResourceAsStream("/fhir/masking-full.json");
-                InputStream is = this.getClass().getResourceAsStream("/fhir/MedicationOrder-230986.json");
-                InputStream inputStream = this.getClass().getResourceAsStream("/fhir/MedicationOrder-230986.json");
+                InputStream configurationStream = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/masking-full.json");
+                InputStream is = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/MedicationOrder-230986.json");
+                InputStream inputStream = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/MedicationOrder-230986.json");
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 PrintStream output = new PrintStream(byteArrayOutputStream)
         ) {

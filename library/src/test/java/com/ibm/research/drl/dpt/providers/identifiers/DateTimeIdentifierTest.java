@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParsePosition;
@@ -226,7 +227,10 @@ public class DateTimeIdentifierTest {
     public void fromDemoFile() throws Exception {
         DateTimeIdentifier identifier = new DateTimeIdentifier();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/demo.csv")))) {
+        try (
+                InputStream inputStream = DateTimeIdentifierTest.class.getResourceAsStream("/demo.csv");
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader br = new BufferedReader(inputStreamReader)) {
             for (String line = br.readLine(); null != line; line = br.readLine()) {
                 final String value = line.split(",")[0];
                 try {
