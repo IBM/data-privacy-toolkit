@@ -18,7 +18,15 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.mondrian;
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.AnonymizationUtils;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformationGenerator;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
+import com.ibm.research.drl.dpt.anonymization.ValidationUtils;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
@@ -32,7 +40,6 @@ import com.ibm.research.drl.dpt.generators.ItemSet;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.util.Histogram;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -87,8 +94,6 @@ public class MondrianTest {
         MondrianOptions options = new MondrianOptions();
         try (InputStream input = MondrianTest.class.getResourceAsStream("/testNumericOriginal.csv")) {
             IPVDataset dataset = IPVDataset.load(input, false, ',', '"', false);
-
-            List<? extends IPVSchemaField> fields = dataset.getSchema().getFields();
 
             ItemSet itemSet = new ItemSet();
             itemSet.addItem(0);

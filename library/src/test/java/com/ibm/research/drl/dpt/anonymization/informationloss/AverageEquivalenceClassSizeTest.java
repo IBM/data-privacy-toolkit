@@ -18,13 +18,16 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.informationloss;
 
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformationGenerator;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.InMemoryPartition;
+import com.ibm.research.drl.dpt.anonymization.Partition;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -43,7 +46,6 @@ public class AverageEquivalenceClassSizeTest {
 
     @Test
     public void testAECSNumeric() {
-        int K = 2;
         List<List<String>> values = new ArrayList<>();
         values.add(toString(new Long[]{1L, 7L, 2L, 4L}));
         values.add(toString(new Long[]{6L, 7L, 12L, 4L}));
@@ -93,7 +95,6 @@ public class AverageEquivalenceClassSizeTest {
                 null, partitions, columnInformationList, new AECSOptions(false, 2));
 
         double aecsValue = aecs.report();
-//        System.out.println("AECS = " + aecsValue);
 
         double expected = 5.0 / 2.0;
         assertEquals(aecsValue, expected, Double.MIN_VALUE);
@@ -103,7 +104,6 @@ public class AverageEquivalenceClassSizeTest {
                 null, partitions, columnInformationList, new AECSOptions(true, 2));
 
         aecsValue = aecs.report();
-//        System.out.println("AECS normalized = " + aecsValue);
 
         expected = (5.0 / 2.0) / 2.0;
         assertThat(aecsValue, is(expected));
