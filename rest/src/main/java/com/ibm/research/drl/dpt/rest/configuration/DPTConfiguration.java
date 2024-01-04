@@ -123,12 +123,7 @@ public class DPTConfiguration {
     @Bean
     public IdentifierFactory createIdentifierFactory() throws IOException {
         try (InputStream stream = DPTConfiguration.class.getResourceAsStream("/identifiers.properties")) {
-            if (Objects.isNull(stream)) throw new RuntimeException("Stream is null");
-            try {
-                return new IdentifierFactory(stream);
-            } catch (NoClassDefFoundError e) {
-                throw new RuntimeException("missing something: " + e.getMessage());
-            }
+            return new IdentifierFactory(stream);
         }
     }
 }
