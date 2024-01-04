@@ -37,15 +37,15 @@ repositories {
 }
 
 ext {
-    junit_jupiter_version = '5.9.0'
-    junit_platform_launcher_version = '1.9.0'
+    junit_jupiter_version = '5.10.0'
+    junit_platform_launcher_version = '1.9.3'
 
-    mockito_version = '4.11.0'
+    mockito_version = '5.4.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
-    jackson_version = '2.14.2'
-    jackson_dataformat_version = '2.14.2'
+    jackson_version = '2.15.3'
+    jackson_dataformat_version = '2.15.3'
 
     log4j2_version = '2.19.0'
 
