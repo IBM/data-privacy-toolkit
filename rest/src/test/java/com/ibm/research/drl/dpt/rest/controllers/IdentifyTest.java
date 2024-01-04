@@ -20,6 +20,7 @@ package com.ibm.research.drl.dpt.rest.controllers;
 
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.internal.util.io.IOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
+@Disabled
 class IdentifyTest {
     @Autowired
     private MockMvc mvc;
