@@ -27,10 +27,10 @@ plugins {
 }
 
 ext {
-    junit_jupiter_version = '5.9.3'
+    junit_jupiter_version = '5.10.0'
     junit_platform_launcher_version = '1.11.0'
 
-    mockito_version = '4.11.0'
+    mockito_version = '5.4.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
@@ -46,7 +46,6 @@ ext {
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
-    pdfbox_version = '2.0.24'
 
     poi_version = "5.2.2"
 
