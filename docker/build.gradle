@@ -27,26 +27,25 @@ plugins {
 }
 
 ext {
-    junit_jupiter_version = '5.9.3'
+    junit_jupiter_version = '5.10.0'
     junit_platform_launcher_version = '1.9.3'
 
-    mockito_version = '4.11.0'
+    mockito_version = '5.4.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
-    jackson_version = '2.15.0'
-    jackson_dataformat_version = '2.15.0'
+    jackson_version = '2.15.2'
+    jackson_dataformat_version = '2.15.2'
 
     log4j2_version = '2.20.0'
 
     commons_codec_version = '1.13'
     commons_csv_version = '1.8'
-    commons_io_version = '2.11.0'
+    commons_io_version = '2.13.0'
     commons_lang_version = '3.10'
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
-    pdfbox_version = '2.0.24'
 
     poi_version = "5.2.2"
 
