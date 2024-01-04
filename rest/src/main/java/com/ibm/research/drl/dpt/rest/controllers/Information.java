@@ -26,7 +26,12 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.rest.exceptions.UnknownAlgorithmName;
-import com.ibm.research.drl.dpt.rest.models.*;
+import com.ibm.research.drl.dpt.rest.models.AnonymizationAlgorithmDescription;
+import com.ibm.research.drl.dpt.rest.models.CompleteAlgorithmConfiguration;
+import com.ibm.research.drl.dpt.rest.models.IdentifierDescription;
+import com.ibm.research.drl.dpt.rest.models.InformationLossMetricDescription;
+import com.ibm.research.drl.dpt.rest.models.RiskIdentificationDescription;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +46,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/information")
 public class Information {
+    private IdentifierFactory identifierFactory;
+    public Information(@Autowired IdentifierFactory identifierFactory) {
+        this.identifierFactory = identifierFactory;
+    }
+
     @GetMapping("/identifiers")
     public Iterable<IdentifierDescription> listIdentifiers() {
-        return IdentifierFactory.defaultIdentifiers().stream().
+        return this.identifierFactory.availableIdentifiers().stream().
                 map( identifier -> new IdentifierDescription(
                         identifier.getClass().getSimpleName(),
                         identifier.getDescription())).
