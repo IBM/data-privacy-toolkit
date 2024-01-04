@@ -56,7 +56,6 @@ ext {
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
     commons_cli_version = "1.4"
-    pdfbox_version = '2.0.24'
 
     scala_version = '2.13'
     spark_version = '3.2.3'
