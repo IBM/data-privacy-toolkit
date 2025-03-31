@@ -252,7 +252,7 @@ public class CSVFormatProcessorTest {
 
     @Test
     public void testFirstN() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/random1.txt")) {
+        try (InputStream inputStream = CSVFormatProcessorTest.class.getResourceAsStream("/random1.txt")) {
 
             CSVFormatProcessor formatProcessor = new CSVFormatProcessor();
             Iterable<Record> records = formatProcessor.extractRecords(inputStream, new CSVDatasetOptions(false, ',', '"', false), 2);
@@ -274,7 +274,7 @@ public class CSVFormatProcessorTest {
     
     @Test
     public void testIdentifyStreamCSV() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/random1.txt")) {
+        try (InputStream inputStream = CSVFormatProcessorTest.class.getResourceAsStream("/random1.txt")) {
 
             IdentificationReport results = new CSVFormatProcessor().identifyTypesStream(inputStream, DataTypeFormat.CSV,
                     new CSVDatasetOptions(false, ',', '"', false), IdentifierFactory.defaultIdentifiers(),  -1);
@@ -287,7 +287,7 @@ public class CSVFormatProcessorTest {
     
     @Test
     public void testMaskStream() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/demo.csv");
+        try (InputStream inputStream = CSVFormatProcessorTest.class.getResourceAsStream("/demo.csv");
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             PrintStream output = new PrintStream(outputStream)) {
 
