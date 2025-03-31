@@ -37,26 +37,25 @@ buildscript {
 }
 
 ext {
-    junit_jupiter_version = '5.9.3'
-    junit_platform_launcher_version = '1.9.3'
+    junit_jupiter_version = '5.10.0'
+    junit_platform_launcher_version = '1.10.1'
 
-    mockito_version = '5.3.1'
+    mockito_version = '5.4.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
-    jackson_version = '2.14.2'
-    jackson_dataformat_version = '2.15.0'
+    jackson_version = '2.15.3'
+    jackson_dataformat_version = '2.15.3'
 
     log4j2_version = '2.20.0'
 
     commons_codec_version = '1.13'
     commons_csv_version = '1.10.0'
-    commons_io_version = '2.7'
     commons_lang_version = '3.12.0'
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
-    pdfbox_version = '2.0.28'
+    pdfbox_version = '3.0.1'
 
     poi_version = "5.2.3"
 
@@ -76,7 +75,7 @@ dependencies {
     implementation "org.apache.poi:poi-ooxml:${poi_version}"
     implementation "org.apache.pdfbox:pdfbox:${pdfbox_version}"
 
-    implementation "ca.uhn.hapi:hapi-base:2.3"
+    implementation "ca.uhn.hapi:hapi-base:2.6.0"
     implementation "ca.uhn.hapi:hapi-structures-v22:2.3"
     implementation "ca.uhn.hapi:hapi-structures-v23:2.3"
     implementation 'org.iban4j:iban4j:3.2.5-RELEASE'
@@ -87,7 +86,9 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
     testImplementation "org.mockito:mockito-core:${mockito_version}"
     testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
-    testImplementation "org.beer30:jdefault:${jdefault_version}"
+    testImplementation("org.beer30:jdefault:${jdefault_version}"){
+        exclude group: "org.slf4j", module: "slf4j-simple"
+    }
 
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
