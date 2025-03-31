@@ -33,10 +33,13 @@ import java.util.Map;
 
 public class PartitionUtils {
     public static String printToCSV(String delimiter, List<String> fieldList) throws IOException {
-        StringWriter stringWriter = new StringWriter();
-        CSVPrinter writer = new CSVPrinter(stringWriter, CSVFormat.RFC4180.withDelimiter(delimiter.charAt(0)).withQuoteMode(QuoteMode.MINIMAL));
-        writer.printRecord(fieldList);
-        return stringWriter.toString().trim();
+        try (
+            StringWriter stringWriter = new StringWriter();
+            CSVPrinter writer = new CSVPrinter(stringWriter, CSVFormat.RFC4180.withDelimiter(delimiter.charAt(0)).withQuoteMode(QuoteMode.MINIMAL));
+         ) {
+            writer.printRecord(fieldList);
+            return stringWriter.toString().trim();
+        }
     }
 
     public static List<Partition> createPartitions(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
