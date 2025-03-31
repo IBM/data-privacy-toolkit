@@ -379,7 +379,7 @@ public class EstimatedRiskTest {
     @Test
     @Disabled
     public void testDump() throws Exception {
-        InputStream sample = this.getClass().getResourceAsStream("/florida_sample_0.01.txt");
+        InputStream sample = EstimatedRiskTest.class.getResourceAsStream("/florida_sample_0.01.txt");
         IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
 
         System.out.println("loading done");
