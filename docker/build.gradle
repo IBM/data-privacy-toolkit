@@ -28,14 +28,14 @@ plugins {
 
 ext {
     junit_jupiter_version = '5.10.3'
-    junit_platform_launcher_version = '1.9.3'
+    junit_platform_launcher_version = '1.11.0'
 
     mockito_version = '4.11.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
     jackson_version = '2.17.0'
-    jackson_dataformat_version = '2.15.0'
+    jackson_dataformat_version = '2.18.3'
 
     log4j2_version = '2.20.0'
 
