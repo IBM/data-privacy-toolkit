@@ -37,7 +37,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,13 +45,13 @@ public class NonUniformEntropyTest {
 
     @Test
     public void testNonUniformEntropy() {
-        IPVDataset original = new IPVDataset(1);
+        IPVDataset original = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         original.addRow(List.of("1"));
         original.addRow(List.of("2"));
         original.addRow(List.of("3"));
         original.addRow(List.of("4"));
 
-        IPVDataset anonymized = new IPVDataset(1);
+        IPVDataset anonymized = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("3-4"));
@@ -80,14 +79,14 @@ public class NonUniformEntropyTest {
 
     @Test
     public void testNonUniformEntropyWithWeights() {
-
-        IPVDataset original = new IPVDataset(1);
+        IPVDataset original = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         original.addRow(List.of("1"));
         original.addRow(List.of("2"));
         original.addRow(List.of("3"));
         original.addRow(List.of("4"));
 
-        IPVDataset anonymized = new IPVDataset(1);
+
+        IPVDataset anonymized = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("3-4"));
@@ -115,7 +114,6 @@ public class NonUniformEntropyTest {
 
     @Test
     public void testNonUniformEntropyWithZeroWeights() {
-
         IPVDataset original = new IPVDataset(1);
         original.addRow(List.of("1"));
         original.addRow(List.of("2"));
