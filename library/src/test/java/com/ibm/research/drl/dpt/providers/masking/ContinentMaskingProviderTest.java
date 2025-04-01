@@ -39,6 +39,9 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class ContinentMaskingProviderTest {
@@ -154,6 +157,7 @@ public class ContinentMaskingProviderTest {
 
             for (int i = 0; i < N; i++) {
                 String maskedValue = maskingProvider.mask(originalContinent);
+                assertThat(maskedValue, not(nullValue()));
             }
 
             long diff = System.currentTimeMillis() - startMillis;
