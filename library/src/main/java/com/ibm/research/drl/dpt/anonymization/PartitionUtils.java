@@ -35,7 +35,7 @@ public class PartitionUtils {
     public static String printToCSV(String delimiter, List<String> fieldList) throws IOException {
         try (
             StringWriter stringWriter = new StringWriter();
-            CSVPrinter writer = new CSVPrinter(stringWriter, CSVFormat.RFC4180.withDelimiter(delimiter.charAt(0)).withQuoteMode(QuoteMode.MINIMAL));
+            CSVPrinter writer = new CSVPrinter(stringWriter, CSVFormat.RFC4180.builder().setDelimiter(delimiter.charAt(0)).setQuoteMode(QuoteMode.MINIMAL).build());
          ) {
             writer.printRecord(fieldList);
             return stringWriter.toString().trim();
