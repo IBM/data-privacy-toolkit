@@ -18,8 +18,27 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.informationloss;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.dpt.anonymization.*;
+import com.ibm.research.drl.dpt.anonymization.CategoricalInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.ColumnType;
+import com.ibm.research.drl.dpt.anonymization.DatasetGeneralizerTest;
+import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
+import com.ibm.research.drl.dpt.anonymization.InMemoryPartition;
+import com.ibm.research.drl.dpt.anonymization.Partition;
+import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
@@ -27,19 +46,10 @@ import com.ibm.research.drl.dpt.anonymization.ola.OLA;
 import com.ibm.research.drl.dpt.anonymization.ola.OLAOptions;
 import com.ibm.research.drl.dpt.configuration.AnonymizationOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
-import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
 import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
 import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class NonUniformEntropyTest {
 
@@ -114,13 +124,13 @@ public class NonUniformEntropyTest {
 
     @Test
     public void testNonUniformEntropyWithZeroWeights() {
-        IPVDataset original = new IPVDataset(1);
+        IPVDataset original = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         original.addRow(List.of("1"));
         original.addRow(List.of("2"));
         original.addRow(List.of("3"));
         original.addRow(List.of("4"));
 
-        IPVDataset anonymized = new IPVDataset(1);
+        IPVDataset anonymized = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("3-4"));
@@ -159,7 +169,7 @@ public class NonUniformEntropyTest {
     @Test
     public void testNonUniformEntropyWithSuppressed() {
 
-        IPVDataset original = new IPVDataset(1);
+        IPVDataset original = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         original.addRow(List.of("1"));
         original.addRow(List.of("2"));
         original.addRow(List.of("3"));
@@ -181,7 +191,7 @@ public class NonUniformEntropyTest {
         originalPartitions.add(originalPartition1);
         originalPartitions.add(originalPartition2);
         
-        IPVDataset anonymized = new IPVDataset(1);
+        IPVDataset anonymized = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("1-2"));
         anonymized.addRow(List.of("3-4"));
@@ -346,13 +356,13 @@ public class NonUniformEntropyTest {
     @Test
     public void testNonUniformEntropyOneValue() {
 
-        IPVDataset original = new IPVDataset(1);
+        IPVDataset original = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         original.addRow(List.of("1"));
         original.addRow(List.of("1"));
         original.addRow(List.of("1"));
         original.addRow(List.of("1"));
 
-        IPVDataset anonymized = new IPVDataset(1);
+        IPVDataset anonymized = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(1), false);
         anonymized.addRow(List.of("*"));
         anonymized.addRow(List.of("*"));
         anonymized.addRow(List.of("*"));
