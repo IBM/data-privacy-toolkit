@@ -55,9 +55,9 @@ ext {
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
-    pdfbox_version = '3.0.1'
+    pdfbox_version = '3.0.4'
 
-    poi_version = "5.4.0"
+    poi_version = "5.3.0"
 
     open_nlp_version = "2.2.0"
 }
