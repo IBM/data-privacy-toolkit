@@ -249,14 +249,14 @@ public class KMeansAnonymizationTest {
         }
 
         //we check that we dont have vulnerabilities on the quasi-identifiers
-        IPVDataset IPVDataset = new IPVDataset(2);
+        IPVDataset dataset = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(2), false);
         for(int i = 0; i < anonymized.getNumberOfRows(); i++) {
             List<String> row = new ArrayList<>();
 
             row.add(anonymized.get(i, 1));
             row.add(anonymized.get(i, 2));
 
-            IPVDataset.addRow(row);
+            dataset.addRow(row);
 
             String rowID = anonymized.get(i, 0);
 
@@ -270,6 +270,6 @@ public class KMeansAnonymizationTest {
         }
 
         Brute brute = new Brute(k);
-        assertEquals(0, brute.apply(IPVDataset).size());
+        assertEquals(0, brute.apply(dataset).size());
     }
 }
