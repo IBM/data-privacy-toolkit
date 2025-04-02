@@ -191,7 +191,7 @@ public class KMap implements AnonymizationAlgorithm {
     }
 
     private IPVDataset createDataset(List<Partition> anonymizedPartitions, int numberOfColumns) {
-        IPVDataset dataset = new IPVDataset(numberOfColumns);
+        IPVDataset dataset = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(numberOfColumns), false);
 
         for (Partition partition : anonymizedPartitions) {
             if (!partition.isAnonymous()) {
