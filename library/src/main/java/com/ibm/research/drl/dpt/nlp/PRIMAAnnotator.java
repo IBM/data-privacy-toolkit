@@ -19,33 +19,42 @@ under the License.
 package com.ibm.research.drl.dpt.nlp;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierWithOffset;
 import com.ibm.research.drl.dpt.util.JsonUtils;
 import com.ibm.research.drl.dpt.util.Tuple;
+
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-public class PRIMAAnnotator extends AbstractNLPAnnotator implements Serializable {
+public class PRIMAAnnotator extends AbstractNLPAnnotator {
     private static final Logger logger = LogManager.getLogger(PRIMAAnnotator.class);
 
     private static final String annotatorName = "PRIMA";
