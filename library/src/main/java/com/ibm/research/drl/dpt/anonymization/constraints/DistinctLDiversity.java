@@ -74,9 +74,9 @@ public class DistinctLDiversity implements PrivacyConstraint {
     public boolean check(PrivacyMetric metric) {
         LDiversityMetric lDiversityMetric = (LDiversityMetric) metric;
 
-        List<Histogram> histograms = lDiversityMetric.getHistograms();
+        List<Histogram<String>> histograms = lDiversityMetric.getHistograms();
 
-        for (Histogram histogram : histograms) {
+        for (Histogram<String> histogram : histograms) {
             if (histogram.size() < this.l) {
                 return false;
             }
