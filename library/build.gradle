@@ -57,7 +57,7 @@ ext {
     commons_validator_version = '1.7'
     pdfbox_version = '3.0.1'
 
-    poi_version = "5.2.3"
+    poi_version = "5.4.0"
 
     open_nlp_version = "2.2.0"
 }
