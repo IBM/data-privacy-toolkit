@@ -46,7 +46,7 @@ public class Histogram<T> extends HashMap<T, Long> {
     }
 
     public static <K> Histogram<K> createHistogram(List<K> values) {
-        Histogram<K> histogram = new Histogram();
+        Histogram<K> histogram = new Histogram<K>();
 
         for (K value : values) {
 
