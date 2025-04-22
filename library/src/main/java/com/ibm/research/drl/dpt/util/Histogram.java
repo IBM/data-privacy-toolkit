@@ -66,7 +66,7 @@ public class Histogram<T> extends HashMap<T, Long> {
     }
 
     public static Histogram<String> createHistogram(IPVDataset dataset, int column, boolean toLowercase) {
-        Histogram<String> histogram = new Histogram();
+        Histogram<String> histogram = new Histogram<>();
 
         for (int i = 0; i < dataset.getNumberOfRows(); i++) {
             String value = dataset.get(i, column);
