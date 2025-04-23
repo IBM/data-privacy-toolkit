@@ -20,6 +20,7 @@ package com.ibm.research.drl.dpt.anonymization;
 
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryPartition implements Partition {
@@ -66,7 +67,8 @@ public class InMemoryPartition implements Partition {
 
     public InMemoryPartition(int numberOfColumns) {
         this.dataset = new IPVDataset(
-                numberOfColumns);
+            new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(numberOfColumns), false
+        );
     }
 
     public InMemoryPartition(IPVDataset dataset) {
