@@ -18,6 +18,24 @@ under the License.
 */
 package com.ibm.research.drl.dpt.datasets;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVFormat.Builder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
@@ -27,13 +45,6 @@ import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
 import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
 import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.*;
-import java.util.*;
 
 public class IPVDataset implements Iterable<List<String>> {
     private static final Logger logger = LogManager.getLogger(IPVDataset.class);
@@ -245,18 +256,20 @@ public class IPVDataset implements Iterable<List<String>> {
     }
 
     public void toCSV(CSVDatasetOptions options, Appendable writer) {
-        CSVFormat format = CSVFormat.DEFAULT
-                .withRecordSeparator('\n')
-                .withDelimiter(options.getFieldDelimiter())
-                .withQuote(options.getQuoteChar())
-                .withTrim(options.isTrimFields())
-                .withHeader().withSkipHeaderRecord(!options.isHasHeader());
+        Builder formatBuilder = CSVFormat.DEFAULT.builder()
+                .setRecordSeparator('\n')
+                .setDelimiter(options.getFieldDelimiter())
+                .setQuote(options.getQuoteChar())
+                .setTrim(options.isTrimFields())
+                .setHeader().setSkipHeaderRecord(!options.isHasHeader());
 
         if (options.isHasHeader()) {
-            format = format.withHeader(schema.getFields().stream().map(IPVSchemaField::getName).toArray(String[]::new));
+            formatBuilder.setHeader(schema.getFields().stream().map(IPVSchemaField::getName).toArray(String[]::new));
         }
 
-        try (CSVPrinter printer = new CSVPrinter(writer, format)) {
+        
+
+        try (CSVPrinter printer = new CSVPrinter(writer, formatBuilder.build())) {
             printer.printRecords(this);
         } catch (IOException e) {
             logger.error("Error creating writer", e);
