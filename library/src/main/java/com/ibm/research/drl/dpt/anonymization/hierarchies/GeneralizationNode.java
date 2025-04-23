@@ -19,7 +19,13 @@ under the License.
 package com.ibm.research.drl.dpt.anonymization.hierarchies;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class GeneralizationNode implements Serializable {
     private final String value;

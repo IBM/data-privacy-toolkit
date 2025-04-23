@@ -20,11 +20,7 @@ package com.ibm.research.drl.dpt.providers.masking;
 
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
-import com.ibm.research.drl.dpt.models.ValueClass;
 import com.ibm.research.drl.dpt.providers.ProviderType;
-import com.ibm.research.drl.dpt.schema.FieldRelationship;
-import com.ibm.research.drl.dpt.schema.RelationshipOperand;
-import com.ibm.research.drl.dpt.schema.RelationshipType;
 import com.ibm.research.drl.dpt.util.Readers;
 import com.ibm.research.drl.dpt.util.localization.LocalizationManager;
 import com.ibm.research.drl.dpt.util.localization.Resource;
@@ -43,6 +39,9 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class ContinentMaskingProviderTest {
@@ -158,6 +157,7 @@ public class ContinentMaskingProviderTest {
 
             for (int i = 0; i < N; i++) {
                 String maskedValue = maskingProvider.mask(originalContinent);
+                assertThat(maskedValue, not(nullValue()));
             }
 
             long diff = System.currentTimeMillis() - startMillis;

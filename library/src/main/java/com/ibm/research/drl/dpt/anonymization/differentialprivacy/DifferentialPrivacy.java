@@ -132,31 +132,6 @@ public class DifferentialPrivacy implements AnonymizationAlgorithm {
         return this;
     }
 
-    private AnonymizationAlgorithm initialize(List<ColumnInformation> columnInformationList, List<PrivacyConstraint> privacyConstraints, DifferentialPrivacyMechanismOptions options) {
-        this.numberOfColumns = columnInformationList.size();
-
-        this.columnIndex = -1;
-
-        for (int i = 0; i < this.numberOfColumns; i++) {
-            ColumnInformation col = columnInformationList.get(i);
-
-            if (col.getColumnType() == ColumnType.E_QUASI) {
-                if (this.columnIndex < 0) {
-                    this.columnIndex = i;
-                } else {
-                    throw new RuntimeException("Expected only one e-quasi");
-                }
-            }
-        }
-
-        this.perEquivalenceClass = options.isDPPerEquivalenceClass(this.perEquivalenceClass);
-        this.getBoundsFromData = options.isGetBoundsFromData();
-        this.mechanism = options.getMechanism();
-        this.mechanism.setOptions(options);
-
-        return this;
-    }
-
     @Override
     public String getName() {
         return "Differential Privacy";
@@ -219,7 +194,7 @@ public class DifferentialPrivacy implements AnonymizationAlgorithm {
     }
 
     private IPVDataset consolidatePartitions(List<Partition> equivalenceClasses) {
-        IPVDataset finalDataset = new IPVDataset(this.numberOfColumns);
+        IPVDataset finalDataset = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(numberOfColumns), false);
 
         for (Partition p : equivalenceClasses) {
             IPVDataset member = p.getMember();

@@ -32,13 +32,10 @@ public class NonUniformEntropy implements InformationMetric {
     /* Original paper: https://www.openu.ac.il/lists/mediaserver_documents/personalsites/tamirtassa/entropy_j.pdf */
     /* paper that shows how NUE is a good metric for health data: http://ebooks.iospress.nl/publication/48242 */
 
-    private IPVDataset original;
     private IPVDataset anonymized;
     private List<ColumnInformation> columnInformationList;
     private List<Map<String, Double>> proportionsOriginal;
     private List<Map<String, Double>> proprtionsAnonymized;
-    private boolean withTransformationLevels;
-    private int[] transformationLevels;
     private double globalMaximumEntropy;
 
     private List<Partition> originalPartitions;
@@ -283,7 +280,6 @@ public class NonUniformEntropy implements InformationMetric {
     @Override
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized, List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, InformationMetricOptions options) {
-        this.original = original;
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;
 
@@ -293,8 +289,6 @@ public class NonUniformEntropy implements InformationMetric {
         this.originalPartitions = originalPartitions;
         this.anonymizedPartitions = anonymizedPartitions;
 
-        this.withTransformationLevels = false;
-        this.transformationLevels = null;
 
         this.globalMaximumEntropy = calculateMaxEntropyForEntireDataset();
 
@@ -305,7 +299,6 @@ public class NonUniformEntropy implements InformationMetric {
     public InformationMetric initialize(IPVDataset original, IPVDataset anonymized,
                                         List<Partition> originalPartitions, List<Partition> anonymizedPartitions,
                                         List<ColumnInformation> columnInformationList, int[] transformationLevels, InformationMetricOptions options) {
-        this.original = original;
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;
 
@@ -314,9 +307,6 @@ public class NonUniformEntropy implements InformationMetric {
 
         this.originalPartitions = originalPartitions;
         this.anonymizedPartitions = anonymizedPartitions;
-
-        this.withTransformationLevels = true;
-        this.transformationLevels = transformationLevels;
 
         this.globalMaximumEntropy = calculateMaxEntropyForEntireDataset();
 
