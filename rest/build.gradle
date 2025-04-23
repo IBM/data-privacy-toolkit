@@ -36,8 +36,8 @@ repositories {
 }
 
 ext {
-    jackson_version = '2.14.2'
-    jackson_dataformat_version = '2.14.2'
+    jackson_version = '2.15.3'
+    jackson_dataformat_version = '2.15.3'
 }
 
 dependencies {

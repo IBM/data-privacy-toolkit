@@ -26,16 +26,19 @@ import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.providers.masking.FreeTextMaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -101,8 +104,9 @@ public class PDFFreeTextFormatProcessorTest {
 
         try (
                 InputStream documentStream = PDFFreeTextFormatProcessorTest.class.getResourceAsStream("/multi-page.pdf");
-                PDDocument document = PDDocument.load(documentStream);
-                ) {
+                RandomAccessReadBuffer buffer = new RandomAccessReadBuffer(documentStream);
+                PDDocument document = Loader.loadPDF(buffer);
+        ) {
             PDPage firstPage = document.getPage(0);
 
             assertEquals("FIRST PAGE \n" +
