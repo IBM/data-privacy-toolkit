@@ -50,7 +50,7 @@ ext {
     log4j2_version = '2.20.0'
 
     commons_codec_version = '1.13'
-    commons_csv_version = '1.10.0'
+    commons_csv_version = '1.14.1'
     commons_lang_version = '3.20.0'
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
