@@ -32,7 +32,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.barfuin.gradle.taskinfo:gradle-taskinfo:2.2.0"
+        classpath "org.barfuin.gradle.taskinfo:gradle-taskinfo:2.2.1"
     }
 }
 
