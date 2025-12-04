@@ -37,7 +37,7 @@ buildscript {
 }
 
 ext {
-    junit_jupiter_version = '5.10.0'
+    junit_jupiter_version = '5.10.1'
     junit_platform_launcher_version = '1.10.1'
 
     mockito_version = '5.20.0'
