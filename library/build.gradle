@@ -32,7 +32,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.barfuin.gradle.taskinfo:gradle-taskinfo:2.1.0"
+        classpath "org.barfuin.gradle.taskinfo:gradle-taskinfo:2.2.0"
     }
 }
 
@@ -40,7 +40,7 @@ ext {
     junit_jupiter_version = '5.10.0'
     junit_platform_launcher_version = '1.10.1'
 
-    mockito_version = '5.4.0'
+    mockito_version = '5.20.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
@@ -51,13 +51,13 @@ ext {
 
     commons_codec_version = '1.13'
     commons_csv_version = '1.10.0'
-    commons_lang_version = '3.12.0'
+    commons_lang_version = '3.20.0'
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
-    commons_validator_version = '1.7'
-    pdfbox_version = '3.0.1'
+    commons_validator_version = '1.10.1'
+    pdfbox_version = '3.0.4'
 
-    poi_version = "5.2.3"
+    poi_version = "5.3.0"
 
     open_nlp_version = "2.2.0"
 }
@@ -76,9 +76,9 @@ dependencies {
     implementation "org.apache.pdfbox:pdfbox:${pdfbox_version}"
 
     implementation "ca.uhn.hapi:hapi-base:2.6.0"
-    implementation "ca.uhn.hapi:hapi-structures-v22:2.3"
-    implementation "ca.uhn.hapi:hapi-structures-v23:2.3"
-    implementation 'org.iban4j:iban4j:3.2.5-RELEASE'
+    implementation "ca.uhn.hapi:hapi-structures-v22:2.6.0"
+    implementation "ca.uhn.hapi:hapi-structures-v23:2.6.0"
+    implementation 'org.iban4j:iban4j:3.2.11-RELEASE'
 
     implementation "org.apache.opennlp:opennlp-tools:${open_nlp_version}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"

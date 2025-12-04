@@ -55,7 +55,7 @@ ext {
     commons_math_version = '3.6.1'
     commons_text_version = '1.8'
     commons_validator_version = '1.7'
-    commons_cli_version = "1.4"
+    commons_cli_version = "1.11.0"
 
     scala_version = '2.13'
     spark_version = '3.2.3'
@@ -71,7 +71,7 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation 'org.lz4:lz4-java:1.8.0'
+    implementation 'org.lz4:lz4-java:1.8.1'
 
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "org.apache.commons:commons-csv:${commons_csv_version}"
