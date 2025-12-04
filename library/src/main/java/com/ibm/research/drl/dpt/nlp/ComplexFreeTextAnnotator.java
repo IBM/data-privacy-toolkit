@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.ibm.research.drl.dpt.nlp.opennlp.OpenNLPLanguageDetector;
 import com.ibm.research.drl.dpt.providers.identifiers.Identifier;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;

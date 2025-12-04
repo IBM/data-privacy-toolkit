@@ -19,7 +19,7 @@ under the License.
 package com.ibm.research.drl.dpt.nlp;
 
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.Serializable;
 import java.util.Arrays;

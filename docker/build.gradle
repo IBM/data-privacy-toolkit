@@ -27,14 +27,14 @@ plugins {
 }
 
 ext {
-    junit_jupiter_version = '5.10.0'
-    junit_platform_launcher_version = '1.11.0'
+    junit_jupiter_version = '5.12.2'
+    junit_platform_launcher_version = '1.12.2'
 
     mockito_version = '5.4.0'
     jdefault_version = '2.0.0'
-    hamcrest_version = '2.2'
+    hamcrest_version = '3.0'
 
-    jackson_version = '2.17.0'
+    jackson_version = '2.20.0'
     jackson_dataformat_version = '2.18.3'
 
     log4j2_version = '2.20.0'
@@ -49,7 +49,7 @@ ext {
 
     poi_version = "5.2.2"
 
-    commons_cli_version = '1.8.0'
+    commons_cli_version = '1.11.0'
     commons_io_version = '2.7'
 }
 
