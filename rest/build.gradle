@@ -18,7 +18,7 @@ under the License.
 */
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.10-SNAPSHOT'
+    id 'org.springframework.boot' version '2.7.18'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
