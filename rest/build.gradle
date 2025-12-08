@@ -37,7 +37,7 @@ repositories {
 
 ext {
     jackson_version = '2.15.3'
-    jackson_dataformat_version = '2.15.3'
+    jackson_dataformat_version = '2.20.1'
 }
 
 dependencies {
