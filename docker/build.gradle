@@ -50,7 +50,7 @@ ext {
     poi_version = "5.2.2"
 
     commons_cli_version = '1.11.0'
-    commons_io_version = '2.7'
+    commons_io_version = '2.21.0'
 }
 
 sourceCompatibility = '11'
