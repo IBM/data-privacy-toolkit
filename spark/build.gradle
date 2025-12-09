@@ -40,7 +40,7 @@ ext {
     junit_jupiter_version = '5.14.1'
     junit_platform_launcher_version = '1.14.1'
 
-    mockito_version = '5.4.0'
+    mockito_version = '5.21.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '2.2'
 
