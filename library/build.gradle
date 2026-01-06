@@ -47,7 +47,7 @@ ext {
     jackson_version = '2.15.3'
     jackson_dataformat_version = '2.20.1'
 
-    log4j2_version = '2.25.2'
+    log4j2_version = '2.25.3'
 
     commons_codec_version = '1.13'
     commons_csv_version = '1.14.1'
