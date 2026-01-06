@@ -30,7 +30,7 @@ jobs:
         run: ./gradlew testCoverage --no-daemon
       - name: Add coverage to PR
         id: jacoco
-        uses: madrapps/jacoco-report@v1.3
+        uses: madrapps/jacoco-report@v1.6
         with:
           paths: ${{ github.workspace }}/library/build/reports/jacoco/testCoverage/testCoverage.xml,${{ github.workspace }}/docker/build/reports/jacoco/testCoverage/testCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
