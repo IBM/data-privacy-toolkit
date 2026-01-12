@@ -27,7 +27,7 @@ plugins {
 }
 
 ext {
-    junit_jupiter_version = '5.14.1'
+    junit_jupiter_version = '6.0.2'
     junit_platform_launcher_version = '1.14.1'
 
     mockito_version = '5.4.0'
