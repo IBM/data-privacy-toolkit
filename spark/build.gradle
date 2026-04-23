@@ -58,7 +58,7 @@ ext {
     commons_cli_version = "1.11.0"
 
     scala_version = '2.13'
-    spark_version = '3.2.3'
+    spark_version = '3.5.8'
 
     poi_version = "5.2.2"
 }
