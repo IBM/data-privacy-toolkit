@@ -133,6 +133,7 @@ public class AddressIdentifierTest {
 
             for (int i = 0; i < N; i++) {
                 boolean check = identifier.isOfThisType(originalValue);
+                assert check;
             }
 
             long diff = System.currentTimeMillis() - startMillis;

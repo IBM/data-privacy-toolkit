@@ -18,16 +18,27 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.generators.ItemSet;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
-import java.util.*;
-
+/**
+ * Utility class for anonymization-related operations.
+ * Provides methods for handling privacy constraints, generating partitions,
+ * and performing various operations on datasets and column information.
+ */
 public class AnonymizationUtils {
     private static final Logger logger = LogManager.getLogger(AnonymizationUtils.class);
 
@@ -82,6 +93,13 @@ public class AnonymizationUtils {
         return columns;
     }
 
+    /**
+     * Counts the number of columns in the provided list that match the specified column type.
+     *
+     * @param columnInformationList the list of column information objects to be checked
+     * @param columnType the column type to count
+     * @return the number of columns in the list that match the specified column type
+     */
     public static int countColumnsByType(List<ColumnInformation> columnInformationList, ColumnType columnType) {
         int count = 0;
 

@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '11', '17']
+        java: [ '11', '17', '21']
         distribution: ['adopt', 'corretto', 'microsoft']
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Setup java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
@@ -36,9 +36,9 @@ jobs:
     env:
       IMAGE_NAME: dpt-image:test
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Setup java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: 'adopt'
           java-version: '11'
@@ -53,9 +53,9 @@ jobs:
         working-directory: ./docker
         run: docker build -t $IMAGE_NAME .
       - name: Setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.9'
+          python-version: '3.14'
           cache: 'pip'
           cache-dependency-path: '**/requirements-dev.txt'
       - name: Install pytest

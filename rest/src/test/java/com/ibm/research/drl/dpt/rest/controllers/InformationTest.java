@@ -43,7 +43,7 @@ class InformationTest {
         mvc.perform(get("/api/information/identifiers").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(33)));
+                .andExpect(jsonPath("$", hasSize(32)));
     }
 
     @Test

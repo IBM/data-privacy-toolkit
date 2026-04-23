@@ -47,6 +47,7 @@ public class ConfigurationOption implements Serializable {
     }
 
     /* for serialization only */
+    @SuppressWarnings("unused")
     private ConfigurationOption() {
         description = null;
         category = null;

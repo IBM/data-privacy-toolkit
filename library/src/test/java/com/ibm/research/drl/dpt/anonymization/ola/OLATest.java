@@ -97,7 +97,7 @@ public class OLATest {
     }
 
     private IPVDataset generateRandomDataset(int numberOfRows) {
-        IPVDataset IPVDataset = new IPVDataset(3);
+        IPVDataset dataset = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(3), false);
 
         List<String> dates = getLeaves(dateHierarchy.getTerms());
         List<String> genders = getLeaves(genderHierarchy.getTerms());
@@ -117,10 +117,10 @@ public class OLATest {
             int ai = random.nextInt(ages.size());
             row.add(ages.get(ai));
 
-            IPVDataset.addRow(row);
+            dataset.addRow(row);
         }
 
-        return IPVDataset;
+        return dataset;
     }
 
     private void generateAgeHierarchy(){
