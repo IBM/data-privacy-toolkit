@@ -38,11 +38,15 @@ class Workflow extends Component {
         </Switch>
         <div className='btn-group pull-right' data-role='groups'>
           {next}
-          <a className='btn btn-primary' onClick={
+          <a
+            className='btn btn-primary' onClick={
             (event) => {
               const nextState = this.getNextState()
               this.props.history.push(`${this.props.match.path}/${nextState}`)
-            }}>{this.getNextLabel()} <i className='fa fa-step-forward' /></a>
+            }
+}
+          >{this.getNextLabel()} <i className='fa fa-step-forward' />
+          </a>
         </div>
       </div>
     )

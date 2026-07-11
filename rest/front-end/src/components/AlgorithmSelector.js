@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AlgorithmSelector = ({id = '', algorithms, selected, onChange}) => {
+const AlgorithmSelector = ({ id = '', algorithms, selected, onChange }) => {
   const options = algorithms.map((algorithm, index) => <option key={index} value={algorithm.name}>{algorithm.name}</option>)
   return (
     <select id={id} value={selected} onChange={onChange}>

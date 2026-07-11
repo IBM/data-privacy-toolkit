@@ -13,15 +13,15 @@ class Loading extends Component {
 
     this.state = {
       knownDatasets: [
-        {name: 'healthcare-dataset.txt', id: 1},
-        {name: 'simple.csv', id: 2},
-        {name: 'washington.csv', id: 3},
-        {name: '100.csv', id: 4},
-        {name: 'compounds.csv', id: 5},
-        {name: 'demo.csv', id: 6},
-        {name: 'random1_height_weight.txt', id: 7}
+        { name: 'healthcare-dataset.txt', id: 1 },
+        { name: 'simple.csv', id: 2 },
+        { name: 'washington.csv', id: 3 },
+        { name: '100.csv', id: 4 },
+        { name: 'compounds.csv', id: 5 },
+        { name: 'demo.csv', id: 6 },
+        { name: 'random1_height_weight.txt', id: 7 },
 
-        ,{name: 'Upload your own!', id: -1}
+        { name: 'Upload your own!', id: -1 }
       ]
     }
   }
@@ -32,7 +32,7 @@ class Loading extends Component {
     return (
       <div className='container-fluid'>
         <DatasetLoader knownDatasets={this.state.knownDatasets} onLoadLocal={(name) => this.props.loadLocal(name)} onLoadRemote={(file, hasHeader) => this.props.loadRemote(file, hasHeader)} />
-        { dataset }
+        {dataset}
       </div>
     )
   }

@@ -23,15 +23,20 @@ class Identify extends Component {
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='sampleSize'>Sample size</label>
-            <input value={this.state.sampleSize} className='sampleSizeInputField' onChange={event => {
-              const sampleSize = Number(event.target.value)
-              this.setState({sampleSize})
-            }} type='number' step='1' max='10000' />
+            <input
+              value={this.state.sampleSize} className='sampleSizeInputField' onChange={event => {
+                const sampleSize = Number(event.target.value)
+                this.setState({ sampleSize })
+              }} type='number' step='1' max='10000'
+            />
           </div>
           <div className='form-group'>
-            <a className='btn btn-primary' onClick={event => {
-              this.props.identifyDataset(this.props.dataset, this.props.hasHeader, this.state.sampleSize)
-            }}><i className='fa fa-search' /> Identify</a>
+            <a
+              className='btn btn-primary' onClick={event => {
+                this.props.identifyDataset(this.props.dataset, this.props.hasHeader, this.state.sampleSize)
+              }}
+            ><i className='fa fa-search' /> Identify
+            </a>
           </div>
         </div>
       </div>
@@ -52,15 +57,19 @@ class Identify extends Component {
   buildHeaderRow () {
     if (!this.props.dataset) return undefined
 
-    let headers = this.props.headers || {}
+    const headers = this.props.headers || {}
     return this.props.dataset[0].map((data, index) => {
-      const columnName = this.props.hasHeader ? data : `Column ${index}`;
+      const columnName = this.props.hasHeader ? data : `Column ${index}`
       const columnType = headers[columnName]
       const identifiedValue = columnType ? columnType.name : undefined
-      return (<MaskingProvidersSelector selected={identifiedValue} providers={this.props.providers || []} key={index} onChange={(providerName) => {
-        console.log(`${columnName} set to ${providerName}`)
-        this.props.updateColumnValue(columnName, this.findMaskingProvider(providerName))
-      }} />)
+      return (
+        <MaskingProvidersSelector
+          selected={identifiedValue} providers={this.props.providers || []} key={index} onChange={(providerName) => {
+            console.log(`${columnName} set to ${providerName}`)
+            this.props.updateColumnValue(columnName, this.findMaskingProvider(providerName))
+          }}
+        />
+      )
     })
   }
 

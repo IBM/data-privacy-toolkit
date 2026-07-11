@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DicomImageViewer = ({imageData}) => {
+const DicomImageViewer = ({ imageData }) => {
   if (imageData) {
     return (<img src={imageData} alt='DICOMImage' />)
   } else {

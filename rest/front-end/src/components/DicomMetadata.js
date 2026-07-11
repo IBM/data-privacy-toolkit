@@ -1,11 +1,11 @@
 import React from 'react'
 
-const DicomMetadata = ({metadata = [], modified = []}) => {
+const DicomMetadata = ({ metadata = [], modified = [] }) => {
   const attributes = metadata.map(({
-      name,
-      vrName,
-      value
-    }, i) => {
+    name,
+    vrName,
+    value
+  }, i) => {
     const className = modified.indexOf(name) !== -1 ? 'bg-danger' : ''
     return (
       <div className={`row ${className}`} key={i}>
