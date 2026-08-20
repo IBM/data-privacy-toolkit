@@ -87,19 +87,15 @@ public class DPTSparkDriver {
     }
 
     private static String extractFileExtension(String configurationFile) {
-        return configurationFile.substring(configurationFile.lastIndexOf(".") + 1);
+        return configurationFile.substring(configurationFile.lastIndexOf('.') + 1);
     }
 
     private static ObjectMapper buildMapper(String configurationFile) {
-        final String extension = extractFileExtension(configurationFile);
-
-        if (extension.equalsIgnoreCase("json")) {
-            return JsonUtils.MAPPER;
-        } else if (extension.equalsIgnoreCase("yaml") || extension.equalsIgnoreCase("yml")) {
-            return new ObjectMapper(new YAMLFactory());
-        }
-
-        throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        return switch (extractFileExtension(configurationFile).toLowerCase()) {
+            case "json" -> JsonUtils.MAPPER;
+            case "yaml", "yml" -> new ObjectMapper(new YAMLFactory());
+            default -> throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        };
     }
 
     public static void main(String[] args) {
@@ -131,13 +127,10 @@ public class DPTSparkDriver {
                 System.exit(0);
             }
         } catch (IOException | ParseException | RuntimeException e) {
-            logger.error("Execution failed " + e.getMessage());
+            logger.error("Execution failed: {}", e.getMessage());
             logger.debug("Additional information:", e);
-        }
-
-        new HelpFormatter().printHelp(System.getProperty("java.class.path"), "", options, "", true);
-
-        System.exit(1);
+            new HelpFormatter().printHelp(System.getProperty("java.class.path"), "", options, "", true);
+            System.exit(1);
     }
 
     private static InputStream readConfiguration(String configurationFile, SparkSession session) {
