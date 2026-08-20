@@ -27,7 +27,6 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class KMap implements AnonymizationAlgorithm {
     private List<ColumnInformation> columnInformationList;
@@ -125,7 +124,7 @@ public class KMap implements AnonymizationAlgorithm {
 
         List<ColumnInformation> quasiColumnInformationList = this.columnInformationList.stream().filter(columnInformation -> {
             return columnInformation.getColumnType() == ColumnType.QUASI;
-        }).collect(Collectors.toList());
+        }).toList();
 
         int[] maxLevel = new int[quasiColumnInformationList.size()];
 

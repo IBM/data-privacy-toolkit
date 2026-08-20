@@ -212,7 +212,7 @@ public abstract class FormatProcessor implements Serializable {
                                 valueEntry.getKey(),
                                 valueEntry.getValue().counter
                         )
-                ).collect(Collectors.toList())
+                ).toList()
         ));
 
         Map<String, IdentifiedType> bestIdentifiedTypes = IdentifierUtils.getIdentifiedType(results, recordCount, IdentificationConfiguration.DEFAULT);

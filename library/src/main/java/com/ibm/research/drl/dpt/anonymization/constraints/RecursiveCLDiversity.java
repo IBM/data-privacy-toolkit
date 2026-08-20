@@ -26,7 +26,6 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.Histogram;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RecursiveCLDiversity implements PrivacyConstraint {
@@ -57,7 +56,7 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
             frequencies.add(counter);
         }
 
-        Collections.sort(frequencies);
+        frequencies.sort(null);
 
         double threshold = 0;
         for (int i = frequencies.size() - this.l; i >= 0; i--) { // minSize=(int)l;

@@ -192,12 +192,7 @@ public class DatasetLinker {
             return sets.get(0).size();
         }
 
-        Collections.sort(sets, new Comparator<Set<T>>() {
-            @Override
-            public int compare(Set<T> o1, Set<T> o2) {
-                return Integer.compare(o1.size(), o2.size());
-            }
-        });
+        sets.sort(Comparator.comparingInt(Set::size));
 
         int results = 0;
 

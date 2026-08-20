@@ -24,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class IntervalGenerator {
@@ -48,7 +47,7 @@ public class IntervalGenerator {
             longs.add(v);
         }
 
-        Collections.sort(longs);
+        longs.sort(null);
 
         long minimum = longs.get(0);
         long maximum = longs.get(Math.max(0, longs.size() - 1)) + 1;

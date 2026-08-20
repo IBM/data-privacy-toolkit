@@ -34,7 +34,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -295,8 +294,9 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
     }
 
     private List<IdentifiedEntity> mergeOverlappingSingleType(List<IdentifiedEntity> entityList) {
-        if (entityList.isEmpty()) return entityList;
+        if (entityList.isEmpty()) return new ArrayList<>();
 
+        entityList = new ArrayList<>(entityList);
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
 
@@ -438,7 +438,7 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
         StringBuilder builder = new StringBuilder();
         int lastOffset = 0;
         
-        Collections.sort(changes);
+        changes.sort(null);
         
         for(Integer change: changes) {
             builder.append(text, lastOffset, change);
@@ -515,6 +515,6 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
                 .filter( Identifier::isPOSIndependent)
                 .map(Identifier::getType).map(ProviderType::getName)
                 .map(this::mapType)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
