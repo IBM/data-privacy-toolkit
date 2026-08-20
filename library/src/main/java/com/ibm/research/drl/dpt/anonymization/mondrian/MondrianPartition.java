@@ -162,7 +162,7 @@ public class MondrianPartition implements Partition {
     }
 
     private MedianInformation calculateMedianForNumerical(List<Double> values) {
-        Collections.sort(values);
+        values.sort(null);
 
         double median = median(values);
         double low = values.get(0);
@@ -305,7 +305,7 @@ public class MondrianPartition implements Partition {
                 ((CategoricalInformation) this.columnInformationList.get(columnIndex)).getHierarchy();
 
         List<Double> categoricalIndices = extractCategoricalIndices(columnIndex, materializedHierarchy);
-        Collections.sort(categoricalIndices);
+        categoricalIndices.sort(null);
         double median = median(categoricalIndices);
 
         List<List<String>> leftValues = new ArrayList<>();

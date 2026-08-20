@@ -3,7 +3,7 @@
 **DPT Command-line Toolkit** is a command line tool exposing the DPT Java library functionality in a more user-friendly manner.
 The toolkit is packaged together with its dependencies so there is no requirement for additional configuration of classpath or internet connection to artifact repositories.
 
-A containerised version of the command line tool also exists, which nicely integrates into data pipelines - for further information, please refer to the last section of this page.
+A containerised version of the command line tool also exists, which nicely integrates into data pipelines — for further information, please refer to the last section of this page.
 
 The tool requires an input and an output path, along with a configuration file. It can be invoked as follows:
 
@@ -26,7 +26,7 @@ Where the parameters can be described as follows:
 ## Writing the configuration file
 
 The tool requires a configuration file in order to understand the input format and to control the task behavior.
-For the reminded of this documentation, we will present only the JSON version of the configuration files. A direct translation to YAML is also possible.
+For the remainder of this documentation, we will present only the JSON version of the configuration files. A direct translation to YAML is also possible.
 
 The skeleton of a configuration for all the available tasks is:
 
@@ -81,30 +81,29 @@ The following options are supported:
 
 * For CSV inputFormat: `quoteChar`, `delimiter`, `hasHeader`, and `trimFields`
 
-* *taskOptions*: (require) defines options that are specific to the chosen privacy task.
+* *taskOptions*: (required) defines options that are specific to the chosen privacy task.
 
 Please refer to the appropriate documentation on the left menu for a description of each specific task options.
 
 ## DPT Command-line Toolkit Docker Container
 
-The DPT Command-line toolkit is also available as a Docker container. In order to run it, 3 folders must be prepared beforehand:
+The DPT Command-line toolkit is also available as a Docker container.
+The public image is hosted on [quay.io/data_privacy_toolkit/cli](https://quay.io/data_privacy_toolkit/cli) and is updated automatically on every merge to `main`.
+
+In order to run it, three folders must be prepared beforehand:
 
 * *an input folder*, where the input file(s) must be stored
-* *a config folder*, where a config.json file must be stored
-* *an output folder*: where dpt will store the output file(s) of the privacy task
+* *a config folder*, where a `config.json` file must be stored
+* *an output folder*, where DPT will write the output file(s) of the privacy task
 
-The image is available on IBM's internal Artifactory, and can be run as:
-
-```
+```bash
 docker run \
   --mount type=bind,source=/absolute/path/to/input/folder/,target=/input/ \
   --mount type=bind,source=/absolute/path/to/config/folder/,target=/config/ \
   --mount type=bind,source=/absolute/path/to/output/folder/,target=/output/ \
-  res-drl-docker-local.artifactory.swg-devops.com/dpt/base-cli:latest
+  quay.io/data_privacy_toolkit/cli:latest
 ```
 
-Where the three paths `/absolute/path/to/input/folder`, `/absolute/path/to/config/folder`, and `/absolute/path/to/output/folder` must be specified accordingly.
+Where the three paths must be replaced with absolute paths on the host machine.
 
 Upon completion, the output file(s) of the privacy task will be available in the provided output folder.
-
-

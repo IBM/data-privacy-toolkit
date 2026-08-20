@@ -44,16 +44,15 @@ ext {
     jdefault_version = '2.0.0'
     hamcrest_version = '3.0'
 
-    jackson_version = '2.15.3'
-    jackson_dataformat_version = '2.20.1'
+    jackson_version = '2.20.1'
 
     log4j2_version = '2.25.2'
 
-    commons_codec_version = '1.13'
+    commons_codec_version = '1.18.0'
     commons_csv_version = '1.14.1'
     commons_lang_version = '3.20.0'
     commons_math_version = '3.6.1'
-    commons_text_version = '1.8'
+    commons_text_version = '1.13.1'
     commons_validator_version = '1.10.1'
     pdfbox_version = '3.0.6'
 
@@ -63,8 +62,8 @@ ext {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_version}"
 
     implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
     implementation "org.apache.commons:commons-csv:${commons_csv_version}"
@@ -94,8 +93,8 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
 }
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -118,7 +117,7 @@ test {
 }
 
 group = 'com.ibm.research.drl.dpt'
-version = '6.0.0-SNAPSHOT'
+version = '7.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -229,12 +228,12 @@ task testCoverage(type: JacocoReport, dependsOn: "test") {
             '**/actions/*.*',
     ]
 
-    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    def javaClasses = fileTree(dir: layout.buildDirectory.dir("classes/java/main"), excludes: excludes)
     classDirectories.from = files([javaClasses])
 
     sourceDirectories.from = files([
             "$project.projectDir/src/main/java",
     ])
 
-    executionData.from = files("${project.buildDir}/jacoco/test.exec")
+    executionData.from = files(layout.buildDirectory.file("jacoco/test.exec"))
 }

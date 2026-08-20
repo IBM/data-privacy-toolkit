@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class DummySuppressionReassignment extends StrategyImpl {
 
@@ -176,7 +175,7 @@ public class DummySuppressionReassignment extends StrategyImpl {
     private List<String> createCategoricalCentroids(Partition partition) {
 
         List<Integer> categoricalColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
-        categoricalColumns = categoricalColumns.stream().filter(x -> this.columnInformationList.get(x).isCategorical()).collect(Collectors.toList());
+        categoricalColumns = categoricalColumns.stream().filter(x -> this.columnInformationList.get(x).isCategorical()).toList();
 
         if (categoricalColumns.isEmpty()) {
             return Collections.emptyList();

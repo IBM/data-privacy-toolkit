@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ibm.research.drl.dpt.toolkit.task.TaskOptions;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class TransactionUniquenessOptions extends TaskOptions {
     private final List<String> externallyObservableFields;
@@ -42,8 +42,8 @@ public class TransactionUniquenessOptions extends TaskOptions {
     ) {
         this.externallyObservableFields = externallyObservableFields;
         this.identityFields = identityFields;
-        this.factor = Optional.ofNullable(factor).orElse(1);
-        this.threshold = Optional.ofNullable(threshold).orElse(1);
+        this.factor = Objects.requireNonNullElse(factor, 1);
+        this.threshold = Objects.requireNonNullElse(threshold, 1);
         this.exploreExternallyObservableFields = exploreExternallyObservableFields;
     }
 
@@ -63,5 +63,7 @@ public class TransactionUniquenessOptions extends TaskOptions {
         return threshold;
     }
 
-    public boolean isExploreExternallyObservableFields() { return exploreExternallyObservableFields; }
+    public boolean isExploreExternallyObservableFields() {
+        return exploreExternallyObservableFields;
+    }
 }

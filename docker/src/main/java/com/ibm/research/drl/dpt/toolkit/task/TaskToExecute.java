@@ -24,17 +24,13 @@ import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.toolkit.anonymization.AnonymizationTask;
-//import com.ibm.research.drl.dpt.toolkit.exploration.ExplorationTask;
-//import com.ibm.research.drl.dpt.toolkit.freetext.FreeTextDeID;
 import com.ibm.research.drl.dpt.toolkit.freetext.FreeTextDeID;
 import com.ibm.research.drl.dpt.toolkit.identification.IdentificationTask;
 import com.ibm.research.drl.dpt.toolkit.masking.MaskingTask;
-//import com.ibm.research.drl.dpt.toolkit.transaction_uniqueness.TransactionUniquenessTask;
 import com.ibm.research.drl.dpt.toolkit.transaction_uniqueness.TransactionUniquenessTask;
 import com.ibm.research.drl.dpt.toolkit.vulnerability.VulnerabilityTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 import java.beans.IntrospectionException;
 import java.io.IOException;
@@ -52,7 +48,6 @@ import java.util.Map;
         @JsonSubTypes.Type(value = VulnerabilityTask.class, name = "Vulnerability"),
         @JsonSubTypes.Type(value = AnonymizationTask.class, name = "Anonymization"),
         @JsonSubTypes.Type(value = TransactionUniquenessTask.class, name = "TransactionUniqueness"),
-//        @JsonSubTypes.Type(value = ExplorationTask.class, name = "Exploration"),
         @JsonSubTypes.Type(value = FreeTextDeID.class, name = "FreeTextDeID"),
 })
 public abstract class TaskToExecute {
@@ -119,13 +114,13 @@ public abstract class TaskToExecute {
     }
 
     public void enrichOptions(Map<String, Object> taskOptions) {
-        for (Map.Entry<String, Object> option : taskOptions.entrySet()) {
+        taskOptions.forEach((key, value) -> {
             try {
-                this.getTaskOptions().setOption(option.getKey(), option.getValue());
+                this.getTaskOptions().setOption(key, value);
             } catch (IllegalAccessException | IntrospectionException | InvocationTargetException e) {
-                throw new IllegalArgumentException("Unable to set option: " + option.getKey(), e);
+                throw new IllegalArgumentException("Unable to set option: " + key, e);
             }
-        }
+        });
     }
 
     public abstract TaskOptions getTaskOptions();

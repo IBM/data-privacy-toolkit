@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final static Logger logger = LogManager.getLogger(FreeTextMaskingProvider.class);
@@ -91,7 +90,7 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
                             return entity;
                         }
                 )
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private String truncateOrPad(String maskedValue, int length) {

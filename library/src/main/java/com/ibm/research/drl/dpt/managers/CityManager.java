@@ -28,63 +28,25 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CityManager extends ResourceBasedManager<City> {
 
-    private static final class CityDistanceFinder implements Comparable<CityDistanceFinder> {
-        private final City city;
-        private final double distance;
+    private record CityDistanceFinder(City city, double distance) implements Comparable<CityDistanceFinder> {
 
         CityDistanceFinder(KDTree.CartesianPoint centroid, City city, KDTree.CartesianPoint cityPoint) {
-            this.city = city;
-            this.distance = centroid.euclideanDistance(cityPoint);
-        }
-
-        public City getCity() {
-            return city;
+            this(city, centroid.euclideanDistance(cityPoint));
         }
 
         @Override
         public int compareTo(CityDistanceFinder o) {
             return Double.compare(distance, o.distance);
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CityDistanceFinder that = (CityDistanceFinder) o;
-            return Double.compare(that.distance, distance) == 0 && Objects.equals(city, that.city);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(city, distance);
-        }
     }
 
-    private static final class CityDistanceComparator implements Comparator<City> {
-
-        private final City centroid;
-
-        CityDistanceComparator(City centroid) {
-            this.centroid = centroid;
-        }
-
-        @Override
-        public int compare(City c1, City c2) {
-            double dist1 = cityDistance(centroid, c1);
-            double dist2 = cityDistance(centroid, c2);
-
-            return Double.compare(dist1, dist2);
-        }
-
-        private static double cityDistance(City city1, City city2) {
-            return Math.sqrt(
-                    Math.pow((city1.getLocation().getLatitude() - city2.getLocation().getLatitude()), 2) +
-                            Math.pow((city1.getLocation().getLongitude() - city2.getLocation().getLongitude()), 2));
-        }
+    private static double cityDistance(City city1, City city2) {
+        return Math.sqrt(
+                Math.pow((city1.getLocation().getLatitude() - city2.getLocation().getLatitude()), 2) +
+                        Math.pow((city1.getLocation().getLongitude() - city2.getLocation().getLongitude()), 2));
     }
 
     private static final SecureRandom random = new SecureRandom();
@@ -144,10 +106,11 @@ public class CityManager extends ResourceBasedManager<City> {
     // NOTE: benchmarked before fix for cartesian. In repeat testing, consistently faster than Nearest v2.
     // Benchmark times: 6022, 5810, 6256
     private void precomputeNearest1() {
-        for (String key : cityListMap.keySet()) {
-            final List<City> cityList = cityListMap.get(key);
-            final List<KDTree.CartesianPoint> cityListPoints = cityList.stream().map(
-                    (c) -> new KDTree.CartesianPoint(c.getLocation().getLatitude(), c.getLocation().getLongitude())).collect(Collectors.toList());
+        for (var entry : cityListMap.entrySet()) {
+            final List<City> cityList = entry.getValue();
+            final List<KDTree.CartesianPoint> cityListPoints = cityList.stream()
+                    .map(c -> new KDTree.CartesianPoint(c.getLocation().getLatitude(), c.getLocation().getLongitude()))
+                    .toList();
 
             for (int i = 0; i < cityList.size(); i++) {
                 final City city = cityList.get(i);
@@ -158,9 +121,9 @@ public class CityManager extends ResourceBasedManager<City> {
                     // Original includes self as well as other cities... not filtering self
                     otherCities.add(new CityDistanceFinder(cityPoint, cityList.get(j), cityListPoints.get(j)));
                 }
-                Collections.sort(otherCities);
+                otherCities.sort(null);
 
-                city.setNeighbors(otherCities.stream().map(CityDistanceFinder::getCity).collect(Collectors.toList()));
+                city.setNeighbors(otherCities.stream().map(CityDistanceFinder::city).toList());
             }
         }
     }
@@ -168,12 +131,12 @@ public class CityManager extends ResourceBasedManager<City> {
     // Benchmark times: 7165, 6566, 6634
     // NOTE - incorrect behavior: not using cartesian coordinate conversion
     private void precomputeNearest2() {
-        for (String key : cityListMap.keySet()) {
-            final List<City> cityList = cityListMap.get(key);
+        for (var entry : cityListMap.entrySet()) {
+            final List<City> cityList = entry.getValue();
 
             for (City city : cityList) {
                 final List<City> otherCities = new ArrayList<>(cityList);
-                otherCities.sort(new CityDistanceComparator(city));
+                otherCities.sort(Comparator.comparingDouble(c -> cityDistance(city, c)));
                 city.setNeighbors(otherCities);
             }
         }

@@ -22,13 +22,12 @@ import com.ibm.research.drl.dpt.models.Location;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LatLonKDTree<T extends Location> {
     private final KDTree<LatLonCartesianPoint<T>> tree;
 
     public List<T> findNearestK(double[] key, int k) {
-        return tree.nearestNeighbourSearch(k, new LatLonCartesianPoint<>(key)).stream().map(point -> point.location).collect(Collectors.toList());
+        return new ArrayList<>(tree.nearestNeighbourSearch(k, new LatLonCartesianPoint<>(key)).stream().map(point -> point.location).toList());
     }
 
     /**

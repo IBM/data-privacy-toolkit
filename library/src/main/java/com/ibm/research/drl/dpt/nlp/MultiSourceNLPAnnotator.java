@@ -27,8 +27,9 @@ import java.util.Set;
 
 public abstract class MultiSourceNLPAnnotator extends AbstractNLPAnnotator {
     protected List<IdentifiedEntity> mergeEntityListsAndOverlappingEntities(List<IdentifiedEntity> entityList) {
-        if (entityList.isEmpty()) return entityList;
+        if (entityList.isEmpty()) return new ArrayList<>();
 
+        entityList = new ArrayList<>(entityList);
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
 

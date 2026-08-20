@@ -30,31 +30,30 @@ ext {
     junit_jupiter_version = '5.14.3'
     junit_platform_launcher_version = '1.14.3'
 
-    mockito_version = '5.4.0'
+    mockito_version = '5.21.0'
     jdefault_version = '2.0.0'
     hamcrest_version = '3.0'
 
     jackson_version = '2.20.1'
-    jackson_dataformat_version = '2.21.0'
+    jackson_dataformat_version = '2.20.1'
 
     log4j2_version = '2.25.2'
 
-    commons_codec_version = '1.13'
-    commons_csv_version = '1.8'
+    commons_codec_version = '1.18.0'
+    commons_csv_version = '1.14.1'
     commons_io_version = '2.21.0'
-    commons_lang_version = '3.10'
+    commons_lang_version = '3.20.0'
     commons_math_version = '3.6.1'
-    commons_text_version = '1.8'
-    commons_validator_version = '1.7'
+    commons_text_version = '1.13.1'
+    commons_validator_version = '1.10.1'
 
-    poi_version = "5.2.2"
+    poi_version = "5.4.0"
 
     commons_cli_version = '1.11.0'
-    commons_io_version = '2.21.0'
 }
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -77,7 +76,7 @@ test {
 }
 
 group = 'com.ibm.research.drl.dpt'
-version = '6.0.0-SNAPSHOT'
+version = '7.0.0-SNAPSHOT'
 
 jar {
     manifest {
@@ -134,12 +133,12 @@ tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
             '**/actions/*.*',
     ]
 
-    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    def javaClasses = fileTree(dir: layout.buildDirectory.dir("classes/java/main"), excludes: excludes)
     classDirectories.from = files([javaClasses])
 
     sourceDirectories.from = files([
             "$project.projectDir/src/main/java",
     ])
 
-    executionData.from = files("${project.buildDir}/jacoco/test.exec")
+    executionData.from = files(layout.buildDirectory.file("jacoco/test.exec"))
 }

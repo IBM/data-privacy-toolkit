@@ -38,9 +38,20 @@ import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -97,21 +108,21 @@ public class TransactionUniquenessTask extends TaskToExecute {
 
     @Override
     public void processFile(InputStream input, OutputStream output) throws MisconfigurationException, IOException {
-        final IPVDataset dataset = readInputDataset(input);
+        final var dataset = readInputDataset(input);
         final int threshold = getTaskOptions().getThreshold();
 
-        Map<Integer, Set<Integer>> idsByTransaction = groupTransactionIdByTargetValues(dataset, getTaskOptions().getIdentityFields(), getTaskOptions().getExternallyObservableFields());
+        var idsByTransaction = groupTransactionIdByTargetValues(dataset, getTaskOptions().getIdentityFields(), getTaskOptions().getExternallyObservableFields());
 
-        List<Integer> totalIDs = countNumberOfTotalIDs(idsByTransaction);
-        List<Set<Integer>> uniqueTransactionCombinations = identifyUniqueTransactions(idsByTransaction, threshold);
-        List<Integer> uniqueIDs = extractIDsOfUniqueTransactions(uniqueTransactionCombinations);
+        var totalIDs = countNumberOfTotalIDs(idsByTransaction);
+        var uniqueTransactionCombinations = identifyUniqueTransactions(idsByTransaction, threshold);
+        var uniqueIDs = extractIDsOfUniqueTransactions(uniqueTransactionCombinations);
 
         if (this.getTaskOptions().isExploreExternallyObservableFields()) {
-            List<TransactionUniquenessReportColumnContribution> columnsContributions = new ArrayList<>(getTaskOptions().getExternallyObservableFields().size());
-            for(String column : getTaskOptions().getExternallyObservableFields()) {
-                Map<Integer, Set<Integer>> contribIdsByTransaction = groupTransactionIdByTargetValues(dataset, getTaskOptions().getIdentityFields(), Collections.singletonList((column)));
-                List<Set<Integer>> contribUniqueTransactionCombinations = identifyUniqueTransactions(contribIdsByTransaction, threshold);
-                List<Integer> contribUniqueIDs = extractIDsOfUniqueTransactions(contribUniqueTransactionCombinations);
+            var columnsContributions = new ArrayList<TransactionUniquenessReportColumnContribution>(getTaskOptions().getExternallyObservableFields().size());
+            for (String column : getTaskOptions().getExternallyObservableFields()) {
+                var contribIdsByTransaction = groupTransactionIdByTargetValues(dataset, getTaskOptions().getIdentityFields(), Collections.singletonList(column));
+                var contribUniqueTransactionCombinations = identifyUniqueTransactions(contribIdsByTransaction, threshold);
+                var contribUniqueIDs = extractIDsOfUniqueTransactions(contribUniqueTransactionCombinations);
                 columnsContributions.add(new TransactionUniquenessReportColumnContribution(
                         column,
                         contribUniqueTransactionCombinations.size(),
@@ -138,22 +149,22 @@ public class TransactionUniquenessTask extends TaskToExecute {
 
     private List<Integer> extractIDsOfUniqueTransactions(List<Set<Integer>> uniqueTransactionCombinations) {
         return uniqueTransactionCombinations.stream()
-                .flatMap(Collection::stream)
+                .flatMap(Set::stream)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Set<Integer>> identifyUniqueTransactions(Map<Integer, Set<Integer>> transactionsById, int threshold) {
         return transactionsById.values().stream()
                 .filter(transaction -> transaction.size() <= threshold)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Integer> countNumberOfTotalIDs(Map<Integer, Set<Integer>> transactionsById) {
         return transactionsById.values().stream()
-                .flatMap(Collection::stream)
+                .flatMap(Set::stream)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Map<Integer, Set<Integer>> groupTransactionIdByTargetValues(IPVDataset dataset, List<String> identityFields, List<String> externallyObservableFields) {
@@ -175,69 +186,47 @@ public class TransactionUniquenessTask extends TaskToExecute {
     }
 
     private Stream<Tuple<Integer, Set<Integer>>> encodeTransactionAndId(IPVDataset dataset, List<String> identityFields, List<String> externallyObservableFields) {
-        final List<Integer> encodedIdFields = mapFieldNamesToPositions(dataset.getSchema(), identityFields);
-        final List<Integer> encodedTargetFields = mapFieldNamesToPositions(dataset.getSchema(), externallyObservableFields);
+        final var encodedIdFields = mapFieldNamesToPositions(dataset.getSchema(), identityFields);
+        final var encodedTargetFields = mapFieldNamesToPositions(dataset.getSchema(), externallyObservableFields);
 
-        return StreamSupport.stream(dataset.spliterator(), false).
-                map(row -> new Tuple<>(
+        return StreamSupport.stream(dataset.spliterator(), false)
+                .map(row -> new Tuple<>(
                         encodeValues(row, encodedTargetFields),
-                        new HashSet<>(Collections.singleton(
-                                encodeValues(row, encodedIdFields)
-                        ))
+                        new HashSet<>(Collections.singleton(encodeValues(row, encodedIdFields)))
                 ));
     }
 
     private Integer encodeValues(List<String> row, List<Integer> fields) {
-        StringBuilder builder = new StringBuilder();
-        for (Integer field : fields) {
-            builder.append(row.get(field));
-            builder.append('#');
-        }
-
-        return builder.toString().hashCode();
+        return fields.stream()
+                .map(row::get)
+                .collect(Collectors.joining("#"))
+                .hashCode();
     }
 
     private List<Integer> mapFieldNamesToPositions(IPVSchema schema, List<String> requiredFieldNames) {
-        List<? extends IPVSchemaField> schemaFields = schema.getFields();
+        final var schemaFields = schema.getFields();
 
-        return requiredFieldNames.stream().map(fieldName -> {
-            for (int i = 0; i < schemaFields.size(); ++i) {
-                if (schemaFields.get(i).getName().equals(fieldName))
-                    return i;
-            }
-            throw new IllegalArgumentException("Unknown field " + fieldName);
-        }).collect(Collectors.toList());
+        return requiredFieldNames.stream()
+                .map(fieldName -> IntStream.range(0, schemaFields.size())
+                        .filter(i -> schemaFields.get(i).getName().equals(fieldName))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Unknown field " + fieldName))
+                )
+                .toList();
     }
 
     private IPVDataset readInputDataset(InputStream inputStream) {
         try (Reader reader = new InputStreamReader(inputStream)) {
-            switch (getInputFormat()) {
-                case CSV:
-                    CSVDatasetOptions options = (CSVDatasetOptions) getInputOptions();
-
-                    return IPVDataset.load(reader, options.isHasHeader(), options.getFieldDelimiter(), options.getQuoteChar(), options.isTrimFields());
-                case JSON:
-                    return JSONIPVDataset.load(reader);
-
-                case DICOM:
-                case XLS:
-                case XLSX:
-                case XML:
-                case PDF:
-                case DOC:
-                case DOCX:
-                case PLAIN:
-                case FHIR_JSON:
-                case HL7:
-                case PARQUET:
-                case VCF:
-                case JDBC:
-                default:
-                    throw new IllegalArgumentException("Format not supported (at the moment). Please contact support.");
-            }
+            return switch (getInputFormat()) {
+                case CSV -> {
+                    var options = (CSVDatasetOptions) getInputOptions();
+                    yield IPVDataset.load(reader, options.isHasHeader(), options.getFieldDelimiter(), options.getQuoteChar(), options.isTrimFields());
+                }
+                case JSON -> JSONIPVDataset.load(reader);
+                default -> throw new IllegalArgumentException("Format not supported (at the moment). Please contact support.");
+            };
         } catch (IOException e) {
             throw new RuntimeException("Format not supported at the moment", e);
         }
     }
 }
-

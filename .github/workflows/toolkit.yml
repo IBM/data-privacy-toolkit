@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '11', '17', '21']
-        distribution: ['adopt', 'corretto', 'microsoft']
+        java: [ '21' ]
+        distribution: ['temurin', 'corretto', 'microsoft']
     steps:
-      - uses: actions/checkout@v6
-      - name: Setup java
+      - uses: actions/checkout@v4
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: ${{ matrix.distribution }}
@@ -27,7 +27,7 @@ jobs:
       - name: Run gradlew publish to maven local
         working-directory: ./library
         run: ./gradlew publishToMavenLocal --no-daemon
-      - name: Run gradlew clean build
+      - name: Run gradlew build
         working-directory: ./docker
         run: ./gradlew build --no-daemon
   end-to-end-test:
@@ -36,12 +36,12 @@ jobs:
     env:
       IMAGE_NAME: dpt-image:test
     steps:
-      - uses: actions/checkout@v6
-      - name: Setup java
+      - uses: actions/checkout@v4
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '21'
           cache: 'gradle'
       - name: Run gradlew publish to maven local
         working-directory: ./library
@@ -52,10 +52,10 @@ jobs:
       - name: Build docker image
         working-directory: ./docker
         run: docker build -t $IMAGE_NAME .
-      - name: Setup python
-        uses: actions/setup-python@v6
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.13'
           cache: 'pip'
           cache-dependency-path: '**/requirements-dev.txt'
       - name: Install pytest

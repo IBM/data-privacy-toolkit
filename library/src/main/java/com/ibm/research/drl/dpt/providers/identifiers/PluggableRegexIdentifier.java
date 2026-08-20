@@ -25,7 +25,6 @@ import com.ibm.research.drl.dpt.util.Tuple;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
     private final Collection<String> appropriateNames;
@@ -58,7 +57,7 @@ public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier imple
         this.appropriateNames = appropriateNames;
         this.providerType = ProviderType.valueOf(providerTypeName);
         this.valueClass = valueClass;
-        this.patterns = patternStrings.stream().map(Pattern::compile).collect(Collectors.toList());
+        this.patterns = patternStrings.stream().map(Pattern::compile).toList();
         this.isPOSIndependent = isPOSIndependent;
     }
 

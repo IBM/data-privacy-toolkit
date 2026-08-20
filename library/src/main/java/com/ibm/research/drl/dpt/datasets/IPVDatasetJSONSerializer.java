@@ -32,8 +32,8 @@ public class IPVDatasetJSONSerializer {
     public void serialize(IPVDataset dataset, JSONDatasetOptions options, Writer writer) throws IOException {
         List<Map<String, Object>> jsonDataset = new ArrayList<>();
 
-        List<String> fields = dataset.schema.getFields().stream().map(IPVSchemaField::getName).collect(Collectors.toList());
-        List<IPVSchemaFieldType> types = dataset.schema.getFields().stream().map(IPVSchemaField::getType).collect(Collectors.toList());
+        List<String> fields = dataset.schema.getFields().stream().map(IPVSchemaField::getName).toList();
+        List<IPVSchemaFieldType> types = dataset.schema.getFields().stream().map(IPVSchemaField::getType).toList();
 
         for (List<String> values : dataset) {
             jsonDataset.add(

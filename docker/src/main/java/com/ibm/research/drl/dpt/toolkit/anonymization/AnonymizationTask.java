@@ -43,7 +43,12 @@ import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.toolkit.dataset.JSONIPVDataset;
 import com.ibm.research.drl.dpt.toolkit.task.TaskToExecute;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
 
 public class AnonymizationTask extends TaskToExecute {
     private final AnonymizationTaskOptions taskOptions;
@@ -101,20 +106,13 @@ public class AnonymizationTask extends TaskToExecute {
     }
 
     private AnonymizationAlgorithmOptions buildAnonymizationAlgorithmOptions() {
-        switch (taskOptions.getAlgorithm()) {
-            case OLA:
-                return new OLAOptions(taskOptions.getSuppressionRate());
-            case MONDRIAN:
-                return new MondrianOptions(taskOptions.getCategoricalSplitStrategy());
-            case KMAP:
-                return new KMapOptions(taskOptions.getSuppressionRate());
-            case KMEANS:
-                return new KMeansOptions(taskOptions.getSuppressionRate(), taskOptions.getStrategyOptions());
-            case SAMPLING:
-                return new SamplingOptions(taskOptions.getPercentage());
-        }
-
-        throw new IllegalArgumentException("Unsupported algorithmType: " + taskOptions.getAlgorithm());
+        return switch (taskOptions.getAlgorithm()) {
+            case OLA -> new OLAOptions(taskOptions.getSuppressionRate());
+            case MONDRIAN -> new MondrianOptions(taskOptions.getCategoricalSplitStrategy());
+            case KMAP -> new KMapOptions(taskOptions.getSuppressionRate());
+            case KMEANS -> new KMeansOptions(taskOptions.getSuppressionRate(), taskOptions.getStrategyOptions());
+            case SAMPLING -> new SamplingOptions(taskOptions.getPercentage());
+        };
     }
 
     private void writeDataset(OutputStream output, IPVDataset anonymizedDataset) {
@@ -125,49 +123,26 @@ public class AnonymizationTask extends TaskToExecute {
 
     private IPVDataset readInputDataset(InputStream inputStream) {
         try (Reader reader = new InputStreamReader(inputStream)) {
-            switch (getInputFormat()) {
-                case CSV:
-                    CSVDatasetOptions options = (CSVDatasetOptions) getInputOptions();
-
-                    return IPVDataset.load(reader, options.isHasHeader(), options.getFieldDelimiter(), options.getQuoteChar(), options.isTrimFields());
-                case JSON:
-                    return JSONIPVDataset.load(reader);
-
-                case DICOM:
-                case XLS:
-                case XLSX:
-                case XML:
-                case PDF:
-                case DOC:
-                case DOCX:
-                case PLAIN:
-                case FHIR_JSON:
-                case HL7:
-                case PARQUET:
-                case VCF:
-                case JDBC:
-                default:
-                    throw new IllegalArgumentException("Format not supported (at the moment). Please contact support.");
-            }
+            return switch (getInputFormat()) {
+                case CSV -> {
+                    var options = (CSVDatasetOptions) getInputOptions();
+                    yield IPVDataset.load(reader, options.isHasHeader(), options.getFieldDelimiter(), options.getQuoteChar(), options.isTrimFields());
+                }
+                case JSON -> JSONIPVDataset.load(reader);
+                default -> throw new IllegalArgumentException("Format not supported (at the moment). Please contact support.");
+            };
         } catch (IOException e) {
             throw new RuntimeException("Format not supported at the moment", e);
         }
     }
 
     private AnonymizationAlgorithm buildAnonymizationAlgorithm() {
-        switch (taskOptions.getAlgorithm()) {
-            case OLA:
-                return new OLA();
-            case MONDRIAN:
-                return new Mondrian();
-            case KMAP:
-                return new KMap();
-            case KMEANS:
-                return new KMeansAnonymization();
-            case SAMPLING:
-                return new Sampling();
-        }
-
-        throw new IllegalArgumentException("Unsupported algorithmType: " + taskOptions.getAlgorithm());
+        return switch (taskOptions.getAlgorithm()) {
+            case OLA -> new OLA();
+            case MONDRIAN -> new Mondrian();
+            case KMAP -> new KMap();
+            case KMEANS -> new KMeansAnonymization();
+            case SAMPLING -> new Sampling();
+        };
     }
 }

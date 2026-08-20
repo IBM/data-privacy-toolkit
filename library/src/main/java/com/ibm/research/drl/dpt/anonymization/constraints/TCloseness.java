@@ -32,7 +32,6 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.Histogram;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -151,7 +150,7 @@ public class TCloseness implements PrivacyConstraint {
                 Histogram<Double> histogram = Histogram.createHistogram(values);
                 this.histograms.add(histogram);
 
-                Collections.sort(values);
+                values.sort(null);
                 this.totalOrdered.add(values);
             } else {
                 this.histograms.add(null);
