@@ -30,7 +30,13 @@ import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -40,22 +46,19 @@ public class JSONIPVDataset extends IPVDataset {
     }
 
     public static IPVDataset load(Reader reader) throws IOException {
-        final List<JsonNode> values = readObjects(reader);
-        final List<SimpleSchemaField> fields = buildHeaders("/*/", values);
-        final List<List<String>> records = buildRecords(values, fields);
+        final var values = readObjects(reader);
+        final var fields = buildHeaders("/*/", values);
+        final var records = buildRecords(values, fields);
 
-        return new JSONIPVDataset(
-                fields,
-                records
-        );
+        return new JSONIPVDataset(fields, records);
     }
 
     private static List<JsonNode> readObjects(Reader reader) throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
+        final var mapper = new ObjectMapper();
         final JsonParser parser = mapper.getFactory().createParser(reader);
         final MappingIterator<JsonNode> nodes = mapper.readerFor(JsonNode.class).readValues(parser);
 
-        List<JsonNode> dataset = new ArrayList<>();
+        var dataset = new ArrayList<JsonNode>();
 
         while (nodes.hasNext()) {
             JsonNode node = nodes.next();
@@ -70,12 +73,13 @@ public class JSONIPVDataset extends IPVDataset {
     }
 
     private static List<SimpleSchemaField> buildHeaders(String prefix, List<JsonNode> nodes) {
-        List<String> allFieldNames = nodes.stream().flatMap(
+        // Collect into a mutable list so we can remove entries as fields are resolved
+        var allFieldNames = new ArrayList<>(nodes.stream().flatMap(
                 node -> StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(node.fieldNames(), Spliterator.ORDERED),
                         false
                 )
-        ).distinct().collect(Collectors.toList());
+        ).distinct().collect(Collectors.toList()));
 
         List<SimpleSchemaField> fields = new ArrayList<>(allFieldNames.size());
 
@@ -90,19 +94,9 @@ public class JSONIPVDataset extends IPVDataset {
 
                     if (field.isValueNode()) {
                         final IPVSchemaFieldType fieldType = getFieldType(field);
-                        fields.add(
-                            new SimpleSchemaField(
-                                prefix + fieldName,
-                                fieldType
-                            )
-                        );
+                        fields.add(new SimpleSchemaField(prefix + fieldName, fieldType));
                     } else {
-                        fields.addAll(
-                            buildHeaders(
-                                prefix + fieldName + "/",
-                                Collections.singletonList(field)
-                            )
-                        );
+                        fields.addAll(buildHeaders(prefix + fieldName + "/", Collections.singletonList(field)));
                     }
 
                     fieldNamesIterator.remove();
@@ -123,17 +117,16 @@ public class JSONIPVDataset extends IPVDataset {
     }
 
     private static List<List<String>> buildRecords(List<JsonNode> nodes, List<SimpleSchemaField> fields) {
-        return nodes.stream().map( node -> fields.stream().map(
-                    field -> {
-                        final String fieldName = field.getName();
-                        JsonNode child = node.at(fieldName.startsWith("/*") ? fieldName.substring(2) : fieldName);
-                        if (child != null) {
-                            return child.asText();
-                        }
-                        return "";
+        return nodes.stream().map(node -> fields.stream().map(
+                field -> {
+                    final String fieldName = field.getName();
+                    JsonNode child = node.at(fieldName.startsWith("/*") ? fieldName.substring(2) : fieldName);
+                    if (child != null) {
+                        return child.asText();
                     }
-            ).collect(Collectors.toList())
-        ).collect(Collectors.toList());
+                    return "";
+                }
+        ).toList()).toList();
     }
 
     @Override

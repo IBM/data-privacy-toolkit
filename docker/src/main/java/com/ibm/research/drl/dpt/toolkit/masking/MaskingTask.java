@@ -41,9 +41,17 @@ import com.ibm.research.drl.dpt.toolkit.task.TaskToExecute;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class MaskingTask extends TaskToExecute {
     private static final Logger logger = LogManager.getLogger(MaskingTask.class);
@@ -101,7 +109,7 @@ public class MaskingTask extends TaskToExecute {
     }
 
     private MaskingProviderFactory buildMaskingProviderFactory(Map<String, DataMaskingTarget> toBeMasked, JsonNode maskingProvidersConfig) {
-        final ConfigurationManager configurationManager = ConfigurationManager.load(maskingProvidersConfig);
+        final var configurationManager = ConfigurationManager.load(maskingProvidersConfig);
         return new MaskingProviderFactory(configurationManager, toBeMasked);
     }
 
@@ -118,19 +126,18 @@ public class MaskingTask extends TaskToExecute {
     private static Map<ProviderType, Class<? extends MaskingProvider>> loadUserDefinedMaskingProviders(String filename) throws IOException {
         final Map<ProviderType, Class<? extends MaskingProvider>> userDefinedMaskingProviders = new HashMap<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (var reader = new BufferedReader(new FileReader(filename))) {
             for (String line = reader.readLine(); null != line; line = reader.readLine()) {
-                final String[] parts = line.split(":");
-                final ProviderType providerType = ProviderType.valueOf(parts[0].trim());
+                final var parts = line.split(":");
+                final var providerType = ProviderType.valueOf(parts[0].trim());
 
-                final Class<? extends MaskingProvider> maskingProvider = (Class<? extends MaskingProvider>) Class.forName(parts[1].trim());
+                @SuppressWarnings("unchecked")
+                final var maskingProvider = (Class<? extends MaskingProvider>) Class.forName(parts[1].trim());
 
                 userDefinedMaskingProviders.put(providerType, maskingProvider);
             }
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException(filename + " not found", e);
-        } catch (IOException e) {
-            throw new IOException("Error reading user defined masking providers from " + filename, e);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("Class not found " + e.getMessage(), e);
         }
@@ -150,5 +157,4 @@ public class MaskingTask extends TaskToExecute {
         FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(dataMaskingOptions.getInputFormat());
         formatProcessor.maskStream(dataset, output, this.maskingProviderFactory, dataMaskingOptions, alreadyMaskedFields, userDefinedTypes);
     }
-
 }

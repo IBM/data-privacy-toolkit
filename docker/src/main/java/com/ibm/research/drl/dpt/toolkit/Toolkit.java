@@ -21,15 +21,25 @@ package com.ibm.research.drl.dpt.toolkit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ibm.research.drl.dpt.toolkit.task.TaskToExecute;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -88,22 +98,19 @@ public class Toolkit {
                 }
 
                 processTasks(input, output, taskToExecute);
-
-                return;
             }
         } catch (IOException | ParseException | RuntimeException e) {
             logger.error("Execution failed: {}", e.getMessage());
             logger.debug("Additional information:", e);
+            new HelpFormatter().printHelp(System.getProperty("java.class.path"), "", options, "", true);
+            System.exit(1);
         }
-        new HelpFormatter().printHelp(System.getProperty("java.class.path"), "", options, "", true);
-
-        System.exit(1);
     }
 
     protected static void processTasks(File input, File output, TaskToExecute taskToExecute) {
         if (!input.exists()) {
             logger.error("File not found: {}", input);
-            throw new RuntimeException("File not found: "+ input);
+            throw new RuntimeException("File not found: " + input);
         }
 
         if (input.isDirectory()) {
@@ -172,7 +179,7 @@ public class Toolkit {
         return new File(outputDirectory, outputFileName);
     }
 
-    private static Iterable<File> listValidFiles(File directory, String extension) {
+    private static List<File> listValidFiles(File directory, String extension) {
         if (null != extension) {
             return Arrays.asList(
                     Objects.requireNonNull(directory.listFiles(
@@ -197,23 +204,19 @@ public class Toolkit {
     }
 
     private static File createFile(String filePath) {
-        return TypeHandler.createFile(filePath);
+        return new File(filePath);
     }
 
     private static ObjectMapper buildMapper(String configurationFile) {
-        final String extension = extractFileExtension(configurationFile);
-
-        if (extension.equalsIgnoreCase("json")) {
-            return new ObjectMapper();
-        } else if (extension.equalsIgnoreCase("yaml") || extension.equalsIgnoreCase("yml")) {
-            return new ObjectMapper(new YAMLFactory());
-        }
-
-        throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        return switch (extractFileExtension(configurationFile).toLowerCase()) {
+            case "json" -> new ObjectMapper();
+            case "yaml", "yml" -> new ObjectMapper(new YAMLFactory());
+            default -> throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        };
     }
 
     private static String extractFileExtension(String configurationFile) {
-        return configurationFile.substring(configurationFile.lastIndexOf(".") + 1);
+        return configurationFile.substring(configurationFile.lastIndexOf('.') + 1);
     }
 
     private static Map<String, Object> buildTaskOptions(String additionalArguments) {
@@ -221,16 +224,14 @@ public class Toolkit {
 
         return Arrays.stream(additionalArguments.split(";"))
                 .map(String::trim)
-                .filter(((Predicate<String>)String::isEmpty).negate())
-                .filter(((Predicate<String>) line -> line.startsWith("#")).negate())
-                .map( option -> option.split("\\s*=\\s*"))
-                .filter( optionArgument -> 2 == optionArgument.length)
-                .collect(
-                        Collectors.toMap(
-                                optionArgument -> optionArgument[0],
-                                optionArgument -> optionArgument[1]
-                        )
-                );
+                .filter(Predicate.not(String::isEmpty))
+                .filter(Predicate.not(line -> line.startsWith("#")))
+                .map(option -> option.split("\\s*=\\s*"))
+                .filter(optionArgument -> 2 == optionArgument.length)
+                .collect(Collectors.toMap(
+                        optionArgument -> optionArgument[0],
+                        optionArgument -> optionArgument[1]
+                ));
     }
 
     private static CommandLine createCommandLine(Options options, String[] args) throws ParseException {
@@ -252,4 +253,3 @@ public class Toolkit {
         return options;
     }
 }
-

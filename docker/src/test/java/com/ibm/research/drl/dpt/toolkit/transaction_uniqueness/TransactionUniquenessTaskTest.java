@@ -73,10 +73,10 @@ public class TransactionUniquenessTaskTest {
 
             assertNotNull(report);
 
-            assertEquals(report.getTotalIDs(), 3);
-            assertEquals(report.getTotalTransactions(), 8);
-            assertEquals(report.getUniqueTransactions(), 2);
-            assertEquals(report.getUniqueIDs(), 1);
+            assertEquals(report.totalIDs(), 3);
+            assertEquals(report.totalTransactions(), 8);
+            assertEquals(report.uniqueTransactions(), 2);
+            assertEquals(report.uniqueIDs(), 1);
         }
     }
 }

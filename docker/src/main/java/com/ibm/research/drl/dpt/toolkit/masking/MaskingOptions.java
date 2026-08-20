@@ -26,7 +26,6 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.toolkit.task.TaskOptions;
 
-import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -50,29 +49,23 @@ public class MaskingOptions extends TaskOptions {
     }
 
     private Map<String, DataMaskingTarget> buildToBeMasked(Map<String, JsonNode> toBeMaskedNodes) {
-        return toBeMaskedNodes.entrySet().stream().map(entry ->
-                (Map.Entry<String, DataMaskingTarget>) new AbstractMap.SimpleEntry<>(
-                        entry.getKey(),
-                        convertValue(entry.getKey(), entry.getValue())
-                )).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return toBeMaskedNodes.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> convertValue(entry.getKey(), entry.getValue())
+                ));
     }
 
     private DataMaskingTarget convertValue(String fieldReference, JsonNode target) {
         if (target.isTextual()) {
             return new DataMaskingTarget(ProviderType.valueOf(target.asText()), fieldReference);
-        } else if (target.isObject() && target.has("providerType") && target.has("targetPath")) {
+        }
+        if (target.isObject() && target.has("providerType") && target.has("targetPath")) {
             final JsonNode providerTypeNode = target.get("providerType");
+            final JsonNode targetPathNode = target.get("targetPath");
 
-            if (providerTypeNode.isTextual()) {
-                final String providerType = providerTypeNode.asText();
-
-
-                final JsonNode targetPathNode = target.get("targetPath");
-                if (targetPathNode.isTextual()) {
-                    final String targetPath = targetPathNode.asText();
-
-                    return new DataMaskingTarget(ProviderType.valueOf(providerType), targetPath);
-                }
+            if (providerTypeNode.isTextual() && targetPathNode.isTextual()) {
+                return new DataMaskingTarget(ProviderType.valueOf(providerTypeNode.asText()), targetPathNode.asText());
             }
         }
         throw new IllegalArgumentException("Unable to deserialize " + target);

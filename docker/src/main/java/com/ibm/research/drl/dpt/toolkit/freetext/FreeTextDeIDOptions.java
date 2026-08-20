@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.ibm.research.drl.dpt.toolkit.masking.MaskingOptions;
 import com.ibm.research.drl.dpt.toolkit.task.TaskOptions;
 
-import java.util.Optional;
+import java.util.Objects;
 
 public class FreeTextDeIDOptions extends TaskOptions {
     private final MaskingOptions maskingConfiguration;
@@ -38,7 +38,7 @@ public class FreeTextDeIDOptions extends TaskOptions {
             @JsonProperty("annotate") Boolean annotate) {
         this.nlpAnnotator = nlpAnnotator;
         this.maskingConfiguration = maskingConfiguration;
-        this.annotate = Optional.ofNullable(annotate).orElse(false);
+        this.annotate = Objects.requireNonNullElse(annotate, false);
     }
 
     public MaskingOptions getMaskingConfiguration() {
