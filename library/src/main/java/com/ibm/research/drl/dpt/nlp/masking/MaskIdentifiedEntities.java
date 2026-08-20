@@ -30,7 +30,6 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 public class MaskIdentifiedEntities {
@@ -58,7 +57,7 @@ public class MaskIdentifiedEntities {
                             toBeMasked.get(type).getProviderType(), type) : entity.getText();
 
             return new IdentifiedEntity(maskedValue, entity.getStart(), entity.getEnd(), entity.getType(), entity.getPos());
-        }).collect(Collectors.toList());
+        }).toList();
     }
 
     private String mask(final String text, final MaskingConfiguration configuration, ProviderType providerType, String fieldName) {

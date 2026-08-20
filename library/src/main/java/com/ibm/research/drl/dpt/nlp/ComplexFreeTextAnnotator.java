@@ -260,12 +260,12 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
                 .flatMap(List::stream)
                 .filter(this::isEntityValid)
                 .map(this::removeUnreliableSources)
-                .collect(Collectors.toList());
+                .toList();
 
         List<IdentifiedEntity> resolvedEntities = splitAndMergeOverlapping(mergedList).stream()
                 .map(this::resolveType)
                 .filter(this::filterIncorrectIdentifications)
-                .collect(Collectors.toList());
+                .toList();
 
         List<IdentifiedEntity> listOfIdentified = mergeAdjacentEntities(resolvedEntities, text).stream()
                 .filter(this::filterIncorrectIdentifications)
@@ -275,15 +275,15 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
                         entity.getType().stream().filter(newCheckBlackList(entity.getText())).collect(Collectors.toSet()),
                         entity.getPos()))
                 .filter(((Predicate<IdentifiedEntity>) entity -> entity.getType().isEmpty()).negate())
-                .collect(Collectors.toList());
+                .toList();
 
-        return adjustOffsets(
+        return new ArrayList<>(adjustOffsets(
                 filterToNotBeReported(mergeEntityListsAndOverlappingEntities(
                         identifyMissedRepetitions(
                                 mergeConnectedEntities(
                                         mergeAdjacentEntities(listOfIdentified, text),
                                         text),
-                                text, false))));
+                                text, false)))));
     }
 
     private List<IdentifiedEntity> adjustOffsets(List<IdentifiedEntity> identifiedEntities) {
@@ -304,7 +304,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
                             entity.getPos()
                     );
                 }
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     private boolean isEntityValid(IdentifiedEntity identifiedEntity) {
@@ -343,7 +343,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
                     IdentifiedEntityType type = entity.getType().iterator().next();
                     return !toNotToBeReported.contains(type.getType());
                 }
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
     public List<IdentifiedEntity> identifyMissing(List<IdentifiedEntity> identifiedEntities,
@@ -352,6 +352,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
     }
 
     private List<IdentifiedEntity> mergeAdjacentEntities(List<IdentifiedEntity> identifiedEntities, String text) {
+        identifiedEntities = new ArrayList<>(identifiedEntities);
         identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
         identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
 
@@ -409,8 +410,9 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
     }
 
     protected List<IdentifiedEntity> split(List<IdentifiedEntity> entities) {
-        if (entities.size() == 1) return entities;
+        if (entities.size() == 1) return new ArrayList<>(entities);
 
+        entities = new ArrayList<>(entities);
         entities.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
         entities.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
 
@@ -433,7 +435,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
                 .sorted()
                 .distinct()
                 .boxed()
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<IdentifiedEntity> computeEntitySplits(final IdentifiedEntity entity, List<Integer> sortedSplitPoint) {
@@ -538,8 +540,9 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
     }
 
     private List<IdentifiedEntity> mergeEntityListsAndOverlappingEntities(List<IdentifiedEntity> entityList) {
-        if (entityList.isEmpty()) return entityList;
+        if (entityList.isEmpty()) return new ArrayList<>();
 
+        entityList = new ArrayList<>(entityList);
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
 
@@ -675,6 +678,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
     }
 
     private List<IdentifiedEntity> mergeConnectedEntities(List<IdentifiedEntity> identifiedEntities, final String text) {
+        identifiedEntities = new ArrayList<>(identifiedEntities);
         identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
 
         for(ConnectedEntities connectedEntity: this.connectedEntities) {
@@ -717,6 +721,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
     }
 
     private List<IdentifiedEntity> identifyMissedRepetitions(List<IdentifiedEntity> identifiedEntities, String text, boolean missingOnly) {
+        identifiedEntities = new ArrayList<>(identifiedEntities);
         identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
 
         List<IdentifiedEntity> missedRepetitions = (missingOnly) ? new ArrayList<>() : new ArrayList<>(identifiedEntities);
@@ -871,7 +876,7 @@ public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
 
     @Override
     public String getName() {
-        return "ComplexFreeTextAnnotator" + nlpAnnotators.stream().map(NLPAnnotator::getName).collect(Collectors.toList()).toString();
+        return "ComplexFreeTextAnnotator" + nlpAnnotators.stream().map(NLPAnnotator::getName).toList().toString();
     }
 
     private Map<String, Set<String>> buildBlacklist(JsonNode configuration) {

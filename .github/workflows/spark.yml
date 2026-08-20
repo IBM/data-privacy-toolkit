@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: ['11']
-        distribution: ['adopt', 'corretto', 'microsoft']
+        java: [ '21' ]
+        distribution: ['temurin', 'corretto', 'microsoft']
     steps:
-      - uses: actions/checkout@v6
-      - name: Setup java
+      - uses: actions/checkout@v4
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: ${{ matrix.distribution }}
@@ -27,20 +27,6 @@ jobs:
       - name: Run gradlew publish to maven local
         working-directory: ./library
         run: ./gradlew publishToMavenLocal --no-daemon
-      - name: Run gradlew clean build
-        working-directory: ./docker
+      - name: Run gradlew build
+        working-directory: ./spark
         run: ./gradlew build --no-daemon
-  end-to-end-test:
-    name: End to end test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-          cache: 'gradle'
-      - name: Run gradlew publish to maven local
-        working-directory: ./library
-        run: ./gradlew publishToMavenLocal --no-daemon

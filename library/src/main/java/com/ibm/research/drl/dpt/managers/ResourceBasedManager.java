@@ -73,9 +73,8 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         localMap.put(key, value);
         listMap.get(countryCode).add(key);
 
-        if (value instanceof ProbabilisticEntity) {
-            double probability = ((ProbabilisticEntity) value).getProbability();
-            probMap.get(countryCode).add(new Pair<>(key, probability));
+        if (value instanceof ProbabilisticEntity pe) {
+            probMap.get(countryCode).add(new Pair<>(key, pe.getProbability()));
         }
     }
 
@@ -229,9 +228,8 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         if (value == null) {
             return getPseudorandomElement(getKeys(), key);
         } else {
-            if (value instanceof LocalizedEntity) {
-                String countryCode = ((LocalizedEntity) value).getNameCountryCode();
-                return getPseudorandomElement(getKeys(countryCode), key);
+            if (value instanceof LocalizedEntity le) {
+                return getPseudorandomElement(getKeys(le.getNameCountryCode()), key);
             }
 
             return getPseudorandomElement(getKeys(), key);

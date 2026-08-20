@@ -73,7 +73,7 @@ public class AnonymizedDatasetLinker {
                     continue;
                 }
 
-                if (!(columnInformation instanceof CategoricalInformation)) {
+                if (!(columnInformation instanceof CategoricalInformation categoricalInformation)) {
                     Set<Integer> matchedRows = datasetLinker.matchValue(value, targetIndex, info.isPrefixMatch());
                     if (matchedRows == null) {
                         return 0;
@@ -81,7 +81,6 @@ public class AnonymizedDatasetLinker {
                         infoMatching.add(matchedRows);
                     }
                 } else {
-                    CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
                     int level = categoricalInformation.getHierarchy().getNodeLevel(value);
 
                     if (level <= 0) {

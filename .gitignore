@@ -150,4 +150,5 @@ hs_err_pid*
 .vscode/tasks.json
 
 .gradle
-build/
+build/.vscode
+.vscode

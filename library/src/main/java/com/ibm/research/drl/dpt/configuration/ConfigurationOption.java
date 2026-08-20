@@ -109,8 +109,8 @@ public class ConfigurationOption implements Serializable {
 
         if (Objects.isNull(value) || value instanceof Serializable) {
             out.writeObject(value);
-        } else if (value instanceof JsonNode) {
-            out.writeObject(value.toString().getBytes());
+        } else if (value instanceof JsonNode jn) {
+            out.writeObject(jn.toString().getBytes());
         } else {
             throw new RuntimeException("Not serializable: " + value.getClass().getCanonicalName());
         }
@@ -122,8 +122,8 @@ public class ConfigurationOption implements Serializable {
 
         Object value = in.readObject();
 
-        if (value instanceof byte[]) {
-            this.value = JsonUtils.MAPPER.readTree((byte[]) value);
+        if (value instanceof byte[] bytes) {
+            this.value = JsonUtils.MAPPER.readTree(bytes);
         } else {
             this.value = value;
         }

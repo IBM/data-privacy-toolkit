@@ -47,38 +47,27 @@ public class PartitionUtils {
 
         for (int k = 0; k < dataset.getNumberOfRows(); k++) {
             List<String> row = new ArrayList<>();
-
             List<String> keyValues = new ArrayList<>();
 
             for (int j = 0; j < dataset.getNumberOfColumns(); j++) {
                 String value = dataset.get(k, j);
                 row.add(value);
-
                 if (columnInformationList.get(j).getColumnType() == ColumnType.QUASI) {
                     keyValues.add(value);
                 }
             }
 
             try {
-                String key = printToCSV(",", keyValues);
-
-                if (!map.containsKey(key)) {
-                    map.put(key, new ArrayList<>());
-                }
-
-                map.get(key).add(row);
-
+                map.computeIfAbsent(printToCSV(",", keyValues), k2 -> new ArrayList<>()).add(row);
             } catch (Exception e) {
                 throw new RuntimeException("unable to create key");
             }
         }
 
-        List<Partition> partitions = new ArrayList<>();
+        List<Partition> partitions = new ArrayList<>(map.size());
         for (List<List<String>> values : map.values()) {
-            InMemoryPartition partition = new InMemoryPartition(values);
-            partitions.add(partition);
+            partitions.add(new InMemoryPartition(values));
         }
-
         return partitions;
     }
 
@@ -87,34 +76,23 @@ public class PartitionUtils {
 
         for (int k = 0; k < dataset.getNumberOfRows(); k++) {
             List<String> row = dataset.getRow(k);
-
             List<String> keyValues = new ArrayList<>();
 
             for (int j : columnIndices) {
-                String value = dataset.get(k, j);
-                keyValues.add(value);
+                keyValues.add(dataset.get(k, j));
             }
 
             try {
-                String key = printToCSV(",", keyValues);
-
-                if (!map.containsKey(key)) {
-                    map.put(key, new ArrayList<>());
-                }
-
-                map.get(key).add(row);
-
+                map.computeIfAbsent(printToCSV(",", keyValues), k2 -> new ArrayList<>()).add(row);
             } catch (Exception e) {
                 throw new RuntimeException("unable to create key");
             }
         }
 
-        List<Partition> partitions = new ArrayList<>();
+        List<Partition> partitions = new ArrayList<>(map.size());
         for (List<List<String>> values : map.values()) {
-            InMemoryPartition partition = new InMemoryPartition(values);
-            partitions.add(partition);
+            partitions.add(new InMemoryPartition(values));
         }
-
         return partitions;
     }
 }

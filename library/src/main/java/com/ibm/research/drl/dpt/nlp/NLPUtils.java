@@ -106,8 +106,10 @@ public class NLPUtils {
     public static String applyFunction(String inputText,
                                        List<IdentifiedEntity> identifiedEntities,
                                        Function<IdentifiedEntity, String> function) {
-        identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
-        identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
+        List<IdentifiedEntity> sorted = identifiedEntities.stream()
+                .sorted(Comparator.comparingInt(IdentifiedEntity::getEnd).thenComparingInt(IdentifiedEntity::getStart))
+                .toList();
+        identifiedEntities = sorted;
 
         StringBuilder builder = new StringBuilder();
         int lastOffset = 0;
@@ -128,8 +130,10 @@ public class NLPUtils {
     public static String maskAnnotatedText(final String text, final List<IdentifiedEntity> identifiedEntities, final MaskingProviderFactory maskingProviderFactory) {
         String maskedText = text;
 
-        identifiedEntities.sort(Comparator.comparingInt(IdentifiedEntity::getStart).reversed());
-        for (final IdentifiedEntity identifiedEntity : identifiedEntities) {
+        List<IdentifiedEntity> sorted = identifiedEntities.stream()
+                .sorted(Comparator.comparingInt(IdentifiedEntity::getStart).reversed())
+                .toList();
+        for (final IdentifiedEntity identifiedEntity : sorted) {
             maskedText = maskTextForIdentifiedEntity(text, identifiedEntity, maskingProviderFactory);
         }
 
