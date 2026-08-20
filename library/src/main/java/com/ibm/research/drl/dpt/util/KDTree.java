@@ -19,7 +19,6 @@ under the License.
 package com.ibm.research.drl.dpt.util;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.sin;
@@ -156,7 +155,7 @@ public class KDTree<T extends KDTree.CartesianPoint> {
             node = node.parent;
         }
 
-        return results.stream().map(treeNode -> treeNode.point).collect(Collectors.toList());
+        return new ArrayList<>(results.stream().map(treeNode -> treeNode.point).toList());
     }
 
     private void searchNode(T value, KDTreeNode<T> node, int K, TreeSet<KDTreeNode<T>> results, Set<KDTreeNode<T>> examined) {

@@ -32,7 +32,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class IdentifierFactory implements Serializable {
     private static final Logger logger = LogManager.getLogger(IdentifierFactory.class);
@@ -336,7 +335,7 @@ public final class IdentifierFactory implements Serializable {
         for (File file : populateFilesToProcess(path)) {
             try {
                 terms.addAll(
-                        Files.lines(file.toPath()).map(String::trim).collect(Collectors.toList())
+                        Files.lines(file.toPath()).map(String::trim).toList()
                 );
             } catch (IOException e) {
                 throw new RuntimeException(e);

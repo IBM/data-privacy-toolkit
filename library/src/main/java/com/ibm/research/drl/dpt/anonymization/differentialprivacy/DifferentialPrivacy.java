@@ -30,7 +30,6 @@ import com.ibm.research.drl.dpt.datasets.schema.IPVSchema;
 import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class DifferentialPrivacy implements AnonymizationAlgorithm {
@@ -145,7 +144,7 @@ public class DifferentialPrivacy implements AnonymizationAlgorithm {
 
     @Override
     public IPVDataset apply() {
-        List<Integer> columnIndexes = IntStream.range(0, columnInformationList.size()).boxed().filter(i -> columnInformationList.get(i).getColumnType().equals(ColumnType.E_QUASI)).collect(Collectors.toList());
+        List<Integer> columnIndexes = IntStream.range(0, columnInformationList.size()).boxed().filter(i -> columnInformationList.get(i).getColumnType().equals(ColumnType.E_QUASI)).toList();
         if (columnIndexes.size() != 1) throw new RuntimeException("More than one e-quasi identifier specified");
 
         this.columnIndex = columnIndexes.get(0);

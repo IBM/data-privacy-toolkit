@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.apache.commons.csv.CSVFormat;
@@ -71,8 +70,8 @@ public class IPVDataset implements Iterable<List<String>> {
     }
 
     public int getNumberOfColumns() {
-        if (null != schema) return schema.getFields().size();
-        if (0 == values.size()) return -1;
+        if (schema != null) return schema.getFields().size();
+        if (values.isEmpty()) return -1;
 
         return values.get(0).size();
     }
@@ -124,7 +123,7 @@ public class IPVDataset implements Iterable<List<String>> {
     public String toString() {
         final StringBuilder builder = new StringBuilder();
 
-        if (hasSchema && null != schema && schema.getFields().size() > 0) {
+        if (hasSchema && schema != null && !schema.getFields().isEmpty()) {
             // add header -> schema
             builder.append(buildHeader(schema, ','));
             builder.append('\n');
@@ -233,26 +232,7 @@ public class IPVDataset implements Iterable<List<String>> {
 
     @Override
     public Iterator<List<String>> iterator() {
-        return new Iterator<>() {
-            private volatile int index = 0;
-
-            @Override
-            public synchronized boolean hasNext() {
-                return getNumberOfRows() > index;
-            }
-
-            @Override
-            public synchronized List<String> next() {
-                if (!hasNext()) throw new NoSuchElementException();
-
-                return getRow(index++);
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
+        return values.iterator();
     }
 
     public void toCSV(CSVDatasetOptions options, Appendable writer) {

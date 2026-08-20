@@ -110,14 +110,10 @@ public class Country implements Location, LocalizedEntity {
      * @return the name
      */
     public String getName(CountryNameSpecification spec) {
-        switch (spec) {
-            case ISO2:
-                return iso2code;
-            case ISO3:
-                return iso3code;
-            case NAME:
-            default:
-                return name;
-        }
+        return switch (spec) {
+            case ISO2 -> iso2code;
+            case ISO3 -> iso3code;
+            default -> name;
+        };
     }
 }

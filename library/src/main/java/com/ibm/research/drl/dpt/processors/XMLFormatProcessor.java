@@ -34,22 +34,9 @@ import java.util.Collections;
 public class XMLFormatProcessor extends MultipathFormatProcessor {
     private final DocumentBuilder documentBuilder;
 
-    private DocumentBuilder buildDocumentBuilder() throws ParserConfigurationException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-        factory.setXIncludeAware(false);
-        factory.setExpandEntityReferences(false);
-        factory.setFeature(javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING, true);
-
-        return factory.newDocumentBuilder();
-    }
-
     public XMLFormatProcessor() {
         try {
-            this.documentBuilder = this.buildDocumentBuilder();
+            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Unable to instantiate the document builder " + e.getMessage());
         }
@@ -72,4 +59,6 @@ public class XMLFormatProcessor extends MultipathFormatProcessor {
     public boolean supportsStreams() {
         return true;
     }
+
+
 }

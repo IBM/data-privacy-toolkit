@@ -55,7 +55,7 @@ public class ColumnInformationGenerator {
             }
         }
 
-        Collections.sort(doubles);
+        doubles.sort(null);
         return new NumericalRange(doubles, columnType, weight, isForLinking);
     }
 

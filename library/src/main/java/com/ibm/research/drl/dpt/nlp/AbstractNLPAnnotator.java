@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 
@@ -38,7 +37,7 @@ public abstract class AbstractNLPAnnotator implements NLPAnnotator {
             return Collections.emptyList();
         }
 
-        return StreamSupport.stream(node.spliterator(), false).map(JsonNode::asText).collect(Collectors.toList());
+        return StreamSupport.stream(node.spliterator(), false).map(JsonNode::asText).toList();
     }
     
     protected Map<String, String> extractMapping(JsonNode mapping, boolean ignoreCase) {

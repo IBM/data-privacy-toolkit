@@ -45,8 +45,8 @@ public class AnonymizationUtils {
     public static int getK(List<PrivacyConstraint> privacyConstraints) {
 
         for (PrivacyConstraint privacyConstraint : privacyConstraints) {
-            if (privacyConstraint instanceof KAnonymity) {
-                return ((KAnonymity) privacyConstraint).getK();
+            if (privacyConstraint instanceof KAnonymity ka) {
+                return ka.getK();
             }
         }
 
