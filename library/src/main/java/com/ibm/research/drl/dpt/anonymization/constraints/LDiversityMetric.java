@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LDiversityMetric extends KAnonymityMetric {
-    private final List<Histogram> histograms;
+    private final List<Histogram<String>> histograms;
 
-    public List<Histogram> getHistograms() {
+    public List<Histogram<String>> getHistograms() {
         return histograms;
     }
 
@@ -42,7 +42,7 @@ public class LDiversityMetric extends KAnonymityMetric {
         this.histograms = new ArrayList<>();
 
         for (String sensitiveValue : sensitiveValues) {
-            Histogram histogram = new Histogram();
+            Histogram<String> histogram = new Histogram<String>();
             histogram.put(sensitiveValue, 1L);
 
             this.histograms.add(histogram);
@@ -59,11 +59,11 @@ public class LDiversityMetric extends KAnonymityMetric {
         super.update(metric);
 
         LDiversityMetric lDiversityMetric = (LDiversityMetric) metric;
-        List<Histogram> metricHistograms = lDiversityMetric.getHistograms();
+        List<Histogram<String>> metricHistograms = lDiversityMetric.getHistograms();
 
         for (int i = 0; i < metricHistograms.size(); i++) {
             if (histograms.size() <= i) {
-                histograms.add(new Histogram());
+                histograms.add(new Histogram<String>());
             }
 
             histograms.get(i).update(metricHistograms.get(i));

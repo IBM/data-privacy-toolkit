@@ -46,7 +46,7 @@ public class EntropyLDiversity implements PrivacyConstraint {
         return l;
     }
 
-    private boolean checkHistogramEntropy(Histogram histogram, int total) {
+    private boolean checkHistogramEntropy(Histogram<String> histogram, int total) {
         double sum1 = EntropyUtilities.calculateEntropy(histogram, total);
 
         return Math.log(this.l) <= sum1;
@@ -60,7 +60,7 @@ public class EntropyLDiversity implements PrivacyConstraint {
             return false;
         }
 
-        Histogram histogram = Histogram.createHistogram(partition.getMember(), column);
+        Histogram<String> histogram = Histogram.createHistogram(partition.getMember(), column);
 
         return checkHistogramEntropy(histogram, total);
     }
@@ -74,7 +74,7 @@ public class EntropyLDiversity implements PrivacyConstraint {
             return false;
         }
 
-        for (Histogram histogram : lDiversityMetric.getHistograms()) {
+        for (Histogram<String> histogram : lDiversityMetric.getHistograms()) {
             if (!checkHistogramEntropy(histogram, (int) total)) {
                 return false;
             }

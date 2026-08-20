@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
 import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.processors.CSVFormatProcessor;
+import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,13 +39,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Configuration
 public class DPTConfiguration {
-    public static final Logger log = LogManager.getLogger(DPTConfiguration.class);
+    public static final Logger logger = LogManager.getLogger(DPTConfiguration.class);
 
     @Bean
     public WebServerFactoryCustomizer<WebServerFactory> containerCustomizer() {
@@ -78,30 +81,30 @@ public class DPTConfiguration {
 
     @Bean
     public CSVFormatProcessor createCsvFormatProcessor() {
-        log.info("Creating a CSV format Processor");
+        logger.info("Creating a CSV format Processor");
 
         return new CSVFormatProcessor();
     }
 
     @Bean
     public DefaultMaskingConfiguration createMaskingConfiguration() {
-        log.info("Creating masking configuration");
+        logger.info("Creating masking configuration");
 
         DefaultMaskingConfiguration configuration = new DefaultMaskingConfiguration();
 
-        log.info("Setting demo-specific options: replace.mask.offset = 0");
+        logger.info("Setting demo-specific options: replace.mask.offset = 0");
 
         configuration.setValue("replace.mask.offset", 0);
 
-        log.info("Setting demo-specific options: replace.mask.preserve = 4");
+        logger.info("Setting demo-specific options: replace.mask.preserve = 4");
 
         configuration.setValue("replace.mask.preserve", 4);
 
-        log.info("Setting demo-specific options: binning.mask.binSize = 10");
+        logger.info("Setting demo-specific options: binning.mask.binSize = 10");
 
         configuration.setValue("binning.mask.binSize", 10);
 
-        log.info("Setting demo-specific options: binning.mask.returnBinMean = true");
+        logger.info("Setting demo-specific options: binning.mask.returnBinMean = true");
 
         configuration.setValue("binning.mask.returnBinMean", true);
 
@@ -110,10 +113,17 @@ public class DPTConfiguration {
 
     @Bean
     public MaskingProviderFactory createMaskingProviderFactory(@Autowired DefaultMaskingConfiguration configuration) {
-        log.info("Creating default MaskingProviderFactory");
+        logger.info("Creating default MaskingProviderFactory");
 
         return new MaskingProviderFactory(
                 new ConfigurationManager(configuration),
                 Collections.emptyMap());
+    }
+
+    @Bean
+    public IdentifierFactory createIdentifierFactory() throws IOException {
+        try (InputStream stream = DPTConfiguration.class.getResourceAsStream("/identifiers.properties")) {
+            return new IdentifierFactory(stream);
+        }
     }
 }

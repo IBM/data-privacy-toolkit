@@ -211,7 +211,7 @@ public class DummySuppressionReassignment extends StrategyImpl {
     }
 
     private IPVDataset createAnonymized(List<KMeansCluster> clusters) {
-        IPVDataset anonymized = new IPVDataset(original.getNumberOfColumns());
+        IPVDataset anonymized = new IPVDataset(new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(original.getNumberOfColumns()), false);
 
         for (KMeansCluster cluster : clusters) {
             Partition partition = cluster.getOriginalData();
@@ -235,14 +235,9 @@ public class DummySuppressionReassignment extends StrategyImpl {
 
     @Override
     public IPVDataset buildAnonymizedDataset(List<KMeansCluster> clusters) {
-
-
         List<KMeansCluster> conformingClusters = suppressAndMerge(clusters);
 
         return createAnonymized(conformingClusters);
-
     }
-
-
 }
 

@@ -19,7 +19,11 @@ under the License.
 package com.ibm.research.drl.dpt.processors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.research.drl.dpt.configuration.*;
+import com.ibm.research.drl.dpt.configuration.ConfigurationManager;
+import com.ibm.research.drl.dpt.configuration.DataMaskingOptions;
+import com.ibm.research.drl.dpt.configuration.DataMaskingTarget;
+import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
+import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.models.ValueClass;
@@ -32,20 +36,35 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.schema.RelationshipType;
+
 import org.beer30.jdefault.JDefaultBusiness;
 import org.beer30.jdefault.JDefaultIdentity;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.time.Duration.ofMillis;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class FormatProcessorTest {
 

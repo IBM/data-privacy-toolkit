@@ -18,7 +18,7 @@ under the License.
 */
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.10-SNAPSHOT'
+    id 'org.springframework.boot' version '2.7.18'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
@@ -36,14 +36,14 @@ repositories {
 }
 
 ext {
-    jackson_version = '2.14.2'
-    jackson_dataformat_version = '2.14.2'
+    jackson_version = '2.15.3'
+    jackson_dataformat_version = '2.20.1'
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation 'org.apache.commons:commons-csv:1.10.0'
+    implementation 'org.apache.commons:commons-csv:1.14.1'
 
     implementation "${group}:data-privacy-toolkit:${version}"
 

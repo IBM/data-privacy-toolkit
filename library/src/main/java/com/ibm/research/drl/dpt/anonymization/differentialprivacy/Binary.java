@@ -23,7 +23,7 @@ import com.ibm.research.drl.dpt.anonymization.Partition;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;;
+import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 import java.util.List;

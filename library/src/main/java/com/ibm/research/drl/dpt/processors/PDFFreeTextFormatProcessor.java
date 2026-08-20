@@ -23,21 +23,19 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.nlp.IdentifiedEntity;
 import com.ibm.research.drl.dpt.nlp.NLPAnnotator;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
-import org.apache.fontbox.ttf.TrueTypeCollection;
-import org.apache.fontbox.ttf.TrueTypeFont;
-import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDCIDFontType0;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import org.apache.pdfbox.text.PDFTextStripperByArea;;
+import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 import java.awt.Rectangle;
 import java.io.IOException;
@@ -50,8 +48,10 @@ public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
 
     @Override
     public List<IdentifiedEntity> identifyDocument(InputStream inputStream, NLPAnnotator identifier, DatasetOptions datasetOptions) {
-        try {
-            PDDocument document = PDDocument.load(inputStream);
+        try (
+                RandomAccessReadBuffer buffer = new RandomAccessReadBuffer(inputStream);
+                PDDocument document = Loader.loadPDF(buffer)
+        ) {
 
 
             PDFTextStripper pdfStripper = new PDFTextStripper();
@@ -66,8 +66,10 @@ public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
 
     @Override
     public void maskDocument(InputStream inputDocument, OutputStream outputDocument, MaskingProvider maskingProvider) {
-        try {
-            PDDocument document = PDDocument.load(inputDocument);
+        try (
+                RandomAccessReadBuffer buffer = new RandomAccessReadBuffer(inputDocument);
+                PDDocument document = Loader.loadPDF(buffer)
+        ) {
 
             int numOfPages = document.getNumberOfPages();
 
@@ -102,7 +104,7 @@ public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
 
     private PDFont loadFont(PDDocument original, PDDocument masked) {
         // TODO: add loading fonts from original document
-        return PDType1Font.HELVETICA;
+        return new PDType1Font(Standard14Fonts.FontName.HELVETICA);
     }
 
     private PDPage createMaskedPage(PDDocument document, String text, PDFont font) {

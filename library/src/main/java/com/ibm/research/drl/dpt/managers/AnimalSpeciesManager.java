@@ -26,7 +26,6 @@ import com.ibm.research.drl.dpt.util.localization.ResourceEntry;
 import org.apache.commons.csv.CSVRecord;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
