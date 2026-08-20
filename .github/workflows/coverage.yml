@@ -13,12 +13,13 @@ jobs:
     name: Coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - name: Setup java
+      - uses: actions/checkout@v4
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
       - name: Run Coverage for Library
         working-directory: ./library
         run: ./gradlew testCoverage --no-daemon
@@ -30,7 +31,7 @@ jobs:
         run: ./gradlew testCoverage --no-daemon
       - name: Add coverage to PR
         id: jacoco
-        uses: madrapps/jacoco-report@v1.3
+        uses: madrapps/jacoco-report@v1.7
         with:
           paths: ${{ github.workspace }}/library/build/reports/jacoco/testCoverage/testCoverage.xml,${{ github.workspace }}/docker/build/reports/jacoco/testCoverage/testCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}

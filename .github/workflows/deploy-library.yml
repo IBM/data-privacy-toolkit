@@ -15,16 +15,13 @@ jobs:
       OSSRH_GPG_SECRET_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
       OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
     steps:
-      - uses: actions/checkout@v6
-      - name: Setup java
+      - uses: actions/checkout@v4
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'temurin'
+          java-version: '21'
           cache: 'gradle'
       - name: Push to OSSRH
         working-directory: ./library
         run: ./gradlew --no-daemon publish
-
-
-
