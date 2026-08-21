@@ -20,10 +20,16 @@ plugins {
     id 'java'
     id 'idea'
     id 'eclipse'
-
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-
     id 'jacoco'
+}
+
+group = 'com.ibm.research.drl.dpt'
+version = '7.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 ext {
@@ -46,22 +52,42 @@ ext {
     commons_validator_version = '1.10.1'
     pdfbox_version = '3.0.6'
 
-    commons_io_version = '2.21.0'
-
     commons_cli_version = '1.11.0'
     commons_io_version = '2.21.0'
 
     poi_version = "5.4.0"
 }
 
-sourceCompatibility = '21'
-targetCompatibility = '21'
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
 
-tasks.withType(JavaCompile) {
+dependencies {
+    implementation "com.ibm.research.drl.dpt:data-privacy-toolkit:${version}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
+    implementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_version}"
+
+    implementation "commons-cli:commons-cli:${commons_cli_version}"
+    implementation "commons-io:commons-io:${commons_io_version}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
+    testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
+
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
     minHeapSize = "5g"
     maxHeapSize = "10g"
@@ -77,39 +103,10 @@ test {
     }
 }
 
-group = 'com.ibm.research.drl.dpt'
-version = '7.0.0-SNAPSHOT'
-
 jar {
     manifest {
         attributes 'Main-Class': "${group}.toolkit.Toolkit"
     }
-}
-
-dependencies {
-    implementation "com.ibm.research.drl.dpt:data-privacy-toolkit:${version}"
-    implementation "org.apache.logging.log4j:log4j-api:${log4j2_version}"
-    implementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
-
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_version}"
-
-
-    implementation "commons-cli:commons-cli:${commons_cli_version}"
-    implementation "commons-io:commons-io:${commons_io_version}"
-
-    testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
-    testImplementation "org.hamcrest:hamcrest:${hamcrest_version}"
-
-    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
 }
 
 shadowJar {
@@ -119,8 +116,8 @@ shadowJar {
     zip64 true
 }
 
-tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
-
+tasks.register('testCoverage', JacocoReport) {
+    dependsOn tasks.named('test')
     group = "Reporting"
     description = "Generate Jacoco coverage reports for the test build."
 
@@ -135,12 +132,12 @@ tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
             '**/actions/*.*',
     ]
 
-    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    def javaClasses = fileTree(dir: layout.buildDirectory.dir("classes/java/main"), excludes: excludes)
     classDirectories.from = files([javaClasses])
 
     sourceDirectories.from = files([
             "$project.projectDir/src/main/java",
     ])
 
-    executionData.from = files("${project.buildDir}/jacoco/test.exec")
+    executionData.from = files(layout.buildDirectory.file("jacoco/test.exec"))
 }
