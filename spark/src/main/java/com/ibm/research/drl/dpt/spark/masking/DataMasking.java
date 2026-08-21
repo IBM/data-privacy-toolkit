@@ -38,7 +38,13 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class DataMasking {
 
@@ -99,9 +105,7 @@ public class DataMasking {
                 maskingOptions.getToBeMasked());
 
         final Map<String, MaskingProvider> maskingProviders = new HashMap<>();
-        for (String key : maskingOptions.getToBeMasked().keySet()) {
-            maskingProviders.put(key, maskingProviderFactory.get(key));
-        }
+        maskingOptions.getToBeMasked().keySet().forEach(key -> maskingProviders.put(key, maskingProviderFactory.get(key)));
         
         final List<String> fieldNames = SparkUtils.createFieldNames(dataset, maskingOptions.getInputFormat(), maskingOptions.getDatasetOptions());
         final Map<String, Integer> fieldMap = RecordUtils.createFieldMap(dataset.schema());
@@ -136,22 +140,16 @@ public class DataMasking {
         
         Set<String> fields = maskingOptions.getToBeMasked().keySet();
         
-        for(String field: fields) {
+        fields.forEach(field -> {
             MaskingConfiguration fieldConfiguration = configurationManager.getFieldConfiguration(field);
             boolean isConsistent = fieldConfiguration.getBooleanValue("persistence.export");
             String consistentType = fieldConfiguration.getStringValue("persistence.type");
-                    
+
             if (isConsistent && consistentType.equals("memory")) {
                 String ns = fieldConfiguration.getStringValue("persistence.namespace");
-                
-                if (!consistentFields.containsKey(ns)) {
-                    consistentFields.put(ns, new HashSet<>());
-                }
-                
-                consistentFields.get(ns).add(field);
+                consistentFields.computeIfAbsent(ns, k -> new HashSet<>()).add(field);
             }
-            
-        }
+        });
         
         return consistentFields;
     }

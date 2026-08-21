@@ -24,7 +24,6 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
@@ -88,7 +87,7 @@ public class ExtractFieldsStatisticsTest {
     }
 
     private Dataset<Row> createDataset(List<List<Object>> data, StructType schema) {
-        return spark.createDataset(convertToRows(data), RowEncoder.apply(schema));
+        return spark.createDataFrame(convertToRows(data), schema);
     }
 
     private List<Row> convertToRows(List<List<Object>> data) {

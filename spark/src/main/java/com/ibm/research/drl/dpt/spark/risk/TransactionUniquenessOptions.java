@@ -25,7 +25,8 @@ import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionUniquenessOptions {
     private final int factor;
@@ -80,15 +81,9 @@ public class TransactionUniquenessOptions {
     }
    
     private String[] readArray(JsonNode arr) {
-        String[] s = new String[arr.size()];
-
-        Iterator<JsonNode> iterator = arr.iterator();
-        int i = 0;
-        while(iterator.hasNext()) {
-            s[i++] = iterator.next().asText();
-        }
-        
-        return s;
+        List<String> result = new ArrayList<>();
+        arr.forEach(node -> result.add(node.asText()));
+        return result.toArray(String[]::new);
     }
     
     public TransactionUniquenessOptions(JsonNode configuration) {

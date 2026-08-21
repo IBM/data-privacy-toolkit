@@ -30,8 +30,6 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.*;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
@@ -135,8 +133,7 @@ public class TransactionUniquenessTest {
             List<Row> data = new ArrayList<>();
             data.add(RowFactory.create("x", "d1", "loc1"));
 
-            ExpressionEncoder<Row> encoder = RowEncoder.apply(schema);
-            Dataset<Row> dataset = sparkSession.createDataset(data, encoder);
+            Dataset<Row> dataset = sparkSession.createDataFrame(data, schema);
 
             Map<String, Long> results = TransactionUniqueness.run(dataset, idColumns, targetColumns, DataTypeFormat.CSV, new CSVDatasetOptions(false, ',', '"', false), fieldNames,
                     fieldMap, fieldTypes, dataMaskingOptions, maskingProviderFactory, 1, 1);
