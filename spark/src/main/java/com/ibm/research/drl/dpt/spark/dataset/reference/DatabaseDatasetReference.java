@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.datasets.DatasetOptions;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.spark.sql.Dataset;
@@ -58,18 +57,18 @@ public class DatabaseDatasetReference extends DatasetReference {
     }
 
     @JsonIgnore
-    public DataTypeFormat getFormat() { throw new NotImplementedException(); }
+    public DataTypeFormat getFormat() { throw new UnsupportedOperationException(); }
 
     @JsonIgnore
-    public DatasetOptions getOptions() { throw new NotImplementedException(); }
+    public DatasetOptions getOptions() { throw new UnsupportedOperationException(); }
 
     @Override
     public Dataset<Row> readDataset(SparkSession sparkSession, String inputReference) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public void writeDataset(Dataset<Row> outputDataset, String path) {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -31,8 +31,8 @@ import com.ibm.research.drl.dpt.anonymization.PrivacyMetric;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymityMetric;
 import com.ibm.research.drl.dpt.anonymization.ola.AnonymityChecker;
 import com.ibm.research.drl.dpt.anonymization.ola.LatticeNode;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
@@ -47,7 +47,7 @@ import java.util.List;
 
 
 public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
-    private static final Logger logger = LogManager.getLogger(SparkAnonymityChecker.class);
+    private static final Logger logger = LoggerFactory.getLogger(SparkAnonymityChecker.class);
 
     private final JavaRDD<String> input;
     private final List<ColumnInformation> columnInformationList;

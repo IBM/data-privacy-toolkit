@@ -25,8 +25,8 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.commons.cli.*;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.JavaDoubleRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 import static org.apache.spark.sql.functions.*;
 
 public class DistributionExtractor implements Serializable {
-    private static final Logger logger = LogManager.getLogger(DistributionExtractor.class);
+    private static final Logger logger = LoggerFactory.getLogger(DistributionExtractor.class);
     public static void main(String[] args) {
         try {
             CommandLine cmd = createAndParseCommandLine(args);

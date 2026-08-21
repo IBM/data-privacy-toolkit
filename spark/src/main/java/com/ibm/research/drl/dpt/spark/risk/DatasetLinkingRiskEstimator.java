@@ -23,8 +23,8 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarch
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.*;
 
@@ -38,7 +38,7 @@ import static org.apache.spark.sql.functions.*;
 
 
 public class DatasetLinkingRiskEstimator {
-    private static final Logger logger = LogManager.getLogger(DatasetLinkingRiskEstimator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatasetLinkingRiskEstimator.class);
     private static final String RISK_LABEL = "___RISK___";
     private static final String COUNT_COLUMN = "__COUNT__";
     private static final String COUNT_DEMOGRAPHIC = "__COUNT_DEMOGRAPHIC__";
@@ -50,7 +50,7 @@ public class DatasetLinkingRiskEstimator {
         options.addOption("basePath", true, "Base path for reading partitioned data");
 
         try {
-            CommandLineParser parser = new PosixParser();
+            CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
             DatasetLinkingOptions configuration =

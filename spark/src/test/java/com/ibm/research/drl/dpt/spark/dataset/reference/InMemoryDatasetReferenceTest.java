@@ -21,7 +21,6 @@ package com.ibm.research.drl.dpt.spark.dataset.reference;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.sql.*;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
@@ -90,16 +89,16 @@ class InMemoryDatasetReferenceTest {
 
         assertNotNull(datasetReference);
 
-        Dataset<Row> dataframe = sparkSession.createDataset(
+        Dataset<Row> dataframe = sparkSession.createDataFrame(
                 List.of(RowFactory.create("FOO1", "BAR1"),
                         RowFactory.create("FOO2", "BAR2"),
                         RowFactory.create("FOO3", "BAR3"),
                         RowFactory.create("FOO4", "BAR4"),
                         RowFactory.create("FOO5", "BAR5")
-                ), RowEncoder.apply(new StructType(new StructField[]{
+                ), new StructType(new StructField[]{
                         new StructField("name", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("surname", DataTypes.StringType, false, Metadata.empty()),
-                }))
+                })
         );
 
         datasetReference.writeDataset(dataframe, "FOOO");

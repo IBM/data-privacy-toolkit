@@ -36,8 +36,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.Dataset;
@@ -57,9 +57,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class TransactionUniqueness {
-    private static final Logger logger = LogManager.getLogger(TransactionUniqueness.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransactionUniqueness.class);
     
     public static void main(String[] args) throws Exception {
 
@@ -160,29 +161,22 @@ public class TransactionUniqueness {
 
         final FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(inputFormat);
         
-        return rdd.mapToPair( row -> {
+        return rdd.mapToPair(row -> {
             Record record = RecordUtils.createRecord(row, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, false);
 
             if (!dataMaskingOptions.getToBeMasked().isEmpty()) {
                 record = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
             }
 
-            StringBuilder keyBuilder = new StringBuilder();
-            for(String idColumn: idColumns) {
-                String k = new String(record.getFieldValue(idColumn));
-                keyBuilder.append(k);
-                keyBuilder.append(":");
-            }
+            final Record finalRecord = record;
+            String key = Arrays.stream(idColumns)
+                    .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
+                    .collect(java.util.stream.Collectors.joining());
+            String value = Arrays.stream(targetColumns)
+                    .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
+                    .collect(java.util.stream.Collectors.joining());
 
-            String key = keyBuilder.toString();
-
-            StringBuilder value = new StringBuilder();
-            for (String target : targetColumns) {
-                value.append(new String(record.getFieldValue(target)));
-                value.append(":");
-            }
-
-            return new Tuple2<>(key, value.toString());
+            return new Tuple2<>(key, value);
         }).groupByKey().flatMapToPair( perUserTransactions -> {
             Set<String> uniques = new HashSet<>();
 
@@ -219,30 +213,18 @@ public class TransactionUniqueness {
             record = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
         }
 
-        StringBuilder keyBuilder = new StringBuilder();
-        
-        for(int i = 0; i < idColumns.length - 1; i++) {
-            String k = new String(record.getFieldValue(idColumns[i]));
-            keyBuilder.append(k);
-            keyBuilder.append(":");
-        }
+        String key = Arrays.stream(idColumns)
+                .limit(idColumns.length - 1L)
+                .map(col -> new String(record.getFieldValue(col)) + ":")
+                .collect(java.util.stream.Collectors.joining())
+                + new String(record.getFieldValue(idColumns[idColumns.length - 1]));
 
-        String k = new String(record.getFieldValue(idColumns[idColumns.length - 1]));
-        keyBuilder.append(k);
-        
-        String key = keyBuilder.toString();
+        String value = IntStream.range(0, targetColumns.length - 1)
+                .mapToObj(i -> new String(record.getFieldValue(targetColumns[i])) + ":")
+                .collect(java.util.stream.Collectors.joining())
+                + new String(record.getFieldValue(targetColumns[targetColumns.length - 1]));
 
-        StringBuilder value = new StringBuilder();
-        for(int i = 0; i < targetColumns.length - 1; i++) {
-            byte[] fieldValue = record.getFieldValue(targetColumns[i]);
-            value.append(new String(fieldValue));
-            value.append(":");
-        }
-
-        byte[] lastValue = record.getFieldValue(targetColumns[targetColumns.length - 1]);
-        value.append(new String(lastValue));
-
-        return new Tuple2<>(value.toString(), new HashSet<>(Arrays.asList(key))); // transaction -> uid
+        return new Tuple2<>(value, new HashSet<>(Arrays.asList(key))); // transaction -> uid
     }
     
     private static JavaPairRDD<String, Set<String>> computeTransactionsToUsersNoCombinations(JavaRDD<Row> rdd, String[] idColumns, String[] targetColumns, 

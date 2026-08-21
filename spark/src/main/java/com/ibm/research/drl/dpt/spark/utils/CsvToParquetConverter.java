@@ -23,12 +23,10 @@ import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import org.apache.commons.cli.*;
 import org.apache.commons.csv.*;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.ForeachFunction;
 import org.apache.spark.sql.Column;
@@ -59,13 +57,13 @@ import java.util.Set;
 import static org.apache.spark.sql.functions.*;
 
 public class CsvToParquetConverter {
-    private static final Logger logger = LogManager.getLogger(CsvToParquetConverter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CsvToParquetConverter.class);
 
     public static void main(String[] args) {
         try {
             CommandLine cmd = createAndParseCommandLine(args);
 
-            SparkSession spark = SparkSession.builder().sparkContext(new SparkContext(new SparkConf(true))).getOrCreate();
+            SparkSession spark = SparkSession.builder().getOrCreate();
 
             boolean remoteConf = cmd.hasOption("remoteConf");
             String pathToSchemaFile = cmd.getOptionValue("s");
@@ -369,57 +367,23 @@ public class CsvToParquetConverter {
     }
 
     private static DataType converToDataType(JsonNode type) {
-        switch(type.asText().split("\\(")[0].toLowerCase()) {
-            case "binary":
-                return DataTypes.BinaryType;
-
-            case "boolean":
-                return DataTypes.BooleanType;
-
-            case "byte":
-                return DataTypes.ByteType;
-
-            case "interval":
-                return DataTypes.CalendarIntervalType;
-
-            case "date":
-                return DataTypes.DateType;
-
-            case "numeric":
-            case "decimal":
-                return extractDecimalType(type.asText().toLowerCase());
-                
-            case "double":
-                return DataTypes.DoubleType;
-
-            case "float":
-                return DataTypes.FloatType;
-
-            case "int":
-            case "int32":
-                return DataTypes.IntegerType;
-                
-            case "int64":
-            case "long":
-                return DataTypes.LongType;
-
-            case "short":
-                return DataTypes.ShortType;
-
-            case "timestamp":
-                return DataTypes.TimestampType;
-
-            case "string":
-            case "varchar":
-            case "char":
-                return DataTypes.StringType;
-
-            case "null":
-                return DataTypes.NullType;
-
-            default:
-                throw new IllegalArgumentException("UnknownType: " + type.asText());
-        }
+        return switch (type.asText().split("\\(")[0].toLowerCase()) {
+            case "binary" -> DataTypes.BinaryType;
+            case "boolean" -> DataTypes.BooleanType;
+            case "byte" -> DataTypes.ByteType;
+            case "interval" -> DataTypes.CalendarIntervalType;
+            case "date" -> DataTypes.DateType;
+            case "numeric", "decimal" -> extractDecimalType(type.asText().toLowerCase());
+            case "double" -> DataTypes.DoubleType;
+            case "float" -> DataTypes.FloatType;
+            case "int", "int32" -> DataTypes.IntegerType;
+            case "int64", "long" -> DataTypes.LongType;
+            case "short" -> DataTypes.ShortType;
+            case "timestamp" -> DataTypes.TimestampType;
+            case "string", "varchar", "char" -> DataTypes.StringType;
+            case "null" -> DataTypes.NullType;
+            default -> throw new IllegalArgumentException("UnknownType: " + type.asText());
+        };
     }
 
     public  static DataType extractDecimalType(String s) {

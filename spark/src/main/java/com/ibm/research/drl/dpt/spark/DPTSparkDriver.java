@@ -28,8 +28,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -40,7 +40,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 public class DPTSparkDriver {
-    private static final Logger logger = LogManager.getLogger(DPTSparkDriver.class);
+    private static final Logger logger = LoggerFactory.getLogger(DPTSparkDriver.class);
 
     private enum CommandLineOptions {
         DisplayHelp("h", "help", "Display help", false, false),
@@ -87,19 +87,15 @@ public class DPTSparkDriver {
     }
 
     private static String extractFileExtension(String configurationFile) {
-        return configurationFile.substring(configurationFile.lastIndexOf(".") + 1);
+        return configurationFile.substring(configurationFile.lastIndexOf('.') + 1);
     }
 
     private static ObjectMapper buildMapper(String configurationFile) {
-        final String extension = extractFileExtension(configurationFile);
-
-        if (extension.equalsIgnoreCase("json")) {
-            return JsonUtils.MAPPER;
-        } else if (extension.equalsIgnoreCase("yaml") || extension.equalsIgnoreCase("yml")) {
-            return new ObjectMapper(new YAMLFactory());
-        }
-
-        throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        return switch (extractFileExtension(configurationFile).toLowerCase()) {
+            case "json" -> JsonUtils.MAPPER;
+            case "yaml", "yml" -> new ObjectMapper(new YAMLFactory());
+            default -> throw new IllegalArgumentException("Unknown extension " + configurationFile);
+        };
     }
 
     public static void main(String[] args) {
@@ -131,13 +127,11 @@ public class DPTSparkDriver {
                 System.exit(0);
             }
         } catch (IOException | ParseException | RuntimeException e) {
-            logger.error("Execution failed " + e.getMessage());
+            logger.error("Execution failed: {}", e.getMessage());
             logger.debug("Additional information:", e);
+            new HelpFormatter().printHelp(System.getProperty("java.class.path"), "", options, "", true);
+            System.exit(1);
         }
-
-        new HelpFormatter().printHelp(System.getProperty("java.class.path"), "", options, "", true);
-
-        System.exit(1);
     }
 
     private static InputStream readConfiguration(String configurationFile, SparkSession session) {

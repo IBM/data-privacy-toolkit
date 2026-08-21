@@ -28,10 +28,9 @@ import com.ibm.research.drl.dpt.processors.records.RecordFactory;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.spark.utils.RecordUtils;
 import com.ibm.research.drl.jsonpath.JSONPathException;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaUtils;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.Dataset;
@@ -39,16 +38,15 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructField;
-import scala.Array;
 import scala.Tuple2;
 import scala.Tuple3;
-import scala.collection.JavaConverters;
+import scala.jdk.javaapi.CollectionConverters;
 
 import java.io.IOException;
 import java.util.*;
 
 public class ConsistentDataMasking {
-    private static final Logger logger = LogManager.getLogger(ConsistentDataMasking.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsistentDataMasking.class);
 
     public static String updateKeyToRecord(String maskedKey, Row record,
                                            DataMaskingOptions dataMaskingOptions,
@@ -196,7 +194,7 @@ public class ConsistentDataMasking {
                         );
                     }
 
-                    return JavaConverters.asScalaIteratorConverter(orderedValues.iterator()).asScala().toSeq();
+                    return CollectionConverters.asScala(orderedValues).toSeq();
                 })
                 .map(Row::fromSeq);
 

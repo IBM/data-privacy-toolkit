@@ -28,8 +28,8 @@ import com.ibm.research.drl.dpt.spark.dataset.reference.DatasetReference;
 import com.ibm.research.drl.dpt.spark.task.option.IdentificationOptions;
 import com.ibm.research.drl.dpt.spark.utils.RecordUtils;
 import com.ibm.research.drl.dpt.util.IdentifierUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
@@ -39,11 +39,13 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class IdentificationTask extends SparkTaskToExecute {
-    private static final Logger logger = LogManager.getLogger(IdentificationTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdentificationTask.class);
     private final IdentificationOptions taskOptions;
     private final IdentifierFactory identifiers;
 
@@ -121,7 +123,7 @@ public class IdentificationTask extends SparkTaskToExecute {
                             IdentifiedType::getTypeName,
                             IdentifiedType::getCount
                     )))
-            ).collect(Collectors.toList()),
+            ).toList(),
             new StructType(new StructField[]{
                     new StructField("Field Name", DataTypes.StringType, false, Metadata.empty()),
                     new StructField("Best Type", DataTypes.StringType, false, Metadata.empty()),

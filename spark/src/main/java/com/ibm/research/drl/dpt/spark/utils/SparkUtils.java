@@ -177,10 +177,12 @@ public class SparkUtils {
             reader = reader.option("basePath", basePath);
         }
 
-        switch (inputFormat) {
-            case CSV:
+        return switch (inputFormat) {
+            case CSV -> {
                 CSVDatasetOptions csvDatasetOptions = (CSVDatasetOptions) datasetOptions;
-                reader = reader.option("sep", Character.toString(csvDatasetOptions.getFieldDelimiter())).option("quote", Character.toString(csvDatasetOptions.getQuoteChar()));
+                reader = reader
+                        .option("sep", Character.toString(csvDatasetOptions.getFieldDelimiter()))
+                        .option("quote", Character.toString(csvDatasetOptions.getQuoteChar()));
 
                 if (csvDatasetOptions.isHasHeader()) {
                     reader = reader.option("header", true);
@@ -195,16 +197,14 @@ public class SparkUtils {
                 if (!csvDatasetOptions.isHasHeader()) {
                     int numberOfFields = dataset.schema().fields().length;
                     String[] columnNames = CSVFormatProcessor.generateColumnNames(numberOfFields);
-                    return dataset.toDF(columnNames);
+                    yield dataset.toDF(columnNames);
                 }
 
-                return dataset;
-
-            case PARQUET:
-                return reader.parquet(input);
-            default:
-                return reader.text(input);
-        }
+                yield dataset;
+            }
+            case PARQUET -> reader.parquet(input);
+            default -> reader.text(input);
+        };
 
     }
 
@@ -234,11 +234,8 @@ public class SparkUtils {
             }
 
             for (StructField field : schema.fields()) {
-                scala.Option<Object> option = schema.getFieldIndex(field.name());
-                if (!option.isDefined()) {
-                    throw new RuntimeException("undefined field: " + field.name());
-                }
-                fieldNames.set((Integer) option.get(), field.name());
+                int idx = schema.fieldIndex(field.name());
+                fieldNames.set(idx, field.name());
             }
         }
 

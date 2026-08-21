@@ -26,7 +26,6 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
@@ -99,16 +98,16 @@ class FileDatasetReferenceTest {
         assertTrue(Files.deleteIfExists(tempFilePath));
         assertThat(Files.exists(tempFilePath), is(false));
 
-        Dataset<Row> dataframe = sparkSession.createDataset(
+        Dataset<Row> dataframe = sparkSession.createDataFrame(
                 List.of(RowFactory.create("FOO1", "BAR1"),
                         RowFactory.create("FOO2", "BAR2"),
                         RowFactory.create("FOO3", "BAR3"),
                         RowFactory.create("FOO4", "BAR4"),
                         RowFactory.create("FOO5", "BAR5")
-                ), RowEncoder.apply(new StructType(new StructField[]{
+                ), new StructType(new StructField[]{
                         new StructField("name", DataTypes.StringType, false, Metadata.empty()),
                         new StructField("surname", DataTypes.StringType, false, Metadata.empty()),
-                }))
+                })
         );
 
         reference.writeDataset(dataframe, tempFilePath.toAbsolutePath().toString());

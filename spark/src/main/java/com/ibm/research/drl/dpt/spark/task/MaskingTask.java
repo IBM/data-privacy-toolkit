@@ -29,8 +29,8 @@ import com.ibm.research.drl.dpt.schema.FieldRelationship;
 import com.ibm.research.drl.dpt.schema.RelationshipOperand;
 import com.ibm.research.drl.dpt.spark.dataset.reference.DatasetReference;
 import com.ibm.research.drl.dpt.spark.task.option.MaskingOptions;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -42,7 +42,15 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -50,7 +58,7 @@ import static org.apache.spark.sql.functions.lit;
 import static org.apache.spark.sql.functions.udf;
 
 public class MaskingTask extends SparkTaskToExecute {
-    private static final Logger logger = LogManager.getLogger(MaskingTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(MaskingTask.class);
     private static final String[] PREFIX = {
             "___",
             "###",
@@ -120,7 +128,7 @@ public class MaskingTask extends SparkTaskToExecute {
 
         return Arrays.stream(columnNames).filter(columnToBeMasked::containsKey)
                 .filter(operands::contains)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private String findPrefix(String[] columnNames) {
@@ -166,67 +174,70 @@ public class MaskingTask extends SparkTaskToExecute {
             String operandFieldName = relationship.getOperands()[0].getName();
             String operandFieldPreservedValueName = prefix + operandFieldName;
 
-            switch (relationship.getRelationshipType()) {
-                case KEY:
+            return switch (relationship.getRelationshipType()) {
+                case KEY -> {
                     UDF2<String, String, String> keyedUDF = provider::maskWithKey;
-
-                    return dataset.withColumn(target.getTargetPath(),
-                                        udf(keyedUDF, DataTypes.StringType).apply(
-                                        dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
-                                    ).cast(targetDataType));
-                case DISTANCE:
+                    yield dataset.withColumn(target.getTargetPath(),
+                            udf(keyedUDF, DataTypes.StringType).apply(
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
+                            ).cast(targetDataType));
+                }
+                case DISTANCE -> {
                     UDF3<String, String, String, String> distanceUDF = provider::maskDistance;
-                    return dataset.withColumn(target.getTargetPath(),
+                    yield dataset.withColumn(target.getTargetPath(),
                             udf(distanceUDF, DataTypes.StringType).apply(
-                                dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
-                case EQUALS:
+                }
+                case EQUALS -> {
                     UDF2<String, String, String> equalUDF = provider::maskEqual;
-                    return dataset.withColumn(target.getTargetPath(),
+                    yield dataset.withColumn(target.getTargetPath(),
                             udf(equalUDF, DataTypes.StringType).apply(
-                                    dataset.col(fieldName).cast(DataTypes.StringType), dataset.col(operandFieldName).cast(DataTypes.StringType)
+                                    dataset.col(fieldName).cast(DataTypes.StringType),
+                                    dataset.col(operandFieldName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
-                case GREATER:
+                }
+                case GREATER -> {
                     UDF3<String, String, String, String> greaterUDF = provider::maskGreater;
-                    return dataset.withColumn(target.getTargetPath(),
+                    yield dataset.withColumn(target.getTargetPath(),
                             udf(greaterUDF, DataTypes.StringType).apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
-                case LESS:
+                }
+                case LESS -> {
                     UDF3<String, String, String, String> lesserUDF = provider::maskLess;
-                    return dataset.withColumn(target.getTargetPath(),
+                    yield dataset.withColumn(target.getTargetPath(),
                             udf(lesserUDF, DataTypes.StringType).apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
-                case LINKED:
+                }
+                case LINKED -> {
                     UDF3<String, String, ProviderType, String> linkedUDF = provider::maskLinked;
-                    return dataset.withColumn(target.getTargetPath(),
+                    yield dataset.withColumn(target.getTargetPath(),
                             udf(linkedUDF, DataTypes.StringType).apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     lit(relationship.getOperands()[0].getType())
                             ).cast(targetDataType));
-                case RATIO:
+                }
+                case RATIO -> {
                     UDF3<String, String, String, String> ratioUDF = provider::maskWithRatio;
-                    return dataset.withColumn(target.getTargetPath(),
+                    yield dataset.withColumn(target.getTargetPath(),
                             udf(ratioUDF, DataTypes.StringType).apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
-                case GREP_AND_MASK: // TODO: needs to be revisited
-                case SUM:
-                case SUM_APPROXIMATE:
-                case PRODUCT:
-                default:
-                    throw new UnsupportedOperationException();
-            }
+                }
+                default -> throw new UnsupportedOperationException();
+            };
         }
     }
 
@@ -249,13 +260,10 @@ public class MaskingTask extends SparkTaskToExecute {
     }
 
     private Collection<String> getFieldsToSuppress(Map<String, DataMaskingTarget> maskingTargets) {
-        List<String> fieldsToSuppress = new ArrayList<>();
-        for (Map.Entry<String, DataMaskingTarget> toBeMasked : maskingTargets.entrySet()) {
-            if (toBeMasked.getValue().getProviderType().equals(ProviderType.SUPPRESS_FIELD)) {
-                fieldsToSuppress.add(toBeMasked.getKey());
-            }
-        }
-        return fieldsToSuppress;
+        return maskingTargets.entrySet().stream()
+                .filter(e -> e.getValue().getProviderType().equals(ProviderType.SUPPRESS_FIELD))
+                .map(Map.Entry::getKey)
+                .toList();
     }
 
     private boolean requiresOtherField(String fieldsToMask, Collection<String> alreadyMaskedFields) {
