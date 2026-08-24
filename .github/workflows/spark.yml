@@ -15,7 +15,8 @@ jobs:
     strategy:
       matrix:
         java: [ '21' ]
-        distribution: ['temurin', 'corretto', 'microsoft']
+        # distribution: ['temurin', 'corretto', 'microsoft']
+        distribution: ["oracle-openjdk"]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Java
