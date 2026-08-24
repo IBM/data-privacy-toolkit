@@ -24,69 +24,73 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class IPVDatasetJSONSerializer {
 
-    public void serialize(IPVDataset dataset, JSONDatasetOptions options, Writer writer) throws IOException {
+    public static void serialize(IPVDataset dataset, JSONDatasetOptions options, Writer writer) throws IOException {
         List<Map<String, Object>> jsonDataset = new ArrayList<>();
 
-        List<String> fields = dataset.schema.getFields().stream().map(IPVSchemaField::getName).toList();
-        List<IPVSchemaFieldType> types = dataset.schema.getFields().stream().map(IPVSchemaField::getType).toList();
+        List<? extends IPVSchemaField> fields = dataset.schema.getFields();
 
         for (List<String> values : dataset) {
-            jsonDataset.add(
-                    buildValueMap(values, fields)
-            );
+            jsonDataset.add(buildValueMap(values, fields));
         }
 
         JsonUtils.MAPPER.writeValue(writer, jsonDataset);
     }
 
-    private Map<String, Object> buildValueMap(List<String> values, List<String> fields) {
-        Map<String, Object> obj = new HashMap<>();
+    private static Map<String, Object> buildValueMap(List<String> values, List<? extends IPVSchemaField> fields) {
+        Map<String, Object> obj = new LinkedHashMap<>();
 
-        for (int i = 0; i < values.size(); ++i) {
-            String field = fields.get(i);
-            String value = values.get(i);
-
-            setValue(obj, field, value);
+        int limit = Math.min(values.size(), fields.size());
+        for (int i = 0; i < limit; ++i) {
+            IPVSchemaField field = fields.get(i);
+            setValue(obj, field.getName(), toTypedValue(values.get(i), field.getType()));
         }
 
         return obj;
     }
 
-    private void setValue(Map<String, Object> obj, String field, String value) {
-        if (field.contains(".")) {
-            String fieldName = extractFieldName(field);
-            String fieldPath = extractFieldPath(field);
+    private static Object toTypedValue(String raw, IPVSchemaFieldType type) {
+        if (raw == null) return null;
+        try {
+            return switch (type) {
+                case INT -> Long.parseLong(raw);
+                case FLOAT -> Double.parseDouble(raw);
+                case BOOLEAN -> Boolean.parseBoolean(raw);
+                default -> raw;
+            };
+        } catch (NumberFormatException e) {
+            // fall back to raw string when the value cannot be parsed
+            return raw;
+        }
+    }
 
-            obj = extractFieldObj(obj, fieldName);
-
-            setValue(obj, fieldPath, value);
+    private static void setValue(Map<String, Object> obj, String field, Object value) {
+        int dot = field.indexOf('.');
+        if (dot >= 0) {
+            String head = field.substring(0, dot);
+            String tail = field.substring(dot + 1);
+            setValue(extractFieldObj(obj, head), tail, value);
         } else {
             obj.put(field, value);
         }
     }
 
-    private Map<String, Object> extractFieldObj(Map<String, Object> obj, String fieldName) {
-        if (!obj.containsKey(fieldName)) {
-            obj.put(fieldName, new HashMap<>());
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> extractFieldObj(Map<String, Object> obj, String fieldName) {
+        Object existing = obj.get(fieldName);
+        if (existing instanceof Map) {
+            return (Map<String, Object>) existing;
         }
-
-        return (Map<String, Object>) obj.get(fieldName);
-    }
-
-    private String extractFieldPath(String field) {
-        String[] parts = field.split("\\.");
-
-        return Arrays.stream(parts, 1, parts.length).collect(Collectors.joining("."));
-    }
-
-    private String extractFieldName(String field) {
-        String[] parts = field.split("\\.");
-
-        return parts[0];
+        // Create a new nested map, overwriting any previously stored non-map value
+        // (this can happen when a schema has both "address" and "address.city").
+        Map<String, Object> nested = new LinkedHashMap<>();
+        obj.put(fieldName, nested);
+        return nested;
     }
 }
