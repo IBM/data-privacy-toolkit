@@ -259,7 +259,7 @@ public class IPVDataset implements Iterable<List<String>> {
 
     public void toJSON(JSONDatasetOptions datasetOptions, Writer writer) {
         try {
-            new IPVDatasetJSONSerializer().serialize(this, datasetOptions, writer);
+            IPVDatasetJSONSerializer.serialize(this, datasetOptions, writer);
         } catch (IOException e) {
             logger.error("Error creating writer", e);
 
