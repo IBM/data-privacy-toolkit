@@ -171,7 +171,7 @@ public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
             });
         }
 
-        Logger.getLogger(SparkAnonymityChecker.class).info("Suppression for node: " + node.toString() + " is " + (100.0 * (double) suppressed / (double) inputSize));
+        logger.info("Suppression for node: " + node.toString() + " is " + (100.0 * (double) suppressed / (double) inputSize));
         return 100.0 * (double) suppressed / (double) inputSize;
     }
 
