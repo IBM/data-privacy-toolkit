@@ -16,13 +16,17 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'jacoco'
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'jacoco'
+}
 
-sourceCompatibility = '21'
-targetCompatibility = '21'
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 group = 'com.ibm.research.drl.dpt'
 version = '7.0.0-SNAPSHOT'
@@ -44,8 +48,8 @@ ext {
     jdefault_version = '2.0.0'
     hamcrest_version = '3.0'
 
-    jackson_version = '2.20.1'
-    jackson_dataformat_version = '2.20.1'
+    jackson_version = '2.19.4'
+    jackson_dataformat_version = '2.19.4'
 
     log4j2_version = '2.25.2'
 
@@ -71,8 +75,6 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation 'org.lz4:lz4-java:1.8.1'
-
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "org.apache.commons:commons-csv:${commons_csv_version}"
 
@@ -91,7 +93,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -113,7 +115,8 @@ test {
     }
 }
 
-tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
+tasks.register("testCoverage", JacocoReport) {
+    dependsOn tasks.named('test')
 
     group = "Reporting"
     description = "Generate Jacoco coverage reports for the test build."

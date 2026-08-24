@@ -213,16 +213,17 @@ public class TransactionUniqueness {
             record = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
         }
 
+        final Record finalRecord = record;
         String key = Arrays.stream(idColumns)
                 .limit(idColumns.length - 1L)
-                .map(col -> new String(record.getFieldValue(col)) + ":")
+                .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
                 .collect(java.util.stream.Collectors.joining())
-                + new String(record.getFieldValue(idColumns[idColumns.length - 1]));
+                + new String(finalRecord.getFieldValue(idColumns[idColumns.length - 1]));
 
         String value = IntStream.range(0, targetColumns.length - 1)
-                .mapToObj(i -> new String(record.getFieldValue(targetColumns[i])) + ":")
+                .mapToObj(i -> new String(finalRecord.getFieldValue(targetColumns[i])) + ":")
                 .collect(java.util.stream.Collectors.joining())
-                + new String(record.getFieldValue(targetColumns[targetColumns.length - 1]));
+                + new String(finalRecord.getFieldValue(targetColumns[targetColumns.length - 1]));
 
         return new Tuple2<>(value, new HashSet<>(Arrays.asList(key))); // transaction -> uid
     }
