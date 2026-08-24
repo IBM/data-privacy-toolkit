@@ -18,31 +18,30 @@ under the License.
 */
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.18'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
-
 group = 'com.ibm.research.drl.dpt'
-version = '6.0.1-SNAPSHOT'
+version = '7.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
-    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 ext {
-    jackson_version = '2.15.3'
-    jackson_dataformat_version = '2.20.1'
+    jackson_version = '2.20.1'
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_version}"
     implementation 'org.apache.commons:commons-csv:1.14.1'
 
     implementation "${group}:data-privacy-toolkit:${version}"
@@ -50,7 +49,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
-
