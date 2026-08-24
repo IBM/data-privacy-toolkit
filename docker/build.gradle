@@ -20,7 +20,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'eclipse'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.gradleup.shadow' version '9.0.0'
     id 'jacoco'
 }
 
