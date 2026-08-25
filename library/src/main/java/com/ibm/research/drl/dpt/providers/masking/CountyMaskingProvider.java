@@ -25,6 +25,9 @@ import com.ibm.research.drl.dpt.models.County;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider for US county names.
+ */
 public class CountyMaskingProvider implements MaskingProvider {
     private final static CountyManager countyManager = CountyManager.getInstance();
     private final boolean getPseudorandom;

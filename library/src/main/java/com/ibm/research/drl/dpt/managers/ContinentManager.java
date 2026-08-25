@@ -31,9 +31,17 @@ import org.apache.commons.csv.CSVRecord;
 import java.security.SecureRandom;
 import java.util.*;
 
+/**
+ * Manager for continent data loaded from localization resources.
+ */
 public class ContinentManager extends ResourceBasedManager<Continent> {
     private static final ContinentManager CONTINENT_MANAGER = new ContinentManager();
 
+    /**
+     * Returns the singleton instance of ContinentManager.
+     *
+     * @return the singleton instance
+     */
     public static ContinentManager getInstance() {
         return CONTINENT_MANAGER;
     }

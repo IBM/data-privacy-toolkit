@@ -29,8 +29,23 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Utility class for loading {@link DataFormatProperties} from a JSON configuration stream.
+ */
 public class DataFormatPropertiesHelper {
+    /**
+     * Constructs a new DataFormatPropertiesHelper. This is a utility class with only static methods.
+     */
+    public DataFormatPropertiesHelper() {
+    }
 
+    /**
+     * Builds a map of format properties from a JSON input stream.
+     *
+     * @param inputStream the JSON input stream
+     * @return a map from data type format to its properties
+     * @throws IOException if reading fails
+     */
     public static Map<DataTypeFormat, DataFormatProperties> buildProperties(InputStream inputStream) throws IOException {
         Map<DataTypeFormat, DataFormatProperties> results = new HashMap<>();
 

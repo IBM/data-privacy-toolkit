@@ -18,21 +18,39 @@ under the License.
 */
 package com.ibm.research.drl.dpt.configuration;
 
+/**
+ * Enumerates the data type formats supported by the toolkit.
+ */
 public enum DataTypeFormat {
+    /** Comma-Separated Values format. */
     CSV,
+    /** JSON format. */
     JSON,
+    /** DICOM medical imaging format. */
     DICOM,
+    /** Microsoft Excel 97-2003 format. */
     XLS,
+    /** Microsoft Excel Open XML format. */
     XLSX,
+    /** XML format. */
     XML,
+    /** PDF format. */
     PDF,
+    /** Microsoft Word 97-2003 format. */
     DOC,
+    /** Microsoft Word Open XML format. */
     DOCX,
+    /** Plain text format. */
     PLAIN,
+    /** HL7 FHIR JSON format. */
     FHIR_JSON,
+    /** HL7 v2 format. */
     HL7,
+    /** Apache Parquet format. */
     PARQUET,
+    /** Variant Call Format. */
     VCF,
+    /** JDBC (database) format. */
     JDBC
 }
 

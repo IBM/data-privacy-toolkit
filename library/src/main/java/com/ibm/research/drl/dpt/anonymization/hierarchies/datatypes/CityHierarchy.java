@@ -26,12 +26,20 @@ import com.ibm.research.drl.dpt.models.Country;
 
 import java.util.Collection;
 
+/**
+ * Generalization hierarchy for cities, grouping city → country → continent.
+ */
 public class CityHierarchy extends MaterializedHierarchy {
     private final static CityManager cityManager = CityManager.getInstance();
     private final static CountryManager countryManager = CountryManager.getInstance();
 
     private static final CityHierarchy instance = new CityHierarchy();
 
+    /**
+     * Returns the singleton instance of CityHierarchy.
+     *
+     * @return the singleton instance
+     */
     public static CityHierarchy getInstance() {
         return instance;
     }

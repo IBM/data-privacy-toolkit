@@ -24,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.io.Serializable;
 
+/**
+ * Describes the role and properties of a single column in an anonymization context.
+ */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         property = "class"

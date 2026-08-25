@@ -197,6 +197,15 @@ public abstract class FormatProcessor implements Serializable {
         return extractRecords(dataset, dataOptions, -1);
     }
 
+    /**
+     * Extracts records from an input stream.
+     *
+     * @param dataset      the input stream to read from
+     * @param dataOptions  the dataset options
+     * @param firstN       the maximum number of records to read, or -1 for all
+     * @return an iterable of records
+     * @throws IOException if reading fails
+     */
     protected abstract Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException;
 
     protected void updateCounter(Map<String, Counter> columnTypes, String type) {
@@ -312,10 +321,27 @@ public abstract class FormatProcessor implements Serializable {
         );
     }
 
+    /**
+     * Returns whether this format processor supports streaming vulnerability identification.
+     *
+     * @return true if streaming is supported
+     */
     public boolean supportsStreams() {
         return false;
     }
 
+    /**
+     * Identifies vulnerabilities from a stream input.
+     *
+     * @param input           the input stream
+     * @param algorithm       the IPV algorithm to apply
+     * @param inputFormatType the input data format type
+     * @param datasetOptions  the dataset options
+     * @param isFullReport    whether to produce a full report
+     * @param kValue          the k-anonymity threshold
+     * @return a map of vulnerabilities to row indices
+     * @throws IOException if reading fails
+     */
     public Map<IPVVulnerability, List<Integer>> identifyVulnerabilitiesStream(InputStream input, IPVAlgorithm algorithm, DataTypeFormat inputFormatType, DatasetOptions datasetOptions, boolean isFullReport, int kValue) throws IOException {
         throw new NotImplementedException("Limited support for vulnerability identification");
     }

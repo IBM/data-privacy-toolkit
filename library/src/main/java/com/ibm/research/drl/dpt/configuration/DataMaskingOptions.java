@@ -38,6 +38,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Options for the data masking pipeline, specifying input/output formats, fields to mask, and relationships.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataMaskingOptions implements Serializable {
 
@@ -50,6 +53,16 @@ public class DataMaskingOptions implements Serializable {
     private final Map<String, DataMaskingTarget> toBeMasked;
     private final Map<String, FieldRelationship> predefinedRelationships;
 
+    /**
+     * Constructs a DataMaskingOptions.
+     *
+     * @param inputFormat             the input data format
+     * @param outputFormat            the output data format
+     * @param toBeMasked              map of field paths to their masking targets
+     * @param identifyRelationships   whether to auto-identify relationships
+     * @param predefinedRelationships predefined field relationships
+     * @param datasetOptions          the dataset options
+     */
     public DataMaskingOptions(DataTypeFormat inputFormat,
                               DataTypeFormat outputFormat,
                               Map<String, DataMaskingTarget> toBeMasked,
@@ -115,6 +128,14 @@ public class DataMaskingOptions implements Serializable {
         }
     }
 
+    /**
+     * Validates that a JSON configuration node contains a field with the expected type.
+     *
+     * @param configuration the JSON configuration
+     * @param key           the field key to validate
+     * @param expectedType  the expected JSON node type
+     * @throws MisconfigurationException if the field is missing or has the wrong type
+     */
     public static void validateField(JsonNode configuration, String key, JsonNodeType expectedType) throws MisconfigurationException {
 
         JsonNode node = configuration.get(key);
@@ -129,6 +150,12 @@ public class DataMaskingOptions implements Serializable {
 
     }
 
+    /**
+     * Validates that the predefined relationships have no cyclic dependencies.
+     *
+     * @param predefinedRelationships the relationships to validate
+     * @return true if valid (no cycles), false otherwise
+     */
     public static boolean validateRelationships(Map<String, FieldRelationship> predefinedRelationships) {
         return null == predefinedRelationships || predefinedRelationships.isEmpty() || hasNoCyclicDependencies(predefinedRelationships);
     }
@@ -178,22 +205,47 @@ public class DataMaskingOptions implements Serializable {
         return false;
     }
 
+    /**
+     * Returns the dataset options.
+     *
+     * @return the dataset options
+     */
     public DatasetOptions getDatasetOptions() {
         return datasetOptions;
     }
 
+    /**
+     * Returns the input data format.
+     *
+     * @return the input format
+     */
     public DataTypeFormat getInputFormat() {
         return inputFormat;
     }
 
+    /**
+     * Returns the output data format.
+     *
+     * @return the output format
+     */
     public DataTypeFormat getOutputFormat() {
         return outputFormat;
     }
 
+    /**
+     * Returns the map of field paths to their masking targets.
+     *
+     * @return the to-be-masked fields map
+     */
     public Map<String, DataMaskingTarget> getToBeMasked() {
         return toBeMasked;
     }
 
+    /**
+     * Returns the predefined field relationships.
+     *
+     * @return the predefined relationships map
+     */
     public Map<String, FieldRelationship> getPredefinedRelationships() {
         return predefinedRelationships;
     }

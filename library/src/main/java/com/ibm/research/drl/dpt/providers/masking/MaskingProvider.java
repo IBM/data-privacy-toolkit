@@ -72,6 +72,14 @@ public interface MaskingProvider extends Serializable {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks a value consistently with a linked value.
+     *
+     * @param identifier   the value to mask
+     * @param linkedValue  the linked reference value
+     * @param providerType the provider type of the linked value
+     * @return the masked value
+     */
     default String maskLinked(String identifier, String linkedValue, ProviderType providerType) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }

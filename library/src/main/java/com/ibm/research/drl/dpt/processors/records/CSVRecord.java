@@ -29,11 +29,22 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * A record read from a CSV-formatted dataset.
+ */
 public final class CSVRecord extends TabularRecord {
     private final static CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
 
     private final CSVDatasetOptions csvOptions;
 
+    /**
+     * Constructs a CSVRecord.
+     *
+     * @param data       the field values
+     * @param fieldNames the mapping from field names to column indices
+     * @param csvOptions the CSV options
+     * @param isHeader   whether this record is a header row
+     */
     public CSVRecord(String[] data, Map<String, Integer> fieldNames, CSVDatasetOptions csvOptions, boolean isHeader) {
         this.data = data;
         this.fieldNames = fieldNames;
@@ -59,6 +70,16 @@ public final class CSVRecord extends TabularRecord {
         throw new RuntimeException("unreachable");
     }
 
+    /**
+     * Creates a CSVRecord by parsing a CSV-formatted string.
+     *
+     * @param input          the CSV-formatted string
+     * @param datasetOptions the CSV dataset options
+     * @param fieldNames     the mapping from field names to column indices
+     * @param isHeader       whether this record is a header row
+     * @return the parsed CSVRecord
+     * @throws IOException if parsing fails
+     */
     public static Record fromString(String input, DatasetOptions datasetOptions, Map<String, Integer> fieldNames, boolean isHeader) throws IOException {
         CSVDatasetOptions csvOptions = (CSVDatasetOptions) datasetOptions;
         CsvSchema schema = CsvSchema.emptySchema().withColumnSeparator(csvOptions.getFieldDelimiter()).withQuoteChar(csvOptions.getQuoteChar());

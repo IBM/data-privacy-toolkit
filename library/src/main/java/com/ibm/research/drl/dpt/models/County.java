@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Represents a US county with its name, state, short name, and population.
+ */
 public class County implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;
@@ -46,10 +49,13 @@ public class County implements LocalizedEntity {
 
 
     /**
-     * Instantiates a new Race.
+     * Constructs a new County.
      *
-     * @param name            the name
+     * @param name            the county name
      * @param nameCountryCode the name country code
+     * @param shortName       the short name or abbreviation
+     * @param state           the state the county belongs to
+     * @param population      the population of the county
      */
     public County(String name, String nameCountryCode, String shortName, String state, Integer population) {
         this.name = name;

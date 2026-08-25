@@ -23,7 +23,15 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
 import java.util.*;
 
+/**
+ * Utility class for generating {@link ColumnInformation} objects from datasets.
+ */
 public class ColumnInformationGenerator {
+    /**
+     * Constructs a new ColumnInformationGenerator. This is a utility class with only static methods.
+     */
+    public ColumnInformationGenerator() {
+    }
 
     /**
      * Generate numerical range numerical range.
@@ -37,10 +45,29 @@ public class ColumnInformationGenerator {
         return generateNumericalRange(dataset, column, columnType, 1.0);
     }
 
+    /**
+     * Generates a NumericalRange for a column using a specified weight.
+     *
+     * @param dataset    the dataset
+     * @param column     the column index
+     * @param columnType the column type
+     * @param weight     the column weight
+     * @return the generated NumericalRange
+     */
     public static NumericalRange generateNumericalRange(IPVDataset dataset, int column, ColumnType columnType, double weight) {
         return generateNumericalRange(dataset, column, columnType, weight, false);
     }
 
+    /**
+     * Generates a NumericalRange for a column using a specified weight and linking flag.
+     *
+     * @param dataset      the dataset
+     * @param column       the column index
+     * @param columnType   the column type
+     * @param weight       the column weight
+     * @param isForLinking whether this column is used for linking
+     * @return the generated NumericalRange
+     */
     public static NumericalRange generateNumericalRange(IPVDataset dataset, int column, ColumnType columnType, double weight, boolean isForLinking) {
         List<Double> doubles = new ArrayList<>();
 

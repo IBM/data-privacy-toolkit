@@ -22,6 +22,9 @@ import com.ibm.research.drl.dpt.util.CountryNameSpecification;
 
 import java.util.Arrays;
 
+/**
+ * Represents a country with its geographic location and ISO codes.
+ */
 public class Country implements Location, LocalizedEntity {
 
     private final String name;

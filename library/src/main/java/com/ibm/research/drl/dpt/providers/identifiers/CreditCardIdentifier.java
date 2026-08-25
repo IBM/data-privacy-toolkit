@@ -25,7 +25,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for credit card numbers (Visa, MasterCard, AMEX, Discover, etc.) using Luhn validation.
+ */
 public class CreditCardIdentifier extends AbstractRegexBasedIdentifier implements LuhnBasedIdentifier {
+    /**
+     * Constructs a new CreditCardIdentifier.
+     */
+    public CreditCardIdentifier() {
+    }
     private static final String[] appropriateNames = {"CreditCard", "Credit Card", "CCN"};
 
     private static final Collection<Pattern> combinedPattern = Arrays.asList(

@@ -78,6 +78,11 @@ public abstract class TabularRecord implements Record {
                 .toArray(String[]::new);
     }
 
+    /**
+     * Formats this record as a string in its native format.
+     *
+     * @return the formatted record string
+     */
     protected abstract String formatRecord();
 
     @Override

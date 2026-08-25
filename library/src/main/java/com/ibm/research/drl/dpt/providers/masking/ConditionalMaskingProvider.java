@@ -27,12 +27,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Masking provider that conditionally applies another masking provider based on pattern matching.
+ */
 public class ConditionalMaskingProvider implements MaskingProvider {
     private final MaskingProvider maskingProvider;
     private final boolean isWhiteListEnabled;
 
     private final Collection<Pattern> patterns;
 
+    /**
+     * Constructs a ConditionalMaskingProvider from configuration.
+     *
+     * @param configuration          the masking configuration
+     * @param maskingProviderFactory the factory to use for creating the inner masking provider
+     */
     public ConditionalMaskingProvider(MaskingConfiguration configuration, MaskingProviderFactory maskingProviderFactory) {
         isWhiteListEnabled = configuration.getBooleanValue("conditional.isWhitelist");
         patterns = buildPatterns(configuration.getJsonNodeValue("conditional.patterns"));

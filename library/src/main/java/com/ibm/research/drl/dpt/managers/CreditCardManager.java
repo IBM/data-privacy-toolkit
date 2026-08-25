@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Manager for credit card brand data and Luhn-valid number generation.
+ */
 public class CreditCardManager {
     private final SecureRandom random;
     private final Map<String, CreditCard> creditCardMap;
@@ -42,6 +45,11 @@ public class CreditCardManager {
 
     private final static CreditCardManager CREDIT_CARD_MANAGER = new CreditCardManager();
 
+    /**
+     * Returns the singleton instance of CreditCardManager.
+     *
+     * @return the singleton instance
+     */
     public static CreditCardManager getInstance() {
         return CREDIT_CARD_MANAGER;
     }

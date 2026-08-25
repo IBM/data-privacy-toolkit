@@ -21,11 +21,29 @@ package com.ibm.research.drl.dpt.providers.masking.persistence.causal;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Interface for retrieving and appending to a dictionary chain for causal consistency masking.
+ */
 public interface ChainRetrieval {
+    /**
+     * Retrieves all dictionary entries from the chain.
+     *
+     * @return list of dictionary entries
+     * @throws IOException if the chain cannot be read
+     */
     List<DictionaryEntry> retrieveChain() throws IOException;
 
+    /**
+     * Appends a hashed term to the chain.
+     *
+     * @param hashedTerm the hashed term to append
+     * @throws Exception if the append operation fails
+     */
     void append(String hashedTerm) throws Exception;
 
+    /**
+     * Shuts down the chain retrieval connection.
+     */
     void shutDown();
 }
 

@@ -22,8 +22,24 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarch
 
 import java.util.*;
 
+/**
+ * Utility class providing helper methods for clustering-based anonymization.
+ */
 public class ClusteringAnonUtils {
+    /**
+     * Constructs a new ClusteringAnonUtils. This is a utility class with only static methods.
+     */
+    public ClusteringAnonUtils() {
+    }
 
+    /**
+     * Creates an anonymized row by replacing quasi-identifier values with centroid values.
+     *
+     * @param centroids             the centroid values for each column
+     * @param originalRow           the original row values
+     * @param columnInformationList the column information list
+     * @return a new row with quasi-identifier columns replaced by centroids
+     */
     public static List<String> createAnonymizedRow(List<String> centroids, List<String> originalRow, List<ColumnInformation> columnInformationList) {
         List<String> row = new ArrayList<>();
 
@@ -40,6 +56,13 @@ public class ClusteringAnonUtils {
         return row;
     }
 
+    /**
+     * Calculates the lowest common ancestor in the hierarchy for a set of values.
+     *
+     * @param values    the set of values whose common ancestor to find
+     * @param hierarchy the generalization hierarchy
+     * @return the common ancestor value
+     */
     public static String calculateCommonAncestor(Set<String> values, GeneralizationHierarchy hierarchy) {
 
         if (values.size() == 1) {
@@ -83,6 +106,13 @@ public class ClusteringAnonUtils {
 
     }
 
+    /**
+     * Calculates the centroid values for categorical variables across a set of clusters.
+     *
+     * @param categoricalVariables  per-cluster, per-column sets of values
+     * @param columnInformationList the column information list
+     * @return per-cluster centroid values for each categorical column
+     */
     public static List<List<String>> calculateCategoricalCentroids(
             List<List<Set<String>>> categoricalVariables, List<ColumnInformation> columnInformationList) {
 

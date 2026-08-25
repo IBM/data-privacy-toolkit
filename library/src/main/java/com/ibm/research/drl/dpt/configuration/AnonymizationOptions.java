@@ -231,6 +231,12 @@ public class AnonymizationOptions {
         return columnInformation;
     }
 
+    /**
+     * Parses privacy constraints from a JSON array node.
+     *
+     * @param node the JSON array node
+     * @return list of privacy constraint objects
+     */
     public static List<PrivacyConstraint> privacyConstraintsFromJSON(JsonNode node) {
         if (node.isNull() || !node.isArray()) {
             throw new MisconfigurationException("Privacy constraints is not an array");
@@ -344,6 +350,12 @@ public class AnonymizationOptions {
         return hierarchy;
     }
 
+    /**
+     * Parses generalization hierarchies from a JSON object node.
+     *
+     * @param hierarchies the JSON object node mapping names to hierarchy specifications
+     * @return a map of hierarchy names to built hierarchies
+     */
     public static Map<String, GeneralizationHierarchy> hierarchiesFromJSON(JsonNode hierarchies) {
         if (hierarchies == null || hierarchies.isNull() || !hierarchies.isObject()) {
             throw new MisconfigurationException("hierarchies key is either missing or null or not an object");

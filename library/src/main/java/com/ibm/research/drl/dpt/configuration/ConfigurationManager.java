@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Manages field-level masking configurations, allowing per-field overrides of a default configuration.
+ */
 public class ConfigurationManager implements Serializable {
     private final MaskingConfiguration defaults;
     private final Map<String, MaskingConfiguration> fields;

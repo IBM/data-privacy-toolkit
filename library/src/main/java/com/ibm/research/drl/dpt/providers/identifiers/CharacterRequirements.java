@@ -18,15 +18,27 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.identifiers;
 
+/**
+ * Bitmask constants for specifying required character classes in an identifier.
+ */
 public class CharacterRequirements {
+    /** No character class requirement. */
     public static final int NONE = 0;
+    /** Requires at least one digit character. */
     public static final int DIGIT = 1;
+    /** Requires at least one alphabetic character. */
     public static final int ALPHA = 2;
+    /** Requires an at-sign ({@code @}). */
     public static final int AT = 4;
+    /** Requires a dot character ({@code .}). */
     public static final int DOT = 8;
+    /** Requires a space character. */
     public static final int SPACE = 16;
+    /** Requires a dash character ({@code -}). */
     public static final int DASH = 32;
+    /** Requires a colon character ({@code :}). */
     public static final int COLUMN = 64;
+    /** Requires a slash character ({@code /}). */
     public static final int SLASH = 128;
 
     private CharacterRequirements() {

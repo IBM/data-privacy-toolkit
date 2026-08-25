@@ -51,6 +51,11 @@ public class CountryManager extends AbstractManager<Country> {
 
     private static final CountryManager instance = new CountryManager();
 
+    /**
+     * Returns the singleton instance of CountryManager.
+     *
+     * @return the singleton instance
+     */
     public static CountryManager getInstance() {
         return instance;
     }
@@ -143,6 +148,12 @@ public class CountryManager extends AbstractManager<Country> {
         return ((Country) (keys.get(position))).getName();
     }
 
+    /**
+     * Returns a pseudorandom country name for the given identifier.
+     *
+     * @param identifier the input identifier
+     * @return a deterministic pseudorandom country name
+     */
     public String getPseudorandom(String identifier) {
         String key = identifier.toUpperCase();
         Country country = lookupCountry(identifier);

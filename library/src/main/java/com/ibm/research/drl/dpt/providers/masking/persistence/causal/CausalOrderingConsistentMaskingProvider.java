@@ -26,16 +26,32 @@ import com.ibm.research.drl.dpt.providers.masking.persistence.AbstractPersistent
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Masking provider that maintains causal ordering consistency using a distributed chain.
+ */
 public class CausalOrderingConsistentMaskingProvider extends AbstractPersistentMaskingProvider {
 
     private final static HashMaskingProvider HASH_MASKING_PROVIDER = new HashMaskingProvider();
     private final Map<String, List<DictionaryEntry>> cache;
     private final ChainRetrieval chainRetrieval;
 
+    /**
+     * Computes the private hash of a term.
+     *
+     * @param term the term to hash
+     * @return the hashed value
+     */
     public static String privateHash(String term) {
         return HASH_MASKING_PROVIDER.mask(term);
     }
 
+    /**
+     * Reconstructs the dictionary of masked values from the chain for the given term.
+     *
+     * @param chainRetrieval the chain retrieval implementation
+     * @param term           the original term to look up
+     * @return the list of dictionary entries from the chain
+     */
     public static List<DictionaryEntry> reconstructDictionary(ChainRetrieval chainRetrieval, String term) {
         List<DictionaryEntry> entries = new ArrayList<>();
         Set<String> entriesToRemove = new HashSet<>();
@@ -92,6 +108,12 @@ public class CausalOrderingConsistentMaskingProvider extends AbstractPersistentM
 
     }
 
+    /**
+     * Constructs a CausalOrderingConsistentMaskingProvider.
+     *
+     * @param maskingProvider the underlying masking provider
+     * @param configuration   the masking configuration
+     */
     public CausalOrderingConsistentMaskingProvider(MaskingProvider maskingProvider, MaskingConfiguration configuration) {
         super(maskingProvider, configuration);
         this.cache = new HashMap<>();

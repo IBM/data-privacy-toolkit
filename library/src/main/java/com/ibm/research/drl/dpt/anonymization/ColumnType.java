@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization;
 
+/**
+ * Enumerates the possible types of columns in an anonymization context.
+ */
 public enum ColumnType {
     /**
      * Direct identifier column type.

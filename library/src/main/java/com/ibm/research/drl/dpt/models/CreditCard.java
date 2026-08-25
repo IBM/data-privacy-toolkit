@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Represents a credit card type with its valid number prefixes and length constraints.
+ */
 public class CreditCard {
     private final String name;
     private final String[] prefixes;
