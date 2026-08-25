@@ -36,13 +36,16 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.FilterFunction;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
+import com.ibm.research.drl.dpt.spark.utils.SparkEncoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.Tuple2;
 
 import java.io.FileOutputStream;
@@ -61,7 +64,7 @@ import java.util.stream.IntStream;
 
 public class TransactionUniqueness {
     private static final Logger logger = LoggerFactory.getLogger(TransactionUniqueness.class);
-    
+
     public static void main(String[] args) throws Exception {
 
         Options options = SparkUtils.buildCommonCommandLineOptions();
@@ -78,20 +81,20 @@ public class TransactionUniqueness {
 
         JsonNode configurationNode = SparkUtils.readConfigurationFile(cmd.getOptionValue("c"));
         final TransactionUniquenessOptions uniquenessOptions = new TransactionUniquenessOptions(configurationNode);
-        
+
         DatasetOptions datasetOptions = uniquenessOptions.getDatasetOptions();
         DataTypeFormat inputFormat = uniquenessOptions.getInputFormat();
-        
+
         DataMaskingOptions dataMaskingOptions = null;
         MaskingProviderFactory maskingProviderFactory = null;
-       
+
         if (configurationNode.has("toBeMasked")) {
             dataMaskingOptions = SparkUtils.deserializeConfiguration(cmd.getOptionValue("c"), DataMaskingOptions.class);
         } else {
-            dataMaskingOptions = new DataMaskingOptions(inputFormat, inputFormat, Collections.emptyMap(), 
+            dataMaskingOptions = new DataMaskingOptions(inputFormat, inputFormat, Collections.emptyMap(),
                     false, Collections.emptyMap(), datasetOptions);
         }
-        
+
         if (!dataMaskingOptions.getToBeMasked().isEmpty()) {
             ConfigurationManager configurationManager = ConfigurationManager.load(
                     SparkUtils.readConfigurationFile(cmd.getOptionValue("c")));
@@ -101,30 +104,30 @@ public class TransactionUniqueness {
         String basePath = cmd.getOptionValue("basePath");
 
         logger.info("basePath: " + basePath);
-        
+
         Dataset<Row> dataset = SparkUtils.createDataset(
                 sparkSession,
                 cmd.getOptionValue("i"),
                 inputFormat,
                 datasetOptions,
                 basePath);
-        
+
 
         if (uniquenessOptions.isJoinRequired()) {
             JoinInformation joinInformation = uniquenessOptions.getJoinInformation();
-            
+
             logger.info("Need to join with: " + joinInformation.getRightTable());
 
             String joinTableLocation = cmd.getOptionValue("linkingBase", "");
 
             if (!joinTableLocation.isEmpty()) {
-               if (!joinTableLocation.endsWith("/")) {
+                if (!joinTableLocation.endsWith("/")) {
                     joinTableLocation += "/";
                 }
             }
 
             joinTableLocation += joinInformation.getRightTable();
-            
+
             Dataset<Row> right = SparkUtils.createDataset(
                     sparkSession,
                     joinTableLocation,
@@ -136,70 +139,55 @@ public class TransactionUniqueness {
         final List<String> fieldNames = SparkUtils.createFieldNames(dataset, uniquenessOptions.getInputFormat(), uniquenessOptions.getDatasetOptions());
         final Map<String, Integer> fieldMap = RecordUtils.createFieldMap(dataset.schema());
         final List<String> fieldTypes = RecordUtils.getFieldClasses(dataset.schema().fields());
-        
+
         String[] idColumns = uniquenessOptions.getIdColumns();
         String[] targetColumns = uniquenessOptions.getTargetColumns();
-        
-        Map<String, Long> results = run(dataset, idColumns, targetColumns, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, 
+
+        Map<String, Long> results = run(dataset, idColumns, targetColumns, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes,
                 dataMaskingOptions, maskingProviderFactory, uniquenessOptions.getFactor(), uniquenessOptions.getThreshold());
 
         boolean remoteOutput = cmd.hasOption("remoteOutput");
         String outputPath = cmd.getOptionValue("o");
-        try (OutputStream os = remoteOutput? SparkUtils.createHDFSOutputStream(outputPath) : new FileOutputStream(outputPath);
-             PrintStream printStream = new PrintStream(os);) {
+        try (OutputStream os = remoteOutput ? SparkUtils.createHDFSOutputStream(outputPath) : new FileOutputStream(outputPath);
+             PrintStream printStream = new PrintStream(os)) {
             String output = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(results);
             printStream.print(output);
         }
-        
     }
-    
-    private static JavaPairRDD<String, Iterable<String>> computeTransactionsToUsersWithCombinations(JavaRDD<Row> rdd,
-                                                                                                    String[] idColumns, String[] targetColumns,
-                                                                                                    DataTypeFormat inputFormat, DatasetOptions datasetOptions,
-                                                                                                    List<String> fieldNames, Map<String, Integer> fieldMap, List<String> fieldTypes,
-                                                                                                    DataMaskingOptions dataMaskingOptions, MaskingProviderFactory maskingProviderFactory) {
+
+    private static Dataset<Tuple2<String, String>> computeTransactionsToUsersWithCombinations(Dataset<Row> dataset,
+                                                                                              String[] idColumns, String[] targetColumns,
+                                                                                              DataTypeFormat inputFormat, DatasetOptions datasetOptions,
+                                                                                              List<String> fieldNames, Map<String, Integer> fieldMap, List<String> fieldTypes,
+                                                                                              DataMaskingOptions dataMaskingOptions, MaskingProviderFactory maskingProviderFactory) {
 
         final FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(inputFormat);
-        
-        return rdd.mapToPair(row -> {
-            Record record = RecordUtils.createRecord(row, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, false);
 
-            if (!dataMaskingOptions.getToBeMasked().isEmpty()) {
-                record = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
-            }
+        return dataset
+                .map((MapFunction<Row, Tuple2<String, String>>) row -> {
+                    Record record = RecordUtils.createRecord(row, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, false);
 
-            final Record finalRecord = record;
-            String key = Arrays.stream(idColumns)
-                    .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
-                    .collect(java.util.stream.Collectors.joining());
-            String value = Arrays.stream(targetColumns)
-                    .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
-                    .collect(java.util.stream.Collectors.joining());
+                    if (!dataMaskingOptions.getToBeMasked().isEmpty()) {
+                        record = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
+                    }
 
-            return new Tuple2<>(key, value);
-        }).groupByKey().flatMapToPair( perUserTransactions -> {
-            Set<String> uniques = new HashSet<>();
+                    final Record finalRecord = record;
+                    String key = Arrays.stream(idColumns)
+                            .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
+                            .collect(java.util.stream.Collectors.joining());
+                    String value = Arrays.stream(targetColumns)
+                            .map(col -> new String(finalRecord.getFieldValue(col)) + ":")
+                            .collect(java.util.stream.Collectors.joining());
 
-            for (String v : perUserTransactions._2) {
-                uniques.add(v);
-            }
-
-            List<Tuple2<String, String>> perTransaction = new ArrayList<>();
-            String user = perUserTransactions._1;
-
-            for(String t: uniques) {
-                perTransaction.add(new Tuple2<>(t, user));
-            }
-
-            return perTransaction.iterator();
-        }).groupByKey();
+                    return new Tuple2<>(key, value);
+                }, SparkEncoders.javaSerOf(Tuple2.class));
     }
-   
+
     public static Tuple2<String, Set<String>> transactionToUID(Row row, String[] idColumns, String[] targetColumns, FormatProcessor formatProcessor,
-                                                                DataTypeFormat inputFormat, DatasetOptions datasetOptions,
-                                                                List<String> fieldNames, Map<String,Integer> fieldMap,
-                                                                List<String> fieldTypes, DataMaskingOptions dataMaskingOptions, MaskingProviderFactory maskingProviderFactory) throws Exception{
-        
+                                                               DataTypeFormat inputFormat, DatasetOptions datasetOptions,
+                                                               List<String> fieldNames, Map<String, Integer> fieldMap,
+                                                               List<String> fieldTypes, DataMaskingOptions dataMaskingOptions, MaskingProviderFactory maskingProviderFactory) throws Exception {
+
         Record record = RecordUtils.createRecord(row, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, false);
 
         for (String targetColumn : targetColumns) {
@@ -208,7 +196,7 @@ public class TransactionUniqueness {
                 return null;
             }
         }
-        
+
         if (!dataMaskingOptions.getToBeMasked().isEmpty()) {
             record = formatProcessor.maskRecord(record, maskingProviderFactory, Collections.emptySet(), dataMaskingOptions);
         }
@@ -225,67 +213,84 @@ public class TransactionUniqueness {
                 .collect(java.util.stream.Collectors.joining())
                 + new String(finalRecord.getFieldValue(targetColumns[targetColumns.length - 1]));
 
-        return new Tuple2<>(value, new HashSet<>(Arrays.asList(key))); // transaction -> uid
+        return new Tuple2<>(value, new HashSet<>(Arrays.asList(key)));
     }
-    
-    private static JavaPairRDD<String, Set<String>> computeTransactionsToUsersNoCombinations(JavaRDD<Row> rdd, String[] idColumns, String[] targetColumns, 
-                                                                                                 DataTypeFormat inputFormat, DatasetOptions datasetOptions, 
-                                                                                                 List<String> fieldNames, Map<String,Integer> fieldMap, 
-                                                                                                 List<String> fieldTypes, DataMaskingOptions dataMaskingOptions, 
+
+    private static Dataset<Tuple2<String, Set<String>>> computeTransactionsToUsersNoCombinations(Dataset<Row> dataset, String[] idColumns, String[] targetColumns,
+                                                                                                 DataTypeFormat inputFormat, DatasetOptions datasetOptions,
+                                                                                                 List<String> fieldNames, Map<String, Integer> fieldMap,
+                                                                                                 List<String> fieldTypes, DataMaskingOptions dataMaskingOptions,
                                                                                                  MaskingProviderFactory maskingProviderFactory) {
-        
+
         final FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(inputFormat);
 
-        return rdd.mapToPair(
-                row -> transactionToUID(row, idColumns, targetColumns, formatProcessor, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, dataMaskingOptions, maskingProviderFactory)
-        ).filter(Objects::nonNull).
-                reduceByKey( (v1, v2) -> {
-                    v1.addAll(v2);
+        return dataset
+                .map((MapFunction<Row, Tuple2<String, Set<String>>>) row ->
+                        transactionToUID(row, idColumns, targetColumns, formatProcessor, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, dataMaskingOptions, maskingProviderFactory),
+                        SparkEncoders.javaSerOf(Tuple2.class))
+                .filter((FilterFunction<Tuple2<String, Set<String>>>) Objects::nonNull)
+                .groupByKey((MapFunction<Tuple2<String, Set<String>>, String>) Tuple2::_1, Encoders.STRING())
+                .reduceGroups((org.apache.spark.api.java.function.ReduceFunction<Tuple2<String, Set<String>>>) (v1, v2) -> {
+                    v1._2().addAll(v2._2());
                     return v1;
-                });
+                })
+                .map((MapFunction<Tuple2<String, Tuple2<String, Set<String>>>, Tuple2<String, Set<String>>>) kv -> kv._2(),
+                        SparkEncoders.javaSerOf(Tuple2.class));
     }
 
     public static Map<String, Long> run(Dataset<Row> dataset,
-                            String[] idColumns, String[] targetColumns,
-                            DataTypeFormat inputFormat, DatasetOptions datasetOptions,
-                            List<String> fieldNames, Map<String, Integer> fieldMap, List<String> fieldTypes,
-                            DataMaskingOptions dataMaskingOptions, MaskingProviderFactory maskingProviderFactory,
-                            int factor, int threshold) {
-        JavaRDD<Row> rdd = dataset.javaRDD();
+                                        String[] idColumns, String[] targetColumns,
+                                        DataTypeFormat inputFormat, DatasetOptions datasetOptions,
+                                        List<String> fieldNames, Map<String, Integer> fieldMap, List<String> fieldTypes,
+                                        DataMaskingOptions dataMaskingOptions, MaskingProviderFactory maskingProviderFactory,
+                                        int factor, int threshold) {
 
         long uniqueTransactionCombinationsCount;
         long uniqueIDs;
-        long totalTransactions = rdd.count();
+        long totalTransactions = dataset.count();
         long totalIDs;
-        
+
         if (factor > 1) {
-            JavaPairRDD<String, Iterable<String>> transactionsToUsers;
-            transactionsToUsers = computeTransactionsToUsersWithCombinations(rdd, idColumns, targetColumns, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes,
-                    dataMaskingOptions, maskingProviderFactory);
-            
-            totalIDs = transactionsToUsers.values().flatMap(Iterable::iterator).distinct().count();
+            // group by transaction -> set of users
+            Dataset<Tuple2<String, List<String>>> transactionsToUsers = computeTransactionsToUsersWithCombinations(dataset, idColumns, targetColumns, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes,
+                    dataMaskingOptions, maskingProviderFactory)
+                    .groupByKey((MapFunction<Tuple2<String, String>, String>) Tuple2::_2, Encoders.STRING())
+                    .mapGroups((org.apache.spark.api.java.function.MapGroupsFunction<String, Tuple2<String, String>, Tuple2<String, List<String>>>) (key, iter) -> {
+                        List<String> users = new ArrayList<>();
+                        while (iter.hasNext()) users.add(iter.next()._1());
+                        return new Tuple2<>(key, users);
+                    }, SparkEncoders.javaSerOf(Tuple2.class));
 
-            JavaPairRDD<String, Iterable<String>> uniqueTransactionCombinations = transactionsToUsers.filter(r -> {
-                Set<String> s = new HashSet<>();
-                r._2().forEach(s::add);
-                return s.size() <= threshold;
-            });
-            
+            totalIDs = transactionsToUsers
+                    .flatMap((FlatMapFunction<Tuple2<String, List<String>>, String>) t -> t._2().iterator(), Encoders.STRING())
+                    .distinct().count();
+
+            Dataset<Tuple2<String, List<String>>> uniqueTransactionCombinations = transactionsToUsers
+                    .filter((FilterFunction<Tuple2<String, List<String>>>) r -> {
+                        Set<String> s = new HashSet<>(r._2());
+                        return s.size() <= threshold;
+                    });
+
             uniqueTransactionCombinationsCount = uniqueTransactionCombinations.count();
-            uniqueIDs = uniqueTransactionCombinations.values().flatMap(Iterable::iterator).distinct().count();
+            uniqueIDs = uniqueTransactionCombinations
+                    .flatMap((FlatMapFunction<Tuple2<String, List<String>>, String>) t -> t._2().iterator(), Encoders.STRING())
+                    .distinct().count();
         } else {
-            JavaPairRDD<String, Set<String>> transactionsToUsers;
-            transactionsToUsers = computeTransactionsToUsersNoCombinations(rdd, idColumns, targetColumns, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes,
+            Dataset<Tuple2<String, Set<String>>> transactionsToUsers = computeTransactionsToUsersNoCombinations(dataset, idColumns, targetColumns, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes,
                     dataMaskingOptions, maskingProviderFactory);
-           
-            totalIDs = transactionsToUsers.values().flatMap(Set::iterator).distinct().count();
-            
-            JavaPairRDD<String, Set<String>> uniqueTransactionCombinations = transactionsToUsers.filter(r -> r._2().size() <= threshold);
-            
-            uniqueTransactionCombinationsCount = uniqueTransactionCombinations.count();
-            uniqueIDs = uniqueTransactionCombinations.values().flatMap(Set::iterator).distinct().count();
-        }
 
+            totalIDs = transactionsToUsers
+                    .flatMap((FlatMapFunction<Tuple2<String, Set<String>>, String>) t -> t._2().iterator(), Encoders.STRING())
+                    .distinct().count();
+
+            Dataset<Tuple2<String, Set<String>>> uniqueTransactionCombinations = transactionsToUsers
+                    .filter((FilterFunction<Tuple2<String, Set<String>>>) r -> r._2().size() <= threshold);
+
+            uniqueTransactionCombinationsCount = uniqueTransactionCombinations.count();
+            uniqueIDs = uniqueTransactionCombinations
+                    .flatMap((FlatMapFunction<Tuple2<String, Set<String>>, String>) t -> t._2().iterator(), Encoders.STRING())
+                    .distinct().count();
+        }
 
         Map<String, Long> results = new HashMap<>();
         results.put("unique_transactions", uniqueTransactionCombinationsCount);
@@ -295,7 +300,7 @@ public class TransactionUniqueness {
 
         logger.info("Combinations leading to a unique ID: " + uniqueTransactionCombinationsCount);
         logger.info("Unique IDs : " + uniqueIDs);
-        
+
         return results;
     }
 }

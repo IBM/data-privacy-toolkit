@@ -116,8 +116,8 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named('test') {
     useJUnitPlatform()
-    minHeapSize = "5g"
-    maxHeapSize = "10g"
+    minHeapSize = "512m"
+    maxHeapSize = "4g"
 
     testLogging {
         events 'failed'

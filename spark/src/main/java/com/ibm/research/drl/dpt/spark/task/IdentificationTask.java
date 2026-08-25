@@ -83,33 +83,36 @@ public class IdentificationTask extends SparkTaskToExecute {
         Map<String, List<IdentifiedType>> fieldsProcessed = new HashMap<>(fieldNames.length);
 
         for (String fieldName : fieldNames) {
-            List<IdentifiedType> detectedTypes = dataset.toJavaRDD()
-                    .mapToPair(row -> new Tuple2<>(row.get(row.fieldIndex(fieldName)), 1L))
-                    .reduceByKey(Long::sum)
-                    .flatMapToPair(valueCount -> {
+            List<IdentifiedType> detectedTypes = dataset
+                    .groupBy(org.apache.spark.sql.functions.col(fieldName).cast(org.apache.spark.sql.types.DataTypes.StringType))
+                    .count()
+                    .flatMap((org.apache.spark.api.java.function.FlatMapFunction<Row, Tuple2<ProviderType, Long>>) valueCount -> {
                         final List<Tuple2<ProviderType, Long>> matches = new ArrayList<>();
-
-                        final String value = valueCount._1.toString();
+                        final String value = valueCount.isNullAt(0) ? "" : valueCount.getString(0);
+                        final long count = valueCount.getLong(1);
 
                         if (value.isEmpty() || value.isBlank()) {
-                            return List.of(new Tuple2<>(ProviderType.EMPTY, valueCount._2)).iterator();
+                            return List.of(new Tuple2<>(ProviderType.EMPTY, count)).iterator();
                         }
 
                         for (Identifier identifier : this.identifiers.availableIdentifiers()) {
                             if (identifier.isOfThisType(value)) {
-                                matches.add(new Tuple2<>(identifier.getType(), valueCount._2));
+                                matches.add(new Tuple2<>(identifier.getType(), count));
                             }
                         }
 
                         if (matches.isEmpty()) {
-                            matches.add(new Tuple2<>(ProviderType.UNKNOWN, valueCount._2));
+                            matches.add(new Tuple2<>(ProviderType.UNKNOWN, count));
                         }
 
                         return matches.iterator();
-                    })
-                    .reduceByKey(Long::sum)
-                    .map( valueCount -> new IdentifiedType(valueCount._1.name(), valueCount._2))
-                    .collect();
+                    }, com.ibm.research.drl.dpt.spark.utils.SparkEncoders.javaSerOf(Tuple2.class))
+                    .groupByKey((org.apache.spark.api.java.function.MapFunction<Tuple2<ProviderType, Long>, String>) t -> t._1().name(), org.apache.spark.sql.Encoders.STRING())
+                    .reduceGroups((org.apache.spark.api.java.function.ReduceFunction<Tuple2<ProviderType, Long>>) (a, b) -> new Tuple2<>(a._1(), a._2() + b._2()))
+                    .map((org.apache.spark.api.java.function.MapFunction<Tuple2<String, Tuple2<ProviderType, Long>>, IdentifiedType>) kv ->
+                            new IdentifiedType(kv._2()._1().name(), kv._2()._2()),
+                            org.apache.spark.sql.Encoders.javaSerialization(IdentifiedType.class))
+                    .collectAsList();
 
             fieldsProcessed.put(fieldName, detectedTypes);
         }

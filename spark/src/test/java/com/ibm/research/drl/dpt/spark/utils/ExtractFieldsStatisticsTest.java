@@ -18,8 +18,6 @@ under the License.
 */
 package com.ibm.research.drl.dpt.spark.utils;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
@@ -47,14 +45,12 @@ public class ExtractFieldsStatisticsTest {
 
     @BeforeEach
     public void setUp() {
-        spark = SparkSession.builder().sparkContext(
-                new SparkContext(
-                        new SparkConf(true).
-                                setMaster("local").
-                                setAppName("testing").
-                                set("spark.driver.bindAddress", "127.0.0.1")
-                )
-        ).getOrCreate();
+        spark = SparkSession.builder()
+                .master("local")
+                .appName("testing")
+                .config("spark.driver.bindAddress", "127.0.0.1")
+                .config("spark.driver.host", "127.0.0.1")
+                .getOrCreate();
     }
 
     @AfterEach

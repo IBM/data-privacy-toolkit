@@ -31,7 +31,6 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.providers.masking.fhir.FHIRMaskingUtils;
 import com.ibm.research.drl.dpt.spark.utils.RecordUtils;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
@@ -120,7 +119,7 @@ public class DataMasking {
         
         final List<String> fieldTypes = RecordUtils.getFieldClasses(dataset.schema().fields());
 
-        JavaRDD<Row> rdd = dataset.toJavaRDD().map(value -> {
+        return dataset.map((MapFunction<Row, Row>) value -> {
             Record record = RecordUtils.createRecord(value, inputFormat, datasetOptions, fieldNames, fieldMap, fieldTypes, false);
             Record maskedRecord = formatProcessor.maskRecord(record, maskingProviderFactory, alreadyMaskedFields, maskingOptions);
 
@@ -129,9 +128,7 @@ public class DataMasking {
             } else {
                 return RowFactory.create(Collections.singletonList(maskedRecord.toString()).toArray());
             }
-        });
-
-        return dataset.sparkSession().createDataFrame(rdd, dataset.schema());
+        }, org.apache.spark.sql.Encoders.row(dataset.schema()));
     }
   
     public static Map<String,Set<String>> analyzeConfiguration(DataMaskingOptions maskingOptions, ConfigurationManager configurationManager) {

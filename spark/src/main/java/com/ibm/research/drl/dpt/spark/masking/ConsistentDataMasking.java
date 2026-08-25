@@ -28,16 +28,16 @@ import com.ibm.research.drl.dpt.processors.records.RecordFactory;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.spark.utils.RecordUtils;
 import com.ibm.research.drl.jsonpath.JSONPathException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.Tuple2;
 import scala.Tuple3;
 import scala.jdk.javaapi.CollectionConverters;
@@ -75,8 +75,8 @@ public class ConsistentDataMasking {
         }
 
         return output;
-
     }
+
     private static String groupByPathForGlobalConsistency(
             Tuple3<Row, String, Long> s,
             DataMaskingOptions maskingOptions,
@@ -127,22 +127,21 @@ public class ConsistentDataMasking {
 
         return firstNode.toString();
     }
-    
+
     private static String mergeMaskedPathsRecord(Tuple2<Long, Iterable<Tuple2<String, String>>> s, Set<String> fieldsInNamespace,
                                                  DataMaskingOptions maskingOptions, Map<String, Integer> fieldPaths) throws IOException, JSONPathException {
 
         Iterable<Tuple2<String, String>> maskedRecords = s._2();
         return mergeRecordObjectsByPath(maskedRecords, maskingOptions.getInputFormat(), maskingOptions.getDatasetOptions(), fieldPaths);
     }
-    
+
     private static String mergeMaskedPaths(Tuple2<Long, Iterable<Tuple2<String, String>>> s,
                                            Set<String> fieldsInNamespace,
                                            DataMaskingOptions maskingOptions, Map<String, Integer> fieldPaths) throws IOException, JSONPathException {
 
         return mergeMaskedPathsRecord(s, fieldsInNamespace, maskingOptions, fieldPaths);
-
     }
-    
+
     public static Tuple2<String, Row> createMapPairForSingleConsistency(Row row,
                                                                         final DataMaskingOptions maskingOptions,
                                                                         String fieldName,
@@ -151,72 +150,72 @@ public class ConsistentDataMasking {
         String key = new String(record.getFieldValue(fieldName));
         return new Tuple2<>(key, row);
     }
-    
-    
+
+
     public static Dataset<Row> doGloballyConsistentMasking(Dataset<Row> dataset, Map<String, DataMaskingTarget> identifiedTypes,
-                                                               final Map<String, MaskingProvider> maskingProviders, 
-                                                               final Set<String> fieldsInNamespace,
-                                                               final Map<String, Integer> fieldPaths, final DataMaskingOptions maskingOptions) {
-        JavaRDD<String> maskedRdd = dataset.javaRDD().zipWithIndex()
-                .flatMap(s -> projectionMapForGlobalConsistency(s, fieldsInNamespace, maskingOptions).iterator())
-                .groupBy(s -> groupByPathForGlobalConsistency(s, maskingOptions, fieldPaths))
-                .map(s -> {
-                    String key = s._1();
-                    Iterable<Tuple3<Row, String, Long>> records = s._2();
-                    String maskedKey = null;
-                    List<Tuple2<Long, Tuple2<String, String>>> projectedRecords = new ArrayList<>();
-                    for (Tuple3<Row, String, Long> r : records) {
-                        Row record = r._1();
-                        String path = r._2();
-                        Long rowIndex = r._3();
-                        // we mask the key based on the first field of the namespace
-                        if (maskedKey == null) {
-                            maskedKey = maskingProviders.get(path).mask(key);
-                        }
-                        String updatedRecord = updateKeyToRecord(maskedKey, record, maskingOptions, path, fieldPaths);
-                        Tuple2<String, String> maskedRecord = new Tuple2<>(updatedRecord, path);
-                        Tuple2<Long, Tuple2<String, String>> projectedRecord = new Tuple2<>(rowIndex, maskedRecord);
-                        projectedRecords.add(projectedRecord);
-                    }
-                    return projectedRecords;
-                })
-                .flatMapToPair(List::iterator)
-                .groupByKey()
-                .map(longIterableTuple2 -> mergeMaskedPaths(longIterableTuple2, fieldsInNamespace, maskingOptions, fieldPaths));
+                                                           final Map<String, MaskingProvider> maskingProviders,
+                                                           final Set<String> fieldsInNamespace,
+                                                           final Map<String, Integer> fieldPaths, final DataMaskingOptions maskingOptions) {
+        // Use toJavaRDD for the complex zipWithIndex + flatMap + groupBy pipeline, then convert back
+        Dataset<String> maskedDs = dataset.sparkSession().createDataset(
+                dataset.toJavaRDD().zipWithIndex()
+                        .flatMap(s -> projectionMapForGlobalConsistency(new Tuple2<>(s._1(), s._2()), fieldsInNamespace, maskingOptions).iterator())
+                        .mapToPair(s -> new Tuple2<>(groupByPathForGlobalConsistency(s, maskingOptions, fieldPaths), s))
+                        .groupByKey()
+                        .flatMap(s -> {
+                            String key = s._1();
+                            Iterable<Tuple3<Row, String, Long>> records = s._2();
+                            String maskedKey = null;
+                            List<Tuple2<Long, Tuple2<String, String>>> projectedRecords = new ArrayList<>();
+                            for (Tuple3<Row, String, Long> r : records) {
+                                Row record = r._1();
+                                String path = r._2();
+                                Long rowIndex = r._3();
+                                if (maskedKey == null) {
+                                    maskedKey = maskingProviders.get(path).mask(key);
+                                }
+                                String updatedRecord = updateKeyToRecord(maskedKey, record, maskingOptions, path, fieldPaths);
+                                projectedRecords.add(new Tuple2<>(rowIndex, new Tuple2<>(updatedRecord, path)));
+                            }
+                            return projectedRecords.iterator();
+                        })
+                        .mapToPair(t -> t)
+                        .groupByKey()
+                        .map(longIterableTuple2 -> mergeMaskedPaths(longIterableTuple2, fieldsInNamespace, maskingOptions, fieldPaths))
+                        .rdd(),
+                Encoders.STRING());
 
-        JavaRDD<Row> rowRdd = maskedRdd.map(row -> ((CSVRecord) CSVRecord.fromString(row, maskingOptions.getDatasetOptions(), fieldPaths, false)))
-                .map(csvRecord -> {
+        Dataset<Row> rowDs = maskedDs
+                .map((MapFunction<String, Row>) row -> {
+                    CSVRecord csvRecord = (CSVRecord) CSVRecord.fromString(row, maskingOptions.getDatasetOptions(), fieldPaths, false);
                     List<Object> orderedValues = new ArrayList<>();
-
                     for (StructField field : dataset.schema().fields()) {
-                        orderedValues.add(
-                              csvRecord.getFieldValue(field.name())
-                        );
+                        orderedValues.add(csvRecord.getFieldValue(field.name()));
                     }
+                    return RowFactory.create(CollectionConverters.asScala(orderedValues).toSeq());
+                }, Encoders.row(dataset.schema()));
 
-                    return CollectionConverters.asScala(orderedValues).toSeq();
-                })
-                .map(Row::fromSeq);
+        return rowDs;
+    }
 
-        return dataset.sparkSession().createDataFrame(rowRdd, dataset.schema()); // to be fixed!
-    } 
-    
     public static Dataset<Row> doConsistentMasking(SparkSession sparkSession, Dataset<Row> dataset,
-                                                    final Map<String, MaskingProvider> maskingProviders,
-                                                    final String fieldName,
-                                                    final Map<String, Integer> fieldPaths,
-                                                    final DataMaskingOptions maskingOptions) {
+                                                   final Map<String, MaskingProvider> maskingProviders,
+                                                   final String fieldName,
+                                                   final Map<String, Integer> fieldPaths,
+                                                   final DataMaskingOptions maskingOptions) {
 
-        JavaRDD<String> rdd = dataset.javaRDD().mapToPair(s -> createMapPairForSingleConsistency(s, maskingOptions, fieldName, fieldPaths))
-                .groupByKey()
-                .map((Function<Tuple2<String, Iterable<Row>>, List<String>>) tuple2 -> {
-                    String key = tuple2._1();
-                    Iterable<Row> records = tuple2._2();
-                    return writeMaskedKeyForSingleConsistency(key, fieldName, maskingProviders, records, maskingOptions, fieldName, fieldPaths);
-                }).flatMap((FlatMapFunction<List<String>, String>) List::iterator);
-        
-        return sparkSession.createDataset(rdd.rdd(), Encoders.STRING()).toDF();
+        Dataset<String> ds = sparkSession.createDataset(
+                dataset.toJavaRDD()
+                        .mapToPair(s -> createMapPairForSingleConsistency(s, maskingOptions, fieldName, fieldPaths))
+                        .groupByKey()
+                        .flatMap((FlatMapFunction<Tuple2<String, Iterable<Row>>, String>) tuple2 -> {
+                            String key = tuple2._1();
+                            Iterable<Row> records = tuple2._2();
+                            return writeMaskedKeyForSingleConsistency(key, fieldName, maskingProviders, records, maskingOptions, fieldName, fieldPaths).iterator();
+                        })
+                        .rdd(),
+                Encoders.STRING());
 
-
+        return sparkSession.createDataset(ds.rdd(), Encoders.STRING()).toDF();
     }
 }

@@ -19,14 +19,14 @@ under the License.
 package com.ibm.research.drl.dpt.spark.anonymization;
 
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
-import com.ibm.research.drl.dpt.spark.anonymization.mondrian.MondrianExecutor;
 import com.ibm.research.drl.dpt.spark.anonymization.mondrian.MondrianSpark;
 import com.ibm.research.drl.dpt.spark.anonymization.ola.OLASpark;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 import org.apache.commons.cli.*;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.SparkSession;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,35 +57,31 @@ public class AnonymizationExecutor {
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
 
-
             boolean remoteConfiguration = cmd.hasOption("remoteConf");
             InputStream confStream = SparkUtils.readFile(cmd.getOptionValue("c"), remoteConfiguration);
 
-            DataTypeFormat inputFormat = DataTypeFormat.CSV;
-            final DataTypeFormat exportFormat = DataTypeFormat.CSV;
-
-            SparkContext sc = SparkUtils.createSparkContext("Data Anonymization");
-            JavaRDD<String> inputRDD = SparkUtils.createTextFileRDD(sc, cmd.getOptionValue("i"));
+            SparkSession spark = SparkUtils.createSparkSession("Data Anonymization");
+            Dataset<String> inputRDD = spark.read().textFile(cmd.getOptionValue("i")).as(Encoders.STRING());
 
             String algorithmName = cmd.getOptionValue("a");
 
-            JavaRDD<String> outputRDD;
+            Dataset<String> outputRDD;
 
             switch (algorithmName.toUpperCase()) {
                 case "OLA":
                     outputRDD = OLASpark.run(confStream, inputRDD);
-                    Export.doExport(outputRDD, cmd.getOptionValue("o"));
+                    outputRDD.write().text(cmd.getOptionValue("o"));
                     break;
                 case "MONDRIAN":
                     outputRDD = MondrianSpark.run(confStream, inputRDD);
-                    Export.doExport(outputRDD, cmd.getOptionValue("o"));
+                    outputRDD.write().text(cmd.getOptionValue("o"));
+                    break;
                 default:
                     throw new RuntimeException("invalid algorithm name: " + algorithmName);
             }
 
-
             confStream.close();
-            sc.stop();
+            spark.stop();
         } catch (ParseException e) {
             String header = "Data Anonymization\n\n";
             String footer = "\n";

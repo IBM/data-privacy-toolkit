@@ -112,7 +112,7 @@ public class TransactionUniquenessTest {
     }
     
     @Test
-    public void testNoCombinationsNoMasking() {
+    public void testNoCombinationsNoMasking() throws Exception {
         String[] idColumns = new String[]{"id"};
         String[] targetColumns = new String[]{"date", "location"};
 
