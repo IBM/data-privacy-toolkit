@@ -31,6 +31,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider for age expressions; replaces numeric age values with random or redacted values.
+ */
 public class AgeMaskingProvider implements MaskingProvider {
 
     private static final AgeIdentifier AGE_IDENTIFIER = new AgeIdentifier();
@@ -40,14 +43,28 @@ public class AgeMaskingProvider implements MaskingProvider {
     private final SecureRandom random;
     private final int failMode;
 
+    /**
+     * Constructs an AgeMaskingProvider with default configuration.
+     */
     public AgeMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs an AgeMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public AgeMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
 
+    /**
+     * Constructs an AgeMaskingProvider with the given random source and configuration.
+     *
+     * @param random               the secure random source
+     * @param maskingConfiguration the masking configuration
+     */
     public AgeMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.redactNumbers = maskingConfiguration.getBooleanValue("age.mask.redactNumbers");
         this.randomNumbers = maskingConfiguration.getBooleanValue("age.mask.randomNumbers");
@@ -60,6 +77,13 @@ public class AgeMaskingProvider implements MaskingProvider {
         }
     }
 
+    /**
+     * Applies age masking to the given identifier using a pre-parsed age object.
+     *
+     * @param identifier the original age string
+     * @param age        the parsed age portions
+     * @return the masked age string
+     */
     protected String mask(String identifier, Age age) {
         AgePortion[] portions = new AgePortion[]{
                 age.getYearPortion(),

@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Represents an animal species with its localized name.
+ */
 public class AnimalSpecies implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;

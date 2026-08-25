@@ -85,9 +85,21 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
      */
     protected abstract Collection<ResourceEntry> getResources();
 
+    /**
+     * Parses a single CSV record into one or more key-value pairs for the resource map.
+     *
+     * @param record      the CSV record to parse
+     * @param countryCode the country code for the resource file being parsed
+     * @return a list of key-value tuples to add to the resource map
+     */
     protected abstract List<Tuple<String, K>> parseResourceRecord(CSVRecord record, String countryCode);
 
 
+    /**
+     * Returns whether this manager's resources apply to all countries only (no per-country mapping).
+     *
+     * @return true if resources apply globally only
+     */
     protected boolean appliesToAllCountriesOnly() {
         return false;
     }

@@ -21,6 +21,22 @@ package com.ibm.research.drl.dpt.managers;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * Abstract base class for all manager implementations.
+ *
+ * @param <K> the type of items managed
+ */
 public abstract class AbstractManager<K> implements Manager, Serializable {
+    /**
+     * Constructs a new AbstractManager.
+     */
+    public AbstractManager() {
+    }
+
+    /**
+     * Returns the full list of managed items.
+     *
+     * @return collection of all items
+     */
     public abstract Collection<K> getItemList();
 }

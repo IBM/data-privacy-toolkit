@@ -24,7 +24,16 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import java.security.SecureRandom;
 import java.util.HashMap;
 
+/**
+ * Masking provider that wraps values in XML-style annotation tags instead of replacing them.
+ */
 public class AnnotateMaskingProvider implements MaskingProvider {
+    /**
+     * Constructs an AnnotateMaskingProvider.
+     *
+     * @param secureRandom         unused, present for API consistency
+     * @param maskingConfiguration unused, present for API consistency
+     */
     public AnnotateMaskingProvider(SecureRandom secureRandom, MaskingConfiguration maskingConfiguration) {}
 
     private static class CacheEntry extends HashMap<String, String> {}

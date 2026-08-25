@@ -20,7 +20,15 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.managers.Manager;
 
+/**
+ * Abstract base class for identifiers backed by a {@link com.ibm.research.drl.dpt.managers.Manager}.
+ */
 public abstract class AbstractManagerBasedIdentifier extends AbstractIdentifier {
+    /**
+     * Constructs a new AbstractManagerBasedIdentifier.
+     */
+    public AbstractManagerBasedIdentifier() {
+    }
 
     /**
      * Gets manager.

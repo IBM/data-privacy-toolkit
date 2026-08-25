@@ -18,7 +18,15 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
+/**
+ * Bounded Laplace differential privacy mechanism that clamps the output to a finite range.
+ */
 public class BoundedLaplace extends Laplace {
+    /**
+     * Constructs a new BoundedLaplace mechanism.
+     */
+    public BoundedLaplace() {
+    }
     private double cdf(double x) {
         if (x < 0) {
             return 0.5 * Math.exp(x / this.shape);

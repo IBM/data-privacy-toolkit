@@ -20,6 +20,9 @@ package com.ibm.research.drl.dpt.anonymization;
 
 import java.io.Serializable;
 
+/**
+ * Options interface for anonymization algorithm configuration.
+ */
 public interface AnonymizationAlgorithmOptions extends Serializable {
     /**
      * Gets int value.

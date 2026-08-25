@@ -26,7 +26,15 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Name identifier that matches values case-insensitively against a names dictionary.
+ */
 public class CaseInsensitiveNameIdentifier extends AbstractIdentifier {
+    /**
+     * Constructs a new CaseInsensitiveNameIdentifier.
+     */
+    public CaseInsensitiveNameIdentifier() {
+    }
     private final static NamesManager.Names manager = NamesManager.instance();
     private final Pattern trailingPunctuation = Pattern.compile("(\\p{Alpha}+)[,.]$");
     private final Pattern hasDigit = Pattern.compile("\\d");

@@ -70,12 +70,32 @@ public interface Identifier {
      */
     int getPriority();
 
+    /**
+     * Returns the minimum character class requirements for this identifier.
+     *
+     * @return bitmask of required character classes (see {@link CharacterRequirements})
+     */
     int getMinimumCharacterRequirements();
 
+    /**
+     * Returns the minimum length of a valid value for this identifier.
+     *
+     * @return minimum length, or 0 if no minimum
+     */
     int getMinimumLength();
 
+    /**
+     * Returns the maximum length of a valid value for this identifier.
+     *
+     * @return maximum length, or 0 if no maximum
+     */
     int getMaximumLength();
 
+    /**
+     * Returns whether this identifier operates independently of part-of-speech tagging.
+     *
+     * @return true if POS-independent, false otherwise
+     */
     default boolean isPOSIndependent() {
         return false;
     }

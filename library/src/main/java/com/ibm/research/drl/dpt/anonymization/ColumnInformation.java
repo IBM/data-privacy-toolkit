@@ -42,8 +42,18 @@ public interface ColumnInformation extends Serializable {
      */
     boolean isCategorical();
 
+    /**
+     * Returns the weight of this column in information loss calculations.
+     *
+     * @return the column weight
+     */
     double getWeight();
 
+    /**
+     * Returns whether this column is used for record linking.
+     *
+     * @return true if used for linking
+     */
     boolean isForLinking();
 
     /**

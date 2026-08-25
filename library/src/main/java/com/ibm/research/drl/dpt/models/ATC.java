@@ -18,13 +18,26 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Represents an Anatomical Therapeutic Chemical (ATC) classification code.
+ */
 public class ATC {
     private final String code;
 
+    /**
+     * Returns the ATC code.
+     *
+     * @return the ATC code string
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Constructs an ATC with the given code.
+     *
+     * @param code the ATC code
+     */
     public ATC(String code) {
         this.code = code;
     }

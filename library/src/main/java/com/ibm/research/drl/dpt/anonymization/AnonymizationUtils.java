@@ -42,6 +42,18 @@ import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 public class AnonymizationUtils {
     private static final Logger logger = LogManager.getLogger(AnonymizationUtils.class);
 
+    /**
+     * Constructs a new AnonymizationUtils. This is a utility class with only static methods.
+     */
+    public AnonymizationUtils() {
+    }
+
+    /**
+     * Extracts the k value from the list of privacy constraints.
+     *
+     * @param privacyConstraints the list of privacy constraints
+     * @return the k value from the first KAnonymity constraint found
+     */
     public static int getK(List<PrivacyConstraint> privacyConstraints) {
 
         for (PrivacyConstraint privacyConstraint : privacyConstraints) {
@@ -112,6 +124,13 @@ public class AnonymizationUtils {
         return count;
     }
 
+    /**
+     * Generates a composite key string from quasi-identifier column values of the given row.
+     *
+     * @param row          the dataset row
+     * @param quasiColumns indices of the quasi-identifier columns
+     * @return the composite key string
+     */
     public static String generateEQKey(List<String> row, List<Integer> quasiColumns) {
         StringBuilder key = new StringBuilder();
 
@@ -124,6 +143,13 @@ public class AnonymizationUtils {
         return key.toString();
     }
 
+    /**
+     * Generates a map of equivalence class keys to their record counts.
+     *
+     * @param dataset               the dataset
+     * @param columnInformationList the column information list
+     * @return a map from equivalence class key to count
+     */
     public static Map<String, Integer> generateEQCounters(IPVDataset dataset, List<ColumnInformation> columnInformationList) {
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         Map<String, Integer> counters = new HashMap<>();
@@ -142,6 +168,13 @@ public class AnonymizationUtils {
         return counters;
     }
 
+    /**
+     * Generates a hash value for the quasi-identifier values in the first row of a partition.
+     *
+     * @param partition             the partition
+     * @param columnInformationList the column information list
+     * @return a hash string representing the quasi-identifier values
+     */
     public static String generateHashValue(Partition partition, List<ColumnInformation> columnInformationList) {
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         List<String> row = partition.getMember().getRow(0);
@@ -157,6 +190,13 @@ public class AnonymizationUtils {
         return Integer.toString(key.hashCode());
     }
 
+    /**
+     * Generates partitions from a dataset based on specific column indices.
+     *
+     * @param anonymized   the dataset
+     * @param quasiColumns the column indices to use for partitioning
+     * @return list of partitions
+     */
     public static List<Partition> generatePartitionsByColumnIndex(IPVDataset anonymized, List<Integer> quasiColumns) {
         Map<String, List<List<String>>> partitionsMap = new HashMap<>();
         int n = anonymized.getNumberOfRows();
@@ -197,11 +237,25 @@ public class AnonymizationUtils {
         return partitions;
     }
 
+    /**
+     * Generates partitions from a dataset based on the quasi-identifier columns.
+     *
+     * @param anonymized            the dataset
+     * @param columnInformationList the column information list
+     * @return list of partitions
+     */
     public static List<Partition> generatePartitions(IPVDataset anonymized, List<ColumnInformation> columnInformationList) {
         List<Integer> quasiColumns = getColumnsByType(columnInformationList, ColumnType.QUASI);
         return generatePartitionsByColumnIndex(anonymized, quasiColumns);
     }
 
+    /**
+     * Generates partitions from a dataset based on the linking columns.
+     *
+     * @param anonymized            the dataset
+     * @param columnInformationList the column information list
+     * @return list of partitions for linking
+     */
     public static List<Partition> generatePartitionsForLinking(IPVDataset anonymized, List<ColumnInformation> columnInformationList) {
         List<Integer> linkingColumns = getLinkingColumns(columnInformationList);
 
@@ -222,6 +276,12 @@ public class AnonymizationUtils {
         return linkingColumns;
     }
 
+    /**
+     * Builds a bitmask of content requirements for all privacy constraints.
+     *
+     * @param privacyConstraints the list of privacy constraints
+     * @return the combined content requirements bitmask
+     */
     public static int buildPrivacyConstraintContentRequirements(List<PrivacyConstraint> privacyConstraints) {
         int requirements = 0;
 
@@ -232,6 +292,14 @@ public class AnonymizationUtils {
         return requirements;
     }
 
+    /**
+     * Checks whether all privacy constraints are satisfied for the given partition.
+     *
+     * @param privacyConstraints the privacy constraints to check
+     * @param partition          the partition to evaluate
+     * @param sensitiveColumns   indices of sensitive columns
+     * @return true if all constraints are satisfied
+     */
     public static boolean checkPrivacyConstraints(List<PrivacyConstraint> privacyConstraints, Partition partition, List<Integer> sensitiveColumns) {
         for (PrivacyConstraint privacyConstraint : privacyConstraints) {
             if (!privacyConstraint.check(partition, sensitiveColumns)) {
@@ -242,6 +310,13 @@ public class AnonymizationUtils {
         return true;
     }
 
+    /**
+     * Initializes all privacy constraints with the given dataset and column information.
+     *
+     * @param dataset               the dataset
+     * @param columnInformationList the column information list
+     * @param privacyConstraints    the privacy constraints to initialize
+     */
     public static void initializeConstraints(IPVDataset dataset, List<ColumnInformation> columnInformationList,
                                              List<PrivacyConstraint> privacyConstraints) {
         for (PrivacyConstraint privacyConstraint : privacyConstraints) {

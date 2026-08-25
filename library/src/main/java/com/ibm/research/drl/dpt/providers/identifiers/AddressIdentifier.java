@@ -31,6 +31,11 @@ import java.util.regex.Pattern;
  * The type Address identifier.
  */
 public class AddressIdentifier extends AbstractIdentifier {
+    /**
+     * Constructs a new AddressIdentifier.
+     */
+    public AddressIdentifier() {
+    }
     private static final Pattern[] poBoxPatterns = {
             Pattern.compile("(PO|P.O.) BOX (?<poboxnumber>\\d+)")
     };

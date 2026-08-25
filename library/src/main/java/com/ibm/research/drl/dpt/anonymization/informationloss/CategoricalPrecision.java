@@ -27,7 +27,15 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Information loss metric measuring generalization precision for categorical quasi-identifiers.
+ */
 public class CategoricalPrecision implements InformationMetric {
+    /**
+     * Constructs a new CategoricalPrecision.
+     */
+    public CategoricalPrecision() {
+    }
     private IPVDataset original;
     private IPVDataset anonymized;
     private List<ColumnInformation> columnInformationList;
