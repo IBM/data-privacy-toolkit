@@ -25,7 +25,7 @@ import org.apache.commons.cli.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.*;
 
 import java.io.IOException;
@@ -155,61 +155,51 @@ public class DatasetLinkingRiskEstimator {
 
     private static Dataset<Row> generalizeKnowledgeBase(
             Dataset<Row> knowledgeBase,
-            List<Integer> generalizationLevel, 
+            List<Integer> generalizationLevel,
             List<BasicColumnInformation> basicColumnInformation
     ) {
         final String[] names = knowledgeBase.columns();
-        JavaRDD<Object[]> rdd = knowledgeBase.rdd().toJavaRDD().map(row -> {
-            Object[] o = new Object[row.length()];
 
-            for (int i = 0; i < o.length; ++i) {
-                o[i] = row.get(i);
-            }
-
-            return o;
-        });
+        // Build a list of (quasiIndex, level, target, hierarchy) for columns that need generalization
+        List<int[]> genSpec = new ArrayList<>(); // [position, level]
+        List<GeneralizationHierarchy> hierarchies = new ArrayList<>();
 
         int quasiIndex = 0;
-        
         for (int i = 0; i < basicColumnInformation.size(); ++i) {
             final BasicColumnInformation bci = basicColumnInformation.get(i);
-            
-            if (!bci.isAnonymised()) {
-                continue;
-            }
-            
-            final int level = generalizationLevel.get(quasiIndex);
-            quasiIndex++;
-            
+            if (!bci.isAnonymised()) continue;
+
+            final int level = generalizationLevel.get(quasiIndex++);
             if (0 == level) continue;
 
             final String target = bci.getTarget();
-
             final GeneralizationHierarchy hierarchy = bci.getHierarchy();
-
             final int position = ArrayUtils.indexOf(names, target);
-
             if (position < 0) continue;
 
-            rdd = rdd.map(row -> {
-                if (position < row.length) {
-                    Object rowValue = row[position];
-
-                    if (Objects.nonNull(rowValue)) {
-                        String originalValue = rowValue.toString();
-                        String encodedValue = hierarchy.encode(originalValue, level, false);
-
-                        row[position] = encodedValue;
-                    }
-                } else {
-                    logger.error(String.format("SOMETHING WENT WRONG! %s: %d >= %d", target, position, row.length));
-                }
-
-                return row;
-            });
+            genSpec.add(new int[]{position, level});
+            hierarchies.add(hierarchy);
         }
 
-        return knowledgeBase.sparkSession().createDataFrame(rdd.map(RowFactory::create), knowledgeBase.schema());
+        if (genSpec.isEmpty()) return knowledgeBase;
+
+        return knowledgeBase.map((MapFunction<Row, Row>) row -> {
+            Object[] o = new Object[row.length()];
+            for (int i = 0; i < o.length; ++i) {
+                o[i] = row.get(i);
+            }
+            for (int g = 0; g < genSpec.size(); g++) {
+                int position = genSpec.get(g)[0];
+                int level = genSpec.get(g)[1];
+                GeneralizationHierarchy hierarchy = hierarchies.get(g);
+                if (position < o.length && Objects.nonNull(o[position])) {
+                    o[position] = hierarchy.encode(o[position].toString(), level, false);
+                } else if (position >= o.length) {
+                    logger.error(String.format("SOMETHING WENT WRONG! %s: %d >= %d", names[position], position, o.length));
+                }
+            }
+            return RowFactory.create(o);
+        }, Encoders.row(knowledgeBase.schema()));
     }
 
     protected static Dataset<Row> extractDataset(
@@ -256,7 +246,7 @@ public class DatasetLinkingRiskEstimator {
             return Arrays.asList(zeros);
         }
         
-        List<String> uniqueLevelsAsString = anonymisedDataset.javaRDD().map(row -> {
+        List<String> uniqueLevelsAsString = anonymisedDataset.map((MapFunction<Row, String>) row -> {
             StringBuilder builder = new StringBuilder();
 
             for(BasicColumnInformation bci: basicColumnInformation) {
@@ -274,7 +264,7 @@ public class DatasetLinkingRiskEstimator {
             }
 
             return builder.toString();
-        }).distinct().collect();
+        }, Encoders.STRING()).distinct().collectAsList();
         
         List<List<Integer>> distinctLevels = new ArrayList<>();
         

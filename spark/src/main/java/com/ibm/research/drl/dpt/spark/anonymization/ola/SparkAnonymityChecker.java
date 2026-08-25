@@ -31,12 +31,13 @@ import com.ibm.research.drl.dpt.anonymization.PrivacyMetric;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymityMetric;
 import com.ibm.research.drl.dpt.anonymization.ola.AnonymityChecker;
 import com.ibm.research.drl.dpt.anonymization.ola.LatticeNode;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.api.java.function.ReduceFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
+import com.ibm.research.drl.dpt.spark.utils.SparkEncoders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 
 import java.io.IOException;
@@ -49,7 +50,7 @@ import java.util.List;
 public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
     private static final Logger logger = LoggerFactory.getLogger(SparkAnonymityChecker.class);
 
-    private final JavaRDD<String> input;
+    private final Dataset<String> input;
     private final List<ColumnInformation> columnInformationList;
     private final List<Integer> quasiColumns;
     private final List<Integer> sensitiveColumns;
@@ -97,7 +98,7 @@ public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
         }
 
         List<PrivacyMetric> metrics = new ArrayList<>();
-        for(PrivacyMetric metric: privacyMetrics) {
+        for (PrivacyMetric metric : privacyMetrics) {
             metrics.add(metric.getInstance(sensitiveValues));
         }
 
@@ -107,11 +108,11 @@ public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
     public static boolean checkConstraints(List<PrivacyMetric> privacyMetrics,
                                            List<PrivacyConstraint> privacyConstraints) {
 
-        for(int i = 0; i < privacyConstraints.size(); i++) {
+        for (int i = 0; i < privacyConstraints.size(); i++) {
             PrivacyConstraint constraint = privacyConstraints.get(i);
             PrivacyMetric metric = privacyMetrics.get(i);
 
-            if(!constraint.check(metric)) {
+            if (!constraint.check(metric)) {
                 return true;
             }
         }
@@ -125,57 +126,48 @@ public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
 
         logger.info("Checking node: " + node);
 
-        JavaRDD<Long> counters = input.mapToPair((PairFunction<String, String, List<PrivacyMetric>>) s -> createMapToPair(s, delimiter, quoteChar, columnInformationList, privacyMetrics, quasiColumns,
-                sensitiveColumns, levels, privacyConstraintsContentRequirements)).reduceByKey(new Function2<List<PrivacyMetric>, List<PrivacyMetric>, List<PrivacyMetric>>() {
-            @Override
-            public List<PrivacyMetric> call(List<PrivacyMetric> p1, List<PrivacyMetric> p2) throws Exception {
-                for(int i = 0; i < p1.size(); i++) {
-                    PrivacyMetric m1 = p1.get(i);
-                    PrivacyMetric m2 = p2.get(i);
-                    m1.update(m2);
-                }
-
-                return p1;
-            }
-        }).filter(new Function<Tuple2<String, List<PrivacyMetric>>, Boolean>() {
-            @Override
-            public Boolean call(Tuple2<String, List<PrivacyMetric>> s) throws Exception {
-                return checkConstraints(s._2(), privacyConstraints);
-            }
-        }).map(new Function<Tuple2<String, List<PrivacyMetric>>, Long>() {
-            @Override
-            public Long call(Tuple2<String, List<PrivacyMetric>> s) throws Exception {
-                for(PrivacyMetric metric: s._2()) {
-                    if (metric instanceof KAnonymityMetric) {
-                        return ((KAnonymityMetric)metric).getCount();
+        // Map each string to (key, metrics) tuple encoded as a string pair, group by key, then check constraints
+        Dataset<Long> counters = input
+                .map((MapFunction<String, Tuple2<String, List<PrivacyMetric>>>) s ->
+                        createMapToPair(s, delimiter, quoteChar, columnInformationList, privacyMetrics,
+                                quasiColumns, sensitiveColumns, levels, privacyConstraintsContentRequirements),
+                        SparkEncoders.javaSerOf(Tuple2.class))
+                .groupByKey((MapFunction<Tuple2<String, List<PrivacyMetric>>, String>) Tuple2::_1, Encoders.STRING())
+                .reduceGroups((ReduceFunction<Tuple2<String, List<PrivacyMetric>>>) (p1, p2) -> {
+                    for (int i = 0; i < p1._2().size(); i++) {
+                        p1._2().get(i).update(p2._2().get(i));
                     }
-                }
-
-                return 0L;
-            }
-        });
+                    return p1;
+                })
+                .map((MapFunction<Tuple2<String, Tuple2<String, List<PrivacyMetric>>>, Long>) kv -> {
+                    Tuple2<String, List<PrivacyMetric>> val = kv._2();
+                    if (!checkConstraints(val._2(), privacyConstraints)) {
+                        return 0L;
+                    }
+                    for (PrivacyMetric metric : val._2()) {
+                        if (metric instanceof KAnonymityMetric) {
+                            return ((KAnonymityMetric) metric).getCount();
+                        }
+                    }
+                    return 0L;
+                }, Encoders.LONG())
+                .filter((org.apache.spark.api.java.function.FilterFunction<Long>) v -> v > 0);
 
         Long suppressed = 0L;
 
         long countersCount = counters.count();
 
         if (countersCount == 1) {
-            suppressed = counters.collect().get(0);
-        }
-        else if (countersCount > 0) {
-            suppressed = counters.reduce(new Function2<Long, Long, Long>() {
-                @Override
-                public Long call(Long a, Long b) throws Exception {
-                    return a + b;
-                }
-            });
+            suppressed = counters.first();
+        } else if (countersCount > 0) {
+            suppressed = counters.reduce((org.apache.spark.api.java.function.ReduceFunction<Long>) (a, b) -> a + b);
         }
 
         logger.info("Suppression for node: " + node.toString() + " is " + (100.0 * (double) suppressed / (double) inputSize));
         return 100.0 * (double) suppressed / (double) inputSize;
     }
 
-    public SparkAnonymityChecker(JavaRDD<String> input, Long inputSize, List<ColumnInformation> columnInformationList,
+    public SparkAnonymityChecker(Dataset<String> input, Long inputSize, List<ColumnInformation> columnInformationList,
                                  List<PrivacyConstraint> privacyConstraints, char delimiter, char quoteChar) {
         this.input = input;
         this.privacyConstraints = privacyConstraints;
@@ -187,9 +179,8 @@ public class SparkAnonymityChecker implements AnonymityChecker, Serializable {
         this.sensitiveColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.SENSITIVE);
         this.privacyConstraintsContentRequirements = AnonymizationUtils.buildPrivacyConstraintContentRequirements(privacyConstraints);
 
-
         this.privacyMetrics = new ArrayList<>();
-        for(PrivacyConstraint constraint: privacyConstraints) {
+        for (PrivacyConstraint constraint : privacyConstraints) {
             this.privacyMetrics.add(constraint.getMetricInstance());
         }
     }

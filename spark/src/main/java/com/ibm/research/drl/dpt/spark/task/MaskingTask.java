@@ -34,9 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.api.java.UDF1;
-import org.apache.spark.sql.api.java.UDF2;
-import org.apache.spark.sql.api.java.UDF3;
+import org.apache.spark.sql.expressions.UserDefinedFunction;
 import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
@@ -56,7 +54,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.lit;
-import static org.apache.spark.sql.functions.udf;
 
 public class MaskingTask extends SparkTaskToExecute {
     private static final Logger logger = LoggerFactory.getLogger(MaskingTask.class);
@@ -165,10 +162,10 @@ public class MaskingTask extends SparkTaskToExecute {
         final FieldRelationship relationship = taskOptions.getPredefinedRelationships().get(fieldName);
 
         if (relationship == null) {
-            UDF1<String, String> mask = provider::mask;
+            UserDefinedFunction maskUdf = functions.udf((String s) -> provider.mask(s), DataTypes.StringType);
 
             return dataset.withColumn(target.getTargetPath(),
-                    udf(mask, DataTypes.StringType).apply(
+                    maskUdf.apply(
                             dataset.col(fieldName).cast(DataTypes.StringType)
                     ).cast(targetDataType));
         } else {
@@ -177,61 +174,61 @@ public class MaskingTask extends SparkTaskToExecute {
 
             return switch (relationship.getRelationshipType()) {
                 case KEY -> {
-                    UDF2<String, String, String> keyedUDF = provider::maskWithKey;
+                    UserDefinedFunction keyedUdf = functions.udf((String a, String b) -> provider.maskWithKey(a, b), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(keyedUDF, DataTypes.StringType).apply(
+                            keyedUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
                 }
                 case DISTANCE -> {
-                    UDF3<String, String, String, String> distanceUDF = provider::maskDistance;
+                    UserDefinedFunction distanceUdf = functions.udf((String a, String b, String c) -> provider.maskDistance(a, b, c), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(distanceUDF, DataTypes.StringType).apply(
+                            distanceUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
                 }
                 case EQUALS -> {
-                    UDF2<String, String, String> equalUDF = provider::maskEqual;
+                    UserDefinedFunction equalUdf = functions.udf((String a, String b) -> provider.maskEqual(a, b), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(equalUDF, DataTypes.StringType).apply(
+                            equalUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
                 }
                 case GREATER -> {
-                    UDF3<String, String, String, String> greaterUDF = provider::maskGreater;
+                    UserDefinedFunction greaterUdf = functions.udf((String a, String b, String c) -> provider.maskGreater(a, b, c), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(greaterUDF, DataTypes.StringType).apply(
+                            greaterUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
                 }
                 case LESS -> {
-                    UDF3<String, String, String, String> lesserUDF = provider::maskLess;
+                    UserDefinedFunction lesserUdf = functions.udf((String a, String b, String c) -> provider.maskLess(a, b, c), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(lesserUDF, DataTypes.StringType).apply(
+                            lesserUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)
                             ).cast(targetDataType));
                 }
                 case LINKED -> {
-                    UDF3<String, String, ProviderType, String> linkedUDF = provider::maskLinked;
+                    UserDefinedFunction linkedUdf = functions.udf((String a, String b, ProviderType t) -> provider.maskLinked(a, b, t), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(linkedUDF, DataTypes.StringType).apply(
+                            linkedUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     lit(relationship.getOperands()[0].getType())
                             ).cast(targetDataType));
                 }
                 case RATIO -> {
-                    UDF3<String, String, String, String> ratioUDF = provider::maskWithRatio;
+                    UserDefinedFunction ratioUdf = functions.udf((String a, String b, String c) -> provider.maskWithRatio(a, b, c), DataTypes.StringType);
                     yield dataset.withColumn(target.getTargetPath(),
-                            udf(ratioUDF, DataTypes.StringType).apply(
+                            ratioUdf.apply(
                                     dataset.col(fieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldName).cast(DataTypes.StringType),
                                     dataset.col(operandFieldPreservedValueName).cast(DataTypes.StringType)

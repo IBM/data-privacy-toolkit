@@ -27,9 +27,7 @@ import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.spark.api.java.JavaDoubleRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -70,9 +68,11 @@ public class DistributionExtractor implements Serializable {
             final SparkSession spark = SparkUtils.createSparkSession("DistributionExtractor");
             final Dataset<Row> dataset = SparkUtils.createDataset(spark, cmd.getOptionValue("i"), inputFormat, datasetOptions, cmd.getOptionValue("basePath"));
 
-            JavaRDD<Row> data = extractDistribution(dataset, configuration);
+            Dataset<Row> data = extractDistribution(dataset, configuration);
 
-            JavaDoubleRDD numericData = data.mapToDouble(r -> Double.parseDouble(r.get(0).toString()));
+            Dataset<Double> numericData = data.map(
+                    (MapFunction<Row, Double>) r -> Double.parseDouble(r.get(0).toString()),
+                    org.apache.spark.sql.Encoders.DOUBLE());
 
             boolean remoteOutput = cmd.hasOption("remoteOutput");
             final String outputPath = cmd.getOptionValue("o");
@@ -81,8 +81,8 @@ public class DistributionExtractor implements Serializable {
             if (numericData.isEmpty()) {
                 binsStrings = extractActualValues(numericData);
             } else {
-                final double m = numericData.min();
-                final double M = numericData.max();
+                final double m = numericData.reduce((org.apache.spark.api.java.function.ReduceFunction<Double>) (a, b) -> Math.min(a, b));
+                final double M = numericData.reduce((org.apache.spark.api.java.function.ReduceFunction<Double>) (a, b) -> Math.max(a, b));
 
                 if (null != configuration.getBinningCondition()) {
                     binsStrings = applyBinningIfRequired(numericData, m, M, configuration.getBinningCondition());
@@ -94,7 +94,7 @@ public class DistributionExtractor implements Serializable {
                     }
                 }
 
-                final List<String> dataForCDF = extractBins(numericData, m, M, Math.min(10000, numericData.count()), true);
+                final List<String> dataForCDF = extractBins(numericData, m, M, Math.min(10000, (double) numericData.count()), true);
                 final List<Tuple<Double, Double>> numbersForCDF = dataForCDF.parallelStream().map (x -> {
                     String[] toks = x.split(",");
                     return new Tuple<>(Double.parseDouble(toks[0]), Double.parseDouble(toks[1]));
@@ -125,7 +125,7 @@ public class DistributionExtractor implements Serializable {
         }
     }
 
-    private static JavaRDD<Row> extractDistribution(Dataset<Row> dataset, DistributionExtractorOptions configuration) {
+    private static Dataset<Row> extractDistribution(Dataset<Row> dataset, DistributionExtractorOptions configuration) {
         if (containsCustomExtraction(configuration)) {
             return executeCustomDistributionExtraction(dataset, configuration);
         } else {
@@ -143,11 +143,11 @@ public class DistributionExtractor implements Serializable {
 
             String valueColumnName = extractDistributionColumn(configuration.getThresholds());
 
-            return histograms.where(col(valueColumnName).isNotNull()).javaRDD();
+            return histograms.where(col(valueColumnName).isNotNull());
         }
     }
 
-    private static JavaRDD<Row> executeCustomDistributionExtraction(Dataset<Row> dataset, DistributionExtractorOptions configuration) {
+    private static Dataset<Row> executeCustomDistributionExtraction(Dataset<Row> dataset, DistributionExtractorOptions configuration) {
         DistributionExtractorOptions.ProjectedExpression expression = getCustomExpression(configuration);
         String query = getExpression(expression);
         String tableName = getTableName(expression);
@@ -155,9 +155,9 @@ public class DistributionExtractor implements Serializable {
 
         dataset.createOrReplaceTempView(tableName);
 
-        Dataset<Row> response = dataset.sqlContext().sql(query).select(col(columnName));
+        Dataset<Row> response = dataset.sparkSession().sql(query).select(col(columnName));
 
-        return response.toJavaRDD();
+        return response;
     }
 
     private static String getColumnName(DistributionExtractorOptions.ProjectedExpression expression) {
@@ -195,7 +195,7 @@ public class DistributionExtractor implements Serializable {
     }
 
 
-    private static List<String> applyBinningIfRequired(JavaDoubleRDD data, double min, double max, DistributionExtractorOptions.BinningCondition options) {
+    private static List<String> applyBinningIfRequired(Dataset<Double> data, double min, double max, DistributionExtractorOptions.BinningCondition options) {
         switch (options.getType()) {
             case SIZE:
                 return extractBinsBySize(data, min, max, options.getBinSize(), options.isReturnMidPoint());
@@ -207,21 +207,28 @@ public class DistributionExtractor implements Serializable {
         throw new IllegalArgumentException("Unknown binning type");
     }
 
-    private static List<String> extractBinsBySize(JavaDoubleRDD data, double m, double M, double binSize, boolean returnMidpoint) {
-        JavaRDD<Tuple2<double[], Long>> bins = data.mapToPair(value -> {
-            double scaledValue = value - m;
-            return new Tuple2<>((int) Math.floor(scaledValue / binSize), 1L);
-        }).reduceByKey(Long::sum).map(createRanges(binSize, m, M));
+    private static List<String> extractBinsBySize(Dataset<Double> data, double m, double M, double binSize, boolean returnMidpoint) {
+        Dataset<Tuple2<double[], Long>> bins = data
+                .map((MapFunction<Double, Tuple2<Integer, Long>>) value -> {
+                    double scaledValue = value - m;
+                    return new Tuple2<>((int) Math.floor(scaledValue / binSize), 1L);
+                }, com.ibm.research.drl.dpt.spark.utils.SparkEncoders.javaSerOf(Tuple2.class))
+                .groupByKey((MapFunction<Tuple2<Integer, Long>, Integer>) Tuple2::_1, org.apache.spark.sql.Encoders.INT())
+                .reduceGroups((org.apache.spark.api.java.function.ReduceFunction<Tuple2<Integer, Long>>) (a, b) -> new Tuple2<>(a._1(), a._2() + b._2()))
+                .map((MapFunction<Tuple2<Integer, Tuple2<Integer, Long>>, Tuple2<double[], Long>>) kv -> createRanges(binSize, m, M).call(kv._2()),
+                        com.ibm.research.drl.dpt.spark.utils.SparkEncoders.javaSerOf(Tuple2.class));
 
         if (returnMidpoint) {
-            return bins.map(tuple -> "" + (tuple._1()[0] + tuple._1()[1])/2.0 + "," + tuple._2()).collect();
+            return bins.map((MapFunction<Tuple2<double[], Long>, String>) tuple -> "" + (tuple._1()[0] + tuple._1()[1]) / 2.0 + "," + tuple._2(),
+                    org.apache.spark.sql.Encoders.STRING()).collectAsList();
         }
 
-        return bins.map(tuple -> "" + tuple._1()[0] + "," + tuple._1()[1] + "," + tuple._2()).collect();
+        return bins.map((MapFunction<Tuple2<double[], Long>, String>) tuple -> "" + tuple._1()[0] + "," + tuple._1()[1] + "," + tuple._2(),
+                org.apache.spark.sql.Encoders.STRING()).collectAsList();
     }
 
-    private static List<String> extractActualValues(JavaDoubleRDD values) {
-        return values.map(Object::toString).collect();
+    private static List<String> extractActualValues(Dataset<Double> values) {
+        return values.map((MapFunction<Double, String>) Object::toString, org.apache.spark.sql.Encoders.STRING()).collectAsList();
     }
 
     public static List<Tuple<Double,Double>> calculateCDF(List<Tuple<Double,Double>> numbersForCDF) {
@@ -264,23 +271,30 @@ public class DistributionExtractor implements Serializable {
         return thresholds.iterator().next().getColumnName();
     }
 
-    private static List<String> extractBins(JavaDoubleRDD numericData, double m, double M, double numberOfBins, boolean returnMidpoint) {
+    private static List<String> extractBins(Dataset<Double> numericData, double m, double M, double numberOfBins, boolean returnMidpoint) {
         final double range = M - m;
         final double binSize = range / numberOfBins;
 
-        JavaRDD<Tuple2<double[], Long>> bins = numericData.mapToPair(value -> {
-            double scaledValue = value - m;
-            return new Tuple2<>((int) Math.floor(scaledValue / binSize), 1L);
-        }).reduceByKey(Long::sum).map(createRanges(binSize, m, M));
+        Dataset<Tuple2<double[], Long>> bins = numericData
+                .map((MapFunction<Double, Tuple2<Integer, Long>>) value -> {
+                    double scaledValue = value - m;
+                    return new Tuple2<>((int) Math.floor(scaledValue / binSize), 1L);
+                }, com.ibm.research.drl.dpt.spark.utils.SparkEncoders.javaSerOf(Tuple2.class))
+                .groupByKey((MapFunction<Tuple2<Integer, Long>, Integer>) Tuple2::_1, org.apache.spark.sql.Encoders.INT())
+                .reduceGroups((org.apache.spark.api.java.function.ReduceFunction<Tuple2<Integer, Long>>) (a, b) -> new Tuple2<>(a._1(), a._2() + b._2()))
+                .map((MapFunction<Tuple2<Integer, Tuple2<Integer, Long>>, Tuple2<double[], Long>>) kv -> createRanges(binSize, m, M).call(kv._2()),
+                        com.ibm.research.drl.dpt.spark.utils.SparkEncoders.javaSerOf(Tuple2.class));
 
         if (returnMidpoint) {
-            return bins.map(tuple -> "" + (tuple._1()[0] + tuple._1()[1])/2.0 + "," + tuple._2()).collect();
+            return bins.map((MapFunction<Tuple2<double[], Long>, String>) tuple -> "" + (tuple._1()[0] + tuple._1()[1]) / 2.0 + "," + tuple._2(),
+                    org.apache.spark.sql.Encoders.STRING()).collectAsList();
         }
-        
-        return bins.map(tuple -> "" + tuple._1()[0] + "," + tuple._1()[1] + "," + tuple._2()).collect();
+
+        return bins.map((MapFunction<Tuple2<double[], Long>, String>) tuple -> "" + tuple._1()[0] + "," + tuple._1()[1] + "," + tuple._2(),
+                org.apache.spark.sql.Encoders.STRING()).collectAsList();
     }
 
-    private static Function<Tuple2<Integer, Long>, Tuple2<double[], Long>> createRanges(final double binSize, final double min, double max) {
+    private static org.apache.spark.api.java.function.Function<Tuple2<Integer, Long>, Tuple2<double[], Long>> createRanges(final double binSize, final double min, double max) {
         return idCount -> {
             int id = idCount._1();
             double[] ranges = new double[2];

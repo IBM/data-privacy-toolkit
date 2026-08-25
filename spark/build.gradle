@@ -61,8 +61,7 @@ ext {
     commons_validator_version = '1.10.1'
     commons_cli_version = "1.11.0"
 
-    scala_version = '2.13'
-    spark_version = '3.5.8'
+    spark_version = '4.0.0'
 
     poi_version = "5.4.0"
 }
@@ -78,8 +77,8 @@ dependencies {
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "org.apache.commons:commons-csv:${commons_csv_version}"
 
-    implementation "org.apache.spark:spark-core_${scala_version}:${spark_version}"
-    implementation "org.apache.spark:spark-sql_${scala_version}:${spark_version}"
+    implementation "org.apache.spark:spark-core_2.13:${spark_version}"
+    implementation "org.apache.spark:spark-sql_2.13:${spark_version}"
 
     implementation "org.apache.commons:commons-text:${commons_text_version}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
@@ -99,8 +98,24 @@ tasks.withType(JavaCompile).configureEach {
 
 test {
     useJUnitPlatform()
-    minHeapSize = "5g"
-    maxHeapSize = "10g"
+    minHeapSize = "512m"
+    maxHeapSize = "4g"
+    jvmArgs(
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.lang.invoke=ALL-UNNAMED',
+        '--add-opens=java.base/java.lang.reflect=ALL-UNNAMED',
+        '--add-opens=java.base/java.io=ALL-UNNAMED',
+        '--add-opens=java.base/java.net=ALL-UNNAMED',
+        '--add-opens=java.base/java.nio=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED',
+        '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+        '--add-opens=java.base/sun.nio.cs=ALL-UNNAMED',
+        '--add-opens=java.base/sun.security.action=ALL-UNNAMED',
+        '--add-opens=java.base/sun.util.calendar=ALL-UNNAMED',
+        '--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED'
+    )
 
     testLogging {
         events 'failed'

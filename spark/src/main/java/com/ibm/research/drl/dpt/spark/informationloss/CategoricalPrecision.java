@@ -26,20 +26,19 @@ import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetricO
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
 import org.apache.spark.util.DoubleAccumulator;
 
 import java.util.List;
 
 public class CategoricalPrecision implements InformationMetricSpark {
-    private JavaRDD<String> anonymized;
-    private JavaRDD<String> original;
+    private Dataset<String> anonymized;
     private List<ColumnInformation> columnInformationList;
 
     private double getLossCategorical(String value, ColumnInformation columnInformation) {
-        CategoricalInformation categoricalInformation = (CategoricalInformation)columnInformation;
+        CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
 
         int level = categoricalInformation.getHierarchy().getNodeLevel(value);
 
@@ -51,12 +50,12 @@ public class CategoricalPrecision implements InformationMetricSpark {
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "Categorical Precision";
     }
 
     @Override
-    public String getShortName(){
+    public String getShortName() {
         return "CP";
     }
 
@@ -89,38 +88,36 @@ public class CategoricalPrecision implements InformationMetricSpark {
     public Double report() {
         final List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
 
-        final DoubleAccumulator cells = this.anonymized.rdd().sparkContext().doubleAccumulator();
+        final DoubleAccumulator cells = this.anonymized.sparkSession().sparkContext().doubleAccumulator();
 
-        double precision = this.anonymized.map((Function<String, Double>) s -> {
-            CSVRecord record = CSVParser.parse(s, CSVFormat.RFC4180).getRecords().get(0);
+        double precision = this.anonymized
+                .map((MapFunction<String, Double>) s -> {
+                    CSVRecord record = CSVParser.parse(s, CSVFormat.RFC4180).getRecords().get(0);
 
-            double precision1 = 0.0;
+                    double precision1 = 0.0;
 
-            for(int  j: quasiColumns) {
-                ColumnInformation columnInformation = columnInformationList.get(j);
-                if (!columnInformation.isCategorical()) {
-                    continue;
-                }
+                    for (int j : quasiColumns) {
+                        ColumnInformation columnInformation = columnInformationList.get(j);
+                        if (!columnInformation.isCategorical()) {
+                            continue;
+                        }
+                        cells.add(1.0);
+                        double loss = getLossCategorical(record.get(j), columnInformation) * columnInformation.getWeight();
+                        precision1 += loss;
+                    }
 
-                cells.add(1.0);
+                    return precision1;
+                }, Encoders.DOUBLE())
+                .reduce((org.apache.spark.api.java.function.ReduceFunction<Double>) (a, b) -> a + b);
 
-                double loss = getLossCategorical(record.get(j), columnInformation) * columnInformation.getWeight();
-                precision1 += loss;
-            }
-
-            return precision1;
-        }).reduce((Function2<Double, Double, Double>) (aDouble, aDouble2) -> aDouble + aDouble2);
-
-        return (precision) / cells.value();
-
+        return precision / cells.value();
     }
 
     @Override
-    public InformationMetricSpark initialize(JavaRDD<String> original, JavaRDD<String> anonymized, List<ColumnInformation> columnInformationList,
+    public InformationMetricSpark initialize(Dataset<String> original, Dataset<String> anonymized, List<ColumnInformation> columnInformationList,
                                              int k, InformationMetricOptions options) {
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;
-
         return this;
     }
 }

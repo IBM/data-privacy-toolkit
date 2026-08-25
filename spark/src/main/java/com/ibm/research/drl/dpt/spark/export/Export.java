@@ -20,7 +20,6 @@ package com.ibm.research.drl.dpt.spark.export;
 
 
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.DataFrameWriter;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -53,10 +52,6 @@ public class Export {
             case PARQUET -> writer.parquet(outputFile);
             default -> writer.text(outputFile);
         }
-    }
-
-    public static void doExport(JavaRDD<String> rdd, String outputFile) {
-        rdd.saveAsTextFile(outputFile);
     }
 
     public static void doExport(Dataset<Row> dataset, DataTypeFormat exportFormat, String outputFile) {

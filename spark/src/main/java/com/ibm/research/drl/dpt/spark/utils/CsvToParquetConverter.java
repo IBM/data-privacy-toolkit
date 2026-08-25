@@ -27,7 +27,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.ForeachFunction;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.DataFrameReader;
@@ -103,23 +102,25 @@ public class CsvToParquetConverter {
             final String finalQuoteChar;
             final boolean finalHasHeader;
             
-            JavaRDD<String> stringRDD = null;
-            
-            if(quoteMode.equals("NONE")) {
-                stringRDD = spark.read().textFile(cmd.getOptionValue("i")).javaRDD();
+            Dataset<String> stringDS = null;
+
+            if (quoteMode.equals("NONE")) {
+                stringDS = spark.read().textFile(cmd.getOptionValue("i"));
                 
                 finalDelimiter = ",";
                 finalQuoteChar = "\"";
                 finalHasHeader = false;
                
                 if (userProvidedHasHeader) {
-                    stringRDD = stringRDD.zipWithIndex().filter( tuple -> (tuple._2 > 0)).keys();
+                    stringDS = spark.createDataset(
+                            stringDS.toJavaRDD().zipWithIndex().filter(t -> t._2() > 0).map(scala.Tuple2::_1).rdd(),
+                            org.apache.spark.sql.Encoders.STRING());
                 }
-                
+
                 logger.info("manually parsing data");
                 final char delimForQuoteNone = userProviderDelimiter.charAt(0);
-                
-                stringRDD = stringRDD.map( line -> {
+
+                stringDS = stringDS.map((org.apache.spark.api.java.function.MapFunction<String, String>) line -> {
                     CSVParser csvParser = CSVParser.parse(line,
                             CSVFormat.RFC4180.withDelimiter(delimForQuoteNone).
                                     withQuote(userProvidedQuoteChar.isEmpty() ? null : userProvidedQuoteChar.charAt(0)).
@@ -137,7 +138,7 @@ public class CsvToParquetConverter {
 
                         return stringWriter.toString();
                     }
-                });
+                }, org.apache.spark.sql.Encoders.STRING());
             } else {
                 finalDelimiter = userProviderDelimiter;
                 finalQuoteChar = userProvidedQuoteChar;
@@ -178,7 +179,7 @@ public class CsvToParquetConverter {
             Dataset<Row> dataset;
             
             if (quoteMode.equals("NONE")) {
-                dataset = dataFrameReader.schema(schema).csv(spark.createDataset(stringRDD.rdd(), Encoders.STRING()));
+                dataset = dataFrameReader.schema(schema).csv(stringDS);
             } else {
                 dataset = dataFrameReader.schema(schema).csv(cmd.getOptionValue("i"));
             }

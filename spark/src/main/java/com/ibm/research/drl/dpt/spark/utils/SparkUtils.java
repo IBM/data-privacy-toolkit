@@ -33,11 +33,6 @@ import org.apache.commons.cli.Options;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.DataFrameReader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -104,42 +99,12 @@ public class SparkUtils {
         }
     }
 
-    /**
-     * Create spark context spark context.
-     *
-     * @return the spark context
-     */
-    public static SparkContext createSparkContext(String appName) {
-        SparkConf configuration = new SparkConf().setAppName(appName);
-
-        configuration.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-        configuration.registerKryoClasses(new Class[]{ProviderType.class});
-
-        return new SparkContext(configuration);
-    }
-
     public static SparkSession createSparkSession(String appName) {
         return SparkSession.builder().appName(appName).getOrCreate();
     }
 
     public static SparkSession createSparkSession(String appName, String master) {
         return SparkSession.builder().appName(appName).master(master).getOrCreate();
-    }
-
-    /**
-     * Create rdd java rdd.
-     *
-     * @param context the context
-     * @param input   the input
-     * @return the java rdd
-     */
-    public static JavaRDD<String> createTextFileRDD(SparkContext context, String input) {
-        RDD<String> rdd = context.textFile(input, 16);
-        return rdd.toJavaRDD();
-    }
-
-    public static JavaRDD<String> createTextFileRDD(JavaSparkContext context, String input) {
-        return context.textFile(input);
     }
 
     public static InputStream createHDFSInputStream(String path) throws IOException {
