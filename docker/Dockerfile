@@ -7,7 +7,7 @@ ENV INPUT=/input \
     CONFDIR=/config \
     CONSISTENTDIR=/consistency
 
-RUN microdnf install -y java-21-openjdk-headless && microdnf clean all \
+RUN microdnf install -y shadow-utils java-21-openjdk-headless && microdnf clean all \
     && groupadd -r dpt && useradd -r -g dpt -s /sbin/nologin dpt \
     && mkdir -p /input /output /config /consistency \
     && chown -R dpt:dpt /input /output /config /consistency
