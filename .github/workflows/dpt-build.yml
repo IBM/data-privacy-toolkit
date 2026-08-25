@@ -1,4 +1,4 @@
-name: DataPrivacyToolkit-Toolkit
+name: DataPrivacyToolkit
 on:
   push:
     tags:

@@ -1,7 +1,7 @@
 name: Deploy Library
 on:
   workflow_run:
-    workflows: [DataPrivacyToolkit-Library]
+    workflows: [DataPrivacyToolkit]
     types:
       - completed
     branches: [main]

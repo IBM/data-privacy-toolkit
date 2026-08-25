@@ -1,7 +1,7 @@
 name: Deploy Toolkit
 on:
   workflow_run:
-    workflows: [DataPrivacyToolkit-Toolkit]
+    workflows: [DataPrivacyToolkit]
     types:
       - completed
     branches: [main]
