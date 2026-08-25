@@ -1,0 +1,98 @@
+name: DataPrivacyToolkit-Toolkit
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  library:
+    name: Library
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '21' ]
+        distribution: ['temurin', 'corretto', 'microsoft']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
+      - name: Run gradlew build
+        working-directory: ./library
+        run: ./gradlew build --no-daemon
+
+  spark:
+    name: Spark
+    needs: library
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '21' ]
+        distribution: ['temurin']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
+      - name: Run gradlew publish to maven local
+        working-directory: ./library
+        run: ./gradlew publishToMavenLocal --no-daemon
+      - name: Run gradlew build
+        working-directory: ./spark
+        run: ./gradlew build --no-daemon
+
+  rest:
+    name: REST
+    needs: library
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '21' ]
+        distribution: ['temurin', 'corretto', 'microsoft']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
+      - name: Run gradlew publish to maven local
+        working-directory: ./library
+        run: ./gradlew publishToMavenLocal --no-daemon
+      - name: Run gradlew build
+        working-directory: ./rest
+        run: ./gradlew build --no-daemon
+
+  docker:
+    name: Docker
+    needs: library
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '21' ]
+        distribution: ['temurin', 'corretto', 'microsoft']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: ${{ matrix.distribution }}
+          java-version: ${{ matrix.java }}
+          cache: 'gradle'
+      - name: Run gradlew publish to maven local
+        working-directory: ./library
+        run: ./gradlew publishToMavenLocal --no-daemon
+      - name: Run gradlew build
+        working-directory: ./docker
+        run: ./gradlew build --no-daemon
