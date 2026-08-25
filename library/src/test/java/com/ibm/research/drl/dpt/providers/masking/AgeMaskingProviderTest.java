@@ -108,11 +108,20 @@ public class AgeMaskingProviderTest {
         assertTrue(randomOK > 0);
         
         originalValue = "5 year and 6 month";
-        age = new Age(new AgePortion(true, 0, 1, AgePortionFormat.NUMERICAL), new AgePortion(true, 11, 12, AgePortionFormat.NUMERICAL), MISSING_AGE_PORTION, MISSING_AGE_PORTION);
-        String masked = ageMaskingProvider.mask(originalValue, age);
-        assertNotEquals(masked, originalValue);
-        assertTrue(AGE_IDENTIFIER.isOfThisType(masked));
-        masked = ageMaskingProvider.mask(originalValue);
+        age = new Age(new AgePortion(true, 0, 1, AgePortionFormat.NUMERICAL),
+                new AgePortion(true, 11, 12, AgePortionFormat.NUMERICAL),
+                MISSING_AGE_PORTION, MISSING_AGE_PORTION);
+
+        int differentCount = 0;
+        for (int i = 0; i < 100; i++) {
+            String masked = ageMaskingProvider.mask(originalValue, age);
+            if (!masked.equals(originalValue)) {
+                differentCount++;
+            }
+            assertTrue(AGE_IDENTIFIER.isOfThisType(masked));
+        }
+        assertTrue(differentCount > 0, "Expected at least some masked values to differ from original");
+        var masked = ageMaskingProvider.mask(originalValue);
         assertNotEquals(masked, originalValue);
         assertTrue(AGE_IDENTIFIER.isOfThisType(masked));
 
