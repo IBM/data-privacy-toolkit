@@ -22,6 +22,8 @@ import com.ibm.research.drl.dpt.models.SSNUS;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SSNUSIdentifierTest {
@@ -55,12 +57,12 @@ public class SSNUSIdentifierTest {
     public void testWithPrefix() {
         SSNUSIdentifier identifier = new SSNUSIdentifier();
 
-        Tuple<String, Tuple<Boolean, Tuple<Integer, Integer>>>[] expectedResults = new Tuple[]{
+        List<Tuple<String, Tuple<Boolean, Tuple<Integer, Integer>>>> expectedResults = List.of(
                 new Tuple<>("SS # of 123-44-1234", new Tuple<>(true, new Tuple<>(8, 11))),
                 new Tuple<>("SS: 123-44-1234", new Tuple<>(true, new Tuple<>(4, 11)))
-        };
+        );
 
-        for(Tuple<String, Tuple<Boolean, Tuple<Integer, Integer>>> expectedResult: expectedResults) {
+        for (Tuple<String, Tuple<Boolean, Tuple<Integer, Integer>>> expectedResult : expectedResults) {
             String value = expectedResult.getFirst();
             Tuple<Boolean, Tuple<Integer, Integer>> expected = expectedResult.getSecond();
 

@@ -180,6 +180,7 @@ public class CityMaskingProviderTest {
             long startMillis = System.currentTimeMillis();
 
             for (int i = 0; i < N; i++) {
+                @SuppressWarnings("unused")
                 String maskedCity = maskingProvider.mask(originalCity);
             }
 
