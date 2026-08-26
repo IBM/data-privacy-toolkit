@@ -20,6 +20,7 @@ package com.ibm.research.drl.dpt.anonymization;
 
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
+/** A partition (equivalence class) of rows used during anonymization. */
 public interface Partition {
     /**
      * Size int.

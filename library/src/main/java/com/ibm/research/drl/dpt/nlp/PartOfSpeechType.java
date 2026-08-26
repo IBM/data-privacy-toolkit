@@ -144,6 +144,12 @@ public final class PartOfSpeechType implements Serializable {
         this.type = type;
     }
 
+    /**
+     * Returns the {@code PartOfSpeechType} for the given tag string, or {@link #UNKNOWN} if not recognised.
+     *
+     * @param type the POS tag string
+     * @return the corresponding {@code PartOfSpeechType}
+     */
     public static PartOfSpeechType valueOf(String type) {
         PartOfSpeechType pos = knownTypes.get(type);
 
