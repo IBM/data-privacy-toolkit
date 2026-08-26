@@ -153,3 +153,5 @@ hs_err_pid*
 build/.vscode
 .vscode
 __pycache__
+**/build/
+gradle.properties
