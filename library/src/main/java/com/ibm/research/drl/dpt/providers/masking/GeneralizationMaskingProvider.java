@@ -29,6 +29,7 @@ import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Objects;
 
+/** Masking provider that generalises values using a predefined hierarchy. */
 public class GeneralizationMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(GeneralizationMaskingProvider.class);
 
@@ -36,6 +37,14 @@ public class GeneralizationMaskingProvider implements MaskingProvider {
     private final GeneralizationHierarchy hierarchy;
     private final boolean randomizeOnFail;
 
+    /**
+     * Constructs a GeneralizationMaskingProvider from configuration.
+     *
+     * @param random               the secure random instance (unused, for API consistency)
+     * @param maskingConfiguration the masking configuration
+     * @throws RuntimeException     if the hierarchy level is negative
+     * @throws IllegalArgumentException if the named hierarchy is not found
+     */
     public GeneralizationMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.hierarchyLevel = maskingConfiguration.getIntValue("generalization.masking.hierarchyLevel");
 

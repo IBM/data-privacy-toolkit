@@ -28,16 +28,24 @@ import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces gender values with random gender values. */
 public class GenderMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(GenderMaskingProvider.class);
 
     private static final GenderManager genderManager = GenderManager.getInstance();
     private final int failMode;
 
+    /** Constructs a GenderMaskingProvider with default configuration. */
     public GenderMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a GenderMaskingProvider with the given configuration.
+     *
+     * @param random               the secure random instance (unused, for API consistency)
+     * @param maskingConfiguration the masking configuration
+     */
     public GenderMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.failMode = maskingConfiguration.getIntValue("fail.mode");
     }

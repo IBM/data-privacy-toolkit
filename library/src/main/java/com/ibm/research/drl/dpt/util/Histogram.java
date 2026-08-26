@@ -25,12 +25,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A map from values to their occurrence counts.
+ *
+ * @param <T> the type of values counted
+ */
 public class Histogram<T> extends HashMap<T, Long> {
 
+    /** Constructs an empty Histogram. */
     public Histogram() {
         super();
     }
 
+    /**
+     * Merges another histogram into this one by summing counts.
+     *
+     * @param other the histogram to merge in
+     */
     public void update(Histogram<T> other) {
         for (Map.Entry<T, Long> pair : other.entrySet()) {
             T key = pair.getKey();

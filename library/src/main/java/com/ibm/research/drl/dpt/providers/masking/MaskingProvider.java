@@ -156,6 +156,13 @@ public interface MaskingProvider extends Serializable {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks the identifier using grep-and-mask semantics with the given target tokens.
+     *
+     * @param identifier  the value to mask
+     * @param targetToken the list of tokens to look up
+     * @return the masked value
+     */
     default String maskGrepAndMask(String identifier, List<String> targetToken) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }

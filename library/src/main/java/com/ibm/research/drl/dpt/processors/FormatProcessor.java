@@ -103,6 +103,12 @@ public abstract class FormatProcessor implements Serializable {
         }
     }
 
+    /**
+     * Returns a list of fields to suppress from the masking options.
+     *
+     * @param dataMaskingOptions the masking options
+     * @return list of field names to suppress
+     */
     protected List<String> getFieldsToSuppress(DataMaskingOptions dataMaskingOptions) {
         List<String> fieldsToSuppress = new ArrayList<>();
         for (Map.Entry<String, DataMaskingTarget> toBeMasked : dataMaskingOptions.getToBeMasked().entrySet()) {
@@ -225,6 +231,14 @@ public abstract class FormatProcessor implements Serializable {
         }
     }
 
+    /**
+     * Extracts records from an input stream using default settings.
+     *
+     * @param dataset     the input stream to read from
+     * @param dataOptions the dataset options
+     * @return an iterable of records
+     * @throws IOException if reading fails
+     */
     protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions) throws IOException {
         return extractRecords(dataset, dataOptions, -1);
     }
@@ -240,12 +254,26 @@ public abstract class FormatProcessor implements Serializable {
      */
     protected abstract Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException;
 
+    /**
+     * Increments the counter for the given type in the column type map.
+     *
+     * @param columnTypes the map of type name to counter
+     * @param type        the type name to increment
+     */
     protected void updateCounter(Map<String, Counter> columnTypes, String type) {
         Counter counter = columnTypes.computeIfAbsent(type, ignored -> new Counter(0L));
 
         counter.counter += 1;
     }
 
+    /**
+     * Assembles an identification report from collected type counters.
+     *
+     * @param allTypes    map of field to type-name counter maps
+     * @param columnTypes map of column field to type-name counter maps
+     * @param recordCount number of records processed
+     * @return the assembled identification report
+     */
     protected IdentificationReport assembleReport(Map<String, Map<String, Counter>> allTypes, Map<String, Map<String, Counter>> columnTypes, long recordCount) {
         Map<String, List<IdentifiedType>> results = allTypes.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -271,6 +299,13 @@ public abstract class FormatProcessor implements Serializable {
         );
     }
 
+    /**
+     * Checks field names of a record against a collection of identifiers.
+     *
+     * @param record      the record whose field names to check
+     * @param identifiers the identifiers to match against
+     * @return a map of field reference to type-name counter maps
+     */
     protected Map<String, Map<String, Counter>> checkFieldNames(Record record, Collection<Identifier> identifiers) {
         Map<String, Map<String, Counter>> types = new HashMap<>();
 
@@ -294,6 +329,12 @@ public abstract class FormatProcessor implements Serializable {
         return types;
     }
 
+    /**
+     * Extracts the field name from a field reference.
+     *
+     * @param fieldName the raw field reference
+     * @return the extracted field name
+     */
     protected String extractFieldName(String fieldName) {
         return fieldName;
     }

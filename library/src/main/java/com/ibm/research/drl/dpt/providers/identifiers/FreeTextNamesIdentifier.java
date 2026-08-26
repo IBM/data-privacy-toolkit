@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/** Identifier for medical names and person names in free text. */
 public class FreeTextNamesIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
 
     //JMS, DMY, 
@@ -171,6 +172,12 @@ public class FreeTextNamesIdentifier extends AbstractIdentifier implements Ident
     }
 
 
+    /**
+     * Returns whether the given token is a recognised medical title.
+     *
+     * @param data the token to check
+     * @return true if the token is a medical title
+     */
     public static boolean isMedicalTitle(String data) {
         if (titlesWithTrailingDots.contains(data)) {
             return true;

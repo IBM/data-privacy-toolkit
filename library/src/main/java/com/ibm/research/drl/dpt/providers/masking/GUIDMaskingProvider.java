@@ -23,6 +23,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import java.security.SecureRandom;
 import java.util.UUID;
 
+/** Masking provider that replaces values with randomly generated GUIDs. */
 public class GUIDMaskingProvider implements MaskingProvider {
 
     /**

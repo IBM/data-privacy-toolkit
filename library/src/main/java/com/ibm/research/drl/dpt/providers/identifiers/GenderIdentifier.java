@@ -22,7 +22,11 @@ import com.ibm.research.drl.dpt.managers.GenderManager;
 import com.ibm.research.drl.dpt.managers.Manager;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+/** Identifier for gender values. */
 public class GenderIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a GenderIdentifier. */
+    public GenderIdentifier() {}
     private static final GenderManager genderManager = GenderManager.getInstance();
 
     @Override

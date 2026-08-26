@@ -56,6 +56,15 @@ public interface FreeTextFormatProcessor {
         throw new UnsupportedOperationException("Not implemented for this file format");
     }
 
+    /**
+     * Applies a function to each identified entity in the document and writes the result.
+     *
+     * @param inputStream    the document input stream
+     * @param output         the output print stream
+     * @param identifier     the NLP annotator
+     * @param datasetOptions dataset options
+     * @param function       the function to apply to each identified entity
+     */
     default void applyFunction(InputStream inputStream, PrintStream output, NLPAnnotator identifier, DatasetOptions datasetOptions,
                                Function<IdentifiedEntity, String> function) {
         throw new UnsupportedOperationException("Not implemented for this file format");
