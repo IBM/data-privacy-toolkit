@@ -23,11 +23,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Collection;
 import java.util.Collections;
 
+/** Interface for data type identifiers that can recognise a specific type of value. */
 public interface Identifier {
     /**
-     * Gets type.
+     * Returns the provider type this identifier detects.
      *
-     * @return the type
+     * @return the provider type
      */
     ProviderType getType();
 

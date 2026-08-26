@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.models.Hospital;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces hospital names with random hospital names. */
 public class HospitalMaskingProvider implements MaskingProvider {
     private final static HospitalManager hospitalManager = HospitalManager.getInstance();
     private final boolean preserveCountry;

@@ -43,8 +43,18 @@ public interface Partition {
      */
     IPVDataset getMember();
 
+    /**
+     * Returns whether this partition has been anonymised.
+     *
+     * @return true if anonymous
+     */
     boolean isAnonymous();
 
+    /**
+     * Sets whether this partition has been anonymised.
+     *
+     * @param value true to mark as anonymous
+     */
     void setAnonymous(boolean value);
 }
 

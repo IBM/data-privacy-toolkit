@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 
+/** Manager for ICD v9 disease codes loaded from locale resources. */
 public class ICDv9Manager implements Manager {
 
     private static final Collection<ResourceEntry> resourceICDList =
@@ -43,10 +44,20 @@ public class ICDv9Manager implements Manager {
 
     private final static ICDv9Manager ICD_V9_MANAGER = new ICDv9Manager();
 
+    /**
+     * Returns the singleton instance of this manager.
+     *
+     * @return the singleton ICDv9Manager
+     */
     public static ICDv9Manager getInstance() {
         return ICD_V9_MANAGER;
     }
 
+    /**
+     * Returns the list of all ICD v9 entries.
+     *
+     * @return collection of ICD entries
+     */
     public Collection<ICD> getItemList() {
         return icdByCodeMap.getMap().values();
     }

@@ -23,7 +23,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+/** Factory for creating {@link InformationMetric} instances by short name. */
 public class InformationLossMetricFactory {
+
+    /** Not instantiable. */
+    private InformationLossMetricFactory() {}
+
     private static final List<InformationMetric> metricList = Arrays.asList(
             new AverageEquivalenceClassSize(),
             new CategoricalPrecision(),
@@ -35,10 +40,21 @@ public class InformationLossMetricFactory {
             new SensitiveSimilarityMeasure()
     );
 
+    /**
+     * Returns the list of all available information metrics.
+     *
+     * @return list of information metrics
+     */
     public static List<InformationMetric> getAvailableMetrics() {
         return metricList;
     }
 
+    /**
+     * Returns a new instance of the metric with the given short name.
+     *
+     * @param shortName the short name of the desired metric
+     * @return a new metric instance, or {@code null} if no matching metric is found
+     */
     public static InformationMetric getInstance(String shortName) {
         for (InformationMetric metric : metricList) {
             if (metric.getShortName().equals(shortName)) {

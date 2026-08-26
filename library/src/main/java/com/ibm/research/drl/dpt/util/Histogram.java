@@ -56,6 +56,13 @@ public class Histogram<T> extends HashMap<T, Long> {
         }
     }
 
+    /**
+     * Creates a histogram from a list of values.
+     *
+     * @param <K>    the value type
+     * @param values the list of values to count
+     * @return a histogram mapping each value to its count
+     */
     public static <K> Histogram<K> createHistogram(List<K> values) {
         Histogram<K> histogram = new Histogram<K>();
 
@@ -72,10 +79,25 @@ public class Histogram<T> extends HashMap<T, Long> {
         return histogram;
     }
 
+    /**
+     * Creates a histogram of the specified column in a dataset.
+     *
+     * @param dataset the dataset to read
+     * @param column  the column index to count
+     * @return a histogram mapping each value to its count
+     */
     public static Histogram<String> createHistogram(IPVDataset dataset, int column) {
         return createHistogram(dataset, column, false);
     }
 
+    /**
+     * Creates a histogram of the specified column in a dataset, optionally lower-casing values.
+     *
+     * @param dataset     the dataset to read
+     * @param column      the column index to count
+     * @param toLowercase whether to convert values to lower case before counting
+     * @return a histogram mapping each value to its count
+     */
     public static Histogram<String> createHistogram(IPVDataset dataset, int column, boolean toLowercase) {
         Histogram<String> histogram = new Histogram<>();
 

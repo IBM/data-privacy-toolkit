@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+/** Compiled JSON pointer expression used to locate and mutate nodes in a JSON tree. */
 public final class JSONPath implements Serializable {
     private final String pattern;
 
@@ -36,14 +37,33 @@ public final class JSONPath implements Serializable {
         this.pattern = pattern;
     }
 
+    /**
+     * Compiles a JSON pointer pattern.
+     *
+     * @param pattern the JSON pointer string (RFC 6901)
+     * @return the compiled JSONPath
+     */
     public static JSONPath compile(final String pattern) {
         return new JSONPath(pattern);
     }
 
+    /**
+     * Applies this path to the given JSON node and returns the referenced value.
+     *
+     * @param obj the root JSON node
+     * @return the referenced node, or {@code MissingNode} if not found
+     */
     public JsonNode apply(JsonNode obj) {
         return obj.at(pattern);
     }
 
+    /**
+     * Updates the value referenced by this path in the given JSON tree.
+     *
+     * @param obj   the root JSON node
+     * @param value the new value to set
+     * @return the (possibly mutated) root node
+     */
     public JsonNode update(JsonNode obj, JsonNode value) {
         List<String> list = Arrays.asList(pattern.split("/"));
         JsonNode node;
@@ -65,6 +85,12 @@ public final class JSONPath implements Serializable {
         return obj;
     }
 
+    /**
+     * Removes the node referenced by this path from the given JSON tree.
+     *
+     * @param obj the root JSON node
+     * @return the (possibly mutated) root node
+     */
     public JsonNode remove(JsonNode obj) {
         List<String> list = Arrays.asList(pattern.split("/"));
         JsonNode node;

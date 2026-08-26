@@ -20,31 +20,65 @@ package com.ibm.research.drl.dpt.anonymization.mondrian;
 
 import java.io.Serializable;
 
+/** Represents a numeric interval [low, high] with an optional median. */
 public class Interval implements Serializable {
     private final double low;
     private final double high;
     private final Double median;
 
+    /**
+     * Returns the lower bound.
+     *
+     * @return the low value
+     */
     public double getLow() {
         return low;
     }
 
+    /**
+     * Returns the upper bound.
+     *
+     * @return the high value
+     */
     public double getHigh() {
         return high;
     }
 
+    /**
+     * Returns the median, or {@code null} if not set.
+     *
+     * @return the median
+     */
     public Double getMedian() {
         return median;
     }
 
+    /**
+     * Returns the range (high minus low).
+     *
+     * @return the range
+     */
     public double getRange() {
         return high - low;
     }
 
+    /**
+     * Constructs an Interval with no median.
+     *
+     * @param low  the lower bound
+     * @param high the upper bound
+     */
     public Interval(Double low, Double high) {
         this(low, high, null);
     }
 
+    /**
+     * Constructs an Interval with an optional median.
+     *
+     * @param low    the lower bound
+     * @param high   the upper bound
+     * @param median the median, or {@code null}
+     */
     public Interval(double low, double high, Double median) {
         this.low = low;
         this.high = high;

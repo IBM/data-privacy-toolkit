@@ -33,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.*;
 
+/** Factory for creating and registering {@link Identifier} instances. */
 public final class IdentifierFactory implements Serializable {
     private static final Logger logger = LogManager.getLogger(IdentifierFactory.class);
     private static final IdentifierFactory DEFAULT_IDENTIFIER_FACTORY;
@@ -118,19 +119,40 @@ public final class IdentifierFactory implements Serializable {
 
     private final IdentifierFactoryHelper helper;
 
+    /**
+     * Returns the default identifier factory loaded from classpath resources.
+     *
+     * @return the default IdentifierFactory
+     * @deprecated use direct instantiation instead
+     */
     @Deprecated
     public static IdentifierFactory getDefaultIdentifierFactory() {
         return DEFAULT_IDENTIFIER_FACTORY;
     }
 
+    /**
+     * Returns the identifiers registered with this factory.
+     *
+     * @return collection of available identifiers
+     */
     public Collection<Identifier> availableIdentifiers() {
         return this.helper.availableIdentifiers();
     }
 
+    /**
+     * Constructs an IdentifierFactory loading identifiers from an input stream.
+     *
+     * @param configuration the properties stream listing identifier class names
+     */
     public IdentifierFactory(InputStream configuration) {
         this.helper = new IdentifierFactoryHelper(configuration);
     }
 
+    /**
+     * Constructs an IdentifierFactory with the given set of identifier class names.
+     *
+     * @param identifierClassNames fully-qualified class names of identifier implementations
+     */
     public IdentifierFactory(Set<String> identifierClassNames) {
         this.helper = new IdentifierFactoryHelper(identifierClassNames);
     }
@@ -145,14 +167,32 @@ public final class IdentifierFactory implements Serializable {
         return getDefaultIdentifierFactory().availableIdentifiers();
     }
 
+    /**
+     * Registers an identifier class with this factory.
+     *
+     * @param identifier the identifier class to register
+     * @throws InstantiationException if the class cannot be instantiated
+     * @throws IllegalAccessException if access to the constructor is denied
+     */
     public void registerIdentifier(final Class<? extends Identifier> identifier) throws InstantiationException, IllegalAccessException {
         this.helper.registerIdentifier(identifier);
     }
 
+    /**
+     * Registers an identifier instance with this factory.
+     *
+     * @param identifier the identifier instance to register
+     */
     public void registerIdentifier(final Identifier identifier) {
         this.helper.registerIdentifier(identifier);
     }
 
+    /**
+     * Initialises an IdentifierFactory from a JSON configuration node.
+     *
+     * @param identifiers the JSON node describing identifier classes or paths
+     * @return the configured IdentifierFactory
+     */
     public static IdentifierFactory initializeIdentifiers(JsonNode identifiers) {
         IdentifierFactory factory = new IdentifierFactory(Collections.emptySet());
 

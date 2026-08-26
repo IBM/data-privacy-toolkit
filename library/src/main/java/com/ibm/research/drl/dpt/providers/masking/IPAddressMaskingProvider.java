@@ -29,6 +29,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces IP addresses with random IP addresses. */
 public class IPAddressMaskingProvider implements MaskingProvider {
     private final static Logger logger = LogManager.getLogger(IPAddressMaskingProvider.class);
 

@@ -24,7 +24,11 @@ import org.apache.commons.validator.routines.IBANValidator;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for International Bank Account Numbers (IBAN). */
 public class IBANIdentifier extends AbstractIdentifier {
+
+    /** Constructs an IBANIdentifier. */
+    public IBANIdentifier() {}
     private final static IBANValidator ibanValidator = IBANValidator.getInstance();
     private final static String[] appropriateNames = new String[]{"IBAN"};
 

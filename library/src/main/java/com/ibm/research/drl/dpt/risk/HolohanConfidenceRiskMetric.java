@@ -27,9 +27,15 @@ import org.apache.commons.math3.distribution.HypergeometricDistribution;
 import java.util.List;
 import java.util.Map;
 
+/** Computes the Holohan confidence-based re-identification risk metric. */
 public class HolohanConfidenceRiskMetric implements RiskMetric {
+    /** Option key for the population size parameter. */
     public static final String POPULATION = "N";
+    /** Option key for the confidence level parameter. */
     public static final String CONFIDENCE = "HRMConfidence";
+
+    /** Constructs a HolohanConfidenceRiskMetric. */
+    public HolohanConfidenceRiskMetric() {}
     private int N;
     private List<Partition> equivalenceClassesOverAnonymizedDataset;
     private int n;

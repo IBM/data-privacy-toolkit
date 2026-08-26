@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
+/** Configuration parameters controlling the type-identification process. */
 public class IdentificationConfiguration implements Serializable {
     /**
      * The constant DEFAULT.
@@ -48,6 +49,16 @@ public class IdentificationConfiguration implements Serializable {
     private final Map<String, Double> frequencyThresholds;
 
 
+    /**
+     * Constructs an IdentificationConfiguration.
+     *
+     * @param defaultPriority            the default identifier priority
+     * @param defaultFrequencyThreshold  the default frequency threshold (0–100)
+     * @param considerEmptyForFrequency  whether empty values are counted in frequency
+     * @param identificationStrategy     the identification strategy to use
+     * @param priorities                 per-type priority overrides
+     * @param frequencyThresholds        per-type frequency-threshold overrides
+     */
     @JsonCreator
     public IdentificationConfiguration(
             @JsonProperty("defaultPriority") int defaultPriority,
@@ -67,6 +78,11 @@ public class IdentificationConfiguration implements Serializable {
         this.frequencyThresholds = frequencyThresholds;
     }
 
+    /**
+     * Returns the identification strategy.
+     *
+     * @return the identification strategy
+     */
     public IdentificationStrategy getIdentificationStrategy() {
         return identificationStrategy;
     }

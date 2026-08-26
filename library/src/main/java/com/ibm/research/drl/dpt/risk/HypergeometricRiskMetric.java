@@ -31,8 +31,13 @@ import java.util.List;
 import java.util.Map;
 
 
+/** Computes a re-identification risk metric based on the hypergeometric distribution. */
 public class HypergeometricRiskMetric implements RiskMetric {
+    /** Option key for the population size parameter. */
     public static final String N = "N";
+
+    /** Constructs a HypergeometricRiskMetric. */
+    public HypergeometricRiskMetric() {}
 
     private List<PoissonDistribution> F;
     private List<Integer> f;

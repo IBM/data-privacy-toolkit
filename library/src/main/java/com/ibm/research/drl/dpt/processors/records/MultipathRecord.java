@@ -19,20 +19,55 @@ under the License.
 package com.ibm.research.drl.dpt.processors.records;
 
 
+/** Abstract base for records that support JSON-pointer-style multi-path field access. */
 public abstract class MultipathRecord implements Record {
 
+    /**
+     * Generates all concrete field paths matching the given pattern.
+     *
+     * @param pattern the path pattern
+     * @return iterable of concrete field paths
+     */
     public abstract Iterable<String> generatePaths(String pattern);
 
+    /**
+     * Returns whether the given field name is an absolute path.
+     *
+     * @param fieldName the field name to check
+     * @return true if absolute
+     */
     public abstract boolean isAbsolute(String fieldName);
 
+    /**
+     * Returns whether the field reference points to a single element (not an array).
+     *
+     * @param fieldName the field reference
+     * @return true if single element
+     */
     public abstract boolean isSingleElement(String fieldName);
 
+    /**
+     * Returns the base path for the given path (parent path).
+     *
+     * @param path the full path
+     * @return the base path
+     */
     public abstract String getBasepath(String path);
 
+    /**
+     * Returns field references that may include generalized/wildcard paths.
+     *
+     * @return iterable of generalized field references
+     */
     public Iterable<String> getFieldReferencesWithGeneralization() {
         return getFieldReferences();
     }
 
+    /**
+     * Formats this record to its serialized string form.
+     *
+     * @return the formatted record string
+     */
     protected abstract String formatRecord();
 
     @Override

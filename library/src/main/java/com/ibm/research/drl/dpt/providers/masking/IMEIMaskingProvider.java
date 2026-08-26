@@ -26,6 +26,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces IMEI values with randomly generated IMEI numbers. */
 public class IMEIMaskingProvider implements MaskingProvider {
     private static final IMEIIdentifier IMEI_IDENTIFIER = new IMEIIdentifier();
     private static final IMEIManager imeiManager = IMEIManager.getInstance();

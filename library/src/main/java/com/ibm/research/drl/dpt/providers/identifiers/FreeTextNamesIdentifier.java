@@ -29,7 +29,10 @@ import java.util.regex.Pattern;
 /** Identifier for medical names and person names in free text. */
 public class FreeTextNamesIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
 
-    //JMS, DMY, 
+    /** Constructs a FreeTextNamesIdentifier. */
+    public FreeTextNamesIdentifier() {}
+
+    //JMS, DMY,
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList("Dr.", "Dr ", "Mr.", "Ms.", "Mrs.", "Mr ", "Ms ", "Mrs "));
     private static final Set<String> titles = new HashSet<>(Arrays.asList("MD", "M.D.", "RN", "Rn",
             "PTA", "LPN", "DDS", "NP", "CDE", "OD", "DOE", "DMD", "MCF", "APRN", "PHD", "Ph.D", "PA"));

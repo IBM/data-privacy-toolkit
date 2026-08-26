@@ -27,7 +27,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** Identifier for Italian fiscal codes (Codice Fiscale). */
 public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
+
+    /** Constructs an ItalianFiscalCodeIdentifier. */
+    public ItalianFiscalCodeIdentifier() {}
     private final static Collection<String> appropriateNames = Arrays.asList(
             "codice fiscale",
             "codice-fiscale"

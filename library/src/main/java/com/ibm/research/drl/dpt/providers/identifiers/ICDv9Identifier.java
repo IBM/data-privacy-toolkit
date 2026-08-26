@@ -26,7 +26,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 
+/** Identifier for ICD version 9 disease codes. */
 public class ICDv9Identifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs an ICDv9Identifier. */
+    public ICDv9Identifier() {}
     private static final String[] appropriateNames = {"ICD", "Disease code", "ICD9"};
     private static final ICDv9Manager icdv9Manager = ICDv9Manager.getInstance();
 

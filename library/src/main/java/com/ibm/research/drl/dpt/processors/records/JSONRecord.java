@@ -48,10 +48,16 @@ import java.util.Spliterators;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
+/** A {@link MultipathRecord} backed by a Jackson {@link JsonNode}. */
 public final class JSONRecord extends MultipathRecord {
     private static final Logger logger = LogManager.getLogger(JSONRecord.class);
     private final JsonNode node;
 
+    /**
+     * Constructs a JSONRecord wrapping the given JSON node.
+     *
+     * @param node the JSON node
+     */
     public JSONRecord(JsonNode node) {
         this.node = node;
     }

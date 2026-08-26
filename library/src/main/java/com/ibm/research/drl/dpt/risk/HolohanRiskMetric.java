@@ -28,8 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 
+/** Computes the Holohan re-identification risk metric. */
 public class HolohanRiskMetric implements RiskMetric {
+    /** Option key for the population size parameter. */
     public static final String POPULATION = "N";
+
+    /** Constructs a HolohanRiskMetric. */
+    public HolohanRiskMetric() {}
     private int N;
     private List<Partition> equivalenceClassesOverAnonymizedDataset;
     private int n;
