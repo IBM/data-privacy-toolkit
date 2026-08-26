@@ -26,6 +26,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
+/** Masking provider for Vehicle Identification Number (VIN) values. */
 public class VINMaskingProvider implements MaskingProvider {
     private static final char[] allowedCharacters = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789".toCharArray();
     private final boolean preserveWMI;

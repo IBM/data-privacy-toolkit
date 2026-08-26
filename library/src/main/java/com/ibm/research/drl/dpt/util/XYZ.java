@@ -18,23 +18,46 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util;
 
+/** Represents a point or vector in three-dimensional space. */
 public class XYZ {
     private final double x;
     private final double y;
     private final double z;
 
+    /**
+     * Returns the X component.
+     *
+     * @return the X coordinate
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Returns the Y component.
+     *
+     * @return the Y coordinate
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * Returns the Z component.
+     *
+     * @return the Z coordinate
+     */
     public double getZ() {
         return z;
     }
 
+    /**
+     * Constructs an XYZ point with the given coordinates.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     */
     public XYZ(double x, double y, double z) {
         this.x = x;
         this.y = y;

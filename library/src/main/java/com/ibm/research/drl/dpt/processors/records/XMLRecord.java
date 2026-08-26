@@ -37,6 +37,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.util.*;
 
+/** A {@link com.ibm.research.drl.dpt.processors.records.Record} backed by a parsed XML {@link Document}. */
 public class XMLRecord extends MultipathRecord {
     private final Document document;
 
@@ -59,6 +60,11 @@ public class XMLRecord extends MultipathRecord {
                     "</xsl:stylesheet>";
     private final static XPath xPath = XPathFactory.newInstance().newXPath();
 
+    /**
+     * Constructs an XMLRecord wrapping the given document.
+     *
+     * @param document the parsed XML document
+     */
     public XMLRecord(Document document) {
         this.document = document;
     }

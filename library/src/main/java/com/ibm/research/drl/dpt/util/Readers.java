@@ -28,6 +28,9 @@ import java.nio.charset.StandardCharsets;
 public class Readers {
     private final static Readers instance = new Readers();
 
+    /** Not instantiable. */
+    private Readers() {}
+
     private static CSVParser createGenericReader(Reader reader, char separator, char quoteChar) throws IOException {
         return CSVFormat.DEFAULT.withDelimiter(separator).withQuote(quoteChar).parse(reader);
     }

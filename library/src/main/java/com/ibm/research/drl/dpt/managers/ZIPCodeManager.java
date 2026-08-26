@@ -32,11 +32,17 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 
+/** Manager for ZIP code resources, supporting population-based lookups with prefix matching. */
 public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Serializable {
 
     private Map<String, Map<String, ZIPCode>> zipCodeMapThreeDigits;
     private final int prefixDigits;
 
+    /**
+     * Constructs a ZIPCodeManager with the given prefix digit count.
+     *
+     * @param prefix the number of leading digits to use for prefix-based lookups
+     */
     public ZIPCodeManager(int prefix) {
         super();
         this.prefixDigits = prefix;
@@ -115,6 +121,13 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
     }
 
 
+    /**
+     * Returns the population for the given country code and ZIP code key.
+     *
+     * @param countryCode the ISO country code
+     * @param key         the ZIP code key
+     * @return the population, or {@code 0} if not found
+     */
     public Integer getPopulation(String countryCode, String key) {
         ZIPCode zipCode = getKey(countryCode, key);
 
@@ -125,6 +138,13 @@ public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Ser
         return zipCode.getPopulation();
     }
 
+    /**
+     * Returns the population for the prefix of the given ZIP code and country.
+     *
+     * @param countryCode the ISO country code
+     * @param zipCode     the full ZIP code (first {@code prefixDigits} digits are used)
+     * @return the population, or {@code 0} if not found
+     */
     public int getPopulationByPrefix(String countryCode, String zipCode) {
         if (zipCode.length() < this.prefixDigits) {
             return 0;

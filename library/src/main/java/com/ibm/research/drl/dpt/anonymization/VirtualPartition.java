@@ -20,6 +20,7 @@ package com.ibm.research.drl.dpt.anonymization;
 
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
+/** A lightweight partition that stores only its size, without holding actual data. */
 public class VirtualPartition implements Partition {
     private final int size;
     private boolean anonymous;
@@ -49,6 +50,11 @@ public class VirtualPartition implements Partition {
         this.anonymous = value;
     }
 
+    /**
+     * Constructs a VirtualPartition with the given size.
+     *
+     * @param size the number of records represented by this partition
+     */
     public VirtualPartition(int size) {
         this.size = size;
     }

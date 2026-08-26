@@ -22,7 +22,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Calendar;
 
+/** Identifier for year-of-birth values. */
 public class YOBIdentifier extends AbstractIdentifier {
+
+    /** Constructs a YOBIdentifier. */
+    public YOBIdentifier() {}
     private final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
     @Override

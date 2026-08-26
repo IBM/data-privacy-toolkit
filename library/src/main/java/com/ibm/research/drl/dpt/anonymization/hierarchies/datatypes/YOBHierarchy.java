@@ -24,11 +24,17 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
 
+/** Generalization hierarchy for year-of-birth values, grouping years into intervals. */
 public class YOBHierarchy extends MaterializedHierarchy {
     private static final YOBHierarchy instance = new YOBHierarchy();
 
     private static final int LEAF = 0;
 
+    /**
+     * Returns the singleton instance of this hierarchy.
+     *
+     * @return the singleton {@code YOBHierarchy}
+     */
     public static YOBHierarchy getInstance() {
         return instance;
     }

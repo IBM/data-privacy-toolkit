@@ -31,6 +31,7 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** Masking provider for URL values. */
 public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final boolean maskUsernamePassword;
     private final boolean randomizePort;
@@ -44,6 +45,14 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final SecureRandom random;
 
 
+    /**
+     * Constructs a URLMaskingProvider.
+     *
+     * @param complexType    the complex type name
+     * @param configuration  the masking configuration
+     * @param maskedFields   the set of fields already masked
+     * @param factory        the masking provider factory
+     */
     public URLMaskingProvider(String complexType, MaskingConfiguration configuration, Set<String> maskedFields, MaskingProviderFactory factory) {
         super(complexType, configuration, maskedFields, factory);
 
@@ -58,14 +67,32 @@ public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
     }
 
 
+    /**
+     * Constructs a URLMaskingProvider with default configuration.
+     *
+     * @param factory the masking provider factory
+     */
     public URLMaskingProvider(MaskingProviderFactory factory) {
         this("url", new DefaultMaskingConfiguration(), Collections.emptySet(), factory);
     }
 
+    /**
+     * Constructs a URLMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public URLMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("url", maskingConfiguration, Collections.emptySet(), factory);
     }
 
+    /**
+     * Constructs a URLMaskingProvider with an explicit random source.
+     *
+     * @param random               the secure random source (unused; kept for API compatibility)
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public URLMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("url", maskingConfiguration, Collections.emptySet(), factory);
     }

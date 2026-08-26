@@ -25,7 +25,11 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for URLs and web addresses. */
 public class URLIdentifier extends AbstractIdentifier {
+
+    /** Constructs a URLIdentifier. */
+    public URLIdentifier() {}
     private static final String[] appropriateNames = {"URL", "Webpage", "Web URL"};
 
     @Override

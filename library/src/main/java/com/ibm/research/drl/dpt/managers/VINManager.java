@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/** Manager for Vehicle Identification Number (VIN) World Manufacturer Identifiers (WMIs). */
 public class VINManager implements Manager, Serializable {
 
     private static final Collection<ResourceEntry> resourceWMIList =

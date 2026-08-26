@@ -22,7 +22,11 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarch
 
 import java.util.Set;
 
+/** Generalization hierarchy for US ZIP codes based on character replacement with {@code *}. */
 public class ZIPCodeCompBasedHierarchy implements GeneralizationHierarchy {
+
+    /** Constructs a ZIPCodeCompBasedHierarchy. */
+    public ZIPCodeCompBasedHierarchy() {}
     private final String topTerm = "*****";
     private final int height = 6;
 

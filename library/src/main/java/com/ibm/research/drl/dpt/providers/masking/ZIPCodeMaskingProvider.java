@@ -22,6 +22,7 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.managers.ZIPCodeManager;
 
+/** Masking provider for US ZIP code values. */
 public class ZIPCodeMaskingProvider implements MaskingProvider {
     private final String countryCode;
     private final int minimumPopulation;
@@ -32,10 +33,16 @@ public class ZIPCodeMaskingProvider implements MaskingProvider {
     private final ZIPCodeManager zipCodeManager;
     private final MaskingProvider randomMaskingProvider;
 
+    /** Constructs a ZIPCodeMaskingProvider with default configuration. */
     public ZIPCodeMaskingProvider() {
         this(new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a ZIPCodeMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public ZIPCodeMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this.countryCode = maskingConfiguration.getStringValue("zipcode.mask.countryCode");
         this.requireMinimumPopulation = maskingConfiguration.getBooleanValue("zipcode.mask.requireMinimumPopulation");
