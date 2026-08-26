@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/** FHIRResourceMaskingConfiguration FHIR datatype. */
 public class FHIRResourceMaskingConfiguration {
     private final String basePath;
     private final List<FHIRResourceField> fields;

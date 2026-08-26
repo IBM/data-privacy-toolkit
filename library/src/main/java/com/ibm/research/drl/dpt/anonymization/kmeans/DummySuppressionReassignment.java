@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/** K-means suppression strategy that reassigns suppressed records to the closest cluster. */
 public class DummySuppressionReassignment extends StrategyImpl {
 
     private final double maximumSuppressionRate;
@@ -47,6 +48,14 @@ public class DummySuppressionReassignment extends StrategyImpl {
     private final List<Partition> partitions = new ArrayList<>();
     private final List<Partition> anonymizedPartitions = new ArrayList<>();
 
+    /**
+     * Constructs a DummySuppressionReassignment.
+     *
+     * @param original               the original dataset
+     * @param maximumSuppressionRate the maximum suppression rate allowed
+     * @param columnInformationList  the column information list
+     * @param privacyConstraints     the privacy constraints
+     */
     public DummySuppressionReassignment(IPVDataset original, double maximumSuppressionRate,
                                         List<ColumnInformation> columnInformationList,
                                         List<PrivacyConstraint> privacyConstraints) {

@@ -25,11 +25,21 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Arrays;
 import java.util.List;
 
+/** Utility methods for domain and IP address splitting. */
 public class DomainUtils {
+
+    private DomainUtils() {}
 
     private static final IPAddressIdentifier ipAddressIdentifier = new IPAddressIdentifier();
     private static final TLDManager tldManager = TLDManager.instance();
 
+    /**
+     * Splits an IPv4 address, preserving a given number of subnet octets.
+     *
+     * @param address        the IPv4 address string
+     * @param preserveSubnets the number of trailing octets to preserve
+     * @return a tuple of (prefix, preserved suffix)
+     */
     public static Tuple<String, String> splitIPV4Address(String address, int preserveSubnets) {
 
         if (preserveSubnets <= 0) {
@@ -46,10 +56,25 @@ public class DomainUtils {
         );
     }
 
+    /**
+     * Splits a domain, preserving a given number of domain labels.
+     *
+     * @param domain          the domain string
+     * @param preserveDomains the number of domain labels to preserve
+     * @return a tuple of (prefix, preserved suffix)
+     */
     public static Tuple<String, String> splitDomain(String domain, int preserveDomains) {
         return splitDomain(domain, preserveDomains, 0);
     }
 
+    /**
+     * Splits a domain, preserving domain labels and subnet octets.
+     *
+     * @param domain          the domain string
+     * @param preserveDomains the number of domain labels to preserve
+     * @param preserveSubnets the number of subnet octets to preserve
+     * @return a tuple of (prefix, preserved suffix)
+     */
     public static Tuple<String, String> splitDomain(String domain, int preserveDomains, int preserveSubnets) {
         if (preserveDomains <= 0) {
             return new Tuple<>(domain, "");

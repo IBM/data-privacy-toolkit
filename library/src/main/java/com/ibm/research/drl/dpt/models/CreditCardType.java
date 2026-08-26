@@ -18,13 +18,24 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents a credit card type name. */
 public class CreditCardType {
     private final String value;
 
+    /**
+     * Returns the credit card type value.
+     *
+     * @return the type string
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Constructs a CreditCardType with the given value.
+     *
+     * @param value the type string
+     */
     public CreditCardType(String value) {
         this.value = value;
     }

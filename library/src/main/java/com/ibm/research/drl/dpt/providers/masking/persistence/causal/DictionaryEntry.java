@@ -18,19 +18,36 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking.persistence.causal;
 
+/** An entry in the causal masking dictionary chain. */
 public class DictionaryEntry {
 
     private final DictionaryEntryType type;
     private final String value;
 
+    /**
+     * Returns the entry type.
+     *
+     * @return the dictionary entry type
+     */
     public DictionaryEntryType getType() {
         return type;
     }
 
+    /**
+     * Returns the entry value.
+     *
+     * @return the value string
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Constructs a DictionaryEntry.
+     *
+     * @param value the value string
+     * @param type  the entry type
+     */
     public DictionaryEntry(String value, DictionaryEntryType type) {
         this.type = type;
         this.value = value;

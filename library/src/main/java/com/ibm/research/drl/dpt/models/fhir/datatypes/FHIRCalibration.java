@@ -21,29 +21,57 @@ package com.ibm.research.drl.dpt.models.fhir.datatypes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/** FHIRCalibration FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRCalibration {
+    /** Constructs a FHIRCalibration. */
+    public FHIRCalibration() {}
+
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns the state.
+     * @return the state
+     */
     public String getState() {
         return state;
     }
 
+    /**
+     * Sets the state.
+     * @param state the state
+     */
     public void setState(String state) {
         this.state = state;
     }
 
+    /**
+     * Returns the time.
+     * @return the time
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     * Sets the time.
+     * @param time the time
+     */
     public void setTime(String time) {
         this.time = time;
     }

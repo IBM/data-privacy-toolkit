@@ -26,9 +26,13 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRQuantity;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRange;
 
 
+/** FHIRGroupCharacteristic FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRGroupCharacteristic {
+    /** Constructs a FHIRGroupCharacteristic. */
+    public FHIRGroupCharacteristic() {}
+
 
     private FHIRCodeableConcept code;
     private FHIRCodeableConcept valueCodeableConcept;
@@ -38,58 +42,114 @@ public class FHIRGroupCharacteristic {
     private boolean exclude;
     private FHIRPeriod period;
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public FHIRCodeableConcept getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(FHIRCodeableConcept code) {
         this.code = code;
     }
 
+    /**
+     * Returns the valueCodeableConcept.
+     * @return the valueCodeableConcept
+     */
     public FHIRCodeableConcept getValueCodeableConcept() {
         return valueCodeableConcept;
     }
 
+    /**
+     * Sets the valueCodeableConcept.
+     * @param valueCodeableConcept the valueCodeableConcept
+     */
     public void setValueCodeableConcept(FHIRCodeableConcept valueCodeableConcept) {
         this.valueCodeableConcept = valueCodeableConcept;
     }
 
+    /**
+     * Returns the valueBoolean.
+     * @return the valueBoolean
+     */
     public boolean isValueBoolean() {
         return valueBoolean;
     }
 
+    /**
+     * Sets the valueBoolean.
+     * @param valueBoolean the valueBoolean
+     */
     public void setValueBoolean(boolean valueBoolean) {
         this.valueBoolean = valueBoolean;
     }
 
+    /**
+     * Returns the valueQuantity.
+     * @return the valueQuantity
+     */
     public FHIRQuantity getValueQuantity() {
         return valueQuantity;
     }
 
+    /**
+     * Sets the valueQuantity.
+     * @param valueQuantity the valueQuantity
+     */
     public void setValueQuantity(FHIRQuantity valueQuantity) {
         this.valueQuantity = valueQuantity;
     }
 
+    /**
+     * Returns the valueRange.
+     * @return the valueRange
+     */
     public FHIRRange getValueRange() {
         return valueRange;
     }
 
+    /**
+     * Sets the valueRange.
+     * @param valueRange the valueRange
+     */
     public void setValueRange(FHIRRange valueRange) {
         this.valueRange = valueRange;
     }
 
+    /**
+     * Returns the exclude.
+     * @return the exclude
+     */
     public boolean isExclude() {
         return exclude;
     }
 
+    /**
+     * Sets the exclude.
+     * @param exclude the exclude
+     */
     public void setExclude(boolean exclude) {
         this.exclude = exclude;
     }
 
+    /**
+     * Returns the period.
+     * @return the period
+     */
     public FHIRPeriod getPeriod() {
         return period;
     }
 
+    /**
+     * Sets the period.
+     * @param period the period
+     */
     public void setPeriod(FHIRPeriod period) {
         this.period = period;
     }

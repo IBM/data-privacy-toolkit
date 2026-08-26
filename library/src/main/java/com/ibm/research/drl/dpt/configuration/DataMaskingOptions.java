@@ -84,6 +84,20 @@ public class DataMaskingOptions implements Serializable {
         }
     }
 
+    /**
+     * Constructs a DataMaskingOptions from JSON properties.
+     *
+     * @param inputFormat           the input data format
+     * @param outputFormat          the output data format
+     * @param delimiter             the field delimiter
+     * @param quoteChar             the quote character
+     * @param hasHeader             whether the data has a header row
+     * @param trimFields            whether to trim whitespace from fields
+     * @param toBeMasked            the masking configuration per field
+     * @param identifyRelationships whether to auto-identify relationships
+     * @param predefinedRelationships predefined relationship definitions
+     * @throws IOException if configuration cannot be read
+     */
     @JsonCreator
     public DataMaskingOptions(
             @JsonProperty(value = "inputFormat", required = true)

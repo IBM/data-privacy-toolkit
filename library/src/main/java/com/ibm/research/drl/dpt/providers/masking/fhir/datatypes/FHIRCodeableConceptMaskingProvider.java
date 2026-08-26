@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+/** FHIRCodeableConceptMaskingProvider FHIR datatype. */
 public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean maskText;

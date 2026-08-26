@@ -25,9 +25,13 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRIdentifier;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRQuantity;
 
+/** FHIRContractTermValuedItem FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRContractTermValuedItem {
+    /** Constructs a FHIRContractTermValuedItem. */
+    public FHIRContractTermValuedItem() {}
+
 
     private FHIRCodeableConcept entityCodeableConcept;
     private FHIRReference entityReference;
@@ -39,74 +43,146 @@ public class FHIRContractTermValuedItem {
     private float points;
     private FHIRQuantity net;
 
+    /**
+     * Returns the entityCodeableConcept.
+     * @return the entityCodeableConcept
+     */
     public FHIRCodeableConcept getEntityCodeableConcept() {
         return entityCodeableConcept;
     }
 
+    /**
+     * Sets the entityCodeableConcept.
+     * @param entityCodeableConcept the entityCodeableConcept
+     */
     public void setEntityCodeableConcept(FHIRCodeableConcept entityCodeableConcept) {
         this.entityCodeableConcept = entityCodeableConcept;
     }
 
+    /**
+     * Returns the entityReference.
+     * @return the entityReference
+     */
     public FHIRReference getEntityReference() {
         return entityReference;
     }
 
+    /**
+     * Sets the entityReference.
+     * @param entityReference the entityReference
+     */
     public void setEntityReference(FHIRReference entityReference) {
         this.entityReference = entityReference;
     }
 
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public FHIRIdentifier getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(FHIRIdentifier identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Returns the effectiveTime.
+     * @return the effectiveTime
+     */
     public String getEffectiveTime() {
         return effectiveTime;
     }
 
+    /**
+     * Sets the effectiveTime.
+     * @param effectiveTime the effectiveTime
+     */
     public void setEffectiveTime(String effectiveTime) {
         this.effectiveTime = effectiveTime;
     }
 
+    /**
+     * Returns the quantity.
+     * @return the quantity
+     */
     public FHIRQuantity getQuantity() {
         return quantity;
     }
 
+    /**
+     * Sets the quantity.
+     * @param quantity the quantity
+     */
     public void setQuantity(FHIRQuantity quantity) {
         this.quantity = quantity;
     }
 
+    /**
+     * Returns the unitPrice.
+     * @return the unitPrice
+     */
     public FHIRQuantity getUnitPrice() {
         return unitPrice;
     }
 
+    /**
+     * Sets the unitPrice.
+     * @param unitPrice the unitPrice
+     */
     public void setUnitPrice(FHIRQuantity unitPrice) {
         this.unitPrice = unitPrice;
     }
 
+    /**
+     * Returns the factor.
+     * @return the factor
+     */
     public float getFactor() {
         return factor;
     }
 
+    /**
+     * Sets the factor.
+     * @param factor the factor
+     */
     public void setFactor(float factor) {
         this.factor = factor;
     }
 
+    /**
+     * Returns the points.
+     * @return the points
+     */
     public float getPoints() {
         return points;
     }
 
+    /**
+     * Sets the points.
+     * @param points the points
+     */
     public void setPoints(float points) {
         this.points = points;
     }
 
+    /**
+     * Returns the net.
+     * @return the net
+     */
     public FHIRQuantity getNet() {
         return net;
     }
 
+    /**
+     * Sets the net.
+     * @param net the net
+     */
     public void setNet(FHIRQuantity net) {
         this.net = net;
     }

@@ -45,7 +45,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
+/** Format processor for Excel (XLS/XLSX) datasets. */
 public class ExcelFormatProcessor extends FormatProcessor {
+    /** Constructs an ExcelFormatProcessor. */
+    public ExcelFormatProcessor() {}
 
     @Override
     public boolean supportsStreams() {

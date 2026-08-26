@@ -22,13 +22,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/** Default implementation of {@link ColumnInformation} for non-quasi-identifier columns. */
 public class DefaultColumnInformation implements ColumnInformation {
     private final boolean forLinking;
 
+    /** Constructs a DefaultColumnInformation with forLinking set to false. */
     public DefaultColumnInformation() {
         this(false);
     }
 
+    /**
+     * Constructs a DefaultColumnInformation.
+     *
+     * @param forLinking whether this column is used for linking
+     */
     @JsonCreator
     public DefaultColumnInformation(
             @JsonProperty("forLinking") boolean forLinking) {

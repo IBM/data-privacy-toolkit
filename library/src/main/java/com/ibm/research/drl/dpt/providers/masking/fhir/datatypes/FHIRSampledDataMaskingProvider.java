@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRSampledDataMaskingProvider FHIR datatype. */
 public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean maskOrigin;

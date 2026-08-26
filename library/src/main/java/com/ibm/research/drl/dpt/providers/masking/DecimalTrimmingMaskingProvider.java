@@ -30,26 +30,50 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Masking provider that trims decimal digits based on configured rules. */
 public class DecimalTrimmingMaskingProvider implements MaskingProvider {
     private final static Logger logger = LogManager.getLogger(DecimalTrimmingMaskingProvider.class);
 
+    /** A single decimal-trimming rule covering a numeric range. */
     public static class DecimalTrimmingRule {
         private final double lowerThreshold;
         private final double upperThreshold;
         private final int digitsToKeep;
 
+        /**
+         * Returns the lower threshold of the rule.
+         *
+         * @return the lower threshold
+         */
         public double getLowerThreshold() {
             return lowerThreshold;
         }
 
+        /**
+         * Returns the upper threshold of the rule.
+         *
+         * @return the upper threshold
+         */
         public double getUpperThreshold() {
             return upperThreshold;
         }
 
+        /**
+         * Returns the number of decimal digits to keep.
+         *
+         * @return the digits to keep
+         */
         public int getDigitsToKeep() {
             return digitsToKeep;
         }
 
+        /**
+         * Constructs a DecimalTrimmingRule.
+         *
+         * @param lowerThreshold the inclusive lower bound
+         * @param upperThreshold the exclusive upper bound
+         * @param digitsToKeep   the number of decimal digits to keep
+         */
         public DecimalTrimmingRule(double lowerThreshold, double upperThreshold, int digitsToKeep) {
             this.lowerThreshold = lowerThreshold;
             this.upperThreshold = upperThreshold;
@@ -60,19 +84,37 @@ public class DecimalTrimmingMaskingProvider implements MaskingProvider {
     private final List<DecimalTrimmingRule> rules;
     private final int failMode;
 
+    /** Constructs a DecimalTrimmingMaskingProvider with default configuration. */
     public DecimalTrimmingMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a DecimalTrimmingMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public DecimalTrimmingMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
 
+    /**
+     * Constructs a DecimalTrimmingMaskingProvider.
+     *
+     * @param random               a secure random instance
+     * @param maskingConfiguration the masking configuration
+     */
     public DecimalTrimmingMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.rules = parseRules(maskingConfiguration.getStringValue("decimalrounding.mask.rules"));
         this.failMode = maskingConfiguration.getIntValue("fail.mode");
     }
 
+    /**
+     * Parses a semicolon-delimited rule string into a list of rules.
+     *
+     * @param stringValue the rule string
+     * @return a list of parsed rules
+     */
     public static List<DecimalTrimmingRule> parseRules(String stringValue) {
         List<DecimalTrimmingRule> rules = new ArrayList<>();
 

@@ -32,9 +32,15 @@ import com.ibm.research.drl.dpt.util.Histogram;
 
 import java.util.List;
 
+/** Privacy constraint enforcing entropy l-diversity. */
 public class EntropyLDiversity implements PrivacyConstraint {
     private final int l;
 
+    /**
+     * Constructs an EntropyLDiversity constraint.
+     *
+     * @param l the required entropy threshold (l-diversity parameter)
+     */
     @JsonCreator
     public EntropyLDiversity(
             @JsonProperty("l") int l
@@ -42,6 +48,11 @@ public class EntropyLDiversity implements PrivacyConstraint {
         this.l = l;
     }
 
+    /**
+     * Returns the l value.
+     *
+     * @return the entropy threshold
+     */
     public int getL() {
         return l;
     }

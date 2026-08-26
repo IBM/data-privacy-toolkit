@@ -23,30 +23,58 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Collection;
 
+/** FHIRTiming FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRTiming {
+    /** Constructs a FHIRTiming. */
+    public FHIRTiming() {}
 
+
+    /**
+     * Returns the event.
+     * @return the event
+     */
     public Collection<String> getEvent() {
         return event;
     }
 
+    /**
+     * Sets the event.
+     * @param event the event
+     */
     public void setEvent(Collection<String> event) {
         this.event = event;
     }
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public FHIRCodeableConcept getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(FHIRCodeableConcept code) {
         this.code = code;
     }
 
+    /**
+     * Returns the repeat.
+     * @return the repeat
+     */
     public FHIRTimingRepeat getRepeat() {
         return repeat;
     }
 
+    /**
+     * Sets the repeat.
+     * @param repeat the repeat
+     */
     public void setRepeat(FHIRTimingRepeat repeat) {
         this.repeat = repeat;
     }

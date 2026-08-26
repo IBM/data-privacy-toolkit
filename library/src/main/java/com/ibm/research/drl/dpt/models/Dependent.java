@@ -18,13 +18,24 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents a dependent-relationship entity. */
 public class Dependent {
     private final String value;
 
+    /**
+     * Returns the dependent value.
+     *
+     * @return the value string
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Constructs a Dependent with the given value.
+     *
+     * @param value the value string
+     */
     public Dependent(String value) {
         this.value = value;
     }

@@ -23,6 +23,7 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRNarrative;
 
 import java.io.Serializable;
 
+/** FHIRNarrativeMaskingProvider FHIR datatype. */
 public class FHIRNarrativeMaskingProvider implements Serializable {
 
     private final boolean removeDiv;

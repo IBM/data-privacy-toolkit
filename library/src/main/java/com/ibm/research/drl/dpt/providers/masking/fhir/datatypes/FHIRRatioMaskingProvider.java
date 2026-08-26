@@ -28,6 +28,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRRatioMaskingProvider FHIR datatype. */
 public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
     private final boolean deleteNumerator;
     private final boolean deleteDenominator;

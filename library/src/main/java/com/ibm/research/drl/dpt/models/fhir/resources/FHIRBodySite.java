@@ -28,14 +28,26 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRIdentifier;
 
 import java.util.Collection;
 
+/** FHIRBodySite FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRBodySite extends FHIRBaseDomainResource {
+    /** Constructs a FHIRBodySite. */
+    public FHIRBodySite() {}
 
+
+    /**
+     * Returns the resourceType.
+     * @return the resourceType
+     */
     public String getResourceType() {
         return resourceType;
     }
 
+    /**
+     * Sets the resourceType.
+     * @param resourceType the resourceType
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
@@ -48,50 +60,98 @@ public class FHIRBodySite extends FHIRBaseDomainResource {
     private String description;
     private Collection<FHIRAttachment> image;
 
+    /**
+     * Returns the patient.
+     * @return the patient
+     */
     public FHIRReference getPatient() {
         return patient;
     }
 
+    /**
+     * Sets the patient.
+     * @param patient the patient
+     */
     public void setPatient(FHIRReference patient) {
         this.patient = patient;
     }
 
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public Collection<FHIRIdentifier> getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(Collection<FHIRIdentifier> identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public FHIRCodeableConcept getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(FHIRCodeableConcept code) {
         this.code = code;
     }
 
+    /**
+     * Returns the modifier.
+     * @return the modifier
+     */
     public Collection<FHIRCodeableConcept> getModifier() {
         return modifier;
     }
 
+    /**
+     * Sets the modifier.
+     * @param modifier the modifier
+     */
     public void setModifier(Collection<FHIRCodeableConcept> modifier) {
         this.modifier = modifier;
     }
 
+    /**
+     * Returns the description.
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the description.
+     * @param description the description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Returns the image.
+     * @return the image
+     */
     public Collection<FHIRAttachment> getImage() {
         return image;
     }
 
+    /**
+     * Sets the image.
+     * @param image the image
+     */
     public void setImage(Collection<FHIRAttachment> image) {
         this.image = image;
     }

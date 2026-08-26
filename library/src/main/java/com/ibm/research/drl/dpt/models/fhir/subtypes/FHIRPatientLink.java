@@ -22,21 +22,41 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 
+/** FHIRPatientLink FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRPatientLink {
+    /** Constructs a FHIRPatientLink. */
+    public FHIRPatientLink() {}
+
+    /**
+     * Returns the other.
+     * @return the other
+     */
     public FHIRReference getOther() {
         return other;
     }
 
+    /**
+     * Sets the other.
+     * @param other the other
+     */
     public void setOther(FHIRReference other) {
         this.other = other;
     }
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(String code) {
         this.code = code;
     }

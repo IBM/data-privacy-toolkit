@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.providers.masking.AbstractComplexMaskingProvider
 
 import java.util.Set;
 
+/** FHIRNullMaskingProvider FHIR datatype. */
 public class FHIRNullMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     public FHIRNullMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fullPath) {

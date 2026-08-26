@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents a day-of-week entity. */
 public class Day implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;

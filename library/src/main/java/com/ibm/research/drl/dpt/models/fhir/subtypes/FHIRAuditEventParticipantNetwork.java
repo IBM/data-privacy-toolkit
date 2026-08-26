@@ -21,24 +21,44 @@ package com.ibm.research.drl.dpt.models.fhir.subtypes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/** FHIRAuditEventParticipantNetwork FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRAuditEventParticipantNetwork {
+    /** Constructs a FHIRAuditEventParticipantNetwork. */
+    public FHIRAuditEventParticipantNetwork() {}
+
     private String address;
     private String type;
 
+    /**
+     * Returns the address.
+     * @return the address
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * Sets the address.
+     * @param address the address
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(String type) {
         this.type = type;
     }

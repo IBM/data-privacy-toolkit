@@ -30,7 +30,11 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.IOException;
 import java.util.*;
 
+/** FHIRMaskingUtils FHIR datatype. */
 public class FHIRMaskingUtils {
+    /** Constructs a FHIRMaskingUtils. */
+    public FHIRMaskingUtils() {}
+
     public static String maskResourceId(String id, boolean preserveIdPrefix, MaskingProvider maskingProvider) {
         if (!preserveIdPrefix) {
             return maskingProvider.mask(id);

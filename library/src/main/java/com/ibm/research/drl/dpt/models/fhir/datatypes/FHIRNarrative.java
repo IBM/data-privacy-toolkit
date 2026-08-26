@@ -24,30 +24,58 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRExtension;
 
 import java.util.Collection;
 
+/** FHIRNarrative FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRNarrative {
+    /** Constructs a FHIRNarrative. */
+    public FHIRNarrative() {}
 
+
+    /**
+     * Returns the status.
+     * @return the status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Sets the status.
+     * @param status the status
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /**
+     * Returns the div.
+     * @return the div
+     */
     public String getDiv() {
         return div;
     }
 
+    /**
+     * Sets the div.
+     * @param div the div
+     */
     public void setDiv(String div) {
         this.div = div;
     }
 
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }

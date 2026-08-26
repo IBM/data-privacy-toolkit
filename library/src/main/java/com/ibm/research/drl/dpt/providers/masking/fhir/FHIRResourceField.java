@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking.fhir;
 
+/** FHIRResourceField FHIR datatype. */
 public class FHIRResourceField {
 
     private final String path;

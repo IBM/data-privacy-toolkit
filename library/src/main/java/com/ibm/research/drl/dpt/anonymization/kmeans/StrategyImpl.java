@@ -42,12 +42,33 @@ public abstract class StrategyImpl {
         this.privacyConstraints = privacyConstraints;
     }
 
+    /**
+     * Builds the anonymized dataset from the given clusters.
+     *
+     * @param clusters the k-means clusters
+     * @return the anonymized dataset
+     */
     public abstract IPVDataset buildAnonymizedDataset(List<KMeansCluster> clusters);
 
+    /**
+     * Returns the original partitions.
+     *
+     * @return list of original partitions
+     */
     public abstract List<Partition> getOriginalPartitions();
 
+    /**
+     * Returns the anonymized partitions.
+     *
+     * @return list of anonymized partitions
+     */
     public abstract List<Partition> getAnonymizedPartitions();
 
+    /**
+     * Returns the number of suppressed rows.
+     *
+     * @return the count of suppressed rows
+     */
     public abstract Long getSuppressedRows();
 }
 

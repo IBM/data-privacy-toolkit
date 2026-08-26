@@ -28,9 +28,13 @@ import com.ibm.research.drl.dpt.models.fhir.subtypes.FHIRAuditEventSource;
 
 import java.util.Collection;
 
+/** FHIRAuditEvent FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRAuditEvent extends FHIRBaseDomainResource {
+    /** Constructs a FHIRAuditEvent. */
+    public FHIRAuditEvent() {}
+
     private String resourceType;
 
     private FHIRAuditEventEvent event;
@@ -38,42 +42,82 @@ public class FHIRAuditEvent extends FHIRBaseDomainResource {
     private FHIRAuditEventSource source;
     private Collection<FHIRAuditEventObject> object;
 
+    /**
+     * Returns the resourceType.
+     * @return the resourceType
+     */
     public String getResourceType() {
         return resourceType;
     }
 
+    /**
+     * Sets the resourceType.
+     * @param resourceType the resourceType
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
 
+    /**
+     * Returns the event.
+     * @return the event
+     */
     public FHIRAuditEventEvent getEvent() {
         return event;
     }
 
+    /**
+     * Sets the event.
+     * @param event the event
+     */
     public void setEvent(FHIRAuditEventEvent event) {
         this.event = event;
     }
 
+    /**
+     * Returns the participant.
+     * @return the participant
+     */
     public Collection<FHIRAuditEventParticipant> getParticipant() {
         return participant;
     }
 
+    /**
+     * Sets the participant.
+     * @param participant the participant
+     */
     public void setParticipant(Collection<FHIRAuditEventParticipant> participant) {
         this.participant = participant;
     }
 
+    /**
+     * Returns the source.
+     * @return the source
+     */
     public FHIRAuditEventSource getSource() {
         return source;
     }
 
+    /**
+     * Sets the source.
+     * @param source the source
+     */
     public void setSource(FHIRAuditEventSource source) {
         this.source = source;
     }
 
+    /**
+     * Returns the object.
+     * @return the object
+     */
     public Collection<FHIRAuditEventObject> getObject() {
         return object;
     }
 
+    /**
+     * Sets the object.
+     * @param object the object
+     */
     public void setObject(Collection<FHIRAuditEventObject> object) {
         this.object = object;
     }

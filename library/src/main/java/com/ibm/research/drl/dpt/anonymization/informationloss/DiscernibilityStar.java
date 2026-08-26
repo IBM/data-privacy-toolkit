@@ -28,7 +28,10 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Information loss metric based on the discernibility-star criterion. */
 public class DiscernibilityStar implements InformationMetric {
+    /** Constructs a DiscernibilityStar metric instance. */
+    public DiscernibilityStar() {}
     private List<Partition> partitions;
     private int quasiIdentifiersLength;
 

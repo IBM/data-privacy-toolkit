@@ -64,10 +64,24 @@ public interface MaskingProvider extends Serializable {
         return false;
     }
 
+    /**
+     * Masks a complex object field.
+     *
+     * @param complex   the complex object
+     * @param fieldName the field name to mask
+     * @return the masked bytes
+     */
     default byte[] mask(Object complex, String fieldName) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Masks a value using a key.
+     *
+     * @param identifier the value to mask
+     * @param key        the key
+     * @return the masked value
+     */
     default String maskWithKey(String identifier, String key) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
@@ -84,22 +98,60 @@ public interface MaskingProvider extends Serializable {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks a value consistently with a product value.
+     *
+     * @param identifier the value to mask
+     * @param product    the product value
+     * @return the masked value
+     */
     default String maskProduct(String identifier, String product) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks a value that must remain less than a given masked greater value.
+     *
+     * @param identifier           the value to mask
+     * @param greaterValue         the already-masked greater value
+     * @param originalGreaterValue the original greater value
+     * @return the masked value
+     */
     default String maskLess(String identifier, String greaterValue, String originalGreaterValue) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks a value consistently with an equal value.
+     *
+     * @param identifier the value to mask
+     * @param equalValue the equal value to match
+     * @return the masked value
+     */
     default String maskEqual(String identifier, String equalValue) {
         return equalValue;
     }
 
+    /**
+     * Masks a value that must remain greater than a given masked lesser value.
+     *
+     * @param identifier          the value to mask
+     * @param lesserValue         the already-masked lesser value
+     * @param originalLesserValue the original lesser value
+     * @return the masked value
+     */
     default String maskGreater(String identifier, String lesserValue, String originalLesserValue) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks a value while preserving distance to a reference.
+     *
+     * @param identifier the value to mask
+     * @param original   the original reference value
+     * @param masked     the masked reference value
+     * @return the masked value
+     */
     default String maskDistance(String identifier, String original, String masked) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }

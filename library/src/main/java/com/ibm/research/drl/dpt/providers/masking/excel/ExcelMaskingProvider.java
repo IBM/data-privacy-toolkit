@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/** Masking provider for Excel files. */
 public class ExcelMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(ExcelMaskingProvider.class);
     private final DataTypeFormat inputFormatType;
@@ -49,6 +50,14 @@ public class ExcelMaskingProvider implements MaskingProvider {
     private final MaskingProviderFactory maskingProviderFactory;
     private final boolean ignoreNonExistent;
 
+    /**
+     * Constructs an ExcelMaskingProvider.
+     *
+     * @param maskingConfiguration   the masking configuration
+     * @param inputFormatType        the input format type (XLS or XLSX)
+     * @param toBeMasked             map of field paths to masking targets
+     * @param maskingProviderFactory the masking provider factory
+     */
     public ExcelMaskingProvider(MaskingConfiguration maskingConfiguration, DataTypeFormat inputFormatType,
                                 Map<String, DataMaskingTarget> toBeMasked, MaskingProviderFactory maskingProviderFactory) {
         this.inputFormatType = inputFormatType;

@@ -31,6 +31,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.security.SecureRandom;
 import java.util.Set;
 
+/** FHIRContactPointMaskingProvider FHIR datatype. */
 public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
     private final boolean randomizeUse;
     private final boolean removeExtensions;

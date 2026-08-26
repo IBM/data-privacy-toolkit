@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/** FHIRMaskingProvider FHIR datatype. */
 public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final Map<String, FHIRGenericMaskingProvider> maskingProviderMap;
 

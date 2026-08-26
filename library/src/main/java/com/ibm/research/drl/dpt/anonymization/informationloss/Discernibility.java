@@ -27,7 +27,10 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Information loss metric based on the discernibility criterion. */
 public class Discernibility implements InformationMetric {
+    /** Constructs a Discernibility metric instance. */
+    public Discernibility() {}
     private List<Partition> partitions;
     private IPVDataset original;
     private int quasiIdentifiersLength;

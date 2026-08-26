@@ -27,43 +27,79 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRHumanName;
 
 import java.util.Collection;
 
+/** FHIROrganizationContact FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIROrganizationContact {
+    /** Constructs a FHIROrganizationContact. */
+    public FHIROrganizationContact() {}
+
 
     private FHIRCodeableConcept purpose;
     private FHIRHumanName name;
     private Collection<FHIRContactPoint> telecom;
     private FHIRAddress address;
 
+    /**
+     * Returns the purpose.
+     * @return the purpose
+     */
     public FHIRCodeableConcept getPurpose() {
         return purpose;
     }
 
+    /**
+     * Sets the purpose.
+     * @param purpose the purpose
+     */
     public void setPurpose(FHIRCodeableConcept purpose) {
         this.purpose = purpose;
     }
 
+    /**
+     * Returns the name.
+     * @return the name
+     */
     public FHIRHumanName getName() {
         return name;
     }
 
+    /**
+     * Sets the name.
+     * @param name the name
+     */
     public void setName(FHIRHumanName name) {
         this.name = name;
     }
 
+    /**
+     * Returns the telecom.
+     * @return the telecom
+     */
     public Collection<FHIRContactPoint> getTelecom() {
         return telecom;
     }
 
+    /**
+     * Sets the telecom.
+     * @param telecom the telecom
+     */
     public void setTelecom(Collection<FHIRContactPoint> telecom) {
         this.telecom = telecom;
     }
 
+    /**
+     * Returns the address.
+     * @return the address
+     */
     public FHIRAddress getAddress() {
         return address;
     }
 
+    /**
+     * Sets the address.
+     * @param address the address
+     */
     public void setAddress(FHIRAddress address) {
         this.address = address;
     }

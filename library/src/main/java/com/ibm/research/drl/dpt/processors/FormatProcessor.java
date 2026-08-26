@@ -59,6 +59,17 @@ public abstract class FormatProcessor implements Serializable {
         output.write(System.lineSeparator().getBytes());
     }
 
+    /**
+     * Masks a stream of records.
+     *
+     * @param dataset            the input stream
+     * @param output             the output stream
+     * @param factory            the masking provider factory
+     * @param dataMaskingOptions the masking options
+     * @param alreadyMaskedFields fields already masked
+     * @param registerTypes      additional provider type registrations
+     * @throws IOException if an I/O error occurs
+     */
     public void maskStream(InputStream dataset, OutputStream output, MaskingProviderFactory factory, DataMaskingOptions dataMaskingOptions, Set<String> alreadyMaskedFields, Map<ProviderType, Class<? extends MaskingProvider>> registerTypes) throws IOException {
         logger.info("Masking stream");
 
@@ -266,6 +277,17 @@ public abstract class FormatProcessor implements Serializable {
         return fieldName;
     }
 
+    /**
+     * Identifies data types in a stream.
+     *
+     * @param input           the input stream
+     * @param inputFormatType the format type
+     * @param datasetOptions  dataset options
+     * @param identifiers     the identifiers to use
+     * @param firstN          maximum number of records to process (0 = all)
+     * @return an identification report
+     * @throws IOException if an I/O error occurs
+     */
     public IdentificationReport identifyTypesStream(InputStream input, DataTypeFormat inputFormatType,
                                                     DatasetOptions datasetOptions,
                                                     Collection<Identifier> identifiers, int firstN) throws IOException {

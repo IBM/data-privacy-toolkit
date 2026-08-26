@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 
 import java.util.Set;
 
+/** FHIRBaseDomainResourceMaskingProvider FHIR datatype. */
 public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean maskId;

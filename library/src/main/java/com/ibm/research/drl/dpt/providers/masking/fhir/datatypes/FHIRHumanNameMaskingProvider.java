@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+/** FHIRHumanNameMaskingProvider FHIR datatype. */
 public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
     private final MaskingProvider nameMaskingProvider;
     private final boolean removeExtensions;

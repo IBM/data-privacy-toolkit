@@ -28,6 +28,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRRangeMaskingProvider FHIR datatype. */
 public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean deleteLow;

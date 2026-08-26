@@ -41,18 +41,57 @@ import java.util.List;
 })
 public interface
 PrivacyConstraint extends Serializable {
+    /**
+     * Checks this constraint using the given privacy metric.
+     *
+     * @param metric the computed privacy metric
+     * @return true if the constraint is satisfied
+     */
     boolean check(PrivacyMetric metric);
 
+    /**
+     * Checks this constraint for the given partition.
+     *
+     * @param partition        the partition to check
+     * @param sensitiveColumns list of sensitive column indices
+     * @return true if the constraint is satisfied
+     */
     boolean check(Partition partition, List<Integer> sensitiveColumns);
 
+    /**
+     * Returns whether this constraint requires the anonymized partition.
+     *
+     * @return true if the anonymized partition is required
+     */
     boolean requiresAnonymizedPartition();
 
+    /**
+     * Returns the content requirements bitmask for this constraint.
+     *
+     * @return the content requirements
+     */
     int contentRequirements();
 
+    /**
+     * Performs sanity checks on the original dataset.
+     *
+     * @param dataset the original dataset
+     */
     void sanityChecks(IPVDataset dataset);
 
+    /**
+     * Initializes the constraint with dataset and column information.
+     *
+     * @param dataset               the dataset
+     * @param columnInformationList the column information list
+     */
     void initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList);
 
+    /**
+     * Returns an empty metric instance for this constraint type.
+     *
+     * @return a new metric instance
+     */
     @JsonIgnore
     PrivacyMetric getMetricInstance();
 }

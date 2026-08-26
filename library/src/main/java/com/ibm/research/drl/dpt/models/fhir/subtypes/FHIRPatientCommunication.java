@@ -22,21 +22,41 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
+/** FHIRPatientCommunication FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRPatientCommunication {
+    /** Constructs a FHIRPatientCommunication. */
+    public FHIRPatientCommunication() {}
+
+    /**
+     * Returns the language.
+     * @return the language
+     */
     public FHIRCodeableConcept getLanguage() {
         return language;
     }
 
+    /**
+     * Sets the language.
+     * @param language the language
+     */
     public void setLanguage(FHIRCodeableConcept language) {
         this.language = language;
     }
 
+    /**
+     * Returns the preferred.
+     * @return the preferred
+     */
     public boolean isPreferred() {
         return preferred;
     }
 
+    /**
+     * Sets the preferred.
+     * @param preferred the preferred
+     */
     public void setPreferred(boolean preferred) {
         this.preferred = preferred;
     }

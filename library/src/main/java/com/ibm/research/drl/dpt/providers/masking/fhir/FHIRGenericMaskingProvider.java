@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/** FHIRGenericMaskingProvider FHIR datatype. */
 public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
     private final List<FHIRResourceMaskingAction> maskingActionList;
     private final Set<String> maskedFields;

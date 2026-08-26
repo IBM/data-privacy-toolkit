@@ -21,7 +21,10 @@ package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 import com.ibm.research.drl.dpt.anonymization.Partition;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
+/** DP error metric based on average relative error per value. */
 public class DPErrorAverageRelative implements DPError {
+    /** Constructs a DPErrorAverageRelative instance. */
+    public DPErrorAverageRelative() {}
     @Override
     public double reportError(Partition original, Partition noisy, int columnIndex) {
         IPVDataset originalDataset = original.getMember();

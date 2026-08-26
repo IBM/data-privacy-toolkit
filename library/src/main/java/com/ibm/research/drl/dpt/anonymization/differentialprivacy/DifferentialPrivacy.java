@@ -32,8 +32,12 @@ import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaField;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/** Implements differential privacy as an anonymization algorithm. */
 public class DifferentialPrivacy implements AnonymizationAlgorithm {
+    /** Constructs a DifferentialPrivacy algorithm instance. */
+    public DifferentialPrivacy() {}
     private boolean perEquivalenceClass = true;
+    /** The index of the e-quasi column being anonymized. */
     public int columnIndex;
     private int numberOfColumns;
     private boolean getBoundsFromData;

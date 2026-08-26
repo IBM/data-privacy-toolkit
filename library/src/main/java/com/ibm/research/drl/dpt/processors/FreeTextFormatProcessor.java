@@ -30,11 +30,28 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.function.Function;
 
+/** Processor interface for free-text format documents. */
 public interface FreeTextFormatProcessor {
+    /**
+     * Identifies entities in the given document.
+     *
+     * @param inputStream    the document input stream
+     * @param identifier     the NLP annotator
+     * @param datasetOptions dataset options
+     * @return list of identified entities
+     * @throws IOException if reading fails
+     */
     default List<IdentifiedEntity> identifyDocument(InputStream inputStream, NLPAnnotator identifier, DatasetOptions datasetOptions) throws IOException {
         throw new UnsupportedOperationException("Not implemented for this file format");
     }
 
+    /**
+     * Masks the given document and writes to the output.
+     *
+     * @param dataset         the document input stream
+     * @param output          the output stream
+     * @param maskingProvider the masking provider
+     */
     default void maskDocument(InputStream dataset, OutputStream output, MaskingProvider maskingProvider) {
         throw new UnsupportedOperationException("Not implemented for this file format");
     }

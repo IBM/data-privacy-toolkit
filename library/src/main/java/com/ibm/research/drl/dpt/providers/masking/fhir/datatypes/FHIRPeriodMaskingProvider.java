@@ -31,6 +31,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.Serializable;
 import java.util.Set;
 
+/** FHIRPeriodMaskingProvider FHIR datatype. */
 public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
     private final boolean maskStart;

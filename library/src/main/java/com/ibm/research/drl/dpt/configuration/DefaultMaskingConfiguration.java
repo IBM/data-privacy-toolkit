@@ -49,12 +49,16 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         this(null, name);
     }
 
+    /** Constructs a DefaultMaskingConfiguration with no name or manager. */
     public DefaultMaskingConfiguration() {
         this(null, null);
     }
 
     /**
      * Instantiates a new Default masking configuration.
+     *
+     * @param configurationManager the configuration manager
+     * @param name                 the configuration name
      */
     public DefaultMaskingConfiguration(ConfigurationManager configurationManager, String name) {
         this.configurationManager = configurationManager;

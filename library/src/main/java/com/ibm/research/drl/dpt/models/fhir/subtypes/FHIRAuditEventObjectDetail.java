@@ -22,25 +22,45 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 
+/** FHIRAuditEventObjectDetail FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRAuditEventObjectDetail {
+    /** Constructs a FHIRAuditEventObjectDetail. */
+    public FHIRAuditEventObjectDetail() {}
+
 
     private String type;
     private String value;
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns the value.
+     * @return the value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets the value.
+     * @param value the value
+     */
     public void setValue(String value) {
         this.value = value;
     }

@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRQuantityMaskingProvider FHIR datatype. */
 public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final String VALUE_PATH;

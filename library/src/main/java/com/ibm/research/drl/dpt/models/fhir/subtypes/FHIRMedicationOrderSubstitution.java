@@ -23,21 +23,41 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
 
+/** FHIRMedicationOrderSubstitution FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationOrderSubstitution {
+    /** Constructs a FHIRMedicationOrderSubstitution. */
+    public FHIRMedicationOrderSubstitution() {}
+
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public FHIRCodeableConcept getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(FHIRCodeableConcept type) {
         this.type = type;
     }
 
+    /**
+     * Returns the reason.
+     * @return the reason
+     */
     public FHIRCodeableConcept getReason() {
         return reason;
     }
 
+    /**
+     * Sets the reason.
+     * @param reason the reason
+     */
     public void setReason(FHIRCodeableConcept reason) {
         this.reason = reason;
     }

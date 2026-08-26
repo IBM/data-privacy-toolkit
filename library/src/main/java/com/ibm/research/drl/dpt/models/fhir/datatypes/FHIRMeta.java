@@ -25,7 +25,11 @@ import java.util.Collection;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+/** FHIRMeta FHIR datatype. */
 public class FHIRMeta {
+    /** Constructs a FHIRMeta. */
+    public FHIRMeta() {}
+
     /* v1.0.2
     {
   // from Element: extension

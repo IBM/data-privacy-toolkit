@@ -24,6 +24,7 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.io.Serializable;
 
+/** FHIRResourceMaskingAction FHIR datatype. */
 public class FHIRResourceMaskingAction implements Serializable {
 
     private final String fullPath;

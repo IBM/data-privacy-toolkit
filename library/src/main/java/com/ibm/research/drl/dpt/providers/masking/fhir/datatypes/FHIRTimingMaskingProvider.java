@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+/** FHIRTimingMaskingProvider FHIR datatype. */
 public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean maskEvent;
