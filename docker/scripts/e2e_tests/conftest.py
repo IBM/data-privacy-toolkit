@@ -21,15 +21,7 @@ DOCKER_IMAGE = os.getenv("IMAGE_NAME")
 def _docker_run(current_test, input_folder="input", output_folder="output", config_folder="config", consistency_folder=None):
     """
     Executes the test by running the dpt docker image.
-
-    @param current_test: path of the current test,
-        where output/ and expected/ sub-folders are expected.
-        If output is not existing will be created
-
     """
-    if not DOCKER_IMAGE:
-        pytest.skip("IMAGE_NAME environment variable not set")
-
     current_test_folder = os.path.dirname(current_test)
     output = os.path.join(current_test_folder, output_folder)
 
@@ -41,13 +33,18 @@ def _docker_run(current_test, input_folder="input", output_folder="output", conf
     if consistency and not os.path.exists(consistency):
         os.makedirs(consistency)
 
+    # Add chmod to ensure output directory is writable
+    os.chmod(output, 0o777)
+    if consistency:
+        os.chmod(consistency, 0o777)
+
     os.system(
-        "docker run --rm"
-        " --mount type=bind,source=" + os.path.join(current_test_folder, input_folder) + ",target=/input"
-        " --mount type=bind,source=" + os.path.join(current_test_folder, config_folder) + ",target=/config"
-        " --mount type=bind,source=" + output + ",target=/output"
-        + (" --mount type=bind,source=" + consistency + ",target=/consistency" if consistency_folder else "")
-        + " " + DOCKER_IMAGE
+        "docker run --rm " \
+        " --mount type=bind,source=" + os.path.join(current_test_folder, input_folder) + ",target=/input" \
+        " --mount type=bind,source=" + os.path.join(current_test_folder, config_folder) + ",target=/config" \
+        " --mount type=bind,source=" + output + ",target=/output " \
+        " " + ("--mount type=bind,source=" + consistency +",target=/consistency" if consistency_folder else "") + "" \
+        " " + DOCKER_IMAGE
     )
 
 
