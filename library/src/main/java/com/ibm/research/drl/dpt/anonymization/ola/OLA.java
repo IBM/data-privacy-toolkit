@@ -236,6 +236,12 @@ public class OLA implements AnonymizationAlgorithm {
     }
 
 
+    /**
+     * Selects the lattice node with the lowest information loss from the given list.
+     *
+     * @param nodes the candidate nodes
+     * @return the node with the lowest information loss, or {@code null} if none have a computed loss
+     */
     public static LatticeNode selectLowestLossOnLevel(List<LatticeNode> nodes) {
 
         double lowestLoss = Double.MAX_VALUE;

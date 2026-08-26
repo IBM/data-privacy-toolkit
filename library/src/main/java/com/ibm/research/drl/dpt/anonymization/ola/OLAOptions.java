@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Configuration options for the OLA anonymization algorithm. */
 public class OLAOptions implements AnonymizationAlgorithmOptions {
     /**
      * Gets suppression rate.

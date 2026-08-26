@@ -22,6 +22,10 @@ package com.ibm.research.drl.dpt.processors.records;
 /** Abstract base for records that support JSON-pointer-style multi-path field access. */
 public abstract class MultipathRecord implements Record {
 
+    /** Constructs a MultipathRecord. */
+    protected MultipathRecord() {}
+
+
     /**
      * Generates all concrete field paths matching the given pattern.
      *

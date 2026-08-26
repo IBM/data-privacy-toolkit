@@ -130,6 +130,14 @@ public class NumericalRange implements ColumnInformation {
         this(sortedValues, columnType, 1.0, false);
     }
 
+    /**
+     * Constructs a NumericalRange from its constituent properties.
+     *
+     * @param sortedValues sorted list of numeric values defining the range
+     * @param columnType   the column type
+     * @param weight       the weight assigned to this range
+     * @param forLinking   whether this range is used for record linking
+     */
     @JsonCreator
     public NumericalRange(
             @JsonProperty("sortedValues") List<Double> sortedValues,

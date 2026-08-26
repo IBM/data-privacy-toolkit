@@ -41,7 +41,12 @@ import java.util.List;
 public class NamesManager implements Serializable {
     private final static Logger log = LogManager.getLogger(NamesManager.class);
 
+    /** Manager for last-name resources. */
     private final static class LastNameManager extends ResourceBasedManager<LastName> implements Serializable {
+
+        /** Constructs a LastNameManager. */
+        LastNameManager() {}
+
 
         @Override
         protected Collection<ResourceEntry> getResources() {

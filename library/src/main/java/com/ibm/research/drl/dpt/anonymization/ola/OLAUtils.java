@@ -25,7 +25,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+/** Utility methods for the OLA anonymization algorithm. */
 public class OLAUtils {
+
+    /** Not instantiable. */
+    private OLAUtils() {}
 
     private static String createRowKey(List<String> row, List<Integer> quasiColumns) {
         List<String> quasiValues = new ArrayList<>(quasiColumns.size());
