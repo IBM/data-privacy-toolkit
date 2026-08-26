@@ -29,6 +29,7 @@ import java.util.Map;
 
 /** Persistent masking provider backed by a relational database. */
 public class DBPersistentMaskingProvider extends AbstractPersistentMaskingProvider {
+    /** The database-backed cache mapping original to masked values. */
     private final DBCache cache;
 
     /**

@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Persistent masking provider that caches masked values in an in-memory {@link java.util.concurrent.ConcurrentHashMap}.
  */
 public class LocallyPersistentMaskingProvider extends AbstractPersistentMaskingProvider {
+    /** In-memory map caching original-to-masked value pairs. */
     private final Map<String, String> persistenceProvider;
 
     /**

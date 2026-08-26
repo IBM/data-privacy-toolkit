@@ -32,7 +32,9 @@ import java.util.UUID;
 
 /** Persistent masking provider backed by the file system. */
 public class FileBackedPersistentMaskingProvider extends AbstractPersistentMaskingProvider {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(FileBackedPersistentMaskingProvider.class);
+    /** The file-backed cache mapping original to masked values. */
     private final FileCache cache;
 
     /**

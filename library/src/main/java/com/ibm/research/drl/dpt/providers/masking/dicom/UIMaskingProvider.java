@@ -26,6 +26,7 @@ import java.security.SecureRandom;
 
 /** DICOM UI (unique identifier) masking provider. */
 public class UIMaskingProvider implements MaskingProvider {
+    /** Delegate random masking provider. */
     private final RandomMaskingProvider randomMaskingProvider;
 
     /**

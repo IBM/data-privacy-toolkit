@@ -34,9 +34,12 @@ import java.util.Set;
 
 /** FHIRGenericMaskingProvider FHIR datatype. */
 public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
+    /** The ordered list of masking actions to apply. */
     private final List<FHIRResourceMaskingAction> maskingActionList;
+    /** The set of field paths that have already been masked. */
     private final Set<String> maskedFields;
 
+    /** Masking provider for the common FHIR domain resource fields. */
     private final FHIRBaseDomainResourceMaskingProvider fhirBaseDomainResourceMaskingProvider;
 
     private AbstractComplexMaskingProvider<JsonNode> createFHIRMaskingProvider(String fhirType, String fullPath, MaskingConfiguration maskingConfiguration) {

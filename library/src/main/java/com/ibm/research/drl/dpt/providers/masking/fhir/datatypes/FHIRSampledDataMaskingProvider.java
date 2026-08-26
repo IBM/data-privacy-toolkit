@@ -32,28 +32,49 @@ import java.util.Set;
 /** FHIRSampledDataMaskingProvider FHIR datatype. */
 public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the origin element. */
     private final boolean maskOrigin;
+    /** Whether to mask the period element. */
     private final boolean maskPeriod;
+    /** Whether to mask the factor element. */
     private final boolean maskFactor;
+    /** Whether to mask the lower limit element. */
     private final boolean maskLowerLimit;
+    /** Whether to mask the upper limit element. */
     private final boolean maskUpperLimit;
+    /** Whether to mask the dimensions element. */
     private final boolean maskDimensions;
+    /** Whether to mask the data element. */
     private final boolean maskData;
 
+    /** JSON path to the origin field. */
     private final String ORIGIN_PATH;
+    /** JSON path to the period field. */
     private final String PERIOD_PATH;
+    /** JSON path to the factor field. */
     private final String FACTOR_PATH;
+    /** JSON path to the lowerLimit field. */
     private final String LOWERLIMIT_PATH;
+    /** JSON path to the upperLimit field. */
     private final String UPPERLIMIT_PATH;
+    /** JSON path to the dimensions field. */
     private final String DIMENSIONS_PATH;
+    /** JSON path to the data field. */
     private final String DATA_PATH;
 
+    /** Masking provider for the origin element. */
     private final FHIRQuantityMaskingProvider originMaskingProvider;
+    /** Masking provider for the period element. */
     private final MaskingProvider periodMaskingProvider;
+    /** Masking provider for the factor element. */
     private final MaskingProvider factorMaskingProvider;
+    /** Masking provider for the lower limit element. */
     private final MaskingProvider lowerLimitMaskingProvider;
+    /** Masking provider for the upper limit element. */
     private final MaskingProvider upperLimitMaskingProvider;
+    /** Masking provider for the dimensions element. */
     private final MaskingProvider dimensionsMaskingProvider;
+    /** Masking provider for the data element. */
     private final MaskingProvider dataMaskingProvider;
 
     /**

@@ -32,9 +32,13 @@ import java.util.Set;
 /** FHIRAttachmentMaskingProvider FHIR datatype. */
 public class FHIRAttachmentMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
+    /** Whether to remove extensions from the attachment. */
     private final boolean removeExtensions;
+    /** Whether to remove the data element. */
     private final boolean removeData;
+    /** Whether to remove the URI element. */
     private final boolean removeURI;
+    /** Whether to remove the title element. */
     private final boolean removeTitle;
 
     /**

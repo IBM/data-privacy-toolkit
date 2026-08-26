@@ -31,6 +31,7 @@ import java.util.List;
 
 /** DICOM PN (person name) masking provider that masks each name component. */
 public class PNMaskingProvider implements MaskingProvider {
+    /** Delegate name masking provider for each PN component. */
     private final MaskingProvider nameMaskingProvider;
 
     /**

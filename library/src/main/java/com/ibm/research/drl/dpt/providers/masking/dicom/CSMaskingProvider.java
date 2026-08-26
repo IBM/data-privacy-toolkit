@@ -30,12 +30,18 @@ import java.security.SecureRandom;
  * DICOM CS (Code String) masking provider, supporting GENDER and SEX_NEUTERED entity types.
  */
 public class CSMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger logger = LogManager.getLogger(CSMaskingProvider.class);
+    /** Fallback random masking provider. */
     private final RandomMaskingProvider randomMaskingProvider;
+    /** Valid gender code characters. */
     private final char[] genders = "FMO".toCharArray();
+    /** Valid sex-neutered code values. */
     private final String[] sexNeutered = {"ALTERED", "UNALTERED"};
 
+    /** The DICOM entity type driving the masking logic. */
     private final DicomEntityType entityType;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

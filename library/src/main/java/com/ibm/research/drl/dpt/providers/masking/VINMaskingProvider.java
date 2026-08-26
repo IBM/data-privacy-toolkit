@@ -28,10 +28,15 @@ import java.security.SecureRandom;
 
 /** Masking provider for Vehicle Identification Number (VIN) values. */
 public class VINMaskingProvider implements MaskingProvider {
+    /** Characters allowed in a randomly generated VIN. */
     private static final char[] allowedCharacters = "ABCDEFGHJKLMNPRSTUVWXYZ0123456789".toCharArray();
+    /** Whether to preserve the World Manufacturer Identifier (WMI) portion. */
     private final boolean preserveWMI;
+    /** Whether to preserve the Vehicle Descriptor Section (VDS) portion. */
     private final boolean preserveVDS;
+    /** Shared VIN identifier instance. */
     private final VINIdentifier vinIdentifier = new VINIdentifier();
+    /** Shared VIN manager instance. */
     private final VINManager vinManager = new VINManager();
 
     /**

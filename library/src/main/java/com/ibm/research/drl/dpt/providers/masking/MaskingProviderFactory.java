@@ -58,7 +58,9 @@ public final class MaskingProviderFactory implements Serializable {
     private static final Logger logger = LogManager.getLogger(MaskingProviderFactory.class);
     private static final SecureRandom random = new SecureRandom();
 
+    /** Shared dummy masking provider used as a pass-through. */
     private static final DummyMaskingProvider dummy = new DummyMaskingProvider();
+    /** The configuration manager providing per-field masking configurations. */
     private final ConfigurationManager configurationManager;
 
     /**

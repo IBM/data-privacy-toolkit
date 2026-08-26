@@ -32,16 +32,25 @@ import java.util.Set;
 /** FHIRQuantityMaskingProvider FHIR datatype. */
 public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** JSON path to the value field. */
     private final String VALUE_PATH;
+    /** JSON path to the system field. */
     private final String SYSTEM_PATH;
+    /** JSON path to the code field. */
     private final String CODE_PATH;
 
+    /** Whether to mask the value element. */
     private final boolean maskValue;
+    /** Whether to mask the system element. */
     private final boolean maskSystem;
+    /** Whether to mask the code element. */
     private final boolean maskCode;
 
+    /** Masking provider for the value element. */
     private final MaskingProvider valueMaskingProvider;
+    /** Masking provider for the system element. */
     private final MaskingProvider systemMaskingProvider;
+    /** Masking provider for the code element. */
     private final MaskingProvider codeMaskingProvider;
 
     /**

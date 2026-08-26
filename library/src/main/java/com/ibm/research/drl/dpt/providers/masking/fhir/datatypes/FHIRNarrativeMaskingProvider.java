@@ -26,7 +26,9 @@ import java.io.Serializable;
 /** FHIRNarrativeMaskingProvider FHIR datatype. */
 public class FHIRNarrativeMaskingProvider implements Serializable {
 
+    /** Whether to remove the div element. */
     private final boolean removeDiv;
+    /** Whether to remove extensions. */
     private final boolean removeExtensions;
 
     /**

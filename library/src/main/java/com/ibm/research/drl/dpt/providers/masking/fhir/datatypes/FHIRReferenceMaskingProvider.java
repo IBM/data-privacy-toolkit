@@ -34,16 +34,26 @@ import java.util.Set;
 /** FHIRReferenceMaskingProvider FHIR datatype. */
 public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
+    /** Whether to mask the display element. */
     private final boolean maskDisplay;
+    /** Whether to remove the display element. */
     private final boolean removeDisplay;
+    /** Whether to remove extensions. */
     private final boolean removeExtension;
+    /** Whether to mask the reference element. */
     private final boolean maskReference;
+    /** Whether to preserve the reference prefix when masking. */
     private final boolean preserveReferencePrefix;
+    /** Masking provider for the reference element. */
     private final MaskingProvider referenceMaskingProvider;
+    /** Masking provider for the display element. */
     private final MaskingProvider displayMaskingProvider;
+    /** Reference prefixes that should be excluded from masking. */
     private final Set<String> maskReferenceExcludePrefixList;
 
+    /** JSON path to the reference field. */
     private final String REFERENCE_FIELD_PATH;
+    /** JSON path to the display field. */
     private final String DISPLAY_FIELD_PATH;
 
     /**

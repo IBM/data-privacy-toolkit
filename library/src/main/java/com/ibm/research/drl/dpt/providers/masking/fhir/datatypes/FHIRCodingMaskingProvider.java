@@ -32,19 +32,31 @@ import java.util.Set;
 /** FHIRCodingMaskingProvider FHIR datatype. */
 public class FHIRCodingMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the version element. */
     private final boolean maskVersion;
+    /** Whether to mask the system element. */
     private final boolean maskSystem;
+    /** Whether to mask the code element. */
     private final boolean maskCode;
+    /** Whether to mask the display element. */
     private final boolean maskDisplay;
 
+    /** Masking provider for the version element. */
     private final MaskingProvider versionMaskingProvider;
+    /** Masking provider for the system element. */
     private final MaskingProvider systemMaskingProvider;
+    /** Masking provider for the display element. */
     private final MaskingProvider displayMaskingProvider;
+    /** Masking provider for the code element. */
     private final MaskingProvider codeMaskingProvider;
 
+    /** JSON path to the display field. */
     private final String DISPLAY_PATH;
+    /** JSON path to the version field. */
     private final String VERSION_PATH;
+    /** JSON path to the code field. */
     private final String CODE_PATH;
+    /** JSON path to the system field. */
     private final String SYSTEM_PATH;
 
 

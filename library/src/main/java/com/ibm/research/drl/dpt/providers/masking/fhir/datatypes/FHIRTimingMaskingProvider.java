@@ -34,13 +34,19 @@ import java.util.Set;
 /** FHIRTimingMaskingProvider FHIR datatype. */
 public class FHIRTimingMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the event element. */
     private final boolean maskEvent;
+    /** Whether to mask the code element. */
     private final boolean maskCode;
 
+    /** Masking provider for the event element. */
     private final MaskingProvider eventMaskingProvider;
+    /** Masking provider for the code element. */
     private final FHIRCodeableConceptMaskingProvider codeMaskingProvider;
 
+    /** JSON path to the event field. */
     private final String EVENT_PATH;
+    /** JSON path to the code field. */
     private final String CODE_PATH;
 
     /**

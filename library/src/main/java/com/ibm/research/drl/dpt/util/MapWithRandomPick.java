@@ -29,8 +29,11 @@ import java.util.*;
  * @param <V> the type parameter for values
  */
 public class MapWithRandomPick<K, V> implements Serializable {
+    /** The underlying map. */
     private final Map<K, V> map;
+    /** Ordered list of keys used for random selection. */
     private final List<K> keyList = new ArrayList<K>();
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

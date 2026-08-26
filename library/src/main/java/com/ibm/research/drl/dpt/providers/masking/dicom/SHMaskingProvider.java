@@ -26,6 +26,7 @@ import java.security.SecureRandom;
 
 /** DICOM SH (short string) masking provider that randomizes character values. */
 public class SHMaskingProvider implements MaskingProvider {
+    /** Delegate random masking provider. */
     private final RandomMaskingProvider randomMaskingProvider;
 
     /**

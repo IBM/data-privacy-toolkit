@@ -40,13 +40,20 @@ import java.util.Set;
 
 /** FHIRAddressMaskingProvider FHIR datatype. */
 public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
+    /** Shared city manager instance. */
     private final static CityManager cityManager = CityManager.getInstance();
+    /** Shared country manager instance. */
     private final static CountryManager countryManager = CountryManager.getInstance();
 
+    /** Masking provider for the city component. */
     private final MaskingProvider cityMaskingProvider;
+    /** Masking provider for the postal code component. */
     private final MaskingProvider postalCodeMaskingProvider;
+    /** Shared street name manager instance. */
     private static final StreetNameManager streetNameManager = StreetNameManager.getInstance();
+    /** Whether to preserve only the state/region component. */
     private final boolean preserveStateOnly;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**
