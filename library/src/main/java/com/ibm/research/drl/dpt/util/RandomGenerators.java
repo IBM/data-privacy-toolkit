@@ -41,10 +41,12 @@ import java.util.Random;
 
 import static org.apache.commons.lang3.ArrayUtils.contains;
 
-/**
- * The type Random generators.
- */
+/** Utility class providing static methods for generating random values of various types. */
 public class RandomGenerators {
+
+    /** Not instantiable. */
+    private RandomGenerators() {}
+
     private static final Logger logger = LogManager.getLogger(RandomGenerators.class);
 
     private static final SecureRandom random = new SecureRandom();
@@ -78,6 +80,11 @@ public class RandomGenerators {
         return builder.toString();
     }
 
+    /**
+     * Generates a random UK Social Security Number.
+     *
+     * @return a randomly generated SSNUK string
+     */
     public static String generateRandomSSNUK() {
         String prefix = SSNUK_MANAGER.getRandomPrefix();
         StringBuilder builder = new StringBuilder(prefix);
@@ -91,6 +98,11 @@ public class RandomGenerators {
         return builder.toString();
     }
 
+    /**
+     * Builds a username derived from a random first and last name.
+     *
+     * @return a name-based username string
+     */
     public static String buildNameBasedUsername() {
         String firstName = namesManager.getRandomFirstName();
         String lastName = namesManager.getRandomLastName();
@@ -181,6 +193,14 @@ public class RandomGenerators {
         return (base - rangeDown) + random.nextInt(rangeUp + rangeDown);
     }
 
+    /**
+     * Returns a random double within the given range around {@code base}.
+     *
+     * @param base      the centre value
+     * @param rangeDown the downward offset
+     * @param rangeUp   the upward offset
+     * @return a random value in {@code [base - rangeDown, base + rangeUp]}
+     */
     public static double randomWithinRange(double base, double rangeDown, double rangeUp) {
         return (base - rangeDown) + random.nextDouble() * (rangeUp + rangeDown);
     }
@@ -341,6 +361,13 @@ public class RandomGenerators {
         return builder.toString();
     }
 
+    /**
+     * Generates a random coordinate at a random bearing from the given position.
+     *
+     * @param latitudeLongitude the starting position
+     * @param distance          the distance in metres
+     * @return a random coordinate at approximately {@code distance} from the starting position
+     */
     public static LatitudeLongitude generateRandomCoordinateRandomDirection(
             LatitudeLongitude latitudeLongitude, int distance) {
 
@@ -352,6 +379,15 @@ public class RandomGenerators {
 
     }
 
+    /**
+     * Calculates a destination coordinate from an origin, bearing and distance.
+     *
+     * @param latitude  origin latitude in degrees
+     * @param longitude origin longitude in degrees
+     * @param radian    bearing in radians
+     * @param distance  distance in metres
+     * @return the destination coordinate
+     */
     public static LatitudeLongitude generateRandomCoordinateFromBearing(
             double latitude, double longitude, double radian, int distance) {
 
@@ -373,6 +409,14 @@ public class RandomGenerators {
 
     }
 
+    /**
+     * Generates a random coordinate at a random bearing from the given lat/lon.
+     *
+     * @param latitude  origin latitude in degrees
+     * @param longitude origin longitude in degrees
+     * @param distance  distance in metres
+     * @return a random coordinate at approximately {@code distance} from the origin
+     */
     public static LatitudeLongitude generateRandomCoordinateRandomDirection(
             double latitude, double longitude, int distance) {
 
@@ -380,12 +424,29 @@ public class RandomGenerators {
         return generateRandomCoordinateFromBearing(latitude, longitude, radian, distance);
     }
 
+    /**
+     * Generates a random coordinate within an annular region around the given position.
+     *
+     * @param latitudeLongitude   the centre position
+     * @param minimumOffsetRadius the minimum distance in metres
+     * @param maximumOffsetRadius the maximum distance in metres
+     * @return a random coordinate within the annulus
+     */
     public static LatitudeLongitude generateRandomCoordinate(
             LatitudeLongitude latitudeLongitude, int minimumOffsetRadius, int maximumOffsetRadius) {
         return generateRandomCoordinate(latitudeLongitude.getLatitude(), latitudeLongitude.getLongitude(), minimumOffsetRadius, maximumOffsetRadius);
 
     }
 
+    /**
+     * Generates a random coordinate within an annular region around the given lat/lon.
+     *
+     * @param latitude            centre latitude in degrees
+     * @param longitude           centre longitude in degrees
+     * @param minimumOffsetRadius minimum distance in metres
+     * @param maximumOffsetRadius maximum distance in metres
+     * @return a random coordinate within the annulus
+     */
     public static LatitudeLongitude generateRandomCoordinate(
             Double latitude, Double longitude, int minimumOffsetRadius, int maximumOffsetRadius) {
 
@@ -589,7 +650,12 @@ public class RandomGenerators {
         return randomUIDGenerator(length, null);
     }
 
-    /* Creates a random sequence of hex pairs, each pair is a value from 0 to 255 */
+    /**
+     * Creates a random sequence of hex pairs; each pair is a value from 0 to 255.
+     *
+     * @param length the number of hex pairs to generate
+     * @return a hex string of length {@code 2 * length}
+     */
     public static String randomHexSequence(int length) {
         if (length == 0) {
             return "";

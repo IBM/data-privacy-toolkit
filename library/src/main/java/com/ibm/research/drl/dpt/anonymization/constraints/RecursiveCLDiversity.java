@@ -28,10 +28,17 @@ import com.ibm.research.drl.dpt.util.Histogram;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Privacy constraint implementing recursive (c,l)-diversity. */
 public class RecursiveCLDiversity implements PrivacyConstraint {
     private final int l;
     private final double c;
 
+    /**
+     * Constructs a RecursiveCLDiversity constraint.
+     *
+     * @param l the minimum number of sensitive value occurrences
+     * @param c the ratio threshold
+     */
     @JsonCreator
     public RecursiveCLDiversity(
             @JsonProperty("l") int l,
@@ -40,10 +47,20 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
         this.c = c;
     }
 
+    /**
+     * Returns the l parameter.
+     *
+     * @return l
+     */
     public int getL() {
         return l;
     }
 
+    /**
+     * Returns the c parameter.
+     *
+     * @return c
+     */
     public double getC() {
         return c;
     }

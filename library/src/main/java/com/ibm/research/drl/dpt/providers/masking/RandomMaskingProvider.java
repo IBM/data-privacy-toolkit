@@ -24,6 +24,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces characters of a value with randomly chosen alphanumeric characters. */
 public class RandomMaskingProvider implements MaskingProvider {
 
     /**

@@ -39,6 +39,10 @@ import java.util.List;
  * Manager for first and last name resources, providing random name generation and name lookup.
  */
 public class NamesManager implements Serializable {
+
+    /** Constructs a NamesManager. */
+    public NamesManager() {}
+
     private final static Logger log = LogManager.getLogger(NamesManager.class);
 
     /** Manager for last-name resources. */

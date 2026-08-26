@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util.localization;
 
+/** Enumeration of all resource types available for localization. */
 public enum Resource {
     /**
      * Public suffix list resource.
@@ -124,15 +125,24 @@ public enum Resource {
      * States us resource.
      */
     STATES_US,
+    /** Gender resource. */
     GENDER,
+    /** County resource. */
     COUNTY,
+    /** ZIP code resource. */
     ZIPCODE,
+    /** Street types resource. */
     STREET_TYPES,
+    /** Dependent resource. */
     DEPENDENT,
+    /** Month resource. */
     MONTH,
+    /** Day resource. */
     DAY,
+    /** Animal species resource. */
     ANIMAL,
+    /** UK Social Security Number prefix resource. */
     SSNUK_PREFIXES,
-
+    /** Stop-words resource. */
     STOP_WORDS
 }

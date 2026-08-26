@@ -25,7 +25,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Collection;
 import java.util.Collections;
 
+/** Identifier for religion name values. */
 public class ReligionIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a ReligionIdentifier. */
+    public ReligionIdentifier() {}
+
     private final Collection<String> appropriateNames = Collections.singletonList("Religion");
     private final static ReligionManager religionManager = ReligionManager.getInstance();
 

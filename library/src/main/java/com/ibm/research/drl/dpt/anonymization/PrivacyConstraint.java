@@ -28,6 +28,7 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.io.Serializable;
 import java.util.List;
 
+/** Constraint that must be satisfied by an anonymized dataset partition. */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         property = "type"

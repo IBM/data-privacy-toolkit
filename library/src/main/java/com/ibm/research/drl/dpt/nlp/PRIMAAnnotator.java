@@ -53,6 +53,7 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
 
+/** NLP annotator using the PRIMA shingle-based entity recognition approach. */
 public class PRIMAAnnotator extends AbstractNLPAnnotator {
     private static final Logger logger = LogManager.getLogger(PRIMAAnnotator.class);
 
@@ -75,10 +76,21 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
 
     private final boolean performPOSTagging = false;
 
+    /**
+     * Constructs a PRIMAAnnotator with the given configuration, using the default identifier factory.
+     *
+     * @param properties JSON configuration node
+     */
     public PRIMAAnnotator(JsonNode properties) {
         this(properties, null);
     }
 
+    /**
+     * Constructs a PRIMAAnnotator with the given configuration and identifier factory.
+     *
+     * @param properties        JSON configuration node
+     * @param identifierFactory the identifier factory to use, or {@code null} to use the default
+     */
     public PRIMAAnnotator(JsonNode properties, IdentifierFactory identifierFactory) {
         this.typeMap = extractMapping(properties.get("mapping"));
         this.MIN_SHINGLE_SIZE = properties.get("MIN_SHINGLE_SIZE").asInt(2);

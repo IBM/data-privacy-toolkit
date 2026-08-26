@@ -29,6 +29,7 @@ import java.security.SecureRandom;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
+/** Masking provider for telephone, mobile, and fax number values. */
 public class PhoneMaskingProvider implements MaskingProvider {
     private final static PhoneIdentifier phoneIdentifier = new PhoneIdentifier();
     private static final MSISDNManager msisdnManager = MSISDNManager.getInstance();
