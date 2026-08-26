@@ -28,8 +28,12 @@ import java.util.List;
 import java.util.Map;
 
 
+/** Risk metric based on the FK ratio. */
 public class FKRatioMetric implements RiskMetric {
+    /** The key name for the population parameter. */
     public static final String POPULATION = "population";
+    /** Constructs a FKRatioMetric. */
+    public FKRatioMetric() {}
     private List<Partition> partitions;
     private double population;
     private double n;

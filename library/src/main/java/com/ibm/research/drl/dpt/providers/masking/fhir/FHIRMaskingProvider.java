@@ -40,22 +40,54 @@ import java.util.Set;
 public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final Map<String, FHIRGenericMaskingProvider> maskingProviderMap;
 
+    /**
+     * Constructs a FHIRMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param factory the factory
+     */
     public FHIRMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("fhir", maskingConfiguration, new HashSet<>(), factory);
     }
 
+    /**
+     * Constructs a FHIRMaskingProvider.
+     * @param random the random
+     * @param maskingConfiguration the maskingConfiguration
+     * @param factory the factory
+     */
     public FHIRMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("fhir", maskingConfiguration, new HashSet<>(), factory);
     }
 
+    /**
+     * Constructs a FHIRMaskingProvider.
+     * @param random the random
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param factory the factory
+     */
     public FHIRMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, Set<String> maskedFields, MaskingProviderFactory factory) {
         this("fhir", maskingConfiguration, maskedFields, factory);
     }
 
+    /**
+     * Loads masking rules for a given FHIR resource from configuration.
+     *
+     * @param resourceName         the FHIR resource name
+     * @param maskingConfiguration the masking configuration
+     * @return the collection of masking rule strings
+     */
     public static Collection<String> loadRulesForResource(String resourceName, MaskingConfiguration maskingConfiguration) {
         return maskingConfiguration.getStringValueWithPrefixMatch("fhir.maskingConf." + resourceName + ".");
     }
 
+    /**
+     * Loads masking rules for a given FHIR resource from the masking targets map.
+     *
+     * @param resourceName the FHIR resource name
+     * @param toBeMasked   the map of fields to masking targets
+     * @return the collection of masking rule strings
+     */
     public static Collection<String> loadRulesForResource(String resourceName, Map<String, DataMaskingTarget> toBeMasked) {
         List<String> rules = new ArrayList<>();
 
@@ -92,6 +124,14 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
 
     }
 
+    /**
+     * Constructs a FHIRMaskingProvider.
+     * @param random the random
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param toBeMasked the toBeMasked
+     * @param factory the factory
+     */
     public FHIRMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration,
                                Set<String> maskedFields, Map<String, DataMaskingTarget> toBeMasked, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
@@ -148,6 +188,11 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
 
      */
 
+    /**
+     * Masks a JsonNode object.
+     * @param resource the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public String mask(JsonNode resource) {
         JsonNode maskedValue = maskResource(resource);
 
@@ -158,6 +203,11 @@ public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> 
         return maskedValue.toString();
     }
 
+    /**
+     * Masks a String object.
+     * @param identifier the String to mask
+     * @return the masked String
+     */
     public String mask(String identifier) {
 
         try {

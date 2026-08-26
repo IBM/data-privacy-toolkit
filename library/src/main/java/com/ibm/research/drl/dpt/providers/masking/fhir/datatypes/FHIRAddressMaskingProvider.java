@@ -69,6 +69,11 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAddress obj = JsonUtils.MAPPER.treeToValue(node, FHIRAddress.class);

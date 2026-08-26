@@ -41,6 +41,13 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
     private final String NUMERATOR_PATH;
     private final String DENOMINATOR_PATH;
 
+    /**
+     * Constructs a FHIRRatioMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRRatioMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -57,6 +64,11 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRatio obj = JsonUtils.MAPPER.treeToValue(node, FHIRRatio.class);
@@ -67,6 +79,11 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
         }
     }
 
+    /**
+     * Masks a FHIR Ratio object.
+     * @param ratio the FHIRRatio to mask
+     * @return the masked FHIRRatio
+     */
     public FHIRRatio mask(FHIRRatio ratio) {
         if (this.deleteDenominator) {
             ratio.setDenominator(null);

@@ -43,6 +43,13 @@ public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskin
 
     private final String idPath;
 
+    /**
+     * Constructs a FHIRBaseDomainResourceMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRBaseDomainResourceMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -60,6 +67,11 @@ public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskin
 
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param obj the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode obj) {
         if (obj == null || obj.isNull()) {
             return NullNode.getInstance();

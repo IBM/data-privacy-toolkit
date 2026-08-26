@@ -47,9 +47,21 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/** Base class for format processors that mask data records. */
 public abstract class FormatProcessor implements Serializable {
+    /** Constructs a FormatProcessor. */
+    public FormatProcessor() {}
+
     private final static Logger logger = LogManager.getLogger(FormatProcessor.class);
 
+    /**
+     * Writes a record to the output, suppressing the specified fields.
+     *
+     * @param record          the record to write
+     * @param output          the output stream
+     * @param fieldsToSuppress the fields to suppress
+     * @throws IOException if writing fails
+     */
     protected void performOutputAction(Record record, OutputStream output, Iterable<String> fieldsToSuppress) throws IOException {
         for (String field : fieldsToSuppress) {
             record.suppressField(field);
@@ -121,6 +133,15 @@ public abstract class FormatProcessor implements Serializable {
         return operandsNotToBeMasked;
     }
 
+    /**
+     * Masks a record using the configured masking providers.
+     *
+     * @param record                  the record to mask
+     * @param maskingProvidersFactory the masking provider factory
+     * @param alreadyMaskedFields     fields already masked
+     * @param dataMaskingOptions      the data masking options
+     * @return the masked record
+     */
     public Record maskRecord(Record record, MaskingProviderFactory maskingProvidersFactory, Set<String> alreadyMaskedFields, DataMaskingOptions dataMaskingOptions) {
         Map<String, FieldRelationship> relationships = dataMaskingOptions.getPredefinedRelationships();
         Map<String, DataMaskingTarget> fieldsToMask = dataMaskingOptions.getToBeMasked();

@@ -133,6 +133,13 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
         return maskingActions;
     }
 
+    /**
+     * Constructs a FHIRGenericMaskingProvider.
+     * @param resourceConfiguration the resourceConfiguration
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param factory the factory
+     */
     public FHIRGenericMaskingProvider(FHIRResourceMaskingConfiguration resourceConfiguration,
                                       MaskingConfiguration maskingConfiguration, Set<String> maskedFields, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
@@ -268,6 +275,11 @@ public class FHIRGenericMaskingProvider extends AbstractComplexMaskingProvider<J
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         this.fhirBaseDomainResourceMaskingProvider.mask(node);
 

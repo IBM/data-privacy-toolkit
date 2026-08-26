@@ -42,6 +42,13 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
     private final String LOW_PATH;
     private final String HIGH_PATH;
 
+    /**
+     * Constructs a FHIRRangeMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRRangeMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -60,6 +67,11 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRange obj = JsonUtils.MAPPER.treeToValue(node, FHIRRange.class);
@@ -70,6 +82,11 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
         }
     }
 
+    /**
+     * Masks a FHIR Range object.
+     * @param range the FHIRRange to mask
+     * @return the masked FHIRRange
+     */
     public FHIRRange mask(FHIRRange range) {
         if (this.deleteHigh) {
             range.setHigh(null);

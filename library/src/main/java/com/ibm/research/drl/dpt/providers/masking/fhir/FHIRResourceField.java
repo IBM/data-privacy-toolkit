@@ -24,14 +24,27 @@ public class FHIRResourceField {
     private final String path;
     private final String fhirType;
 
+    /**
+     * Returns the path.
+     * @return the path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Returns the fhirType.
+     * @return the fhirType
+     */
     public String getFhirType() {
         return fhirType;
     }
 
+    /**
+     * Constructs a FHIRResourceField.
+     * @param path the path
+     * @param fhirType the fhirType
+     */
     public FHIRResourceField(String path, String fhirType) {
         this.path = path;
         this.fhirType = fhirType;

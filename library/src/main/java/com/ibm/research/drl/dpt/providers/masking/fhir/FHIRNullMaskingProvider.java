@@ -28,11 +28,22 @@ import java.util.Set;
 /** FHIRNullMaskingProvider FHIR datatype. */
 public class FHIRNullMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /**
+     * Constructs a FHIRNullMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fullPath the fullPath
+     */
     public FHIRNullMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fullPath) {
         super("fhir", maskingConfiguration, maskedFields, null);
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         return NullNode.getInstance();
     }

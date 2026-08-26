@@ -44,6 +44,13 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
     private final String FAMILY_FIELD_PATH;
     private final String GIVEN_FIELD_PATH;
 
+    /**
+     * Constructs a FHIRHumanNameMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRHumanNameMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -96,6 +103,11 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRHumanName obj = JsonUtils.MAPPER.treeToValue(node, FHIRHumanName.class);
@@ -106,6 +118,11 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
         }
     }
 
+    /**
+     * Masks a FHIR HumanName object.
+     * @param name the FHIRHumanName to mask
+     * @return the masked FHIRHumanName
+     */
     public FHIRHumanName mask(FHIRHumanName name) {
         if (name == null) {
             return null;

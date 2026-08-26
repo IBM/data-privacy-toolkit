@@ -25,9 +25,9 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRExtension;
 import java.util.Collection;
 
 /** FHIR Address datatype. */
+/** FHIRAddress FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-/** FHIRAddress FHIR datatype. */
 public class FHIRAddress {
     /** Constructs a FHIRAddress. */
     public FHIRAddress() {}
@@ -50,110 +50,182 @@ public class FHIRAddress {
      */
 
 
-    /** Returns the extension. @return the extension */
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public FHIRExtension getExtension() {
         return extension;
     }
-    /** Sets the extension to set. @param extension the extension to set */
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(FHIRExtension extension) {
         this.extension = extension;
     }
 
-    /** Returns the resource type. @return the resource type */
+    /**
+     * Returns the resource type.
+     * @return the resource type
+     */
     public String getResourceType() {
         return resourceType;
     }
-    /** Sets the resource type to set. @param resourceType the resource type to set */
+    /**
+     * Sets the resource type.
+     * @param resourceType the resource type
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
 
-    /** Returns the use. @return the use */
+    /**
+     * Returns the use.
+     * @return the use
+     */
     public String getUse() {
         return use;
     }
-    /** Sets the use to set. @param use the use to set */
+    /**
+     * Sets the use.
+     * @param use the use
+     */
     public void setUse(String use) {
         this.use = use;
     }
 
-    /** Returns the type. @return the type */
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public String getType() {
         return type;
     }
-    /** Sets the type to set. @param type the type to set */
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
-    /** Returns the text. @return the text */
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
-    /** Sets the text to set. @param text the text to set */
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }
 
-    /** Returns the address lines. @return the address lines */
+    /**
+     * Returns the address lines.
+     * @return the address lines
+     */
     public Collection<String> getLine() {
         return line;
     }
-    /** Sets the address lines to set. @param line the address lines to set */
+    /**
+     * Sets the address lines.
+     * @param line the address lines
+     */
     public void setLine(Collection<String> line) {
         this.line = line;
     }
 
-    /** Returns the city. @return the city */
+    /**
+     * Returns the city.
+     * @return the city
+     */
     public String getCity() {
         return city;
     }
-    /** Sets the city to set. @param city the city to set */
+    /**
+     * Sets the city.
+     * @param city the city
+     */
     public void setCity(String city) {
         this.city = city;
     }
 
-    /** Returns the district. @return the district */
+    /**
+     * Returns the district.
+     * @return the district
+     */
     public String getDistrict() {
         return district;
     }
-    /** Sets the district to set. @param district the district to set */
+    /**
+     * Sets the district.
+     * @param district the district
+     */
     public void setDistrict(String district) {
         this.district = district;
     }
 
-    /** Returns the state. @return the state */
+    /**
+     * Returns the state.
+     * @return the state
+     */
     public String getState() {
         return state;
     }
-    /** Sets the state to set. @param state the state to set */
+    /**
+     * Sets the state.
+     * @param state the state
+     */
     public void setState(String state) {
         this.state = state;
     }
 
-    /** Returns the postal code. @return the postal code */
+    /**
+     * Returns the postal code.
+     * @return the postal code
+     */
     public String getPostalCode() {
         return postalCode;
     }
-    /** Sets the postal code to set. @param postalCode the postal code to set */
+    /**
+     * Sets the postal code.
+     * @param postalCode the postal code
+     */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    /** Returns the country. @return the country */
+    /**
+     * Returns the country.
+     * @return the country
+     */
     public String getCountry() {
         return country;
     }
-    /** Sets the country to set. @param country the country to set */
+    /**
+     * Sets the country.
+     * @param country the country
+     */
     public void setCountry(String country) {
         this.country = country;
     }
 
-    /** Returns the period. @return the period */
+    /**
+     * Returns the period.
+     * @return the period
+     */
     public FHIRPeriod getPeriod() {
         return period;
     }
-    /** Sets the period to set. @param period the period to set */
+    /**
+     * Sets the period.
+     * @param period the period
+     */
     public void setPeriod(FHIRPeriod period) {
         this.period = period;
     }

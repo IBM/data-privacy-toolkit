@@ -47,6 +47,13 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
     private final String AUTHORREFERENCE_FIELD_PATH;
     private final String TIME_FIELD_PATH;
 
+    /**
+     * Constructs a FHIRAnnotationMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRAnnotationMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -68,6 +75,11 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAnnotation obj = JsonUtils.MAPPER.treeToValue(node, FHIRAnnotation.class);
@@ -78,6 +90,11 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
         }
     }
 
+    /**
+     * Masks a FHIR Annotation object.
+     * @param annotation the FHIRAnnotation to mask
+     * @return the masked FHIRAnnotation
+     */
     public FHIRAnnotation mask(FHIRAnnotation annotation) {
         if (annotation == null) {
             return null;

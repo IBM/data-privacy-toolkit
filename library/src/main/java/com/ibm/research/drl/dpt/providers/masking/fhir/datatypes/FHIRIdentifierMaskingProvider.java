@@ -54,6 +54,13 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
     private final String SYSTEM_PATH;
     private final String ASSIGNER_PATH;
 
+    /**
+     * Constructs a FHIRIdentifierMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRIdentifierMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, final String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -87,6 +94,11 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRIdentifier obj = JsonUtils.MAPPER.treeToValue(node, FHIRIdentifier.class);
@@ -97,6 +109,11 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
         }
     }
 
+    /**
+     * Masks a FHIR Identifier object.
+     * @param identifier the FHIRIdentifier to mask
+     * @return the masked FHIRIdentifier
+     */
     public FHIRIdentifier mask(FHIRIdentifier identifier) {
         if (identifier == null) {
             return null;

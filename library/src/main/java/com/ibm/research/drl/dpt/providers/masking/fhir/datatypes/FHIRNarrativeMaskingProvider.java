@@ -29,11 +29,20 @@ public class FHIRNarrativeMaskingProvider implements Serializable {
     private final boolean removeDiv;
     private final boolean removeExtensions;
 
+    /**
+     * Constructs a FHIRNarrativeMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     */
     public FHIRNarrativeMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this.removeDiv = maskingConfiguration.getBooleanValue("fhir.narrative.removeDiv");
         this.removeExtensions = maskingConfiguration.getBooleanValue("fhir.narrative.removeExtensions");
     }
 
+    /**
+     * Masks a FHIR Narrative object.
+     * @param narrative the FHIRNarrative to mask
+     * @return the masked FHIRNarrative
+     */
     public FHIRNarrative mask(FHIRNarrative narrative) {
         if (narrative == null) {
             return null;

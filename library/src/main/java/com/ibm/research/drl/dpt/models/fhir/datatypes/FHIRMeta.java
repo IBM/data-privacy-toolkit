@@ -23,9 +23,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Collection;
 
+/** FHIRMeta FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-/** FHIRMeta FHIR datatype. */
 public class FHIRMeta {
     /** Constructs a FHIRMeta. */
     public FHIRMeta() {}

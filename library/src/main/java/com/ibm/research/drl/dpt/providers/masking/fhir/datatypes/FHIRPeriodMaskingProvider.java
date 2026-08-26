@@ -45,6 +45,13 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
     private final String START_PATH;
     private final String END_PATH;
 
+    /**
+     * Constructs a FHIRPeriodMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRPeriodMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -66,6 +73,11 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRPeriod obj = JsonUtils.MAPPER.treeToValue(node, FHIRPeriod.class);
@@ -76,6 +88,11 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
         }
     }
 
+    /**
+     * Masks a FHIR Period object.
+     * @param period the FHIRPeriod to mask
+     * @return the masked FHIRPeriod
+     */
     public FHIRPeriod mask(FHIRPeriod period) {
         if (period == null) {
             return null;

@@ -31,10 +31,18 @@ public class FHIRResourceMaskingConfiguration {
     private final List<FHIRResourceField> fields;
     private final MaskingConfiguration maskingConfiguration;
 
+    /**
+     * Returns the basePath.
+     * @return the basePath
+     */
     public String getBasePath() {
         return basePath;
     }
 
+    /**
+     * Returns the fields.
+     * @return the fields
+     */
     public List<FHIRResourceField> getFields() {
         return fields;
     }
@@ -62,10 +70,21 @@ public class FHIRResourceMaskingConfiguration {
         return resourceFields;
     }
 
+    /**
+     * Constructs a FHIRResourceMaskingConfiguration.
+     * @param basePath the basePath
+     * @param configuration the configuration
+     */
     public FHIRResourceMaskingConfiguration(String basePath, Collection<String> configuration) {
         this(basePath, configuration, new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a FHIRResourceMaskingConfiguration.
+     * @param basePath the basePath
+     * @param configurations the configurations
+     * @param maskingConfiguration the maskingConfiguration
+     */
     public FHIRResourceMaskingConfiguration(String basePath, Collection<String> configurations, MaskingConfiguration maskingConfiguration) {
         this.basePath = basePath;
         this.maskingConfiguration = maskingConfiguration;
