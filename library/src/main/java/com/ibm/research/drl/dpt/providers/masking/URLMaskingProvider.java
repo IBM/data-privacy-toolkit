@@ -33,15 +33,24 @@ import java.util.*;
 
 /** Masking provider for URL values. */
 public class URLMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** Whether to mask the username and password components of the URL. */
     private final boolean maskUsernamePassword;
+    /** Whether to randomise the port number. */
     private final boolean randomizePort;
+    /** Whether to remove the query string from the URL. */
     private final boolean removeQuery;
+    /** Whether to mask the query string components. */
     private final boolean maskQuery;
+    /** Number of domain levels to preserve in the masked URL. */
     private final int preserveDomains;
+    /** The masking configuration for this provider. */
     private final MaskingConfiguration configuration;
+    /** Cache of masking providers keyed by provider type. */
     private final Map<ProviderType, MaskingProvider> providerMap =
             new HashMap<>(ProviderType.values().length);
+    /** The masking provider factory. */
     private final MaskingProviderFactory maskingProviderFactory;
+    /** Secure random source. */
     private final SecureRandom random;
 
 

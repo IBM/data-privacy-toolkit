@@ -31,10 +31,14 @@ import java.util.Objects;
 
 /** Masking provider that generalises values using a predefined hierarchy. */
 public class GeneralizationMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(GeneralizationMaskingProvider.class);
 
+    /** The hierarchy level to generalise to. */
     private final int hierarchyLevel;
+    /** The generalisation hierarchy used for masking. */
     private final GeneralizationHierarchy hierarchy;
+    /** Whether to randomise when the input is not found in the hierarchy. */
     private final boolean randomizeOnFail;
 
     /**

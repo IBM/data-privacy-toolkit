@@ -70,9 +70,13 @@ public final class MaskingProviderFactory implements Serializable {
         return toBeMasked;
     }
 
+    /** Map of field names to their masking targets. */
     private final Map<String, DataMaskingTarget> toBeMasked;
+    /** Cache of previously created masking providers keyed by field name. */
     private final Map<String, MaskingProvider> cachedProviders;
+    /** Map of provider types to their implementing masking provider classes. */
     private final Map<ProviderType, Class<? extends MaskingProvider>> registeredMaskingProviders;
+    /** Global persistent masking providers shared across records. */
     private final HashMap<String, MaskingProvider> globalPersistent;
 
     private static final String PERSISTENCE_TYPE_CONF_NAME = "persistence.type";

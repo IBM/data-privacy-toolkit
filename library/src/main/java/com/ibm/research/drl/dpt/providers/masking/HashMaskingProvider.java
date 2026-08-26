@@ -31,11 +31,16 @@ import java.security.SecureRandom;
  * The type Hash masking provider.
  */
 public class HashMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(HashMaskingProvider.class);
 
+    /** Hex digit characters used when encoding hash bytes. */
     private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+    /** The hashing algorithm to use. */
     private final String algorithm;
+    /** Optional salt string prepended to the value before hashing. */
     private final String salt;
+    /** Whether to normalise the value before hashing. */
     private final Boolean normalize;
 
     /**

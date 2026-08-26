@@ -35,6 +35,7 @@ public class TemporalAnnotationMaskingProvider implements MaskingProvider {
     private final static Pattern daysBefore = Pattern.compile("\\bdays\\s+before\\b");
 
     final static Pattern getNumber = Pattern.compile("(\\d+)");
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

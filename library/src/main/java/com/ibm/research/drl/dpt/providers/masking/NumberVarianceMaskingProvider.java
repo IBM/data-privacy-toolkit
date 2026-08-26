@@ -31,12 +31,18 @@ import java.security.SecureRandom;
  * Masking provider that adds a random percentage variance to numerical values.
  */
 public class NumberVarianceMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private final static Logger log = LogManager.getLogger(NumberVarianceMaskingProvider.class);
 
+    /** The maximum downward variance percentage. */
     private final double limitDown;
+    /** The maximum upward variance percentage. */
     private final double limitUp;
+    /** Number of decimal digits to keep in the output. */
     private final int precisionDigits;
+    /** The configured failure mode. */
     private final int failMode;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

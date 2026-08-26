@@ -30,9 +30,12 @@ import java.security.SecureRandom;
 
 /** Masking provider that replaces gender values with random gender values. */
 public class GenderMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(GenderMaskingProvider.class);
 
+    /** Shared gender manager instance. */
     private static final GenderManager genderManager = GenderManager.getInstance();
+    /** The configured failure mode. */
     private final int failMode;
 
     /** Constructs a GenderMaskingProvider with default configuration. */

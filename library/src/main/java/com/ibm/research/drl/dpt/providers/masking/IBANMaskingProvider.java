@@ -28,7 +28,9 @@ import java.security.SecureRandom;
 
 /** Masking provider that replaces IBAN values with randomly generated IBANs. */
 public class IBANMaskingProvider implements MaskingProvider {
+    /** Shared IBAN identifier instance. */
     private static final IBANIdentifier ibanIdentifier = new IBANIdentifier();
+    /** Whether to preserve the country code from the original IBAN. */
     private final boolean preserveCountry;
 
     /**

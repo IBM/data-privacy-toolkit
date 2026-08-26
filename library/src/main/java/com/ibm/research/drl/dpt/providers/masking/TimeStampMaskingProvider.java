@@ -29,13 +29,21 @@ import java.time.temporal.ChronoField;
 
 /** Masking provider for timestamp values, supporting component-level masking. */
 public class TimeStampMaskingProvider implements MaskingProvider {
+    /** The date-time formatter built from the configured format. */
     private DateTimeFormatter formatter;
+    /** Whether to mask the year component. */
     private final boolean year;
+    /** Whether to mask the month component. */
     private final boolean month;
+    /** Whether to mask the day component. */
     private final boolean day;
+    /** Whether to mask the hour component. */
     private final boolean hour;
+    /** Whether to mask the minute component. */
     private final boolean minute;
+    /** Whether to mask the second component. */
     private final boolean second;
+    /** The fixed timestamp format string, if configured. */
     private final String fixedFormat;
 
     /**

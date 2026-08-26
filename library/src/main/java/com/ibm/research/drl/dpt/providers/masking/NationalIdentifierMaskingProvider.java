@@ -26,6 +26,7 @@ import java.security.SecureRandom;
  * The type National identifier masking provider.
  */
 public class NationalIdentifierMaskingProvider implements MaskingProvider {
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

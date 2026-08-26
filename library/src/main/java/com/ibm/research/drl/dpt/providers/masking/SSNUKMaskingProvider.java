@@ -36,11 +36,17 @@ public class SSNUKMaskingProvider implements MaskingProvider {
     Validation lists of issued two-letter prefixes are published from time to time.[7][8]
     The suffix letter is either A, B, C, or D.[5] (although F, M, and P have been used for temporary numbers in the past)
      */
+    /** Shared SSN UK identifier instance. */
     private static final SSNUKIdentifier identifier = new SSNUKIdentifier();
+    /** Allowed characters for the first letter of the NI number prefix. */
     private static final char[] allowedFirstLetters = "ABCEGHJKLMNOPRSTWXYZ".toCharArray();
+    /** Allowed characters for the second letter of the NI number prefix. */
     private static final char[] allowedSecondLetters = "ABCEGHJKLMNPRSTWXYZ".toCharArray();
+    /** Allowed suffix letters for NI numbers. */
     private static final char[] allowedSuffixLetters = "ABCD".toCharArray();
+    /** Whether to preserve the prefix letters of the SSN. */
     private final boolean preservePrefix;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

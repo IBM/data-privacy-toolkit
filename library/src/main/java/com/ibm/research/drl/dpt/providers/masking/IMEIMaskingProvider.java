@@ -28,8 +28,11 @@ import java.security.SecureRandom;
 
 /** Masking provider that replaces IMEI values with randomly generated IMEI numbers. */
 public class IMEIMaskingProvider implements MaskingProvider {
+    /** Shared IMEI identifier instance. */
     private static final IMEIIdentifier IMEI_IDENTIFIER = new IMEIIdentifier();
+    /** Shared IMEI manager instance. */
     private static final IMEIManager imeiManager = IMEIManager.getInstance();
+    /** Whether to preserve the Type Allocation Code (TAC) prefix. */
     private final boolean preserveTAC;
 
     /**
