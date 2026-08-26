@@ -111,6 +111,8 @@ def _compare_filename_only(current_test):
 
 
 def _compare_entire_content(current_test, output="output/", expected="expected/", logging_level=None):
+    old_logging_level: int | None = None
+
     if logging_level:
         old_logging_level = LOGGER.level
         LOGGER.setLevel(logging_level)
@@ -151,7 +153,7 @@ def _compare_entire_content(current_test, output="output/", expected="expected/"
 
     assert _compare_dirs(output_subfolder, expected_subfolder, comparer)
 
-    if logging_level:
+    if logging_level and old_logging_level:
         LOGGER.setLevel(old_logging_level)
 
 
