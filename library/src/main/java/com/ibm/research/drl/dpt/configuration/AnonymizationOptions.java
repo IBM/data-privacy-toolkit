@@ -48,6 +48,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * Configuration options for the anonymization pipeline, including column information,
+ * privacy constraints, information loss metric and risk metric.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AnonymizationOptions {
     private final List<PrivacyConstraint> privacyConstraints;
@@ -62,6 +66,22 @@ public class AnonymizationOptions {
     private static final String CLASS_NAME_FIELD = "className";
     private static final String SUPPRESSION_FIELD = "suppression";
 
+    /**
+     * Constructs an AnonymizationOptions instance from its JSON-annotated properties.
+     *
+     * @param delimiter            the CSV delimiter character
+     * @param quoteChar            the CSV quote character
+     * @param hasHeader            whether the dataset has a header row
+     * @param trimFields           whether to trim field values
+     * @param estimateUniqueness   whether to estimate uniqueness
+     * @param riskMetricNode       the risk metric specification node
+     * @param riskMetricOptionsNode the risk metric options node
+     * @param hierarchiesNode      the generalization hierarchies node
+     * @param informationLoss      the information loss metric class name
+     * @param options              additional options node
+     * @param columnInformation    the column information node
+     * @param privacyConstraints   the privacy constraints node
+     */
     @JsonCreator
     public AnonymizationOptions(
             @JsonProperty("delimiter")
@@ -184,18 +204,39 @@ public class AnonymizationOptions {
         }
     }
 
+    /**
+     * Returns the suppression rate.
+     *
+     * @return the suppression rate
+     */
     public double getSuppressionRate() {
         return suppressionRate;
     }
 
+    /**
+     * Returns the list of privacy constraints.
+     *
+     * @return the privacy constraints
+     */
     public List<PrivacyConstraint> getPrivacyConstraints() {
         return privacyConstraints;
     }
 
+    /**
+     * Returns the list of column information.
+     *
+     * @return the column information
+     */
     public List<ColumnInformation> getColumnInformation() {
         return columnInformation;
     }
 
+    /**
+     * Parses privacy constraints from a JSON array node.
+     *
+     * @param node the JSON array node
+     * @return list of privacy constraint objects
+     */
     public static List<PrivacyConstraint> privacyConstraintsFromJSON(JsonNode node) {
         if (node.isNull() || !node.isArray()) {
             throw new MisconfigurationException("Privacy constraints is not an array");
@@ -279,6 +320,12 @@ public class AnonymizationOptions {
         return privacyConstraints;
     }
 
+    /**
+     * Builds a {@link GeneralizationHierarchy} from a JSON node specification.
+     *
+     * @param specification the JSON specification (array for materialized, string for named hierarchy)
+     * @return the generalization hierarchy
+     */
     public static GeneralizationHierarchy getHierarchyFromJsonNode(JsonNode specification) {
         GeneralizationHierarchy hierarchy;
 
@@ -303,6 +350,12 @@ public class AnonymizationOptions {
         return hierarchy;
     }
 
+    /**
+     * Parses generalization hierarchies from a JSON object node.
+     *
+     * @param hierarchies the JSON object node mapping names to hierarchy specifications
+     * @return a map of hierarchy names to built hierarchies
+     */
     public static Map<String, GeneralizationHierarchy> hierarchiesFromJSON(JsonNode hierarchies) {
         if (hierarchies == null || hierarchies.isNull() || !hierarchies.isObject()) {
             throw new MisconfigurationException("hierarchies key is either missing or null or not an object");
@@ -391,6 +444,13 @@ public class AnonymizationOptions {
         return StringUtils.join(values, ",");
     }
 
+    /**
+     * Parses column information from a JSON array node.
+     *
+     * @param contents             the JSON array node describing column information
+     * @param defaultHierarchyMap  map of pre-built named hierarchies to use as defaults
+     * @return list of column information objects
+     */
     public static List<ColumnInformation> columnInformationFromJSON(JsonNode contents, Map<String, GeneralizationHierarchy> defaultHierarchyMap) {
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
@@ -497,22 +557,47 @@ public class AnonymizationOptions {
         return columnInformationList;
     }
 
+    /**
+     * Returns whether uniqueness estimation is enabled.
+     *
+     * @return true if uniqueness should be estimated
+     */
     public boolean isEstimateUniqueness() {
         return estimateUniqueness;
     }
 
+    /**
+     * Returns the information loss metric.
+     *
+     * @return the information loss metric
+     */
     public InformationMetric getInformationLoss() {
         return informationLoss;
     }
 
+    /**
+     * Returns the risk metric.
+     *
+     * @return the risk metric
+     */
     public RiskMetric getRiskMetric() {
         return riskMetric;
     }
 
+    /**
+     * Returns the risk metric options map.
+     *
+     * @return the risk metric options
+     */
     public Map<String, String> getRiskOptions() {
         return riskOptions;
     }
 
+    /**
+     * Returns the dataset options.
+     *
+     * @return the dataset options
+     */
     public DatasetOptions getDatasetOptions() {
         return datasetOptions;
     }

@@ -31,6 +31,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.Serializable;
 import java.util.Set;
 
+/** FHIRReferenceMaskingProvider FHIR datatype. */
 public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
     private final boolean maskDisplay;
@@ -45,6 +46,13 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
     private final String REFERENCE_FIELD_PATH;
     private final String DISPLAY_FIELD_PATH;
 
+    /**
+     * Constructs a FHIRReferenceMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRReferenceMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, final String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -63,6 +71,11 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRReference reference = JsonUtils.MAPPER.treeToValue(node, FHIRReference.class);
@@ -84,6 +97,11 @@ public class FHIRReferenceMaskingProvider extends AbstractComplexMaskingProvider
         return this.maskReferenceExcludePrefixList.contains(prefix.toUpperCase());
     }
 
+    /**
+     * Masks a FHIR Reference object.
+     * @param reference the FHIRReference to mask
+     * @return the masked FHIRReference
+     */
     public FHIRReference mask(FHIRReference reference) {
         if (reference == null) {
             return null;

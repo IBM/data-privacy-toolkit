@@ -28,7 +28,15 @@ import org.apache.logging.log4j.LogManager;
 import java.security.SecureRandom;
 import java.util.*;
 
+/**
+ * Differential privacy mechanism for categorical domains using the exponential mechanism.
+ */
 public class Categorical implements DPMechanism {
+    /**
+     * Constructs a new Categorical mechanism.
+     */
+    public Categorical() {
+    }
     private static final Logger log = LogManager.getLogger(Categorical.class);
     private final Random rnd = new SecureRandom();
     private double epsilon;
@@ -182,6 +190,13 @@ public class Categorical implements DPMechanism {
         return Math.exp(- this.epsilon * getUtility(value1, value2) / 2);
     }
 
+    /**
+     * Returns the pre-computed utility value for a pair of values.
+     *
+     * @param value1 the first value
+     * @param value2 the second value
+     * @return the utility score
+     */
     public double getUtility(String value1, String value2) {
         return this.utilityFunction.get(getHashValue(value1, value2));
     }

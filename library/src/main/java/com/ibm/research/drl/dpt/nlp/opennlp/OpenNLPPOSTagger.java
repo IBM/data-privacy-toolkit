@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/** Part-of-speech tagger implementation backed by the OpenNLP library. */
 public class OpenNLPPOSTagger extends AbstractNLPAnnotator {
     private final static Logger logger = LogManager.getLogger(OpenNLPPOSTagger.class);
 
@@ -72,6 +73,11 @@ public class OpenNLPPOSTagger extends AbstractNLPAnnotator {
         }
     }
 
+    /**
+     * Constructs an OpenNLPPOSTagger from a JSON configuration node.
+     *
+     * @param configuration JSON configuration describing model paths and language settings
+     */
     public OpenNLPPOSTagger(JsonNode configuration) {
         this.defaultLanguage = Language.valueOf(configuration.get("defaultLanguage").asText());
         this.sentenceDetector = new HashMap<>();

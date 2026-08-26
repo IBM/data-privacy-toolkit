@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.providers.identifiers.SSNUSIdentifier;
 
 import java.security.SecureRandom;
 
+/** Masking provider for US Social Security Number values. */
 public class SSNUSMaskingProvider implements MaskingProvider {
     private static final SSNUSIdentifier ssnUSIdentifier = new SSNUSIdentifier();
 

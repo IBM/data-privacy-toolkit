@@ -30,7 +30,19 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.IOException;
 import java.util.*;
 
+/** FHIRMaskingUtils FHIR datatype. */
 public class FHIRMaskingUtils {
+    /** Constructs a FHIRMaskingUtils. */
+    public FHIRMaskingUtils() {}
+
+    /**
+     * Masks a resource ID.
+     *
+     * @param id               the resource ID
+     * @param preserveIdPrefix whether to preserve the prefix before the last '/'
+     * @param maskingProvider  the masking provider
+     * @return the masked resource ID
+     */
     public static String maskResourceId(String id, boolean preserveIdPrefix, MaskingProvider maskingProvider) {
         if (!preserveIdPrefix) {
             return maskingProvider.mask(id);
@@ -46,6 +58,13 @@ public class FHIRMaskingUtils {
         return prefix + maskingProvider.mask(id.substring(slashIndex + 1));
     }
 
+    /**
+     * Builds a set from a comma-separated string.
+     *
+     * @param value       the comma-separated string
+     * @param toUppercase whether to convert values to uppercase
+     * @return the resulting set
+     */
     public static Set<String> setFromString(String value, boolean toUppercase) {
         Set<String> set = new HashSet<>();
 
@@ -62,6 +81,12 @@ public class FHIRMaskingUtils {
         return set;
     }
 
+    /**
+     * Pre-processes a FHIR JSON node by wrapping it under its resource type path.
+     *
+     * @param node the FHIR JSON node
+     * @return the pre-processed node, or null if resourceType is absent
+     */
     public static JsonNode preprocessFHIRObject(JsonNode node) {
         JsonNode typeNode = node.get("resourceType");
 
@@ -79,6 +104,13 @@ public class FHIRMaskingUtils {
 
     }
 
+    /**
+     * Pre-processes a FHIR JSON string.
+     *
+     * @param object the FHIR JSON string
+     * @return the pre-processed JSON string, or null
+     * @throws IOException if parsing fails
+     */
     public static String preprocessFHIRObject(String object) throws IOException {
         JsonNode node = JsonUtils.MAPPER.readTree(object);
 
@@ -91,6 +123,12 @@ public class FHIRMaskingUtils {
         return processedNode.toString();
     }
 
+    /**
+     * Post-processes a FHIR JSON node by extracting the first child.
+     *
+     * @param node the wrapped FHIR JSON node
+     * @return the first child node, or null
+     */
     public static JsonNode postProcessFHIRObject(JsonNode node) {
         Iterator<JsonNode> iterator = node.iterator();
 
@@ -101,6 +139,13 @@ public class FHIRMaskingUtils {
         return iterator.next();
     }
 
+    /**
+     * Post-processes a FHIR JSON string.
+     *
+     * @param object the wrapped FHIR JSON string
+     * @return the post-processed JSON string, or null
+     * @throws IOException if parsing fails
+     */
     public static String postProcessFHIRObject(String object) throws IOException {
         JsonNode node = JsonUtils.MAPPER.readTree(object);
         JsonNode processedNode = postProcessFHIRObject(node);
@@ -112,6 +157,13 @@ public class FHIRMaskingUtils {
         return processedNode.toString();
     }
 
+    /**
+     * Masks a collection of FHIR identifiers.
+     *
+     * @param identifiers    the identifiers to mask
+     * @param maskingProvider the identifier masking provider
+     * @return the masked identifiers
+     */
     public static Collection<FHIRIdentifier> maskIdentifiers(Collection<FHIRIdentifier> identifiers, FHIRIdentifierMaskingProvider maskingProvider) {
         if (identifiers == null || identifiers.isEmpty()) {
             return identifiers;
@@ -125,6 +177,13 @@ public class FHIRMaskingUtils {
         return maskedIdentifiers;
     }
 
+    /**
+     * Masks a collection of FHIR references.
+     *
+     * @param identifiers    the references to mask
+     * @param maskingProvider the reference masking provider
+     * @return the masked references
+     */
     public static Collection<FHIRReference> maskReferences(Collection<FHIRReference> identifiers, FHIRReferenceMaskingProvider maskingProvider) {
 
         if (identifiers == null || identifiers.isEmpty()) {
@@ -139,6 +198,13 @@ public class FHIRMaskingUtils {
         return maskedIdentifiers;
     }
 
+    /**
+     * Masks a collection of FHIR annotations.
+     *
+     * @param identifiers    the annotations to mask
+     * @param maskingProvider the annotation masking provider
+     * @return the masked annotations
+     */
     public static Collection<FHIRAnnotation>
     maskAnnotations(Collection<FHIRAnnotation> identifiers, FHIRAnnotationMaskingProvider maskingProvider) {
 
@@ -154,6 +220,13 @@ public class FHIRMaskingUtils {
         return maskedIdentifiers;
     }
 
+    /**
+     * Masks a collection of FHIR contact points.
+     *
+     * @param telecoms       the contact points to mask
+     * @param maskingProvider the contact point masking provider
+     * @return the masked contact points
+     */
     public static Collection<FHIRContactPoint> maskTelecoms(Collection<FHIRContactPoint> telecoms, FHIRContactPointMaskingProvider maskingProvider) {
 
         if (telecoms == null || telecoms.isEmpty()) {
@@ -168,6 +241,13 @@ public class FHIRMaskingUtils {
         return maskedTelecoms;
     }
 
+    /**
+     * Masks a collection of FHIR codeable concepts.
+     *
+     * @param codeableConcepts the codeable concepts to mask
+     * @param maskingProvider  the codeable concept masking provider
+     * @return the masked codeable concepts
+     */
     public static Collection<FHIRCodeableConcept> maskCodeableConcepts(Collection<FHIRCodeableConcept> codeableConcepts, FHIRCodeableConceptMaskingProvider maskingProvider) {
 
         if (codeableConcepts == null || codeableConcepts.isEmpty()) {
@@ -182,6 +262,13 @@ public class FHIRMaskingUtils {
         return maskedConcepts;
     }
 
+    /**
+     * Masks a collection of FHIR addresses.
+     *
+     * @param telecoms       the addresses to mask
+     * @param maskingProvider the address masking provider
+     * @return the masked addresses
+     */
     public static Collection<FHIRAddress> maskAddresses(Collection<FHIRAddress> telecoms, FHIRAddressMaskingProvider maskingProvider) {
 
         if (telecoms == null || telecoms.isEmpty()) {

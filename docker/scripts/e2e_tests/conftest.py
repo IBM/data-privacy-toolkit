@@ -21,11 +21,6 @@ DOCKER_IMAGE = os.getenv("IMAGE_NAME")
 def _docker_run(current_test, input_folder="input", output_folder="output", config_folder="config", consistency_folder=None):
     """
     Executes the test by running the dpt docker image.
-
-    @param current_test: path of the current test,
-        where output/ and expected/ sub-folders are expected.
-        If output is not existing will be created
-
     """
     if not DOCKER_IMAGE:
         pytest.skip("IMAGE_NAME environment variable not set")
@@ -40,6 +35,11 @@ def _docker_run(current_test, input_folder="input", output_folder="output", conf
 
     if consistency and not os.path.exists(consistency):
         os.makedirs(consistency)
+
+    # Add chmod to ensure output directory is writable
+    os.chmod(output, 0o777)
+    if consistency:
+        os.chmod(consistency, 0o777)
 
     os.system(
         "docker run --rm"
@@ -111,6 +111,8 @@ def _compare_filename_only(current_test):
 
 
 def _compare_entire_content(current_test, output="output/", expected="expected/", logging_level=None):
+    old_logging_level: int | None = None
+
     if logging_level:
         old_logging_level = LOGGER.level
         LOGGER.setLevel(logging_level)
@@ -151,7 +153,7 @@ def _compare_entire_content(current_test, output="output/", expected="expected/"
 
     assert _compare_dirs(output_subfolder, expected_subfolder, comparer)
 
-    if logging_level:
+    if logging_level and old_logging_level:
         LOGGER.setLevel(old_logging_level)
 
 

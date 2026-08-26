@@ -22,23 +22,46 @@ import java.util.Objects;
 
 
 
+/** Holds dependency-parse information for an NLP token. */
 public final class DependencyParseInformation {
     private final String caseI;
     private final String nmod;
     private final String apposMod;
 
+    /**
+     * Returns the appositive modifier.
+     *
+     * @return the appositional modifier string
+     */
     public String getApposMod() {
         return apposMod;
     }
 
+    /**
+     * Returns the case dependency.
+     *
+     * @return the case string
+     */
     public String getCase() {
         return caseI;
     }
 
+    /**
+     * Returns the nominal modifier.
+     *
+     * @return the nmod string
+     */
     public String getNmod() {
         return nmod;
     }
 
+    /**
+     * Constructs a DependencyParseInformation.
+     *
+     * @param nmod      the nominal modifier
+     * @param caseInfo  the case dependency string
+     * @param apposMod  the appositional modifier
+     */
     public DependencyParseInformation(String nmod, String caseInfo, String apposMod) {
        this.caseI = caseInfo;
        this.nmod = nmod;

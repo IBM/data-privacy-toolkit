@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
+/** Masking provider for UK Social Security Number values. */
 public class SSNUKMaskingProvider implements MaskingProvider {
     /*
     The format of the number is two prefix letters, six digits, and one suffix letter.[5]

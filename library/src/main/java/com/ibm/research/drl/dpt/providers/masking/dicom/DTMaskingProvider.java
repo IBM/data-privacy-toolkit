@@ -24,17 +24,26 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.security.SecureRandom;
 
+/** DICOM date/time masking provider. */
 public class DTMaskingProvider implements MaskingProvider {
     private final DateTimeMaskingProvider dateTimeMaskingProvider;
 
     /**
-     * Instantiates a new Dt masking provider.
+     * Constructs a DTMaskingProvider with the given masking configuration.
+     *
+     * @param maskingConfiguration the masking configuration
      */
     public DTMaskingProvider(MaskingConfiguration maskingConfiguration) {
         maskingConfiguration.setValue("datetime.format.fixed", "yyyyMMddHHmmss.SSSSZ");
         dateTimeMaskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
     }
 
+    /**
+     * Constructs a DTMaskingProvider (random parameter is unused).
+     *
+     * @param random               a secure random instance (unused)
+     * @param maskingConfiguration the masking configuration
+     */
     public DTMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this(maskingConfiguration);
     }

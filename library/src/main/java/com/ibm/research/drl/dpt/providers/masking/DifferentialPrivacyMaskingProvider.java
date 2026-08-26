@@ -35,11 +35,18 @@ import java.security.SecureRandom;
 import java.util.Map;
 
 
+/** Masking provider that applies differential privacy to individual values. */
 public class DifferentialPrivacyMaskingProvider implements MaskingProvider  {
     private final static Logger logger = LogManager.getLogger(DifferentialPrivacyMaskingProvider.class);
 
     private final DPMechanism mechanism;
 
+    /**
+     * Constructs a DifferentialPrivacyMaskingProvider.
+     *
+     * @param random        a secure random instance
+     * @param configuration the masking configuration
+     */
     public DifferentialPrivacyMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
         DifferentialPrivacyMechanismOptions options = new DifferentialPrivacyMechanismOptions();
         options.setEpsilon(configuration.getDoubleValue("differentialPrivacy.parameter.epsilon"));
@@ -80,6 +87,11 @@ public class DifferentialPrivacyMaskingProvider implements MaskingProvider  {
         this.mechanism.setOptions(options);
     }
 
+    /**
+     * Constructs a DifferentialPrivacyMaskingProvider with default random.
+     *
+     * @param configuration the masking configuration
+     */
     public DifferentialPrivacyMaskingProvider(DefaultMaskingConfiguration configuration) {
         this(new SecureRandom(), configuration);
     }

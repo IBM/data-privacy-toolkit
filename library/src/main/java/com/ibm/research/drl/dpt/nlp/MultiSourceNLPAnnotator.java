@@ -25,7 +25,19 @@ import java.util.List;
 import java.util.Set;
 
 
+/**
+ * Abstract NLP annotator that merges results from multiple annotation sources and resolves overlapping entities.
+ */
 public abstract class MultiSourceNLPAnnotator extends AbstractNLPAnnotator {
+    /** Constructs a MultiSourceNLPAnnotator. */
+    public MultiSourceNLPAnnotator() {}
+
+    /**
+     * Merges and deduplicates overlapping entities in the given list.
+     *
+     * @param entityList the list of identified entities to process
+     * @return the merged and deduplicated list
+     */
     protected List<IdentifiedEntity> mergeEntityListsAndOverlappingEntities(List<IdentifiedEntity> entityList) {
         if (entityList.isEmpty()) return new ArrayList<>();
 
@@ -138,6 +150,13 @@ public abstract class MultiSourceNLPAnnotator extends AbstractNLPAnnotator {
         return entityList;
     }
 
+    /**
+     * Merges two entity lists and deduplicates overlapping entities.
+     *
+     * @param a the first entity list
+     * @param b the second entity list
+     * @return the merged and deduplicated list
+     */
     protected List<IdentifiedEntity> mergeEntityListsAndOverlappingEntities(List<IdentifiedEntity> a, List<IdentifiedEntity> b) {
         final List<IdentifiedEntity> mergedEntities = new ArrayList<>(a.size() + b.size());
 
@@ -147,6 +166,13 @@ public abstract class MultiSourceNLPAnnotator extends AbstractNLPAnnotator {
        return mergeEntityListsAndOverlappingEntities(mergedEntities);
     }
 
+    /**
+     * Merges two sets of part-of-speech types, excluding UNKNOWN if other types are present.
+     *
+     * @param pos1 the first set
+     * @param pos2 the second set
+     * @return the merged set
+     */
     protected Set<PartOfSpeechType> mergePartOfSpeech(Set<PartOfSpeechType> pos1, Set<PartOfSpeechType> pos2) {
         final Set<PartOfSpeechType> pos = new HashSet<>();
 
@@ -158,6 +184,13 @@ public abstract class MultiSourceNLPAnnotator extends AbstractNLPAnnotator {
         return pos;
     }
 
+    /**
+     * Merges two sets of entity types.
+     *
+     * @param types1 the first set
+     * @param types2 the second set
+     * @return the merged set
+     */
     protected Set<IdentifiedEntityType> mergeTypes(Set<IdentifiedEntityType> types1, Set<IdentifiedEntityType> types2) {
         final Set<IdentifiedEntityType> types = new HashSet<>();
 

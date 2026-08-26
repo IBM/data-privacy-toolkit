@@ -24,7 +24,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for IMSI (International Mobile Subscriber Identity) values. */
 public class IMSIIdentifier extends AbstractIdentifier {
+
+    /** Constructs an IMSIIdentifier. */
+    public IMSIIdentifier() {}
     private final static IMSIManager imsiManager = IMSIManager.getInstance();
     private final static String[] appropriateNames = {"IMSI"};
 

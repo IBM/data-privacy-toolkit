@@ -25,7 +25,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for hospital names. */
 public class HospitalIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a HospitalIdentifier. */
+    public HospitalIdentifier() {}
     private final String[] appropriateNames = {"Hospital", "Medical Center"};
 
     private final static HospitalManager hospitalManager = HospitalManager.getInstance();

@@ -18,16 +18,28 @@ under the License.
 */
 package com.ibm.research.drl.dpt.schema;
 
+/** The type of relationship between fields in a masking rule. */
 public enum RelationshipType {
+    /** Sum relationship. */
     SUM,
+    /** Approximate sum relationship. */
     SUM_APPROXIMATE,
+    /** Product relationship. */
     PRODUCT,
+    /** Equality relationship. */
     EQUALS,
+    /** Greater-than relationship. */
     GREATER,
+    /** Distance relationship. */
     DISTANCE,
+    /** Less-than relationship. */
     LESS,
+    /** Linked relationship. */
     LINKED,
+    /** Key relationship. */
     KEY,
+    /** Ratio relationship. */
     RATIO,
-    GREP_AND_MASK /* for freetext */
+    /** Grep-and-mask relationship for free text. */
+    GREP_AND_MASK
 }

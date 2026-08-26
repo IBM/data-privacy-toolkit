@@ -22,8 +22,18 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/** Utility class for hash-based operations. */
 public class HashUtils {
 
+    /** Not instantiable. */
+    private HashUtils() {}
+
+    /**
+     * Returns a {@code long} derived from the SHA-512 hash of the given value.
+     *
+     * @param value the value to hash (may be {@code null}, treated as empty string)
+     * @return a long derived from the hash
+     */
     public static Long longFromHash(String value) {
         return longFromHash(value, "SHA-512");
     }

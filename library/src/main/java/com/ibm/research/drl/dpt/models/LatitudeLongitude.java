@@ -20,6 +20,9 @@ package com.ibm.research.drl.dpt.models;
 
 import java.util.Objects;
 
+/**
+ * Represents a geographic coordinate (latitude/longitude) in one of several formats.
+ */
 public class LatitudeLongitude {
     /**
      * The Latitude.

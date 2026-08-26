@@ -18,23 +18,46 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.informationloss;
 
+/** Holds the information-loss metric value and its lower/upper bound. */
 public class InformationLossResult {
     private final double value;
     private final double lowerBound;
     private final double upperBound;
 
+    /**
+     * Returns the metric value.
+     *
+     * @return the value
+     */
     public double getValue() {
         return value;
     }
 
+    /**
+     * Returns the lower bound.
+     *
+     * @return the lower bound
+     */
     public double getLowerBound() {
         return lowerBound;
     }
 
+    /**
+     * Returns the upper bound.
+     *
+     * @return the upper bound
+     */
     public double getUpperBound() {
         return upperBound;
     }
 
+    /**
+     * Constructs an InformationLossResult.
+     *
+     * @param value      the metric value
+     * @param lowerBound the lower bound
+     * @param upperBound the upper bound
+     */
     public InformationLossResult(double value, double lowerBound, double upperBound) {
         this.value = value;
         this.lowerBound = lowerBound;

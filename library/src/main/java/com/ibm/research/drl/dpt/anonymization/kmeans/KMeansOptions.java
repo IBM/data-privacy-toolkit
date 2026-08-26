@@ -20,12 +20,15 @@ package com.ibm.research.drl.dpt.anonymization.kmeans;
 
 import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 
+/**
+ * Options for the {@link KMeansAnonymization} algorithm.
+ */
 public class KMeansOptions implements AnonymizationAlgorithmOptions {
     private final double suppressionRate;
     private final StrategyOptions strategy;
 
     /**
-     * Gets suppression rate.
+     * Returns the suppression rate.
      *
      * @return the suppression rate
      */
@@ -33,10 +36,21 @@ public class KMeansOptions implements AnonymizationAlgorithmOptions {
         return suppressionRate;
     }
 
+    /**
+     * Returns the reassignment strategy to use when a cluster is too small.
+     *
+     * @return the strategy options
+     */
     public StrategyOptions getStrategy() {
         return strategy;
     }
 
+    /**
+     * Constructs a KMeansOptions instance.
+     *
+     * @param suppressionRate the suppression rate (percentage of rows that may be suppressed)
+     * @param strategy        the reassignment strategy for under-sized clusters
+     */
     public KMeansOptions(double suppressionRate, StrategyOptions strategy) {
         this.suppressionRate = suppressionRate;
         this.strategy = strategy;

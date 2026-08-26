@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces IMSI values with randomly generated IMSI values. */
 public class IMSIMaskingProvider implements MaskingProvider {
     private static final IMSIManager imsiManager = IMSIManager.getInstance();
     private final boolean preserveMCC;

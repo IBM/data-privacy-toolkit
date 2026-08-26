@@ -30,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import java.security.SecureRandom;
 import java.util.Map;
 
+/** Masking provider that adjusts a numeric value by a configured ratio. */
 public class RatioBasedMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(RatioBasedMaskingProvider.class);
 
@@ -37,18 +38,35 @@ public class RatioBasedMaskingProvider implements MaskingProvider {
     private final double ratio;
     private final int precisionDigits;
 
+    /** Constructs a RatioBasedMaskingProvider with default configuration. */
     public RatioBasedMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a RatioBasedMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public RatioBasedMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
 
+    /**
+     * Constructs a RatioBasedMaskingProvider.
+     *
+     * @param random the secure random source
+     */
     public RatioBasedMaskingProvider(SecureRandom random) {
         this(random, new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a RatioBasedMaskingProvider.
+     *
+     * @param random               the secure random source
+     * @param maskingConfiguration the masking configuration
+     */
     public RatioBasedMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.ratio = maskingConfiguration.getDoubleValue("ratiobased.mask.ratio");
         this.precisionDigits = maskingConfiguration.getIntValue("ratiobased.mask.precisionDigits");

@@ -18,7 +18,18 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util;
 
+/** Utility class for string formatting operations. */
 public class FormatUtils {
+
+    /** Not instantiable. */
+    private FormatUtils() {}
+
+    /**
+     * Converts a string to title case (first letter of each word capitalised).
+     *
+     * @param value the input string
+     * @return the title-cased string
+     */
     public static String makeTitleCase(String value) {
         StringBuilder titleCase = new StringBuilder();
         boolean nextTitleCase = true;

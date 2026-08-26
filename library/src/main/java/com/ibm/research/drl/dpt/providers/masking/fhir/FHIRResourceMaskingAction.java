@@ -24,6 +24,7 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.io.Serializable;
 
+/** FHIRResourceMaskingAction FHIR datatype. */
 public class FHIRResourceMaskingAction implements Serializable {
 
     private final String fullPath;
@@ -34,30 +35,62 @@ public class FHIRResourceMaskingAction implements Serializable {
     private final MaskingProvider maskingProvider;
     private final AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider;
 
+    /**
+     * Returns whether delete.
+     * @return true if delete
+     */
     public boolean isDelete() {
         return delete;
     }
 
+    /**
+     * Returns the path.
+     * @return the path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Returns the fullPath.
+     * @return the fullPath
+     */
     public String getFullPath() {
         return fullPath;
     }
 
+    /**
+     * Returns the paths.
+     * @return the paths
+     */
     public String[] getPaths() {
         return paths;
     }
 
+    /**
+     * Returns the maskingProvider.
+     * @return the maskingProvider
+     */
     public MaskingProvider getMaskingProvider() {
         return maskingProvider;
     }
 
+    /**
+     * Returns the abstractComplexMaskingProvider.
+     * @return the abstractComplexMaskingProvider
+     */
     public AbstractComplexMaskingProvider<JsonNode> getAbstractComplexMaskingProvider() {
         return abstractComplexMaskingProvider;
     }
 
+    /**
+     * Constructs a FHIRResourceMaskingAction.
+     * @param fullPath the fullPath
+     * @param path the path
+     * @param maskingProvider the maskingProvider
+     * @param abstractComplexMaskingProvider the abstractComplexMaskingProvider
+     * @param delete the delete
+     */
     public FHIRResourceMaskingAction(String fullPath, String path,
                                      MaskingProvider maskingProvider, AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider,
                                      boolean delete) {

@@ -23,6 +23,12 @@ import java.util.*;
 import static org.apache.commons.math3.util.FastMath.cos;
 import static org.apache.commons.math3.util.FastMath.sin;
 
+/**
+ * A k-d tree (3-dimensional) for efficient nearest-neighbour searches over
+ * {@link CartesianPoint} instances.
+ *
+ * @param <T> the point type, which must extend {@link CartesianPoint}
+ */
 public class KDTree<T extends KDTree.CartesianPoint> {
     private final KDTreeNode<T> root;
 
@@ -91,6 +97,12 @@ public class KDTree<T extends KDTree.CartesianPoint> {
         return node;
     }
 
+    /**
+     * Returns {@code true} if this tree contains the given point.
+     *
+     * @param value the point to look for
+     * @return {@code true} if found
+     */
     public boolean contains(T value) {
         if (value == null || root == null)
             return false;
@@ -292,6 +304,9 @@ public class KDTree<T extends KDTree.CartesianPoint> {
         }
     }
 
+    /**
+     * A point in three-dimensional Cartesian space.
+     */
     public static class CartesianPoint implements Comparable<CartesianPoint> {
         final double x;
         final double y;
@@ -303,12 +318,24 @@ public class KDTree<T extends KDTree.CartesianPoint> {
             this.z = 0;
         }
 
+        /**
+         * Constructs a CartesianPoint from geographic coordinates by converting to ECEF.
+         *
+         * @param latitude  the latitude in degrees
+         * @param longitude the longitude in degrees
+         */
         public CartesianPoint(Double latitude, Double longitude) {
             x = cos(Math.toRadians(latitude)) * cos(Math.toRadians(longitude));
             y = cos(Math.toRadians(latitude)) * sin(Math.toRadians(longitude));
             z = sin(Math.toRadians(latitude));
         }
 
+        /**
+         * Returns the Euclidean distance from this point to the given point.
+         *
+         * @param other the other point
+         * @return the Euclidean distance
+         */
         public double euclideanDistance(CartesianPoint other) {
             return Math.sqrt(Math.pow((other.x - this.x), 2) + Math.pow((other.y - this.y), 2) + Math.pow((other.z - this.z), 2));
         }

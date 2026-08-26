@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+/** FHIRCodeableConceptMaskingProvider FHIR datatype. */
 public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean maskText;
@@ -44,6 +45,13 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
     private final String CODING_FIELD_PATH;
     private final String TEXT_PATH;
 
+    /**
+     * Constructs a FHIRCodeableConceptMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param fieldNames the fieldNames
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRCodeableConceptMaskingProvider(MaskingConfiguration maskingConfiguration,
                                               Set<String> fieldNames, final String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, fieldNames, factory);
@@ -60,6 +68,11 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
         this.textMaskingProvider = getMaskingProvider(TEXT_PATH, maskingConfiguration, this.factory);
     }
 
+    /**
+     * Masks the coding elements of a codeable concept in place.
+     *
+     * @param concept the codeable concept to mask
+     */
     public void maskCodingElements(FHIRCodeableConcept concept) {
         Collection<FHIRCoding> codings = concept.getCoding();
         if (codings == null || codings.isEmpty()) {
@@ -75,6 +88,11 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRCodeableConcept cc = JsonUtils.MAPPER.treeToValue(node, FHIRCodeableConcept.class);
@@ -85,6 +103,11 @@ public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingPr
         }
     }
 
+    /**
+     * Masks a FHIR CodeableConcept object.
+     * @param concept the FHIRCodeableConcept to mask
+     * @return the masked FHIRCodeableConcept
+     */
     public FHIRCodeableConcept mask(FHIRCodeableConcept concept) {
         if (concept == null) {
             return null;

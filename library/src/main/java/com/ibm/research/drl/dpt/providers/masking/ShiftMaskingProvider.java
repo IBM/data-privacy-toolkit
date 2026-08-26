@@ -53,6 +53,12 @@ public class ShiftMaskingProvider implements MaskingProvider {
         this(new SecureRandom(), configuration);
     }
 
+    /**
+     * Constructs a ShiftMaskingProvider.
+     *
+     * @param random        the secure random source
+     * @param configuration the masking configuration
+     */
     public ShiftMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
         this.shiftValue = configuration.getDoubleValue("shift.mask.value");
         this.digitsToKeep = configuration.getIntValue("shift.mask.digitsToKeep");

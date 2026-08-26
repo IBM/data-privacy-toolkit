@@ -29,9 +29,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for county data loaded from localization resources.
+ */
 public class CountyManager extends ResourceBasedManager<County> {
     private static final CountyManager COUNTY_MANAGER = new CountyManager();
 
+    /**
+     * Returns the singleton instance of CountyManager.
+     *
+     * @return the singleton instance
+     */
     public static CountyManager getInstance() {
         return COUNTY_MANAGER;
     }

@@ -26,7 +26,11 @@ import org.apache.logging.log4j.LogManager;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Utility class for generating generalization hierarchies from numerical intervals. */
 public class IntervalGenerator {
+
+    /** Not instantiable. */
+    private IntervalGenerator() {}
     private final static Logger logger = LogManager.getLogger(IntervalGenerator.class);
 
     /**

@@ -29,10 +29,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manages dependent-relationship resources. */
 public class DependentManager extends ResourceBasedManager<Dependent> {
     private static final Collection<ResourceEntry> resourceDependentList = LocalizationManager.getInstance().getResources(Resource.DEPENDENT);
     private final static DependentManager DEPENDENT_MANAGER = new DependentManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the DependentManager instance
+     */
     public static DependentManager getInstance() {
         return DEPENDENT_MANAGER;
     }

@@ -24,9 +24,14 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRExtension;
 
 import java.util.Collection;
 
+/** FHIR Address datatype. */
+/** FHIRAddress FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRAddress {
+    /** Constructs a FHIRAddress. */
+    public FHIRAddress() {}
+
     /* v1.0.2
     {doco
   "resourceType" : "Address",
@@ -45,98 +50,182 @@ public class FHIRAddress {
      */
 
 
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public FHIRExtension getExtension() {
         return extension;
     }
-
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(FHIRExtension extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the resource type.
+     * @return the resource type
+     */
     public String getResourceType() {
         return resourceType;
     }
-
+    /**
+     * Sets the resource type.
+     * @param resourceType the resource type
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
 
+    /**
+     * Returns the use.
+     * @return the use
+     */
     public String getUse() {
         return use;
     }
-
+    /**
+     * Sets the use.
+     * @param use the use
+     */
     public void setUse(String use) {
         this.use = use;
     }
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public String getType() {
         return type;
     }
-
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
-
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+    /**
+     * Returns the address lines.
+     * @return the address lines
+     */
     public Collection<String> getLine() {
         return line;
     }
-
+    /**
+     * Sets the address lines.
+     * @param line the address lines
+     */
     public void setLine(Collection<String> line) {
         this.line = line;
     }
 
+    /**
+     * Returns the city.
+     * @return the city
+     */
     public String getCity() {
         return city;
     }
-
+    /**
+     * Sets the city.
+     * @param city the city
+     */
     public void setCity(String city) {
         this.city = city;
     }
 
+    /**
+     * Returns the district.
+     * @return the district
+     */
     public String getDistrict() {
         return district;
     }
-
+    /**
+     * Sets the district.
+     * @param district the district
+     */
     public void setDistrict(String district) {
         this.district = district;
     }
 
+    /**
+     * Returns the state.
+     * @return the state
+     */
     public String getState() {
         return state;
     }
-
+    /**
+     * Sets the state.
+     * @param state the state
+     */
     public void setState(String state) {
         this.state = state;
     }
 
+    /**
+     * Returns the postal code.
+     * @return the postal code
+     */
     public String getPostalCode() {
         return postalCode;
     }
-
+    /**
+     * Sets the postal code.
+     * @param postalCode the postal code
+     */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
+    /**
+     * Returns the country.
+     * @return the country
+     */
     public String getCountry() {
         return country;
     }
-
+    /**
+     * Sets the country.
+     * @param country the country
+     */
     public void setCountry(String country) {
         this.country = country;
     }
 
+    /**
+     * Returns the period.
+     * @return the period
+     */
     public FHIRPeriod getPeriod() {
         return period;
     }
-
+    /**
+     * Sets the period.
+     * @param period the period
+     */
     public void setPeriod(FHIRPeriod period) {
         this.period = period;
     }

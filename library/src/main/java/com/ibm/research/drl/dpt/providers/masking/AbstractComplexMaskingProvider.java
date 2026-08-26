@@ -24,11 +24,23 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.Set;
 
+/**
+ * Abstract base class for complex masking providers that handle structured types.
+ *
+ * @param <K> the type of object to be masked
+ */
 public abstract class AbstractComplexMaskingProvider<K> implements MaskingProvider {
     private final String prefixGUID;
     private final Set<String> maskedFields;
+    /** The masking provider factory used to create sub-providers. */
     protected final MaskingProviderFactory factory;
 
+    /**
+     * Masks the given object. By default, returns the object unchanged.
+     *
+     * @param obj the object to mask
+     * @return the masked object
+     */
     public K mask(K obj) {
         return obj;
     }
@@ -37,6 +49,13 @@ public abstract class AbstractComplexMaskingProvider<K> implements MaskingProvid
         return prefixGUID + declaredName;
     }
 
+    /**
+     * Returns the masking configuration for a given subfield.
+     *
+     * @param declaredName         the declared subfield name
+     * @param maskingConfiguration the parent masking configuration
+     * @return the masking configuration for the subfield
+     */
     protected MaskingConfiguration getConfigurationForSubfield(String declaredName, MaskingConfiguration maskingConfiguration) {
         final String subfieldName = getSubfieldName(declaredName);
 
@@ -49,18 +68,40 @@ public abstract class AbstractComplexMaskingProvider<K> implements MaskingProvid
         }
     }
 
+    /**
+     * Returns the masking provider for the given path.
+     *
+     * @param path                 the field path
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     * @return the masking provider
+     */
     protected MaskingProvider getMaskingProvider(String path, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         MaskingConfiguration valueMaskingConfiguration = getConfigurationForSubfield(path, maskingConfiguration);
         String defaultMaskingProvider = valueMaskingConfiguration.getStringValue("default.masking.provider");
         return factory.get(ProviderType.valueOf(defaultMaskingProvider), valueMaskingConfiguration);
     }
 
+    /**
+     * Constructs an AbstractComplexMaskingProvider.
+     *
+     * @param complexType          the complex type identifier used to look up the prefix GUID
+     * @param maskingConfiguration the masking configuration
+     * @param maskedFields         the set of already-masked field paths
+     * @param factory              the masking provider factory
+     */
     public AbstractComplexMaskingProvider(String complexType, MaskingConfiguration maskingConfiguration, Set<String> maskedFields, MaskingProviderFactory factory) {
         this.prefixGUID = maskingConfiguration.getStringValue(complexType + ".prefixGUID");
         this.maskedFields = maskedFields;
         this.factory = factory;
     }
 
+    /**
+     * Returns whether the given field path has already been masked.
+     *
+     * @param fieldPath the field path to check
+     * @return true if already masked, false otherwise
+     */
     public boolean isAlreadyMasked(String fieldPath) {
         return maskedFields.contains(fieldPath);
     }

@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** Masking provider that replaces part or all of a value according to a configurable replacement mode. */
 public class ReplaceMaskingProvider implements MaskingProvider {
     private final int preservedCharacters;
     private final int offset;
@@ -42,11 +43,17 @@ public class ReplaceMaskingProvider implements MaskingProvider {
     private final String prefix;
     private final SecureRandom random;
 
+    /** The replacement mode for the masking operation. */
     public enum ReplaceMode {
+        /** Replace with a partial original value. */
         WITH_PARTIAL,
+        /** Replace with a random value. */
         WITH_RANDOM,
+        /** Replace with asterisks. */
         WITH_ASTERISKS,
+        /** Replace with a deterministic pseudonym. */
         WITH_DETERMINISTIC,
+        /** Replace with a value from a configured set. */
         WITH_SET
     }
 

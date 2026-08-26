@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a religion name with localization and probability support. */
 public class Religion implements LocalizedEntity, ProbabilisticEntity {
     private final String name;
     private final String group;
@@ -45,10 +46,12 @@ public class Religion implements LocalizedEntity, ProbabilisticEntity {
 
 
     /**
-     * Instantiates a new Religion.
+     * Constructs a Religion.
      *
-     * @param name            the name
-     * @param nameCountryCode the name country code
+     * @param name            the religion name
+     * @param group           the religion group
+     * @param nameCountryCode the locale country code
+     * @param probability     the probability of the religion in the locale
      */
     public Religion(String name, String group, String nameCountryCode, double probability) {
         this.name = name;
@@ -57,6 +60,11 @@ public class Religion implements LocalizedEntity, ProbabilisticEntity {
         this.probability = probability;
     }
 
+    /**
+     * Returns the religion group.
+     *
+     * @return the group
+     */
     public String getGroup() {
         return group;
     }

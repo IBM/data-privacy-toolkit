@@ -30,8 +30,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
+/** Represents a part-of-speech (POS) tag, with helpers to classify the tag category. */
 public final class PartOfSpeechType implements Serializable {
     private static final Logger logger = LogManager.getLogger(PartOfSpeechType.class);
+    /** The singleton unknown POS type, used when a tag cannot be recognised. */
     public static final PartOfSpeechType UNKNOWN = new PartOfSpeechType("UNKNOWN");
     private final static Map<String, PartOfSpeechType> knownTypes;
 
@@ -144,6 +146,12 @@ public final class PartOfSpeechType implements Serializable {
         this.type = type;
     }
 
+    /**
+     * Returns the {@code PartOfSpeechType} for the given tag string, or {@link #UNKNOWN} if not recognised.
+     *
+     * @param type the POS tag string
+     * @return the corresponding {@code PartOfSpeechType}
+     */
     public static PartOfSpeechType valueOf(String type) {
         PartOfSpeechType pos = knownTypes.get(type);
 
@@ -167,32 +175,72 @@ public final class PartOfSpeechType implements Serializable {
     private static final Collection<String> numericals = new HashSet<>(Arrays.asList("CD"));
     private static final Collection<String> punctuation = new HashSet<>(Arrays.asList("PUNCT", ":", ",", "``", ".", "#", "''", "$", "(", ")"));
 
+    /**
+     * Returns {@code true} if this part-of-speech type represents a numeral.
+     *
+     * @return {@code true} if numerical
+     */
     public boolean isNumerical() {return numericals.contains(this.type);}
-    
+
+    /**
+     * Returns {@code true} if this part-of-speech type is not in the known-types registry.
+     *
+     * @return {@code true} if unknown
+     */
     public boolean isUnknown() {
         return !knownTypes.containsKey(this.type);
     }
-    
+
+    /**
+     * Returns {@code true} if this part-of-speech type represents a noun.
+     *
+     * @return {@code true} if noun
+     */
     public boolean isNoun() {
         return nouns.contains(this.type);
     }
-    
+
+    /**
+     * Returns {@code true} if this part-of-speech type represents an adjective.
+     *
+     * @return {@code true} if adjective
+     */
     public boolean isAdjective() {
         return adjectives.contains(this.type);
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type is a localizer.
+     *
+     * @return {@code true} if localizer
+     */
     public boolean isLocalizer() {
         return localizer.contains(this.type);
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type represents a pronoun.
+     *
+     * @return {@code true} if pronoun
+     */
     public boolean isPronoun() {
         return pronouns.contains(this.type);
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type represents a verb.
+     *
+     * @return {@code true} if verb
+     */
     public boolean isVerb() {
         return verbs.contains(this.type);
     }
-    
+
+    /**
+     * Returns {@code true} if this part-of-speech type represents a modal verb.
+     *
+     * @return {@code true} if modal
+     */
     public boolean isModal() {
         return modals.contains(this.type);
     }
@@ -217,18 +265,38 @@ public final class PartOfSpeechType implements Serializable {
         return type != null ? type.hashCode() : 0;
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type is classified as other.
+     *
+     * @return {@code true} if other
+     */
     public boolean isOther() {
         return false;
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type represents an adverb.
+     *
+     * @return {@code true} if adverb
+     */
     public boolean isAdverb() {
         return adverbs.contains(this.type);
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type represents a conjunction.
+     *
+     * @return {@code true} if conjunction
+     */
     public boolean isConjunction() {
         return conjunctions.contains(this.type);
     }
 
+    /**
+     * Returns {@code true} if this part-of-speech type represents punctuation.
+     *
+     * @return {@code true} if punctuation
+     */
     public boolean isPuntuation() {
         return punctuation.contains(this.type);
     }

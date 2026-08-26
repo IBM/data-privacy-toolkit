@@ -30,16 +30,26 @@ import java.util.Objects;
 import java.util.Set;
 
 
+/** Represents an entity identified in free text, including its position and type. */
 public final class IdentifiedEntity implements Serializable {
     private final String text;
     private final int start;
     private final int end;
     private final Set<IdentifiedEntityType> type;
     private final Set<PartOfSpeechType> pos;
-    private DependencyParseInformation dependencyParseInformation; 
-    
+    private DependencyParseInformation dependencyParseInformation;
+
+    /**
+     * Constructs an IdentifiedEntity.
+     *
+     * @param text  the identified text span
+     * @param start the start offset (inclusive) in the source text
+     * @param end   the end offset (exclusive) in the source text
+     * @param type  the set of entity types assigned to this entity
+     * @param pos   the set of part-of-speech tags assigned to this entity
+     */
     @JsonCreator
-    public IdentifiedEntity(@JsonProperty("text") String text, @JsonProperty("start") int start, @JsonProperty("end") int end, 
+    public IdentifiedEntity(@JsonProperty("text") String text, @JsonProperty("start") int start, @JsonProperty("end") int end,
                             @JsonProperty("type") Set<IdentifiedEntityType> type,
                             @JsonProperty("pos") Set<PartOfSpeechType> pos) 
     {
@@ -51,30 +61,65 @@ public final class IdentifiedEntity implements Serializable {
         this.dependencyParseInformation = null;
     }
 
+    /**
+     * Returns the dependency parse information for this entity.
+     *
+     * @return the dependency parse information, or {@code null} if not set
+     */
     public DependencyParseInformation getDependencyParseInformation() {
         return dependencyParseInformation;
     }
 
+    /**
+     * Sets the dependency parse information for this entity.
+     *
+     * @param dependencyParseInformation the dependency parse information
+     */
     public void setDependencyParseInformation(DependencyParseInformation dependencyParseInformation) {
         this.dependencyParseInformation = dependencyParseInformation;
     }
-    
+
+    /**
+     * Returns the text span of this entity.
+     *
+     * @return the entity text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Returns the start offset of this entity in the source text.
+     *
+     * @return start offset (inclusive)
+     */
     public int getStart() {
         return start;
     }
 
+    /**
+     * Returns the end offset of this entity in the source text.
+     *
+     * @return end offset (exclusive)
+     */
     public int getEnd() {
         return end;
     }
 
-    public Set<IdentifiedEntityType> getType(){
+    /**
+     * Returns the set of entity types assigned to this entity.
+     *
+     * @return entity types
+     */
+    public Set<IdentifiedEntityType> getType() {
         return type;
     }
 
+    /**
+     * Returns the set of part-of-speech tags assigned to this entity.
+     *
+     * @return part-of-speech tags
+     */
     @JsonIgnore
     public Set<PartOfSpeechType> getPos() {
         return pos;
@@ -99,16 +144,33 @@ public final class IdentifiedEntity implements Serializable {
         return repr;
     }
 
+    /**
+     * Concatenates the source strings of all entity types with the given separator.
+     *
+     * @param sep the separator
+     * @return concatenated sources
+     */
     public String concatSources(String sep) {
         List<String> sources = new ArrayList<>();
         type.forEach(x -> sources.add(x.getSource()));
         return StringUtils.join(sources, sep);
     }
     
+    /**
+     * Concatenates the type representations with the given separator.
+     *
+     * @param sep the separator
+     * @return concatenated type strings
+     */
     public String concatTypes(String sep) {
         return StringUtils.join(type, sep);
     }
     
+    /**
+     * Returns an inline XML representation of this entity.
+     *
+     * @return inline XML string
+     */
     public String toInlineXML() {
         if (null == type || type.isEmpty()) {
             return text;

@@ -28,17 +28,40 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Factory for creating and looking up {@link GeneralizationHierarchy} instances. */
 public class GeneralizationHierarchyFactory {
     private static final Logger logger = LogManager.getLogger(GeneralizationHierarchyFactory.class);
 
+    /** Not instantiable. */
+    private GeneralizationHierarchyFactory() {}
+
+    /**
+     * Returns the default hierarchy for the given provider type.
+     *
+     * @param type the provider type
+     * @return the corresponding generalization hierarchy
+     */
     public static GeneralizationHierarchy getDefaultHierarchy(ProviderType type) {
         return getDefaultHierarchy(type.name().toUpperCase());
     }
 
+    /**
+     * Returns a flat hierarchy for a fixed set of terms with top term {@code "*"}.
+     *
+     * @param terms the leaf terms
+     * @return the generalization hierarchy
+     */
     public static GeneralizationHierarchy getGenericFromFixedSet(List<String> terms) {
         return getGenericFromFixedSet(terms, "*");
     }
 
+    /**
+     * Returns a flat hierarchy for a fixed set of terms with a custom top term.
+     *
+     * @param terms   the leaf terms
+     * @param topTerm the top-level generalisation term
+     * @return the generalization hierarchy
+     */
     public static GeneralizationHierarchy getGenericFromFixedSet(List<String> terms, String topTerm) {
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
 
@@ -52,10 +75,22 @@ public class GeneralizationHierarchyFactory {
         return hierarchy;
     }
 
+    /**
+     * Returns the default hierarchy described by the given JSON node.
+     *
+     * @param hierarchy the JSON configuration node
+     * @return the generalization hierarchy
+     */
     public static GeneralizationHierarchy getDefaultHierarchy(JsonNode hierarchy) {
         return getDefaultHierarchy(hierarchy.get("type").asText().toUpperCase(), hierarchy);
     }
 
+    /**
+     * Returns the default hierarchy for the given type name.
+     *
+     * @param hierarchyType the hierarchy type name (e.g. {@code "COUNTRY"})
+     * @return the generalization hierarchy
+     */
     public static GeneralizationHierarchy getDefaultHierarchy(String hierarchyType) {
         return getDefaultHierarchy(hierarchyType, null);
     }
@@ -116,6 +151,12 @@ public class GeneralizationHierarchyFactory {
         }
     }
 
+    /**
+     * Builds a hierarchy from a JSON specification containing a list of term paths.
+     *
+     * @param hierarchySpec the JSON node specifying the hierarchy terms
+     * @return the constructed generalization hierarchy
+     */
     public static GeneralizationHierarchy buildHierarchy(JsonNode hierarchySpec) {
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
 

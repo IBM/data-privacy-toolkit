@@ -33,8 +33,21 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/** Utility methods for reading Excel workbooks. */
 public class ExcelUtils {
 
+    /** Not instantiable. */
+    private ExcelUtils() {}
+
+    /**
+     * Retrieves the value of a cell at the given path in the workbook.
+     *
+     * @param inputBytes      the workbook as a byte array
+     * @param inputFormatType the format type (XLS or XLSX)
+     * @param path            the cell path (e.g. "/SheetName/A1")
+     * @return the cell value as a string
+     * @throws IOException if the workbook cannot be read
+     */
     public static String getValue(byte[] inputBytes, DataTypeFormat inputFormatType, String path) throws IOException {
         try (Workbook wb = readWorkBook(inputFormatType, inputBytes)) {
             String[] parts = path.split("/");

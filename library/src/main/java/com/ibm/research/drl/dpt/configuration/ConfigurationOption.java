@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Represents a single configurable option with a value, description, and category.
+ */
 public class ConfigurationOption implements Serializable {
     private String description;
     private String category;

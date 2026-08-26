@@ -24,16 +24,27 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.security.SecureRandom;
 
+/**
+ * DICOM DA (Date) masking provider that delegates to {@link com.ibm.research.drl.dpt.providers.masking.DateTimeMaskingProvider}.
+ */
 public class DAMaskingProvider implements MaskingProvider {
     private final DateTimeMaskingProvider dateTimeMaskingProvider;
 
     /**
-     * Instantiates a new Da masking provider.
+     * Constructs a DAMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
      */
     public DAMaskingProvider(MaskingConfiguration maskingConfiguration) {
         dateTimeMaskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
     }
 
+    /**
+     * Constructs a DAMaskingProvider with the given random source and configuration (random is unused).
+     *
+     * @param random               unused, present for API consistency
+     * @param maskingConfiguration the masking configuration
+     */
     public DAMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this(maskingConfiguration);
     }

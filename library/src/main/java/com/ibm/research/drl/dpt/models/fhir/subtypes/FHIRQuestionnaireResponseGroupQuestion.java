@@ -23,34 +23,62 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Collection;
 
+/** FHIRQuestionnaireResponseGroupQuestion FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRQuestionnaireResponseGroupQuestion {
+    /** Constructs a FHIRQuestionnaireResponseGroupQuestion. */
+    public FHIRQuestionnaireResponseGroupQuestion() {}
+
 
     private String linkId;
     private String text;
     private Collection<FHIRQuestionnaireResponseGroupQuestionAnswer> answer;
 
+    /**
+     * Returns the linkId.
+     * @return the linkId
+     */
     public String getLinkId() {
         return linkId;
     }
 
+    /**
+     * Sets the linkId.
+     * @param linkId the linkId
+     */
     public void setLinkId(String linkId) {
         this.linkId = linkId;
     }
 
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+    /**
+     * Returns the answer.
+     * @return the answer
+     */
     public Collection<FHIRQuestionnaireResponseGroupQuestionAnswer> getAnswer() {
         return answer;
     }
 
+    /**
+     * Sets the answer.
+     * @param answer the answer
+     */
     public void setAnswer(Collection<FHIRQuestionnaireResponseGroupQuestionAnswer> answer) {
         this.answer = answer;
     }

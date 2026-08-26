@@ -29,6 +29,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** Manager for SWIFT/BIC code resources. */
 public class SWIFTCodeManager extends ResourceBasedManager<SWIFTCode> {
     private static final CountryManager countryManager = CountryManager.getInstance();
     private Map<String, List<SWIFTCode>> codeByCountryMap;
@@ -36,6 +37,11 @@ public class SWIFTCodeManager extends ResourceBasedManager<SWIFTCode> {
 
     private final static SWIFTCodeManager SWIFT_CODE_MANAGER = new SWIFTCodeManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton SWIFTCodeManager
+     */
     public static SWIFTCodeManager getInstance() {
         return SWIFT_CODE_MANAGER;
     }

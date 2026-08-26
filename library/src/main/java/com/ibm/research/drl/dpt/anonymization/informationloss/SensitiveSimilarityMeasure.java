@@ -26,7 +26,12 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.*;
 
 
+/** Information-loss metric measuring similarity between sensitive-value distributions. */
 public class SensitiveSimilarityMeasure implements InformationMetric {
+
+    /** Constructs a SensitiveSimilarityMeasure. */
+    public SensitiveSimilarityMeasure() {}
+
     private Collection<Integer> sensitiveFields;
     private Map<String, Double> globalDistributions;
     private Collection<Map<String, Double>> partitionDistributions;

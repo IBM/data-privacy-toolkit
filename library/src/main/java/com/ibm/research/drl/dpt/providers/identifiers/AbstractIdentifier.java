@@ -24,7 +24,15 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Abstract base class for all identifier implementations.
+ */
 public abstract class AbstractIdentifier implements Identifier, Serializable {
+    /**
+     * Constructs a new AbstractIdentifier.
+     */
+    public AbstractIdentifier() {
+    }
     /**
      * Gets appropriate names.
      *
@@ -52,6 +60,12 @@ public abstract class AbstractIdentifier implements Identifier, Serializable {
         return false;
     }
 
+    /**
+     * Returns true if the token is in title case (first letter uppercase, at least one lowercase letter).
+     *
+     * @param token the token to check
+     * @return true if title case, false otherwise
+     */
     protected boolean isTitlecase(String token) {
         if (token.isEmpty()) {
             return true;
@@ -80,6 +94,12 @@ public abstract class AbstractIdentifier implements Identifier, Serializable {
         return lowercaseCount > 0;
     }
 
+    /**
+     * Returns true if all letters in the token are uppercase.
+     *
+     * @param token the token to check
+     * @return true if all uppercase, false otherwise
+     */
     protected boolean isAllUppercase(String token) {
         if (token.isEmpty()) {
             return true;

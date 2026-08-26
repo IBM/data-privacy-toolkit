@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a US Social Security Number (SSN), split into area, group and serial components. */
 public class SSNUS {
     private final String areaNumber;
     private final String group;

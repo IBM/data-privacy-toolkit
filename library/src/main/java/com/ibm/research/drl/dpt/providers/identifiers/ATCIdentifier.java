@@ -25,7 +25,15 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Identifier for ATC (Anatomical Therapeutic Chemical) classification codes.
+ */
 public class ATCIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new ATCIdentifier.
+     */
+    public ATCIdentifier() {
+    }
     private final static ATCManager atcManager = ATCManager.getInstance();
     private final String[] appropriateNames = new String[]{"ATC"};
 

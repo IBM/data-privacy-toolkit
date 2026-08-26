@@ -24,7 +24,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+/** Identifier for UK bank sort code values. */
 public class SortCodeIdentifier extends AbstractRegexBasedIdentifier {
+
+    /** Constructs a SortCodeIdentifier. */
+    public SortCodeIdentifier() {}
+
     private final String BANK_ID = "(?:0[15789]" +
             "|1[0-8]" +
             "|2[0357]" +

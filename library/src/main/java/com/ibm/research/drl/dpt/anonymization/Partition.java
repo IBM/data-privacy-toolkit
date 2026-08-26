@@ -20,6 +20,7 @@ package com.ibm.research.drl.dpt.anonymization;
 
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
+/** A partition (equivalence class) of rows used during anonymization. */
 public interface Partition {
     /**
      * Size int.
@@ -43,8 +44,18 @@ public interface Partition {
      */
     IPVDataset getMember();
 
+    /**
+     * Returns whether this partition has been anonymised.
+     *
+     * @return true if anonymous
+     */
     boolean isAnonymous();
 
+    /**
+     * Sets whether this partition has been anonymised.
+     *
+     * @param value true to mark as anonymous
+     */
     void setAnonymous(boolean value);
 }
 

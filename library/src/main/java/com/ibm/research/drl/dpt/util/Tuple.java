@@ -21,6 +21,12 @@ package com.ibm.research.drl.dpt.util;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * An immutable pair of two values.
+ *
+ * @param <K> the type of the first element
+ * @param <V> the type of the second element
+ */
 public final class Tuple<K, V> implements Serializable {
     private final K first;
     private final V second;

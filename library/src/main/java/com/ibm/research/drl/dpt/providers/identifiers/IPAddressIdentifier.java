@@ -25,7 +25,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+/** Identifier for IP addresses (both IPv4 and IPv6). */
 public class IPAddressIdentifier extends AbstractIdentifier {
+
+    /** Constructs an IPAddressIdentifier. */
+    public IPAddressIdentifier() {}
     private static final String ipv4AddressPattern = "^(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$";
     private static final Pattern ipv4matcher = Pattern.compile(ipv4AddressPattern);
 

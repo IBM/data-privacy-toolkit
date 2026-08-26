@@ -24,11 +24,17 @@ import com.ibm.research.drl.dpt.models.ICD;
 
 import java.util.Collection;
 
+/** Generalization hierarchy for ICD v9 disease codes. */
 public class ICDv9Hierarchy extends MaterializedHierarchy {
     private final static ICDv9Manager ICD_V9_MANAGER = ICDv9Manager.getInstance();
 
     private static final ICDv9Hierarchy instance = new ICDv9Hierarchy();
 
+    /**
+     * Returns the singleton instance of this hierarchy.
+     *
+     * @return the singleton ICDv9Hierarchy
+     */
     public static ICDv9Hierarchy getInstance() {
         return instance;
     }

@@ -28,7 +28,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Anonymization algorithm based on k-means clustering.
+ */
 public class KMeansAnonymization implements AnonymizationAlgorithm {
+
+    /** Constructs a KMeansAnonymization algorithm instance. */
+    public KMeansAnonymization() {}
     private int numberOfClusters;
     private List<ColumnInformation> columnInformationList;
     private List<PrivacyConstraint> privacyConstraints;

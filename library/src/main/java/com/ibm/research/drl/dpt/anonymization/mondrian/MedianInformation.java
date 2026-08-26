@@ -18,12 +18,20 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.mondrian;
 
+/**
+ * Holds the result of a median-based split calculation for the Mondrian anonymization algorithm.
+ */
 public class MedianInformation {
     private final Double low;
     private final Double high;
     private final String splitValueString;
     private final Double splitValueNumerical;
 
+    /**
+     * Returns the numerical split value, or {@code null} for categorical splits.
+     *
+     * @return the numerical split value
+     */
     public Double getSplitValueNumerical() {
         return splitValueNumerical;
     }
@@ -69,6 +77,13 @@ public class MedianInformation {
         this.splitValueNumerical = null;
     }
 
+    /**
+     * Constructs a MedianInformation for numerical splits.
+     *
+     * @param low        the lower bound of the partition
+     * @param high       the upper bound of the partition
+     * @param splitValue the numerical split value
+     */
     public MedianInformation(Double low, Double high, Double splitValue) {
         this.low = low;
         this.high = high;

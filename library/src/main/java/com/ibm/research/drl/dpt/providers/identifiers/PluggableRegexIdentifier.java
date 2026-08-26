@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** An identifier that matches values against one or more user-supplied regular expressions. */
 public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
     private final Collection<String> appropriateNames;
     private final Collection<Pattern> patterns;
@@ -48,6 +49,15 @@ public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier imple
         this(providerTypeName, appropriateNames, patternStrings, valueClass, true);
     }
 
+    /**
+     * Constructs a PluggableRegexIdentifier.
+     *
+     * @param providerTypeName the name used to resolve the {@link ProviderType}
+     * @param appropriateNames the field names this identifier applies to
+     * @param patternStrings   the regex pattern strings to compile and match against
+     * @param valueClass       the value class this identifier recognises
+     * @param isPOSIndependent whether POS tagging context is ignored during identification
+     */
     public PluggableRegexIdentifier(String providerTypeName,
                                     Collection<String> appropriateNames,
                                     Collection<String> patternStrings,

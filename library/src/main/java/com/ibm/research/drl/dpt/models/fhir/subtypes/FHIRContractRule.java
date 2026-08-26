@@ -24,24 +24,44 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRAttachment;
 
 
+/** FHIRContractRule FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRContractRule {
+    /** Constructs a FHIRContractRule. */
+    public FHIRContractRule() {}
+
     private FHIRAttachment contentAttachment;
     private FHIRReference contentReference;
 
+    /**
+     * Returns the contentReference.
+     * @return the contentReference
+     */
     public FHIRReference getContentReference() {
         return contentReference;
     }
 
+    /**
+     * Sets the contentReference.
+     * @param contentReference the contentReference
+     */
     public void setContentReference(FHIRReference contentReference) {
         this.contentReference = contentReference;
     }
 
+    /**
+     * Returns the contentAttachment.
+     * @return the contentAttachment
+     */
     public FHIRAttachment getContentAttachment() {
         return contentAttachment;
     }
 
+    /**
+     * Sets the contentAttachment.
+     * @param contentAttachment the contentAttachment
+     */
     public void setContentAttachment(FHIRAttachment contentAttachment) {
         this.contentAttachment = contentAttachment;
     }

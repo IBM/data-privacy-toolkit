@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Model representing a month name, optionally associated with a country code.
+ */
 public class Month implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;

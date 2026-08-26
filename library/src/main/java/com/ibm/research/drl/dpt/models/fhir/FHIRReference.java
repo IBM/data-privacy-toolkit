@@ -24,30 +24,58 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Collection;
 
 
+/** FHIRReference FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRReference {
+    /** Constructs a FHIRReference. */
+    public FHIRReference() {}
 
+
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the reference.
+     * @return the reference
+     */
     public String getReference() {
         return reference;
     }
 
+    /**
+     * Sets the reference.
+     * @param reference the reference
+     */
     public void setReference(String reference) {
         this.reference = reference;
     }
 
+    /**
+     * Returns the display.
+     * @return the display
+     */
     public String getDisplay() {
         return display;
     }
 
+    /**
+     * Sets the display.
+     * @param display the display
+     */
     public void setDisplay(String display) {
         this.display = display;
     }

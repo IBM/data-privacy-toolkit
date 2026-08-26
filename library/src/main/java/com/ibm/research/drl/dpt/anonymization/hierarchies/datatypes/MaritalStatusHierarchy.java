@@ -24,11 +24,19 @@ import com.ibm.research.drl.dpt.models.MaritalStatus;
 
 import java.util.Collection;
 
+/**
+ * Generalization hierarchy for marital-status values, loaded from the {@link MaritalStatusManager}.
+ */
 public class MaritalStatusHierarchy extends MaterializedHierarchy {
     private final static MaritalStatusManager MARITAL_STATUS_MANAGER = MaritalStatusManager.getInstance();
 
     private static final MaritalStatusHierarchy instance = new MaritalStatusHierarchy();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the shared {@link MaritalStatusHierarchy} instance
+     */
     public static MaritalStatusHierarchy getInstance() {
         return instance;
     }

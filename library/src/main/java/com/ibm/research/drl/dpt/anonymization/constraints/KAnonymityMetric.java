@@ -23,16 +23,32 @@ import com.ibm.research.drl.dpt.anonymization.PrivacyMetric;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Privacy metric that counts the number of records in an equivalence class for k-anonymity evaluation.
+ */
 public class KAnonymityMetric implements PrivacyMetric, Serializable {
     private long count = 0L;
 
+    /**
+     * Returns the current record count.
+     *
+     * @return the count
+     */
     public long getCount() {
         return count;
     }
 
+    /**
+     * Constructs a KAnonymityMetric with an initial count of zero.
+     */
     public KAnonymityMetric() {
     }
 
+    /**
+     * Constructs a KAnonymityMetric with the given initial count.
+     *
+     * @param cnt the initial count
+     */
     public KAnonymityMetric(long cnt) {
         this.count = cnt;
     }

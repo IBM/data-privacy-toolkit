@@ -18,7 +18,12 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Enumerates the formats in which an age portion numeric value can appear.
+ */
 public enum AgePortionFormat {
+    /** The age value is expressed as a digit sequence (e.g. "35"). */
     NUMERICAL,
+    /** The age value is expressed as written words (e.g. "thirty-five"). */
     WORDS
 }

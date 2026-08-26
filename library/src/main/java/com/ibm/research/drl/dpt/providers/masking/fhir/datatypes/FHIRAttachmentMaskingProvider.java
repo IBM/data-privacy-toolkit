@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.Serializable;
 import java.util.Set;
 
+/** FHIRAttachmentMaskingProvider FHIR datatype. */
 public class FHIRAttachmentMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
     private final boolean removeExtensions;
@@ -36,6 +37,13 @@ public class FHIRAttachmentMaskingProvider extends AbstractComplexMaskingProvide
     private final boolean removeURI;
     private final boolean removeTitle;
 
+    /**
+     * Constructs a FHIRAttachmentMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRAttachmentMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -46,6 +54,11 @@ public class FHIRAttachmentMaskingProvider extends AbstractComplexMaskingProvide
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAttachment cc = JsonUtils.MAPPER.treeToValue(node, FHIRAttachment.class);
@@ -56,6 +69,11 @@ public class FHIRAttachmentMaskingProvider extends AbstractComplexMaskingProvide
         }
     }
 
+    /**
+     * Masks a FHIR Attachment object.
+     * @param attachment the FHIRAttachment to mask
+     * @return the masked FHIRAttachment
+     */
     public FHIRAttachment mask(FHIRAttachment attachment) {
         if (attachment == null) {
             return null;

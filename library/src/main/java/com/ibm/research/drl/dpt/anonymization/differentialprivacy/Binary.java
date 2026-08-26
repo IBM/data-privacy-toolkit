@@ -29,7 +29,15 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Differential privacy mechanism for binary (two-value) domains.
+ */
 public class Binary implements DPMechanism {
+    /**
+     * Constructs a new Binary mechanism.
+     */
+    public Binary() {
+    }
     private static final Logger log = LogManager.getLogger(Binary.class);
 
     private final Random rnd = new SecureRandom();

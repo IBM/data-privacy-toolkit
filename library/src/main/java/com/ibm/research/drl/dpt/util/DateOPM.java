@@ -33,8 +33,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Utility methods for date offset-preserving masking. */
 public class DateOPM {
 
+    /** Not instantiable. */
+    private DateOPM() {}
+
+    /**
+     * Returns the number of days between two dates.
+     *
+     * @param startDate the start date
+     * @param endDate   the end date
+     * @return the number of days between startDate and endDate
+     */
     public static long daysBetween(Date startDate, Date endDate) {
         Calendar date = Calendar.getInstance();
         date.setTime(startDate);
@@ -47,6 +58,13 @@ public class DateOPM {
         return daysBetween;
     }
 
+    /**
+     * Adds a number of days to a date.
+     *
+     * @param date the base date
+     * @param days the number of days to add
+     * @return the resulting date
+     */
     public static Date addDays(Date date, int days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -54,6 +72,16 @@ public class DateOPM {
         return cal.getTime();
     }
 
+    /**
+     * Creates an offset-preserving mapping from dates in the given range.
+     *
+     * @param startDate         the start date string
+     * @param endDate           the end date string
+     * @param dateFormatPattern the date format pattern
+     * @param daysBudget        the number of budget days for shifting
+     * @return a map from original date strings to shifted dates
+     * @throws ParseException if a date string cannot be parsed
+     */
     public static Map<String, Date> createOPM(String startDate, String endDate,
                                               String dateFormatPattern, int daysBudget) throws ParseException {
 
@@ -90,6 +118,12 @@ public class DateOPM {
         return map;
     }
 
+    /**
+     * Loads a date mapping from an input stream (CSV format).
+     *
+     * @param is the input stream
+     * @return a map from original to mapped date strings
+     */
     public static Map<String, String> loadMapping(InputStream is) {
         Map<String, String> map = new HashMap<>();
 
@@ -109,6 +143,13 @@ public class DateOPM {
     }
 
 
+    /**
+     * Loads a date mapping from a file path.
+     *
+     * @param file the file path
+     * @return a map from original to mapped date strings
+     * @throws IOException if the file cannot be read
+     */
     public static Map<String, String> loadMapping(String file) throws IOException {
         return loadMapping(new FileInputStream(file));
     }

@@ -29,10 +29,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manages day-of-week resources. */
 public class DayManager extends ResourceBasedManager<Day> {
     private static final long serialVersionUID = 422211328962854977L;
     private static final DayManager DAY_MANAGER = new DayManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the DayManager instance
+     */
     public static DayManager getInstance() {
         return DAY_MANAGER;
     }

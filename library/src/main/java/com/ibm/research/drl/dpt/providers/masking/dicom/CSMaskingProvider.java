@@ -26,6 +26,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
+/**
+ * DICOM CS (Code String) masking provider, supporting GENDER and SEX_NEUTERED entity types.
+ */
 public class CSMaskingProvider implements MaskingProvider {
     private static final Logger logger = LogManager.getLogger(CSMaskingProvider.class);
     private final RandomMaskingProvider randomMaskingProvider;
@@ -36,12 +39,20 @@ public class CSMaskingProvider implements MaskingProvider {
     private final SecureRandom random;
 
     /**
-     * Instantiates a new Cs masking provider.
+     * Constructs a CSMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
      */
     public CSMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
 
+    /**
+     * Constructs a CSMaskingProvider with the given random source and configuration.
+     *
+     * @param random               the secure random source
+     * @param maskingConfiguration the masking configuration
+     */
     public CSMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.randomMaskingProvider = new RandomMaskingProvider(maskingConfiguration);
         this.entityType = DicomEntityType.valueOf(maskingConfiguration.getStringValue("dicom.cs.entityType"));

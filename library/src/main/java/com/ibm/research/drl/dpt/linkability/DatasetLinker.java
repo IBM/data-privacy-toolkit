@@ -31,6 +31,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.*;
 
+/**
+ * Builds and queries inverted indices for fast record linking between datasets.
+ */
 public class DatasetLinker {
     private static final Logger logger = LogManager.getLogger(DatasetLinker.class);
 
@@ -38,6 +41,13 @@ public class DatasetLinker {
     private Map<String, Set<Integer>>[] targetIndices;
     private TreeMap<Double, Set<Integer>>[] targetIndicesNumerical; //we explicitly declare TreeMap since we need the ordered iterator
 
+    /**
+     * Constructs a DatasetLinker by indexing the given target dataset.
+     *
+     * @param target        the target dataset input stream
+     * @param targetColumns the link information describing which columns to index
+     * @throws IOException if the target dataset cannot be read
+     */
     public DatasetLinker(InputStream target, Collection<LinkInfo> targetColumns) throws IOException {
         buildTargetIndex(target, targetColumns);
     }
@@ -135,6 +145,14 @@ public class DatasetLinker {
         set.add(rowId);
     }
 
+    /**
+     * Returns the set of target row indices whose value in the given column falls within [minValue, maxValue].
+     *
+     * @param minValue    the minimum value (inclusive)
+     * @param maxValue    the maximum value (inclusive)
+     * @param targetIndex the column index in the target
+     * @return the matching row indices, or empty if none match
+     */
     public Set<Integer> matchValueRange(Double minValue, Double maxValue, int targetIndex) {
         Map<Double, Set<Integer>> map = targetIndicesNumerical[targetIndex];
         Set<Integer> results = new HashSet<>();
@@ -150,10 +168,25 @@ public class DatasetLinker {
         return results;
     }
 
+    /**
+     * Returns the set of target row indices whose numeric value in the given column equals the given value.
+     *
+     * @param value       the value to match
+     * @param targetIndex the column index in the target
+     * @return the matching row indices, or null if none
+     */
     public Set<Integer> matchValue(Double value, int targetIndex) {
         return targetIndicesNumerical[targetIndex].get(value);
     }
 
+    /**
+     * Returns the set of target row indices whose string value in the given column matches.
+     *
+     * @param value        the value to match
+     * @param targetIndex  the column index in the target
+     * @param isWithPrefix whether to perform prefix matching
+     * @return the matching row indices, or null if none
+     */
     public Set<Integer> matchValue(String value, int targetIndex, boolean isWithPrefix) {
         final Map<String, Set<Integer>> index = targetIndices[targetIndex];
 
@@ -211,6 +244,13 @@ public class DatasetLinker {
         return results;
     }
 
+    /**
+     * Matches a source row against the target dataset and returns the count of matching rows.
+     *
+     * @param sourceRow       the source row values
+     * @param linkInformation the link information
+     * @return the number of matching target rows, or null if all columns were wildcards
+     */
     public Integer matchRow(List<String> sourceRow, Collection<LinkInfo> linkInformation) {
         List<Set<Integer>> toBeLinked = new ArrayList<>();
 
@@ -248,6 +288,11 @@ public class DatasetLinker {
         return intersectAll(toBeLinked);
     }
 
+    /**
+     * Returns the total number of rows in the target dataset.
+     *
+     * @return the number of rows
+     */
     public int getNumberOfRows() {
         return numberOfRows;
     }

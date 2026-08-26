@@ -29,6 +29,9 @@ import org.apache.commons.csv.CSVRecord;
 import java.security.SecureRandom;
 import java.util.*;
 
+/**
+ * Manager for city data loaded from localization resources.
+ */
 public class CityManager extends ResourceBasedManager<City> {
 
     private record CityDistanceFinder(City city, double distance) implements Comparable<CityDistanceFinder> {
@@ -55,6 +58,11 @@ public class CityManager extends ResourceBasedManager<City> {
 
     private static final CityManager instance = new CityManager();
 
+    /**
+     * Returns the singleton instance of CityManager.
+     *
+     * @return the singleton instance
+     */
     public static CityManager getInstance() {
         return instance;
     }

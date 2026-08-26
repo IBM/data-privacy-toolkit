@@ -29,10 +29,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for credit card type names loaded from localization resources.
+ */
 public class CreditCardTypeManager extends ResourceBasedManager<CreditCardType> {
     private static final long serialVersionUID = 2610710155976479839L;
     private static final CreditCardTypeManager CREDIT_CARD_TYPE_MANAGER = new CreditCardTypeManager();
 
+    /**
+     * Returns the singleton instance of CreditCardTypeManager.
+     *
+     * @return the singleton instance
+     */
     public static CreditCardTypeManager getInstance() {
         return CREDIT_CARD_TYPE_MANAGER;
     }

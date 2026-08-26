@@ -30,9 +30,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for ATC codes loaded from localization resources.
+ */
 public class ATCManager extends ResourceBasedManager<ATC> {
     private final static ATCManager ATC_MANAGER = new ATCManager();
 
+    /**
+     * Returns the singleton instance of ATCManager.
+     *
+     * @return the singleton instance
+     */
     public static ATCManager getInstance() {
         return ATC_MANAGER;
     }

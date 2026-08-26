@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** A pair holding an original value and its masked replacement. */
 public class OriginalMaskedValuePair {
     private final String original;
     private final String masked;

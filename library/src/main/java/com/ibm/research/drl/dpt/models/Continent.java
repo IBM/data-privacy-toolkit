@@ -20,6 +20,9 @@ package com.ibm.research.drl.dpt.models;
 
 import java.util.List;
 
+/**
+ * Represents a continent with its geographic location.
+ */
 public class Continent implements Location, LocalizedEntity {
 
     private final String name;

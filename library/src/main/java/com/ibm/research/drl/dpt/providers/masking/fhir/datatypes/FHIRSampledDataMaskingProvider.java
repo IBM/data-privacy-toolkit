@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRSampledDataMaskingProvider FHIR datatype. */
 public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final boolean maskOrigin;
@@ -55,6 +56,13 @@ public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvid
     private final MaskingProvider dimensionsMaskingProvider;
     private final MaskingProvider dataMaskingProvider;
 
+    /**
+     * Constructs a FHIRSampledDataMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRSampledDataMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -85,6 +93,11 @@ public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvid
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRSampledData obj = JsonUtils.MAPPER.treeToValue(node, FHIRSampledData.class);
@@ -95,6 +108,11 @@ public class FHIRSampledDataMaskingProvider extends AbstractComplexMaskingProvid
         }
     }
 
+    /**
+     * Masks a FHIR SampledData object.
+     * @param sampledData the FHIRSampledData to mask
+     * @return the masked FHIRSampledData
+     */
     public FHIRSampledData mask(FHIRSampledData sampledData) {
 
         if (this.maskOrigin && !isAlreadyMasked(ORIGIN_PATH)) {

@@ -30,9 +30,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for marital-status entries loaded from localised CSV resources.
+ */
 public class MaritalStatusManager extends ResourceBasedManager<MaritalStatus> {
     private final static MaritalStatusManager MARITAL_STATUS_MANAGER = new MaritalStatusManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the shared {@link MaritalStatusManager} instance
+     */
     public static MaritalStatusManager getInstance() {
         return MARITAL_STATUS_MANAGER;
     }

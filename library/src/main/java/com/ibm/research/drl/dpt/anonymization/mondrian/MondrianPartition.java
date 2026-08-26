@@ -36,6 +36,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A partition used by the Mondrian anonymization algorithm, holding member rows and split metadata.
+ */
 public class MondrianPartition implements Partition {
 
     private final IPVDataset member;
@@ -94,6 +97,11 @@ public class MondrianPartition implements Partition {
         return member.getNumberOfRows();
     }
 
+    /**
+     * Prevents this partition from being further split on the given quasi-identifier dimension.
+     *
+     * @param quasiIndex the quasi-identifier index to disallow splitting on
+     */
     public void disallow(int quasiIndex) {
         allow[quasiIndex] = 0;
     }
@@ -171,6 +179,13 @@ public class MondrianPartition implements Partition {
         return new MedianInformation(low, high, median);
     }
 
+    /**
+     * Generates a string key for the midpoint of a numerical range.
+     *
+     * @param low  the lower bound
+     * @param high the upper bound
+     * @return a string like {@code "low-high"} or the number itself if {@code low == high}
+     */
     public static String generateMiddleKey(double low, double high) {
         if (low == high) {
             return Double.toString(low);
@@ -179,6 +194,13 @@ public class MondrianPartition implements Partition {
         return low + "-" + high;
     }
 
+    /**
+     * Splits this partition on a numerical quasi-identifier dimension.
+     *
+     * @param quasiIndex the quasi-identifier index to split on
+     * @param level      the generalization level
+     * @return a list of sub-partitions
+     */
     public List<MondrianPartition> splitNumerical(int quasiIndex, int level) {
         int columnIndex = this.quasiColumns.get(quasiIndex);
         List<Double> values = extractValues(columnIndex);
@@ -449,6 +471,13 @@ public class MondrianPartition implements Partition {
         return partitions;
     }
 
+    /**
+     * Splits this partition on the given quasi-identifier dimension (numerical or categorical).
+     *
+     * @param quasiIndex the quasi-identifier index to split on
+     * @param level      the generalization level
+     * @return a list of sub-partitions
+     */
     public List<MondrianPartition> split(int quasiIndex, int level) {
         ColumnInformation columnInformation = columnInformationList.get(this.quasiColumns.get(quasiIndex));
 
@@ -509,11 +538,14 @@ public class MondrianPartition implements Partition {
     }
 
     /**
-     * Instantiates a new Mondrian partition.
+     * Constructs a MondrianPartition.
      *
-     * @param data                  the data
-     * @param middle                the middle
-     * @param columnInformationList the column information list
+     * @param data                   the member rows
+     * @param middle                 the per-column middle (midpoint) values
+     * @param width                  the per-column width intervals
+     * @param columnInformationList  the column information list
+     * @param privacyConstraints     the privacy constraints
+     * @param categoricalSplitStrategy the categorical split strategy
      */
     public MondrianPartition(IPVDataset data, List<String> middle, List<Interval> width,
                              List<ColumnInformation> columnInformationList,

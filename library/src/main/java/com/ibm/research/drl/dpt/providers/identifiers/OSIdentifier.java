@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/** Identifier for operating-system name values (e.g. "Windows", "macOS", "Linux"). */
 public class OSIdentifier extends AbstractIdentifier {
     private final Set<String> terms;
     private final Set<String> testDetectionPrefixes = new HashSet<>(Arrays.asList("mac os", "macos", "mac", "windows"));
@@ -35,6 +36,7 @@ public class OSIdentifier extends AbstractIdentifier {
     private final int minimumLength;
     private final int maximumLength;
 
+    /** Constructs an OSIdentifier, loading the known OS terms. */
     public OSIdentifier() {
         terms = populateTerms();
 

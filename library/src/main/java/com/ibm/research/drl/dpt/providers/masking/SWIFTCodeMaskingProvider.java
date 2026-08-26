@@ -24,6 +24,7 @@ import com.ibm.research.drl.dpt.managers.SWIFTCodeManager;
 
 import java.security.SecureRandom;
 
+/** Masking provider for SWIFT/BIC code values. */
 public class SWIFTCodeMaskingProvider implements MaskingProvider {
     private static final SWIFTCodeManager swiftCodeManager = SWIFTCodeManager.getInstance();
     private final boolean preserveCountry;

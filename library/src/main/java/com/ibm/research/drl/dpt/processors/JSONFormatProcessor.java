@@ -36,7 +36,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/** Format processor for JSON documents. */
 public class JSONFormatProcessor extends MultipathFormatProcessor {
+
+    /** Constructs a JSONFormatProcessor. */
+    public JSONFormatProcessor() {}
     private static Map<ProviderType, Long> identifyJSONArrayElement(JsonNode node) {
         Iterator<JsonNode> iterator = node.iterator();
         return identifyListOfElements(iterator);

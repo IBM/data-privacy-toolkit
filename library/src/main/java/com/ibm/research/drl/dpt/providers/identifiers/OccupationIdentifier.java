@@ -25,7 +25,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Identifier for occupation values using a controlled vocabulary.
+ */
 public class OccupationIdentifier extends AbstractManagerBasedIdentifier {
+    /** Constructs an OccupationIdentifier. */
+    public OccupationIdentifier() {}
     private final static String[] appropriateNames = {"Job", "Occupation"};
     private final static OccupationManager occupationManager = OccupationManager.getInstance();
 

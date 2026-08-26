@@ -22,13 +22,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/** Column-information descriptor for sensitive (quasi-sensitive) columns. */
 public class SensitiveColumnInformation implements ColumnInformation {
     private final boolean isForLinking;
 
+    /** Constructs a SensitiveColumnInformation that is not used for linking. */
     public SensitiveColumnInformation() {
         this(false);
     }
 
+    /**
+     * Constructs a SensitiveColumnInformation.
+     *
+     * @param forLinking whether this column is used for record linking
+     */
     @JsonCreator
     public SensitiveColumnInformation(
             @JsonProperty("forLinking") boolean forLinking) {

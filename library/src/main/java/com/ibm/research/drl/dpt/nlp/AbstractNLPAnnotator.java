@@ -27,11 +27,32 @@ import java.util.Map;
 import java.util.stream.StreamSupport;
 
 
+/**
+ * Abstract base class for NLP annotators providing common utility methods.
+ */
 public abstract class AbstractNLPAnnotator implements NLPAnnotator {
+    /**
+     * Constructs a new AbstractNLPAnnotator.
+     */
+    public AbstractNLPAnnotator() {
+    }
+
+    /**
+     * Extracts a case-sensitive string-to-string mapping from a JSON node.
+     *
+     * @param mapping the JSON object node representing the mapping
+     * @return a map of string keys to string values
+     */
     protected Map<String, String> extractMapping(JsonNode mapping) {
         return extractMapping(mapping, false);
     }
 
+    /**
+     * Extracts a list of string values from a JSON array node.
+     *
+     * @param node the JSON array node
+     * @return list of string values, or empty list if null/empty
+     */
     public List<String> extractList(JsonNode node) {
         if (node == null || node.size() == 0) {
             return Collections.emptyList();
@@ -40,6 +61,13 @@ public abstract class AbstractNLPAnnotator implements NLPAnnotator {
         return StreamSupport.stream(node.spliterator(), false).map(JsonNode::asText).toList();
     }
     
+    /**
+     * Extracts a string-to-string mapping from a JSON node.
+     *
+     * @param mapping    the JSON object node representing the mapping
+     * @param ignoreCase if true, keys are lowercased before insertion
+     * @return a map of string keys to string values
+     */
     protected Map<String, String> extractMapping(JsonNode mapping, boolean ignoreCase) {
         if (null == mapping || mapping.isNull() || mapping.isEmpty()) {
             return Collections.emptyMap();

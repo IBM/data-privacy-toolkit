@@ -24,34 +24,62 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRIdentifier;
 
 
+/** FHIRDeviceComponentProductionSpecification FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRDeviceComponentProductionSpecification {
+    /** Constructs a FHIRDeviceComponentProductionSpecification. */
+    public FHIRDeviceComponentProductionSpecification() {}
+
 
     private FHIRCodeableConcept specType;
     private FHIRIdentifier componentId;
     private String productionSpec;
 
+    /**
+     * Returns the specType.
+     * @return the specType
+     */
     public FHIRCodeableConcept getSpecType() {
         return specType;
     }
 
+    /**
+     * Sets the specType.
+     * @param specType the specType
+     */
     public void setSpecType(FHIRCodeableConcept specType) {
         this.specType = specType;
     }
 
+    /**
+     * Returns the componentId.
+     * @return the componentId
+     */
     public FHIRIdentifier getComponentId() {
         return componentId;
     }
 
+    /**
+     * Sets the componentId.
+     * @param componentId the componentId
+     */
     public void setComponentId(FHIRIdentifier componentId) {
         this.componentId = componentId;
     }
 
+    /**
+     * Returns the productionSpec.
+     * @return the productionSpec
+     */
     public String getProductionSpec() {
         return productionSpec;
     }
 
+    /**
+     * Sets the productionSpec.
+     * @param productionSpec the productionSpec
+     */
     public void setProductionSpec(String productionSpec) {
         this.productionSpec = productionSpec;
     }

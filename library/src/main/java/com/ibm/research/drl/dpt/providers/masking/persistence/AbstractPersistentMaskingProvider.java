@@ -21,17 +21,33 @@ package com.ibm.research.drl.dpt.providers.masking.persistence;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
+/**
+ * Abstract base class for masking providers that cache previously masked values for consistency.
+ */
 public abstract class AbstractPersistentMaskingProvider implements MaskingProvider {
     private final MaskingProvider maskingProvider;
     private final boolean normalizeToLowerCase;
 
+    /**
+     * Defines the storage backend used to persist the masking cache.
+     */
     public enum PersistencyType {
+        /** In-memory cache. */
         MEMORY,
+        /** File-based cache. */
         FILE,
+        /** Database-backed cache. */
         DATABASE,
+        /** Causal consistency cache. */
         CAUSAL
     }
 
+    /**
+     * Constructs an AbstractPersistentMaskingProvider.
+     *
+     * @param maskingProvider the underlying masking provider used to generate masked values
+     * @param configuration   the masking configuration
+     */
     public AbstractPersistentMaskingProvider(MaskingProvider maskingProvider, MaskingConfiguration configuration) {
         this.maskingProvider = maskingProvider;
         this.normalizeToLowerCase = configuration.getBooleanValue("persistence.normalize.toLower");
@@ -61,9 +77,27 @@ public abstract class AbstractPersistentMaskingProvider implements MaskingProvid
         return identifier;
     }
 
+    /**
+     * Returns whether the given value has already been cached.
+     *
+     * @param value the original value
+     * @return true if cached, false otherwise
+     */
     protected abstract boolean isCached(String value);
 
+    /**
+     * Returns the previously cached masked value for the given original value.
+     *
+     * @param value the original value
+     * @return the cached masked value
+     */
     protected abstract String getCachedValue(String value);
 
+    /**
+     * Stores the masked value for the given original value in the cache.
+     *
+     * @param value       the original value
+     * @param maskedValue the masked value to store
+     */
     protected abstract void cacheValue(String value, String maskedValue);
 }

@@ -24,7 +24,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Utility class for numeric parsing and conversion operations.
+ */
 public class NumberUtils {
+    /** Not instantiable. */
+    private NumberUtils() {}
+
     private static final Set<String> allowedStrings = Set.of(
             "zero", "one", "two", "three", "four", "five", "six", "seven",
             "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen",
@@ -125,6 +131,12 @@ public class NumberUtils {
         return numNames[number] + " hundred" + soFar;
     }
 
+    /**
+     * Converts a long integer to its English word representation.
+     *
+     * @param number the number to convert
+     * @return the word representation
+     */
     public static String createWords(long number) {
         if (number == 0) {
             return "zero";
@@ -185,6 +197,12 @@ public class NumberUtils {
     }
 
 
+    /**
+     * Parses an English word representation of a number (e.g. "twenty three") into its numeric value.
+     *
+     * @param input the word representation
+     * @return the numeric value, or {@code null} if unparseable
+     */
     public static Long createNumberOrder(String input) {
         long result = 0;
         long finalResult = 0;
@@ -290,6 +308,12 @@ public class NumberUtils {
         return finalResult;
     }
 
+    /**
+     * Parses a numeric string (including ordinals and word representations) into a long value.
+     *
+     * @param input the input string
+     * @return the numeric value, or {@code null} if unparseable
+     */
     public static Long createNumber(String input) {
         boolean isValidInput = true;
         long result = 0;
@@ -396,6 +420,12 @@ public class NumberUtils {
         return finalResult;
     }
 
+    /**
+     * Returns the number of digit characters in the given string.
+     *
+     * @param data the string to scan
+     * @return the count of digit characters
+     */
     public static long countDigits(String data) {
         long cnt = 0;
 
@@ -411,6 +441,14 @@ public class NumberUtils {
     /*
     Returns the value with only the digits to keep
     -1 means keep all digits
+     */
+    /**
+     * Trims the decimal portion of a numeric string to the specified number of digits.
+     * {@code -1} means keep all digits.
+     *
+     * @param identifier  the numeric string
+     * @param digitsToKeep the number of decimal digits to retain ({@code -1} = keep all)
+     * @return the trimmed string
      */
     public static String trimDecimalDigits(String identifier, int digitsToKeep) {
 

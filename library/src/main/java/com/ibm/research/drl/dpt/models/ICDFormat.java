@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** The format of an ICD code representation. */
 public enum ICDFormat {
     /**
      * Code icd format.

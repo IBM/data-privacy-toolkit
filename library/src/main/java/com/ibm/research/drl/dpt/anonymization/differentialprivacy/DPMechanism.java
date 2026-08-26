@@ -24,19 +24,50 @@ import com.ibm.research.drl.dpt.anonymization.Partition;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Interface for differential privacy mechanisms.
+ */
 public interface DPMechanism extends Serializable {
+    /**
+     * Configures this mechanism with the given algorithm options.
+     *
+     * @param options the anonymization algorithm options
+     */
     void setOptions(AnonymizationAlgorithmOptions options);
 
+    /**
+     * Analyses the equivalence classes to derive mechanism parameters for a given column.
+     *
+     * @param equivalenceClasses the list of partitions
+     * @param columnIndex        the column index to analyse
+     */
     void analyseForParams(List<Partition> equivalenceClasses, int columnIndex);
 
+    /**
+     * Randomises the given string value by parsing it as a double and applying the mechanism.
+     *
+     * @param value the string value to randomise
+     * @return the randomised value as a string
+     */
     default String randomise(String value) {
         double numericalValue = Double.parseDouble(value);
 
         return Double.toString(randomise(numericalValue));
     };
 
+    /**
+     * Randomises the given numeric value.
+     *
+     * @param value the numeric value to randomise
+     * @return the randomised value
+     */
     double randomise(double value);
 
+    /**
+     * Returns the name of this mechanism.
+     *
+     * @return the mechanism name
+     */
     String getName();
 }
 

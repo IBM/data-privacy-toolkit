@@ -21,8 +21,19 @@ package com.ibm.research.drl.dpt.processors;
 
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 
+/** Factory for creating {@link FormatProcessor} instances by data type format. */
 public class FormatProcessorFactory {
 
+    /** Not instantiable. */
+    private FormatProcessorFactory() {}
+
+    /**
+     * Returns the appropriate {@link FormatProcessor} for the given format.
+     *
+     * @param datatypeFormat the data type format
+     * @return a format processor
+     * @throws IllegalArgumentException if the format is unsupported
+     */
     public static FormatProcessor getProcessor(DataTypeFormat datatypeFormat) {
 
         switch (datatypeFormat) {

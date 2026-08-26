@@ -20,7 +20,19 @@ package com.ibm.research.drl.dpt.processors;
 
 import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 
+/** Factory for creating {@link FreeTextFormatProcessor} instances by data type format. */
 public class FreeTextFormatProcessorFactory {
+
+    /** Not instantiable. */
+    private FreeTextFormatProcessorFactory() {}
+
+    /**
+     * Returns the appropriate {@link FreeTextFormatProcessor} for the given format.
+     *
+     * @param datatypeFormat the data type format
+     * @return a free-text format processor
+     * @throws RuntimeException if the format is not yet supported
+     */
     public static FreeTextFormatProcessor getProcessor(DataTypeFormat datatypeFormat) {
 
         switch (datatypeFormat) {

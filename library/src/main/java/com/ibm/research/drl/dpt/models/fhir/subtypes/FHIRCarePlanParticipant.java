@@ -23,25 +23,45 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
+/** FHIRCarePlanParticipant FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRCarePlanParticipant {
+    /** Constructs a FHIRCarePlanParticipant. */
+    public FHIRCarePlanParticipant() {}
+
 
     private FHIRCodeableConcept role;
     private FHIRReference member;
 
+    /**
+     * Returns the member.
+     * @return the member
+     */
     public FHIRReference getMember() {
         return member;
     }
 
+    /**
+     * Sets the member.
+     * @param member the member
+     */
     public void setMember(FHIRReference member) {
         this.member = member;
     }
 
+    /**
+     * Returns the role.
+     * @return the role
+     */
     public FHIRCodeableConcept getRole() {
         return role;
     }
 
+    /**
+     * Sets the role.
+     * @param role the role
+     */
     public void setRole(FHIRCodeableConcept role) {
         this.role = role;
     }

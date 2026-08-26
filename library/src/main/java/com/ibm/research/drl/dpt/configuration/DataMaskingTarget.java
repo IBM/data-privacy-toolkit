@@ -24,15 +24,28 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.io.Serializable;
 
+/**
+ * Describes a masking target for a field, specifying the masking provider and target path.
+ */
 public class DataMaskingTarget implements Serializable {
 
     private final ProviderType providerType;
     private final String targetPath;
 
+    /**
+     * Returns the masking provider type for this target.
+     *
+     * @return the provider type
+     */
     public ProviderType getProviderType() {
         return providerType;
     }
 
+    /**
+     * Returns the target field path.
+     *
+     * @return the target path
+     */
     public String getTargetPath() {
         return targetPath;
     }
@@ -47,6 +60,12 @@ public class DataMaskingTarget implements Serializable {
         this.targetPath = targetPath;
     }
 
+    /**
+     * Constructs a DataMaskingTarget.
+     *
+     * @param providerType the masking provider type
+     * @param targetPath   the target field path
+     */
     public DataMaskingTarget(ProviderType providerType, String targetPath) {
         this.providerType = providerType;
         this.targetPath = targetPath;

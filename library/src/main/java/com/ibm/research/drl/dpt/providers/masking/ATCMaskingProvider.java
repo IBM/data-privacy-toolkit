@@ -25,6 +25,9 @@ import com.ibm.research.drl.dpt.providers.identifiers.ATCIdentifier;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider for ATC codes; can preserve a configurable number of ATC hierarchy levels.
+ */
 public class ATCMaskingProvider implements MaskingProvider {
     private static final ATCIdentifier atcIdentifier = new ATCIdentifier();
     private static final ATCManager atcManager = ATCManager.getInstance();

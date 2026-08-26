@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a US state with name, abbreviation, population and locale. */
 public class State implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;
@@ -34,6 +35,12 @@ public class State implements LocalizedEntity {
         return name;
     }
 
+    /**
+     * Returns a string representation of this state using the given name format.
+     *
+     * @param nameFormat the desired name format
+     * @return the full name or abbreviation of the state
+     */
     public String toString(StateNameFormat nameFormat) {
         if (nameFormat == StateNameFormat.ABBREVIATION) {
             return abbreviation;
@@ -42,6 +49,11 @@ public class State implements LocalizedEntity {
         return name;
     }
 
+    /**
+     * Returns the name format associated with this state instance.
+     *
+     * @return the name format
+     */
     public StateNameFormat getNameFormat() {
         return nameFormat;
     }
@@ -67,12 +79,13 @@ public class State implements LocalizedEntity {
 
 
     /**
-     * Instantiates a new State.
+     * Constructs a State.
      *
-     * @param name            the name
-     * @param nameCountryCode the name country code
-     * @param abbreviation    the abbreviation
-     * @param population      the population
+     * @param name            the full state name
+     * @param nameCountryCode the locale country code
+     * @param abbreviation    the two-letter state abbreviation
+     * @param population      the state population
+     * @param nameFormat      the default name format
      */
     public State(String name, String nameCountryCode, String abbreviation, Long population, StateNameFormat nameFormat) {
         this.name = name;

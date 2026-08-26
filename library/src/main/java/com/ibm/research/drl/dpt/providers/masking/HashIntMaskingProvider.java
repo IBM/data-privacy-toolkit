@@ -29,6 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 
+/** Masking provider that hashes integer values using a configurable algorithm. */
 public class HashIntMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(HashIntMaskingProvider.class);
     private final String algorithm;
@@ -36,6 +37,12 @@ public class HashIntMaskingProvider implements MaskingProvider {
     private final int budgetAmount;
     private final boolean signCoherent;
 
+    /**
+     * Constructs a HashIntMaskingProvider from configuration.
+     *
+     * @param random        the secure random instance (unused, for API consistency)
+     * @param configuration the masking configuration
+     */
     public HashIntMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
         this.algorithm = configuration.getStringValue("hashint.algorithm.default");
         this.useBudget = configuration.getBooleanValue("hashint.budget.use");
@@ -43,6 +50,7 @@ public class HashIntMaskingProvider implements MaskingProvider {
         this.signCoherent = configuration.getBooleanValue("hashint.sign.coherent");
     }
 
+    /** Constructs a HashIntMaskingProvider with default configuration. */
     public HashIntMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }

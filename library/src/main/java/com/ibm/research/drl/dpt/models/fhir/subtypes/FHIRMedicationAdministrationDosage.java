@@ -27,9 +27,13 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRange;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRatio;
 
 
+/** FHIRMedicationAdministrationDosage FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationAdministrationDosage {
+    /** Constructs a FHIRMedicationAdministrationDosage. */
+    public FHIRMedicationAdministrationDosage() {}
+
     private String text;
     private FHIRCodeableConcept siteCodeableConcept;
     private FHIRReference siteReference;
@@ -39,66 +43,130 @@ public class FHIRMedicationAdministrationDosage {
     private FHIRRatio rateRatio;
     private FHIRRange rateRange;
 
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+    /**
+     * Returns the siteCodeableConcept.
+     * @return the siteCodeableConcept
+     */
     public FHIRCodeableConcept getSiteCodeableConcept() {
         return siteCodeableConcept;
     }
 
+    /**
+     * Sets the siteCodeableConcept.
+     * @param siteCodeableConcept the siteCodeableConcept
+     */
     public void setSiteCodeableConcept(FHIRCodeableConcept siteCodeableConcept) {
         this.siteCodeableConcept = siteCodeableConcept;
     }
 
+    /**
+     * Returns the siteReference.
+     * @return the siteReference
+     */
     public FHIRReference getSiteReference() {
         return siteReference;
     }
 
+    /**
+     * Sets the siteReference.
+     * @param siteReference the siteReference
+     */
     public void setSiteReference(FHIRReference siteReference) {
         this.siteReference = siteReference;
     }
 
+    /**
+     * Returns the route.
+     * @return the route
+     */
     public FHIRCodeableConcept getRoute() {
         return route;
     }
 
+    /**
+     * Sets the route.
+     * @param route the route
+     */
     public void setRoute(FHIRCodeableConcept route) {
         this.route = route;
     }
 
+    /**
+     * Returns the method.
+     * @return the method
+     */
     public FHIRCodeableConcept getMethod() {
         return method;
     }
 
+    /**
+     * Sets the method.
+     * @param method the method
+     */
     public void setMethod(FHIRCodeableConcept method) {
         this.method = method;
     }
 
+    /**
+     * Returns the quantity.
+     * @return the quantity
+     */
     public FHIRQuantity getQuantity() {
         return quantity;
     }
 
+    /**
+     * Sets the quantity.
+     * @param quantity the quantity
+     */
     public void setQuantity(FHIRQuantity quantity) {
         this.quantity = quantity;
     }
 
+    /**
+     * Returns the rateRatio.
+     * @return the rateRatio
+     */
     public FHIRRatio getRateRatio() {
         return rateRatio;
     }
 
+    /**
+     * Sets the rateRatio.
+     * @param rateRatio the rateRatio
+     */
     public void setRateRatio(FHIRRatio rateRatio) {
         this.rateRatio = rateRatio;
     }
 
+    /**
+     * Returns the rateRange.
+     * @return the rateRange
+     */
     public FHIRRange getRateRange() {
         return rateRange;
     }
 
+    /**
+     * Sets the rateRange.
+     * @param rateRange the rateRange
+     */
     public void setRateRange(FHIRRange rateRange) {
         this.rateRange = rateRange;
     }

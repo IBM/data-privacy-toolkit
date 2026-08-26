@@ -27,43 +27,79 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRPeriod;
 
 import java.util.Collection;
 
+/** FHIRPractitionerQualification FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRPractitionerQualification {
+    /** Constructs a FHIRPractitionerQualification. */
+    public FHIRPractitionerQualification() {}
+
 
     private Collection<FHIRIdentifier> identifier;
     private FHIRCodeableConcept code;
     private FHIRPeriod period;
     private FHIRReference issuer;
 
+    /**
+     * Returns the issuer.
+     * @return the issuer
+     */
     public FHIRReference getIssuer() {
         return issuer;
     }
 
+    /**
+     * Sets the issuer.
+     * @param issuer the issuer
+     */
     public void setIssuer(FHIRReference issuer) {
         this.issuer = issuer;
     }
 
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public Collection<FHIRIdentifier> getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(Collection<FHIRIdentifier> identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public FHIRCodeableConcept getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(FHIRCodeableConcept code) {
         this.code = code;
     }
 
+    /**
+     * Returns the period.
+     * @return the period
+     */
     public FHIRPeriod getPeriod() {
         return period;
     }
 
+    /**
+     * Sets the period.
+     * @param period the period
+     */
     public void setPeriod(FHIRPeriod period) {
         this.period = period;
     }

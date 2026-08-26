@@ -23,8 +23,10 @@ import java.security.SecureRandom;
 import java.util.*;
 
 /**
- * @param <K> the type parameter
- * @param <V> the type parameter
+ * A map that supports random key/value selection.
+ *
+ * @param <K> the type parameter for keys
+ * @param <V> the type parameter for values
  */
 public class MapWithRandomPick<K, V> implements Serializable {
     private final Map<K, V> map;

@@ -24,6 +24,7 @@ import org.apache.commons.csv.CSVParser;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/** Utility class for creating CSV readers from various input sources. */
 public class Readers {
     private final static Readers instance = new Readers();
 
@@ -32,43 +33,46 @@ public class Readers {
     }
 
     /**
-     * Create csv reader from resource csv reader.
+     * Creates a CSV reader from a classpath resource.
      *
-     * @param filename the filename
-     * @return the csv reader
+     * @param filename the classpath resource path
+     * @return a CSV parser
+     * @throws IOException if the resource cannot be read
      */
     public static CSVParser createCSVReaderFromResource(String filename) throws IOException {
         return createCSVReaderFromStream(instance.getClass().getResourceAsStream(filename), ',', '"');
     }
 
     /**
-     * Create csv reader from file csv reader.
+     * Creates a CSV reader from a file on disk.
      *
-     * @param filename the filename
-     * @return the csv reader
-     * @throws FileNotFoundException the file not found exception
+     * @param filename the file path
+     * @return a CSV parser
+     * @throws IOException if the file cannot be read
      */
     public static CSVParser createCSVReaderFromFile(String filename) throws IOException {
         return createGenericReader(new FileReader(filename), ',', '"');
     }
 
     /**
-     * Create csv reader from stream csv reader.
+     * Creates a CSV reader from an input stream using default comma/quote delimiters.
      *
-     * @param stream the stream
-     * @return the csv reader
+     * @param stream the input stream
+     * @return a CSV parser
+     * @throws IOException if the stream cannot be read
      */
     public static CSVParser createCSVReaderFromStream(InputStream stream) throws IOException {
         return createCSVReaderFromStream(stream, ',', '"');
     }
 
     /**
-     * Create csv reader from stream csv reader.
+     * Creates a CSV reader from an input stream with the given delimiter and quote character.
      *
-     * @param stream    the stream
-     * @param separator the separator
-     * @param quoteChar the quote char
-     * @return the csv reader
+     * @param stream    the input stream
+     * @param separator the field separator character
+     * @param quoteChar the quote character
+     * @return a CSV parser
+     * @throws IOException if the stream cannot be read
      */
     public static CSVParser createCSVReaderFromStream(InputStream stream, char separator, char quoteChar) throws IOException {
         return createGenericReader(new InputStreamReader(stream, StandardCharsets.UTF_8), separator, quoteChar);

@@ -31,20 +31,32 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Masking provider that replaces values with random terms from a dictionary file. */
 public class DictionaryBasedMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(DictionaryBasedMaskingProvider.class);
 
     private final SecureRandom random;
     private final List<String> terms;
 
+    /** Constructs a DictionaryBasedMaskingProvider with default configuration. */
     public DictionaryBasedMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a DictionaryBasedMaskingProvider with the given random source.
+     *
+     * @param random a secure random instance
+     */
     public DictionaryBasedMaskingProvider(SecureRandom random) {
         this(random, new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a DictionaryBasedMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public DictionaryBasedMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
@@ -62,6 +74,12 @@ public class DictionaryBasedMaskingProvider implements MaskingProvider {
         return terms;
     }
 
+    /**
+     * Constructs a DictionaryBasedMaskingProvider.
+     *
+     * @param random               a secure random instance
+     * @param maskingConfiguration the masking configuration
+     */
     public DictionaryBasedMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this.random = random;
         String dictionaryFilename = maskingConfiguration.getStringValue("dictionaryBased.mask.filename");

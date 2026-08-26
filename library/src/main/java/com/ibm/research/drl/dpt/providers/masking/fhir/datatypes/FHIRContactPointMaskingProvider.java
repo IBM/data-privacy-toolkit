@@ -31,6 +31,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.security.SecureRandom;
 import java.util.Set;
 
+/** FHIRContactPointMaskingProvider FHIR datatype. */
 public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
     private final boolean randomizeUse;
     private final boolean removeExtensions;
@@ -52,6 +53,13 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
     /* https://www.hl7.org/fhir/valueset-contact-point-use.html */
     private final static String[] useValues = new String[]{"home", "work", "temp", "old", "mobile"};
 
+    /**
+     * Constructs a FHIRContactPointMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRContactPointMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -73,6 +81,11 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
         this.periodMaskingProvider = new FHIRPeriodMaskingProvider(getConfigurationForSubfield(periodPath, maskingConfiguration), maskedFields, periodPath, this.factory);
     }
 
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRContactPoint cc = JsonUtils.MAPPER.treeToValue(node, FHIRContactPoint.class);
@@ -83,6 +96,11 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
         }
     }
 
+    /**
+     * Masks a FHIR ContactPoint object.
+     * @param contactPoint the FHIRContactPoint to mask
+     * @return the masked FHIRContactPoint
+     */
     public FHIRContactPoint mask(FHIRContactPoint contactPoint) {
         if (contactPoint == null) {
             return null;

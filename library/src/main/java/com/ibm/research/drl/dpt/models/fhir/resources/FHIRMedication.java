@@ -27,62 +27,122 @@ import com.ibm.research.drl.dpt.models.fhir.subtypes.FHIRMedicationPackage;
 import com.ibm.research.drl.dpt.models.fhir.subtypes.FHIRMedicationProduct;
 
 
+/** FHIRMedication FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedication extends FHIRBaseDomainResource {
+    /** Constructs a FHIRMedication. */
+    public FHIRMedication() {}
 
+
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public FHIRCodeableConcept getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(FHIRCodeableConcept code) {
         this.code = code;
     }
 
+    /**
+     * Returns the isBrand.
+     * @return the isBrand
+     */
     public boolean isIsBrand() {
         return isBrand;
     }
 
+    /**
+     * Sets the isBrand.
+     * @param brand the isBrand
+     */
     public void setIsBrand(boolean brand) {
         isBrand = brand;
     }
 
+    /**
+     * Returns the manufacturer.
+     * @return the manufacturer
+     */
     public FHIRReference getManufacturer() {
         return manufacturer;
     }
 
+    /**
+     * Sets the manufacturer.
+     * @param manufacturer the manufacturer
+     */
     public void setManufacturer(FHIRReference manufacturer) {
         this.manufacturer = manufacturer;
     }
 
+    /**
+     * Returns the product.
+     * @return the product
+     */
     public FHIRMedicationProduct getProduct() {
         return product;
     }
 
+    /**
+     * Sets the product.
+     * @param product the product
+     */
     public void setProduct(FHIRMedicationProduct product) {
         this.product = product;
     }
 
+    /**
+     * Returns the package.
+     * @return the package
+     */
     public FHIRMedicationPackage getPackage() {
         return Package;
     }
 
+    /**
+     * Sets the package.
+     * @param aPackage the package
+     */
     public void setPackage(FHIRMedicationPackage aPackage) {
         Package = aPackage;
     }
 
+    /**
+     * Returns the resourceType.
+     * @return the resourceType
+     */
     public String getResourceType() {
         return resourceType;
     }
 
+    /**
+     * Sets the resourceType.
+     * @param resourceType the resourceType
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
 
+    /**
+     * Returns the brand.
+     * @return the brand
+     */
     public boolean isBrand() {
         return isBrand;
     }
 
+    /**
+     * Sets the brand.
+     * @param brand the brand
+     */
     public void setBrand(boolean brand) {
         isBrand = brand;
     }

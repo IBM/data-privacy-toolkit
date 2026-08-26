@@ -21,10 +21,16 @@ package com.ibm.research.drl.dpt.anonymization.sampling;
 
 import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 
+/** Configuration options for the sampling anonymization algorithm. */
 public class SamplingOptions implements AnonymizationAlgorithmOptions {
 
     private final double percentage;
 
+    /**
+     * Returns the sampling percentage.
+     *
+     * @return the percentage of rows to retain
+     */
     public double getPercentage() {
         return percentage;
     }
@@ -39,6 +45,11 @@ public class SamplingOptions implements AnonymizationAlgorithmOptions {
         return null;
     }
 
+    /**
+     * Constructs a SamplingOptions.
+     *
+     * @param percentage the fraction of rows to retain (0.0–1.0)
+     */
     public SamplingOptions(double percentage) {
         this.percentage = percentage;
     }

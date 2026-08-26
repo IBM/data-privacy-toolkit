@@ -18,7 +18,16 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.identifiers;
 
+/**
+ * Mixin interface for identifiers that validate a value using the Luhn algorithm.
+ */
 public interface LuhnBasedIdentifier {
+    /**
+     * Returns whether the last digit of the given numeric string is a valid Luhn check digit.
+     *
+     * @param value the numeric string to validate
+     * @return {@code true} if the Luhn check passes
+     */
     default boolean checkLastDigit(String value) {
         int sum = 0;
         boolean doubleValue = false;

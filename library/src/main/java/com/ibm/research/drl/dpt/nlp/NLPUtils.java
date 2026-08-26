@@ -31,12 +31,24 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Utility class for NLP-related operations: annotation, masking, and text transformation.
+ */
 public class NLPUtils {
     private static class CacheEntry extends HashMap<String, String> {}
     private static class Cache extends HashMap<String, CacheEntry> {}
+
+    /** Not instantiable. */
+    private NLPUtils() {}
     
     private static final Cache cache = new Cache();
-    
+
+    /**
+     * Creates a space-joined string of inline-XML annotations for the given entity tokens.
+     *
+     * @param annotatedTokens the list of annotated tokens
+     * @return the joined annotation string
+     */
     public static String createString(List<IdentifiedEntity> annotatedTokens) {
         List<String> tokens = new ArrayList<>();
 
@@ -59,10 +71,13 @@ public class NLPUtils {
         throw new RuntimeException("Unable to properly extract MRN id");
     }
 
+    /** Function that converts an entity to its inline-XML form. */
     public static final Function<IdentifiedEntity, String> ANNOTATE_FUNCTION = IdentifiedEntity::toInlineXML;
 
+    /** Function that returns the original text of an entity. */
     public static final Function<IdentifiedEntity, String> IDENTITY_FUNCTION = IdentifiedEntity::getText;
 
+    /** Function that redacts the entity text (replaces each character with {@code *}). */
     public static final Function<IdentifiedEntity, String> REDACT_FUNCTION = (entity) -> {
 
         final StringBuilder builder = new StringBuilder();
@@ -83,6 +98,7 @@ public class NLPUtils {
         return builder.toString();
     };
 
+    /** Function that replaces entity text with a type-based tag, caching the assignment. */
     public static final Function<IdentifiedEntity, String> TAG_FUNCTION_WITH_CACHE = (entity) -> {
         final String type = entity.getType().iterator().next().getType();
 
@@ -103,6 +119,14 @@ public class NLPUtils {
         return preamble + typeCache.computeIfAbsent(toTag, k -> type + "-" + typeCache.size());
     };
     
+    /**
+     * Applies the given function to each identified entity in the text, replacing its span.
+     *
+     * @param inputText           the original text
+     * @param identifiedEntities  the list of identified entities
+     * @param function            the function to apply to each entity
+     * @return the transformed text
+     */
     public static String applyFunction(String inputText,
                                        List<IdentifiedEntity> identifiedEntities,
                                        Function<IdentifiedEntity, String> function) {
@@ -127,6 +151,14 @@ public class NLPUtils {
         return builder.toString();
     }
     
+    /**
+     * Masks identified entities in the given text using the masking provider factory.
+     *
+     * @param text                    the original text
+     * @param identifiedEntities      the entities to mask
+     * @param maskingProviderFactory  the masking provider factory
+     * @return the masked text
+     */
     public static String maskAnnotatedText(final String text, final List<IdentifiedEntity> identifiedEntities, final MaskingProviderFactory maskingProviderFactory) {
         String maskedText = text;
 
@@ -152,6 +184,13 @@ public class NLPUtils {
         return text.substring(0, identifiedEntity.getStart()) + maskedText + text.substring(identifiedEntity.getEnd());
     }
 
+    /**
+     * Masks each annotated token in the list using the appropriate masking provider.
+     *
+     * @param annotatedTokens        the list of annotated tokens
+     * @param maskingProviderFactory the masking provider factory
+     * @return the list of masked tokens
+     */
     public static List<IdentifiedEntity> maskAnnotatedTokens(List<IdentifiedEntity> annotatedTokens, MaskingProviderFactory maskingProviderFactory) {
 
         List<IdentifiedEntity> maskedTokens = new ArrayList<>();
@@ -173,6 +212,14 @@ public class NLPUtils {
         return maskedTokens;
     }
 
+    /**
+     * Masks tagged entities in annotated text (which uses {@code <ProviderType:...>} tags).
+     *
+     * @param originalText           the tagged text
+     * @param keepTags               whether to keep the XML tags in the output
+     * @param maskingProviderFactory the masking provider factory
+     * @return the masked text
+     */
     public static String maskAnnotatedText(String originalText, boolean keepTags, MaskingProviderFactory maskingProviderFactory) {
         String pattern = "<ProviderType:";
         String closingPattern = "</ProviderType>";

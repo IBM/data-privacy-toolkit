@@ -35,10 +35,22 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for first and last name resources, providing random name generation and name lookup.
+ */
 public class NamesManager implements Serializable {
+
+    /** Constructs a NamesManager. */
+    public NamesManager() {}
+
     private final static Logger log = LogManager.getLogger(NamesManager.class);
 
+    /** Manager for last-name resources. */
     private final static class LastNameManager extends ResourceBasedManager<LastName> implements Serializable {
+
+        /** Constructs a LastNameManager. */
+        LastNameManager() {}
+
 
         @Override
         protected Collection<ResourceEntry> getResources() {
@@ -260,6 +272,14 @@ public class NamesManager implements Serializable {
             }
         }
 
+        /**
+         * Returns a pseudorandom first name for the given gender, seeded from the identifier.
+         *
+         * @param gender         the gender of the first name
+         * @param allowAnyGender whether to allow any gender
+         * @param identifier     the seed value
+         * @return a pseudorandom first name
+         */
         public String getPseudoRandomFirstName(Gender gender, boolean allowAnyGender, String identifier) {
             if (allowAnyGender || Gender.both == gender) {
                 if (0 == identifier.hashCode() % 2) {
@@ -275,6 +295,12 @@ public class NamesManager implements Serializable {
             }
         }
 
+        /**
+         * Returns a pseudorandom last name seeded from the identifier.
+         *
+         * @param identifier the seed value
+         * @return a pseudorandom last name
+         */
         public String getPseudoRandomLastName(String identifier) {
             return lastNameManager.getPseudorandom(identifier);
         }

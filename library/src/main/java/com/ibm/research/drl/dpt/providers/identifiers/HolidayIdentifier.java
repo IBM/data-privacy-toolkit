@@ -33,11 +33,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/** Identifier for public holiday names. */
 public class HolidayIdentifier extends AbstractIdentifier {
     private final Set<String> terms;
     private final int minimumLength;
     private final int maximumLength;
-    
+
+    /** Constructs a HolidayIdentifier loading terms from built-in resources. */
     public HolidayIdentifier() {
         terms = populateTerms();
 

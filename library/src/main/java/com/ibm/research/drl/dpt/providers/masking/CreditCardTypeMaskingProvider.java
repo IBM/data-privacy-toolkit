@@ -26,6 +26,9 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider for credit card type names.
+ */
 public class CreditCardTypeMaskingProvider implements MaskingProvider {
     private static final CreditCardTypeManager ccTypeManager = CreditCardTypeManager.getInstance();
     private static final CreditCardManager creditCardManager = CreditCardManager.getInstance();

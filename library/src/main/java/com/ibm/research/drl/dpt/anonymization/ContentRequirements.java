@@ -18,10 +18,19 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization;
 
+/**
+ * Bitmask constants for partition content requirements in privacy constraints.
+ */
 public class ContentRequirements {
+    /** Utility class; not instantiable. */
+    private ContentRequirements() {}
+    /** No content requirement. */
     public final static int NONE = 0;
+    /** Requires normal (non-quasi, non-sensitive) columns. */
     public final static int NORMAL = 1;
+    /** Requires quasi-identifier columns. */
     public final static int QUASI = 2;
+    /** Requires sensitive columns. */
     public final static int SENSITIVE = 4;
 }
 

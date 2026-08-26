@@ -20,13 +20,26 @@ package com.ibm.research.drl.dpt.anonymization.kmap;
 
 import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 
+/**
+ * Options for the {@link KMap} anonymization algorithm.
+ */
 public class KMapOptions implements AnonymizationAlgorithmOptions {
     private final double suppressionRate;
 
+    /**
+     * Constructs a KMapOptions with the given suppression rate.
+     *
+     * @param s the suppression rate (percentage of rows that may be suppressed)
+     */
     public KMapOptions(double s) {
         this.suppressionRate = s;
     }
 
+    /**
+     * Returns the suppression rate.
+     *
+     * @return the suppression rate
+     */
     public double getSuppressionRate() {
         return suppressionRate;
     }

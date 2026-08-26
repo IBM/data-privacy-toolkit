@@ -18,5 +18,8 @@ under the License.
 */
 package com.ibm.research.drl.dpt.datasets;
 
+/**
+ * Marker interface for dataset-specific options (e.g. CSV options, JSON options).
+ */
 public interface DatasetOptions {
 }

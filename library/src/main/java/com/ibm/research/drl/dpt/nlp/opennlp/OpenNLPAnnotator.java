@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/** NLP annotator implementation backed by the OpenNLP library. */
 public class OpenNLPAnnotator extends AbstractNLPAnnotator {
     private final static String annotatorName = "OpenNLP";
     
@@ -68,6 +69,11 @@ public class OpenNLPAnnotator extends AbstractNLPAnnotator {
         throw new RuntimeException("error initializing model");
     }
     
+    /**
+     * Constructs an OpenNLPAnnotator from a JSON configuration node.
+     *
+     * @param configuration JSON configuration describing model paths and language settings
+     */
     public OpenNLPAnnotator(JsonNode configuration) {
         this.defaultLanguage = Language.valueOf(configuration.get("defaultLanguage").asText());
         this.dateFinder = new HashMap<>();

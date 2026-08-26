@@ -30,9 +30,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The type Latitude longitude identifier.
+ * Identifier for geographic coordinates in decimal, compass, or DMS (degrees–minutes–seconds) formats.
  */
 public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
+    /** Constructs a LatitudeLongitudeIdentifier. */
+    public LatitudeLongitudeIdentifier() {}
     private final static String[] appropriateNames = {"Latitude", "Longitude", "LatitudeLongitude"};
     private final static Pattern latlonPattern = Pattern.compile("^-?([1-8]?[0-9]\\.{1}\\d{1,8}|90\\.{1}0{1,6}),\\s*-?((([1]?[0-7][0-9]|[1-9]?[0-9])\\.{1}\\d{1,8}$)|[1]?[1-8][0]\\.{1}0{1,6})$");
     private final static Pattern compassPattern = Pattern.compile(

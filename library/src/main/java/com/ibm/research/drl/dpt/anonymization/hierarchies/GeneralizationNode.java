@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/** A node in a generalization hierarchy tree. */
 public class GeneralizationNode implements Serializable {
     private final String value;
     private final boolean isLeaf;
@@ -38,7 +39,11 @@ public class GeneralizationNode implements Serializable {
 
     private final Map<String, GeneralizationNode> coverMap = new HashMap<>();
 
-    /* TODO: add test*/
+    /**
+     * Returns the set of leaf values covered by this node.
+     *
+     * @return set of leaf values
+     */
     public Set<String> getLeaveValues() {
         Set<String> results = new HashSet<>();
         if (isLeaf) {
@@ -55,7 +60,11 @@ public class GeneralizationNode implements Serializable {
         return results;
     }
 
-    /* TODO: add test*/
+    /**
+     * Returns the list of leaf nodes covered by this node.
+     *
+     * @return list of leaf nodes
+     */
     public List<GeneralizationNode> getLeaveNodes() {
         List<GeneralizationNode> results;
 
@@ -76,16 +85,22 @@ public class GeneralizationNode implements Serializable {
         return results;
     }
 
+    /**
+     * Returns whether this node is a leaf.
+     *
+     * @return true if this is a leaf node
+     */
     public boolean isLeaf() {
         return isLeaf;
     }
 
     /**
-     * Instantiates a new Generalization node.
+     * Constructs a GeneralizationNode.
      *
-     * @param value  the value
-     * @param parent the parent
-     * @param isLeaf the is leaf
+     * @param value     the value stored at this node
+     * @param parent    the parent node, or {@code null} if this is the root
+     * @param isLeaf    whether this node is a leaf
+     * @param maxHeight the maximum height of the hierarchy
      */
     public GeneralizationNode(String value, GeneralizationNode parent, boolean isLeaf, int maxHeight) {
         this.value = value.toUpperCase();

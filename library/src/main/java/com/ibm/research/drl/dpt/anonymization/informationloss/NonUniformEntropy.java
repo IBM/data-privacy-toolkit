@@ -28,7 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Non-Uniform Entropy information loss metric for anonymization quality evaluation.
+ */
 public class NonUniformEntropy implements InformationMetric {
+    /** Constructs a NonUniformEntropy metric instance. */
+    public NonUniformEntropy() {}
     /* Original paper: https://www.openu.ac.il/lists/mediaserver_documents/personalsites/tamirtassa/entropy_j.pdf */
     /* paper that shows how NUE is a good metric for health data: http://ebooks.iospress.nl/publication/48242 */
 
@@ -85,6 +90,14 @@ public class NonUniformEntropy implements InformationMetric {
         return true;
     }
 
+    /**
+     * Computes entropy contribution for a suppressed (outlier) partition.
+     *
+     * @param originalPartition    the suppressed partition
+     * @param originalFrequencies  the frequency map for the original dataset column
+     * @param columnIndex          the column index
+     * @return the entropy contribution
+     */
     public static double entropyForOutlier(Partition originalPartition, Map<String, Double> originalFrequencies,
                                            int columnIndex) {
 
@@ -103,6 +116,16 @@ public class NonUniformEntropy implements InformationMetric {
         return result;
     }
 
+    /**
+     * Computes entropy contribution for an anonymous partition.
+     *
+     * @param originalPartition    the original partition
+     * @param originalFrequencies  the frequency map for the original dataset column
+     * @param anonymizedPartition  the anonymized partition
+     * @param anonymizedFrequencies the frequency map for the anonymized dataset column
+     * @param columnIndex          the column index
+     * @return the entropy contribution
+     */
     public static double entropyForAnonymous(Partition originalPartition, Map<String, Double> originalFrequencies,
                                              Partition anonymizedPartition, Map<String, Double> anonymizedFrequencies,
                                              int columnIndex) {

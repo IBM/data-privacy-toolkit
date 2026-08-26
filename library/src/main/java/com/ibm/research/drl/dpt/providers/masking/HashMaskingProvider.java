@@ -67,6 +67,12 @@ public class HashMaskingProvider implements MaskingProvider {
     }
 
 
+    /**
+     * Converts a byte array to its hexadecimal string representation.
+     *
+     * @param bytes the byte array to convert
+     * @return the hexadecimal string
+     */
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {

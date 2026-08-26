@@ -45,30 +45,57 @@ import com.ibm.research.drl.dpt.datasets.schema.IPVSchemaFieldType;
 import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchema;
 import com.ibm.research.drl.dpt.datasets.schema.impl.SimpleSchemaField;
 
+/** An in-memory tabular dataset used by the IPV privacy-preservation algorithms. */
 public class IPVDataset implements Iterable<List<String>> {
     private static final Logger logger = LogManager.getLogger(IPVDataset.class);
 
+    /** Dataset identifier. */
     protected String id;
 
+    /** Row data. */
     protected final List<List<String>> values;
+    /** Schema describing the columns. */
     protected IPVSchema schema;
     private final boolean hasSchema;
 
+    /**
+     * Returns the underlying row data.
+     *
+     * @return list of rows
+     */
     public List<List<String>> getValues() {
         return this.values;
     }
 
+    /**
+     * Constructs an empty dataset with the given number of columns.
+     *
+     * @param numberOfColumns number of columns
+     * @deprecated use {@link #IPVDataset(List, IPVSchema, boolean)} instead
+     */
     @Deprecated
     public IPVDataset(int numberOfColumns) {
         this(new ArrayList<>(), generateSchemaWithoutColumnNames(numberOfColumns), false);
     }
 
+    /**
+     * Constructs an IPVDataset with the given values and schema.
+     *
+     * @param values    the row data
+     * @param schema    the column schema (may be {@code null})
+     * @param hasSchema whether the dataset has a named-column schema
+     */
     public IPVDataset(List<List<String>> values, IPVSchema schema, boolean hasSchema) {
         this.values = values;
         this.schema = schema;
         this.hasSchema = hasSchema;
     }
 
+    /**
+     * Returns the number of columns in this dataset.
+     *
+     * @return column count, or -1 if unknown
+     */
     public int getNumberOfColumns() {
         if (schema != null) return schema.getFields().size();
         if (values.isEmpty()) return -1;
@@ -76,38 +103,90 @@ public class IPVDataset implements Iterable<List<String>> {
         return values.get(0).size();
     }
 
+    /**
+     * Appends a single row to this dataset.
+     *
+     * @param row the row to add
+     */
     public void addRow(List<String> row) {
         this.values.add(row);
     }
 
+    /**
+     * Appends multiple rows to this dataset.
+     *
+     * @param v the rows to add
+     */
     public void append(List<List<String>> v) {
         this.values.addAll(v);
     }
 
+    /**
+     * Sets the value at the given row and column.
+     *
+     * @param row    the row index
+     * @param column the column index
+     * @param value  the value to set
+     */
     public void set(int row, int column, String value) {
         this.values.get(row).set(column, value);
     }
 
+    /**
+     * Returns the number of rows in this dataset.
+     *
+     * @return row count
+     */
     public int getNumberOfRows() {
         return values.size();
     }
 
+    /**
+     * Returns the value at the given row and column.
+     *
+     * @param row    the row index
+     * @param column the column index
+     * @return the cell value
+     */
     public String get(int row, int column) {
         return values.get(row).get(column);
     }
 
+    /**
+     * Returns the row at the given index.
+     *
+     * @param row the row index
+     * @return the row as a list of strings
+     */
     public List<String> getRow(int row) {
         return values.get(row);
     }
 
+    /**
+     * Returns the hash code of the value at the given position.
+     *
+     * @param row    the row index
+     * @param column the column index
+     * @return hash code of the cell value
+     */
     public int hash(int row, int column) {
         return get(row, column).hashCode();
     }
 
+    /**
+     * Returns the schema of this dataset.
+     *
+     * @return the schema, or {@code null} if not set
+     */
     public IPVSchema getSchema() {
         return schema;
     }
 
+    /**
+     * Returns whether this dataset has named columns.
+     *
+     * @return true if column names are available
+     */
     public boolean hasColumnNames() {
         return hasSchema;
     }
@@ -141,6 +220,13 @@ public class IPVDataset implements Iterable<List<String>> {
         return builder.toString();
     }
 
+    /**
+     * Builds a delimited header string from the schema.
+     *
+     * @param schema         the schema to read field names from
+     * @param fieldDelimiter the delimiter to use between field names
+     * @return the header string
+     */
     public String buildHeader(IPVSchema schema, Character fieldDelimiter) {
         final List<? extends IPVSchemaField> fields = schema.getFields();
 
@@ -153,12 +239,34 @@ public class IPVDataset implements Iterable<List<String>> {
         return builder.toString();
     }
 
+    /**
+     * Loads an {@link IPVDataset} from an {@link InputStream}.
+     *
+     * @param inputStream    the input stream
+     * @param skipFirst      whether to skip the first (header) row
+     * @param fieldDelimiter the field delimiter character
+     * @param quoteCharacter the quote character
+     * @param trimFields     whether to trim whitespace from field values
+     * @return the loaded dataset
+     * @throws IOException if an I/O error occurs
+     */
     public static IPVDataset load(InputStream inputStream, boolean skipFirst, Character fieldDelimiter, Character quoteCharacter, boolean trimFields) throws IOException {
         try (Reader reader = new InputStreamReader(inputStream)) {
             return load(reader, skipFirst, fieldDelimiter, quoteCharacter, trimFields);
         }
     }
 
+    /**
+     * Loads an {@link IPVDataset} from a {@link Reader}.
+     *
+     * @param reader         the reader
+     * @param hasHeader      whether the first row is a header row
+     * @param fieldDelimiter the field delimiter character
+     * @param quoteCharacter the quote character
+     * @param trimFields     whether to trim whitespace from field values
+     * @return the loaded dataset
+     * @throws IOException if an I/O error occurs
+     */
     public static IPVDataset load(Reader reader, final boolean hasHeader, Character fieldDelimiter, Character quoteCharacter, boolean trimFields) throws IOException {
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema = CsvSchema.emptySchema().withColumnSeparator(fieldDelimiter).withQuoteChar(quoteCharacter).withSkipFirstDataRow(false);
@@ -202,6 +310,12 @@ public class IPVDataset implements Iterable<List<String>> {
         );
     }
 
+    /**
+     * Generates a schema with auto-generated column names ({@code "Column 0"}, {@code "Column 1"}, …).
+     *
+     * @param numberOfFields number of columns
+     * @return the generated schema
+     */
     public static IPVSchema generateSchemaWithoutColumnNames(int numberOfFields) {
         logger.debug("Generating schema without column name knowledge");
 
@@ -235,6 +349,12 @@ public class IPVDataset implements Iterable<List<String>> {
         return values.iterator();
     }
 
+    /**
+     * Writes this dataset as CSV to the given appendable.
+     *
+     * @param options the CSV formatting options
+     * @param writer  the output appendable
+     */
     public void toCSV(CSVDatasetOptions options, Appendable writer) {
         Builder formatBuilder = CSVFormat.DEFAULT.builder()
                 .setRecordSeparator('\n')
@@ -257,6 +377,12 @@ public class IPVDataset implements Iterable<List<String>> {
         }
     }
 
+    /**
+     * Writes this dataset as JSON to the given writer.
+     *
+     * @param datasetOptions the JSON formatting options
+     * @param writer         the output writer
+     */
     public void toJSON(JSONDatasetOptions datasetOptions, Writer writer) {
         try {
             IPVDatasetJSONSerializer.serialize(this, datasetOptions, writer);

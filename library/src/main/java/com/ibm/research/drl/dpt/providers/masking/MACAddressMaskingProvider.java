@@ -24,6 +24,9 @@ import com.ibm.research.drl.dpt.providers.identifiers.MACAddressIdentifier;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider for MAC (Media Access Control) address values.
+ */
 public class MACAddressMaskingProvider implements MaskingProvider {
     private static final char[] allowedCharacters = "abcdef0123456789".toCharArray();
     private static final MACAddressIdentifier macAddressIdentifier = new MACAddressIdentifier();

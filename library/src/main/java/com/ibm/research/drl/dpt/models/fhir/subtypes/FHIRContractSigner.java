@@ -23,34 +23,62 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCoding;
 
+/** FHIRContractSigner FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRContractSigner {
+    /** Constructs a FHIRContractSigner. */
+    public FHIRContractSigner() {}
+
 
     private FHIRCoding type;
     private FHIRReference party;
     private String signature;
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public FHIRCoding getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(FHIRCoding type) {
         this.type = type;
     }
 
+    /**
+     * Returns the party.
+     * @return the party
+     */
     public FHIRReference getParty() {
         return party;
     }
 
+    /**
+     * Sets the party.
+     * @param party the party
+     */
     public void setParty(FHIRReference party) {
         this.party = party;
     }
 
+    /**
+     * Returns the signature.
+     * @return the signature
+     */
     public String getSignature() {
         return signature;
     }
 
+    /**
+     * Sets the signature.
+     * @param signature the signature
+     */
     public void setSignature(String signature) {
         this.signature = signature;
     }

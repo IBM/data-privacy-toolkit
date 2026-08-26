@@ -18,9 +18,24 @@ under the License.
 */
 package com.ibm.research.drl.dpt.nlp;
 
+/**
+ * Utility class for computing character frequency histograms of text.
+ */
 public class CharacterHistogram {
+    /**
+     * Constructs a new CharacterHistogram. This is a utility class with only static methods.
+     */
+    public CharacterHistogram() {
+    }
+
     private static final String ALPHANUMERIC = "abcdefghijklmnopqrstuvwxyz";
 
+    /**
+     * Generates a lowercase letter frequency histogram for the given input string.
+     *
+     * @param input the input string
+     * @return an integer array of length 26 with per-letter counts
+     */
     public static int[] generateHistogram(String input) {
         int[] counters = new int[ALPHANUMERIC.length()];
 

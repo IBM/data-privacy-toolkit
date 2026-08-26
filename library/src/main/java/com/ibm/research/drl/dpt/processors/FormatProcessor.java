@@ -47,9 +47,21 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/** Base class for format processors that mask data records. */
 public abstract class FormatProcessor implements Serializable {
+    /** Constructs a FormatProcessor. */
+    public FormatProcessor() {}
+
     private final static Logger logger = LogManager.getLogger(FormatProcessor.class);
 
+    /**
+     * Writes a record to the output, suppressing the specified fields.
+     *
+     * @param record          the record to write
+     * @param output          the output stream
+     * @param fieldsToSuppress the fields to suppress
+     * @throws IOException if writing fails
+     */
     protected void performOutputAction(Record record, OutputStream output, Iterable<String> fieldsToSuppress) throws IOException {
         for (String field : fieldsToSuppress) {
             record.suppressField(field);
@@ -59,6 +71,17 @@ public abstract class FormatProcessor implements Serializable {
         output.write(System.lineSeparator().getBytes());
     }
 
+    /**
+     * Masks a stream of records.
+     *
+     * @param dataset            the input stream
+     * @param output             the output stream
+     * @param factory            the masking provider factory
+     * @param dataMaskingOptions the masking options
+     * @param alreadyMaskedFields fields already masked
+     * @param registerTypes      additional provider type registrations
+     * @throws IOException if an I/O error occurs
+     */
     public void maskStream(InputStream dataset, OutputStream output, MaskingProviderFactory factory, DataMaskingOptions dataMaskingOptions, Set<String> alreadyMaskedFields, Map<ProviderType, Class<? extends MaskingProvider>> registerTypes) throws IOException {
         logger.info("Masking stream");
 
@@ -80,6 +103,12 @@ public abstract class FormatProcessor implements Serializable {
         }
     }
 
+    /**
+     * Returns a list of fields to suppress from the masking options.
+     *
+     * @param dataMaskingOptions the masking options
+     * @return list of field names to suppress
+     */
     protected List<String> getFieldsToSuppress(DataMaskingOptions dataMaskingOptions) {
         List<String> fieldsToSuppress = new ArrayList<>();
         for (Map.Entry<String, DataMaskingTarget> toBeMasked : dataMaskingOptions.getToBeMasked().entrySet()) {
@@ -110,6 +139,15 @@ public abstract class FormatProcessor implements Serializable {
         return operandsNotToBeMasked;
     }
 
+    /**
+     * Masks a record using the configured masking providers.
+     *
+     * @param record                  the record to mask
+     * @param maskingProvidersFactory the masking provider factory
+     * @param alreadyMaskedFields     fields already masked
+     * @param dataMaskingOptions      the data masking options
+     * @return the masked record
+     */
     public Record maskRecord(Record record, MaskingProviderFactory maskingProvidersFactory, Set<String> alreadyMaskedFields, DataMaskingOptions dataMaskingOptions) {
         Map<String, FieldRelationship> relationships = dataMaskingOptions.getPredefinedRelationships();
         Map<String, DataMaskingTarget> fieldsToMask = dataMaskingOptions.getToBeMasked();
@@ -193,18 +231,49 @@ public abstract class FormatProcessor implements Serializable {
         }
     }
 
+    /**
+     * Extracts records from an input stream using default settings.
+     *
+     * @param dataset     the input stream to read from
+     * @param dataOptions the dataset options
+     * @return an iterable of records
+     * @throws IOException if reading fails
+     */
     protected Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions) throws IOException {
         return extractRecords(dataset, dataOptions, -1);
     }
 
+    /**
+     * Extracts records from an input stream.
+     *
+     * @param dataset      the input stream to read from
+     * @param dataOptions  the dataset options
+     * @param firstN       the maximum number of records to read, or -1 for all
+     * @return an iterable of records
+     * @throws IOException if reading fails
+     */
     protected abstract Iterable<Record> extractRecords(InputStream dataset, DatasetOptions dataOptions, int firstN) throws IOException;
 
+    /**
+     * Increments the counter for the given type in the column type map.
+     *
+     * @param columnTypes the map of type name to counter
+     * @param type        the type name to increment
+     */
     protected void updateCounter(Map<String, Counter> columnTypes, String type) {
         Counter counter = columnTypes.computeIfAbsent(type, ignored -> new Counter(0L));
 
         counter.counter += 1;
     }
 
+    /**
+     * Assembles an identification report from collected type counters.
+     *
+     * @param allTypes    map of field to type-name counter maps
+     * @param columnTypes map of column field to type-name counter maps
+     * @param recordCount number of records processed
+     * @return the assembled identification report
+     */
     protected IdentificationReport assembleReport(Map<String, Map<String, Counter>> allTypes, Map<String, Map<String, Counter>> columnTypes, long recordCount) {
         Map<String, List<IdentifiedType>> results = allTypes.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -230,6 +299,13 @@ public abstract class FormatProcessor implements Serializable {
         );
     }
 
+    /**
+     * Checks field names of a record against a collection of identifiers.
+     *
+     * @param record      the record whose field names to check
+     * @param identifiers the identifiers to match against
+     * @return a map of field reference to type-name counter maps
+     */
     protected Map<String, Map<String, Counter>> checkFieldNames(Record record, Collection<Identifier> identifiers) {
         Map<String, Map<String, Counter>> types = new HashMap<>();
 
@@ -253,10 +329,27 @@ public abstract class FormatProcessor implements Serializable {
         return types;
     }
 
+    /**
+     * Extracts the field name from a field reference.
+     *
+     * @param fieldName the raw field reference
+     * @return the extracted field name
+     */
     protected String extractFieldName(String fieldName) {
         return fieldName;
     }
 
+    /**
+     * Identifies data types in a stream.
+     *
+     * @param input           the input stream
+     * @param inputFormatType the format type
+     * @param datasetOptions  dataset options
+     * @param identifiers     the identifiers to use
+     * @param firstN          maximum number of records to process (0 = all)
+     * @return an identification report
+     * @throws IOException if an I/O error occurs
+     */
     public IdentificationReport identifyTypesStream(InputStream input, DataTypeFormat inputFormatType,
                                                     DatasetOptions datasetOptions,
                                                     Collection<Identifier> identifiers, int firstN) throws IOException {
@@ -312,10 +405,27 @@ public abstract class FormatProcessor implements Serializable {
         );
     }
 
+    /**
+     * Returns whether this format processor supports streaming vulnerability identification.
+     *
+     * @return true if streaming is supported
+     */
     public boolean supportsStreams() {
         return false;
     }
 
+    /**
+     * Identifies vulnerabilities from a stream input.
+     *
+     * @param input           the input stream
+     * @param algorithm       the IPV algorithm to apply
+     * @param inputFormatType the input data format type
+     * @param datasetOptions  the dataset options
+     * @param isFullReport    whether to produce a full report
+     * @param kValue          the k-anonymity threshold
+     * @return a map of vulnerabilities to row indices
+     * @throws IOException if reading fails
+     */
     public Map<IPVVulnerability, List<Integer>> identifyVulnerabilitiesStream(InputStream input, IPVAlgorithm algorithm, DataTypeFormat inputFormatType, DatasetOptions datasetOptions, boolean isFullReport, int kValue) throws IOException {
         throw new NotImplementedException("Limited support for vulnerability identification");
     }

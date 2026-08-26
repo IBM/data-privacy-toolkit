@@ -30,10 +30,17 @@ import java.util.Map;
 import java.util.UUID;
 
 
+/** Persistent masking provider backed by the file system. */
 public class FileBackedPersistentMaskingProvider extends AbstractPersistentMaskingProvider {
     private static final Logger log = LogManager.getLogger(FileBackedPersistentMaskingProvider.class);
     private final FileCache cache;
 
+    /**
+     * Constructs a FileBackedPersistentMaskingProvider.
+     *
+     * @param maskingProvider the underlying masking provider
+     * @param configuration   the masking configuration
+     */
     public FileBackedPersistentMaskingProvider(MaskingProvider maskingProvider, MaskingConfiguration configuration) {
         super(maskingProvider, configuration);
         String directoryName = configuration.getStringValue("persistence.file");

@@ -18,9 +18,13 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization;
 
+/** The type of anonymization transformation applied to a column. */
 public enum TransformationType {
+    /** Local recoding (row-specific generalization). */
     LOCAL_RECODING,
+    /** Global recoding (uniform generalization across all rows). */
     GLOBAL_RECODING,
+    /** Perturbation (adding noise to values). */
     PERTURBATION
 }
 

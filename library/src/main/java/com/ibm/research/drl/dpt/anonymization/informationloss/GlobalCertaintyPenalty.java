@@ -26,7 +26,11 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Computes the Global Certainty Penalty (GCP) information-loss metric. */
 public class GlobalCertaintyPenalty implements InformationMetric {
+
+    /** Constructs a GlobalCertaintyPenalty. */
+    public GlobalCertaintyPenalty() {}
     private List<Partition> partitions;
     private List<ColumnInformation> columnInformationList;
     private IPVDataset anonymized;

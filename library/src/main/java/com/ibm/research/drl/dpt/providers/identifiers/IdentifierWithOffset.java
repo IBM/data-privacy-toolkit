@@ -20,6 +20,16 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.util.Tuple;
 
+/**
+ * Extended identifier interface that also returns the character offset of the matched span.
+ */
 public interface IdentifierWithOffset {
+    /**
+     * Checks whether the given data is of this type and returns the match offset.
+     *
+     * @param data the input string to check
+     * @return a tuple where the first element indicates whether a match was found, and the second
+     *         element is a tuple of (startOffset, endOffset) for the matched span
+     */
     Tuple<Boolean, Tuple<Integer, Integer>> isOfThisTypeWithOffset(String data);
 }

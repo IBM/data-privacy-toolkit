@@ -24,11 +24,17 @@ import com.ibm.research.drl.dpt.models.Race;
 
 import java.util.Collection;
 
+/** Generalization hierarchy for race/ethnicity values. */
 public class RaceHierarchy extends MaterializedHierarchy {
     private final static RaceManager RACE_MANAGER = RaceManager.getInstance();
 
     private static final RaceHierarchy instance = new RaceHierarchy();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton RaceHierarchy
+     */
     public static RaceHierarchy getInstance() {
         return instance;
     }

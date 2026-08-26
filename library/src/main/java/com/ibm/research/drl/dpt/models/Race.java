@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a race or ethnicity value with localization and probability support. */
 public class Race implements LocalizedEntity, ProbabilisticEntity {
     private final String name;
     private final String nameCountryCode;
@@ -44,10 +45,11 @@ public class Race implements LocalizedEntity, ProbabilisticEntity {
 
 
     /**
-     * Instantiates a new Race.
+     * Constructs a Race.
      *
-     * @param name            the name
-     * @param nameCountryCode the name country code
+     * @param name            the race name
+     * @param nameCountryCode the locale country code
+     * @param probability     the probability of the race in the locale
      */
     public Race(String name, String nameCountryCode, double probability) {
         this.name = name;

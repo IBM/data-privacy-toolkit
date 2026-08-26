@@ -25,6 +25,9 @@ import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+/**
+ * Masking provider that replaces a numeric value with the range of the bin it falls into.
+ */
 public class BinningMaskingProvider implements MaskingProvider {
     private static final Logger log = LogManager.getLogger(BinningMaskingProvider.class);
 
@@ -33,10 +36,18 @@ public class BinningMaskingProvider implements MaskingProvider {
     private final boolean returnBinMean;
     private final int failMode;
 
+    /**
+     * Constructs a BinningMaskingProvider with default configuration.
+     */
     public BinningMaskingProvider() {
         this(new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a BinningMaskingProvider with the given configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public BinningMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this.binSize = maskingConfiguration.getIntValue("binning.mask.binSize");
 

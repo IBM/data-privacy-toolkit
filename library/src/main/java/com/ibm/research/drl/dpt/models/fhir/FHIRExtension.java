@@ -22,9 +22,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 
+/** FHIRExtension FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRExtension {
+    /** Constructs a FHIRExtension. */
+    public FHIRExtension() {}
+
     String url;
 }
 

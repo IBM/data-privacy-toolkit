@@ -25,17 +25,47 @@ import java.util.List;
 
 
 
+/**
+ * Interface for NLP annotators that identify named entities in free text.
+ */
 public interface NLPAnnotator extends Serializable {
+    /**
+     * Identifies entities in the given text for the specified language using no custom annotators.
+     *
+     * @param text     the text to annotate
+     * @param language the language of the text
+     * @return list of identified entities
+     * @throws IOException if annotation fails
+     */
     default List<IdentifiedEntity> identify(String text, Language language) throws IOException {
         return identify(text, language, new NLPAnnotator[0]);
     }
 
+    /**
+     * Returns the name of this annotator.
+     *
+     * @return the annotator name
+     */
     String getName();
 
+    /**
+     * Identifies entities in the given text for a given language, with optional custom identifiers.
+     *
+     * @param text              the text to annotate
+     * @param language          the language of the text
+     * @param customIdentifiers optional additional annotators
+     * @return list of identified entities
+     * @throws IOException if annotation fails
+     */
     default List<IdentifiedEntity> identify(String text, Language language, NLPAnnotator ... customIdentifiers) throws IOException {
         return identify(text, language);
     }
 
+    /**
+     * Returns the entity types that can be identified regardless of part-of-speech context.
+     *
+     * @return a list of POS-independent type names
+     */
     default List<String> getPosIndependentTypes() {
         return Collections.emptyList();
     }

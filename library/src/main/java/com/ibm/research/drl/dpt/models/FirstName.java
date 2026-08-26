@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents a first-name entity with gender and locale. */
 public class FirstName implements LocalizedEntity {
     private final String name;
     private final Gender gender;

@@ -24,33 +24,61 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRExtension;
 
 import java.util.Collection;
 
+/** FHIRRange FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRRange {
+    /** Constructs a FHIRRange. */
+    public FHIRRange() {}
+
     private Collection<FHIRExtension> extension;
     private FHIRQuantity low;
     private FHIRQuantity high;
 
+    /**
+     * Returns the high.
+     * @return the high
+     */
     public FHIRQuantity getHigh() {
         return high;
     }
 
+    /**
+     * Sets the high.
+     * @param high the high
+     */
     public void setHigh(FHIRQuantity high) {
         this.high = high;
     }
 
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the low.
+     * @return the low
+     */
     public FHIRQuantity getLow() {
         return low;
     }
 
+    /**
+     * Sets the low.
+     * @param low the low
+     */
     public void setLow(FHIRQuantity low) {
         this.low = low;
     }

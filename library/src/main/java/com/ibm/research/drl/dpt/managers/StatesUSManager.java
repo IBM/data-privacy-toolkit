@@ -30,9 +30,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for US state resources. */
 public class StatesUSManager extends ResourceBasedManager<State> {
     private final static StatesUSManager STATES_US_MANAGER = new StatesUSManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton StatesUSManager
+     */
     public static StatesUSManager getInstance() {
         return STATES_US_MANAGER;
     }

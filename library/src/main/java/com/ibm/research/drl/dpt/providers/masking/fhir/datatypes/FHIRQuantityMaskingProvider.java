@@ -29,6 +29,7 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRQuantityMaskingProvider FHIR datatype. */
 public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
     private final String VALUE_PATH;
@@ -43,6 +44,13 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
     private final MaskingProvider systemMaskingProvider;
     private final MaskingProvider codeMaskingProvider;
 
+    /**
+     * Constructs a FHIRQuantityMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRQuantityMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -61,6 +69,11 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRQuantity obj = JsonUtils.MAPPER.treeToValue(node, FHIRQuantity.class);
@@ -71,6 +84,11 @@ public class FHIRQuantityMaskingProvider extends AbstractComplexMaskingProvider<
         }
     }
 
+    /**
+     * Masks a FHIR Quantity object.
+     * @param quantity the FHIRQuantity to mask
+     * @return the masked FHIRQuantity
+     */
     public FHIRQuantity mask(FHIRQuantity quantity) {
         if (quantity == null) {
             return null;

@@ -25,10 +25,16 @@ import com.ibm.research.drl.dpt.models.Religion;
 import java.io.Serializable;
 import java.util.Collection;
 
+/** Generalization hierarchy for religion values. */
 public class ReligionHierarchy extends MaterializedHierarchy implements Serializable {
     private static final ReligionManager manager = ReligionManager.getInstance();
     private static final ReligionHierarchy instance = new ReligionHierarchy();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton ReligionHierarchy
+     */
     public static ReligionHierarchy getInstance() {
         return instance;
     }

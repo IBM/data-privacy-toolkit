@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for hospital values loaded from locale resources. */
 public class HospitalManager extends ResourceBasedManager<Hospital> {
     private static final HospitalManager HOSPITAL_MANAGER = new HospitalManager();
 

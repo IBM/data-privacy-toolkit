@@ -39,7 +39,11 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Set;
 
+/** Format processor for HL7 v2 messages. */
 public class HL7FormatProcessor extends FormatProcessor {
+
+    /** Constructs an HL7FormatProcessor. */
+    public HL7FormatProcessor() {}
 
 
     @Override

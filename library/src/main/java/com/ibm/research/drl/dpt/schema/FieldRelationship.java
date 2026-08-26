@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.models.ValueClass;
 import java.io.Serializable;
 import java.util.List;
 
+/** Describes a relationship between two fields for consistent masking. */
 public class FieldRelationship implements Serializable {
     private final String fieldName;
     private final ValueClass valueClass;

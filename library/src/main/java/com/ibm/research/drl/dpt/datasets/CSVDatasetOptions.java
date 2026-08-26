@@ -25,6 +25,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
+/**
+ * Dataset options for CSV-formatted inputs, specifying delimiter, quote character, header presence and trimming.
+ */
 public class CSVDatasetOptions implements DatasetOptions, Serializable {
 
     private static final long serialVersionUID = 1302896564898158708L;
@@ -33,18 +36,41 @@ public class CSVDatasetOptions implements DatasetOptions, Serializable {
     private final boolean hasHeader;
     private final boolean trimFields;
 
+    /**
+     * Returns the field delimiter character.
+     *
+     * @return the field delimiter
+     */
     public Character getFieldDelimiter() {
         return fieldDelimiter;
     }
 
+    /**
+     * Returns the quote character.
+     *
+     * @return the quote character
+     */
     public Character getQuoteChar() {
         return quoteChar;
     }
 
+    /**
+     * Returns whether the CSV has a header row.
+     *
+     * @return true if a header row is present
+     */
     public boolean isHasHeader() {
         return hasHeader;
     }
 
+    /**
+     * Constructs a CSVDatasetOptions.
+     *
+     * @param hasHeader      whether the CSV has a header row
+     * @param fieldDelimiter the field delimiter character
+     * @param quoteChar      the quote character
+     * @param trimFields     whether to trim whitespace from field values
+     */
     @JsonCreator
     public CSVDatasetOptions(
             @JsonProperty("hasHeader") boolean hasHeader,
@@ -57,6 +83,11 @@ public class CSVDatasetOptions implements DatasetOptions, Serializable {
         this.trimFields = trimFields;
     }
 
+    /**
+     * Returns whether field values should be trimmed.
+     *
+     * @return true if trim is enabled
+     */
     public boolean isTrimFields() {
         return trimFields;
     }

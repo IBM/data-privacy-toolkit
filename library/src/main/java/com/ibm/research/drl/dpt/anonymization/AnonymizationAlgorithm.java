@@ -26,15 +26,36 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for anonymization algorithm implementations.
+ */
 public interface AnonymizationAlgorithm {
+    /**
+     * Returns the transformation type applied by this algorithm.
+     *
+     * @return the transformation type
+     */
     TransformationType getTransformationType();
 
+    /**
+     * Returns the column information list used by this algorithm.
+     *
+     * @return list of column information
+     */
     List<ColumnInformation> getColumnInformationList();
 
-    /* returns the EQ classes based on the original records */
+    /**
+     * Returns the equivalence classes based on the original (pre-anonymization) records.
+     *
+     * @return list of original partitions
+     */
     List<Partition> getOriginalPartitions();
 
-    /* returns the EQ classes based on the anonymized records */
+    /**
+     * Returns the equivalence classes based on the anonymized records.
+     *
+     * @return list of anonymized partitions
+     */
     List<Partition> getAnonymizedPartitions();
 
     /**
@@ -44,23 +65,27 @@ public interface AnonymizationAlgorithm {
      * @param vulnerabilities the vulnerabilities
      * @param sensitiveFields the sensitive fields
      * @param fieldTypes      the field types
+     * @param privacyConstraints the privacy constraints
      * @param options         the options
      * @return the anonymization algorithm
      */
-    AnonymizationAlgorithm initialize(IPVDataset dataset, Collection<IPVVulnerability> vulnerabilities,
-                                      Collection<String> sensitiveFields, Map<String, ProviderType> fieldTypes,
-                                      List<PrivacyConstraint> privacyConstraints, AnonymizationAlgorithmOptions options);
+   AnonymizationAlgorithm initialize(IPVDataset dataset, Collection<IPVVulnerability> vulnerabilities,
+                                     Collection<String> sensitiveFields, Map<String, ProviderType> fieldTypes,
+                                     List<PrivacyConstraint> privacyConstraints,
+                                     AnonymizationAlgorithmOptions options);
 
-    /**
-     * Initialize anonymization algorithm.
-     *
-     * @param dataset               the dataset
-     * @param columnInformationList the column information list
-     * @param options               the options
-     * @return the anonymization algorithm
-     */
-    AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList,
-                                      List<PrivacyConstraint> privacyConstraints, AnonymizationAlgorithmOptions options);
+   /**
+    * Initialize anonymization algorithm.
+    *
+    * @param dataset               the dataset
+    * @param columnInformationList the column information list
+    * @param privacyConstraints    the privacy constraints
+    * @param options               the options
+    * @return the anonymization algorithm
+    */
+   AnonymizationAlgorithm initialize(IPVDataset dataset, List<ColumnInformation> columnInformationList,
+                                     List<PrivacyConstraint> privacyConstraints,
+                                     AnonymizationAlgorithmOptions options);
 
     /**
      * Gets name.

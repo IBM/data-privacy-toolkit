@@ -50,20 +50,31 @@ public class EmailMaskingProvider extends AbstractComplexMaskingProvider<String>
 
 
     /**
-     * Instantiates a new Email masking provider.
+     * Constructs an EmailMaskingProvider with default configuration.
+     *
+     * @param factory the masking provider factory
      */
     public EmailMaskingProvider(MaskingProviderFactory factory) {
         this("name", new DefaultMaskingConfiguration(), Collections.emptySet(), factory);
     }
 
+    /**
+     * Constructs an EmailMaskingProvider with the given configuration and factory.
+     *
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public EmailMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("name", maskingConfiguration, Collections.emptySet(), factory);
     }
 
     /**
-     * Instantiates a new Email masking provider.
+     * Constructs an EmailMaskingProvider.
      *
-     * @param configuration the configuration
+     * @param complexType  the complex type name
+     * @param configuration the masking configuration
+     * @param maskedFields  the set of already-masked fields
+     * @param factory       the masking provider factory
      */
     public EmailMaskingProvider(String complexType, MaskingConfiguration configuration, Set<String> maskedFields, MaskingProviderFactory factory) {
         super(complexType, configuration, maskedFields, factory);

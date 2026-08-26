@@ -52,18 +52,32 @@ public class LatitudeLongitudeMaskingProvider implements MaskingProvider {
     private final SecureRandom random;
     private final LatitudeLongitudeIdentifier latitudeLongitudeIdentifier = new LatitudeLongitudeIdentifier();
 
+    /**
+     * Constructs a LatitudeLongitudeMaskingProvider using the given random number generator
+     * and default masking configuration.
+     *
+     * @param random the secure random number generator
+     */
     public LatitudeLongitudeMaskingProvider(SecureRandom random) {
         this(random, new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a LatitudeLongitudeMaskingProvider using the given masking configuration
+     * and a new {@link SecureRandom}.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public LatitudeLongitudeMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
 
     /**
-     * Instantiates a new Latitude longitude masking provider.
+     * Constructs a LatitudeLongitudeMaskingProvider with the given random number generator
+     * and masking configuration.
      *
-     * @param configuration the configuration
+     * @param random        the secure random number generator
+     * @param configuration the masking configuration
      */
     public LatitudeLongitudeMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
 
@@ -92,6 +106,12 @@ public class LatitudeLongitudeMaskingProvider implements MaskingProvider {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Masks the given {@link LatitudeLongitude} value according to the configured strategy.
+     *
+     * @param latitudeLongitude the coordinate to mask
+     * @return the masked coordinate as a string
+     */
     public String mask(LatitudeLongitude latitudeLongitude) {
         LatitudeLongitude randomLatLon;
 

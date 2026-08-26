@@ -18,7 +18,16 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.ola;
 
+/**
+ * Interface for checking anonymity and computing suppression rates in OLA.
+ */
 public interface AnonymityChecker {
+    /**
+     * Calculates the suppression rate for the given lattice node.
+     *
+     * @param node the lattice node to evaluate
+     * @return the suppression rate as a value between 0.0 and 1.0
+     */
     double calculateSuppressionRate(LatticeNode node);
 }
 

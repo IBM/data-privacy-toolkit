@@ -29,10 +29,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for animal species loaded from localization resources.
+ */
 public class AnimalSpeciesManager extends ResourceBasedManager<AnimalSpecies> {
     private static final long serialVersionUID = -910793653650184147L;
     private final static AnimalSpeciesManager ANIMAL_SPECIES_MANAGER = new AnimalSpeciesManager();
 
+    /**
+     * Returns the singleton instance of AnimalSpeciesManager.
+     *
+     * @return the singleton instance
+     */
     public static AnimalSpeciesManager getInstance() {
         return ANIMAL_SPECIES_MANAGER;
     }

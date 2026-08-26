@@ -25,7 +25,12 @@ import org.apache.logging.log4j.LogManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for locale-style dates in the form {@code DD MONTHNAME YYYY} or {@code DD MONTHNAME}.
+ */
 public class LocaleDateIdentifier extends AbstractIdentifier {
+    /** Constructs a LocaleDateIdentifier. */
+    public LocaleDateIdentifier() {}
     private static final Logger logger = LogManager.getLogger(LocaleDateIdentifier.class);
 
     private final MonthIdentifier monthIdentifier = new MonthIdentifier();

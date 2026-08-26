@@ -22,7 +22,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.util.regex.Pattern;
 
+/** Identifier for Italian VAT codes (Partita IVA). */
 public class ItalianVATCodeIdentifier extends AbstractIdentifier {
+
+    /** Constructs an ItalianVATCodeIdentifier. */
+    public ItalianVATCodeIdentifier() {}
     private final static Pattern identifier = Pattern.compile("\\d{11}");
 
     @Override

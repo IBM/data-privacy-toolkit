@@ -29,8 +29,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Serializes an {@link IPVDataset} to JSON format. */
 public class IPVDatasetJSONSerializer {
 
+    /** Not instantiable. */
+    private IPVDatasetJSONSerializer() {}
+
+    /**
+     * Serializes the dataset to JSON and writes it to the given writer.
+     *
+     * @param dataset the dataset to serialize
+     * @param options the JSON dataset options
+     * @param writer  the output writer
+     * @throws IOException if writing fails
+     */
     public static void serialize(IPVDataset dataset, JSONDatasetOptions options, Writer writer) throws IOException {
         List<Map<String, Object>> jsonDataset = new ArrayList<>();
 

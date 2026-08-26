@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util.localization;
 
+/** The location type of a localization resource (internal classpath resource or external file). */
 public enum ResourceEntryType {
     /**
      * Internal resource entry type.

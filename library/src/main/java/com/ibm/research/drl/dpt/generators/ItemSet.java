@@ -27,6 +27,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Objects;
 
+/** Represents a set of column indices used in privacy-vulnerability analysis. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemSet implements Comparable<ItemSet>, Serializable {
     private int size;

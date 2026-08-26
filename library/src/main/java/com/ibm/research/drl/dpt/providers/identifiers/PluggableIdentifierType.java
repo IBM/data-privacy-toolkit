@@ -18,7 +18,10 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.identifiers;
 
+/** The type of pattern matching used by a pluggable identifier. */
 public enum PluggableIdentifierType {
+    /** Dictionary (set) lookup matching. */
     DICTIONARY,
+    /** Regular expression matching. */
     REGEX
 }

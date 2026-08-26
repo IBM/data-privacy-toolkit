@@ -32,12 +32,22 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * Utility that applies masking providers to a list of NLP-identified entities.
+ */
 public class MaskIdentifiedEntities {
     private final MaskingProviderFactory factory;
     private final ConfigurationManager configurationManager;
     private final DataMaskingOptions dataMaskingOptions;
     private final Map<String, MaskingProvider> cachedProviders;
 
+    /**
+     * Constructs a MaskIdentifiedEntities instance.
+     *
+     * @param configurationManager the configuration manager providing masking configurations
+     * @param dataMaskingOptions   the options describing which entity types to mask
+     * @param factory              the masking provider factory
+     */
     public MaskIdentifiedEntities(final ConfigurationManager configurationManager, final DataMaskingOptions dataMaskingOptions,
                                   final MaskingProviderFactory factory) {
         this.factory = factory;
@@ -46,6 +56,12 @@ public class MaskIdentifiedEntities {
         this.cachedProviders = new HashMap<>();
     }
 
+    /**
+     * Applies masking to all identified entities that match a masking target.
+     *
+     * @param entities the list of identified entities to mask
+     * @return the list of entities with sensitive values replaced
+     */
     public List<IdentifiedEntity> maskEntities(final List<IdentifiedEntity> entities) {
         Map<String, DataMaskingTarget> toBeMasked = dataMaskingOptions.getToBeMasked();
 

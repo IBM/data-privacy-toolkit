@@ -23,6 +23,7 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/** An in-memory implementation of {@link Partition} backed by an {@link IPVDataset}. */
 public class InMemoryPartition implements Partition {
     private final IPVDataset dataset;
     private boolean isAnon;
@@ -65,12 +66,22 @@ public class InMemoryPartition implements Partition {
         );
     }
 
+    /**
+     * Constructs an empty InMemoryPartition with the specified number of columns.
+     *
+     * @param numberOfColumns the number of columns
+     */
     public InMemoryPartition(int numberOfColumns) {
         this.dataset = new IPVDataset(
             new ArrayList<>(), IPVDataset.generateSchemaWithoutColumnNames(numberOfColumns), false
         );
     }
 
+    /**
+     * Constructs an InMemoryPartition wrapping the given dataset.
+     *
+     * @param dataset the dataset to wrap
+     */
     public InMemoryPartition(IPVDataset dataset) {
         this.dataset = dataset;
     }
