@@ -24,8 +24,19 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.List;
 
 
+/** Utility methods for validating anonymized datasets. */
 public class ValidationUtils {
 
+    /** Not instantiable. */
+    private ValidationUtils() {}
+
+    /**
+     * Asserts that two datasets have identical content.
+     *
+     * @param original the original dataset
+     * @param reloaded the reloaded dataset to compare
+     * @throws RuntimeException if the datasets differ in size or content
+     */
     public static void mustBeTheSame(IPVDataset original, IPVDataset reloaded) {
         if (original.getNumberOfRows() != reloaded.getNumberOfRows()) throw new RuntimeException("Size differ");
         if (original.getNumberOfColumns() != reloaded.getNumberOfColumns()) throw new RuntimeException("Size differ");
@@ -40,6 +51,14 @@ public class ValidationUtils {
         }
     }
 
+    /**
+     * Validates that a dataset satisfies k-anonymity.
+     *
+     * @param dataset           the dataset to validate
+     * @param columnInformation the column information describing quasi-identifier columns
+     * @param k                 the required anonymity level
+     * @throws RuntimeException if k-anonymity is not satisfied
+     */
     public static void validateIsKAnonymous(IPVDataset dataset, List<ColumnInformation> columnInformation, int k) {
         List<Partition> partitions = PartitionUtils.createPartitions(dataset, columnInformation);
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformation, ColumnType.QUASI);

@@ -43,8 +43,11 @@ import java.util.regex.Pattern;
 
 /** Masking provider for free-text content using NLP annotation. */
 public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** Logger for this class. */
     private final static Logger logger = LogManager.getLogger(FreeTextMaskingProvider.class);
+    /** The NLP annotator used to detect entities in free text. */
     private final NLPAnnotator annotator;
+    /** Map of entity type names to their masking targets. */
     private final Map<String, DataMaskingTarget> toBeMasked;
 
     /**

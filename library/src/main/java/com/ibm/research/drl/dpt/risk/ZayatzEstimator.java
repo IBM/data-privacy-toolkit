@@ -29,7 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 
+/** Risk metric that estimates the number of unique individuals using the Zayatz method. */
 public class ZayatzEstimator implements RiskMetric {
+    /** Constructs a ZayatzEstimator. */
+    public ZayatzEstimator() {}
+    /** Option key for the population size parameter. */
     public static final String POPULATION = "N";
 
     private int n;
@@ -54,6 +58,11 @@ public class ZayatzEstimator implements RiskMetric {
         return results.getEstimatedRealUniques();
     }
 
+    /**
+     * Reports the estimated uniqueness of the anonymized dataset.
+     *
+     * @return a {@link ZayatzEstimatorResults} containing the observed and estimated unique counts
+     */
     public ZayatzEstimatorResults reportUniqueness() {
         double sum = 0.0;
 

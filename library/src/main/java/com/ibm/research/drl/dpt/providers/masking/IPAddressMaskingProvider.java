@@ -31,11 +31,16 @@ import java.security.SecureRandom;
 
 /** Masking provider that replaces IP addresses with random IP addresses. */
 public class IPAddressMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private final static Logger logger = LogManager.getLogger(IPAddressMaskingProvider.class);
 
+    /** Shared IP address identifier instance. */
     private final static IPAddressIdentifier ipAddressIdentifier = new IPAddressIdentifier();
+    /** Number of IP prefix octets to preserve. */
     private final int preservedPrefixes;
+    /** The configured failure mode. */
     private final int failMode;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

@@ -38,6 +38,7 @@ import java.util.Set;
 
 /** FHIRMaskingProvider FHIR datatype. */
 public class FHIRMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** Map of FHIR resource type names to their masking providers. */
     private final Map<String, FHIRGenericMaskingProvider> maskingProviderMap;
 
     /**

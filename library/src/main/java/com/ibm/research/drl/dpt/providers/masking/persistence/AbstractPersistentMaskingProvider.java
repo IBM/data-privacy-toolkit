@@ -25,7 +25,9 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
  * Abstract base class for masking providers that cache previously masked values for consistency.
  */
 public abstract class AbstractPersistentMaskingProvider implements MaskingProvider {
+    /** The underlying masking provider whose output is persisted. */
     private final MaskingProvider maskingProvider;
+    /** Whether to normalise values to lower case before looking up the cache. */
     private final boolean normalizeToLowerCase;
 
     /**

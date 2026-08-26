@@ -29,8 +29,11 @@ import java.security.SecureRandom;
 public class SSNUSMaskingProvider implements MaskingProvider {
     private static final SSNUSIdentifier ssnUSIdentifier = new SSNUSIdentifier();
 
+    /** Whether to preserve the area number component of the SSN. */
     private final boolean preserveAreaNumber;
+    /** Whether to preserve the group number component of the SSN. */
     private final boolean preserveGroup;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

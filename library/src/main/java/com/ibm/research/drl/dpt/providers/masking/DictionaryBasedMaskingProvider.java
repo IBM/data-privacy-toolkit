@@ -35,7 +35,9 @@ import java.util.List;
 public class DictionaryBasedMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(DictionaryBasedMaskingProvider.class);
 
+    /** Secure random source. */
     private final SecureRandom random;
+    /** The list of dictionary terms loaded from the configured file. */
     private final List<String> terms;
 
     /** Constructs a DictionaryBasedMaskingProvider with default configuration. */

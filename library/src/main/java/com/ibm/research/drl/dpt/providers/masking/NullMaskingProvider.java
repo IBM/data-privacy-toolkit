@@ -28,6 +28,7 @@ import java.security.SecureRandom;
  */
 public class NullMaskingProvider implements MaskingProvider {
 
+    /** Whether to return {@code null} instead of an empty string. */
     private final boolean returnNull;
 
     /**

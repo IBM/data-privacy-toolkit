@@ -31,15 +31,23 @@ import java.util.Set;
 /** FHIRRangeMaskingProvider FHIR datatype. */
 public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to delete the low quantity element. */
     private final boolean deleteLow;
+    /** Whether to delete the high quantity element. */
     private final boolean deleteHigh;
+    /** Whether to mask the low quantity element. */
     private final boolean maskLow;
+    /** Whether to mask the high quantity element. */
     private final boolean maskHigh;
 
+    /** Masking provider for the low element. */
     private final FHIRQuantityMaskingProvider lowMaskingProvider;
+    /** Masking provider for the high element. */
     private final FHIRQuantityMaskingProvider highMaskingProvider;
 
+    /** JSON path to the low field. */
     private final String LOW_PATH;
+    /** JSON path to the high field. */
     private final String HIGH_PATH;
 
     /**

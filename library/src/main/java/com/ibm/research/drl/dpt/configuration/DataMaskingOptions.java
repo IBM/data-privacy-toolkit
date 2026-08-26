@@ -44,13 +44,19 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DataMaskingOptions implements Serializable {
 
+    /** The expected input format. */
     private final DataTypeFormat inputFormat;
+    /** The desired output format. */
     private final DataTypeFormat outputFormat;
+    /** Whether to identify and handle field relationships during masking. */
     private final boolean identifyRelationships;
 
+    /** Dataset-level options (e.g. CSV delimiter). */
     private final DatasetOptions datasetOptions;
 
+    /** Map from field path to its masking target specification. */
     private final Map<String, DataMaskingTarget> toBeMasked;
+    /** Map from field path to its predefined relationship. */
     private final Map<String, FieldRelationship> predefinedRelationships;
 
     /**

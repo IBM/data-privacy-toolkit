@@ -32,15 +32,23 @@ import java.util.Set;
 /** FHIRBaseDomainResourceMaskingProvider FHIR datatype. */
 public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the resource ID. */
     private final boolean maskId;
+    /** Whether to preserve the prefix when masking the resource ID. */
     private final boolean preserveIdPrefix;
+    /** Whether to remove the meta element. */
     private final boolean removeMeta;
+    /** Whether to remove the text element. */
     private final boolean removeText;
+    /** Whether to remove contained resources. */
     private final boolean removeContained;
+    /** Whether to remove extensions. */
     private final boolean removeExtension;
 
+    /** Masking provider for the resource ID field. */
     private final MaskingProvider idMaskingProvider;
 
+    /** JSON path to the resource ID field. */
     private final String idPath;
 
     /**

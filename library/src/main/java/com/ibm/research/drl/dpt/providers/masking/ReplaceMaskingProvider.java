@@ -31,16 +31,26 @@ import java.util.*;
 
 /** Masking provider that replaces part or all of a value according to a configurable replacement mode. */
 public class ReplaceMaskingProvider implements MaskingProvider {
+    /** Number of characters to preserve when masking. */
     private final int preservedCharacters;
+    /** Offset at which to start preserving characters. */
     private final int offset;
+    /** Whether to replace only when the value is in the test set. */
     private final boolean replaceOnValueInSet;
+    /** The set of test values used with conditional replacement. */
     private final Set<String> testValues;
+    /** Whether to replace only when the value is NOT in the test set. */
     private final boolean replaceOnValueNotInSet;
+    /** The list of replacement values to choose from. */
     private final List<String> replacementValues;
+    /** The replacement mode controlling how values are replaced. */
     private final ReplaceMode replaceMode;
+    /** The asterisk character string used for asterisk-based replacement. */
     private final String asterisk;
 
+    /** The prefix to prepend to the masked value. */
     private final String prefix;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /** The replacement mode for the masking operation. */

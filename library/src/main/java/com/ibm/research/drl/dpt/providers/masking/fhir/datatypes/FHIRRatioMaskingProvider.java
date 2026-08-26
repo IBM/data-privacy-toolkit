@@ -30,15 +30,23 @@ import java.util.Set;
 
 /** FHIRRatioMaskingProvider FHIR datatype. */
 public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
+    /** Whether to delete the numerator element. */
     private final boolean deleteNumerator;
+    /** Whether to delete the denominator element. */
     private final boolean deleteDenominator;
+    /** Whether to mask the numerator element. */
     private final boolean maskNumerator;
+    /** Whether to mask the denominator element. */
     private final boolean maskDenominator;
 
+    /** Masking provider for the numerator element. */
     private final FHIRQuantityMaskingProvider numeratorMaskingProvider;
+    /** Masking provider for the denominator element. */
     private final FHIRQuantityMaskingProvider denominatorMaskingProvider;
 
+    /** JSON path to the numerator field. */
     private final String NUMERATOR_PATH;
+    /** JSON path to the denominator field. */
     private final String DENOMINATOR_PATH;
 
     /**

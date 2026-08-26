@@ -30,7 +30,9 @@ import java.util.Set;
  * @param <K> the type of object to be masked
  */
 public abstract class AbstractComplexMaskingProvider<K> implements MaskingProvider {
+    /** The prefix GUID used to construct subfield names. */
     private final String prefixGUID;
+    /** The set of field paths that have already been masked. */
     private final Set<String> maskedFields;
     /** The masking provider factory used to create sub-providers. */
     protected final MaskingProviderFactory factory;

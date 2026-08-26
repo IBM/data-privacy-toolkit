@@ -40,8 +40,11 @@ public class Binary implements DPMechanism {
     }
     private static final Logger log = LogManager.getLogger(Binary.class);
 
+    /** Random number generator used for randomisation. */
     private final Random rnd = new SecureRandom();
+    /** The privacy budget. */
     private double epsilon;
+    /** The two binary domain values. */
     private Tuple<String, String> binaryValues;
 
     @Override

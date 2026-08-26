@@ -32,10 +32,14 @@ import java.util.Map;
 
 /** Masking provider that adjusts a numeric value by a configured ratio. */
 public class RatioBasedMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger logger = LogManager.getLogger(RatioBasedMaskingProvider.class);
 
+    /** The configured failure mode. */
     private final int failMode;
+    /** The ratio to apply to the original value. */
     private final double ratio;
+    /** Number of decimal digits to keep in the output. */
     private final int precisionDigits;
 
     /** Constructs a RatioBasedMaskingProvider with default configuration. */

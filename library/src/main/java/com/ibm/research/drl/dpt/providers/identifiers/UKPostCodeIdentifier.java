@@ -24,7 +24,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
+/** Identifier for UK post codes. */
 public class UKPostCodeIdentifier extends AbstractRegexBasedIdentifier {
+
+    /** Constructs a UKPostCodeIdentifier. */
+    public UKPostCodeIdentifier() {}
     private static final String AREA = "(?:" +
             "(?:A[BL])|" +
             "(?:B[ABDHLNRST]?)|" +
@@ -65,6 +69,7 @@ public class UKPostCodeIdentifier extends AbstractRegexBasedIdentifier {
             SECTOR + "\\s?" + UNIT +
             ")";
 
+    /** Compiled regex pattern for UK post codes. */
     private final Collection<Pattern> patterns = Collections.singletonList(
             Pattern.compile(OUTWARD + "\\s?" + INWARD, Pattern.CASE_INSENSITIVE)
     );

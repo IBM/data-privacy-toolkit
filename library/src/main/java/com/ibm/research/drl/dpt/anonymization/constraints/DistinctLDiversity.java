@@ -35,6 +35,7 @@ import java.util.Set;
 
 /** Privacy constraint enforcing distinct l-diversity. */
 public class DistinctLDiversity implements PrivacyConstraint {
+    /** The minimum number of distinct sensitive values required per partition. */
     private final int l;
 
     /**

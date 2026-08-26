@@ -36,11 +36,17 @@ import java.security.SecureRandom;
  */
 public class AgeMaskingProvider implements MaskingProvider {
 
+    /** Shared age identifier instance. */
     private static final AgeIdentifier AGE_IDENTIFIER = new AgeIdentifier();
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(AgeMaskingProvider.class);
+    /** Whether to redact numeric age values with "XX". */
     private final boolean redactNumbers;
+    /** Whether to replace numeric age values with random numbers. */
     private final boolean randomNumbers;
+    /** Secure random source. */
     private final SecureRandom random;
+    /** The configured failure mode. */
     private final int failMode;
 
     /**

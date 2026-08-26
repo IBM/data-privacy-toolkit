@@ -31,6 +31,7 @@ import java.util.List;
  * at least {@code k} records.
  */
 public class KAnonymity implements PrivacyConstraint {
+    /** The minimum equivalence-class size required for k-anonymity. */
     private final int k;
 
     /**

@@ -31,10 +31,15 @@ import java.security.SecureRandom;
 
 /** Masking provider that hashes integer values using a configurable algorithm. */
 public class HashIntMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private final static Logger log = LogManager.getLogger(HashIntMaskingProvider.class);
+    /** The hashing algorithm to use. */
     private final String algorithm;
+    /** Whether to limit the output to a configured budget. */
     private final boolean useBudget;
+    /** The maximum hash budget when budget limiting is enabled. */
     private final int budgetAmount;
+    /** Whether to preserve the sign of the original integer. */
     private final boolean signCoherent;
 
     /**

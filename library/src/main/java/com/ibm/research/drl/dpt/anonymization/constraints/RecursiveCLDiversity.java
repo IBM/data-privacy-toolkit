@@ -30,7 +30,9 @@ import java.util.List;
 
 /** Privacy constraint implementing recursive (c,l)-diversity. */
 public class RecursiveCLDiversity implements PrivacyConstraint {
+    /** The minimum number of occurrences for the l parameter. */
     private final int l;
+    /** The ratio threshold for the c parameter. */
     private final double c;
 
     /**

@@ -49,6 +49,7 @@ public class MaritalStatusManager extends ResourceBasedManager<MaritalStatus> {
         super();
     }
 
+    /** The list of loaded marital statuses. */
     private List<MaritalStatus> statusList;
 
     @Override

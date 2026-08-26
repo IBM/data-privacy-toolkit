@@ -31,8 +31,11 @@ import java.util.*;
  */
 public class CausalOrderingConsistentMaskingProvider extends AbstractPersistentMaskingProvider {
 
+    /** Shared hash masking provider used to compute private hashes. */
     private final static HashMaskingProvider HASH_MASKING_PROVIDER = new HashMaskingProvider();
+    /** Cache mapping hashed values to their chain entries. */
     private final Map<String, List<DictionaryEntry>> cache;
+    /** Component responsible for retrieving the causal chain. */
     private final ChainRetrieval chainRetrieval;
 
     /**

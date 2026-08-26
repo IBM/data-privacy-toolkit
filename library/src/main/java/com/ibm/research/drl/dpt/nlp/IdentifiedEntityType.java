@@ -16,8 +16,11 @@ import java.io.Serializable;
 
 /** Represents the type of an identified NLP entity, including subtype and source annotation. */
 public final class IdentifiedEntityType implements Serializable {
+    /** The entity type label. */
     private final String type;
+    /** The entity subtype label. */
     private final String subtype;
+    /** The annotation source that produced this identification. */
     private final String source;
 
     /** Constant representing an unknown annotation source. */

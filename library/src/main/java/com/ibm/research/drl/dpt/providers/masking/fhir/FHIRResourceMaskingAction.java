@@ -27,12 +27,18 @@ import java.io.Serializable;
 /** FHIRResourceMaskingAction FHIR datatype. */
 public class FHIRResourceMaskingAction implements Serializable {
 
+    /** The full JSON path of the field to mask or delete. */
     private final String fullPath;
+    /** The relative path segment of the field. */
     private final String path;
+    /** Path segments split for traversal. */
     private final String[] paths;
+    /** Whether this action deletes the field rather than masking it. */
     private final boolean delete;
 
+    /** The simple masking provider to apply (may be {@code null}). */
     private final MaskingProvider maskingProvider;
+    /** The complex masking provider to apply (may be {@code null}). */
     private final AbstractComplexMaskingProvider<JsonNode> abstractComplexMaskingProvider;
 
     /**

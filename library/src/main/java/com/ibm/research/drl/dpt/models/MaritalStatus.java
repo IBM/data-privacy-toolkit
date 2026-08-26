@@ -22,8 +22,11 @@ package com.ibm.research.drl.dpt.models;
  * Model representing a marital status value with an optional category and country code.
  */
 public class MaritalStatus implements LocalizedEntity {
+    /** The marital status name. */
     private final String name;
+    /** The broad category (e.g. "Coupled" or "Alone"). */
     private final String category;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
 
     /**

@@ -31,10 +31,14 @@ import java.security.SecureRandom;
  * The type Shift masking provider.
  */
 public class ShiftMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(ShiftMaskingProvider.class);
 
+    /** The value to add to the original number. */
     private final double shiftValue;
+    /** The configured failure mode. */
     private final int failMode;
+    /** Number of decimal digits to keep in the output. */
     private final int digitsToKeep;
 
     /**

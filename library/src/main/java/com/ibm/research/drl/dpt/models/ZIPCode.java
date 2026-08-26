@@ -20,18 +20,37 @@ package com.ibm.research.drl.dpt.models;
 
 import java.io.Serializable;
 
+/** Represents a US ZIP code and its associated population. */
 public class ZIPCode implements Serializable {
+    /**
+     * Returns the ZIP code string.
+     *
+     * @return the ZIP code
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Returns the population associated with this ZIP code.
+     *
+     * @return the population count
+     */
     public Integer getPopulation() {
         return population;
     }
 
+    /** The ZIP code string. */
     private final String code;
+    /** The population for this ZIP code area. */
     private final Integer population;
 
+    /**
+     * Constructs a ZIPCode.
+     *
+     * @param code       the ZIP code string
+     * @param population the population associated with this ZIP code
+     */
     public ZIPCode(String code, Integer population) {
         this.code = code;
         this.population = population;

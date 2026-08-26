@@ -22,8 +22,11 @@ import java.io.Serializable;
 
 /** Represents a numeric interval [low, high] with an optional median. */
 public class Interval implements Serializable {
+    /** The lower bound. */
     private final double low;
+    /** The upper bound. */
     private final double high;
+    /** The median, or {@code null} if not set. */
     private final Double median;
 
     /**

@@ -56,6 +56,7 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
             ")";
     private static final String separator = "(?<separator>[- ])";
 
+    /** Compiled regex patterns used to match phone numbers. */
     private final Pattern[] phonePatterns = {
             Pattern.compile(
                     textualPrefix + "?" +

@@ -39,13 +39,19 @@ public class IdentificationConfiguration implements Serializable {
             Collections.emptyMap()
     );
 
+    /** Default minimum frequency threshold for identification. */
     private final double defaultFrequencyThreshold;
+    /** Default identifier priority. */
     private final int defaultPriority;
+    /** Whether empty values contribute to frequency counts. */
     private final boolean considerEmptyForFrequency;
 
+    /** The strategy used to combine identifier results. */
     private final IdentificationStrategy identificationStrategy;
 
+    /** Per-identifier priority overrides. */
     private final Map<String, Integer> priorities;
+    /** Per-identifier frequency-threshold overrides. */
     private final Map<String, Double> frequencyThresholds;
 
 

@@ -31,7 +31,9 @@ public class ReligionIdentifier extends AbstractManagerBasedIdentifier {
     /** Constructs a ReligionIdentifier. */
     public ReligionIdentifier() {}
 
+    /** Appropriate field names for this identifier. */
     private final Collection<String> appropriateNames = Collections.singletonList("Religion");
+    /** Shared religion manager instance. */
     private final static ReligionManager religionManager = ReligionManager.getInstance();
 
     @Override

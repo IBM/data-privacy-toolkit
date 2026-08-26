@@ -28,9 +28,13 @@ import java.security.SecureRandom;
  * Masking provider for MAC (Media Access Control) address values.
  */
 public class MACAddressMaskingProvider implements MaskingProvider {
+    /** Characters allowed in a generated MAC address segment. */
     private static final char[] allowedCharacters = "abcdef0123456789".toCharArray();
+    /** Shared MAC address identifier instance. */
     private static final MACAddressIdentifier macAddressIdentifier = new MACAddressIdentifier();
+    /** Whether to preserve the vendor (OUI) prefix of the MAC address. */
     private final boolean preserveVendor;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

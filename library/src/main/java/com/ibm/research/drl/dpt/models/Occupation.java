@@ -24,7 +24,9 @@ import java.util.List;
  * Model representing an occupation with one or more category tags, associated with a country code.
  */
 public class Occupation implements LocalizedEntity {
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The list of occupation categories. */
     private final List<String> categories;
 
     /**

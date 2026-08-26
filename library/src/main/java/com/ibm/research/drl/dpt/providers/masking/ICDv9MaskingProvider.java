@@ -31,8 +31,11 @@ import java.security.SecureRandom;
  *
  */
 public class ICDv9MaskingProvider implements MaskingProvider {
+    /** Shared ICDv9 manager instance. */
     private final static ICDv9Manager icdV9Manager = ICDv9Manager.getInstance();
+    /** Whether to randomise to the ICD category level. */
     private final boolean randomizeToCategory;
+    /** Whether to randomise to the ICD range level. */
     private final boolean randomizeToRange;
 
 

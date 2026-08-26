@@ -24,7 +24,9 @@ import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
  * Options for the {@link KMeansAnonymization} algorithm.
  */
 public class KMeansOptions implements AnonymizationAlgorithmOptions {
+    /** The maximum suppression rate (percentage of rows that may be suppressed). */
     private final double suppressionRate;
+    /** The reassignment strategy for under-sized clusters. */
     private final StrategyOptions strategy;
 
     /**

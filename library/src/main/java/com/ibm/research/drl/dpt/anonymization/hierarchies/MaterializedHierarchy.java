@@ -30,12 +30,19 @@ import java.util.*;
  * encoding (generalization) and lookup operations.
  */
 public class MaterializedHierarchy implements GeneralizationHierarchy {
+    /** Nodes keyed by upper-cased value. */
     private final Map<String, GeneralizationNode> nodes;
+    /** All term paths (each path goes from leaf to root). */
     private final List<List<String>> terms;
+    /** Term paths keyed by lower-cased leaf value. */
     private final Map<String, List<String>> leaves;
+    /** Insertion-order index of each leaf, keyed by lower-cased value. */
     private final Map<String, Integer> indices;
+    /** Number of term paths added so far. */
     private int termsAdded;
+    /** The top (most general) term of this hierarchy. */
     private String topTerm;
+    /** The maximum number of levels across all added term paths. */
     private int hierarchyHeight;
 
     /**

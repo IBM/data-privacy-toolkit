@@ -27,11 +27,17 @@ import java.util.Set;
 
 /** An identifier that matches values against a user-supplied dictionary (lookup set). */
 public class PluggableLookupIdentifier extends AbstractIdentifier {
+    /** Appropriate field names for this identifier. */
     private final Collection<String> appropriateNames;
+    /** The provider type this identifier represents. */
     private final ProviderType providerType;
+    /** The value class this identifier recognises. */
     private final ValueClass valueClass;
+    /** The set of lookup values used for matching. */
     private final Set<String> valueSet;
+    /** Whether matching is case-insensitive. */
     private final boolean ignoreCase;
+    /** Whether POS tagging context is ignored during identification. */
     private final boolean isPOSIndependent;
 
     /**

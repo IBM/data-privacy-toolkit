@@ -27,6 +27,7 @@ import java.util.List;
  * Privacy metric that counts the number of records in an equivalence class for k-anonymity evaluation.
  */
 public class KAnonymityMetric implements PrivacyMetric, Serializable {
+    /** Number of records in the equivalence class. */
     private long count = 0L;
 
     /**

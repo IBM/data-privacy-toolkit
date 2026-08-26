@@ -28,7 +28,9 @@ import java.util.Objects;
  * @param <V> the type of the second element
  */
 public final class Tuple<K, V> implements Serializable {
+    /** The first element of the tuple. */
     private final K first;
+    /** The second element of the tuple. */
     private final V second;
 
     @Override

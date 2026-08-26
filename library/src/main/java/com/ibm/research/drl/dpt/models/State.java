@@ -20,10 +20,15 @@ package com.ibm.research.drl.dpt.models;
 
 /** Model representing a US state with name, abbreviation, population and locale. */
 public class State implements LocalizedEntity {
+    /** The state name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The state population. */
     private final Long population;
+    /** The two-letter state abbreviation. */
     private final String abbreviation;
+    /** The name format for this state. */
     private final StateNameFormat nameFormat;
 
     @Override

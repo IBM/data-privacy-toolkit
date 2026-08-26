@@ -32,11 +32,17 @@ import java.util.Set;
 
 /** Represents an entity identified in free text, including its position and type. */
 public final class IdentifiedEntity implements Serializable {
+    /** The text of the identified entity. */
     private final String text;
+    /** The start offset (inclusive) in the original text. */
     private final int start;
+    /** The end offset (exclusive) in the original text. */
     private final int end;
+    /** The set of entity types assigned to this entity. */
     private final Set<IdentifiedEntityType> type;
+    /** The set of part-of-speech tags assigned to this entity. */
     private final Set<PartOfSpeechType> pos;
+    /** Dependency-parse information, if available. */
     private DependencyParseInformation dependencyParseInformation;
 
     /**

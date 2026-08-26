@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Default implementation of {@link ColumnInformation} for non-quasi-identifier columns. */
 public class DefaultColumnInformation implements ColumnInformation {
+    /** Whether this column is used for linking. */
     private final boolean forLinking;
 
     /** Constructs a DefaultColumnInformation with forLinking set to false. */

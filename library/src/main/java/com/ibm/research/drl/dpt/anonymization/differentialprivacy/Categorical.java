@@ -38,11 +38,17 @@ public class Categorical implements DPMechanism {
     public Categorical() {
     }
     private static final Logger log = LogManager.getLogger(Categorical.class);
+    /** Random number generator used for randomisation. */
     private final Random rnd = new SecureRandom();
+    /** The privacy budget. */
     private double epsilon;
+    /** The generalization hierarchy for the categorical domain. */
     private GeneralizationHierarchy hierarchy;
+    /** Pre-computed utility values, keyed by hash of (value1, value2). */
     private Map<Integer, Double> utilityFunction = new HashMap<>();
+    /** Pre-computed normalising constants per base value. */
     private Map<String, Double> normalisingConstant = new HashMap<>();
+    /** The set of leaf values in the hierarchy domain. */
     private Set<String> hierarchyLeaves = new HashSet<>();
 
     @Override

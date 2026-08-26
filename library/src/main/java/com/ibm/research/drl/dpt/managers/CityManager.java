@@ -54,6 +54,7 @@ public class CityManager extends ResourceBasedManager<City> {
 
     private static final SecureRandom random = new SecureRandom();
 
+    /** Map from country code to the list of cities in that country. */
     private Map<String, List<City>> cityListMap;
 
     private static final CityManager instance = new CityManager();

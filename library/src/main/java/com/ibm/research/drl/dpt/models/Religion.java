@@ -20,9 +20,13 @@ package com.ibm.research.drl.dpt.models;
 
 /** Model representing a religion name with localization and probability support. */
 public class Religion implements LocalizedEntity, ProbabilisticEntity {
+    /** The religion name. */
     private final String name;
+    /** The broad group this religion belongs to. */
     private final String group;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The probability weight. */
     private final double probability;
 
     /**

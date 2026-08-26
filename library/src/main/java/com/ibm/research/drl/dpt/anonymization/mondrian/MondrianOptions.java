@@ -29,7 +29,9 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MondrianOptions implements AnonymizationAlgorithmOptions {
+    /** Named string value overrides. */
     private final Map<String, String> values = new HashMap<>();
+    /** The categorical split strategy to use. */
     private final CategoricalSplitStrategy categoricalSplitStrategy;
 
     /**

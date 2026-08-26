@@ -22,10 +22,15 @@ package com.ibm.research.drl.dpt.models;
  * Represents a US county with its name, state, short name, and population.
  */
 public class County implements LocalizedEntity {
+    /** The county name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The abbreviated county name. */
     private final String shortName;
+    /** The state this county belongs to. */
     private final String state;
+    /** The population of this county. */
     private final Integer population;
 
     /**

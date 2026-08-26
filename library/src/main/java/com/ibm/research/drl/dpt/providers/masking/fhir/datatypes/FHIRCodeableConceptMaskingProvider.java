@@ -35,14 +35,20 @@ import java.util.Set;
 /** FHIRCodeableConceptMaskingProvider FHIR datatype. */
 public class FHIRCodeableConceptMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the text element. */
     private final boolean maskText;
+    /** Whether to mask the coding element. */
     private final boolean maskCoding;
 
+    /** Masking provider for the coding element. */
     private final FHIRCodingMaskingProvider codingMaskingProvider;
 
+    /** Masking provider for the text element. */
     private final MaskingProvider textMaskingProvider;
 
+    /** JSON path to the coding field. */
     private final String CODING_FIELD_PATH;
+    /** JSON path to the text field. */
     private final String TEXT_PATH;
 
     /**

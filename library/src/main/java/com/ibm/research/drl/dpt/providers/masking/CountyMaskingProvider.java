@@ -29,7 +29,9 @@ import java.security.SecureRandom;
  * Masking provider for US county names.
  */
 public class CountyMaskingProvider implements MaskingProvider {
+    /** Shared county manager instance. */
     private final static CountyManager countyManager = CountyManager.getInstance();
+    /** Whether to apply pseudorandom (hash-based) masking. */
     private final boolean getPseudorandom;
 
     /**

@@ -31,8 +31,11 @@ import java.security.SecureRandom;
  */
 public class PatientIDMaskingProvider implements MaskingProvider {
 
+    /** Shared patient ID identifier instance. */
     private static final PatientIDIdentifier patientIDIdentifier = new PatientIDIdentifier();
+    /** Number of dash-separated groups to preserve in the masked patient ID. */
     private final int preservedGroups;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

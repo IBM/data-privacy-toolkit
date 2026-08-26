@@ -51,7 +51,9 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
                     "[a-z]" // checksum
             ,
             Pattern.CASE_INSENSITIVE);
+    /** Scoring table for characters at odd positions in the fiscal code. */
     private final Map<Character, Integer> oddCharacters = buildOddCharacterMap();
+    /** Scoring table for characters at even positions in the fiscal code. */
     private final Map<Character, Integer> evenCharacters = buildEvenCharacterMap();
 
     private Map<Character, Integer> buildOddCharacterMap() {

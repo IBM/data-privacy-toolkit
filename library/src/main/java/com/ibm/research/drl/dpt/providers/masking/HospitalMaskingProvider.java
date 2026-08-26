@@ -27,7 +27,9 @@ import java.security.SecureRandom;
 
 /** Masking provider that replaces hospital names with random hospital names. */
 public class HospitalMaskingProvider implements MaskingProvider {
+    /** Shared hospital manager instance. */
     private final static HospitalManager hospitalManager = HospitalManager.getInstance();
+    /** Whether to preserve the country of the original hospital when masking. */
     private final boolean preserveCountry;
 
     /**

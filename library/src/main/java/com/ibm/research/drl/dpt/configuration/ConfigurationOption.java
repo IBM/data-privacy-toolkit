@@ -31,8 +31,11 @@ import java.util.Objects;
  * Represents a single configurable option with a value, description, and category.
  */
 public class ConfigurationOption implements Serializable {
+    /** Human-readable description of this option. */
     private String description;
+    /** Category grouping for this option. */
     private String category;
+    /** The option value. */
     private Object value;
 
     /**
@@ -106,6 +109,12 @@ public class ConfigurationOption implements Serializable {
     }
 
 
+    /**
+     * Custom serialisation.
+     *
+     * @param out the output stream
+     * @throws IOException if an I/O error occurs
+     */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.writeObject(description);
         out.writeObject(category);
@@ -119,6 +128,13 @@ public class ConfigurationOption implements Serializable {
         }
     }
 
+    /**
+     * Custom deserialisation.
+     *
+     * @param in the input stream
+     * @throws IOException            if an I/O error occurs
+     * @throws ClassNotFoundException if the serialized class cannot be found
+     */
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.description = (String) in.readObject();
         this.category = (String) in.readObject();

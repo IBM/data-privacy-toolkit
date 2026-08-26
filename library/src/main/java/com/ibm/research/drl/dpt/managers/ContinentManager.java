@@ -46,9 +46,12 @@ public class ContinentManager extends ResourceBasedManager<Continent> {
         return CONTINENT_MANAGER;
     }
 
+    /** Map from country code to the list of continents. */
     private Map<String, List<Continent>> continentListMap;
+    /** KD-tree for spatial lookups, or {@code null} if not yet built. */
     private Map<String, LatLonKDTree<Continent>> latLonTree = null;
 
+    /** Random number generator. */
     private final SecureRandom random = new SecureRandom();
 
     private ContinentManager() {

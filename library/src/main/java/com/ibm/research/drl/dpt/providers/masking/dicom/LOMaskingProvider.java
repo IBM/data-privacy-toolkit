@@ -34,12 +34,17 @@ import java.security.SecureRandom;
  * based on the configured entity type (HOSPITAL, NAME, or GENERIC).
  */
 public class LOMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger logger = LogManager.getLogger(LOMaskingProvider.class);
 
+    /** Generic random masking provider. */
     private final RandomMaskingProvider randomMaskingProvider;
+    /** Name masking provider for NAME entity type. */
     private final MaskingProvider nameMaskingProvider;
+    /** Hospital masking provider for HOSPITAL entity type. */
     private final MaskingProvider hospitalMaskingProvider;
 
+    /** The DICOM entity type driving the masking logic. */
     private final DicomEntityType entityType;
 
     /**

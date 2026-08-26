@@ -30,7 +30,9 @@ import java.security.SecureRandom;
  *
  */
 public class RaceEthnicityMaskingProvider implements MaskingProvider {
+    /** Shared race manager instance. */
     private static final RaceManager raceManager = RaceManager.getInstance();
+    /** Whether to use probability-based masking. */
     private final boolean probabilityBasedMasking;
 
     /**

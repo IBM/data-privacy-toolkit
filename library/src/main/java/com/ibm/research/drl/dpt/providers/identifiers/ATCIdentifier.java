@@ -35,6 +35,7 @@ public class ATCIdentifier extends AbstractManagerBasedIdentifier {
     public ATCIdentifier() {
     }
     private final static ATCManager atcManager = ATCManager.getInstance();
+    /** The appropriate names for this identifier. */
     private final String[] appropriateNames = new String[]{"ATC"};
 
     @Override

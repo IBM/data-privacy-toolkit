@@ -42,6 +42,7 @@ public class LatitudeLongitudeIdentifier extends AbstractRegexBasedIdentifier {
     private final static Pattern dmsCoordinatePattern = Pattern.compile("(?<nsDegrees>[0-9]{1,2})[:|°](?<nsMinutes>[0-9]{1,2})[:|'](?<nsSeconds>(?:\\b[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+\\b))\"?(?<ns>[N|S])[ |,](?<ewDegrees>[0-9]{1,2})[:|°](?<ewMinutes>[0-9]{1,2})[:|'](?<ewSeconds>(?:\\b[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+\\b))\"?(?<ew>[E|W])",
             Pattern.UNICODE_CASE);
 
+    /** The set of patterns used to recognise latitude/longitude values. */
     private final Collection<Pattern> coordinatePatterns = new ArrayList<>(Arrays.asList(
             latlonPattern, compassPattern, dmsCoordinatePattern
     ));

@@ -33,13 +33,21 @@ import java.util.Set;
  * The type Name masking provider.
  */
 public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** The names dataset used for masking. */
     private final NamesManager.Names names;
+    /** Whether to allow names of any gender when masking. */
     private final boolean allowAnyGender;
+    /** The separator string between name components. */
     private final String separator;
+    /** The whitespace string used between name tokens. */
     private final String whitespace;
+    /** Virtual field name for the masking sub-provider. */
     private final String virtualField;
+    /** Masking provider for the virtual field. */
     private final MaskingProvider virtualFieldMaskingProvider;
+    /** Whether to apply pseudorandom (hash-based) masking. */
     private final boolean getPseudorandom;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

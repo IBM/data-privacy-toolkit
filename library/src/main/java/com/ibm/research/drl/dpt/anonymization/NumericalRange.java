@@ -31,15 +31,25 @@ import java.util.Map;
  * and precomputed range metadata.
  */
 public class NumericalRange implements ColumnInformation {
+    /** The column type. */
     private final ColumnType columnType;
+    /** The range (max − min) of values, or {@code null} if empty. */
     private final Double range;
+    /** The minimum value, or {@code null} if empty. */
     private final Double low;
+    /** The maximum value, or {@code null} if empty. */
     private final Double high;
+    /** String representation of the interval. */
     private final String representation;
+    /** Number of distinct values. */
     private final int numberOfValues;
+    /** Sorted list of values. */
     private final List<Double> sortedValues;
+    /** Map from value to its zero-based position in the sorted list. */
     private final Map<Double, Integer> positionMap;
+    /** The column weight. */
     private final double weight;
+    /** Whether this range is used for linking. */
     private final boolean isForLinking;
 
     @Override

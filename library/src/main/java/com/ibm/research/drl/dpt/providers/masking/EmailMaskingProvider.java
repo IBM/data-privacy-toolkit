@@ -36,16 +36,26 @@ import java.util.Set;
  */
 
 public class EmailMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(EmailMaskingProvider.class);
 
+    /** Shared email identifier instance. */
     private static final EmailIdentifier emailIdentifier = new EmailIdentifier();
+    /** Number of domain levels to preserve in the masked address. */
     private final int preserveDomains;
+    /** Whether to generate a name-based username when randomising. */
     private final boolean nameBasedUsername;
+    /** Virtual field name for the username component masking provider. */
     private final String usernameVirtualField;
+    /** Virtual field name for the domain component masking provider. */
     private final String domainVirtualField;
+    /** Masking provider for the username component. */
     private final MaskingProvider usernameVirtualFieldMaskingProvider;
+    /** Masking provider for the domain component. */
     private final MaskingProvider domainVirtualFieldMaskingProvider;
+    /** Number of IP subnet octets to preserve when masking a domain. */
     private final int preserveSubnets;
+    /** The configured failure mode. */
     private final int failMode;
 
 

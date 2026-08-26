@@ -28,6 +28,7 @@ import java.security.SecureRandom;
  * DICOM DA (Date) masking provider that delegates to {@link com.ibm.research.drl.dpt.providers.masking.DateTimeMaskingProvider}.
  */
 public class DAMaskingProvider implements MaskingProvider {
+    /** Delegate date/time masking provider. */
     private final DateTimeMaskingProvider dateTimeMaskingProvider;
 
     /**

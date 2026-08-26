@@ -29,6 +29,7 @@ import java.util.List;
 
 /** Compiled JSON pointer expression used to locate and mutate nodes in a JSON tree. */
 public final class JSONPath implements Serializable {
+    /** The JSON pointer string for this path expression. */
     private final String pattern;
 
     private JSONPath(final String pattern) {

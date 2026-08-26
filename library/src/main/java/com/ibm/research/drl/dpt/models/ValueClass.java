@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Classifies the semantic type of a data value. */
 public enum ValueClass {
     /**
      * Numeric value class.

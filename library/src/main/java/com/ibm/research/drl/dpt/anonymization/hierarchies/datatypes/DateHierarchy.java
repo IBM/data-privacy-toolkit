@@ -41,8 +41,11 @@ public class DateHierarchy implements GeneralizationHierarchy {
     private static final int MONTH_LEVEL = 1;
     private static final int DAY_LEVEL = 0;
 
+    /** Date format matching year, month, and day. */
     private final SimpleDateFormat yearMonthDaySimpleDateFormat;
+    /** Date format matching year and month. */
     private final SimpleDateFormat yearMonthSimpleDateFormat;
+    /** Date format matching year only. */
     private final SimpleDateFormat yearSimpleDateFormat;
 
     private static final SimpleDateFormat yearOnlySimpleDateFormat = new SimpleDateFormat("yyyy");

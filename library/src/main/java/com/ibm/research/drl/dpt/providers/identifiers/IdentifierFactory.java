@@ -117,6 +117,7 @@ public final class IdentifierFactory implements Serializable {
         }
     }
 
+    /** Helper that holds the identifier registry. */
     private final IdentifierFactoryHelper helper;
 
     /**

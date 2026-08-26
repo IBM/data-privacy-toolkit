@@ -25,7 +25,9 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
  * Masking provider that replaces or removes monetary digits from string values.
  */
 public class MonetaryMaskingProvider implements MaskingProvider {
+    /** The character used to replace masked digits. */
     private final String replacingCharacter;
+    /** Whether to preserve the original value length when masking. */
     private final boolean preserveSize;
 
     /**

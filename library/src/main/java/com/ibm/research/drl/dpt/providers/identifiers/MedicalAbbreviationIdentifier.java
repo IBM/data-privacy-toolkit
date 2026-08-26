@@ -38,8 +38,11 @@ import java.util.stream.StreamSupport;
  * Identifier for medical abbreviations loaded from a bundled resource file.
  */
 public class MedicalAbbreviationIdentifier extends AbstractIdentifier {
+    /** The set of known medical abbreviations. */
     private final Set<String> terms;
+    /** The minimum length of a valid abbreviation. */
     private final int minimumLength;
+    /** The maximum length of a valid abbreviation. */
     private final int maximumLength;
 
     /**

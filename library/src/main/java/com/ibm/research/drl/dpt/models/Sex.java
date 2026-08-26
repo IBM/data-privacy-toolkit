@@ -20,7 +20,9 @@ package com.ibm.research.drl.dpt.models;
 
 /** Model representing a biological sex with localization support. */
 public class Sex implements LocalizedEntity {
+    /** The sex name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
 
     /**

@@ -26,6 +26,7 @@ import java.security.SecureRandom;
 
 /** DICOM date/time masking provider. */
 public class DTMaskingProvider implements MaskingProvider {
+    /** Delegate date/time masking provider. */
     private final DateTimeMaskingProvider dateTimeMaskingProvider;
 
     /**

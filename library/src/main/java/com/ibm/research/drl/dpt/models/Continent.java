@@ -25,9 +25,13 @@ import java.util.List;
  */
 public class Continent implements Location, LocalizedEntity {
 
+    /** The continent name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The geographic coordinates. */
     private final LatitudeLongitude latitudeLongitude;
+    /** Nearby continents. */
     private List<Continent> neighbors;
 
     /**

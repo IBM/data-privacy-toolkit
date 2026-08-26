@@ -20,9 +20,15 @@ package com.ibm.research.drl.dpt.anonymization.hierarchies.datatypes;
 
 import com.ibm.research.drl.dpt.anonymization.hierarchies.MaterializedHierarchy;
 
+/** Pre-computed materialized generalization hierarchy for all 100,000 US ZIP codes. */
 public class ZIPCodeMaterializedHierarchy extends MaterializedHierarchy {
     private static final ZIPCodeMaterializedHierarchy instance = new ZIPCodeMaterializedHierarchy();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton {@code ZIPCodeMaterializedHierarchy}
+     */
     public static ZIPCodeMaterializedHierarchy getInstance() {
         return instance;
     }

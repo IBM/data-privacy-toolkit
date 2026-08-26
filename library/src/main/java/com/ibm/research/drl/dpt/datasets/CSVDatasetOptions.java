@@ -31,9 +31,13 @@ import java.io.Serializable;
 public class CSVDatasetOptions implements DatasetOptions, Serializable {
 
     private static final long serialVersionUID = 1302896564898158708L;
+    /** The field delimiter character. */
     private final Character fieldDelimiter;
+    /** The quote character. */
     private final Character quoteChar;
+    /** Whether the CSV data has a header row. */
     private final boolean hasHeader;
+    /** Whether to trim whitespace from field values. */
     private final boolean trimFields;
 
     /**

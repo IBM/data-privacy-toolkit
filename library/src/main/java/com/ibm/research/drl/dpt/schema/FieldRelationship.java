@@ -27,9 +27,13 @@ import java.util.List;
 
 /** Describes a relationship between two fields for consistent masking. */
 public class FieldRelationship implements Serializable {
+    /** The name of the related field. */
     private final String fieldName;
+    /** The value class of this field relationship. */
     private final ValueClass valueClass;
+    /** The operands involved in this relationship. */
     private final RelationshipOperand[] operands;
+    /** The type of relationship between the fields. */
     private final RelationshipType relationshipType;
 
     /**

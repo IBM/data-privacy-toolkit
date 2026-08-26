@@ -30,8 +30,10 @@ import java.util.Map;
  *
  */
 public class FieldMaskingConfiguration implements MaskingConfiguration, Serializable {
+    /** The parent (default) masking configuration. */
     private final MaskingConfiguration parent;
 
+    /** Field-specific option overrides. */
     private final Map<String, ConfigurationOption> fieldOptions;
 
     /**

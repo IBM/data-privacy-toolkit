@@ -29,7 +29,9 @@ import java.util.Objects;
  *
  */
 public class SimpleSchemaField implements IPVSchemaField, Serializable {
+    /** The field name. */
     private final String name;
+    /** The field type. */
     private final IPVSchemaFieldType type;
 
     /**

@@ -44,10 +44,15 @@ import java.util.Map;
 
 /** Masking provider for Excel files. */
 public class ExcelMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger logger = LogManager.getLogger(ExcelMaskingProvider.class);
+    /** The input format type (XLS or XLSX). */
     private final DataTypeFormat inputFormatType;
+    /** Map of field paths to masking targets. */
     private final Map<String, DataMaskingTarget> toBeMasked;
+    /** The masking provider factory used to create per-field providers. */
     private final MaskingProviderFactory maskingProviderFactory;
+    /** Whether to silently ignore non-existent fields in the workbook. */
     private final boolean ignoreNonExistent;
 
     /**

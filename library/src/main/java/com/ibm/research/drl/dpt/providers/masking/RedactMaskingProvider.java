@@ -25,8 +25,11 @@ import java.security.SecureRandom;
 
 /** Masking provider that redacts values by replacing characters with a configurable replacement character. */
 public class RedactMaskingProvider implements MaskingProvider {
+    /** Whether to preserve the original value length when redacting. */
     private final boolean preserveLength;
+    /** The character used to replace original characters. */
     private final String replacementCharacter;
+    /** The fixed length to use when not preserving the original length. */
     private final int replacementLength;
 
     /**
