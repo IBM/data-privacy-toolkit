@@ -29,9 +29,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/** DICOM PN (person name) masking provider that masks each name component. */
 public class PNMaskingProvider implements MaskingProvider {
     private final MaskingProvider nameMaskingProvider;
 
+    /**
+     * Constructs a PNMaskingProvider.
+     *
+     * @param random               the secure random source
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public PNMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this.nameMaskingProvider = new NameMaskingProvider(random, maskingConfiguration, factory);
     }

@@ -26,10 +26,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * The type Patient id identifier.
- */
+/** Identifier for patient ID values matching the pattern {@code NNN-NNN-NNN-NNN}. */
 public class PatientIDIdentifier extends AbstractRegexBasedIdentifier {
+
+    /** Constructs a PatientIDIdentifier. */
+    public PatientIDIdentifier() {}
+
     private static final String[] appropriateNames = {"Patient ID", "PatientID"};
     private final Collection<Pattern> patientIDPatterns = new ArrayList<>(List.of(
             Pattern.compile("^\\d{3}-\\d{3}-\\d{3}-\\d{3}$")

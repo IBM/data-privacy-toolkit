@@ -20,6 +20,12 @@ package com.ibm.research.drl.dpt.models;
 
 import java.io.Serializable;
 
+/** An entity that carries an associated probability score. */
 public interface ProbabilisticEntity extends Serializable {
+    /**
+     * Returns the probability associated with this entity.
+     *
+     * @return the probability in the range [0.0, 1.0]
+     */
     double getProbability();
 }

@@ -505,6 +505,11 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
         this.tokenizer = buildTokenizer();
     }
 
+    /**
+     * Returns the identifier factory used by this annotator.
+     *
+     * @return the identifier factory
+     */
     public IdentifierFactory getIdentifierFactory() {
         return this.identifierFactory;
     }

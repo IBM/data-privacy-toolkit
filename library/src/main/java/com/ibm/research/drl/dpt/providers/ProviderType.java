@@ -38,8 +38,10 @@ public final class ProviderType implements Serializable {
      */
     public static final ProviderType EMPTY = new ProviderType("EMPTY", "Empty", "Empty", TypeClass.CATEGORICAL, true);
 
+    /** The constant SORT_CODE. */
     public static final ProviderType SORT_CODE = new ProviderType("SORT_CODE", "SORT CODE", "");
 
+    /** The constant AGE. */
     public static final ProviderType AGE = new ProviderType("AGE", "Age", "Masks age values", TypeClass.NUMERICAL);
     /**
      * The constant NUMERIC.
@@ -50,6 +52,7 @@ public final class ProviderType implements Serializable {
      */
     public static final ProviderType NAME = new ProviderType("NAME", "Name", "Masks names (with gender preservation) and surnames");
 
+    /** The constant ANIMAL. */
     public static final ProviderType ANIMAL = new ProviderType("ANIMAL", "Animal", "Masks animal species");
     /**
      * The constant EMAIL.
@@ -104,6 +107,7 @@ public final class ProviderType implements Serializable {
      */
     public static final ProviderType DUMMY = new ProviderType("DUMMY", "Dummy", "Reflects original value back");
 
+    /** The constant BINNING. */
     public static final ProviderType BINNING = new ProviderType("BINNING", "Binning", "Bins numerical values");
     /**
      * The constant ICDv9.
@@ -199,8 +203,10 @@ public final class ProviderType implements Serializable {
      */
     public static final ProviderType NULL = new ProviderType("NULL", "Null", "Replaces the value with an empty one", TypeClass.CATEGORICAL, false);
 
+    /** The constant HASH. */
     public static final ProviderType HASH = new ProviderType("HASH", "Hash", "Hashes the value", TypeClass.CATEGORICAL, false);
 
+    /** The constant SHIFT. */
     public static final ProviderType SHIFT = new ProviderType("SHIFT", "Shift", "Shifts the value", TypeClass.NUMERICAL, false);
 
     /**
@@ -208,71 +214,77 @@ public final class ProviderType implements Serializable {
      */
     public static final ProviderType STATES_US = new ProviderType("STATES_US", "US States", "Replaces the US States value", TypeClass.CATEGORICAL, false);
 
+    /** The constant GENDER. */
     public static final ProviderType GENDER = new ProviderType("GENDER", "Gender", "Replaces the genders");
-
+    /** The constant COUNTY. */
     public static final ProviderType COUNTY = new ProviderType("COUNTY", "Counties", "Replaces the county names");
-
+    /** The constant FHIR. */
     public static final ProviderType FHIR = new ProviderType("FHIR", "FHIR objects", "Masks FHIR objects");
-
+    /** The constant ORGANIZATION. */
     public static final ProviderType ORGANIZATION = new ProviderType("ORGANIZATION", "Organizations", "Masks organizations");
+    /** The constant GENERIC_LOCATION. */
     public static final ProviderType GENERIC_LOCATION = new ProviderType("GENERIC_LOCATION", "Locations", "Masks generic locations");
+    /** The constant LOCATION. */
     public static final ProviderType LOCATION = new ProviderType("LOCATION", "Locations", "Masks generic locations");
-
+    /** The constant HASHINT. */
     public static final ProviderType HASHINT = new ProviderType("HASHINT", "Hash and convert to int", "Hashes the incoming (integer) value and returns an integer (as a string)");
-
+    /** The constant OPE. */
     public static final ProviderType OPE = new ProviderType("OPE", "Order Preserving Encryption", "Encrypts numerical, positive, integer value in an order preserving manner");
-
+    /** The constant REDACT. */
     public static final ProviderType REDACT = new ProviderType("REDACT", "Redact provider type", "Remove the value replacing it with an appropriate number of X");
-
+    /** The constant MONETARY. */
     public static final ProviderType MONETARY = new ProviderType("MONETARY", "Monetary value provider type", "Redact the monetary value replacing the digits");
-
+    /** The constant ZIPCODE. */
     public static final ProviderType ZIPCODE = new ProviderType("ZIPCODE", "ZIP codes", "Replaces the ZIP codes");
+    /** The constant POSTCODE. */
     public static final ProviderType POSTCODE = new ProviderType("POSTCODE", "UK post codes", "Replaces the UK Post codes");
-
+    /** The constant YOB. */
     public static final ProviderType YOB = new ProviderType("YOB", "Year of birth", "Replaces the year of birth");
-
+    /** The constant NUMBERVARIANCE. */
     public static final ProviderType NUMBERVARIANCE = new ProviderType("NUMBERVARIANCE", "Number variance", "Replaces numerical date with a random variance");
-
+    /** The constant BOOLEAN. */
     public static final ProviderType BOOLEAN = new ProviderType("BOOLEAN", "Boolean", "Replaces boolean values with another random boolean value");
-
-
+    /** The constant STREET_TYPES. */
     public static final ProviderType STREET_TYPES = new ProviderType("STREET_TYPES", "Street types provider type", "Randomizes street types");
-
+    /** The constant DEPENDENT. */
     public static final ProviderType DEPENDENT = new ProviderType("DEPENDENT", "Dependent provider type", "Randomizes dependents");
-
+    /** The constant FREE_TEXT. */
     public static final ProviderType FREE_TEXT = new ProviderType("FREE_TEXT", "Free text provider type", "Mask provider type");
-
+    /** The constant DAY. */
     public static final ProviderType DAY = new ProviderType("DAY", "Day masking provider type", "Mask day provider type");
+    /** The constant MONTH. */
     public static final ProviderType MONTH = new ProviderType("MONTH", "Month masking provider type", "Mask month provider type");
-
+    /** The constant SYMPTOM. */
     public static final ProviderType SYMPTOM = new ProviderType("SYMPTOM", "Symptom", "Mask symptoms");
+    /** The constant PROCEDURE. */
     public static final ProviderType PROCEDURE = new ProviderType("PROCEDURE", "Procedure", "Mask procedures");
-
+    /** The constant HEIGHT. */
     public static final ProviderType HEIGHT = new ProviderType("HEIGHT", "Height", "Masks height values", TypeClass.NUMERICAL);
-
+    /** The constant MRN. */
     public static final ProviderType MRN = new ProviderType("MRN", "Medical Record Number", "Medical record number");
-
+    /** The constant TEMPORAL. */
     public static final ProviderType TEMPORAL = new ProviderType("TEMPORAL", "Temporal pattern", "Temporal pattern");
-
+    /** The constant TIME. */
     public static final ProviderType TIME = new ProviderType("TIME", "Time pattern", "Time pattern");
-
+    /** The constant REPLACE_FIXED. */
     public static final ProviderType REPLACE_FIXED = new ProviderType("REPLACE_FIXED", "Replace fixed", "Replace fixed");
-
+    /** The constant CHAMELEON. */
     public static final ProviderType CHAMELEON = new ProviderType("CHAMELEON", "Chameleon Pseudonyms", "Chameleon Pseudonyms");
+    /** The constant DIFFERENTIAL_PRIVACY. */
     public static final ProviderType DIFFERENTIAL_PRIVACY = new ProviderType("DIFFERENTIAL_PRIVACY", "Differential Privacy", "e-differential privacy");
-
+    /** The constant SUPPRESS_FIELD. */
     public static final ProviderType SUPPRESS_FIELD = new ProviderType("SUPPRESS_FIELD", "Suppress field", "Suppress the entire field");
-
+    /** The constant DICTIONARY_BASED. */
     public static final ProviderType DICTIONARY_BASED = new ProviderType("DICTIONARY_BASED", "Dictionary based",
             "Replaces values based on dictionaries");
-
+    /** The constant DECIMAL_ROUNDING. */
     public static final ProviderType DECIMAL_ROUNDING = new ProviderType("DECIMAL_ROUNDING", "Decimal rounding",
             "Rounds decimal points");
-
+    /** The constant RATIO_BASED. */
     public static final ProviderType RATIO_BASED = new ProviderType("RATIO_BASED", "Ratio-based", "Ratio based");
-
+    /** The constant GENERALIZATION. */
     public static final ProviderType GENERALIZATION = new ProviderType("GENERALIZATION", "Generalization-based masking", "Generalization-based");
-
+    /** The constant PERSON. */
     public static final ProviderType PERSON = new ProviderType("PERSON", "Generic person", "Person");
 
     private final String name;

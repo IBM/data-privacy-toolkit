@@ -32,7 +32,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.List;
 
+/** Format processor that reads and masks plain-text (UTF-8) documents. */
 public class PlainFreeTextFormatProcessor implements FreeTextFormatProcessor {
+
+    /** Constructs a PlainFreeTextFormatProcessor. */
+    public PlainFreeTextFormatProcessor() {}
+
     private final static Logger logger = LogManager.getLogger(PlainFreeTextFormatProcessor.class);
 
     @Override
