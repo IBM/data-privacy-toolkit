@@ -24,11 +24,14 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.security.SecureRandom;
 
+/** DICOM TM (time) masking provider. */
 public class TMMaskingProvider implements MaskingProvider {
     private final DateTimeMaskingProvider dateTimeMaskingProvider;
 
     /**
-     * Instantiates a new Tm masking provider.
+     * Constructs a TMMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
      */
     public TMMaskingProvider(MaskingConfiguration maskingConfiguration) {
         /*
@@ -48,6 +51,12 @@ public class TMMaskingProvider implements MaskingProvider {
         dateTimeMaskingProvider = new DateTimeMaskingProvider(maskingConfiguration);
     }
 
+    /**
+     * Constructs a TMMaskingProvider.
+     *
+     * @param random               the secure random source (unused, retained for API compatibility)
+     * @param maskingConfiguration the masking configuration
+     */
     public TMMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this(maskingConfiguration);
     }

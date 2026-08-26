@@ -24,13 +24,25 @@ import com.ibm.research.drl.dpt.providers.masking.RandomMaskingProvider;
 
 import java.security.SecureRandom;
 
+/** DICOM UI (unique identifier) masking provider. */
 public class UIMaskingProvider implements MaskingProvider {
     private final RandomMaskingProvider randomMaskingProvider;
 
+    /**
+     * Constructs a UIMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public UIMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this.randomMaskingProvider = new RandomMaskingProvider(maskingConfiguration);
     }
 
+    /**
+     * Constructs a UIMaskingProvider.
+     *
+     * @param random               the secure random source (unused, retained for API compatibility)
+     * @param maskingConfiguration the masking configuration
+     */
     public UIMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this(maskingConfiguration);
     }

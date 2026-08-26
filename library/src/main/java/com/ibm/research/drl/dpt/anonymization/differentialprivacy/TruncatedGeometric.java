@@ -18,7 +18,12 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
+/** Differential-privacy geometric mechanism with output truncated to [lowerBound, upperBound]. */
 public class TruncatedGeometric extends Geometric {
+
+    /** Constructs a TruncatedGeometric. */
+    public TruncatedGeometric() {}
+
     @Override
     public double randomise(double value) {
         double noisyNumValue = super.randomise(value);

@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 
 
+/** Masking provider for timestamp values, supporting component-level masking. */
 public class TimeStampMaskingProvider implements MaskingProvider {
     private DateTimeFormatter formatter;
     private final boolean year;
@@ -37,6 +38,12 @@ public class TimeStampMaskingProvider implements MaskingProvider {
     private final boolean second;
     private final String fixedFormat;
 
+    /**
+     * Constructs a TimeStampMaskingProvider.
+     *
+     * @param ignore        unused random source
+     * @param configuration the masking configuration
+     */
     public TimeStampMaskingProvider(SecureRandom ignore, MaskingConfiguration configuration) {
         this.fixedFormat = configuration.getStringValue("timestamp.mask.format");
         this.year = configuration.getBooleanValue("timestamp.mask.year");

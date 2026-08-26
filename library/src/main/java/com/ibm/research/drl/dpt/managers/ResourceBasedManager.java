@@ -34,14 +34,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-/** Base class for managers that load localization resources from CSV files. */
+/**
+ * Base class for managers that load localization resources from CSV files.
+ *
+ * @param <K> the type of value stored in this manager
+ */
 public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
     private static final String allCountriesName = "__all__";
     private final Map<String, MapWithRandomPick<String, K>> resourceMap;
     private final Map<String, List<String>> listMap;
     private final Map<String, List<Pair<String, Double>>> probMap;
     private final Map<String, EnumeratedDistribution<String>> probDistMap;
+    /** The minimum key length seen across loaded resources. */
     protected int minimumLength;
+    /** The maximum key length seen across loaded resources. */
     protected int maximumLength;
 
     /**

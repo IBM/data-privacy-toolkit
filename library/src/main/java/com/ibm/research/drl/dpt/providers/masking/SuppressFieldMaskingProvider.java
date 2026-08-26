@@ -22,7 +22,14 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 import java.security.SecureRandom;
 
+/** Masking provider that suppresses a field entirely by returning {@code null}. */
 public class SuppressFieldMaskingProvider implements MaskingProvider {
+    /**
+     * Constructs a SuppressFieldMaskingProvider.
+     *
+     * @param random        the secure random source (unused)
+     * @param configuration the masking configuration (unused)
+     */
     public SuppressFieldMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
     }
 
