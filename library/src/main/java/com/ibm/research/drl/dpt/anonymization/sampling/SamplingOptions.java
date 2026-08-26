@@ -24,6 +24,7 @@ import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 /** Configuration options for the sampling anonymization algorithm. */
 public class SamplingOptions implements AnonymizationAlgorithmOptions {
 
+    /** The fraction of rows to retain (0.0–1.0). */
     private final double percentage;
 
     /**

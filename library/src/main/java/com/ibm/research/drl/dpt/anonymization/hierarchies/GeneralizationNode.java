@@ -29,14 +29,21 @@ import java.util.Set;
 
 /** A node in a generalization hierarchy tree. */
 public class GeneralizationNode implements Serializable {
+    /** The value stored at this node (upper-cased). */
     private final String value;
+    /** Whether this node is a leaf in the hierarchy. */
     private final boolean isLeaf;
 
+    /** Number of leaf nodes reachable from this node. */
     private int numberOfLeaves;
+    /** Depth of this node from the top (root is at the maximum depth). */
     private int level;
+    /** Ancestors of this node from the immediate parent to the root. */
     private List<GeneralizationNode> parents;
+    /** Direct children of this node. */
     private final List<GeneralizationNode> children;
 
+    /** Map from covered leaf values (upper-cased) to their nodes. */
     private final Map<String, GeneralizationNode> coverMap = new HashMap<>();
 
     /**

@@ -29,10 +29,15 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarch
  * Column information for categorical quasi-identifier columns, backed by a generalization hierarchy.
  */
 public class CategoricalInformation implements ColumnInformation {
+    /** The column type. */
     private final ColumnType columnType;
+    /** The generalization hierarchy. */
     private final GeneralizationHierarchy hierarchy;
+    /** The column weight. */
     private final double weight;
+    /** The maximum generalization level, or -1 for no limit. */
     private final int maximumLevel;
+    /** Whether this column is used for linking. */
     private final boolean forLinking;
 
     /**

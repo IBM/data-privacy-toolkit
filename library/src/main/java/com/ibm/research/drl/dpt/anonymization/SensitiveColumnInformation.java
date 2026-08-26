@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Column-information descriptor for sensitive (quasi-sensitive) columns. */
 public class SensitiveColumnInformation implements ColumnInformation {
+    /** Whether this column is used for linking. */
     private final boolean isForLinking;
 
     /** Constructs a SensitiveColumnInformation that is not used for linking. */

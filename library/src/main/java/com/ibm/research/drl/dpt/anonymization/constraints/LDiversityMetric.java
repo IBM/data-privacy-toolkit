@@ -30,6 +30,7 @@ import java.util.List;
  * sensitive values within each equivalence class.
  */
 public class LDiversityMetric extends KAnonymityMetric {
+    /** Per-sensitive-column histograms of sensitive values in this equivalence class. */
     private final List<Histogram<String>> histograms;
 
     /**

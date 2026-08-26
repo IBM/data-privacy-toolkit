@@ -30,18 +30,30 @@ import java.util.Map;
 
 /** Configuration options for differential privacy mechanisms. */
 public class DifferentialPrivacyMechanismOptions implements AnonymizationAlgorithmOptions {
+    /** Named string value overrides. */
     private final Map<String, String> values = new HashMap<>();
+    /** Whether to derive bounds from data (default true). */
     private boolean getBoundsFromData = true;
+    /** Whether to apply DP per equivalence class. */
     private boolean DPPerEquivalenceClass = false;
+    /** Whether {@link #DPPerEquivalenceClass} was explicitly set. */
     private boolean overrideDefaultDPPerEquivalenceClass = false;
+    /** The DP mechanism to use. */
     private DPMechanism mechanism;
 
+    /** Lower bound for numerical noise range. */
     private double lowerBound = Double.NEGATIVE_INFINITY;
+    /** Upper bound for numerical noise range. */
     private double upperBound = Double.POSITIVE_INFINITY;
+    /** Generalization hierarchy for categorical mechanism. */
     private GeneralizationHierarchy hierarchy;
+    /** The two binary domain values. */
     private Tuple<String, String> binaryValues;
+    /** The privacy budget. */
     private double epsilon;
+    /** Whether to auto-detect binary values from data. */
     private boolean autodetectBinaryValues;
+    /** Whether to auto-detect bounds from data. */
     private boolean autodetectBounds;
     
     /**

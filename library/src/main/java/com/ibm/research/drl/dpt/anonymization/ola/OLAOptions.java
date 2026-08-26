@@ -36,8 +36,10 @@ public class OLAOptions implements AnonymizationAlgorithmOptions {
         return suppressionRate;
     }
 
+    /** The maximum suppression rate (0.0–1.0). */
     private final double suppressionRate;
 
+    /** Named integer value overrides. */
     private final Map<String, Integer> values = new HashMap<>();
 
     @Override

@@ -33,8 +33,11 @@ public class LatitudeLongitudeHierarchy implements GeneralizationHierarchy, Seri
 
     /** Constructs a LatitudeLongitudeHierarchy. */
     public LatitudeLongitudeHierarchy() {}
+    /** The top-level generalization term. */
     private final String topTerm = "0,0";
+    /** Identifier used to parse latitude/longitude values. */
     private final static LatitudeLongitudeIdentifier LATITUDE_LONGITUDE_IDENTIFIER = new LatitudeLongitudeIdentifier();
+    /** The number of generalization levels (original value + 7 precision reductions + top term). */
     private final int height = 9;
 
     @Override

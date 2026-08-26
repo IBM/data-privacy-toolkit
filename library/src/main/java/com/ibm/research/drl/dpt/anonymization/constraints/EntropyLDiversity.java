@@ -34,6 +34,7 @@ import java.util.List;
 
 /** Privacy constraint enforcing entropy l-diversity. */
 public class EntropyLDiversity implements PrivacyConstraint {
+    /** The entropy threshold (l-diversity parameter). */
     private final int l;
 
     /**

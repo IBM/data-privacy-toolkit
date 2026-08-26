@@ -38,12 +38,18 @@ import java.util.Map;
 /** Privacy constraint enforcing t-closeness: the distribution of sensitive values in each partition must be close to the global distribution. */
 public class TCloseness implements PrivacyConstraint {
 
+    /** The maximum permitted distance between partition and global distributions. */
     private final double t;
 
+    /** Column information list, set during {@link #initialize}. */
     private List<ColumnInformation> columnInformationList;
+    /** Per-column global frequency histograms for numerical sensitive columns. */
     private List<Histogram<Double>> histograms;
+    /** Per-column global frequency histograms for categorical sensitive columns. */
     private List<Histogram<String>> categoricalHistograms;
+    /** Per-column sorted lists of all values for numerical sensitive columns. */
     private List<List<Double>> totalOrdered;
+    /** Total record count, set during {@link #initialize}. */
     private Long totalCount;
 
     /**

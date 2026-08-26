@@ -39,7 +39,9 @@ public class HeightHierarchy implements GeneralizationHierarchy {
     /** Constructs a HeightHierarchy (private — use {@link #getInstance()}). */
     private HeightHierarchy() {}
 
+    /** The top-level generalization term. */
     private final String topTerm = "*";
+    /** Generalization step sizes in centimetres. */
     private final int[] steps = {1, 2, 4, 8, 10, 20, 30};
 
     @Override
