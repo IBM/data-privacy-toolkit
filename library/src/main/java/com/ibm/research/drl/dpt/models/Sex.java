@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a biological sex with localization support. */
 public class Sex implements LocalizedEntity {
     private final String name;
     private final String nameCountryCode;

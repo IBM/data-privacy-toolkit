@@ -23,7 +23,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for UK Social Security Number (SSNUK) values. */
 public class SSNUKIdentifier extends AbstractIdentifier {
+
+    /** Constructs a SSNUKIdentifier. */
+    public SSNUKIdentifier() {}
+
     /**
      * The Appropriate names.
      */

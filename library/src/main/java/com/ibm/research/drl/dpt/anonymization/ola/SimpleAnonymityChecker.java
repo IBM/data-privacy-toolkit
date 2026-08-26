@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/** Implementation of {@link AnonymityChecker} that verifies privacy constraints against a dataset. */
 public class SimpleAnonymityChecker implements AnonymityChecker {
     private final IPVDataset dataset;
     private final List<ColumnInformation> columnInformationList;
@@ -92,9 +93,11 @@ public class SimpleAnonymityChecker implements AnonymityChecker {
 
 
     /**
-     * Instantiates a new Anonymity checker.
+     * Constructs a SimpleAnonymityChecker.
      *
-     * @param columnInformationList the column information list
+     * @param dataset               the dataset to check
+     * @param columnInformationList the column metadata
+     * @param privacyConstraints    the privacy constraints to enforce
      */
     public SimpleAnonymityChecker(IPVDataset dataset, List<ColumnInformation> columnInformationList, List<PrivacyConstraint> privacyConstraints) {
         this.dataset = dataset;

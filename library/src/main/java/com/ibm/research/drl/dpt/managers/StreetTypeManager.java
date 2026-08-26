@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for street type resources. */
 public class StreetTypeManager extends ResourceBasedManager<String> {
 
     private static final Collection<ResourceEntry> resourceStreetNameList =

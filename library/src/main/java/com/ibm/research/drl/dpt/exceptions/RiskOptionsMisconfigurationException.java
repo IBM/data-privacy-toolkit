@@ -18,7 +18,13 @@ under the License.
 */
 package com.ibm.research.drl.dpt.exceptions;
 
+/** Exception thrown when risk analysis options are misconfigured. */
 public class RiskOptionsMisconfigurationException extends MisconfigurationException {
+    /**
+     * Constructs a RiskOptionsMisconfigurationException.
+     *
+     * @param message the detail message
+     */
     public RiskOptionsMisconfigurationException(String message) {
         super(message);
     }

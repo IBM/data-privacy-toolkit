@@ -26,12 +26,21 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
 import java.util.List;
 
+/** Abstract base for k-means anonymization suppression/reassignment strategies. */
 public abstract class StrategyImpl {
     private final IPVDataset original;
     private final double suppressionRate;
     private final List<ColumnInformation> columnInformationList;
     private final List<PrivacyConstraint> privacyConstraints;
 
+    /**
+     * Constructs a StrategyImpl.
+     *
+     * @param original              the original dataset
+     * @param suppressionRate       the maximum fraction of records that may be suppressed
+     * @param columnInformationList column metadata
+     * @param privacyConstraints    the privacy constraints to enforce
+     */
     public StrategyImpl(IPVDataset original,
                         double suppressionRate,
                         List<ColumnInformation> columnInformationList,

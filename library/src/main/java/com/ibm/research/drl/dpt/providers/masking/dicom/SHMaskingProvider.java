@@ -24,13 +24,25 @@ import com.ibm.research.drl.dpt.providers.masking.RandomMaskingProvider;
 
 import java.security.SecureRandom;
 
+/** DICOM SH (short string) masking provider that randomizes character values. */
 public class SHMaskingProvider implements MaskingProvider {
     private final RandomMaskingProvider randomMaskingProvider;
 
+    /**
+     * Constructs a SHMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public SHMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this.randomMaskingProvider = new RandomMaskingProvider(maskingConfiguration);
     }
 
+    /**
+     * Constructs a SHMaskingProvider.
+     *
+     * @param random               the secure random source (unused, retained for API compatibility)
+     * @param maskingConfiguration the masking configuration
+     */
     public SHMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this(maskingConfiguration);
     }

@@ -25,13 +25,21 @@ import com.ibm.research.drl.dpt.models.State;
 
 import java.security.SecureRandom;
 
+/** Masking provider for US state name values. */
 public class StatesUSMaskingProvider implements MaskingProvider {
     private final static StatesUSManager statesUSManager = StatesUSManager.getInstance();
 
+    /** Constructs a StatesUSMaskingProvider with default configuration. */
     public StatesUSMaskingProvider() {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a StatesUSMaskingProvider.
+     *
+     * @param random               the secure random source (unused)
+     * @param maskingConfiguration the masking configuration (unused)
+     */
     public StatesUSMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
     }
 
