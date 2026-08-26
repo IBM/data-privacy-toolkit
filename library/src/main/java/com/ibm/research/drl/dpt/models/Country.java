@@ -27,12 +27,19 @@ import java.util.Arrays;
  */
 public class Country implements Location, LocalizedEntity {
 
+    /** The country name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** ISO 3166-1 alpha-2 code. */
     private final String iso2code;
+    /** ISO 3166-1 alpha-3 code. */
     private final String iso3code;
+    /** The continent name. */
     private final String continent;
+    /** The geographic coordinates. */
     private final LatitudeLongitude latitudeLongitude;
+    /** Neighboring countries. */
     private Country[] neighbors;
 
     /**

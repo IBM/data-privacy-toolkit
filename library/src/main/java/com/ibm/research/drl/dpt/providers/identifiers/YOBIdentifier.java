@@ -27,6 +27,7 @@ public class YOBIdentifier extends AbstractIdentifier {
 
     /** Constructs a YOBIdentifier. */
     public YOBIdentifier() {}
+    /** The current calendar year, used as the upper bound for valid year-of-birth values. */
     private final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
     @Override

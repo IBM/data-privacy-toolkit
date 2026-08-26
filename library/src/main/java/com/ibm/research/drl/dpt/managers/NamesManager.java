@@ -129,6 +129,7 @@ public class NamesManager implements Serializable {
         private static final MaleNameManager maleNameManager = new MaleNameManager();
         private static final FemaleNameManager femaleNameManager = new FemaleNameManager();
 
+        /** Random number generator. */
         private final SecureRandom random;
 
         private Names() {

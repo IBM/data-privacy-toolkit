@@ -20,8 +20,11 @@ package com.ibm.research.drl.dpt.models;
 
 /** Model representing a race or ethnicity value with localization and probability support. */
 public class Race implements LocalizedEntity, ProbabilisticEntity {
+    /** The race/ethnicity name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The probability weight. */
     private final double probability;
 
     /**

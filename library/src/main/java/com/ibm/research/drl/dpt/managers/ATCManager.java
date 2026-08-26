@@ -49,6 +49,7 @@ public class ATCManager extends ResourceBasedManager<ATC> {
         super();
     }
 
+    /** The list of loaded ATC codes. */
     private List<ATC> codeList;
 
     @Override

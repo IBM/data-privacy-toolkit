@@ -29,11 +29,16 @@ import java.util.stream.Collectors;
 
 /** Identifier for operating-system name values (e.g. "Windows", "macOS", "Linux"). */
 public class OSIdentifier extends AbstractIdentifier {
+    /** The set of known OS name terms. */
     private final Set<String> terms;
+    /** Prefixes that trigger OS detection. */
     private final Set<String> testDetectionPrefixes = new HashSet<>(Arrays.asList("mac os", "macos", "mac", "windows"));
+    /** Suffixes that trigger OS detection. */
     private final Set<String> testDetectionSuffixes = new HashSet<>(List.of("linux"));
 
+    /** The minimum length of a valid OS value. */
     private final int minimumLength;
+    /** The maximum length of a valid OS value. */
     private final int maximumLength;
 
     /** Constructs an OSIdentifier, loading the known OS terms. */

@@ -36,7 +36,9 @@ public class CaseInsensitiveNameIdentifier extends AbstractIdentifier {
     public CaseInsensitiveNameIdentifier() {
     }
     private final static NamesManager.Names manager = NamesManager.instance();
+    /** Pattern matching trailing punctuation after a word. */
     private final Pattern trailingPunctuation = Pattern.compile("(\\p{Alpha}+)[,.]$");
+    /** Pattern matching any digit. */
     private final Pattern hasDigit = Pattern.compile("\\d");
 
     @Override

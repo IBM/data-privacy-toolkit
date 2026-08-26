@@ -32,6 +32,9 @@ public class ZIPCodeHierarchy implements GeneralizationHierarchy, Serializable {
     private static final long serialVersionUID = 5771549821136802771L;
     private static final ZIPCodeHierarchy instance = new ZIPCodeHierarchy();
 
+    /** Not instantiable directly — use {@link #getInstance()}. */
+    private ZIPCodeHierarchy() {}
+
     /**
      * Returns the singleton instance.
      *

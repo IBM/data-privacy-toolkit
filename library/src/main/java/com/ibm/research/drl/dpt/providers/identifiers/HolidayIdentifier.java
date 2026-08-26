@@ -35,8 +35,11 @@ import java.util.stream.StreamSupport;
 
 /** Identifier for public holiday names. */
 public class HolidayIdentifier extends AbstractIdentifier {
+    /** The set of known holiday terms. */
     private final Set<String> terms;
+    /** The minimum length of a valid holiday value. */
     private final int minimumLength;
+    /** The maximum length of a valid holiday value. */
     private final int maximumLength;
 
     /** Constructs a HolidayIdentifier loading terms from built-in resources. */

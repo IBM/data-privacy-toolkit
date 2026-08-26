@@ -30,6 +30,7 @@ public class SortCodeIdentifier extends AbstractRegexBasedIdentifier {
     /** Constructs a SortCodeIdentifier. */
     public SortCodeIdentifier() {}
 
+    /** Regex fragment matching valid UK bank identifiers. */
     private final String BANK_ID = "(?:0[15789]" +
             "|1[0-8]" +
             "|2[0357]" +
@@ -41,6 +42,7 @@ public class SortCodeIdentifier extends AbstractRegexBasedIdentifier {
             "|8[023456789]" +
             "|9[0123589])";
 
+    /** Compiled patterns for the three sort-code formats. */
     private final Collection<Pattern> patterns = Arrays.asList(
             Pattern.compile(BANK_ID + "\\d{4}"),
             Pattern.compile(BANK_ID + "\\s\\d{2}\\s\\d{2}"),

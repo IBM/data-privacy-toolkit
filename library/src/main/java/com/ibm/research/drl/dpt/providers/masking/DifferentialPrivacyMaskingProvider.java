@@ -39,6 +39,7 @@ import java.util.Map;
 public class DifferentialPrivacyMaskingProvider implements MaskingProvider  {
     private final static Logger logger = LogManager.getLogger(DifferentialPrivacyMaskingProvider.class);
 
+    /** The differential privacy mechanism used to randomise values. */
     private final DPMechanism mechanism;
 
     /**

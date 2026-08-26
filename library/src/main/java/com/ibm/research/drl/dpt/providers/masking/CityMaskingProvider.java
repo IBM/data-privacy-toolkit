@@ -29,9 +29,13 @@ import java.security.SecureRandom;
  * The type City masking provider.
  */
 public class CityMaskingProvider implements MaskingProvider {
+    /** Shared city manager instance. */
     private static final CityManager cityManager = CityManager.getInstance();
+    /** Whether to replace the city with the geographically closest one. */
     private final boolean getClosest;
+    /** Number of nearest cities to select from. */
     private final int closestK;
+    /** Whether to apply pseudorandom (hash-based) masking. */
     private final boolean getPseudorandom;
 
     /**

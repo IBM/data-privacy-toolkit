@@ -20,7 +20,9 @@ package com.ibm.research.drl.dpt.models;
 
 /** Represents a hospital entity with a name and country code. */
 public class Hospital implements LocalizedEntity {
+    /** The hospital name. */
     private final String name;
+    /** The country code for this hospital. */
     private final String countryCode;
 
     /**

@@ -28,6 +28,7 @@ import java.security.SecureRandom;
  */
 public class BooleanMaskingProvider implements MaskingProvider {
 
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

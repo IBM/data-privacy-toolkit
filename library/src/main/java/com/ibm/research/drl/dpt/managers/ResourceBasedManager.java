@@ -41,9 +41,13 @@ import java.util.*;
  */
 public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
     private static final String allCountriesName = "__all__";
+    /** Map from country code to the resource lookup map for that country. */
     private final Map<String, MapWithRandomPick<String, K>> resourceMap;
+    /** Map from country code to the ordered list of keys for that country. */
     private final Map<String, List<String>> listMap;
+    /** Map from country code to the probability-weighted pairs for that country. */
     private final Map<String, List<Pair<String, Double>>> probMap;
+    /** Map from country code to the enumerated distribution for random selection. */
     private final Map<String, EnumeratedDistribution<String>> probDistMap;
     /** The minimum key length seen across loaded resources. */
     protected int minimumLength;

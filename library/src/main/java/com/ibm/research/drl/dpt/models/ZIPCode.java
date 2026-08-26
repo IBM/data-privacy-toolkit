@@ -40,7 +40,9 @@ public class ZIPCode implements Serializable {
         return population;
     }
 
+    /** The ZIP code string. */
     private final String code;
+    /** The population for this ZIP code area. */
     private final Integer population;
 
     /**

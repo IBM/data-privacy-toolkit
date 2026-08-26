@@ -69,6 +69,7 @@ public class UKPostCodeIdentifier extends AbstractRegexBasedIdentifier {
             SECTOR + "\\s?" + UNIT +
             ")";
 
+    /** Compiled regex pattern for UK post codes. */
     private final Collection<Pattern> patterns = Collections.singletonList(
             Pattern.compile(OUTWARD + "\\s?" + INWARD, Pattern.CASE_INSENSITIVE)
     );

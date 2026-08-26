@@ -52,18 +52,29 @@ import java.util.stream.Stream;
 public class ComplexFreeTextAnnotator extends AbstractNLPAnnotator {
     private final static Logger logger = LogManager.getLogger(ComplexFreeTextAnnotator.class);
 
+    /** The language detector used for multi-language support. */
     private final LanguageDetector languageDetector;
+    /** The NLP annotators applied in sequence. */
     private final List<NLPAnnotator> nlpAnnotators;
+    /** Values that must not be reported, keyed by identifier type. */
     private final Map<String, Set<String>> blacklistedValues;
+    /** Identifiers whose matches are blacklisted, keyed by identifier type. */
     private final Map<String, List<Identifier>> blacklistIdentifierBased;
+    /** Sources considered unreliable, keyed by identifier type. */
     private final Map<String, Set<String>> unreliableSource;
+    /** Pairs of entity types that should be merged when adjacent. */
     private final List<ConnectedEntities> connectedEntities;
+    /** The default language code to assume when detection fails. */
     private final String defaultLanguage;
+    /** Whether to detect the language of each input before annotating. */
     private final boolean performLanguageDetection;
 
+    /** Per-language, per-type annotation weights. */
     private final Map<String, Map<String, Double>> weights;
 
+    /** POS-independent identifier types, keyed by language. */
     private final Map<String, Set<String>> posIndependent;
+    /** Entity types that should not be reported in output. */
     private final Set<String> toNotToBeReported;
 
     /**

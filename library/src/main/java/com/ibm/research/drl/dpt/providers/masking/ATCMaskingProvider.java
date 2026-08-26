@@ -29,8 +29,11 @@ import java.security.SecureRandom;
  * Masking provider for ATC codes; can preserve a configurable number of ATC hierarchy levels.
  */
 public class ATCMaskingProvider implements MaskingProvider {
+    /** Shared ATC identifier instance. */
     private static final ATCIdentifier atcIdentifier = new ATCIdentifier();
+    /** Shared ATC manager instance. */
     private static final ATCManager atcManager = ATCManager.getInstance();
+    /** Number of prefix characters to preserve in the masked ATC code. */
     private final int prefixPreserveLength;
 
     /**

@@ -33,10 +33,15 @@ import java.security.SecureRandom;
  *
  */
 public class CountryMaskingProvider implements MaskingProvider {
+    /** Shared country manager instance. */
     private static final CountryManager countryManager = CountryManager.getInstance();
+    /** Whether to replace the country with the geographically closest one. */
     private final boolean getClosest;
+    /** Number of nearest countries to select from. */
     private final int closestK;
+    /** Whether to apply pseudorandom (hash-based) masking. */
     private final boolean getPseudorandom;
+    /** Shared city manager instance. */
     private static final CityManager cityManager = CityManager.getInstance();
 
     /**

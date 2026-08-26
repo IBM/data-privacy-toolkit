@@ -29,7 +29,9 @@ import java.io.Serializable;
  */
 public class DataMaskingTarget implements Serializable {
 
+    /** The masking provider type for this target. */
     private final ProviderType providerType;
+    /** The output path for the masked value. */
     private final String targetPath;
 
     /**

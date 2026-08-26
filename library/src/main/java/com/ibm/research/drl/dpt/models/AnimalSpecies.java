@@ -22,7 +22,9 @@ package com.ibm.research.drl.dpt.models;
  * Represents an animal species with its localized name.
  */
 public class AnimalSpecies implements LocalizedEntity {
+    /** The animal species name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
 
     /**

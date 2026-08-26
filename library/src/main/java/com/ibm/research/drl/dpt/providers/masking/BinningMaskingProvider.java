@@ -29,11 +29,16 @@ import org.apache.logging.log4j.LogManager;
  * Masking provider that replaces a numeric value with the range of the bin it falls into.
  */
 public class BinningMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(BinningMaskingProvider.class);
 
+    /** The width of each bin. */
     private final int binSize;
+    /** The format string used to render the bin range. */
     private final String format;
+    /** Whether to return the bin mean instead of the bin range. */
     private final boolean returnBinMean;
+    /** The configured failure mode. */
     private final int failMode;
 
     /**

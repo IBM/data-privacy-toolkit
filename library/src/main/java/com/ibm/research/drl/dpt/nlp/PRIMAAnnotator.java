@@ -60,20 +60,32 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
     private static final String annotatorName = "PRIMA";
     private static final Pattern trailingPunctuation = Pattern.compile("\\p{Punct}+\\s*$");
 
+    /** Minimum shingle (n-gram) size used for matching. */
     private final int MIN_SHINGLE_SIZE;
+    /** Maximum shingle (n-gram) size used for matching. */
     private final int MAX_SHINGLE_SIZE;
+    /** Map from raw entity type string to canonical type name. */
     private final Map<String, String> typeMap;
+    /** Whether to split input into sentences before annotating. */
     private final boolean splitSentences;
+    /** The identifier factory used to create per-type identifiers. */
     private final IdentifierFactory identifierFactory;
+    /** Additional patterns used to split sentences. */
     private final List<Pattern> customSentenceSplitPatterns;
 
+    /** The OpenNLP tokenizer (transient — rebuilt on deserialisation). */
     private transient TokenizerME tokenizer;
+    /** The OpenNLP sentence detector (transient — rebuilt on deserialisation). */
     private transient SentenceDetectorME sentenceDetector;
 
+    /** Classpath reference for the sentence model. */
     private final String sentenceModelReference;
+    /** Classpath reference for the tokenizer model. */
     private final String tokenizerModelReference;
+    /** Minimum span size (in tokens) to consider a match. */
     private final int minSpanSize;
 
+    /** Whether to run POS tagging (currently disabled). */
     private final boolean performPOSTagging = false;
 
     /**
@@ -511,6 +523,13 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
         return annotatorName;
     }
 
+    /**
+     * Custom deserialisation: rebuilds transient NLP models after loading.
+     *
+     * @param inputStream the object input stream
+     * @throws IOException            if an I/O error occurs
+     * @throws ClassNotFoundException if a serialized class cannot be found
+     */
     private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         inputStream.defaultReadObject();
         this.sentenceDetector = buildSentenceDetector();

@@ -32,7 +32,9 @@ import java.util.List;
 public class MaritalStatusIdentifier extends AbstractManagerBasedIdentifier {
     /** Constructs a MaritalStatusIdentifier. */
     public MaritalStatusIdentifier() {}
+    /** The appropriate names for this identifier. */
     private final Collection<String> appropriateNames = List.of("Marital Status");
+    /** The manager used to look up valid marital status values. */
     private final MaritalStatusManager maritalStatusManager = MaritalStatusManager.getInstance();
 
     @Override

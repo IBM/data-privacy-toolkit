@@ -49,6 +49,7 @@ public class AnimalSpeciesManager extends ResourceBasedManager<AnimalSpecies> {
         super();
     }
 
+    /** The list of loaded animal species. */
     private List<AnimalSpecies> statusList;
 
     @Override

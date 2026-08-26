@@ -35,9 +35,13 @@ public class LiteralDateIdentifier extends AbstractIdentifier {
     private static final MonthIdentifier monthManager = new MonthIdentifier();
     private static final String[] appropriateNames = {"Date", "Data"};
 
+    /** Helper to detect year-of-birth values. */
     private final YOBIdentifier yobIdentifier = new YOBIdentifier();
+    /** Pattern matching 2- or 4-digit year numbers. */
     private final Pattern yearPattern = Pattern.compile("\\d{2}(?:\\d{2})?");
+    /** Pattern matching day-of-month ordinals (e.g. "5th"). */
     private final Pattern dayIdentifier = Pattern.compile("\\d{1,2}\\s*(?:th)");
+    /** Pattern matching day-of-month numbers (01–31). */
     private final Pattern dayPattern = Pattern.compile("(?:0?[1-9])|(?:[12][0-9])|(?:3[01])}");
 
     @Override

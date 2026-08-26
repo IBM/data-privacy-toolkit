@@ -32,7 +32,9 @@ public class PatientIDIdentifier extends AbstractRegexBasedIdentifier {
     /** Constructs a PatientIDIdentifier. */
     public PatientIDIdentifier() {}
 
+    /** Appropriate field names for this identifier. */
     private static final String[] appropriateNames = {"Patient ID", "PatientID"};
+    /** Compiled regex patterns used to match patient IDs. */
     private final Collection<Pattern> patientIDPatterns = new ArrayList<>(List.of(
             Pattern.compile("^\\d{3}-\\d{3}-\\d{3}-\\d{3}$")
     ));

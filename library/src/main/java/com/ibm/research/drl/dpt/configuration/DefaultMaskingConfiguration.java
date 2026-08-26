@@ -36,8 +36,11 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"optionsByCategory", "name"})
 public final class DefaultMaskingConfiguration implements MaskingConfiguration, Serializable {
+    /** All configuration options, keyed by option name. */
     private final Map<String, ConfigurationOption> optionMap;
+    /** The name of this configuration. */
     private final String name;
+    /** The associated configuration manager, if any. */
     private ConfigurationManager configurationManager;
 
     /**

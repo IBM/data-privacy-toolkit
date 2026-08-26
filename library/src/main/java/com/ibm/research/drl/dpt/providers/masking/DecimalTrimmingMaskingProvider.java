@@ -81,7 +81,9 @@ public class DecimalTrimmingMaskingProvider implements MaskingProvider {
         }
     }
 
+    /** The list of trimming rules to apply. */
     private final List<DecimalTrimmingRule> rules;
+    /** The configured failure mode. */
     private final int failMode;
 
     /** Constructs a DecimalTrimmingMaskingProvider with default configuration. */

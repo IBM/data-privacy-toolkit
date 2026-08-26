@@ -109,7 +109,12 @@ public class ConfigurationOption implements Serializable {
     }
 
 
-    /** Custom serialisation. */
+    /**
+     * Custom serialisation.
+     *
+     * @param out the output stream
+     * @throws IOException if an I/O error occurs
+     */
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         out.writeObject(description);
         out.writeObject(category);
@@ -123,7 +128,13 @@ public class ConfigurationOption implements Serializable {
         }
     }
 
-    /** Custom deserialisation. */
+    /**
+     * Custom deserialisation.
+     *
+     * @param in the input stream
+     * @throws IOException            if an I/O error occurs
+     * @throws ClassNotFoundException if the serialized class cannot be found
+     */
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.description = (String) in.readObject();
         this.category = (String) in.readObject();

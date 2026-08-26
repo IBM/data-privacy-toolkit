@@ -287,11 +287,17 @@ public final class ProviderType implements Serializable {
     /** The constant PERSON. */
     public static final ProviderType PERSON = new ProviderType("PERSON", "Generic person", "Person");
 
+    /** The canonical type name. */
     private final String name;
+    /** The human-readable description. */
     private final String description;
+    /** The user-friendly display name. */
     private final String friendlyName;
+    /** The numeric identifier assigned at construction. */
     private final int id;
+    /** Whether this type is for internal use only. */
     private final boolean forInternalPurposes;
+    /** The type class grouping. */
     private final TypeClass typeClass;
 
     /**

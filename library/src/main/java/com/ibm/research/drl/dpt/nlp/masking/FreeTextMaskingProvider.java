@@ -44,10 +44,15 @@ import java.util.regex.Pattern;
 /** Masking provider for free-text content using NLP annotation. */
 public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final static Logger logger = LogManager.getLogger(FreeTextMaskingProvider.class);
+    /** The annotator used to identify entities in free text. */
     private final ComplexFreeTextAnnotator annotator;
+    /** The separator used between lookup tokens. */
     private final String lookupTokensSeparator;
+    /** Whether token lookup is case-insensitive. */
     private final boolean lookupTokensIgnoreCase;
+    /** Whether to look for tokens anywhere in the value (not just exact match). */
     private final boolean lookupTokensFindAnywhere;
+    /** The entity type to use when looking up replacement tokens. */
     private final String lookupTokensType;
 
     /**

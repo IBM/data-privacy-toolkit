@@ -40,9 +40,13 @@ public class VINManager implements Manager, Serializable {
 
     private static final Collection<ResourceEntry> resourceWMIList =
             LocalizationManager.getInstance().getResources(Resource.WMI);
+    /** Map from WMI prefix to manufacturer name. */
     private final Map<String, String> wmiMap;
+    /** Array of all valid WMI prefixes. */
     private final String[] wmiList;
+    /** Random number generator. */
     private final SecureRandom random;
+    /** Characters excluded from generated VIN sequences. */
     private final char[] excludedCharacters = {'I', 'O', 'Q', 'i', 'o', 'q'};
 
     /**

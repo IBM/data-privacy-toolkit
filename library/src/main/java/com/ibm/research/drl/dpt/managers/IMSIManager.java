@@ -45,7 +45,9 @@ public class IMSIManager extends ResourceBasedManager<IMSI> {
         super();
     }
 
+    /** Random number generator. */
     private final SecureRandom random = new SecureRandom();
+    /** Map from MCC prefix to list of IMSI prefixes. */
     private Map<String, List<String>> mccMap;
 
     @Override

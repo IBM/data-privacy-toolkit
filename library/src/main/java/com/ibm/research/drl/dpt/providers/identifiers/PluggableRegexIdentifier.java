@@ -28,10 +28,15 @@ import java.util.regex.Pattern;
 
 /** An identifier that matches values against one or more user-supplied regular expressions. */
 public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
+    /** Appropriate field names for this identifier. */
     private final Collection<String> appropriateNames;
+    /** Compiled regex patterns used for matching. */
     private final Collection<Pattern> patterns;
+    /** The provider type this identifier represents. */
     private final ProviderType providerType;
+    /** The value class this identifier recognises. */
     private final ValueClass valueClass;
+    /** Whether POS tagging context is ignored during identification. */
     private final boolean isPOSIndependent;
 
     /**

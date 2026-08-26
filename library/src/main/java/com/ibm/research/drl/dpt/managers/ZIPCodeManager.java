@@ -35,7 +35,9 @@ import java.util.*;
 /** Manager for ZIP code resources, supporting population-based lookups with prefix matching. */
 public class ZIPCodeManager extends ResourceBasedManager<ZIPCode> implements Serializable {
 
+    /** Map from country code to a map of ZIP prefixes to their aggregated population. */
     private Map<String, Map<String, ZIPCode>> zipCodeMapThreeDigits;
+    /** Number of leading digits used for prefix-based lookups. */
     private final int prefixDigits;
 
     /**

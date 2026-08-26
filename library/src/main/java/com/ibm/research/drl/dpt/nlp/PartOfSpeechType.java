@@ -140,6 +140,7 @@ public final class PartOfSpeechType implements Serializable {
 
     }
 
+    /** The POS type string. */
     private final String type;
 
     private PartOfSpeechType(String type) {

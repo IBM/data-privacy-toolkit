@@ -35,11 +35,16 @@ import java.security.SecureRandom;
  *
  */
 public class ContinentMaskingProvider implements MaskingProvider {
+    /** Shared country manager instance. */
     private static final CountryManager countryManager = CountryManager.getInstance();
+    /** Shared city manager instance. */
     private static final CityManager cityManager = CityManager.getInstance();
+    /** Whether to replace the continent with the geographically closest one. */
     private final boolean getClosest;
+    /** Number of nearest continents to select from. */
     private final int getClosestK;
 
+    /** Shared continent manager instance. */
     private final static ContinentManager continentManager = ContinentManager.getInstance();
 
     /**

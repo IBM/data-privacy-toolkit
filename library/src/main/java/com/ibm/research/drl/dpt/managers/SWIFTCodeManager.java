@@ -32,7 +32,9 @@ import java.util.*;
 /** Manager for SWIFT/BIC code resources. */
 public class SWIFTCodeManager extends ResourceBasedManager<SWIFTCode> {
     private static final CountryManager countryManager = CountryManager.getInstance();
+    /** Map from country code to the list of SWIFT codes for that country. */
     private Map<String, List<SWIFTCode>> codeByCountryMap;
+    /** Random number generator. */
     private final SecureRandom random = new SecureRandom();
 
     private final static SWIFTCodeManager SWIFT_CODE_MANAGER = new SWIFTCodeManager();

@@ -50,9 +50,13 @@ public class OpenNLPPOSTagger extends AbstractNLPAnnotator {
 
     private static final String annotatorName = "OpenNLP_POS";
 
+    /** The default language to use when none is detected. */
     private final Language defaultLanguage;
+    /** Per-language sentence detectors. */
     private final Map<Language, SentenceDetectorME> sentenceDetector;
+    /** Per-language POS taggers. */
     private final Map<Language, POSTaggerME> tagger;
+    /** Per-language tokenizers. */
     private final Map<Language, TokenizerME> tokenizer;
 
     private POSModel loadPOSModel(String resourceName) {
