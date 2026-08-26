@@ -22,6 +22,9 @@ def _docker_run(current_test, input_folder="input", output_folder="output", conf
     """
     Executes the test by running the dpt docker image.
     """
+    if not DOCKER_IMAGE:
+        pytest.skip("IMAGE_NAME environment variable not set")
+
     current_test_folder = os.path.dirname(current_test)
     output = os.path.join(current_test_folder, output_folder)
 
@@ -39,12 +42,12 @@ def _docker_run(current_test, input_folder="input", output_folder="output", conf
         os.chmod(consistency, 0o777)
 
     os.system(
-        "docker run --rm " \
-        " --mount type=bind,source=" + os.path.join(current_test_folder, input_folder) + ",target=/input" \
-        " --mount type=bind,source=" + os.path.join(current_test_folder, config_folder) + ",target=/config" \
-        " --mount type=bind,source=" + output + ",target=/output " \
-        " " + ("--mount type=bind,source=" + consistency +",target=/consistency" if consistency_folder else "") + "" \
-        " " + DOCKER_IMAGE
+        "docker run --rm"
+        " --mount type=bind,source=" + os.path.join(current_test_folder, input_folder) + ",target=/input"
+        " --mount type=bind,source=" + os.path.join(current_test_folder, config_folder) + ",target=/config"
+        " --mount type=bind,source=" + output + ",target=/output"
+        + (" --mount type=bind,source=" + consistency + ",target=/consistency" if consistency_folder else "")
+        + " " + DOCKER_IMAGE
     )
 
 
