@@ -23,9 +23,22 @@ import com.ibm.research.drl.dpt.models.Location;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A KD-tree specialised for geographic {@link Location} objects, supporting nearest-neighbour search
+ * by latitude/longitude.
+ *
+ * @param <T> the location type
+ */
 public class LatLonKDTree<T extends Location> {
     private final KDTree<LatLonCartesianPoint<T>> tree;
 
+    /**
+     * Returns the {@code k} nearest locations to the given latitude/longitude key.
+     *
+     * @param key an array of two doubles: {@code [latitude, longitude]}
+     * @param k   the number of nearest neighbours to return
+     * @return the list of nearest locations
+     */
     public List<T> findNearestK(double[] key, int k) {
         return new ArrayList<>(tree.nearestNeighbourSearch(k, new LatLonCartesianPoint<>(key)).stream().map(point -> point.location).toList());
     }

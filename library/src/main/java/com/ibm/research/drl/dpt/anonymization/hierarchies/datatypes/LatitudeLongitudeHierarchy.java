@@ -25,7 +25,14 @@ import com.ibm.research.drl.dpt.providers.identifiers.LatitudeLongitudeIdentifie
 import java.io.Serializable;
 import java.util.Set;
 
+/**
+ * Generalization hierarchy for latitude/longitude values that progressively reduces
+ * decimal-place precision up to a coarse {@code 0,0} top term.
+ */
 public class LatitudeLongitudeHierarchy implements GeneralizationHierarchy, Serializable {
+
+    /** Constructs a LatitudeLongitudeHierarchy. */
+    public LatitudeLongitudeHierarchy() {}
     private final String topTerm = "0,0";
     private final static LatitudeLongitudeIdentifier LATITUDE_LONGITUDE_IDENTIFIER = new LatitudeLongitudeIdentifier();
     private final int height = 9;

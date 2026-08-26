@@ -26,7 +26,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Identifier for marital-status values using a controlled vocabulary.
+ */
 public class MaritalStatusIdentifier extends AbstractManagerBasedIdentifier {
+    /** Constructs a MaritalStatusIdentifier. */
+    public MaritalStatusIdentifier() {}
     private final Collection<String> appropriateNames = List.of("Marital Status");
     private final MaritalStatusManager maritalStatusManager = MaritalStatusManager.getInstance();
 

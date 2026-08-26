@@ -26,9 +26,18 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
 import java.util.List;
 
+/**
+ * Privacy constraint implementing k-anonymity: every equivalence class must contain
+ * at least {@code k} records.
+ */
 public class KAnonymity implements PrivacyConstraint {
     private final int k;
 
+    /**
+     * Constructs a KAnonymity constraint with the given k value.
+     *
+     * @param k the minimum group size required for k-anonymity
+     */
     @JsonCreator
     public KAnonymity(
             @JsonProperty("k") int k
@@ -36,6 +45,11 @@ public class KAnonymity implements PrivacyConstraint {
         this.k = k;
     }
 
+    /**
+     * Returns the k value for this constraint.
+     *
+     * @return the minimum equivalence-class size
+     */
     public int getK() {
         return k;
     }

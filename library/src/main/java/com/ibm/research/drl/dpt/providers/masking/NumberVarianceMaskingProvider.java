@@ -27,6 +27,9 @@ import org.apache.logging.log4j.LogManager;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider that adds a random percentage variance to numerical values.
+ */
 public class NumberVarianceMaskingProvider implements MaskingProvider {
     private final static Logger log = LogManager.getLogger(NumberVarianceMaskingProvider.class);
 

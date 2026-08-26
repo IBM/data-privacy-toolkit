@@ -28,7 +28,13 @@ import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 
 import java.util.*;
 
+/**
+ * K-map anonymization algorithm implementation.
+ */
 public class KMap implements AnonymizationAlgorithm {
+
+    /** Constructs a KMap algorithm instance. */
+    public KMap() {}
     private List<ColumnInformation> columnInformationList;
     private List<PrivacyConstraint> privacyConstraints;
     private IPVDataset originalDataset;

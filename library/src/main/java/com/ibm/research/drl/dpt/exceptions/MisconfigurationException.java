@@ -18,7 +18,15 @@ under the License.
 */
 package com.ibm.research.drl.dpt.exceptions;
 
+/**
+ * Exception thrown when a required configuration key is missing or has an unexpected value.
+ */
 public class MisconfigurationException extends RuntimeException {
+    /**
+     * Constructs a MisconfigurationException with the given detail message.
+     *
+     * @param message the detail message
+     */
     public MisconfigurationException(String message) {
         super(message);
     }

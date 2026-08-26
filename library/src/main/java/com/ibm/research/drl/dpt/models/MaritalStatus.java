@@ -18,11 +18,19 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Model representing a marital status value with an optional category and country code.
+ */
 public class MaritalStatus implements LocalizedEntity {
     private final String name;
     private final String category;
     private final String nameCountryCode;
 
+    /**
+     * Returns the category of this marital status (e.g. "Coupled" vs "Alone").
+     *
+     * @return the category string
+     */
     public String getCategory() {
         return category;
     }
@@ -48,10 +56,11 @@ public class MaritalStatus implements LocalizedEntity {
 
 
     /**
-     * Instantiates a new Marital status.
+     * Constructs a MaritalStatus.
      *
-     * @param name            the name
-     * @param nameCountryCode the name country code
+     * @param name            the status name
+     * @param category        the category
+     * @param nameCountryCode the country code
      */
     public MaritalStatus(String name, String category, String nameCountryCode) {
         this.name = name;

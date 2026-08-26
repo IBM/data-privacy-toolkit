@@ -75,6 +75,11 @@ public abstract class MultipathRecord implements Record {
         return formatRecord();
     }
 
+    /**
+     * Formats this record as a byte array.
+     *
+     * @return the record bytes
+     */
     protected byte[] formatRecordBytes() {
         return formatRecord().getBytes();
     }
@@ -89,6 +94,13 @@ public abstract class MultipathRecord implements Record {
         return false;
     }
 
+    /**
+     * Returns whether the given field identifier matches the given pattern (which may contain {@code *}).
+     *
+     * @param pattern         the path pattern
+     * @param fieldIdentifier the concrete field path
+     * @return {@code true} if the path matches the pattern
+     */
     public boolean isMatching(String pattern, String fieldIdentifier) {
         if (pattern.contains("*")) {
             String[] patternParts = pattern.split("/");
@@ -109,7 +121,19 @@ public abstract class MultipathRecord implements Record {
         }
     }
 
+    /**
+     * Returns whether the field identified by the given path holds a primitive (non-object) value.
+     *
+     * @param fieldIdentifier the field path
+     * @return {@code true} if the field value is a primitive type
+     */
     public abstract boolean isPrimitiveType(String fieldIdentifier);
 
+    /**
+     * Returns the raw field object at the given path.
+     *
+     * @param fieldIdentifier the field path
+     * @return the field value as an {@link Object}
+     */
     public abstract Object getFieldObject(String fieldIdentifier);
 }

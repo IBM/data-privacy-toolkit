@@ -21,8 +21,22 @@ package com.ibm.research.drl.dpt.anonymization;
 
 import java.util.List;
 
+/**
+ * Represents a privacy metric used to measure the anonymity of an equivalence class.
+ */
 public interface PrivacyMetric {
+    /**
+     * Creates a new metric instance initialised from the given list of sensitive values.
+     *
+     * @param sensitiveValues the sensitive values for the equivalence class
+     * @return a new {@link PrivacyMetric} instance
+     */
     PrivacyMetric getInstance(List<String> sensitiveValues);
 
+    /**
+     * Merges the given metric into this one.
+     *
+     * @param metric the metric to merge
+     */
     void update(PrivacyMetric metric);
 }

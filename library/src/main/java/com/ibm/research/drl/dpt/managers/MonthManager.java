@@ -29,9 +29,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for month names loaded from localised CSV resources.
+ */
 public class MonthManager extends ResourceBasedManager<Month> {
     private final static MonthManager MONTH_MANAGER = new MonthManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the shared {@link MonthManager} instance
+     */
     public static MonthManager getInstance() {
         return MONTH_MANAGER;
     }

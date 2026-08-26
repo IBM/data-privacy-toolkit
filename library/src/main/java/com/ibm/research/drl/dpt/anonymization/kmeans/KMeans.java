@@ -28,6 +28,9 @@ import com.ibm.research.drl.dpt.util.MutableTuple;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * K-means clustering implementation used for dataset anonymization.
+ */
 public class KMeans {
 
     private final int k;
@@ -209,6 +212,11 @@ public class KMeans {
         return values;
     }
 
+    /**
+     * Runs the k-means algorithm and returns the resulting clusters with their assigned rows.
+     *
+     * @return the list of clusters
+     */
     public List<KMeansCluster> apply() {
         List<KMeansCluster> centers = initializeRandomCenters(k);
         List<KMeansCluster> clusters = applyAlgorithm(centers);
@@ -235,6 +243,15 @@ public class KMeans {
         return clusters;
     }
 
+    /**
+     * Constructs a KMeans instance.
+     *
+     * @param dataset         the input dataset
+     * @param k               the number of clusters
+     * @param maxIterations   the maximum number of iterations
+     * @param columnInformation the column information list
+     * @param columnsToCluster  the indices of columns to use for clustering
+     */
     public KMeans(IPVDataset dataset, int k, int maxIterations, List<ColumnInformation> columnInformation,
                   List<Integer> columnsToCluster) {
         this.dataset = dataset;

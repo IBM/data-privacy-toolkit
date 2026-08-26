@@ -26,7 +26,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for dates expressed in literal form (e.g. "25th January 2023" or "January 2023").
+ */
 public class LiteralDateIdentifier extends AbstractIdentifier {
+    /** Constructs a LiteralDateIdentifier. */
+    public LiteralDateIdentifier() {}
     private static final MonthIdentifier monthManager = new MonthIdentifier();
     private static final String[] appropriateNames = {"Date", "Data"};
 

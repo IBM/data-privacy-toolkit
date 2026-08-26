@@ -25,18 +25,35 @@ import com.ibm.research.drl.dpt.util.Histogram;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Privacy metric for l-diversity: extends k-anonymity by tracking the distribution of
+ * sensitive values within each equivalence class.
+ */
 public class LDiversityMetric extends KAnonymityMetric {
     private final List<Histogram<String>> histograms;
 
+    /**
+     * Returns the per-sensitive-column histograms of sensitive values in this equivalence class.
+     *
+     * @return the list of histograms
+     */
     public List<Histogram<String>> getHistograms() {
         return histograms;
     }
 
+    /**
+     * Constructs an empty LDiversityMetric (for merging).
+     */
     public LDiversityMetric() {
         super();
         this.histograms = new ArrayList<>();
     }
 
+    /**
+     * Constructs an LDiversityMetric seeded with the given sensitive values.
+     *
+     * @param sensitiveValues the list of sensitive values for one record
+     */
     public LDiversityMetric(List<String> sensitiveValues) {
         super(1);
         this.histograms = new ArrayList<>();

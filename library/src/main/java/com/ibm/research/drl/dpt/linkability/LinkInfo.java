@@ -19,6 +19,9 @@ under the License.
 package com.ibm.research.drl.dpt.linkability;
 
 
+/**
+ * Describes how a single column pair should be matched during dataset linkage.
+ */
 public class LinkInfo {
     private final int sourceIndex;
     private final int targetIndex;
@@ -27,30 +30,70 @@ public class LinkInfo {
     private final int prefixMatchLength;
     private final boolean isNumerical;
 
+    /**
+     * Returns whether prefix matching is enabled for this link.
+     *
+     * @return {@code true} if prefix matching is enabled
+     */
     public boolean isPrefixMatch() {
         return prefixMatch;
     }
 
+    /**
+     * Returns the prefix match length.
+     *
+     * @return the prefix length used when prefix matching is enabled
+     */
     public int getPrefixMatchLength() {
         return prefixMatchLength;
     }
 
+    /**
+     * Returns the source column index.
+     *
+     * @return the source column index
+     */
     public int getSourceIndex() {
         return sourceIndex;
     }
 
+    /**
+     * Returns the target column index.
+     *
+     * @return the target column index
+     */
     public int getTargetIndex() {
         return targetIndex;
     }
 
+    /**
+     * Returns the wildcard pattern used for value matching.
+     *
+     * @return the wildcard pattern
+     */
     public String getWildcharPattern() {
         return wildcharPattern;
     }
 
+    /**
+     * Returns whether the column values are numerical.
+     *
+     * @return {@code true} if values should be compared numerically
+     */
     public boolean isNumerical() {
         return isNumerical;
     }
 
+    /**
+     * Constructs a LinkInfo with all options specified.
+     *
+     * @param sourceIndex       the source column index
+     * @param targetIndex       the target column index
+     * @param wildcardPattern   the wildcard matching pattern
+     * @param prefixMatch       whether to use prefix matching
+     * @param prefixMatchLength the prefix length to match
+     * @param isNumerical       whether values are numerical
+     */
     public LinkInfo(int sourceIndex, int targetIndex, String wildcardPattern, boolean prefixMatch, int prefixMatchLength, boolean isNumerical) {
         this.sourceIndex = sourceIndex;
         this.targetIndex = targetIndex;
@@ -60,18 +103,47 @@ public class LinkInfo {
         this.isNumerical = isNumerical;
     }
 
+    /**
+     * Constructs a LinkInfo without specifying numerical mode (defaults to {@code false}).
+     *
+     * @param sourceIndex       the source column index
+     * @param targetIndex       the target column index
+     * @param wildcardPattern   the wildcard matching pattern
+     * @param prefixMatch       whether to use prefix matching
+     * @param prefixMatchLength the prefix length to match
+     */
     public LinkInfo(int sourceIndex, int targetIndex, String wildcardPattern, boolean prefixMatch, int prefixMatchLength) {
         this(sourceIndex, targetIndex, wildcardPattern, prefixMatch, prefixMatchLength, false);
     }
 
+    /**
+     * Constructs a LinkInfo with a wildcard pattern and no prefix match.
+     *
+     * @param sourceIndex     the source column index
+     * @param targetIndex     the target column index
+     * @param wildcardPattern the wildcard matching pattern
+     */
     public LinkInfo(int sourceIndex, int targetIndex, String wildcardPattern) {
         this(sourceIndex, targetIndex, wildcardPattern, false, 0);
     }
 
+    /**
+     * Constructs a LinkInfo that matches all values ({@code "*"} wildcard).
+     *
+     * @param sourceIndex the source column index
+     * @param targetIndex the target column index
+     */
     public LinkInfo(int sourceIndex, int targetIndex) {
         this(sourceIndex, targetIndex, "*", false, 0);
     }
 
+    /**
+     * Constructs a LinkInfo with numerical mode specified.
+     *
+     * @param sourceIndex the source column index
+     * @param targetIndex the target column index
+     * @param isNumerical whether values are numerical
+     */
     public LinkInfo(int sourceIndex, int targetIndex, boolean isNumerical) {
         this(sourceIndex, targetIndex, "*", false, 0, isNumerical);
     }

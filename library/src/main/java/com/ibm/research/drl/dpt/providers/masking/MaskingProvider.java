@@ -60,6 +60,11 @@ public interface MaskingProvider extends Serializable {
         return mask(identifier);
     }
 
+    /**
+     * Returns whether this provider supports masking complex objects via {@link #mask(Object, String)}.
+     *
+     * @return {@code false} by default
+     */
     default boolean supportsObject() {
         return false;
     }
@@ -167,6 +172,14 @@ public interface MaskingProvider extends Serializable {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }
 
+    /**
+     * Masks a value maintaining a numerical ratio to an already-masked operand.
+     *
+     * @param identifier      the value to mask
+     * @param operandMasked   the masked version of the operand
+     * @param operandOriginal the original version of the operand
+     * @return the masked value
+     */
     default String maskWithRatio(String identifier, String operandMasked, String operandOriginal) {
         throw new UnsupportedOperationException("This relationship operation is not supported");
     }

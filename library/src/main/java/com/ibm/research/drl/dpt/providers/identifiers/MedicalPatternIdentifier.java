@@ -26,7 +26,14 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for medical record numbers and related identifiers using regex patterns.
+ */
 public class MedicalPatternIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
+    /** Constructs a MedicalPatternIdentifier. */
+    public MedicalPatternIdentifier() {}
+
+    /** The list of regex patterns used to match medical record numbers. */
     public static Collection<Pattern> patterns = Arrays.asList(
             // more
             Pattern.compile("MRN:?\\s*((?:CLM-)?(?:\\p{Alnum}+-)*\\p{Alnum}+)", Pattern.CASE_INSENSITIVE),

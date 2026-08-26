@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.managers;
 
+/**
+ * Base interface for entity managers that validate and randomly select managed keys.
+ */
 public interface Manager {
 
     /**
@@ -35,10 +38,20 @@ public interface Manager {
      */
     String getRandomKey();
 
+    /**
+     * Returns the maximum key length supported by this manager.
+     *
+     * @return the maximum length (default: {@link Integer#MAX_VALUE})
+     */
     default int getMaximumLength() {
         return Integer.MAX_VALUE;
     }
 
+    /**
+     * Returns the minimum key length supported by this manager.
+     *
+     * @return the minimum length (default: 0)
+     */
     default int getMinimumLength() {
         return 0;
     }

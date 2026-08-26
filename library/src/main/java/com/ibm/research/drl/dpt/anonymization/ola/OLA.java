@@ -46,7 +46,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * OLA (Optimal Lattice Anonymization) algorithm implementation.
+ */
 public class OLA implements AnonymizationAlgorithm {
+    /** Constructs an OLA algorithm instance. */
+    public OLA() {}
     private IPVDataset original;
     private double suppressionRate;
     private List<ColumnInformation> columnInformationList;
@@ -291,18 +296,38 @@ public class OLA implements AnonymizationAlgorithm {
         return bestNode.getSuppressionRate();
     }
 
+    /**
+     * Returns the best (minimal-information-loss) anonymous lattice node found.
+     *
+     * @return the best lattice node
+     */
     public LatticeNode reportBestNode() {
         return bestNode;
     }
 
+    /**
+     * Returns the maximum node in the lattice.
+     *
+     * @return the maximum lattice node
+     */
     public LatticeNode reportMaxNode() {
         return lattice.getMaxNode();
     }
 
+    /**
+     * Returns all anonymous lattice nodes with their information loss values.
+     *
+     * @return the list of anonymous lattice nodes
+     */
     public List<LatticeNode> reportLossOnAllNodes() {
         return lattice.reportLossOnAllNodes();
     }
 
+    /**
+     * Returns the number of tagging operations performed during lattice exploration.
+     *
+     * @return the number of tags performed
+     */
     public int getTagsPerformed() {
         return lattice.getTagsPerformed();
     }

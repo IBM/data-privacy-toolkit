@@ -24,14 +24,17 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Persistent masking provider that caches masked values in an in-memory {@link java.util.concurrent.ConcurrentHashMap}.
+ */
 public class LocallyPersistentMaskingProvider extends AbstractPersistentMaskingProvider {
     private final Map<String, String> persistenceProvider;
 
     /**
-     * Instantiates a new Locally persistent masking provider.
+     * Constructs a LocallyPersistentMaskingProvider.
      *
-     * @param notPersistentMasking the not persistent masking provider
-     * @param configuration
+     * @param notPersistentMasking the underlying (non-persistent) masking provider
+     * @param configuration        the masking configuration
      */
     public LocallyPersistentMaskingProvider(MaskingProvider notPersistentMasking, MaskingConfiguration configuration) {
         super(notPersistentMasking, configuration);

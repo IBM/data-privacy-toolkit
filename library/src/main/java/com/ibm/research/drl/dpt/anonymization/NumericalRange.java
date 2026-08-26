@@ -26,6 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Column information for numerical quasi-identifier columns, holding the sorted value list
+ * and precomputed range metadata.
+ */
 public class NumericalRange implements ColumnInformation {
     private final ColumnType columnType;
     private final Double range;
@@ -48,6 +52,11 @@ public class NumericalRange implements ColumnInformation {
         return isForLinking;
     }
 
+    /**
+     * Returns the number of distinct values in this range.
+     *
+     * @return the number of values
+     */
     @JsonIgnore
     public int getNumberOfValues() {
         return numberOfValues;
@@ -70,26 +79,53 @@ public class NumericalRange implements ColumnInformation {
         return representation;
     }
 
+    /**
+     * Returns the range (max - min) of values in this column, or {@code null} if empty.
+     *
+     * @return the range
+     */
     @JsonIgnore
     public Double getRange() {
         return this.range;
     }
 
+    /**
+     * Returns the position (rank) of the given value in the sorted values list.
+     *
+     * @param value the value to look up
+     * @return the zero-based position
+     */
     @JsonIgnore
     public int getPosition(Double value) {
         return this.positionMap.get(value);
     }
 
+    /**
+     * Returns the minimum value in this range, or {@code null} if empty.
+     *
+     * @return the lower bound
+     */
     @JsonIgnore
     public Double getLow() {
         return low;
     }
 
+    /**
+     * Returns the maximum value in this range, or {@code null} if empty.
+     *
+     * @return the upper bound
+     */
     @JsonIgnore
     public Double getHigh() {
         return high;
     }
 
+    /**
+     * Constructs a NumericalRange with default weight and no linking.
+     *
+     * @param sortedValues the sorted list of values
+     * @param columnType   the column type
+     */
     public NumericalRange(List<Double> sortedValues, ColumnType columnType) {
         this(sortedValues, columnType, 1.0, false);
     }
@@ -124,6 +160,11 @@ public class NumericalRange implements ColumnInformation {
         }
     }
 
+    /**
+     * Returns the sorted list of values.
+     *
+     * @return the sorted values
+     */
     public List<Double> getSortedValues() {
         return sortedValues;
     }

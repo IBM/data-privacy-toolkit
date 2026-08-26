@@ -99,6 +99,11 @@ public final class JSONRecord extends MultipathRecord {
         }
     }
 
+    /**
+     * Returns the underlying {@link JsonNode}.
+     *
+     * @return the JSON node
+     */
     public JsonNode getNode() {
         return node;
     }
@@ -313,6 +318,13 @@ public final class JSONRecord extends MultipathRecord {
 
     }
 
+    /**
+     * Creates a {@link Record} by parsing a JSON string.
+     *
+     * @param input the JSON string
+     * @return the parsed record
+     * @throws IOException if the string cannot be parsed as JSON
+     */
     public static Record fromString(String input) throws IOException {
         return new JSONRecord(JsonUtils.MAPPER.readTree(input));
     }

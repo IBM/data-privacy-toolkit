@@ -239,12 +239,34 @@ public class IPVDataset implements Iterable<List<String>> {
         return builder.toString();
     }
 
+    /**
+     * Loads an {@link IPVDataset} from an {@link InputStream}.
+     *
+     * @param inputStream    the input stream
+     * @param skipFirst      whether to skip the first (header) row
+     * @param fieldDelimiter the field delimiter character
+     * @param quoteCharacter the quote character
+     * @param trimFields     whether to trim whitespace from field values
+     * @return the loaded dataset
+     * @throws IOException if an I/O error occurs
+     */
     public static IPVDataset load(InputStream inputStream, boolean skipFirst, Character fieldDelimiter, Character quoteCharacter, boolean trimFields) throws IOException {
         try (Reader reader = new InputStreamReader(inputStream)) {
             return load(reader, skipFirst, fieldDelimiter, quoteCharacter, trimFields);
         }
     }
 
+    /**
+     * Loads an {@link IPVDataset} from a {@link Reader}.
+     *
+     * @param reader         the reader
+     * @param hasHeader      whether the first row is a header row
+     * @param fieldDelimiter the field delimiter character
+     * @param quoteCharacter the quote character
+     * @param trimFields     whether to trim whitespace from field values
+     * @return the loaded dataset
+     * @throws IOException if an I/O error occurs
+     */
     public static IPVDataset load(Reader reader, final boolean hasHeader, Character fieldDelimiter, Character quoteCharacter, boolean trimFields) throws IOException {
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema = CsvSchema.emptySchema().withColumnSeparator(fieldDelimiter).withQuoteChar(quoteCharacter).withSkipFirstDataRow(false);

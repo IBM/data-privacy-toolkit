@@ -18,13 +18,23 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
+/**
+ * Enumeration of differential-privacy mechanisms supported by the framework.
+ */
 public enum Mechanism {
+    /** Binary mechanism. */
     BINARY,
+    /** Categorical mechanism. */
     CATEGORICAL,
+    /** Native Laplace mechanism. */
     LAPLACE_NATIVE,
+    /** Bounded Laplace mechanism. */
     LAPLACE_BOUNDED,
+    /** Truncated Laplace mechanism. */
     LAPLACE_TRUNCATED,
+    /** Native Geometric mechanism. */
     GEOMETRIC_NATIVE,
+    /** Truncated Geometric mechanism. */
     GEOMETRIC_TRUNCATED
 }
 

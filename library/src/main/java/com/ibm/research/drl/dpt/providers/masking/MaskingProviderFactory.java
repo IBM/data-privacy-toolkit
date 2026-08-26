@@ -51,6 +51,9 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Factory that creates and caches {@link MaskingProvider} instances for data masking operations.
+ */
 public final class MaskingProviderFactory implements Serializable {
     private static final Logger logger = LogManager.getLogger(MaskingProviderFactory.class);
     private static final SecureRandom random = new SecureRandom();
@@ -58,6 +61,11 @@ public final class MaskingProviderFactory implements Serializable {
     private static final DummyMaskingProvider dummy = new DummyMaskingProvider();
     private final ConfigurationManager configurationManager;
 
+    /**
+     * Returns the map of field names to their masking targets.
+     *
+     * @return the masking target map
+     */
     public Map<String, DataMaskingTarget> getToBeMasked() {
         return toBeMasked;
     }
@@ -98,6 +106,13 @@ public final class MaskingProviderFactory implements Serializable {
         return get(fieldName, providerType);
     }
 
+    /**
+     * Returns the masking provider for the given field name and provider type, creating it if not cached.
+     *
+     * @param fieldName    the field name
+     * @param providerType the provider type to use
+     * @return the masking provider
+     */
     public synchronized MaskingProvider get(final String fieldName, ProviderType providerType) {
         if (!cachedProviders.containsKey(fieldName)) {
             MaskingConfiguration maskingConfiguration = configurationManager.getFieldConfiguration(fieldName);

@@ -29,6 +29,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for medicine names loaded from localised CSV resources.
+ */
 public class MedicineManager extends ResourceBasedManager<Medicine> {
 
     private final static MedicineManager MEDICE_MANAGER_INSTANCE = new MedicineManager();

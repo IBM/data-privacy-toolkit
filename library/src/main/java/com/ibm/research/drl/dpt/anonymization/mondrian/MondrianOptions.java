@@ -24,11 +24,19 @@ import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Options for the {@link Mondrian} anonymization algorithm.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MondrianOptions implements AnonymizationAlgorithmOptions {
     private final Map<String, String> values = new HashMap<>();
     private final CategoricalSplitStrategy categoricalSplitStrategy;
 
+    /**
+     * Returns the categorical split strategy to use.
+     *
+     * @return the categorical split strategy
+     */
     public CategoricalSplitStrategy getCategoricalSplitStrategy() {
         return categoricalSplitStrategy;
     }
@@ -50,6 +58,11 @@ public class MondrianOptions implements AnonymizationAlgorithmOptions {
         this.categoricalSplitStrategy = CategoricalSplitStrategy.ORDER_BASED;
     }
 
+    /**
+     * Constructs a MondrianOptions with the given categorical split strategy.
+     *
+     * @param categoricalSplitStrategy the split strategy to use
+     */
     public MondrianOptions(CategoricalSplitStrategy categoricalSplitStrategy) {
         this.categoricalSplitStrategy = categoricalSplitStrategy;
     }

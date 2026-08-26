@@ -19,12 +19,24 @@ under the License.
 package com.ibm.research.drl.dpt.nlp;
 
 
+/**
+ * Languages supported for NLP-based identification and masking.
+ */
 public enum Language {
+    /** Unknown or undetected language. */
     UNKNOWN,
+    /** English. */
     ENGLISH,
+    /** Greek. */
     GREEK,
+    /** Dutch. */
     DUTCH,
+    /** Italian. */
     ITALIAN,
-    HEBREW, IRISH,
+    /** Hebrew. */
+    HEBREW,
+    /** Irish. */
+    IRISH,
+    /** Spanish. */
     SPANISH
 }

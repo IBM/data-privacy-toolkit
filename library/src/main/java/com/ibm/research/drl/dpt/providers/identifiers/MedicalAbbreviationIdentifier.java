@@ -34,11 +34,17 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * Identifier for medical abbreviations loaded from a bundled resource file.
+ */
 public class MedicalAbbreviationIdentifier extends AbstractIdentifier {
     private final Set<String> terms;
     private final int minimumLength;
     private final int maximumLength;
 
+    /**
+     * Constructs a MedicalAbbreviationIdentifier and loads the abbreviation list from resources.
+     */
     public MedicalAbbreviationIdentifier() {
         terms = populateTerms();
 

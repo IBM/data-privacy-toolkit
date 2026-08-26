@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Model interface for entities that have a geographic location.
+ */
 public interface Location {
     /**
      * Gets location.

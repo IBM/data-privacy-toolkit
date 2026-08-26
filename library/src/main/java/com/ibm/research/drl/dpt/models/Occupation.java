@@ -20,6 +20,9 @@ package com.ibm.research.drl.dpt.models;
 
 import java.util.List;
 
+/**
+ * Model representing an occupation with one or more category tags, associated with a country code.
+ */
 public class Occupation implements LocalizedEntity {
     private final String nameCountryCode;
     private final List<String> categories;
