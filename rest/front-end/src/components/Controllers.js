@@ -8,42 +8,48 @@ const Controllers = ({
     <div className='form-inline'>
       <div className='form-group'>
         <label htmlFor='minK'>Min</label>
-        <input id='minK' onChange={event => {
-          const value = Number(event.target.value)
-          const id = event.target.id
-          const property = id.substring(0, id.length - 1)
+        <input
+          id='minK' onChange={event => {
+            const value = Number(event.target.value)
+            const id = event.target.id
+            const property = id.substring(0, id.length - 1)
 
-          const update = {}
-          update[property] = value
+            const update = {}
+            update[property] = value
 
-          onKChange(update)
-        }} className='kInput' value={k.min} type='number' min='2' max='100' step='1' />
+            onKChange(update)
+          }} className='kInput' value={k.min} type='number' min='2' max='100' step='1'
+        />
       </div>
       <div className='form-group'>
         <label htmlFor='maxK'>Max</label>
-        <input id='maxK' className='kInput' onChange={event => {
-          const value = Number(event.target.value)
-          const id = event.target.id
-          const property = id.substring(0, id.length - 1)
+        <input
+          id='maxK' className='kInput' onChange={event => {
+            const value = Number(event.target.value)
+            const id = event.target.id
+            const property = id.substring(0, id.length - 1)
 
-          const update = {}
-          update[property] = value
+            const update = {}
+            update[property] = value
 
-          onKChange(update)
-        }} value={k.max} type='number' min='2' max='100' step='1' />
+            onKChange(update)
+          }} value={k.max} type='number' min='2' max='100' step='1'
+        />
       </div>
       <div className='form-group'>
         <label htmlFor='stepK'>Step</label>
-        <input id='stepK' onChange={event => {
-          const value = Number(event.target.value)
-          const id = event.target.id
-          const property = id.substring(0, id.length - 1)
+        <input
+          id='stepK' onChange={event => {
+            const value = Number(event.target.value)
+            const id = event.target.id
+            const property = id.substring(0, id.length - 1)
 
-          const update = {}
-          update[property] = value
+            const update = {}
+            update[property] = value
 
-          onKChange(update)
-        }} className='kInput' value={k.step} type='number' min='1' max='100' step='1' />
+            onKChange(update)
+          }} className='kInput' value={k.step} type='number' min='1' max='100' step='1'
+        />
       </div>
     </div>
     <h4>Suppression</h4>

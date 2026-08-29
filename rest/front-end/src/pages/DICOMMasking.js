@@ -9,15 +9,20 @@ import DicomMetadata from '../components/DicomMetadata'
 
 class DICOMMasking extends Component {
   render () {
-    const mask = this.props.original ? (
-      <a className='btn btn-primary' onClick={
+    const mask = this.props.original
+      ? (
+        <a
+          className='btn btn-primary' onClick={
           _ => {
             if (this.props.original) {
               this.props.maskFile(this.props.original)
             }
           }
-        }><i className='fa fa-lock' /> Mask</a>
-    ) : undefined
+        }
+        ><i className='fa fa-lock' /> Mask
+        </a>
+        )
+      : undefined
 
     const modifiedAttributes = this.computeDifference()
 
@@ -26,7 +31,7 @@ class DICOMMasking extends Component {
         <h3>DICOM Masking</h3>
 
         <DicomFileSelector onFileSelected={file => this.props.loadFile(file)} />
-        { mask }
+        {mask}
 
         <div className='row'>
           <div className='col-md-6'>

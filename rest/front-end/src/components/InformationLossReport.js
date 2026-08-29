@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InformationLossReport = ({anonymisedInformationLoss}) => (
+const InformationLossReport = ({ anonymisedInformationLoss }) => (
   <table className='table table-hover table-compact'>
     <thead>
       <tr>

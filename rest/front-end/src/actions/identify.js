@@ -48,6 +48,6 @@ export function startIdentification () {
 
 export function updateColumnValue (columnName, provider) {
   return (dispatch, getState) => {
-    dispatch(saveIdentifiedData(Object.assign({}, getState().workflow.identifiedTypes, {[columnName]: provider})))
+    dispatch(saveIdentifiedData(Object.assign({}, getState().workflow.identifiedTypes, { [columnName]: provider })))
   }
 }

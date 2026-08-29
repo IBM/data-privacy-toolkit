@@ -8,7 +8,7 @@ const processConfiguration = (categories) => {
   for (const categoryName in categories) {
     const category = categories[categoryName]
     for (const i in category) {
-      const {id, description, value} = category[i]
+      const { id, description, value } = category[i]
       options[id] = {
         description,
         value,
@@ -16,7 +16,7 @@ const processConfiguration = (categories) => {
       }
     }
   }
-  return {options}
+  return { options }
 }
 
 export function protectDataset (dataset, hasHeader, useCompound, direct, types, configuration) {
@@ -26,12 +26,12 @@ export function protectDataset (dataset, hasHeader, useCompound, direct, types, 
 
       const fields = {}
       direct.forEach((v) => {
-        const columnName = hasHeader ? dataset[0][v] : `Column ${v}`;
+        const columnName = hasHeader ? dataset[0][v] : `Column ${v}`
         const type = types[columnName]
         if (type) {
           fields[columnName] = type
         } else {
-          fields[columnName] = {'name': ''}
+          fields[columnName] = { name: '' }
         }
       })
 
@@ -42,7 +42,7 @@ export function protectDataset (dataset, hasHeader, useCompound, direct, types, 
 
       window.fetch(`api/feature/mask/${Boolean(hasHeader)}/${Boolean(useCompound)}`, {
         method: 'POST',
-        body: body
+        body
       }).then(response => {
         if (response.ok) {
           return response.text()

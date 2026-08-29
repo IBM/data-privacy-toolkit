@@ -4,13 +4,13 @@ import _ from 'underscore'
 
 import Chart from './Chart'
 
-const Confirmation = ({k, suppression, onYes, onNo}) => (
+const Confirmation = ({ k, suppression, onYes, onNo }) => (
   <div className='confirmationMessage'>
     <div className='confirmationHeader'>Use the following values for the anonymization step:</div>
     <div>
       <b>k:</b> <code>{k}</code>, <b>suppression:</b> <code>{suppression}</code>
     </div>
-    <div style={{textAlign: 'right'}}>
+    <div style={{ textAlign: 'right' }}>
       <a className='btn btn-success' onClick={onYes}>Yes</a> <a className='btn btn-danger' onClick={onNo}>No</a>
     </div>
   </div>
@@ -40,7 +40,7 @@ export default class Plot extends Component {
 
     const filterPredicate = obj => obj.suppression === suppression
 
-    for (let i in serieLabels) {
+    for (const i in serieLabels) {
       const label = serieLabels[i]
 
       if (label === 'HGEORM') continue
@@ -68,8 +68,8 @@ export default class Plot extends Component {
         name: label,
         events: {
           click: e => {
-            const {k, suppression} = e.point
-            this.setState(Object.assign({}, this.state, {showPopup: true, k, suppression}))
+            const { k, suppression } = e.point
+            this.setState(Object.assign({}, this.state, { showPopup: true, k, suppression }))
           }
         }
       }
@@ -108,12 +108,18 @@ export default class Plot extends Component {
       },
       series
     }
-    const confirmation = this.state.showPopup ? (<Confirmation k={this.state.k} suppression={this.state.suppression} onYes={() => {
-      this.props.selectedConfiguration(this.state.k, this.state.suppression)
-      this.setState(Object.assign({}, this.state, {showPopup: false}))
-    }} onNo={() => {
-      this.setState(Object.assign({}, this.state, {showPopup: false}))
-    }} />) : undefined
+    const confirmation = this.state.showPopup
+      ? (
+        <Confirmation
+          k={this.state.k} suppression={this.state.suppression} onYes={() => {
+            this.props.selectedConfiguration(this.state.k, this.state.suppression)
+            this.setState(Object.assign({}, this.state, { showPopup: false }))
+          }} onNo={() => {
+            this.setState(Object.assign({}, this.state, { showPopup: false }))
+          }}
+        />
+        )
+      : undefined
 
     return (
       <div>
@@ -121,19 +127,23 @@ export default class Plot extends Component {
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='suppression'>Suppressions:</label>
-            <select id='suppression' value={this.state.selectedSuppression} onChange={event => {
-              const selectedSuppression = Number(event.target.value)
-              this.setState(Object.assign({}, this.state, {selectedSuppression}))
-            }}>
+            <select
+              id='suppression' value={this.state.selectedSuppression} onChange={event => {
+                const selectedSuppression = Number(event.target.value)
+                this.setState(Object.assign({}, this.state, { selectedSuppression }))
+              }}
+            >
               {suppressions}
             </select>
           </div>
           <div className='form-group'>
             <label htmlFor='metric'>Information Loss Metric:</label>
-            <select id='metric' value={this.state.selectedIloss} onChange={event => {
-              const selectedIloss = event.target.value
-              this.setState(Object.assign({}, this.state, {selectedIloss}))
-            }}>
+            <select
+              id='metric' value={this.state.selectedIloss} onChange={event => {
+                const selectedIloss = event.target.value
+                this.setState(Object.assign({}, this.state, { selectedIloss }))
+              }}
+            >
               {metrics}
             </select>
           </div>

@@ -22,10 +22,14 @@ export default class Test extends Component {
               data: [[0, 100], [90, 100], [100, 100]]
             }
           ]
-        }} />
-        <a className='btn btn-warning' onClick={() => {
-          console.log('Testing')
-        }}>Click me</a>
+        }}
+        />
+        <a
+          className='btn btn-warning' onClick={() => {
+            console.log('Testing')
+          }}
+        >Click me
+        </a>
       </div>
     )
   }
