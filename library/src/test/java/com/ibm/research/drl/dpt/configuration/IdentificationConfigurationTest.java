@@ -31,7 +31,7 @@ public class IdentificationConfigurationTest {
     
     @Test
     public void testFromNode() throws Exception {
-        try (InputStream inputStream = this.getClass().getResourceAsStream("/validIdentificationConfiguration.json")) {
+        try (InputStream inputStream = IdentificationConfigurationTest.class.getResourceAsStream("/validIdentificationConfiguration.json")) {
 
             IdentificationConfiguration identificationConfiguration = mapper.readValue(inputStream, IdentificationConfiguration.class);
 
