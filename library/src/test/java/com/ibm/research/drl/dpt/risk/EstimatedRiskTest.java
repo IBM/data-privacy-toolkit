@@ -284,7 +284,7 @@ public class EstimatedRiskTest {
     
     @Test
     public void test() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/random1.txt"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(EstimatedRiskTest.class.getResourceAsStream("/random1.txt"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new DefaultColumnInformation());
@@ -379,7 +379,7 @@ public class EstimatedRiskTest {
     @Test
     @Disabled
     public void testDump() throws Exception {
-        InputStream sample = this.getClass().getResourceAsStream("/florida_sample_0.01.txt");
+        InputStream sample = EstimatedRiskTest.class.getResourceAsStream("/florida_sample_0.01.txt");
         IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
 
         System.out.println("loading done");
@@ -434,7 +434,7 @@ public class EstimatedRiskTest {
         for(int i = 3; i <= 3; i++) {
             String filename = "/florida_samples/sample" + i;
             resources.add(filename);
-            InputStream sample = this.getClass().getResourceAsStream(filename);
+            InputStream sample = EstimatedRiskTest.class.getResourceAsStream(filename);
             assertNotNull(sample);
             sample.close();
         }
