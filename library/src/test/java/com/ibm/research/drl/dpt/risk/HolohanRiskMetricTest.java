@@ -39,7 +39,7 @@ public class HolohanRiskMetricTest {
     public void testAccuracy() throws Exception {
         final int POPULATION = 13511000;
 
-        InputStream sample = this.getClass().getResourceAsStream("/florida_sample_0.01.txt");
+        InputStream sample = HolohanRiskMetricTest.class.getResourceAsStream("/florida_sample_0.01.txt");
         IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
 
         System.out.println("loading done");
