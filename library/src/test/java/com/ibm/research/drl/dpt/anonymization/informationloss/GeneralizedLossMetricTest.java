@@ -36,8 +36,8 @@ public class GeneralizedLossMetricTest {
     @Test
     public void testNumeric() throws Exception {
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
-        IPVDataset anonymized = IPVDataset.load(getClass().getResourceAsStream("/testNumericAnonymized.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
+        IPVDataset anonymized = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testNumericAnonymized.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();
 
@@ -54,9 +54,9 @@ public class GeneralizedLossMetricTest {
     @Test
     public void testNumericWithWeights() throws Exception {
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
 
-        IPVDataset anonymized = IPVDataset.load(getClass().getResourceAsStream("/testNumericAnonymized.csv"), false, ',', '"', false);
+        IPVDataset anonymized = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testNumericAnonymized.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();
 
@@ -73,9 +73,9 @@ public class GeneralizedLossMetricTest {
     @Test
     public void testCategorical() throws Exception {
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testCategoricalOriginal.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testCategoricalOriginal.csv"), false, ',', '"', false);
 
-        IPVDataset anonymized = IPVDataset.load(getClass().getResourceAsStream("/testCategoricalAnonymized.csv"), false, ',', '"', false);
+        IPVDataset anonymized = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testCategoricalAnonymized.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();
 
@@ -97,9 +97,9 @@ public class GeneralizedLossMetricTest {
     @Test
     public void testGLMPerColumn() throws Exception {
 
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testCPWeightsOriginal.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testCPWeightsOriginal.csv"), false, ',', '"', false);
 
-        IPVDataset anonymized = IPVDataset.load(getClass().getResourceAsStream("/testCPWeightsAnonymized.csv"), false, ',', '"', false);
+        IPVDataset anonymized = IPVDataset.load(SensitiveSimilarityMeasureTest.class.getResourceAsStream("/testCPWeightsAnonymized.csv"), false, ',', '"', false);
 
 
         List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();

@@ -33,8 +33,8 @@ public class NumericalPrecisionTest {
 
     @Test
     public void testNumerical() throws Exception {
-        IPVDataset original = IPVDataset.load(getClass().getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
-        IPVDataset anonymized = IPVDataset.load(getClass().getResourceAsStream("/testNumericAnonymized.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(NumericalPrecisionTest.class.getResourceAsStream("/testNumericOriginal.csv"), false, ',', '"', false);
+        IPVDataset anonymized = IPVDataset.load(NumericalPrecisionTest.class.getResourceAsStream("/testNumericAnonymized.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(ColumnInformationGenerator.generateNumericalRange(original, 0, ColumnType.QUASI));

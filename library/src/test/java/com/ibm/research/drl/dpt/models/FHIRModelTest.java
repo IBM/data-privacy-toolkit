@@ -32,7 +32,7 @@ public class FHIRModelTest {
 
     @Test
     public void testSerialization() throws Exception{
-        InputStream inputStream = this.getClass().getResourceAsStream("/fhir/deviceExample.json");
+        InputStream inputStream = FHIRModelTest.class.getResourceAsStream("/fhir/deviceExample.json");
 
         ObjectMapper objectMapper = new ObjectMapper();
 

@@ -42,7 +42,7 @@ public class DatasetLinkerTest {
         linkInformation.add(new LinkInfo(4, 4));
 
         long start = System.currentTimeMillis();
-        InputStream input = this.getClass().getResourceAsStream("/florida_original.txt");
+        InputStream input = DatasetLinkerTest.class.getResourceAsStream("/florida_original.txt");
         DatasetLinker datasetLinker = new DatasetLinker(input, linkInformation);
         long end = System.currentTimeMillis();
 
@@ -61,7 +61,7 @@ public class DatasetLinkerTest {
     
     @Test
     public void testNumerical() throws Exception {
-        InputStream target = this.getClass().getResourceAsStream("/datasetLinkerNumericalTest.csv");
+        InputStream target = DatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv");
         List<LinkInfo> linkInformation = new ArrayList<>();
         linkInformation.add(new LinkInfo(0, 0, true));
         
@@ -77,7 +77,7 @@ public class DatasetLinkerTest {
 
     @Test
     public void testNumericalRange() throws Exception {
-        InputStream target = this.getClass().getResourceAsStream("/datasetLinkerNumericalTest.csv");
+        InputStream target = DatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv");
         List<LinkInfo> linkInformation = new ArrayList<>();
         linkInformation.add(new LinkInfo(0, 0, true));
 
@@ -115,7 +115,7 @@ public class DatasetLinkerTest {
 
     @Test
     public void testMix() throws Exception {
-        InputStream target = this.getClass().getResourceAsStream("/datasetLinkerNumericalTest.csv");
+        InputStream target = DatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv");
         List<LinkInfo> linkInformation = new ArrayList<>();
         linkInformation.add(new LinkInfo(0, 0, true));
         linkInformation.add(new LinkInfo(1, 1));
@@ -131,7 +131,7 @@ public class DatasetLinkerTest {
     
     @Test
     public void testNumericalMatchRow() throws Exception {
-        InputStream target = this.getClass().getResourceAsStream("/datasetLinkerNumericalTest.csv");
+        InputStream target = DatasetLinkerTest.class.getResourceAsStream("/datasetLinkerNumericalTest.csv");
         List<LinkInfo> linkInformation = new ArrayList<>();
         linkInformation.add(new LinkInfo(0, 0, true));
 

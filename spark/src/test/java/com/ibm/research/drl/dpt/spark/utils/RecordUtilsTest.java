@@ -51,7 +51,7 @@ public class RecordUtilsTest {
 
     @Test
     public void testCreateFieldMapCSV() {
-        Dataset<Row> dataset = spark.read().option("header", "true").csv(this.getClass().getResource("/schematest.csv").getFile());
+        Dataset<Row> dataset = spark.read().option("header", "true").csv(RecordUtilsTest.class.getResource("/schematest.csv").getFile());
         Map<String, Integer> fieldMap = RecordUtils.createFieldMap(dataset.schema());
       
         assertEquals(4, fieldMap.size());
@@ -63,7 +63,7 @@ public class RecordUtilsTest {
 
     @Test
     public void testCreateFieldCSVNoHeader() {
-        Dataset<Row> dataset = spark.read().csv(this.getClass().getResource("/schematest.csv").getFile());
+        Dataset<Row> dataset = spark.read().csv(RecordUtilsTest.class.getResource("/schematest.csv").getFile());
         Map<String, Integer> fieldMap = RecordUtils.createFieldMap(dataset.schema());
 
         assertEquals(4, fieldMap.size());
@@ -75,7 +75,7 @@ public class RecordUtilsTest {
 
     @Test
     public void testCreateFieldMapParquet() {
-        Dataset<Row> dataset = spark.read().parquet(this.getClass().getResource("/schematest.parquet").getFile());
+        Dataset<Row> dataset = spark.read().parquet(RecordUtilsTest.class.getResource("/schematest.parquet").getFile());
         Map<String, Integer> fieldMap = RecordUtils.createFieldMap(dataset.schema());
 
         assertEquals(4, fieldMap.size());

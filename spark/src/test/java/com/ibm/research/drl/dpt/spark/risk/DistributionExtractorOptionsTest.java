@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DistributionExtractorOptionsTest {
     @Test
     public void testValidConfiguration() throws Exception {
-        try (InputStream inputStream = getClass().getResourceAsStream("/distributionExtractionValid.yaml")) {
+        try (InputStream inputStream = DistributionExtractorOptionsTest.class.getResourceAsStream("/distributionExtractionValid.yaml")) {
             DistributionExtractorOptions options = new ObjectMapper(new YAMLFactory()).readValue(inputStream, DistributionExtractorOptions.class);
 
             assertNotNull(options);
