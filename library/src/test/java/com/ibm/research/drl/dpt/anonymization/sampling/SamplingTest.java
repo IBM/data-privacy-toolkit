@@ -35,7 +35,7 @@ public class SamplingTest {
     
     @Test
     public void testSampling() throws Exception {
-        IPVDataset original = IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset original = IPVDataset.load(SamplingTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
         columnInformationList.add(new CategoricalInformation(null, ColumnType.QUASI));

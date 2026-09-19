@@ -195,8 +195,8 @@ public class DataMaskingTest {
     @Test
     public void testConsistencyExtraction() throws IOException {
         try (
-                InputStream configuration = this.getClass().getResourceAsStream("/maskingConsistencyTest.json");
-                InputStream options = this.getClass().getResourceAsStream("/maskingConsistencyTest.json");
+                InputStream configuration = DataMaskingTest.class.getResourceAsStream("/maskingConsistencyTest.json");
+                InputStream options = DataMaskingTest.class.getResourceAsStream("/maskingConsistencyTest.json");
                 ) {
             ConfigurationManager configurationManager = ConfigurationManager.load(JsonUtils.MAPPER.readTree(configuration));
 

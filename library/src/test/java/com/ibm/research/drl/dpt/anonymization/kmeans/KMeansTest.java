@@ -38,7 +38,7 @@ public class KMeansTest {
     
     @Test
     public void testKMeans() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/kmeans_simple.txt"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(KMeansTest.class.getResourceAsStream("/kmeans_simple.txt"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new NumericalRange(Collections.emptyList(), ColumnType.QUASI));
@@ -63,7 +63,7 @@ public class KMeansTest {
 
     @Test
     public void testKMeansWithCategorical() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/kmeans_simple_categorical.txt"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(KMeansTest.class.getResourceAsStream("/kmeans_simple_categorical.txt"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformation = new ArrayList<>();
         columnInformation.add(new CategoricalInformation(

@@ -41,17 +41,17 @@ public class IPVDatasetTest {
 
     @Test
     public void testLoad() throws Exception {
-        IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset.load(IPVDatasetTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
     }
 
     @Test
     public void testLoad1() throws Exception {
-        IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), true, ',', '"', false);
+        IPVDataset.load(IPVDatasetTest.class.getResourceAsStream("/100.csv"), true, ',', '"', false);
     }
 
     @Test
     public void testLoadSkipHeaders() throws Exception {
-        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/100.csv")))) {
+        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(IPVDatasetTest.class.getResourceAsStream("/100.csv")))) {
             IPVDataset dataset = IPVDataset.load(reader, true, ',', '"', false);
             assertEquals(99, dataset.getNumberOfRows());
         }
@@ -59,7 +59,7 @@ public class IPVDatasetTest {
 
     @Test
     public void loadDatasetWithHeader() throws Exception {
-        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream("/test_with_header.csv")))) {
+        try (InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(IPVDatasetTest.class.getResourceAsStream("/test_with_header.csv")))) {
             IPVDataset dataset = IPVDataset.load(reader, true, ',', '"', false);
             assertEquals(2, dataset.getNumberOfRows());
 
@@ -72,20 +72,20 @@ public class IPVDatasetTest {
 
     @Test
     public void testGetNumberOfColumnsAfterLoad() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(IPVDatasetTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
 
         assertEquals(5, dataset.getNumberOfColumns());
     }
 
     @Test
     public void testGetNumberOfRowsAfterLoad() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(IPVDatasetTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
         assertEquals(100, dataset.getNumberOfRows());
     }
 
     @Test
     public void testGet() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(IPVDatasetTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
 
         // 1998,1,1,0,6
         assertThat(dataset.get(0, 0).hashCode(), is("1998".hashCode()));
@@ -134,7 +134,7 @@ public class IPVDatasetTest {
 
     @Test
     public void serializeToCSV() throws Exception {
-        IPVDataset dataset = IPVDataset.load(this.getClass().getResourceAsStream("/100.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(IPVDatasetTest.class.getResourceAsStream("/100.csv"), false, ',', '"', false);
 
         String datasetString = dataset.toString();
 

@@ -450,7 +450,7 @@ public class EstimatedRiskTest {
                 riskValues.put("nue", new ArrayList<>());
 
                 for(String resource: resources) {
-                    InputStream sample = this.getClass().getResourceAsStream(resource);
+                    InputStream sample = EstimatedRiskTest.class.getResourceAsStream(resource);
                     IPVDataset sampleDataset = IPVDataset.load(sample, false, ',', '"', false);
 
                     List<PrivacyConstraint> privacyConstraints = new ArrayList<>();

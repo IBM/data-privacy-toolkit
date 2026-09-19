@@ -40,7 +40,7 @@ public class KMeansAnonymizationTest {
         int k = 4;
         double maxSuppressionRate = 1.0;
 
-        InputStream is = this.getClass().getResourceAsStream("/100.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/100.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
 
@@ -70,7 +70,7 @@ public class KMeansAnonymizationTest {
         int k = 4;
         double maxSuppressionRate = 0.0;
 
-        InputStream is = this.getClass().getResourceAsStream("/100.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/100.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
 
@@ -99,7 +99,7 @@ public class KMeansAnonymizationTest {
     public void testNumerical() throws Exception {
         int k = 4;
 
-        InputStream is = this.getClass().getResourceAsStream("/100.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/100.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
@@ -123,7 +123,7 @@ public class KMeansAnonymizationTest {
     public void testCategorical() throws Exception {
         int k = 4;
 
-        InputStream is = this.getClass().getResourceAsStream("/testCategoricalOriginal.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/testCategoricalOriginal.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
@@ -152,7 +152,7 @@ public class KMeansAnonymizationTest {
     public void testCategorical2() throws Exception {
         int k = 4;
 
-        InputStream is = this.getClass().getResourceAsStream("/testCategoricalKmeans.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/testCategoricalKmeans.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
         MaterializedHierarchy hierarchy = new MaterializedHierarchy();
@@ -181,7 +181,7 @@ public class KMeansAnonymizationTest {
     public void testMix() throws Exception {
         int k = 4;
 
-        InputStream is = this.getClass().getResourceAsStream("/testOLA.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/testOLA.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
 
@@ -209,7 +209,7 @@ public class KMeansAnonymizationTest {
     public void testIgnoresNonQuasi() throws Exception {
         int k = 4;
 
-        InputStream is = this.getClass().getResourceAsStream("/100_with_id.csv");
+        InputStream is = KMeansAnonymizationTest.class.getResourceAsStream("/100_with_id.csv");
         IPVDataset csvDataset = IPVDataset.load(is, false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();

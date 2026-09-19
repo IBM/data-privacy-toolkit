@@ -44,7 +44,7 @@ public class FHIRGenericMaskingProviderTest {
         FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration("/fhir/Device", deviceMaskConf, new DefaultMaskingConfiguration());
 
         JsonNode device = new ObjectMapper().readTree(
-                this.getClass().getResourceAsStream("/fhir/deviceExample.json"));
+                FHIRGenericMaskingProviderTest.class.getResourceAsStream("/fhir/deviceExample.json"));
 
         String originalOwnerReference = "Organization/2.16.840.1.113883.19.5";
 
@@ -71,7 +71,7 @@ public class FHIRGenericMaskingProviderTest {
         FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration("/fhir/Device", deviceMaskConf, new DefaultMaskingConfiguration());
 
         JsonNode device = new ObjectMapper().readTree(
-                this.getClass().getResourceAsStream("/fhir/deviceExample.json"));
+                FHIRGenericMaskingProviderTest.class.getResourceAsStream("/fhir/deviceExample.json"));
 
         String originalReference = "Practitioner/xcda-author";
         String originalContactValue = "ext 4352";
@@ -100,7 +100,7 @@ public class FHIRGenericMaskingProviderTest {
         FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration("/fhir/Device", deviceMaskConf, new DefaultMaskingConfiguration());
 
         JsonNode device = new ObjectMapper().readTree(
-                this.getClass().getResourceAsStream("/fhir/deviceExample.json"));
+                FHIRGenericMaskingProviderTest.class.getResourceAsStream("/fhir/deviceExample.json"));
 
         String originalReference = "Practitioner/xcda-author";
         String originalContactValue = "ext 4352";
@@ -128,7 +128,7 @@ public class FHIRGenericMaskingProviderTest {
         FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration("/fhir/Device", deviceMaskConf);
 
         JsonNode device = new ObjectMapper().readTree(
-                this.getClass().getResourceAsStream("/fhir/deviceExample.json"));
+                FHIRGenericMaskingProviderTest.class.getResourceAsStream("/fhir/deviceExample.json"));
 
         assertTrue(device.get("note").isArray());
 
@@ -148,7 +148,7 @@ public class FHIRGenericMaskingProviderTest {
         FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration("/fhir/Device", deviceMaskConf);
 
         JsonNode device = new ObjectMapper().readTree(
-                this.getClass().getResourceAsStream("/fhir/deviceExample.json"));
+                FHIRGenericMaskingProviderTest.class.getResourceAsStream("/fhir/deviceExample.json"));
 
         assertTrue(device.get("expiry").isTextual());
 
@@ -176,6 +176,8 @@ public class FHIRGenericMaskingProviderTest {
                 new DefaultMaskingConfiguration(), new HashSet<String>(), this.factory);
 
         JsonNode maskedDevice = genericMaskingProvider.mask(device);
+
+        assertNotNull(maskedDevice);
     }
 
     @Test
@@ -186,7 +188,7 @@ public class FHIRGenericMaskingProviderTest {
         FHIRResourceMaskingConfiguration resourceConfiguration = new FHIRResourceMaskingConfiguration("/fhir/Device", deviceMaskConf);
 
         JsonNode device = new ObjectMapper().readTree(
-                this.getClass().getResourceAsStream("/fhir/deviceExample.json"));
+                FHIRGenericMaskingProviderTest.class.getResourceAsStream("/fhir/deviceExample.json"));
 
         String originalReference = "2020-08-08";
 

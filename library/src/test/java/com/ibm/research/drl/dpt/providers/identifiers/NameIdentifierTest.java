@@ -131,7 +131,7 @@ public class NameIdentifierTest {
         String[] filenames = {"/top1200maleNamesUS.csv", "/top1000femaleNamesUS.csv"};
 
         for (String filename: filenames) {
-            List<String> names = fileContentsAsList(this.getClass().getResourceAsStream(filename));
+            List<String> names = fileContentsAsList(NameIdentifierTest.class.getResourceAsStream(filename));
 
             int totalNames = 0;
             int totalMatches = 0;

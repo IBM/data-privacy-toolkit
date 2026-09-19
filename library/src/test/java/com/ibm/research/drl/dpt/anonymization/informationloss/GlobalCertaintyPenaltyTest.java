@@ -89,7 +89,7 @@ public class GlobalCertaintyPenaltyTest {
     @Test
     public void testCategoricalNoLoss() throws Exception {
 
-        IPVDataset dataset = IPVDataset.load(getClass().getResourceAsStream("/testCategoricalOriginal2anon.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(GlobalCertaintyPenaltyTest.class.getResourceAsStream("/testCategoricalOriginal2anon.csv"), false, ',', '"', false);
 
 
         List<ColumnInformation> columnInformationList = new ArrayList<ColumnInformation>();
@@ -123,7 +123,7 @@ public class GlobalCertaintyPenaltyTest {
     @Test
     public void testCategoricalWithLoss() throws Exception {
 
-        IPVDataset dataset = IPVDataset.load(getClass().getResourceAsStream("/testCategoricalOriginalunique.csv"), false, ',', '"', false);
+        IPVDataset dataset = IPVDataset.load(GlobalCertaintyPenaltyTest.class.getResourceAsStream("/testCategoricalOriginalunique.csv"), false, ',', '"', false);
 
         List<ColumnInformation> columnInformationList = new ArrayList<>();
 

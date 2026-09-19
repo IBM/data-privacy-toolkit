@@ -53,7 +53,7 @@ public class OutlierRemovalRealLoadTest {
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/filter_not_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalRealLoadTest.class.getResourceAsStream("/filter_not_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 
@@ -67,7 +67,7 @@ public class OutlierRemovalRealLoadTest {
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/filter_one_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalRealLoadTest.class.getResourceAsStream("/filter_one_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 
@@ -81,7 +81,7 @@ public class OutlierRemovalRealLoadTest {
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/filter_two_aggregated_same_id.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalRealLoadTest.class.getResourceAsStream("/filter_two_aggregated_same_id.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 
@@ -95,7 +95,7 @@ public class OutlierRemovalRealLoadTest {
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/filter_two_aggregated_different_id.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalRealLoadTest.class.getResourceAsStream("/filter_two_aggregated_different_id.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 
@@ -109,7 +109,7 @@ public class OutlierRemovalRealLoadTest {
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/filter_aggregated_with_not_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalRealLoadTest.class.getResourceAsStream("/filter_aggregated_with_not_aggregated.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 
@@ -123,7 +123,7 @@ public class OutlierRemovalRealLoadTest {
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/filter_one_aggregated_two_fields.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalRealLoadTest.class.getResourceAsStream("/filter_one_aggregated_two_fields.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 
