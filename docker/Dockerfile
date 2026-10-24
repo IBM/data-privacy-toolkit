@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2-1782798957
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2-1792742351
 
 LABEL authors="Marco Simioni <marco.simioni@ibm.com>, Stefano Braghin <stefanob@ie.ibm.com>"
 
