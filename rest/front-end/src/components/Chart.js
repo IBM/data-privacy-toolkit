@@ -3,7 +3,7 @@ import Highcharts from 'highcharts'
 
 export default class Chart extends Component {
   componentDidMount () {
-    this.chart = new Highcharts['Chart'](this.props.container || 'chart', this.props.options)
+    this.chart = new Highcharts.Chart(this.props.container || 'chart', this.props.options)
   }
 
   componentWillUnmount () {
@@ -12,7 +12,7 @@ export default class Chart extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     this.chart.update(nextProps.options)
   }
 

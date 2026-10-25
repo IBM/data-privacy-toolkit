@@ -14,7 +14,7 @@ import { anonymizeDataset } from '../actions/anonymize'
 
 import { getFieldColor } from '../utilities'
 
-const InformationLossSelector = ({id = '', algorithms, selected, onChange}) => {
+const InformationLossSelector = ({ id = '', algorithms, selected, onChange }) => {
   const options = algorithms.map((algorithm, index) => <option key={index} value={algorithm.shortName}>{algorithm.name}</option>)
   return (
     <select id={id} value={selected} onChange={onChange}>
@@ -37,16 +37,20 @@ class Anonymize extends Component {
 
   render () {
     const headers = this.buildHeaderRow()
-    const suppression = this.state.selectedAlgorithm === 'OLA' ? (
-      <div className='form-group'>
-        <label htmlFor='suppression'>Suppression:</label>
-        <input id='suppression' type='number' value={this.state.suppression} min='0.0' max='20.0' step='0.01' onChange={event => {
-          this.setState(
-            Object.assign({}, this.state, {suppression: Number(event.target.value)})
-          )
-        }} />
-      </div>
-    ) : undefined
+    const suppression = this.state.selectedAlgorithm === 'OLA'
+      ? (
+        <div className='form-group'>
+          <label htmlFor='suppression'>Suppression:</label>
+          <input
+            id='suppression' type='number' value={this.state.suppression} min='0.0' max='20.0' step='0.01' onChange={event => {
+              this.setState(
+                Object.assign({}, this.state, { suppression: Number(event.target.value) })
+              )
+            }}
+          />
+        </div>
+        )
+      : undefined
 
     return (
       <div className='container-fluid'>
@@ -55,41 +59,49 @@ class Anonymize extends Component {
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='algorithm'>Algorithm:</label>
-            <AlgorithmSelector id='metric' algorithms={this.props.algorithms} selected={this.state.selectedAlgorithm} onChange={event => this.setState(Object.assign({}, this.state, {selectedAlgorithm: event.target.value}))} />
+            <AlgorithmSelector id='metric' algorithms={this.props.algorithms} selected={this.state.selectedAlgorithm} onChange={event => this.setState(Object.assign({}, this.state, { selectedAlgorithm: event.target.value }))} />
           </div>
           <div className='form-group'>
             <label htmlFor='kInputField'>k value:</label>
-            <input id='kInputField' type='number' min='2' step='1' value={this.state.k} onChange={event => {
-              this.setState(Object.assign({}, this.state, {k: Number(event.target.value)}))
-            }} />
+            <input
+              id='kInputField' type='number' min='2' step='1' value={this.state.k} onChange={event => {
+                this.setState(Object.assign({}, this.state, { k: Number(event.target.value) }))
+              }}
+            />
           </div>
           {suppression}
         </div>
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='metric'>Information Loss Metric:</label>
-            <InformationLossSelector id='metric' algorithms={this.props.metrics} selected={this.state.selectedMetric} onChange={event => this.setState(Object.assign({}, this.state, {selectedMetric: event.target.value}))} />
+            <InformationLossSelector id='metric' algorithms={this.props.metrics} selected={this.state.selectedMetric} onChange={event => this.setState(Object.assign({}, this.state, { selectedMetric: event.target.value }))} />
           </div>
         </div>
         <div className='form-inline'>
           <div className='form-group'>
-            <a className='btn btn-primary' onClick={event => {
-              this.props.history.push('/exploration')
-            }}><i className='fa fa-line-chart' /> Explore</a>
+            <a
+              className='btn btn-primary' onClick={event => {
+                this.props.history.push('/exploration')
+              }}
+            ><i className='fa fa-line-chart' /> Explore
+            </a>
           </div>
           <div className='form-group'>
-            <a className='btn btn-primary' onClick={event => {
-              const options = {
-                lossMetric: this.state.selectedMetric,
-                k: this.state.k,
-                suppressionRate: this.state.suppression,
-                algorithmName: this.state.selectedAlgorithm,
-                epsilon: this.state.epsilon
-              }
-              this.props.anonymizeData(
-                this.props.protected, this.props.hasHeader, Array.from(this.props.kQuasi), Array.from(this.props.eQuasi), Array.from(this.props.sensitive), this.props.headers, options
-              )
-            }}><i className='fa fa-user-secret' /> Anonymize</a>
+            <a
+              className='btn btn-primary' onClick={event => {
+                const options = {
+                  lossMetric: this.state.selectedMetric,
+                  k: this.state.k,
+                  suppressionRate: this.state.suppression,
+                  algorithmName: this.state.selectedAlgorithm,
+                  epsilon: this.state.epsilon
+                }
+                this.props.anonymizeData(
+                  this.props.protected, this.props.hasHeader, Array.from(this.props.kQuasi), Array.from(this.props.eQuasi), Array.from(this.props.sensitive), this.props.headers, options
+                )
+              }}
+            ><i className='fa fa-user-secret' /> Anonymize
+            </a>
           </div>
         </div>
       </div>
@@ -130,7 +142,7 @@ class Anonymize extends Component {
   buildHeaderRow () {
     if (this.props.protected && this.props.headers && this.props.providers) {
       return this.props.protected[0].map((v, i) => {
-        const columnName = this.props.hasHeader ? v : `Column ${i}`;
+        const columnName = this.props.hasHeader ? v : `Column ${i}`
         const provider = this.props.headers[columnName] || {}
         const providerName = provider.name || 'UNKNOWN'
 
@@ -138,20 +150,24 @@ class Anonymize extends Component {
         const fieldContainerClasses = `fieldTypeContainer ${getFieldColor(fieldSensitivity)}`
 
         const icon = `fa fa-${this.props.linkingData.has(i) ? 'link' : 'chain-broken'}`
-        const linkIcon = (<i className={icon} onClick={event => {
-          const newLinkingData = new Set(this.props.linkingData)
+        const linkIcon = (
+          <i
+            className={icon} onClick={event => {
+              const newLinkingData = new Set(this.props.linkingData)
 
-          if (this.props.linkingData.has(i)) {
-            newLinkingData.delete(i)
-          } else {
-            newLinkingData.add(i)
-          }
+              if (this.props.linkingData.has(i)) {
+                newLinkingData.delete(i)
+              } else {
+                newLinkingData.add(i)
+              }
 
-          this.props.updateLinking(newLinkingData)
-        }} />)
+              this.props.updateLinking(newLinkingData)
+            }}
+          />
+        )
 
         return (
-          <div className={fieldContainerClasses}>
+          <div key={i} className={fieldContainerClasses}>
             <div className='fieldTypeText'>{linkIcon} {providerName}</div>
           </div>
         )

@@ -1,4 +1,4 @@
-import {compress, decompress} from 'lz-string'
+import { compress, decompress } from 'lz-string'
 
 const storage = window.localStorage || {
   getItem: () => null,

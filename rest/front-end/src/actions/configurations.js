@@ -28,13 +28,13 @@ const processConfiguration = (options) => {
   options = options.options
   const categories = {}
 
-  for (let key in options) {
+  for (const key in options) {
     if (key.indexOf('_') !== -1) {
       console.log('Contains underscore')
     }
 
-    let keyOptions = options[key]
-    let category = keyOptions.category
+    const keyOptions = options[key]
+    const category = keyOptions.category
     if (!_.has(categories, category)) {
       categories[category] = []
     }

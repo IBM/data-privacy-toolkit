@@ -27,7 +27,7 @@ class DatasetUploader extends Component {
   onHasHeadersChange (event) {
     const hasHeader = event.target.checked
 
-    this.setState({ hasHeader: hasHeader })
+    this.setState({ hasHeader })
   }
 
   uploadFile (event) {
@@ -72,7 +72,7 @@ export default class DatasetLoader extends Component {
     if (selectedDataset.id !== -1) {
       this.props.onLoadLocal(selectedDataset.name)
     } else {
-      this.setState({loadExternal: true})
+      this.setState({ loadExternal: true })
     }
   }
 
@@ -91,9 +91,9 @@ export default class DatasetLoader extends Component {
           <label htmlFor='datasetType'>Select a dataset:</label>
           <select onChange={this.onDatasetSelect.bind(this)}>
             <option value=''>-- select a dataset --</option>
-            { options }
+            {options}
           </select>
-          { bringYourOwnDataset }
+          {bringYourOwnDataset}
           <div style={separator} />
         </div>
       </div>

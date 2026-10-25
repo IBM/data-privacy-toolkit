@@ -52,7 +52,7 @@ const store = createStore(
 const Layout = () => (
   <div className='container-fluid'>
     <NavBar />
-    <div className='container-fluid' style={{marginTop: '50px'}}>
+    <div className='container-fluid' style={{ marginTop: '50px' }}>
       <Switch>
         <Route exact path='/' component={Description} />
         <Route path='/configuration' component={Configuration} />
@@ -78,6 +78,6 @@ const App = () => (
       <Layout />
     </ConnectedRouter>
   </Provider>
-    )
+)
 
 export default App

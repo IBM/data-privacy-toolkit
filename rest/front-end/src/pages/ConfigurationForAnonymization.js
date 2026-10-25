@@ -8,7 +8,7 @@ function beautify (name) {
   return name.toUpperCase()
 }
 
-const ConfigurationEntry = ({index, name, value, onChangeValue}) => (
+const ConfigurationEntry = ({ index, name, value, onChangeValue }) => (
   <tr>
     <td>{index}</td>
     <td>{beautify(name)}</td>
@@ -51,7 +51,7 @@ class ConfigurationForAnonymization extends Component {
     if (configurations && configurations[algorithmName]) {
       const configuration = configurations[algorithmName].configuration || {}
       const keys = Object.keys(configuration)
-      for (let i in keys) {
+      for (const i in keys) {
         const key = keys[i]
         const value = configuration[key]
 
@@ -66,7 +66,7 @@ class ConfigurationForAnonymization extends Component {
     const rows = this.buildPropertyList(this.state || this.props.algorithmConfigurations, this.props.match.params.anonymizationAlgorithm)
 
     return (
-      <div >
+      <div>
         <table className='table table-border table-hover' summary=''>
           <thead>
             <tr>

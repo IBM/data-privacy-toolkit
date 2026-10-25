@@ -37,7 +37,7 @@ function convertResponse (data) {
   const sensitive = []
 
   if (undefined !== data) {
-    const moreSane = data.map(({itemSet}) => itemSet.items)
+    const moreSane = data.map(({ itemSet }) => itemSet.items)
     direct = moreSane.filter(a => a.length === 1).reduce((a, c) => a.concat(c), [])
     kQuasi = Array.from(new Set(moreSane.filter(a => a.length !== 1).reduce((a, c) => a.concat(c), [])))
   }
@@ -60,7 +60,7 @@ function needsIdentification (state) {
   return !state.workflow.isFetching
 }
 
-function saveAnalyzedData ({direct, kQuasi, eQuasi, sensitive}, k) {
+function saveAnalyzedData ({ direct, kQuasi, eQuasi, sensitive }, k) {
   return {
     type: SAVE_RISK_IDENTIFICATION,
     direct,

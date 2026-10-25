@@ -13,7 +13,7 @@ export function annotateText (text) {
       dispatch(requestAnnotation())
       console.log(`Annotating with ${text}`)
 
-      window.fetch(`api/freetext`, {
+      window.fetch('api/freetext', {
         method: 'POST',
         body: text
       }).then(response => {

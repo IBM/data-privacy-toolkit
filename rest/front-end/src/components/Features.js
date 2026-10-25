@@ -1,15 +1,15 @@
 import React from 'react'
 
-const FeatureEntry = ({index, name, friendlyName = '', description}) => (
+const FeatureEntry = ({ index, name, friendlyName = '', description }) => (
   <tr>
     <td>{index}</td>
     <td>{name}</td>
     <td>{friendlyName}</td>
     <td>{description}</td>
   </tr>
-    )
+)
 
-const Features = ({features, type}) => (
+const Features = ({ features, type }) => (
   <div>
     <h3>Available {type}</h3>
     <table className='table table-border table-hover' summary=''>

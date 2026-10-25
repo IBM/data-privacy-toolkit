@@ -18,16 +18,16 @@ const NavBar = () => (
     <Navbar.Collapse>
       <Nav>
         <NavItem href='#/'><i className='fa fa-home' /> Home</NavItem>
-        <NavDropdown id='information_drop_down' title={generateTitle('fa-info-circle', 'Information')} >
+        <NavDropdown id='information_drop_down' title={generateTitle('fa-info-circle', 'Information')}>
           <MenuItem href='#/identifiers'>Identifiers</MenuItem>
           <MenuItem href='#/maskingProviders'>Masking Providers</MenuItem>
           <MenuItem href='#/anonymizationProviders'>Anonymization Providers</MenuItem>
         </NavDropdown>
-        <NavDropdown id='configuration_drop_down' title={generateTitle('fa-gear', 'Configurations')} >
+        <NavDropdown id='configuration_drop_down' title={generateTitle('fa-gear', 'Configurations')}>
           <MenuItem href='#/configuration'>Masking Providers</MenuItem>
           <MenuItem href='#/configurationAnon'>Anonymization Algorithms</MenuItem>
         </NavDropdown>
-        <NavDropdown id='demos_drop_down' title={generateTitle('fa-laptop', 'Demos')} >
+        <NavDropdown id='demos_drop_down' title={generateTitle('fa-laptop', 'Demos')}>
           <MenuItem href='#/workflow/loading'>Data Protection Workflow</MenuItem>
           <MenuItem divider />
           <MenuItem href='#/dicomMasking' disabled>DICOM Masking</MenuItem>
