@@ -26,10 +26,8 @@ import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.sql.*;
 import scala.Tuple2;
 
@@ -42,14 +40,14 @@ import java.util.stream.Collectors;
 import static org.apache.spark.sql.functions.*;
 
 public class OutlierRemoval implements Serializable {
-    private static final Logger logger = LogManager.getLogger(OutlierRemoval.class);
+    private static final Logger logger = LoggerFactory.getLogger(OutlierRemoval.class);
     public static void main(String[] args) {
         try {
             CommandLine cmd = createAndParseCommandLine(args);
 
             OutlierRemovalOptions configuration = SparkUtils.deserializeConfiguration(cmd.getOptionValue("c"), OutlierRemovalOptions.class);
 
-            final SparkSession spark = SparkSession.builder().sparkContext(new SparkContext(new SparkConf(true))).getOrCreate();
+            final SparkSession spark = SparkSession.builder().getOrCreate();
 
             DataTypeFormat inputFormat = DataTypeFormat.valueOf(cmd.getOptionValue("t", "PARQUET"));
             DatasetOptions datasetOptions = null;
@@ -235,22 +233,15 @@ public class OutlierRemoval implements Serializable {
         if (null == condition.getCondition()) return null;
 
         Column column = col(aggregationName);
-        switch (condition.getCondition()) {
-            case LT:
-                return column.lt(condition.getValue());
-            case LEQ:
-                return column.leq(condition.getValue());
-            case GT:
-                return column.gt(condition.getValue());
-            case GEQ:
-                return column.geq(condition.getValue());
-            case EQ:
-                return column.equalTo(condition.getValue());
-            case NEQ:
-                return column.notEqual(condition.getValue());
-            default:
-                throw new IllegalArgumentException("Unknown condition");
-        }
+        return switch (condition.getCondition()) {
+            case LT -> column.lt(condition.getValue());
+            case LEQ -> column.leq(condition.getValue());
+            case GT -> column.gt(condition.getValue());
+            case GEQ -> column.geq(condition.getValue());
+            case EQ -> column.equalTo(condition.getValue());
+            case NEQ -> column.notEqual(condition.getValue());
+            default -> throw new IllegalArgumentException("Unknown condition");
+        };
     }
 
     private Column[] buildSelectionColumns(Dataset<Row> dataset, String filterColumnName) {
@@ -281,26 +272,15 @@ public class OutlierRemoval implements Serializable {
             Column original = dataset.col(condition.getColumnName());
             Column column = original;
 
-            switch (condition.getCondition()) {
-                case LT:
-                    column = column.lt(condition.getValue());
-                    break;
-                case LEQ:
-                    column = column.leq(condition.getValue());
-                    break;
-                case GT:
-                    column = column.gt(condition.getValue());
-                    break;
-                case GEQ:
-                    column = column.geq(condition.getValue());
-                    break;
-                case EQ:
-                    column = column.equalTo(condition.getValue());
-                    break;
-                case NEQ:
-                    column = column.notEqual(condition.getValue());
-                    break;
-            }
+            column = switch (condition.getCondition()) {
+                case LT -> column.lt(condition.getValue());
+                case LEQ -> column.leq(condition.getValue());
+                case GT -> column.gt(condition.getValue());
+                case GEQ -> column.geq(condition.getValue());
+                case EQ -> column.equalTo(condition.getValue());
+                case NEQ -> column.notEqual(condition.getValue());
+                default -> column;
+            };
 
             if (condition.isTrueOnNull()) {
                 column = original.isNull().or(column);
@@ -332,36 +312,22 @@ public class OutlierRemoval implements Serializable {
         boolean properAggregation = false;
 
         switch (condition.getAggregationType()) {
-            case SUM:
-                column = sum(column);
-                properAggregation = true;
-                break;
-            case COUNT:
-                column = sum(lit(1L));
-                properAggregation = true;
-                break;
-            case MAX:
-                column = max(column);
-                properAggregation = true;
-                break;
-            case MIN:
-                column = min(column);
-                properAggregation = true;
-                break;
-            case NOT_AGGREGATED:
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown aggregation type");
+            case SUM -> { column = sum(column); properAggregation = true; }
+            case COUNT -> { column = sum(lit(1L)); properAggregation = true; }
+            case MAX -> { column = max(column); properAggregation = true; }
+            case MIN -> { column = min(column); properAggregation = true; }
+            case NOT_AGGREGATED -> { }
+            default -> throw new IllegalArgumentException("Unknown aggregation type");
         }
 
-        if (!  properAggregation) throw new IllegalArgumentException("No aggregation values specified");
+        if (!properAggregation) throw new IllegalArgumentException("No aggregation values specified");
 
         return column;
     }
 
     private static CommandLine createAndParseCommandLine(String[] args) throws ParseException {
         Options options = buildOptions();
-        CommandLineParser parser = new PosixParser();
+        CommandLineParser parser = new DefaultParser();
         return parser.parse(options, args);
     }
 

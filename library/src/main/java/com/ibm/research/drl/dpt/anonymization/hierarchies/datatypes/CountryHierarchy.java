@@ -24,12 +24,20 @@ import com.ibm.research.drl.dpt.models.Country;
 
 import java.util.Collection;
 
+/**
+ * Generalization hierarchy for countries, grouping country → continent.
+ */
 public class CountryHierarchy extends MaterializedHierarchy {
 
     private final static CountryManager countryManager = CountryManager.getInstance();
 
     private final static CountryHierarchy instance = new CountryHierarchy();
 
+    /**
+     * Returns the singleton instance of CountryHierarchy.
+     *
+     * @return the singleton instance
+     */
     public static CountryHierarchy getInstance() {
         return instance;
     }

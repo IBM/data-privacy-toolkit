@@ -33,20 +33,35 @@ import java.security.SecureRandom;
  * The type Address masking provider.
  */
 public class AddressMaskingProvider implements MaskingProvider {
+    /** Shared address identifier instance. */
     private static final AddressIdentifier addressIdentifier = new AddressIdentifier();
+    /** Shared postal code manager instance. */
     private static final PostalCodeManager postalCodeManager = PostalCodeManager.getInstance();
+    /** Shared street name manager instance. */
     private static final StreetNameManager streetNameManager = StreetNameManager.getInstance();
+    /** Masking provider used to randomise the country component. */
     private final CountryMaskingProvider countryMaskingProvider;
+    /** Masking provider used to randomise the city component. */
     private final CityMaskingProvider cityMaskingProvider;
+    /** Whether to randomise the country component. */
     private final boolean randomizeCountry;
+    /** Whether to randomise the street number component. */
     private final boolean randomizeNumber;
+    /** Whether to randomise the road type component. */
     private final boolean randomizeRoadType;
+    /** Whether to randomise the postal code component. */
     private final boolean randomizePostalCode;
+    /** Whether to replace the postal code with a nearby one. */
     private final boolean nearestPostalCode;
+    /** Number of nearest postal codes to select from. */
     private final int nearestPostalCodeK;
+    /** Whether to randomise the city component. */
     private final boolean randomizeCity;
+    /** Whether to randomise the street name component. */
     private final boolean randomizeName;
+    /** Whether to apply pseudorandom (hash-based) masking. */
     private final boolean getPseudorandom;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

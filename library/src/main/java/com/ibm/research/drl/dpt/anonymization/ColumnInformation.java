@@ -24,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.io.Serializable;
 
+/**
+ * Describes the role and properties of a single column in an anonymization context.
+ */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         property = "class"
@@ -42,8 +45,18 @@ public interface ColumnInformation extends Serializable {
      */
     boolean isCategorical();
 
+    /**
+     * Returns the weight of this column in information loss calculations.
+     *
+     * @return the column weight
+     */
     double getWeight();
 
+    /**
+     * Returns whether this column is used for record linking.
+     *
+     * @return true if used for linking
+     */
     boolean isForLinking();
 
     /**

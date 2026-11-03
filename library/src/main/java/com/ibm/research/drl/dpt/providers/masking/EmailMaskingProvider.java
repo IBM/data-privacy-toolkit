@@ -36,34 +36,55 @@ import java.util.Set;
  */
 
 public class EmailMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** Logger for this class. */
     private static final Logger log = LogManager.getLogger(EmailMaskingProvider.class);
 
+    /** Shared email identifier instance. */
     private static final EmailIdentifier emailIdentifier = new EmailIdentifier();
+    /** Number of domain levels to preserve in the masked address. */
     private final int preserveDomains;
+    /** Whether to generate a name-based username when randomising. */
     private final boolean nameBasedUsername;
+    /** Virtual field name for the username component masking provider. */
     private final String usernameVirtualField;
+    /** Virtual field name for the domain component masking provider. */
     private final String domainVirtualField;
+    /** Masking provider for the username component. */
     private final MaskingProvider usernameVirtualFieldMaskingProvider;
+    /** Masking provider for the domain component. */
     private final MaskingProvider domainVirtualFieldMaskingProvider;
+    /** Number of IP subnet octets to preserve when masking a domain. */
     private final int preserveSubnets;
+    /** The configured failure mode. */
     private final int failMode;
 
 
     /**
-     * Instantiates a new Email masking provider.
+     * Constructs an EmailMaskingProvider with default configuration.
+     *
+     * @param factory the masking provider factory
      */
     public EmailMaskingProvider(MaskingProviderFactory factory) {
         this("name", new DefaultMaskingConfiguration(), Collections.emptySet(), factory);
     }
 
+    /**
+     * Constructs an EmailMaskingProvider with the given configuration and factory.
+     *
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public EmailMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("name", maskingConfiguration, Collections.emptySet(), factory);
     }
 
     /**
-     * Instantiates a new Email masking provider.
+     * Constructs an EmailMaskingProvider.
      *
-     * @param configuration the configuration
+     * @param complexType  the complex type name
+     * @param configuration the masking configuration
+     * @param maskedFields  the set of already-masked fields
+     * @param factory       the masking provider factory
      */
     public EmailMaskingProvider(String complexType, MaskingConfiguration configuration, Set<String> maskedFields, MaskingProviderFactory factory) {
         super(complexType, configuration, maskedFields, factory);

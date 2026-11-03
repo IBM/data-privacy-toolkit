@@ -33,14 +33,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/** Privacy constraint enforcing distinct l-diversity. */
 public class DistinctLDiversity implements PrivacyConstraint {
+    /** The minimum number of distinct sensitive values required per partition. */
     private final int l;
 
+    /**
+     * Constructs a DistinctLDiversity constraint.
+     *
+     * @param l the required number of distinct sensitive values
+     */
     @JsonCreator
     public DistinctLDiversity(@JsonProperty("l") int l) {
         this.l = l;
     }
 
+    /**
+     * Returns the l value.
+     *
+     * @return the minimum distinct sensitive values required
+     */
     public int getL() {
         return l;
     }

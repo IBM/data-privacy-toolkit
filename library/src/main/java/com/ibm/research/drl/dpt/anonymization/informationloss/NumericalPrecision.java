@@ -26,7 +26,13 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Numerical precision information loss metric that measures the average interval width
+ * relative to the global range for each numerical quasi-identifier column.
+ */
 public class NumericalPrecision implements InformationMetric {
+    /** Constructs a NumericalPrecision metric instance. */
+    public NumericalPrecision() {}
     private IPVDataset original;
     private IPVDataset anonymized;
     private List<ColumnInformation> columnInformationList;

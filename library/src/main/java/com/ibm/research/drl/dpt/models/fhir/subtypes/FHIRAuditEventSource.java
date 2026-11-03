@@ -25,34 +25,62 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRIdentifier;
 
 import java.util.Collection;
 
+/** FHIRAuditEventSource FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRAuditEventSource {
+    /** Constructs a FHIRAuditEventSource. */
+    public FHIRAuditEventSource() {}
+
 
     private String site;
     private FHIRIdentifier identifier;
     private Collection<FHIRCoding> type;
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public Collection<FHIRCoding> getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(Collection<FHIRCoding> type) {
         this.type = type;
     }
 
+    /**
+     * Returns the site.
+     * @return the site
+     */
     public String getSite() {
         return site;
     }
 
+    /**
+     * Sets the site.
+     * @param site the site
+     */
     public void setSite(String site) {
         this.site = site;
     }
 
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public FHIRIdentifier getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(FHIRIdentifier identifier) {
         this.identifier = identifier;
     }

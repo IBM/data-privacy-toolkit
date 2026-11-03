@@ -36,7 +36,11 @@ import java.util.Collection;
 
     https://en.wikipedia.org/wiki/Vehicle_identification_number
  */
+/** Identifier for Vehicle Identification Numbers (VINs). */
 public class VINIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a VINIdentifier. */
+    public VINIdentifier() {}
     private static final VINManager vinManager = new VINManager();
     private static final String[] appropriateNames = {"Vehicle Identification Number", "VIN"};
 

@@ -21,10 +21,14 @@ package com.ibm.research.drl.dpt.generators;
 import java.util.Collection;
 import java.util.Iterator;
 
-/**
- * The interface Ipv generator.
- */
+/** Generator interface for producing candidate item sets for vulnerability analysis. */
 public interface IPVGenerator extends Iterator<ItemSet> {
+    /**
+     * Returns whether the given candidate item set has been banned.
+     *
+     * @param candidate the item set to check
+     * @return true if banned
+     */
     boolean isBanned(ItemSet candidate);
 
     /**

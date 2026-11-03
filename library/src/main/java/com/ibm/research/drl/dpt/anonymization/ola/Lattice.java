@@ -25,6 +25,10 @@ import com.ibm.research.drl.dpt.anonymization.ColumnType;
 
 import java.util.*;
 
+/**
+ * OLA (Optimal Lattice Anonymization) lattice structure that organises generalization nodes
+ * for k-anonymity search.
+ */
 public class Lattice {
     private final List<ColumnInformation> quasiColumnInformationList;
     private final int[] maxLevel;
@@ -69,12 +73,17 @@ public class Lattice {
         return nodesChecked;
     }
 
+    /**
+     * Returns the number of tagging operations performed during exploration.
+     *
+     * @return the number of tags performed
+     */
     public int getTagsPerformed() {
         return tagsPerformed;
     }
 
     /**
-     * Gets lattice.
+     * Returns the internal lattice map (level → set of nodes).
      *
      * @return the lattice
      */
@@ -82,6 +91,21 @@ public class Lattice {
         return this.lattice;
     }
 
+    /**
+     * Returns the maximum node in the lattice (the node with all dimensions at their maximum level).
+     *
+     * @return the maximum lattice node
+     */
+    public LatticeNode getMaxNode() {
+        return new LatticeNode(getMaximumLevels());
+    }
+
+    /**
+     * Computes the Cartesian product of the given level arrays, returning each combination as a list.
+     *
+     * @param levels a 2-D array where {@code levels[i]} contains the possible values for dimension {@code i}
+     * @return all combinations as a list of integer lists
+     */
     public static List<List<Integer>> calculateProduct(int[][] levels) {
         List<List<Integer>> productResult = new ArrayList<>();
 
@@ -252,6 +276,11 @@ public class Lattice {
         return matches;
     }
 
+    /**
+     * Returns all anonymous nodes in the lattice, regardless of exploration level.
+     *
+     * @return the list of all anonymous lattice nodes
+     */
     public List<LatticeNode> reportLossOnAllNodes() {
         Set<Integer> levels = lattice.keySet();
         Integer[] levelsArray = new Integer[levels.size()];
@@ -271,6 +300,13 @@ public class Lattice {
         return matches;
     }
 
+    /**
+     * Returns whether the given node's generalization levels are all within the specified maximum levels.
+     *
+     * @param node                    the lattice node to test
+     * @param maximumExplorationLevel the per-dimension maximum levels ({@code -1} means unconstrained)
+     * @return {@code true} if the node is within bounds for every dimension
+     */
     public static boolean matchesMaximumExplorationLevel(LatticeNode node, int[] maximumExplorationLevel) {
 
         int[] nodeLevels = node.getValues();
@@ -347,15 +383,12 @@ public class Lattice {
         checkForHoles();
     }
 
-    public LatticeNode getMaxNode() {
-        return new LatticeNode(getMaximumLevels());
-    }
-
     /**
-     * Instantiates a new Lattice.
+     * Constructs a Lattice from the given anonymity checker, column information, and suppression rate.
      *
-     * @param columnInformationList the column information list
-     * @param suppressionRate       the suppression rate
+     * @param anonymityChecker      the checker used to evaluate k-anonymity for a lattice node
+     * @param columnInformationList the list of column information entries
+     * @param suppressionRate       the maximum allowed suppression rate
      */
     public Lattice(AnonymityChecker anonymityChecker, List<ColumnInformation> columnInformationList, double suppressionRate) {
         this.suppressionRate = suppressionRate;

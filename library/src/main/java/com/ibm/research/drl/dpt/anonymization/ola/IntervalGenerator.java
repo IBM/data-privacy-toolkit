@@ -24,10 +24,13 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+/** Utility class for generating generalization hierarchies from numerical intervals. */
 public class IntervalGenerator {
+
+    /** Not instantiable. */
+    private IntervalGenerator() {}
     private final static Logger logger = LogManager.getLogger(IntervalGenerator.class);
 
     /**
@@ -48,7 +51,7 @@ public class IntervalGenerator {
             longs.add(v);
         }
 
-        Collections.sort(longs);
+        longs.sort(null);
 
         long minimum = longs.get(0);
         long maximum = longs.get(Math.max(0, longs.size() - 1)) + 1;

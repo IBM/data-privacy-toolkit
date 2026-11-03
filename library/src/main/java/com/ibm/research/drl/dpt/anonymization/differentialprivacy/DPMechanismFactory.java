@@ -19,7 +19,17 @@ under the License.
 package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
 
+/** Factory for creating DP mechanism instances. */
 public class DPMechanismFactory {
+    /** Not instantiable. */
+    private DPMechanismFactory() {}
+
+    /**
+     * Returns the DP mechanism for the given mechanism type.
+     *
+     * @param mechanism the mechanism type
+     * @return the corresponding DPMechanism instance
+     */
     public static DPMechanism getMechanism(Mechanism mechanism) {
         switch (mechanism) {
             case BINARY:

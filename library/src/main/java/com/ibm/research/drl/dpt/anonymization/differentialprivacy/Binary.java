@@ -29,11 +29,22 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Differential privacy mechanism for binary (two-value) domains.
+ */
 public class Binary implements DPMechanism {
+    /**
+     * Constructs a new Binary mechanism.
+     */
+    public Binary() {
+    }
     private static final Logger log = LogManager.getLogger(Binary.class);
 
+    /** Random number generator used for randomisation. */
     private final Random rnd = new SecureRandom();
+    /** The privacy budget. */
     private double epsilon;
+    /** The two binary domain values. */
     private Tuple<String, String> binaryValues;
 
     @Override

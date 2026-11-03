@@ -29,9 +29,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/** Manager for IMEI TAC codes loaded from locale resources. */
 public class IMEIManager extends ResourceBasedManager<IMEI> {
     private final static IMEIManager IMEI_MANAGER_INSTANCE = new IMEIManager();
 
+    /**
+     * Returns the singleton instance of this manager.
+     *
+     * @return the singleton IMEIManager
+     */
     public static IMEIManager getInstance() {
         return IMEI_MANAGER_INSTANCE;
     }

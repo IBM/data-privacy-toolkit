@@ -23,15 +23,28 @@ import opennlp.tools.util.Span;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/** Generates {@link PrimaShingle} instances for all valid sub-spans of a token array. */
 public class PrimaShingleGenerator {
     private final int min_shingle_size;
     private final int max_shingle_size;
 
+    /**
+     * Constructs a PrimaShingleGenerator.
+     *
+     * @param min_shingle_size the minimum number of tokens per shingle
+     * @param max_shingle_size the maximum number of tokens per shingle
+     */
     public PrimaShingleGenerator(int min_shingle_size, int max_shingle_size) {
         this.min_shingle_size = min_shingle_size;
         this.max_shingle_size = max_shingle_size;
     }
 
+    /**
+     * Generates all shingles for the given array of token spans.
+     *
+     * @param spans the token spans to shingle
+     * @return an iterable of shingles
+     */
     public Iterable<PrimaShingle> generate(Span[] spans) {
         return new Iterable<>() {
             int start = 0;

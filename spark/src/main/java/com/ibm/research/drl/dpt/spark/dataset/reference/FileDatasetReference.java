@@ -28,7 +28,6 @@ import com.ibm.research.drl.dpt.datasets.DatasetOptions;
 import com.ibm.research.drl.dpt.processors.CSVFormatProcessor;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.spark.sql.DataFrameReader;
@@ -107,8 +106,8 @@ public class FileDatasetReference extends DatasetReference {
             reader = reader.option("basePath", basePath);
         }
 
-        switch (this.format) {
-            case CSV:
+        return switch (this.format) {
+            case CSV -> {
                 CSVDatasetOptions csvDatasetOptions = (CSVDatasetOptions) this.options;
                 reader = reader
                         .option("sep", Character.toString(csvDatasetOptions.getFieldDelimiter()))
@@ -122,17 +121,12 @@ public class FileDatasetReference extends DatasetReference {
                 }
 
                 Dataset<Row> dataset = reader.csv(input);
-
-                if (csvDatasetOptions.isHasHeader()) {
-                    return dataset;
-                } else {
-                    return dataset.toDF(CSVFormatProcessor.generateColumnNames(dataset.schema().fields().length));
-                }
-            case PARQUET:
-                return reader.parquet(input);
-            default:
-                return reader.text(input);
-        }
+                yield csvDatasetOptions.isHasHeader() ? dataset
+                        : dataset.toDF(CSVFormatProcessor.generateColumnNames(dataset.schema().fields().length));
+            }
+            case PARQUET -> reader.parquet(input);
+            default -> reader.text(input);
+        };
     }
 
     public void writeDataset(Dataset<Row> outputDataset, String path) {

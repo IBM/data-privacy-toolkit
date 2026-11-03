@@ -28,7 +28,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/** Generalization hierarchy for dates in YYYY-MM-DD format. */
 public class DateYYYYMMDDHierarchy implements GeneralizationHierarchy {
+    /** Constructs a DateYYYYMMDDHierarchy. */
+    public DateYYYYMMDDHierarchy() {}
     private static final String TOP_TERM = "*";
     private static final int TOP_LEVEL = 3;
     private static final int YEAR_LEVEL = 2;

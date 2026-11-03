@@ -25,7 +25,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for US ZIP codes. */
 public class ZIPCodeIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a ZIPCodeIdentifier. */
+    public ZIPCodeIdentifier() {}
     private static final ZIPCodeManager ZIP_CODE_MANAGER = new ZIPCodeManager(3);
     private static final String[] appropriateNames = {"ZIP code", "ZIP", "ZIPCODE"};
 

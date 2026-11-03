@@ -30,7 +30,12 @@ import java.util.regex.Pattern;
 
 import static com.ibm.research.drl.dpt.util.NumberUtils.countDigits;
 
+/** Identifier for telephone, mobile, and fax number values. */
 public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
+
+    /** Constructs a PhoneIdentifier. */
+    public PhoneIdentifier() {}
+
     private static final String[] appropriateNames = {
             "Phone Number", "Mobile",
             "Mobile Number", "Telephone", "Tel.",
@@ -51,6 +56,7 @@ public class PhoneIdentifier extends AbstractIdentifier implements IdentifierWit
             ")";
     private static final String separator = "(?<separator>[- ])";
 
+    /** Compiled regex patterns used to match phone numbers. */
     private final Pattern[] phonePatterns = {
             Pattern.compile(
                     textualPrefix + "?" +

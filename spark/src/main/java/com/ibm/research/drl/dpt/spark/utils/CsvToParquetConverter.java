@@ -23,13 +23,10 @@ import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.spark.export.Export;
 import org.apache.commons.cli.*;
 import org.apache.commons.csv.*;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaRDD;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.api.java.function.ForeachFunction;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.DataFrameReader;
@@ -59,13 +56,13 @@ import java.util.Set;
 import static org.apache.spark.sql.functions.*;
 
 public class CsvToParquetConverter {
-    private static final Logger logger = LogManager.getLogger(CsvToParquetConverter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CsvToParquetConverter.class);
 
     public static void main(String[] args) {
         try {
             CommandLine cmd = createAndParseCommandLine(args);
 
-            SparkSession spark = SparkSession.builder().sparkContext(new SparkContext(new SparkConf(true))).getOrCreate();
+            SparkSession spark = SparkSession.builder().getOrCreate();
 
             boolean remoteConf = cmd.hasOption("remoteConf");
             String pathToSchemaFile = cmd.getOptionValue("s");
@@ -105,23 +102,25 @@ public class CsvToParquetConverter {
             final String finalQuoteChar;
             final boolean finalHasHeader;
             
-            JavaRDD<String> stringRDD = null;
-            
-            if(quoteMode.equals("NONE")) {
-                stringRDD = spark.read().textFile(cmd.getOptionValue("i")).javaRDD();
+            Dataset<String> stringDS = null;
+
+            if (quoteMode.equals("NONE")) {
+                stringDS = spark.read().textFile(cmd.getOptionValue("i"));
                 
                 finalDelimiter = ",";
                 finalQuoteChar = "\"";
                 finalHasHeader = false;
                
                 if (userProvidedHasHeader) {
-                    stringRDD = stringRDD.zipWithIndex().filter( tuple -> (tuple._2 > 0)).keys();
+                    stringDS = spark.createDataset(
+                            stringDS.toJavaRDD().zipWithIndex().filter(t -> t._2() > 0).map(scala.Tuple2::_1).rdd(),
+                            org.apache.spark.sql.Encoders.STRING());
                 }
-                
+
                 logger.info("manually parsing data");
                 final char delimForQuoteNone = userProviderDelimiter.charAt(0);
-                
-                stringRDD = stringRDD.map( line -> {
+
+                stringDS = stringDS.map((org.apache.spark.api.java.function.MapFunction<String, String>) line -> {
                     CSVParser csvParser = CSVParser.parse(line,
                             CSVFormat.RFC4180.withDelimiter(delimForQuoteNone).
                                     withQuote(userProvidedQuoteChar.isEmpty() ? null : userProvidedQuoteChar.charAt(0)).
@@ -139,7 +138,7 @@ public class CsvToParquetConverter {
 
                         return stringWriter.toString();
                     }
-                });
+                }, org.apache.spark.sql.Encoders.STRING());
             } else {
                 finalDelimiter = userProviderDelimiter;
                 finalQuoteChar = userProvidedQuoteChar;
@@ -180,7 +179,7 @@ public class CsvToParquetConverter {
             Dataset<Row> dataset;
             
             if (quoteMode.equals("NONE")) {
-                dataset = dataFrameReader.schema(schema).csv(spark.createDataset(stringRDD.rdd(), Encoders.STRING()));
+                dataset = dataFrameReader.schema(schema).csv(stringDS);
             } else {
                 dataset = dataFrameReader.schema(schema).csv(cmd.getOptionValue("i"));
             }
@@ -369,57 +368,23 @@ public class CsvToParquetConverter {
     }
 
     private static DataType converToDataType(JsonNode type) {
-        switch(type.asText().split("\\(")[0].toLowerCase()) {
-            case "binary":
-                return DataTypes.BinaryType;
-
-            case "boolean":
-                return DataTypes.BooleanType;
-
-            case "byte":
-                return DataTypes.ByteType;
-
-            case "interval":
-                return DataTypes.CalendarIntervalType;
-
-            case "date":
-                return DataTypes.DateType;
-
-            case "numeric":
-            case "decimal":
-                return extractDecimalType(type.asText().toLowerCase());
-                
-            case "double":
-                return DataTypes.DoubleType;
-
-            case "float":
-                return DataTypes.FloatType;
-
-            case "int":
-            case "int32":
-                return DataTypes.IntegerType;
-                
-            case "int64":
-            case "long":
-                return DataTypes.LongType;
-
-            case "short":
-                return DataTypes.ShortType;
-
-            case "timestamp":
-                return DataTypes.TimestampType;
-
-            case "string":
-            case "varchar":
-            case "char":
-                return DataTypes.StringType;
-
-            case "null":
-                return DataTypes.NullType;
-
-            default:
-                throw new IllegalArgumentException("UnknownType: " + type.asText());
-        }
+        return switch (type.asText().split("\\(")[0].toLowerCase()) {
+            case "binary" -> DataTypes.BinaryType;
+            case "boolean" -> DataTypes.BooleanType;
+            case "byte" -> DataTypes.ByteType;
+            case "interval" -> DataTypes.CalendarIntervalType;
+            case "date" -> DataTypes.DateType;
+            case "numeric", "decimal" -> extractDecimalType(type.asText().toLowerCase());
+            case "double" -> DataTypes.DoubleType;
+            case "float" -> DataTypes.FloatType;
+            case "int", "int32" -> DataTypes.IntegerType;
+            case "int64", "long" -> DataTypes.LongType;
+            case "short" -> DataTypes.ShortType;
+            case "timestamp" -> DataTypes.TimestampType;
+            case "string", "varchar", "char" -> DataTypes.StringType;
+            case "null" -> DataTypes.NullType;
+            default -> throw new IllegalArgumentException("UnknownType: " + type.asText());
+        };
     }
 
     public  static DataType extractDecimalType(String s) {

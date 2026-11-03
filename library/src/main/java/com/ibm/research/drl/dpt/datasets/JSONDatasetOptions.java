@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.datasets;
 
+/** Dataset options for JSON-formatted input. */
 public class JSONDatasetOptions implements DatasetOptions {
 
+    /** Constructs a JSONDatasetOptions with default settings. */
+    public JSONDatasetOptions() {}
 }

@@ -22,7 +22,10 @@ import com.ibm.research.drl.dpt.managers.DependentManager;
 import com.ibm.research.drl.dpt.managers.Manager;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+/** Identifies dependent-relationship values. */
 public class DependentIdentifier extends AbstractManagerBasedIdentifier {
+    /** Constructs a DependentIdentifier. */
+    public DependentIdentifier() {}
     private final static DependentManager DEPENDENT_MANAGER = DependentManager.getInstance();
 
     @Override

@@ -16,16 +16,20 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 */
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'jacoco'
+plugins {
+    id 'java'
+    id 'idea'
+    id 'eclipse'
+    id 'jacoco'
+}
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 group = 'com.ibm.research.drl.dpt'
-version = '6.0.0-SNAPSHOT'
+version = '7.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -37,30 +41,29 @@ repositories {
 }
 
 ext {
-    junit_jupiter_version = '5.14.3'
-    junit_platform_launcher_version = '1.14.3'
+    junit_jupiter_version = '5.14.4'
+    junit_platform_launcher_version = '1.14.4'
 
     mockito_version = '5.21.0'
     jdefault_version = '2.0.0'
-    hamcrest_version = '2.2'
+    hamcrest_version = '3.0'
 
-    jackson_version = '2.20.1'
-    jackson_dataformat_version = '2.20.1'
+    jackson_version = '2.19.4'
+    jackson_dataformat_version = '2.19.4'
 
     log4j2_version = '2.25.2'
 
-    commons_codec_version = '1.13'
+    commons_codec_version = '1.18.0'
     commons_csv_version = '1.14.1'
-    commons_lang_version = '3.10'
+    commons_lang_version = '3.20.0'
     commons_math_version = '3.6.1'
-    commons_text_version = '1.14.0'
-    commons_validator_version = '1.7'
+    commons_text_version = '1.13.1'
+    commons_validator_version = '1.10.1'
     commons_cli_version = "1.11.0"
 
-    scala_version = '2.13'
-    spark_version = '3.5.8'
+    spark_version = '4.0.0'
 
-    poi_version = "5.2.2"
+    poi_version = "5.4.0"
 }
 
 dependencies {
@@ -71,15 +74,13 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_dataformat_version}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jackson_dataformat_version}"
-    implementation 'org.lz4:lz4-java:1.8.1'
-
     implementation "commons-cli:commons-cli:${commons_cli_version}"
     implementation "org.apache.commons:commons-csv:${commons_csv_version}"
 
-    implementation "org.apache.spark:spark-core_${scala_version}:${spark_version}"
-    implementation "org.apache.spark:spark-sql_${scala_version}:${spark_version}"
+    implementation "org.apache.spark:spark-core_2.13:${spark_version}"
+    implementation "org.apache.spark:spark-sql_2.13:${spark_version}"
 
-    testImplementation "org.apache.commons:commons-text:${commons_text_version}"
+    implementation "org.apache.commons:commons-text:${commons_text_version}"
     testImplementation "org.apache.logging.log4j:log4j-core:${log4j2_version}"
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_jupiter_version}"
@@ -91,16 +92,30 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_jupiter_version}"
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
 test {
     useJUnitPlatform()
-    minHeapSize = "5g"
-    maxHeapSize = "10g"
-
-    //jvmArgs '--add-exports java.base/sun.nio.ch=ALL-UNNAMED'
+    minHeapSize = "512m"
+    maxHeapSize = "4g"
+    jvmArgs(
+        '--add-opens=java.base/java.lang=ALL-UNNAMED',
+        '--add-opens=java.base/java.lang.invoke=ALL-UNNAMED',
+        '--add-opens=java.base/java.lang.reflect=ALL-UNNAMED',
+        '--add-opens=java.base/java.io=ALL-UNNAMED',
+        '--add-opens=java.base/java.net=ALL-UNNAMED',
+        '--add-opens=java.base/java.nio=ALL-UNNAMED',
+        '--add-opens=java.base/java.util=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent=ALL-UNNAMED',
+        '--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED',
+        '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED',
+        '--add-opens=java.base/sun.nio.cs=ALL-UNNAMED',
+        '--add-opens=java.base/sun.security.action=ALL-UNNAMED',
+        '--add-opens=java.base/sun.util.calendar=ALL-UNNAMED',
+        '--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED'
+    )
 
     testLogging {
         events 'failed'
@@ -113,7 +128,8 @@ test {
     }
 }
 
-tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
+tasks.register("testCoverage", JacocoReport) {
+    dependsOn tasks.named('test')
 
     group = "Reporting"
     description = "Generate Jacoco coverage reports for the test build."
@@ -129,12 +145,12 @@ tasks.create(name: "testCoverage", type: JacocoReport, dependsOn: "test") {
             '**/actions/*.*',
     ]
 
-    def javaClasses = fileTree(dir: "${buildDir}/classes/java/main", excludes: excludes)
+    def javaClasses = fileTree(dir: layout.buildDirectory.dir("classes/java/main"), excludes: excludes)
     classDirectories.from = files([javaClasses])
 
     sourceDirectories.from = files([
             "$project.projectDir/src/main/java",
     ])
 
-    executionData.from = files("${project.buildDir}/jacoco/test.exec")
+    executionData.from = files(layout.buildDirectory.file("jacoco/test.exec"))
 }

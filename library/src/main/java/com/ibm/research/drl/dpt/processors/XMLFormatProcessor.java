@@ -31,9 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
+/** Format processor for XML documents. */
 public class XMLFormatProcessor extends MultipathFormatProcessor {
+    /** The document builder used to parse XML input streams. */
     private final DocumentBuilder documentBuilder;
 
+    /** Constructs an XMLFormatProcessor, initialising the underlying {@link DocumentBuilder}. */
     public XMLFormatProcessor() {
         try {
             documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

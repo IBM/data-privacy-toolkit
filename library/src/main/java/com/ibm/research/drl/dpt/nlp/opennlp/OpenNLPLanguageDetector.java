@@ -29,10 +29,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/** Language detector implementation backed by the OpenNLP library. */
 public class OpenNLPLanguageDetector implements com.ibm.research.drl.dpt.nlp.LanguageDetector {
     private final LanguageDetector myCategorizer;
     private final Map<String, Language> languageMap;
-    
+
+    /** Constructs an OpenNLPLanguageDetector loading the bundled language model. */
     public OpenNLPLanguageDetector() {
         try (InputStream is = OpenNLPLanguageDetector.class.getResourceAsStream("/nlp/langdetect-183.bin")) {
             LanguageDetectorModel m = new LanguageDetectorModel(Objects.requireNonNull(is));

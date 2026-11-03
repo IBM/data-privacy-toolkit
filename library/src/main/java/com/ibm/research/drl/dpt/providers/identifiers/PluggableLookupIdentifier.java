@@ -25,12 +25,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/** An identifier that matches values against a user-supplied dictionary (lookup set). */
 public class PluggableLookupIdentifier extends AbstractIdentifier {
+    /** Appropriate field names for this identifier. */
     private final Collection<String> appropriateNames;
+    /** The provider type this identifier represents. */
     private final ProviderType providerType;
+    /** The value class this identifier recognises. */
     private final ValueClass valueClass;
+    /** The set of lookup values used for matching. */
     private final Set<String> valueSet;
+    /** Whether matching is case-insensitive. */
     private final boolean ignoreCase;
+    /** Whether POS tagging context is ignored during identification. */
     private final boolean isPOSIndependent;
 
     /**
@@ -51,6 +58,16 @@ public class PluggableLookupIdentifier extends AbstractIdentifier {
         this(providerTypeName, appropriateNames, values, ignoreCase, valueClass, true);
     }
 
+    /**
+     * Constructs a PluggableLookupIdentifier.
+     *
+     * @param providerTypeName the name used to resolve the {@link ProviderType}
+     * @param appropriateNames the field names this identifier applies to
+     * @param values           the lookup values to match against
+     * @param ignoreCase       whether matching should be case-insensitive
+     * @param valueClass       the value class this identifier recognises
+     * @param isPOSIndependent whether POS tagging context is ignored during identification
+     */
     public PluggableLookupIdentifier(String providerTypeName,
                                      Collection<String> appropriateNames,
                                      Collection<String> values,

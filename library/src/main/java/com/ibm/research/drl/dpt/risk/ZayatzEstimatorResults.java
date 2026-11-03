@@ -18,19 +18,36 @@ under the License.
 */
 package com.ibm.research.drl.dpt.risk;
 
+/** Holds the results produced by {@link ZayatzEstimator}. */
 public class ZayatzEstimatorResults {
 
     private final double estimatedRealUniques;
     private final double uniques;
 
+    /**
+     * Returns the estimated number of real unique individuals in the population.
+     *
+     * @return the estimated real uniqueness count
+     */
     public double getEstimatedRealUniques() {
         return estimatedRealUniques;
     }
 
+    /**
+     * Returns the number of sample-unique equivalence classes observed in the dataset.
+     *
+     * @return the observed uniqueness count
+     */
     public double getUniques() {
         return uniques;
     }
 
+    /**
+     * Constructs a ZayatzEstimatorResults.
+     *
+     * @param uniques              the number of observed sample-unique equivalence classes
+     * @param estimatedRealUniques the estimated number of real unique individuals
+     */
     public ZayatzEstimatorResults(double uniques, double estimatedRealUniques) {
         this.uniques = uniques;
         this.estimatedRealUniques = estimatedRealUniques;

@@ -31,6 +31,11 @@ import java.util.List;
  *
  */
 public class CountryIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new CountryIdentifier.
+     */
+    public CountryIdentifier() {
+    }
     private static final String[] appropriateNames = {"Country"};
     private static final CountryManager countryManager = CountryManager.getInstance();
 

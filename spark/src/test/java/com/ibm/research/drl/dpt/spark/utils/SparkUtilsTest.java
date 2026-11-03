@@ -22,13 +22,10 @@ import com.ibm.research.drl.dpt.configuration.DataTypeFormat;
 import com.ibm.research.drl.dpt.datasets.CSVDatasetOptions;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
-import org.apache.spark.sql.catalyst.expressions.GenericRow;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
@@ -122,16 +119,15 @@ public class SparkUtilsTest {
                 "bbbbb",
                 "ccccc"
         );
-        try (JavaSparkContext context = new JavaSparkContext(spark.sparkContext())) {
-            JavaRDD<Row> rdd = context.parallelize(testData).map(value -> new GenericRow(new Object[]{value}));
+        StructType schema1 = new StructType(new StructField[]{
+                new StructField("column", DataTypes.StringType, false, Metadata.empty())
+        });
+        Dataset<Row> dataset = spark.createDataFrame(
+                testData.stream().map(v -> RowFactory.create(v)).collect(java.util.stream.Collectors.toList()),
+                schema1);
 
-            Dataset<Row> dataset = spark.createDataset(rdd.rdd(), RowEncoder.apply(new StructType(new StructField[]{
-                    new StructField("column", DataTypes.StringType, false, Metadata.empty())
-            })));
-
-            assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "a{5}").count(), is(1L));
-            assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "[ab]{5}").count(), is(2L));
-        }
+        assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "a{5}").count(), is(1L));
+        assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "[ab]{5}").count(), is(2L));
     }
 
     @Test
@@ -142,17 +138,15 @@ public class SparkUtilsTest {
                 33333,
                 44444
         );
-        try (JavaSparkContext context = new JavaSparkContext(spark.sparkContext())) {
-            JavaRDD<Row> rdd = context.parallelize(testData).map(value -> new GenericRow(new Object[]{value}));
+        StructType schema2 = new StructType(new StructField[]{
+                new StructField("column", DataTypes.IntegerType, false, Metadata.empty())
+        });
+        Dataset<Row> dataset = spark.createDataFrame(
+                testData.stream().map(v -> RowFactory.create(v)).collect(java.util.stream.Collectors.toList()),
+                schema2);
 
-
-            Dataset<Row> dataset = spark.createDataset(rdd.rdd(), RowEncoder.apply(new StructType(new StructField[]{
-                    new StructField("column", DataTypes.IntegerType, false, Metadata.empty())
-            })));
-
-            assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "a{5}").count(), is(0L));
-            assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "1{5}").count(), is(1L));
-            assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "[12]{5}").count(), is(2L));
-        }
+        assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "a{5}").count(), is(0L));
+        assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "1{5}").count(), is(1L));
+        assertThat(SparkUtils.filterOnFieldValue(dataset, "column", "[12]{5}").count(), is(2L));
     }
 }

@@ -48,10 +48,16 @@ import java.util.Spliterators;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
+/** A {@link MultipathRecord} backed by a Jackson {@link JsonNode}. */
 public final class JSONRecord extends MultipathRecord {
     private static final Logger logger = LogManager.getLogger(JSONRecord.class);
     private final JsonNode node;
 
+    /**
+     * Constructs a JSONRecord wrapping the given JSON node.
+     *
+     * @param node the JSON node
+     */
     public JSONRecord(JsonNode node) {
         this.node = node;
     }
@@ -93,6 +99,11 @@ public final class JSONRecord extends MultipathRecord {
         }
     }
 
+    /**
+     * Returns the underlying {@link JsonNode}.
+     *
+     * @return the JSON node
+     */
     public JsonNode getNode() {
         return node;
     }
@@ -307,6 +318,13 @@ public final class JSONRecord extends MultipathRecord {
 
     }
 
+    /**
+     * Creates a {@link Record} by parsing a JSON string.
+     *
+     * @param input the JSON string
+     * @return the parsed record
+     * @throws IOException if the string cannot be parsed as JSON
+     */
     public static Record fromString(String input) throws IOException {
         return new JSONRecord(JsonUtils.MAPPER.readTree(input));
     }

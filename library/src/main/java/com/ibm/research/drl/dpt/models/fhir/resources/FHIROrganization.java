@@ -31,9 +31,13 @@ import com.ibm.research.drl.dpt.models.fhir.subtypes.FHIROrganizationContact;
 import java.util.Collection;
 
 
+/** FHIROrganization FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIROrganization extends FHIRBaseDomainResource {
+    /** Constructs a FHIROrganization. */
+    public FHIROrganization() {}
+
 
     private Collection<FHIRIdentifier> identifier;
     private boolean active;
@@ -44,66 +48,130 @@ public class FHIROrganization extends FHIRBaseDomainResource {
     private FHIRReference partOf;
     private Collection<FHIROrganizationContact> contact;
 
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public Collection<FHIRIdentifier> getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(Collection<FHIRIdentifier> identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Returns the active.
+     * @return the active
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Sets the active.
+     * @param active the active
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public FHIRCodeableConcept getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(FHIRCodeableConcept type) {
         this.type = type;
     }
 
+    /**
+     * Returns the name.
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name.
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the telecom.
+     * @return the telecom
+     */
     public Collection<FHIRContactPoint> getTelecom() {
         return telecom;
     }
 
+    /**
+     * Sets the telecom.
+     * @param telecom the telecom
+     */
     public void setTelecom(Collection<FHIRContactPoint> telecom) {
         this.telecom = telecom;
     }
 
+    /**
+     * Returns the address.
+     * @return the address
+     */
     public Collection<FHIRAddress> getAddress() {
         return address;
     }
 
+    /**
+     * Sets the address.
+     * @param address the address
+     */
     public void setAddress(Collection<FHIRAddress> address) {
         this.address = address;
     }
 
+    /**
+     * Returns the partOf.
+     * @return the partOf
+     */
     public FHIRReference getPartOf() {
         return partOf;
     }
 
+    /**
+     * Sets the partOf.
+     * @param partOf the partOf
+     */
     public void setPartOf(FHIRReference partOf) {
         this.partOf = partOf;
     }
 
+    /**
+     * Returns the contact.
+     * @return the contact
+     */
     public Collection<FHIROrganizationContact> getContact() {
         return contact;
     }
 
+    /**
+     * Sets the contact.
+     * @param contact the contact
+     */
     public void setContact(Collection<FHIROrganizationContact> contact) {
         this.contact = contact;
     }

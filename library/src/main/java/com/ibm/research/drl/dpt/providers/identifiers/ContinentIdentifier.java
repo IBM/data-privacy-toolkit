@@ -29,6 +29,11 @@ import java.util.Collection;
  * The type Continent identifier.
  */
 public class ContinentIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new ContinentIdentifier.
+     */
+    public ContinentIdentifier() {
+    }
     private static final String[] appropriateNames = {"Continent"};
     private static final ContinentManager continentManager = ContinentManager.getInstance();
 

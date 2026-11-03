@@ -28,8 +28,11 @@ import java.security.SecureRandom;
  * The type Credit card masking provider.
  */
 public class CreditCardMaskingProvider implements MaskingProvider {
+    /** Whether to preserve the issuer prefix digits of the card number. */
     private final boolean preserveIssuer;
+    /** Secure random source. */
     private final SecureRandom random;
+    /** Number of leading digits to preserve when issuer preservation is enabled. */
     private int preservedDigits = 0;
 
     /**

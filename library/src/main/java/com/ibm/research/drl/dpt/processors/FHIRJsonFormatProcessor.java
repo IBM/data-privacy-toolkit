@@ -31,7 +31,11 @@ import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Set;
 
+/** FHIR-specific JSON format processor. */
 public class FHIRJsonFormatProcessor extends JSONFormatProcessor {
+    /** Constructs a FHIRJsonFormatProcessor. */
+    public FHIRJsonFormatProcessor() {}
+    /** The FHIR masking provider, lazily initialised. */
     private volatile FHIRMaskingProvider maskingProvider;
 
     @Override

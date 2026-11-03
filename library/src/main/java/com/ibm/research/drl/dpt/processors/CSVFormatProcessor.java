@@ -40,7 +40,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * Format processor for CSV datasets.
+ */
 public class CSVFormatProcessor extends FormatProcessor {
+    /**
+     * Constructs a new CSVFormatProcessor.
+     */
+    public CSVFormatProcessor() {
+    }
     private static final Logger logger = LogManager.getLogger(CSVFormatProcessor.class);
 
     private static final CsvMapper mapper = new CsvMapper().enable(CsvParser.Feature.WRAP_AS_ARRAY);
@@ -148,6 +156,12 @@ public class CSVFormatProcessor extends FormatProcessor {
         return fieldMap;
     }
 
+    /**
+     * Generates default column names ("Column 0", "Column 1", ...) for a given number of columns.
+     *
+     * @param length the number of columns
+     * @return an array of default column name strings
+     */
     public static String[] generateColumnNames(int length) {
         String[] names = new String[length];
 

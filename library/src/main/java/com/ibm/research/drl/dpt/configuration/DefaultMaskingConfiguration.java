@@ -26,7 +26,6 @@ import com.ibm.research.drl.dpt.providers.masking.ReplaceMaskingProvider;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -37,8 +36,11 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"optionsByCategory", "name"})
 public final class DefaultMaskingConfiguration implements MaskingConfiguration, Serializable {
+    /** All configuration options, keyed by option name. */
     private final Map<String, ConfigurationOption> optionMap;
+    /** The name of this configuration. */
     private final String name;
+    /** The associated configuration manager, if any. */
     private ConfigurationManager configurationManager;
 
     /**
@@ -50,12 +52,16 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         this(null, name);
     }
 
+    /** Constructs a DefaultMaskingConfiguration with no name or manager. */
     public DefaultMaskingConfiguration() {
         this(null, null);
     }
 
     /**
      * Instantiates a new Default masking configuration.
+     *
+     * @param configurationManager the configuration manager
+     * @param name                 the configuration name
      */
     public DefaultMaskingConfiguration(ConfigurationManager configurationManager, String name) {
         this.configurationManager = configurationManager;
@@ -272,7 +278,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
         this.optionMap.put("iban.mask.preserveCountry", new ConfigurationOption(true, "Preserve country code", "IBAN"));
         this.optionMap.put("imei.mask.preserveTAC", new ConfigurationOption(true, "Preserve TAC prefix", "IMEI"));
 
-        this.optionMap.put("replace.mask.mode", new ConfigurationOption("WITH_PARTIAL", "Replace mode (one of " + String.join(", ", Stream.of(ReplaceMaskingProvider.ReplaceMode.values()).map(Enum::name).collect(Collectors.toList())) + ")", "Replace"));
+        this.optionMap.put("replace.mask.mode", new ConfigurationOption("WITH_PARTIAL", "Replace mode (one of " + String.join(", ", Stream.of(ReplaceMaskingProvider.ReplaceMode.values()).map(Enum::name).toList()) + ")", "Replace"));
         this.optionMap.put("replace.mask.prefix", new ConfigurationOption("", "Prefix to be added to the replaced value", "Replace"));
         this.optionMap.put("replace.mask.offset", new ConfigurationOption(0, "Starting offset for preserving", "Replace"));
         this.optionMap.put("replace.mask.preserve", new ConfigurationOption(0, "Number of characters to preserve", "Replace"));
@@ -482,9 +488,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
     public int getIntValue(String key) {
         Object value = getValue(key);
 
-        if (value instanceof Number) {
-            Number v = (Number) value;
-
+        if (value instanceof Number v) {
             return v.intValue();
         }
 
@@ -495,9 +499,7 @@ public final class DefaultMaskingConfiguration implements MaskingConfiguration, 
     public double getDoubleValue(String key) {
         Object value = getValue(key);
 
-        if (value instanceof Number) {
-            Number v = (Number) value;
-
+        if (value instanceof Number v) {
             return v.doubleValue();
         }
 

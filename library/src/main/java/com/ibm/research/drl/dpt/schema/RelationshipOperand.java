@@ -24,8 +24,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 
 import java.io.Serializable;
 
+/** An operand in a field relationship expression, consisting of a field name and its provider type. */
 public class RelationshipOperand implements Serializable {
+    /** The name of the field operand. */
     private final String name;
+    /** The provider type of the field operand. */
     private final ProviderType type;
 
     /**

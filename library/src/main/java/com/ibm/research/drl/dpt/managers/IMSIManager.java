@@ -28,9 +28,15 @@ import org.apache.commons.csv.CSVRecord;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** Manager for IMSI records loaded from locale resources. */
 public class IMSIManager extends ResourceBasedManager<IMSI> {
     private final static IMSIManager IMSI_MANAGER_INSTANCE = new IMSIManager();
 
+    /**
+     * Returns the singleton instance of this manager.
+     *
+     * @return the singleton IMSIManager
+     */
     public static IMSIManager getInstance() {
         return IMSI_MANAGER_INSTANCE;
     }
@@ -39,7 +45,9 @@ public class IMSIManager extends ResourceBasedManager<IMSI> {
         super();
     }
 
+    /** Random number generator. */
     private final SecureRandom random = new SecureRandom();
+    /** Map from MCC prefix to list of IMSI prefixes. */
     private Map<String, List<String>> mccMap;
 
     @Override

@@ -80,11 +80,11 @@ public class OutlierRemovalTest {
                 new StructField("dw_net_pd_cnt", DataTypes.IntegerType, false, Metadata.empty()),
 
         });
-        Dataset<Row> dummyDataset = spark.read().schema(schema).csv(this.getClass().getResource("/dummyDataset.csv").getPath());
+        Dataset<Row> dummyDataset = spark.read().schema(schema).csv(OutlierRemovalTest.class.getResource("/dummyDataset.csv").getPath());
 
         Dataset<Row> outputDataset = new OutlierRemoval().augmentDatasetWithOutlierCondition(
                 dummyDataset,
-                mapper.readValue(this.getClass().getResourceAsStream("/realFilter.json"), OutlierRemovalOptions.class).getFilters(),
+                mapper.readValue(OutlierRemovalTest.class.getResourceAsStream("/realFilter.json"), OutlierRemovalOptions.class).getFilters(),
                 "foo"
         );
 

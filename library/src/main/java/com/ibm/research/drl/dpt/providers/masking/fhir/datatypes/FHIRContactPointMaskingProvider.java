@@ -31,27 +31,49 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.security.SecureRandom;
 import java.util.Set;
 
+/** FHIRContactPointMaskingProvider FHIR datatype. */
 public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
+    /** Whether to randomise the use element. */
     private final boolean randomizeUse;
+    /** Whether to remove extensions. */
     private final boolean removeExtensions;
+    /** Whether to mask the value element. */
     private final boolean maskValue;
+    /** Whether to mask the period element. */
     private final boolean maskPeriod;
+    /** Whether to remove the system element. */
     private final boolean removeSystem;
 
+    /** Generic random masking provider. */
     private final MaskingProvider randomMaskingProvider;
+    /** Masking provider for the period element. */
     private final FHIRPeriodMaskingProvider periodMaskingProvider;
+    /** Masking provider for phone values. */
     private final MaskingProvider phoneMaskingProvider;
+    /** Masking provider for email values. */
     private final MaskingProvider emailMaskingProvider;
+    /** Masking provider for URL values. */
     private final MaskingProvider urlMaskingProvider;
 
+    /** JSON path to the value field. */
     private final String valuePath;
+    /** JSON path to the use field. */
     private final String usePath;
+    /** JSON path to the period field. */
     private final String periodPath;
 
+    /** Shared secure random source. */
     private final static SecureRandom random = new SecureRandom();
-    /* https://www.hl7.org/fhir/valueset-contact-point-use.html */
+    /** Valid contact point use values per the FHIR specification. */
     private final static String[] useValues = new String[]{"home", "work", "temp", "old", "mobile"};
 
+    /**
+     * Constructs a FHIRContactPointMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRContactPointMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -73,6 +95,11 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
         this.periodMaskingProvider = new FHIRPeriodMaskingProvider(getConfigurationForSubfield(periodPath, maskingConfiguration), maskedFields, periodPath, this.factory);
     }
 
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRContactPoint cc = JsonUtils.MAPPER.treeToValue(node, FHIRContactPoint.class);
@@ -83,6 +110,11 @@ public class FHIRContactPointMaskingProvider extends AbstractComplexMaskingProvi
         }
     }
 
+    /**
+     * Masks a FHIR ContactPoint object.
+     * @param contactPoint the FHIRContactPoint to mask
+     * @return the masked FHIRContactPoint
+     */
     public FHIRContactPoint mask(FHIRContactPoint contactPoint) {
         if (contactPoint == null) {
             return null;

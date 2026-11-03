@@ -19,7 +19,9 @@ under the License.
 package com.ibm.research.drl.dpt.anonymization.kmeans;
 
 
+/** Options controlling the k-means clustering strategy. */
 public enum StrategyOptions {
+    /** Dummy/placeholder strategy option. */
     DUMMY
 }
 

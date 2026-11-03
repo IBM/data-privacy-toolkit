@@ -24,7 +24,11 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Computes the Generalized Loss Metric (GLM) for anonymized datasets. */
 public class GeneralizedLossMetric implements InformationMetric {
+
+    /** Constructs a GeneralizedLossMetric. */
+    public GeneralizedLossMetric() {}
     private IPVDataset original;
     private IPVDataset anonymized;
     private List<ColumnInformation> columnInformationList;

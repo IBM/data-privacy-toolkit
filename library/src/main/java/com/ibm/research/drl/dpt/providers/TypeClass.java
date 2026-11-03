@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers;
 
+/** The broad data type class of a provider type. */
 public enum TypeClass {
     /**
      * Numerical type class.

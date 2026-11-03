@@ -23,10 +23,17 @@ import com.ibm.research.drl.dpt.util.Histogram;
 
 import java.util.*;
 
+/** Performs frequency-analysis re-identification attacks on masked datasets. */
 public class FrequencyAnalysis {
     private final Map<String, Integer> auxiliaryDataRanked;
     private final Map<String, String> maskedToOriginal;
 
+    /**
+     * Constructs a FrequencyAnalysis instance.
+     *
+     * @param originalToMasked         map from original values to their masked counterparts
+     * @param auxiliaryDataRankedList  auxiliary data ranked by frequency (most frequent first)
+     */
     public FrequencyAnalysis(Map<String, String> originalToMasked, List<String> auxiliaryDataRankedList) {
         this.auxiliaryDataRanked = new HashMap<>();
         for (int i = 0; i < auxiliaryDataRankedList.size(); i++) {
@@ -40,6 +47,13 @@ public class FrequencyAnalysis {
 
     }
 
+    /**
+     * Counts successful frequency-analysis matches in the given column.
+     *
+     * @param maskedDataset the masked dataset to analyse
+     * @param columnIndex   the column index to examine
+     * @return number of successfully re-identified values
+     */
     public long successfulMatches(IPVDataset maskedDataset, int columnIndex) {
         Histogram histogram = Histogram.createHistogram(maskedDataset, columnIndex, true);
         return successfulMatches(histogram);

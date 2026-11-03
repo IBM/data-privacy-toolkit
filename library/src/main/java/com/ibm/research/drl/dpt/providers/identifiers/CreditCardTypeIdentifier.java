@@ -26,7 +26,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Identifier for credit card type names.
+ */
 public class CreditCardTypeIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new CreditCardTypeIdentifier.
+     */
+    public CreditCardTypeIdentifier() {
+    }
 
     private static final String[] appropriateNames = {"Credit Card Type"};
     private static final CreditCardTypeManager creditCardTypeManager = CreditCardTypeManager.getInstance();

@@ -25,7 +25,15 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Identifier for city names.
+ */
 public class CityIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new CityIdentifier.
+     */
+    public CityIdentifier() {
+    }
     private static final String[] appropriateNames = {"City"};
     private static final CityManager cityManager = CityManager.getInstance();
 

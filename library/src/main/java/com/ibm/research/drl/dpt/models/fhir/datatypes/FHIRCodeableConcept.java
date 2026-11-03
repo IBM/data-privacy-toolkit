@@ -23,21 +23,41 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Collection;
 
+/** FHIRCodeableConcept FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRCodeableConcept {
+    /** Constructs a FHIRCodeableConcept. */
+    public FHIRCodeableConcept() {}
+
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+    /**
+     * Returns the coding.
+     * @return the coding
+     */
     public Collection<FHIRCoding> getCoding() {
         return coding;
     }
 
+    /**
+     * Sets the coding.
+     * @param coding the coding
+     */
     public void setCoding(Collection<FHIRCoding> coding) {
         this.coding = coding;
     }

@@ -25,12 +25,21 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
+/** Native Geometric differential-privacy mechanism. */
 public class Geometric implements DPMechanism {
+    /** Random number generator. */
     protected Random rnd = new SecureRandom();
+    /** Shape parameter derived from sensitivity and epsilon. */
     protected double shape;
+    /** Privacy budget epsilon. */
     protected double epsilon;
+    /** Lower bound of the domain. */
     protected double lowerBound;
+    /** Upper bound of the domain. */
     protected double upperBound;
+
+    /** Constructs a Geometric mechanism with default settings. */
+    public Geometric() {}
 
     @Override
     public void setOptions(AnonymizationAlgorithmOptions options) {

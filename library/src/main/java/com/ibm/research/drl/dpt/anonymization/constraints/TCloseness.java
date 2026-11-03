@@ -32,20 +32,35 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.Histogram;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/** Privacy constraint enforcing t-closeness: the distribution of sensitive values in each partition must be close to the global distribution. */
 public class TCloseness implements PrivacyConstraint {
 
+    /** The maximum permitted distance between partition and global distributions. */
     private final double t;
 
+    /** Column information list, set during {@link #initialize}. */
     private List<ColumnInformation> columnInformationList;
+    /** Per-column global frequency histograms for numerical sensitive columns. */
     private List<Histogram<Double>> histograms;
+    /** Per-column global frequency histograms for categorical sensitive columns. */
     private List<Histogram<String>> categoricalHistograms;
+    /** Per-column sorted lists of all values for numerical sensitive columns. */
     private List<List<Double>> totalOrdered;
+    /** Total record count, set during {@link #initialize}. */
     private Long totalCount;
 
+    /**
+     * Computes the order-based Earth-mover distance between the partition and global distributions.
+     *
+     * @param partitionValues  the sensitive values in the partition
+     * @param totalOrdered     globally ordered list of sensitive values
+     * @param totalHistogram   frequency histogram for the global distribution
+     * @param totalCount       total record count in the global dataset
+     * @return the order-based distance
+     */
     public static double orderBasedDistance(List<Double> partitionValues, List<Double> totalOrdered,
                                             Histogram<Double> totalHistogram, long totalCount) {
 
@@ -67,6 +82,14 @@ public class TCloseness implements PrivacyConstraint {
         return distance / (double) (totalOrdered.size() - 1);
     }
 
+    /**
+     * Computes the equal (variational) distance between the partition and global categorical distributions.
+     *
+     * @param partitionValues the categorical sensitive values in the partition
+     * @param totalHistogram  frequency histogram for the global distribution
+     * @param totalCount      total record count in the global dataset
+     * @return the equal distance
+     */
     public static double equalDistance(List<String> partitionValues, Histogram<String> totalHistogram, long totalCount) {
 
         double sum = 0.0;
@@ -86,6 +109,11 @@ public class TCloseness implements PrivacyConstraint {
         return sum / 2.0;
     }
 
+    /**
+     * Constructs a TCloseness constraint.
+     *
+     * @param t the maximum permitted distance between partition and global distributions
+     */
     @JsonCreator
     public TCloseness(
             @JsonProperty("t") double t
@@ -93,6 +121,11 @@ public class TCloseness implements PrivacyConstraint {
         this.t = t;
     }
 
+    /**
+     * Returns the t threshold.
+     *
+     * @return t
+     */
     public double getT() {
         return t;
     }
@@ -151,7 +184,7 @@ public class TCloseness implements PrivacyConstraint {
                 Histogram<Double> histogram = Histogram.createHistogram(values);
                 this.histograms.add(histogram);
 
-                Collections.sort(values);
+                values.sort(null);
                 this.totalOrdered.add(values);
             } else {
                 this.histograms.add(null);

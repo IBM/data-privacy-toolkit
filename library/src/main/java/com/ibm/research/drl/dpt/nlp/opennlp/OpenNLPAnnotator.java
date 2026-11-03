@@ -37,16 +37,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/** NLP annotator implementation backed by the OpenNLP library. */
 public class OpenNLPAnnotator extends AbstractNLPAnnotator {
     private final static String annotatorName = "OpenNLP";
     
+    /** Per-language name-finder models. */
     private final Map<Language, NameFinderME> nameFinder;
+    /** Per-language time-finder models. */
     private final Map<Language, NameFinderME> timeFinder;
+    /** Per-language date-finder models. */
     private final Map<Language, NameFinderME> dateFinder;
+    /** Per-language location-finder models. */
     private final Map<Language, NameFinderME> locationFinder;
+    /** Per-language organization-finder models. */
     private final Map<Language, NameFinderME> organizationFinder;
+    /** Per-language sentence detectors. */
     private final Map<Language, SentenceDetectorME> sentenceDetector;
+    /** Per-language tokenizers. */
     private final Map<Language, TokenizerME> tokenizer;
+    /** The default language to use when none is detected. */
     private final Language defaultLanguage;
 
     private TokenNameFinderModel loadNameModel(String resourceName) {
@@ -68,6 +77,11 @@ public class OpenNLPAnnotator extends AbstractNLPAnnotator {
         throw new RuntimeException("error initializing model");
     }
     
+    /**
+     * Constructs an OpenNLPAnnotator from a JSON configuration node.
+     *
+     * @param configuration JSON configuration describing model paths and language settings
+     */
     public OpenNLPAnnotator(JsonNode configuration) {
         this.defaultLanguage = Language.valueOf(configuration.get("defaultLanguage").asText());
         this.dateFinder = new HashMap<>();

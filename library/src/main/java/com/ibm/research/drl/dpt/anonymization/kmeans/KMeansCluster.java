@@ -24,53 +24,102 @@ import com.ibm.research.drl.dpt.anonymization.Partition;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a single cluster in the k-means algorithm, holding its center and member rows.
+ */
 public class KMeansCluster {
 
     private List<Double> center;
     private final List<List<Double>> values;
     private Partition originalData;
 
+    /**
+     * Constructs an empty KMeansCluster with no center.
+     */
     public KMeansCluster() {
         this.center = null;
         this.originalData = null;
         this.values = new ArrayList<>();
     }
 
+    /**
+     * Constructs a KMeansCluster with the given initial center.
+     *
+     * @param center the initial center coordinates
+     */
     public KMeansCluster(List<Double> center) {
         this.center = center;
         this.originalData = null;
         this.values = new ArrayList<>();
     }
 
+    /**
+     * Returns the list of normalised row values belonging to this cluster.
+     *
+     * @return the values
+     */
     public List<List<Double>> getValues() {
         return values;
     }
 
+    /**
+     * Appends additional row values to this cluster.
+     *
+     * @param toAppend the values to append
+     */
     public void addValues(List<List<Double>> toAppend) {
         this.values.addAll(toAppend);
     }
 
+    /**
+     * Initialises the original-data partition for this cluster.
+     *
+     * @param numberOfColumns the number of columns in the dataset
+     */
     public void initializePartition(int numberOfColumns) {
         this.originalData = new InMemoryPartition(numberOfColumns);
         this.originalData.setAnonymous(false);
     }
 
+    /**
+     * Adds an original dataset row to this cluster's partition.
+     *
+     * @param datasetRow the row to add
+     */
     public void addOriginalRow(List<String> datasetRow) {
         this.originalData.getMember().addRow(datasetRow);
     }
 
+    /**
+     * Returns the original-data partition for this cluster.
+     *
+     * @return the original-data partition
+     */
     public Partition getOriginalData() {
         return this.originalData;
     }
 
+    /**
+     * Returns the current center of this cluster.
+     *
+     * @return the center coordinates
+     */
     public List<Double> getCenter() {
         return this.center;
     }
 
+    /**
+     * Adds a single normalised row to this cluster.
+     *
+     * @param row the row to add
+     */
     public void add(List<Double> row) {
         this.values.add(row);
     }
 
+    /**
+     * Recomputes the cluster center as the mean of all member values.
+     */
     public void computeCenter() {
         if (values.size() == 0) {
             return;

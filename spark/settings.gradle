@@ -8,4 +8,3 @@
  */
 
 rootProject.name = 'data-privacy-toolkit-spark'
-include('app')

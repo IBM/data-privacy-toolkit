@@ -25,33 +25,61 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 import java.util.Collection;
 
 
+/** FHIRMedicationProduct FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationProduct {
+    /** Constructs a FHIRMedicationProduct. */
+    public FHIRMedicationProduct() {}
+
     private FHIRCodeableConcept form;
     private Collection<FHIRMedicationProductBatch> batch;
     private Collection<FHIRMedicationProductIngredient> ingredient;
 
+    /**
+     * Returns the form.
+     * @return the form
+     */
     public FHIRCodeableConcept getForm() {
         return form;
     }
 
+    /**
+     * Sets the form.
+     * @param form the form
+     */
     public void setForm(FHIRCodeableConcept form) {
         this.form = form;
     }
 
+    /**
+     * Returns the batch.
+     * @return the batch
+     */
     public Collection<FHIRMedicationProductBatch> getBatch() {
         return batch;
     }
 
+    /**
+     * Sets the batch.
+     * @param batch the batch
+     */
     public void setBatch(Collection<FHIRMedicationProductBatch> batch) {
         this.batch = batch;
     }
 
+    /**
+     * Returns the ingredient.
+     * @return the ingredient
+     */
     public Collection<FHIRMedicationProductIngredient> getIngredient() {
         return ingredient;
     }
 
+    /**
+     * Sets the ingredient.
+     * @param ingredient the ingredient
+     */
     public void setIngredient(Collection<FHIRMedicationProductIngredient> ingredient) {
         this.ingredient = ingredient;
     }

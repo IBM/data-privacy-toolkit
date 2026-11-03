@@ -28,7 +28,7 @@ class UUIDIdentifierTest {
     public void executeOnDataset() throws IOException {
         Identifier identifier = new UUIDIdentifier();
 
-        try (InputStream data = getClass().getResourceAsStream("/test-uuid.txt");
+        try (InputStream data = UUIDIdentifierTest.class.getResourceAsStream("/test-uuid.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader((data)))
         ) {
             for (String value: reader.lines().collect(Collectors.toList())) {

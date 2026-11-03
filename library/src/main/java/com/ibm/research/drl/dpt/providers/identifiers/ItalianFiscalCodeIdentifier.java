@@ -27,7 +27,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** Identifier for Italian fiscal codes (Codice Fiscale). */
 public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
+
+    /** Constructs an ItalianFiscalCodeIdentifier. */
+    public ItalianFiscalCodeIdentifier() {}
     private final static Collection<String> appropriateNames = Arrays.asList(
             "codice fiscale",
             "codice-fiscale"
@@ -47,7 +51,9 @@ public class ItalianFiscalCodeIdentifier extends AbstractIdentifier {
                     "[a-z]" // checksum
             ,
             Pattern.CASE_INSENSITIVE);
+    /** Scoring table for characters at odd positions in the fiscal code. */
     private final Map<Character, Integer> oddCharacters = buildOddCharacterMap();
+    /** Scoring table for characters at even positions in the fiscal code. */
     private final Map<Character, Integer> evenCharacters = buildEvenCharacterMap();
 
     private Map<Character, Integer> buildOddCharacterMap() {

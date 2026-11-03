@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.util;
 
+/**
+ * Enumerates the formats in which a country name can be specified.
+ */
 public enum CountryNameSpecification {
     /**
      * Name country name specification.

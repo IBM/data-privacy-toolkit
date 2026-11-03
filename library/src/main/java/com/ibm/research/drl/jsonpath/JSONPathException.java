@@ -18,11 +18,18 @@ under the License.
 */
 package com.ibm.research.drl.jsonpath;
 
+/** Exception thrown when a JSON path operation fails. */
 public class JSONPathException extends Exception {
+    /** Constructs a JSONPathException with no detail message. */
     public JSONPathException() {
         super();
     }
 
+    /**
+     * Constructs a JSONPathException with the given detail message.
+     *
+     * @param message the detail message
+     */
     public JSONPathException(String message) {
         super(message);
     }

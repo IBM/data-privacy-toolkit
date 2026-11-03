@@ -34,7 +34,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,32 +53,56 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.Span;
 
+/** NLP annotator using the PRIMA shingle-based entity recognition approach. */
 public class PRIMAAnnotator extends AbstractNLPAnnotator {
     private static final Logger logger = LogManager.getLogger(PRIMAAnnotator.class);
 
     private static final String annotatorName = "PRIMA";
     private static final Pattern trailingPunctuation = Pattern.compile("\\p{Punct}+\\s*$");
 
+    /** Minimum shingle (n-gram) size used for matching. */
     private final int MIN_SHINGLE_SIZE;
+    /** Maximum shingle (n-gram) size used for matching. */
     private final int MAX_SHINGLE_SIZE;
+    /** Map from raw entity type string to canonical type name. */
     private final Map<String, String> typeMap;
+    /** Whether to split input into sentences before annotating. */
     private final boolean splitSentences;
+    /** The identifier factory used to create per-type identifiers. */
     private final IdentifierFactory identifierFactory;
+    /** Additional patterns used to split sentences. */
     private final List<Pattern> customSentenceSplitPatterns;
 
+    /** The OpenNLP tokenizer (transient — rebuilt on deserialisation). */
     private transient TokenizerME tokenizer;
+    /** The OpenNLP sentence detector (transient — rebuilt on deserialisation). */
     private transient SentenceDetectorME sentenceDetector;
 
+    /** Classpath reference for the sentence model. */
     private final String sentenceModelReference;
+    /** Classpath reference for the tokenizer model. */
     private final String tokenizerModelReference;
+    /** Minimum span size (in tokens) to consider a match. */
     private final int minSpanSize;
 
+    /** Whether to run POS tagging (currently disabled). */
     private final boolean performPOSTagging = false;
 
+    /**
+     * Constructs a PRIMAAnnotator with the given configuration, using the default identifier factory.
+     *
+     * @param properties JSON configuration node
+     */
     public PRIMAAnnotator(JsonNode properties) {
         this(properties, null);
     }
 
+    /**
+     * Constructs a PRIMAAnnotator with the given configuration and identifier factory.
+     *
+     * @param properties        JSON configuration node
+     * @param identifierFactory the identifier factory to use, or {@code null} to use the default
+     */
     public PRIMAAnnotator(JsonNode properties, IdentifierFactory identifierFactory) {
         this.typeMap = extractMapping(properties.get("mapping"));
         this.MIN_SHINGLE_SIZE = properties.get("MIN_SHINGLE_SIZE").asInt(2);
@@ -295,8 +318,9 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
     }
 
     private List<IdentifiedEntity> mergeOverlappingSingleType(List<IdentifiedEntity> entityList) {
-        if (entityList.isEmpty()) return entityList;
+        if (entityList.isEmpty()) return new ArrayList<>();
 
+        entityList = new ArrayList<>(entityList);
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getStart));
         entityList.sort(Comparator.comparingInt(IdentifiedEntity::getEnd));
 
@@ -438,7 +462,7 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
         StringBuilder builder = new StringBuilder();
         int lastOffset = 0;
         
-        Collections.sort(changes);
+        changes.sort(null);
         
         for(Integer change: changes) {
             builder.append(text, lastOffset, change);
@@ -499,12 +523,24 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
         return annotatorName;
     }
 
+    /**
+     * Custom deserialisation: rebuilds transient NLP models after loading.
+     *
+     * @param inputStream the object input stream
+     * @throws IOException            if an I/O error occurs
+     * @throws ClassNotFoundException if a serialized class cannot be found
+     */
     private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         inputStream.defaultReadObject();
         this.sentenceDetector = buildSentenceDetector();
         this.tokenizer = buildTokenizer();
     }
 
+    /**
+     * Returns the identifier factory used by this annotator.
+     *
+     * @return the identifier factory
+     */
     public IdentifierFactory getIdentifierFactory() {
         return this.identifierFactory;
     }
@@ -515,6 +551,6 @@ public class PRIMAAnnotator extends AbstractNLPAnnotator {
                 .filter( Identifier::isPOSIndependent)
                 .map(Identifier::getType).map(ProviderType::getName)
                 .map(this::mapType)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

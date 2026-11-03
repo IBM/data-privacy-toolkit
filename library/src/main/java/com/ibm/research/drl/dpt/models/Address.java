@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Represents a parsed postal address, either a standard street address or a PO Box.
+ */
 public class Address {
 
     private boolean isPoBox;

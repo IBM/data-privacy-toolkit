@@ -22,7 +22,15 @@ import com.ibm.research.drl.dpt.managers.CountyManager;
 import com.ibm.research.drl.dpt.managers.Manager;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+/**
+ * Identifier for US county names.
+ */
 public class CountyIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new CountyIdentifier.
+     */
+    public CountyIdentifier() {
+    }
     private final static CountyManager countyManager = CountyManager.getInstance();
 
     @Override

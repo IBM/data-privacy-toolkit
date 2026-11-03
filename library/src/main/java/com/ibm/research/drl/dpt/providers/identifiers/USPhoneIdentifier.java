@@ -26,7 +26,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** Identifier for US phone, fax, and beeper numbers. */
 public class USPhoneIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
+
+    /** Constructs a USPhoneIdentifier. */
+    public USPhoneIdentifier() {}
     @Override
     public ProviderType getType() {
         return ProviderType.PHONE;

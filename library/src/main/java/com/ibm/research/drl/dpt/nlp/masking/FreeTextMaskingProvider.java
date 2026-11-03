@@ -40,16 +40,27 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+/** Masking provider for free-text content using NLP annotation. */
 public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<String> {
     private final static Logger logger = LogManager.getLogger(FreeTextMaskingProvider.class);
+    /** The annotator used to identify entities in free text. */
     private final ComplexFreeTextAnnotator annotator;
+    /** The separator used between lookup tokens. */
     private final String lookupTokensSeparator;
+    /** Whether token lookup is case-insensitive. */
     private final boolean lookupTokensIgnoreCase;
+    /** Whether to look for tokens anywhere in the value (not just exact match). */
     private final boolean lookupTokensFindAnywhere;
+    /** The entity type to use when looking up replacement tokens. */
     private final String lookupTokensType;
 
+    /**
+     * Constructs a FreeTextMaskingProvider with the given factory and annotator.
+     *
+     * @param factory    the masking provider factory
+     * @param annotator  the NLP annotator
+     */
     public FreeTextMaskingProvider(MaskingProviderFactory factory, ComplexFreeTextAnnotator annotator) {
         super("freetext", factory.getConfigurationForField(""), Collections.emptySet(), factory);
         this.annotator = annotator;
@@ -62,6 +73,12 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
         logger.info("Initialization of FreeTextMaskingProvider completed");
     }
 
+    /**
+     * Constructs a FreeTextMaskingProvider with a configuration-derived annotator.
+     *
+     * @param factory       the masking provider factory
+     * @param configuration the masking configuration
+     */
     public FreeTextMaskingProvider(MaskingProviderFactory factory, MaskingConfiguration configuration) {
         this(factory, buildNLPAnnotator(configuration));
     }
@@ -121,7 +138,7 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
                             return entity;
                         }
                 )
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private String truncateOrPad(String maskedValue, int length) {
@@ -138,6 +155,17 @@ public class FreeTextMaskingProvider extends AbstractComplexMaskingProvider<Stri
         return annotator.identify(text, Language.UNKNOWN);
     }
 
+    /**
+     * Finds occurrences of source tokens in a target string.
+     *
+     * @param sourceTokens  the tokens to search for
+     * @param targetValue   the text to search within
+     * @param separator     the token separator
+     * @param ignoreCase    whether to ignore case
+     * @param findAnywhere  whether to match anywhere (not just at word boundaries)
+     * @param tokenType     the entity type to assign to matches
+     * @return list of identified entities for each match
+     */
     protected List<IdentifiedEntity> grep(String sourceTokens, String targetValue, String separator,
                                           boolean ignoreCase,
                                           boolean findAnywhere,

@@ -30,10 +30,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Manager for occupation entries loaded from localised CSV resources.
+ */
 public class OccupationManager extends ResourceBasedManager<Occupation> {
 
     private static final OccupationManager OCCUPATION_MANAGER = new OccupationManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the shared {@link OccupationManager} instance
+     */
     public static OccupationManager getInstance() {
         return OCCUPATION_MANAGER;
     }

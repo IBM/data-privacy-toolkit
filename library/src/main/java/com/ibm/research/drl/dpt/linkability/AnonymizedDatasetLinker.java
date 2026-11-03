@@ -29,15 +29,33 @@ import java.io.InputStream;
 import java.util.*;
 
 
+/**
+ * Links an anonymized dataset against a target dataset to estimate re-identification risk.
+ */
 public class AnonymizedDatasetLinker {
     private final static Logger logger = LogManager.getLogger(AnonymizedDatasetLinker.class);
 
     private final DatasetLinker datasetLinker;
 
+    /**
+     * Constructs an AnonymizedDatasetLinker.
+     *
+     * @param target          the target dataset input stream
+     * @param linkInformation the link information describing how columns are linked
+     * @throws IOException if the target dataset cannot be read
+     */
     public AnonymizedDatasetLinker(InputStream target, Collection<LinkInfo> linkInformation) throws IOException {
         this.datasetLinker = new DatasetLinker(target, linkInformation);
     }
 
+    /**
+     * Matches a single anonymized row against the target dataset and returns the count of matching records.
+     *
+     * @param anonymizedRow      the anonymized row values
+     * @param linkInformation    the link information
+     * @param columnInformations the column information list for the source dataset
+     * @return the number of matching target records
+     */
     public Integer matchAnonymizedRow(List<String> anonymizedRow, Collection<LinkInfo> linkInformation, List<ColumnInformation> columnInformations) {
         List<List<Set<Integer>>> matching = new ArrayList<>(linkInformation.size());
 
@@ -73,7 +91,7 @@ public class AnonymizedDatasetLinker {
                     continue;
                 }
 
-                if (!(columnInformation instanceof CategoricalInformation)) {
+                if (!(columnInformation instanceof CategoricalInformation categoricalInformation)) {
                     Set<Integer> matchedRows = datasetLinker.matchValue(value, targetIndex, info.isPrefixMatch());
                     if (matchedRows == null) {
                         return 0;
@@ -81,7 +99,6 @@ public class AnonymizedDatasetLinker {
                         infoMatching.add(matchedRows);
                     }
                 } else {
-                    CategoricalInformation categoricalInformation = (CategoricalInformation) columnInformation;
                     int level = categoricalInformation.getHierarchy().getNodeLevel(value);
 
                     if (level <= 0) {
@@ -171,6 +188,13 @@ public class AnonymizedDatasetLinker {
         return result;
     }
 
+    /**
+     * Returns the number of target matches per record in the source dataset.
+     *
+     * @param source          the source dataset
+     * @param linkInformation the link information
+     * @return a list of match counts, one per source record
+     */
     public List<Integer> matchesPerRecord(IPVDataset source, Collection<LinkInfo> linkInformation) {
         final List<Integer> matchResults = new ArrayList<>();
 
@@ -199,6 +223,14 @@ public class AnonymizedDatasetLinker {
         return matchResults;
     }
 
+    /**
+     * Returns the number of target matches per record in the source dataset, considering column information.
+     *
+     * @param source             the source dataset
+     * @param linkInformation    the link information
+     * @param columnInformations the column information list
+     * @return a list of match counts, one per source record
+     */
     public List<Integer> matchesPerRecord(IPVDataset source, Collection<LinkInfo> linkInformation, List<ColumnInformation> columnInformations) {
         final List<Integer> matchResults = new ArrayList<>();
 
@@ -227,6 +259,14 @@ public class AnonymizedDatasetLinker {
         return matchResults;
     }
 
+    /**
+     * Returns the number of target matches per record in the given partition.
+     *
+     * @param partition          the partition whose records to match
+     * @param linkInformation    the link information
+     * @param columnInformations the column information list
+     * @return a list of match counts, one per record in the partition
+     */
     public List<Integer> matchesPerRecord(Partition partition, Collection<LinkInfo> linkInformation, List<ColumnInformation> columnInformations) {
         final List<Integer> matchResults = new ArrayList<>();
 

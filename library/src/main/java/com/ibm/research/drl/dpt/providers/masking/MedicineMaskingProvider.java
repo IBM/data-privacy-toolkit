@@ -25,6 +25,9 @@ import com.ibm.research.drl.dpt.models.Medicine;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider that replaces medicine names with randomly chosen alternatives.
+ */
 public class MedicineMaskingProvider implements MaskingProvider {
     private static final MedicineManager medicineManager = MedicineManager.getInstance();
 

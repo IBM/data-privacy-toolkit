@@ -22,29 +22,57 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 
+/** FHIRLocationPosition FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRLocationPosition {
+    /** Constructs a FHIRLocationPosition. */
+    public FHIRLocationPosition() {}
+
+    /**
+     * Returns the longitude.
+     * @return the longitude
+     */
     public float getLongitude() {
         return longitude;
     }
 
+    /**
+     * Sets the longitude.
+     * @param longitude the longitude
+     */
     public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * Returns the latitude.
+     * @return the latitude
+     */
     public float getLatitude() {
         return latitude;
     }
 
+    /**
+     * Sets the latitude.
+     * @param latitude the latitude
+     */
     public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * Returns the altitude.
+     * @return the altitude
+     */
     public float getAltitude() {
         return altitude;
     }
 
+    /**
+     * Sets the altitude.
+     * @param altitude the altitude
+     */
     public void setAltitude(float altitude) {
         this.altitude = altitude;
     }

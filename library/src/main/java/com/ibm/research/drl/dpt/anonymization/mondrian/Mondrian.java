@@ -50,7 +50,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Mondrian multidimensional anonymization algorithm implementation.
+ */
 public class Mondrian implements AnonymizationAlgorithm {
+    /** Constructs a Mondrian algorithm instance. */
+    public Mondrian() {}
     private IPVDataset dataset;
     private List<Integer> quasiColumns;
     private List<Integer> nonQuasiColumns;
@@ -60,6 +65,13 @@ public class Mondrian implements AnonymizationAlgorithm {
     private List<ColumnInformation> columnInformationList;
     private CategoricalSplitStrategy categoricalSplitStrategy;
 
+    /**
+     * Returns the column indices that are NOT quasi-identifiers.
+     *
+     * @param numberOfColumns the total number of columns
+     * @param quasiColumns    the list of quasi-identifier column indices
+     * @return the list of non-quasi-identifier column indices
+     */
     public static List<Integer> getNonQuasiColumns(int numberOfColumns, List<Integer> quasiColumns) {
         List<Integer> result = new ArrayList<>();
 
@@ -99,6 +111,14 @@ public class Mondrian implements AnonymizationAlgorithm {
         return this.anonymizedPartitions;
     }
 
+    /**
+     * Finds the common ancestor term for all values in the given column across the provided rows.
+     *
+     * @param values                 the dataset rows
+     * @param columnIndex            the column index to examine
+     * @param materializedHierarchy  the hierarchy for that column
+     * @return the common ancestor term
+     */
     public static String findCommonAncestor(List<List<String>> values, int columnIndex, MaterializedHierarchy materializedHierarchy) {
         Set<String> uniqueValues = new HashSet<>();
 
@@ -130,6 +150,17 @@ public class Mondrian implements AnonymizationAlgorithm {
         return commonAncestors;
     }
 
+    /**
+     * Anonymizes a single Mondrian partition by replacing quasi-identifier values with their
+     * generalized forms.
+     *
+     * @param partition                the partition to anonymize
+     * @param quasiColumns             the quasi-identifier column indices
+     * @param nonQuasiColumns          the non-quasi-identifier column indices
+     * @param columnInformationList    the column information list
+     * @param categoricalSplitStrategy the strategy used for categorical splits
+     * @return the anonymized partition
+     */
     public static Partition anonymizePartition(MondrianPartition partition,
                                                List<Integer> quasiColumns, List<Integer> nonQuasiColumns,
                                                List<ColumnInformation> columnInformationList, CategoricalSplitStrategy categoricalSplitStrategy) {

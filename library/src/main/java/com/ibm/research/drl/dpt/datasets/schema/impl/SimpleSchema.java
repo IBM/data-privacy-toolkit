@@ -31,7 +31,9 @@ import java.util.List;
  *
  */
 public class SimpleSchema implements IPVSchema, Serializable {
+    /** The schema identifier. */
     private final String id;
+    /** The ordered list of fields in this schema. */
     private final List<SimpleSchemaField> fields;
 
     /**

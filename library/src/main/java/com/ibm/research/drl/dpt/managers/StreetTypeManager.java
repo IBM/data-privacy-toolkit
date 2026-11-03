@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for street type resources. */
 public class StreetTypeManager extends ResourceBasedManager<String> {
 
     private static final Collection<ResourceEntry> resourceStreetNameList =
@@ -35,6 +36,11 @@ public class StreetTypeManager extends ResourceBasedManager<String> {
 
     private final static StreetTypeManager STREET_TYPE_MANAGER = new StreetTypeManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton StreetTypeManager
+     */
     public static StreetTypeManager getInstance() {
         return STREET_TYPE_MANAGER;
     }

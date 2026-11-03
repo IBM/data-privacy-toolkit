@@ -28,78 +28,154 @@ import com.ibm.research.drl.dpt.models.fhir.subtypes.FHIRGroupMember;
 
 import java.util.Collection;
 
+/** FHIRGroup FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRGroup extends FHIRBaseDomainResource {
+    /** Constructs a FHIRGroup. */
+    public FHIRGroup() {}
 
+
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public Collection<FHIRIdentifier> getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(Collection<FHIRIdentifier> identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Returns the actual.
+     * @return the actual
+     */
     public boolean isActual() {
         return actual;
     }
 
+    /**
+     * Sets the actual.
+     * @param actual the actual
+     */
     public void setActual(boolean actual) {
         this.actual = actual;
     }
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public FHIRCodeableConcept getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(FHIRCodeableConcept code) {
         this.code = code;
     }
 
+    /**
+     * Returns the name.
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name.
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the quantity.
+     * @return the quantity
+     */
     public String getQuantity() {
         return quantity;
     }
 
+    /**
+     * Sets the quantity.
+     * @param quantity the quantity
+     */
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
+    /**
+     * Returns the characteristic.
+     * @return the characteristic
+     */
     public Collection<FHIRGroupCharacteristic> getCharacteristic() {
         return characteristic;
     }
 
+    /**
+     * Sets the characteristic.
+     * @param characteristic the characteristic
+     */
     public void setCharacteristic(Collection<FHIRGroupCharacteristic> characteristic) {
         this.characteristic = characteristic;
     }
 
+    /**
+     * Returns the member.
+     * @return the member
+     */
     public Collection<FHIRGroupMember> getMember() {
         return member;
     }
 
+    /**
+     * Sets the member.
+     * @param member the member
+     */
     public void setMember(Collection<FHIRGroupMember> member) {
         this.member = member;
     }
 
+    /**
+     * Returns the resourceType.
+     * @return the resourceType
+     */
     public String getResourceType() {
         return resourceType;
     }
 
+    /**
+     * Sets the resourceType.
+     * @param resourceType the resourceType
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }

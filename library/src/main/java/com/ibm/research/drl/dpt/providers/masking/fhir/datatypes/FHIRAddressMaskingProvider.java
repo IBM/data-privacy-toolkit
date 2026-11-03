@@ -38,16 +38,32 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
+/** FHIRAddressMaskingProvider FHIR datatype. */
 public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
+    /** Shared city manager instance. */
     private final static CityManager cityManager = CityManager.getInstance();
+    /** Shared country manager instance. */
     private final static CountryManager countryManager = CountryManager.getInstance();
 
+    /** Masking provider for the city component. */
     private final MaskingProvider cityMaskingProvider;
+    /** Masking provider for the postal code component. */
     private final MaskingProvider postalCodeMaskingProvider;
+    /** Shared street name manager instance. */
     private static final StreetNameManager streetNameManager = StreetNameManager.getInstance();
+    /** Whether to preserve only the state/region component. */
     private final boolean preserveStateOnly;
+    /** Secure random source. */
     private final SecureRandom random;
 
+    /**
+     * Constructs a FHIRAddressMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
+     * @param maskedFields         the set of already-masked fields
+     * @param fieldPath            the field path
+     * @param factory              the masking provider factory
+     */
     public FHIRAddressMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -60,6 +76,11 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAddress obj = JsonUtils.MAPPER.treeToValue(node, FHIRAddress.class);
@@ -70,6 +91,12 @@ public class FHIRAddressMaskingProvider extends AbstractComplexMaskingProvider<J
         }
     }
 
+    /**
+     * Masks the given FHIR address.
+     *
+     * @param address the address to mask
+     * @return the masked address
+     */
     public FHIRAddress mask(FHIRAddress address) {
         if (address == null) {
             return null;

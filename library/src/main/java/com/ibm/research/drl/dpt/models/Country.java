@@ -22,14 +22,24 @@ import com.ibm.research.drl.dpt.util.CountryNameSpecification;
 
 import java.util.Arrays;
 
+/**
+ * Represents a country with its geographic location and ISO codes.
+ */
 public class Country implements Location, LocalizedEntity {
 
+    /** The country name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** ISO 3166-1 alpha-2 code. */
     private final String iso2code;
+    /** ISO 3166-1 alpha-3 code. */
     private final String iso3code;
+    /** The continent name. */
     private final String continent;
+    /** The geographic coordinates. */
     private final LatitudeLongitude latitudeLongitude;
+    /** Neighboring countries. */
     private Country[] neighbors;
 
     /**
@@ -110,14 +120,10 @@ public class Country implements Location, LocalizedEntity {
      * @return the name
      */
     public String getName(CountryNameSpecification spec) {
-        switch (spec) {
-            case ISO2:
-                return iso2code;
-            case ISO3:
-                return iso3code;
-            case NAME:
-            default:
-                return name;
-        }
+        return switch (spec) {
+            case ISO2 -> iso2code;
+            case ISO3 -> iso3code;
+            default -> name;
+        };
     }
 }

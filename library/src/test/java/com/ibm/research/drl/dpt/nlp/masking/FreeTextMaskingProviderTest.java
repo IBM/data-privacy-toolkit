@@ -298,8 +298,8 @@ TODO: MOVE TO PROCESSORS MODULE
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/jsonlookup.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/jsonlookup.json"), DataMaskingOptions.class);
+        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookup.json")));
+        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookup.json"), DataMaskingOptions.class);
 
         FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.JSON);
         formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
@@ -329,8 +329,8 @@ TODO: MOVE TO PROCESSORS
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/jsonlookupnested.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/jsonlookupnested.json"), DataMaskingOptions.class);
+        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookupnested.json")));
+        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookupnested.json"), DataMaskingOptions.class);
 
         FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.JSON);
         formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
@@ -364,8 +364,8 @@ TODO: MOVE TO PROCESSORS
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/jsonlookuparray.json")));
-        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(this.getClass().getResourceAsStream("/jsonlookuparray.json"), DataMaskingOptions.class);
+        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookuparray.json")));
+        DataMaskingOptions maskingOptions = (new ObjectMapper()).readValue(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookuparray.json"), DataMaskingOptions.class);
 
         FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.JSON);
         formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);
@@ -401,8 +401,8 @@ TODO: MOVE TO PROCESSORS
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
 
-        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(this.getClass().getResourceAsStream("/jsonlookup.json")));
-        DataMaskingOptions maskingOptions = mapper.readValue(this.getClass().getResourceAsStream("/jsonlookup.json"), DataMaskingOptions.class);
+        ConfigurationManager configurationManager = ConfigurationManager.load(mapper.readTree(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookup.json")));
+        DataMaskingOptions maskingOptions = mapper.readValue(FreeTextMaskingProviderTest.class.getResourceAsStream("/jsonlookup.json"), DataMaskingOptions.class);
 
         FormatProcessor formatProcessor = FormatProcessorFactory.getProcessor(DataTypeFormat.JSON);
         formatProcessor.maskStream(inputStream, printStream, new MaskingProviderFactory(configurationManager, Collections.emptyMap()), maskingOptions, new HashSet<>(), null);

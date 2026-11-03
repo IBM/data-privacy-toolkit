@@ -25,10 +25,25 @@ import com.ibm.research.drl.dpt.exceptions.MisconfigurationException;
 
 import java.util.*;
 
+/**
+ * Utility class providing JSON helper methods and a shared {@link ObjectMapper} instance.
+ */
 public class JsonUtils {
 
+    /** Shared Jackson {@link ObjectMapper} instance. */
     public final static ObjectMapper MAPPER = new ObjectMapper();
 
+    /** Not instantiable. */
+    private JsonUtils() {}
+
+    /**
+     * Validates that a JSON configuration node contains a required key of the expected type.
+     *
+     * @param configuration the JSON configuration node
+     * @param key           the required key name
+     * @param expectedType  the expected {@link JsonNodeType} for the value
+     * @throws MisconfigurationException if the key is absent or has the wrong type
+     */
     public static void validateField(JsonNode configuration, String key, JsonNodeType expectedType) throws MisconfigurationException {
         JsonNode node = configuration.get(key);
         if (node == null) {
@@ -38,6 +53,13 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * Builds a {@link Set} of strings from a JSON array node.
+     *
+     * @param array the JSON array node (may be {@code null})
+     * @return a set containing the text of each array element, or an empty set if the input is
+     *         {@code null} or not an array
+     */
     public static Set<String> setFromArrayOfStrings(JsonNode array) {
         if (array == null || !array.isArray()) {
             return Collections.emptySet();
@@ -110,6 +132,13 @@ public class JsonUtils {
 
     }
 
+    /**
+     * Traverses a JSON object tree and returns a flat map from JSON-pointer path to the list of
+     * {@link JsonNode} values found at that path.
+     *
+     * @param node the root JSON node to traverse
+     * @return a map from path string to the list of nodes at that path
+     */
     public static Map<String, List<JsonNode>> traverseObject(JsonNode node) {
         return traverseObject(node, "");
     }

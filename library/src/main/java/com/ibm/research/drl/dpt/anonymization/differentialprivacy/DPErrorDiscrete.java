@@ -22,7 +22,10 @@ package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 import com.ibm.research.drl.dpt.anonymization.Partition;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 
+/** DP error metric for discrete values (fraction incorrectly reassigned). */
 public class DPErrorDiscrete implements DPError {
+    /** Constructs a DPErrorDiscrete instance. */
+    public DPErrorDiscrete() {}
     @Override
     public double reportError(Partition original, Partition noisy, int columnIndex) {
         IPVDataset originalDataset = original.getMember();

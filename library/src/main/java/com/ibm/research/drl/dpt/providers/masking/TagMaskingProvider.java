@@ -23,6 +23,7 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 import java.security.SecureRandom;
 import java.util.HashMap;
 
+/** Masking provider that tags identified entities in a value and caches replacements. */
 public class TagMaskingProvider implements MaskingProvider {
     private static class CacheEntry extends HashMap<String, String> {
     }
@@ -32,6 +33,12 @@ public class TagMaskingProvider implements MaskingProvider {
 
     private static final Cache cache = new Cache();
 
+    /**
+     * Constructs a TagMaskingProvider.
+     *
+     * @param random               the secure random source (unused)
+     * @param maskingConfiguration the masking configuration (unused)
+     */
     public TagMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
     }
 

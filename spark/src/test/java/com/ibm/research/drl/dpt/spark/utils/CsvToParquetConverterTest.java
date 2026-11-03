@@ -28,7 +28,6 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -108,7 +107,7 @@ public class CsvToParquetConverterTest {
                 new StructField("A", DataTypes.StringType, true, Metadata.empty())
         });
 
-        Dataset<Row> dataset = spark.createDataset(
+        Dataset<Row> dataset = spark.createDataFrame(
                 Arrays.asList(
                         RowFactory.create(
                                 "2016-01-29"
@@ -125,8 +124,8 @@ public class CsvToParquetConverterTest {
                         RowFactory.create(
                                 "2016-01-29"
                         )
-                        ),
-                RowEncoder.apply(schema));
+                ),
+                schema);
 
         Dataset<Row> after = dataset.select(to_date(col("A")).as("A"));
 
@@ -141,7 +140,7 @@ public class CsvToParquetConverterTest {
                 new StructField("B", DataTypes.StringType, false, Metadata.empty())
         });
 
-        Dataset<Row> dataset = spark.createDataset(
+        Dataset<Row> dataset = spark.createDataFrame(
                 Arrays.asList(
                         RowFactory.create(
                                 "2016-01-29 00:00",
@@ -160,7 +159,7 @@ public class CsvToParquetConverterTest {
                                 "10/09/1098 12:11:12"
                         )
                 ),
-                RowEncoder.apply(schema));
+                schema);
 
         Dataset<Row> after = dataset.select(
                 to_timestamp(col("A"), "yyyy-MM-dd HH:mm").as("A"),

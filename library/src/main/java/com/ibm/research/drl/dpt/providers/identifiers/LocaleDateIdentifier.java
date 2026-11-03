@@ -25,12 +25,20 @@ import org.apache.logging.log4j.LogManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for locale-style dates in the form {@code DD MONTHNAME YYYY} or {@code DD MONTHNAME}.
+ */
 public class LocaleDateIdentifier extends AbstractIdentifier {
+    /** Constructs a LocaleDateIdentifier. */
+    public LocaleDateIdentifier() {}
     private static final Logger logger = LogManager.getLogger(LocaleDateIdentifier.class);
 
+    /** Helper to detect month names. */
     private final MonthIdentifier monthIdentifier = new MonthIdentifier();
 
+    /** Pattern matching day–month–year locale dates. */
     private final Pattern dmy = Pattern.compile("(\\d{1,2})\\s+(\\p{Alpha}{5,}|\\d{1,2}) (\\d{2,4})");
+    /** Pattern matching day–month locale dates. */
     private final Pattern dm = Pattern.compile("(\\d{1,2})\\s+(\\p{Alpha}{5,}|\\d{1,2})");
 
     @Override

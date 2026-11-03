@@ -25,6 +25,7 @@ import com.ibm.research.drl.dpt.anonymization.AnonymizationAlgorithmOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Configuration options for the OLA anonymization algorithm. */
 public class OLAOptions implements AnonymizationAlgorithmOptions {
     /**
      * Gets suppression rate.
@@ -35,8 +36,10 @@ public class OLAOptions implements AnonymizationAlgorithmOptions {
         return suppressionRate;
     }
 
+    /** The maximum suppression rate (0.0–1.0). */
     private final double suppressionRate;
 
+    /** Named integer value overrides. */
     private final Map<String, Integer> values = new HashMap<>();
 
     @Override
@@ -50,9 +53,9 @@ public class OLAOptions implements AnonymizationAlgorithmOptions {
     }
 
     /**
-     * Instantiates a new Ola options.
+     * Instantiates a new OLA options.
      *
-     * @param suppressionRate
+     * @param suppressionRate the maximum suppression rate (0.0–1.0)
      */
     @JsonCreator
     public OLAOptions(@JsonProperty("suppressionRate") double suppressionRate) {

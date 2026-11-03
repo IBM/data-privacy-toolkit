@@ -48,59 +48,99 @@ import java.util.Objects;
  * The type Date time masking provider.
  */
 public class DateTimeMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger logger = LogManager.getLogger(DateTimeMaskingProvider.class);
+    /** Shared date-time identifier instance. */
     private final static DateTimeIdentifier dateTimeIdentifier = new DateTimeIdentifier();
 
+    /** Temporal annotation masking provider used for annotation-based masking. */
     private final TemporalAnnotationMaskingProvider temporalMaskingProvider;
 
+    /** The configured failure mode. */
     private final int failMode;
+    /** Whether to shift the date by a fixed number of seconds. */
     private final boolean shiftDate;
+    /** Number of seconds to shift the date when shift mode is enabled. */
     private final int shiftSeconds;
 
+    /** Whether to replace the day with another day in the same class. */
     private final boolean replaceDaySameClass;
 
+    /** Whether to mask the year component. */
     private final boolean yearMask;
+    /** Maximum upward range for year randomisation. */
     private final int yearRangeUp;
+    /** Maximum downward range for year randomisation. */
     private final int yearRangeDown;
 
+    /** Whether to mask the month component. */
     private final boolean monthMask;
+    /** Maximum upward range for month randomisation. */
     private final int monthRangeUp;
+    /** Maximum downward range for month randomisation. */
     private final int monthRangeDown;
 
+    /** Whether to mask the day component. */
     private final boolean dayMask;
+    /** Maximum upward range for day randomisation. */
     private final int dayRangeUp;
+    /** Maximum downward range for day randomisation. */
     private final int dayRangeDown;
 
+    /** Whether to mask the hour component. */
     private final boolean hourMask;
+    /** Maximum upward range for hour randomisation. */
     private final int hourRangeUp;
+    /** Maximum downward range for hour randomisation. */
     private final int hourRangeDown;
 
+    /** Whether to mask the minutes component. */
     private final boolean minutesMask;
+    /** Maximum upward range for minutes randomisation. */
     private final int minutesRangeUp;
+    /** Maximum downward range for minutes randomisation. */
     private final int minutesRangeDown;
 
+    /** Whether to mask the seconds component. */
     private final boolean secondsMask;
+    /** Maximum upward range for seconds randomisation. */
     private final int secondsRangeUp;
+    /** Maximum downward range for seconds randomisation. */
     private final int secondsRangeDown;
 
+    /** Whether to generalise to week/year granularity. */
     private final boolean generalizeWeekYear;
+    /** Whether to generalise to month/year granularity. */
     private final boolean generalizeMonthYear;
+    /** Whether to generalise to quarter/year granularity. */
     private final boolean generalizeQuarterYear;
+    /** Whether to generalise to year granularity. */
     private final boolean generalizeYear;
+    /** Whether to generalise to an N-year interval. */
     private final boolean generalizeNYearInterval;
+    /** The N-year interval size for generalisation. */
     private final int generalizeNYearIntervalValue;
 
+    /** Whether to return the original value when the date format is unknown. */
     private final boolean returnOriginalOnUnknownFormat;
 
+    /** Maximum number of days for key-based date shifting. */
     private final int keyBasedMaxDays;
+    /** Minimum number of days for key-based date shifting. */
     private final int keyBasedMinDays;
 
+    /** Whether to trim the time component to the nearest hour interval. */
     private final boolean trimTimeToHourInterval;
+    /** Number of hour intervals used when trimming the time component. */
     private final int numberOfHourIntervals;
+    /** The time zone used when parsing and formatting dates. */
     private final String timeZone;
+    /** Secure random source. */
     private final SecureRandom random;
 
+    /** A fixed date format string, if configured; otherwise {@code null}. */
     private String fixedDateFormat = null;
+    /** Default date formatter using dd/MM/yyyy pattern with zeroed time defaults. */
     private final static DateTimeFormatter defaultDateFormat = new DateTimeFormatterBuilder()
             .appendPattern("dd/MM/yyyy")
             .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)

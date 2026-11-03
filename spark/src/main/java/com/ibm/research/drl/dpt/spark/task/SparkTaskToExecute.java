@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ibm.research.drl.dpt.spark.dataset.reference.DatasetReference;
 import com.ibm.research.drl.dpt.spark.utils.SparkUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -38,7 +38,7 @@ import java.io.Serializable;
         @JsonSubTypes.Type(value = IdentificationTask.class, name = "Identification"),
 })
 public abstract class SparkTaskToExecute implements Serializable {
-    private static final Logger logger = LogManager.getLogger(SparkTaskToExecute.class);
+    private static final Logger logger = LoggerFactory.getLogger(SparkTaskToExecute.class);
 
     private final String task;
     private final DatasetReference inputDatasetReference;

@@ -25,7 +25,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/** Identifier for P.O. Box address values. */
 public class POBOXIdentifier extends AbstractRegexBasedIdentifier {
+
+    /** Constructs a POBOXIdentifier. */
+    public POBOXIdentifier() {}
+
 
     private final static Pattern POBOX = Pattern.compile("\\bP\\.?O\\.?[\\s-]?BOX[\\s-]*(?:\\d+|\\p{Alpha})\\b", Pattern.CASE_INSENSITIVE);
 

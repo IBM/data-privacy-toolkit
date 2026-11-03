@@ -28,8 +28,8 @@ import com.ibm.research.drl.dpt.configuration.DefaultMaskingConfiguration;
 import com.ibm.research.drl.dpt.processors.CSVFormatProcessor;
 import com.ibm.research.drl.dpt.providers.identifiers.IdentifierFactory;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactory;
@@ -47,13 +47,12 @@ import java.util.stream.Stream;
 
 @Configuration
 public class DPTConfiguration {
-    public static final Logger logger = LogManager.getLogger(DPTConfiguration.class);
+    public static final Logger logger = LoggerFactory.getLogger(DPTConfiguration.class);
 
     @Bean
     public WebServerFactoryCustomizer<WebServerFactory> containerCustomizer() {
-        return (WebServerFactory container) -> {
-            if (container instanceof TomcatServletWebServerFactory) {
-                TomcatServletWebServerFactory tomcat = (TomcatServletWebServerFactory) container;
+        return container -> {
+            if (container instanceof TomcatServletWebServerFactory tomcat) {
                 tomcat.addConnectorCustomizers(
                         connector -> connector.setMaxPostSize(20971520) // 20 MiB max post size
                 );

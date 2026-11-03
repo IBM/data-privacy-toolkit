@@ -18,13 +18,24 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents an IMEI (International Mobile Equipment Identity) value. */
 public class IMEI {
     private final String value;
 
+    /**
+     * Returns the IMEI value string.
+     *
+     * @return the IMEI value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Constructs an IMEI with the given value.
+     *
+     * @param value the IMEI string
+     */
     public IMEI(String value) {
         this.value = value;
     }

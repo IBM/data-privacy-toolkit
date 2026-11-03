@@ -23,8 +23,12 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider that replaces boolean values with a randomly generated boolean.
+ */
 public class BooleanMaskingProvider implements MaskingProvider {
 
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

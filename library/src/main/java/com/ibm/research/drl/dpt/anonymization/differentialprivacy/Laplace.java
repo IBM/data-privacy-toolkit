@@ -25,11 +25,22 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Differential-privacy mechanism that adds Laplace noise to numerical values.
+ */
 public class Laplace implements DPMechanism {
+
+    /** Constructs a Laplace mechanism with default settings. */
+    public Laplace() {}
+    /** Random number generator. */
     protected Random rnd = new SecureRandom();
+    /** Laplace distribution shape (scale) parameter. */
     protected double shape;
+    /** Privacy budget epsilon. */
     protected double epsilon;
+    /** Lower bound of the value range. */
     protected double lowerBound;
+    /** Upper bound of the value range. */
     protected double upperBound;
 
     @Override

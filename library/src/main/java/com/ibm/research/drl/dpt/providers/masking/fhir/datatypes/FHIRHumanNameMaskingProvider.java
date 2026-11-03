@@ -34,15 +34,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+/** FHIRHumanNameMaskingProvider FHIR datatype. */
 public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
+    /** Masking provider for the family and given name components. */
     private final MaskingProvider nameMaskingProvider;
+    /** Whether to remove extensions from the human name. */
     private final boolean removeExtensions;
+    /** Whether to remove the name prefix. */
     private final boolean removePrefix;
+    /** Whether to remove the name suffix. */
     private final boolean removeSuffix;
 
+    /** JSON path to the family name field. */
     private final String FAMILY_FIELD_PATH;
+    /** JSON path to the given name field. */
     private final String GIVEN_FIELD_PATH;
 
+    /**
+     * Constructs a FHIRHumanNameMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRHumanNameMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -95,6 +109,11 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRHumanName obj = JsonUtils.MAPPER.treeToValue(node, FHIRHumanName.class);
@@ -105,6 +124,11 @@ public class FHIRHumanNameMaskingProvider extends AbstractComplexMaskingProvider
         }
     }
 
+    /**
+     * Masks a FHIR HumanName object.
+     * @param name the FHIRHumanName to mask
+     * @return the masked FHIRHumanName
+     */
     public FHIRHumanName mask(FHIRHumanName name) {
         if (name == null) {
             return null;

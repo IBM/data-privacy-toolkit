@@ -25,7 +25,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Identifier for month names using a controlled vocabulary.
+ */
 public class MonthIdentifier extends AbstractManagerBasedIdentifier {
+    /** Constructs a MonthIdentifier. */
+    public MonthIdentifier() {}
     private static final MonthManager monthManager = MonthManager.getInstance();
     private static final String[] appropriateNames = {"Month"};
 

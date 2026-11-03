@@ -34,7 +34,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Identifier that matches Italian stop words. */
 public class ItalianStopWordsIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs an ItalianStopWordsIdentifier. */
+    public ItalianStopWordsIdentifier() {}
     private final static Logger logger = LogManager.getLogger(ItalianStopWordsIdentifier.class);
 
     private final static StopWordsManager manager = new StopWordsManager();

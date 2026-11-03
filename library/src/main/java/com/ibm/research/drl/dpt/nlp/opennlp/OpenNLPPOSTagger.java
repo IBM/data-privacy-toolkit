@@ -44,14 +44,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/** Part-of-speech tagger implementation backed by the OpenNLP library. */
 public class OpenNLPPOSTagger extends AbstractNLPAnnotator {
     private final static Logger logger = LogManager.getLogger(OpenNLPPOSTagger.class);
 
     private static final String annotatorName = "OpenNLP_POS";
 
+    /** The default language to use when none is detected. */
     private final Language defaultLanguage;
+    /** Per-language sentence detectors. */
     private final Map<Language, SentenceDetectorME> sentenceDetector;
+    /** Per-language POS taggers. */
     private final Map<Language, POSTaggerME> tagger;
+    /** Per-language tokenizers. */
     private final Map<Language, TokenizerME> tokenizer;
 
     private POSModel loadPOSModel(String resourceName) {
@@ -72,6 +77,11 @@ public class OpenNLPPOSTagger extends AbstractNLPAnnotator {
         }
     }
 
+    /**
+     * Constructs an OpenNLPPOSTagger from a JSON configuration node.
+     *
+     * @param configuration JSON configuration describing model paths and language settings
+     */
     public OpenNLPPOSTagger(JsonNode configuration) {
         this.defaultLanguage = Language.valueOf(configuration.get("defaultLanguage").asText());
         this.sentenceDetector = new HashMap<>();

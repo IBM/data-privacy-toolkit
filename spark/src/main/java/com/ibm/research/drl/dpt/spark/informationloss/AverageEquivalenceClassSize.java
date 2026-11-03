@@ -25,14 +25,16 @@ import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetricO
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.api.java.function.ReduceFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
 import scala.Tuple2;
 
 import java.util.List;
 
 public class AverageEquivalenceClassSize implements InformationMetricSpark {
-    private JavaRDD<String> anonymized;
+    private Dataset<String> anonymized;
     private double total_records;
     private boolean normalized;
     private int k;
@@ -77,43 +79,38 @@ public class AverageEquivalenceClassSize implements InformationMetricSpark {
     public Double report() {
         final List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
 
-        long equivalence_classes = this.anonymized.mapToPair(new PairFunction<String, String, Long>() {
-            @Override
-            public Tuple2<String, Long> call(String s) throws Exception {
-                String key = "";
-                CSVRecord record = CSVParser.parse(s, CSVFormat.RFC4180).getRecords().get(0);
+        long equivalence_classes = this.anonymized
+                .map((MapFunction<String, String>) s -> {
+                    StringBuilder key = new StringBuilder();
+                    CSVRecord record = CSVParser.parse(s, CSVFormat.RFC4180).getRecords().get(0);
+                    for (Integer column : quasiColumns) {
+                        key.append(record.get(column)).append(":");
+                    }
+                    return key.toString();
+                }, Encoders.STRING())
+                .distinct()
+                .count();
 
-                for(Integer column: quasiColumns) {
-                    key += record.get(column) + ":";
-                }
-
-                return new Tuple2<String, Long>(key, 1L);
-            }
-        }).keys().count();
-
-        double aecs = total_records/(double)equivalence_classes;
+        double aecs = total_records / (double) equivalence_classes;
 
         if (!normalized) {
             return aecs;
-        }
-        else {
-            return aecs / (double)this.k;
+        } else {
+            return aecs / (double) this.k;
         }
     }
 
     @Override
-    public InformationMetricSpark initialize(JavaRDD<String> original, JavaRDD<String> anonymized, List<ColumnInformation> columnInformationList,
+    public InformationMetricSpark initialize(Dataset<String> original, Dataset<String> anonymized, List<ColumnInformation> columnInformationList,
                                              int k, InformationMetricOptions options) {
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;
         this.k = k;
-
         this.total_records = original.count();
 
         if (options != null) {
             this.normalized = options.getBooleanValue("normalized");
-        }
-        else {
+        } else {
             this.normalized = false;
         }
 

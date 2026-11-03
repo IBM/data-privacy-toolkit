@@ -29,9 +29,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for religion resources. */
 public class ReligionManager extends ResourceBasedManager<Religion> {
     private final static ReligionManager RELIGION_MANAGER = new ReligionManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton ReligionManager
+     */
     public static ReligionManager getInstance() {
         return RELIGION_MANAGER;
     }

@@ -21,7 +21,15 @@ package com.ibm.research.drl.dpt.anonymization.hierarchies;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
+/**
+ * Abstract base class for generalization hierarchies built from JSON configuration.
+ */
 public abstract class AbstractHierarchy implements GeneralizationHierarchy {
+    /**
+     * Constructs an AbstractHierarchy from a JSON node.
+     *
+     * @param node the JSON node describing the hierarchy
+     */
     public AbstractHierarchy(JsonNode node) {
     }
 }

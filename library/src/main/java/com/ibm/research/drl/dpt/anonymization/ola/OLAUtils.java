@@ -25,7 +25,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+/** Utility methods for the OLA anonymization algorithm. */
 public class OLAUtils {
+
+    /** Not instantiable. */
+    private OLAUtils() {}
 
     private static String createRowKey(List<String> row, List<Integer> quasiColumns) {
         List<String> quasiValues = new ArrayList<>(quasiColumns.size());
@@ -38,6 +42,14 @@ public class OLAUtils {
         return StringUtils.join(quasiValues, ':');
     }
 
+    /**
+     * Generates original and anonymized partition pairs from the two datasets.
+     *
+     * @param original              the original dataset
+     * @param anonymized            the anonymized dataset
+     * @param columnInformationList column metadata describing quasi-identifier columns
+     * @return a tuple of (original partitions, anonymized partitions)
+     */
     public static Tuple<List<Partition>, List<Partition>> generatePartitions(IPVDataset original, IPVDataset anonymized,
                                                                              List<ColumnInformation> columnInformationList) {
 

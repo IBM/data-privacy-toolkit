@@ -25,7 +25,15 @@ import org.apache.commons.csv.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Utility class for generalizing dataset rows according to a column information list and transformation levels.
+ */
 public class DatasetGeneralizer {
+    /**
+     * Constructs a new DatasetGeneralizer. This is a utility class with only static methods.
+     */
+    public DatasetGeneralizer() {
+    }
 
     private static String transformValue(String value, int level, CategoricalInformation categoricalInformation, boolean randomizeOnFail) {
         if (level == 0) {
@@ -71,6 +79,14 @@ public class DatasetGeneralizer {
         return anonymizedRow;
     }
 
+    /**
+     * Generalizes a row given as a JSON array node according to the column information and levels.
+     *
+     * @param originalRow           the original row as a JSON array
+     * @param columnInformationList the column information list
+     * @param levels                the generalization levels per quasi-identifier column
+     * @return the generalized row as a list of strings
+     */
     public static List<String> generalizeRow(JsonNode originalRow, List<ColumnInformation> columnInformationList, int[] levels) {
         int numberOfColumns = originalRow.size();
 
@@ -116,6 +132,15 @@ public class DatasetGeneralizer {
         return anonymized;
     }
 
+    /**
+     * Generalizes the dataset and groups rows into equivalence class partitions.
+     *
+     * @param dataset               the dataset to generalize
+     * @param columnInformationList the column information list
+     * @param levels                the generalization levels per quasi-identifier column
+     * @param contentRequirements   the content requirements bitmask
+     * @return collection of partitions (equivalence classes)
+     */
     public static Collection<Partition> generalizeAndPartition(IPVDataset dataset, List<ColumnInformation> columnInformationList,
                                                                int[] levels, int contentRequirements) {
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
@@ -143,6 +168,12 @@ public class DatasetGeneralizer {
         return partitionMap.values();
     }
 
+    /**
+     * Converts an Apache CSV record to a list of strings.
+     *
+     * @param record the CSV record
+     * @return list of field values
+     */
     public static List<String> toList(CSVRecord record) {
         List<String> row = new ArrayList<>();
 
@@ -153,6 +184,15 @@ public class DatasetGeneralizer {
         return row;
     }
 
+    /**
+     * Reads a CSV input stream, generalizes each row, and counts the resulting equivalence classes.
+     *
+     * @param dataset               the CSV input stream
+     * @param columnInformationList the column information list
+     * @param levels                the generalization levels per quasi-identifier column
+     * @return a map from equivalence class key to count
+     * @throws IOException if reading fails
+     */
     public static Map<String, Integer> generalizeCSVAndCountEQ(InputStream dataset, List<ColumnInformation> columnInformationList, int[] levels) throws IOException {
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
         Map<String, Integer> counters = new HashMap<>();
@@ -173,6 +213,15 @@ public class DatasetGeneralizer {
         return counters;
     }
 
+    /**
+     * Generalizes the quasi-identifier values of a row and returns a composite equivalence class key.
+     *
+     * @param originalRow           the original row values
+     * @param quasiColumns          indices of the quasi-identifier columns
+     * @param columnInformationList the column information list
+     * @param levels                the generalization levels per quasi-identifier column
+     * @return the composite key string
+     */
     public static String generalizeAndGenerateKey(List<String> originalRow,
                                                   List<Integer> quasiColumns, List<ColumnInformation> columnInformationList, int[] levels) {
         StringBuilder key = new StringBuilder();
@@ -191,6 +240,14 @@ public class DatasetGeneralizer {
         return key.toString();
     }
 
+    /**
+     * Generalizes an IPV dataset and counts the resulting equivalence classes.
+     *
+     * @param dataset               the dataset
+     * @param columnInformationList the column information list
+     * @param levels                the generalization levels per quasi-identifier column
+     * @return a map from equivalence class key to count
+     */
     public static Map<String, Integer> generalizeCSVAndCountEQ(IPVDataset dataset, List<ColumnInformation> columnInformationList, int[] levels) {
         List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(columnInformationList, ColumnType.QUASI);
 
@@ -212,6 +269,15 @@ public class DatasetGeneralizer {
         return counters;
     }
 
+    /**
+     * Reads a CSV input stream, generalizes each row, and writes the result to a FileWriter.
+     *
+     * @param dataset               the CSV input stream
+     * @param writer                the output FileWriter
+     * @param columnInformationList the column information list
+     * @param levels                the generalization levels per quasi-identifier column
+     * @throws IOException if reading or writing fails
+     */
     public static void generalizeCSVInputStream(InputStream dataset, FileWriter writer, List<ColumnInformation> columnInformationList, int[] levels) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(dataset));

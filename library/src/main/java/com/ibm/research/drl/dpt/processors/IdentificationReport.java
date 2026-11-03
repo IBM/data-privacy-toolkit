@@ -26,12 +26,20 @@ import com.ibm.research.drl.dpt.schema.IdentifiedType;
 import java.util.List;
 import java.util.Map;
 
+/** Holds the results of a type identification pass over a dataset. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class IdentificationReport {
     private final Map<String, List<IdentifiedType>> rawResults;
     private final Map<String, IdentifiedType> bestTypes;
     private final long recordCount;
 
+    /**
+     * Constructs an IdentificationReport.
+     *
+     * @param rawResults  map of field name to all identified types with their counts
+     * @param bestTypes   map of field name to the single best-identified type
+     * @param recordCount number of records processed
+     */
     @JsonCreator
     public IdentificationReport(
             @JsonProperty("rawResults")
@@ -45,14 +53,29 @@ public final class IdentificationReport {
         this.recordCount = recordCount;
     }
 
+    /**
+     * Returns the raw identification results for all fields.
+     *
+     * @return map of field name to identified types
+     */
     public Map<String, List<IdentifiedType>> getRawResults() {
         return rawResults;
     }
 
+    /**
+     * Returns the best-identified type for each field.
+     *
+     * @return map of field name to best identified type
+     */
     public Map<String, IdentifiedType> getBestTypes() {
         return bestTypes;
     }
 
+    /**
+     * Returns the number of records that were processed.
+     *
+     * @return record count
+     */
     public long getRecordCount() {
         return recordCount;
     }

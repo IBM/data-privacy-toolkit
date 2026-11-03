@@ -32,8 +32,8 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import com.ibm.research.drl.dpt.rest.exceptions.InvalidRequestException;
 import com.ibm.research.drl.dpt.rest.models.MaskingProviderDescription;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,7 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "/api/feature/mask")
 public class DataProtection {
-    private static final Logger logger = LogManager.getLogger(DataProtection.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataProtection.class);
     private final ObjectMapper mapper;
     private final CSVFormatProcessor csvProcessor;
 

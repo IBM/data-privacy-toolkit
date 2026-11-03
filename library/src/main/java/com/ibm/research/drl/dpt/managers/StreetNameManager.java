@@ -28,12 +28,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for street name resources. */
 public class StreetNameManager extends ResourceBasedManager<String> {
     private static final Collection<ResourceEntry> resourceStreetNameList =
             LocalizationManager.getInstance().getResources(Resource.STREET_NAMES);
 
     private final static StreetNameManager STREET_NAME_MANAGER = new StreetNameManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton StreetNameManager
+     */
     public static StreetNameManager getInstance() {
         return STREET_NAME_MANAGER;
     }

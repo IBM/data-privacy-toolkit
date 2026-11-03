@@ -19,13 +19,25 @@ under the License.
 package com.ibm.research.drl.dpt.util;
 
 
+/**
+ * A simple mutable counter backed by a public {@code long} field.
+ */
 public class Counter {
+    /** The current counter value. */
     public long counter;
 
+    /**
+     * Constructs a Counter with an initial value of 1.
+     */
     public Counter() {
         this(1L);
     }
 
+    /**
+     * Constructs a Counter with the given initial value.
+     *
+     * @param initial the initial counter value
+     */
     public Counter(long initial) {
         counter = initial;
     }

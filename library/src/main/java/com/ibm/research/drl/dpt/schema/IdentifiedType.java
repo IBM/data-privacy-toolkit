@@ -25,7 +25,9 @@ import java.util.Objects;
  * The type Identified type.
  */
 public final class IdentifiedType implements Comparable<IdentifiedType>, Serializable {
+    /** The name of the identified type. */
     private final String typeName;
+    /** The number of occurrences of this type. */
     private final long count;
 
     /**

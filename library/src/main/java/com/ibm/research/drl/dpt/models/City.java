@@ -20,12 +20,20 @@ package com.ibm.research.drl.dpt.models;
 
 import java.util.List;
 
+/**
+ * Represents a city with its geographic location and country information.
+ */
 public class City implements Location, LocalizedEntity {
 
+    /** The city name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
+    /** The ISO country code for this city. */
     private final String countryCode;
+    /** The geographic coordinates. */
     private final LatitudeLongitude latitudeLongitude;
+    /** Nearby cities. */
     private List<City> neighbors;
 
     /**

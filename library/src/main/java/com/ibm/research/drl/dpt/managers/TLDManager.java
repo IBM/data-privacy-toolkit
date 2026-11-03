@@ -28,6 +28,7 @@ import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
 
+/** Manager for top-level domain (TLD) values used during email and URL masking. */
 public class TLDManager {
     private static final TLDManager instance = new TLDManager();
     SecureRandom random;

@@ -29,24 +29,44 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRCodingMaskingProvider FHIR datatype. */
 public class FHIRCodingMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the version element. */
     private final boolean maskVersion;
+    /** Whether to mask the system element. */
     private final boolean maskSystem;
+    /** Whether to mask the code element. */
     private final boolean maskCode;
+    /** Whether to mask the display element. */
     private final boolean maskDisplay;
 
+    /** Masking provider for the version element. */
     private final MaskingProvider versionMaskingProvider;
+    /** Masking provider for the system element. */
     private final MaskingProvider systemMaskingProvider;
+    /** Masking provider for the display element. */
     private final MaskingProvider displayMaskingProvider;
+    /** Masking provider for the code element. */
     private final MaskingProvider codeMaskingProvider;
 
+    /** JSON path to the display field. */
     private final String DISPLAY_PATH;
+    /** JSON path to the version field. */
     private final String VERSION_PATH;
+    /** JSON path to the code field. */
     private final String CODE_PATH;
+    /** JSON path to the system field. */
     private final String SYSTEM_PATH;
 
 
+    /**
+     * Constructs a FHIRCodingMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRCodingMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, final String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -67,6 +87,11 @@ public class FHIRCodingMaskingProvider extends AbstractComplexMaskingProvider<Js
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRCoding cc = JsonUtils.MAPPER.treeToValue(node, FHIRCoding.class);
@@ -77,6 +102,11 @@ public class FHIRCodingMaskingProvider extends AbstractComplexMaskingProvider<Js
         }
     }
 
+    /**
+     * Masks a FHIR Coding object.
+     * @param coding the FHIRCoding to mask
+     * @return the masked FHIRCoding
+     */
     public FHIRCoding mask(FHIRCoding coding) {
         if (coding == null) {
             return null;

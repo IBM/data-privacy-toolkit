@@ -23,37 +23,73 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRNarrative;
 
 import java.util.Collection;
 
+/** FHIRBaseDomainResource FHIR datatype. */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRBaseDomainResource extends FHIRResource {
+    /** Constructs a FHIRBaseDomainResource. */
+    public FHIRBaseDomainResource() {}
 
+
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public FHIRNarrative getText() {
         return text;
     }
 
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(FHIRNarrative text) {
         this.text = text;
     }
 
+    /**
+     * Returns the contained.
+     * @return the contained
+     */
     public Collection<FHIRResource> getContained() {
         return contained;
     }
 
+    /**
+     * Sets the contained.
+     * @param contained the contained
+     */
     public void setContained(Collection<FHIRResource> contained) {
         this.contained = contained;
     }
 
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the modifierExtension.
+     * @return the modifierExtension
+     */
     public Collection<FHIRExtension> getModifierExtension() {
         return modifierExtension;
     }
 
+    /**
+     * Sets the modifierExtension.
+     * @param modifierExtension the modifierExtension
+     */
     public void setModifierExtension(Collection<FHIRExtension> modifierExtension) {
         this.modifierExtension = modifierExtension;
     }

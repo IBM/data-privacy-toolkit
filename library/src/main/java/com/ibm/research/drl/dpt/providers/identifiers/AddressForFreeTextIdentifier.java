@@ -24,7 +24,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Address identifier optimized for free text; relies on a rich set of regex patterns.
+ */
 public class AddressForFreeTextIdentifier extends AbstractIdentifier {
+    /**
+     * Constructs a new AddressForFreeTextIdentifier.
+     */
+    public AddressForFreeTextIdentifier() {
+    }
 
     private static final long serialVersionUID = -4924554398358986665L;
 

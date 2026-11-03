@@ -83,7 +83,7 @@ public class IdentifierFactoryTest {
                         put("providerType", "FOO").
                         put("ignoreCase", false).
                         set("paths", mapper.createArrayNode().add(
-                                Objects.requireNonNull(this.getClass().getResource("/dict")).getPath()
+                                Objects.requireNonNull(IdentifierFactoryTest.class.getResource("/dict")).getPath()
                         ))
         );
 
@@ -101,7 +101,7 @@ public class IdentifierFactoryTest {
                         put("type", PluggableIdentifierType.REGEX.toString()).
                         put("providerType", "FOO").
                         set("paths", mapper.createArrayNode().add(
-                                this.getClass().getResource("/test_regex.txt").getPath()
+                                IdentifierFactoryTest.class.getResource("/test_regex.txt").getPath()
                         ))
         );
 

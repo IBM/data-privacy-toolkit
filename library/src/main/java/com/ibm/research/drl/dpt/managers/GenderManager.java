@@ -29,10 +29,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for gender/sex values loaded from locale resources. */
 public class GenderManager extends ResourceBasedManager<Sex> {
     private static final long serialVersionUID = -8322026980948568171L;
     private final static GenderManager GENDER_MANAGER = new GenderManager();
 
+    /**
+     * Returns the singleton instance of this manager.
+     *
+     * @return the singleton GenderManager
+     */
     public static GenderManager getInstance() {
         return GENDER_MANAGER;
     }

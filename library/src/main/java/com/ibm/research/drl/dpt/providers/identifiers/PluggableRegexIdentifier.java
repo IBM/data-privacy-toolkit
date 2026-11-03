@@ -25,13 +25,18 @@ import com.ibm.research.drl.dpt.util.Tuple;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
+/** An identifier that matches values against one or more user-supplied regular expressions. */
 public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
+    /** Appropriate field names for this identifier. */
     private final Collection<String> appropriateNames;
+    /** Compiled regex patterns used for matching. */
     private final Collection<Pattern> patterns;
+    /** The provider type this identifier represents. */
     private final ProviderType providerType;
+    /** The value class this identifier recognises. */
     private final ValueClass valueClass;
+    /** Whether POS tagging context is ignored during identification. */
     private final boolean isPOSIndependent;
 
     /**
@@ -49,6 +54,15 @@ public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier imple
         this(providerTypeName, appropriateNames, patternStrings, valueClass, true);
     }
 
+    /**
+     * Constructs a PluggableRegexIdentifier.
+     *
+     * @param providerTypeName the name used to resolve the {@link ProviderType}
+     * @param appropriateNames the field names this identifier applies to
+     * @param patternStrings   the regex pattern strings to compile and match against
+     * @param valueClass       the value class this identifier recognises
+     * @param isPOSIndependent whether POS tagging context is ignored during identification
+     */
     public PluggableRegexIdentifier(String providerTypeName,
                                     Collection<String> appropriateNames,
                                     Collection<String> patternStrings,
@@ -58,7 +72,7 @@ public class PluggableRegexIdentifier extends AbstractRegexBasedIdentifier imple
         this.appropriateNames = appropriateNames;
         this.providerType = ProviderType.valueOf(providerTypeName);
         this.valueClass = valueClass;
-        this.patterns = patternStrings.stream().map(Pattern::compile).collect(Collectors.toList());
+        this.patterns = patternStrings.stream().map(Pattern::compile).toList();
         this.isPOSIndependent = isPOSIndependent;
     }
 

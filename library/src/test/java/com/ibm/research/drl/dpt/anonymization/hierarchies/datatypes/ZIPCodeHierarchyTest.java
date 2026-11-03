@@ -26,7 +26,7 @@ public class ZIPCodeHierarchyTest {
     
     @Test
     public void testLeaves() {
-        ZIPCodeHierarchy hierarchy = new ZIPCodeHierarchy();
+        ZIPCodeHierarchy hierarchy = ZIPCodeHierarchy.getInstance();
 
         assertEquals(10, hierarchy.getNodeLeaves("1234*").size());
         

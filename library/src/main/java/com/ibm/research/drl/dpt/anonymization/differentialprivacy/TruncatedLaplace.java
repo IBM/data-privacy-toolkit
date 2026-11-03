@@ -18,7 +18,12 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.differentialprivacy;
 
+/** Differential-privacy Laplace mechanism with output truncated to [lowerBound, upperBound]. */
 public class TruncatedLaplace extends Laplace {
+
+    /** Constructs a TruncatedLaplace. */
+    public TruncatedLaplace() {}
+
     @Override
     public double randomise(double value) {
         double noisyNumValue = super.randomise(value);

@@ -18,9 +18,13 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking.persistence.causal;
 
+/** Types of entries in the causal masking dictionary. */
 public enum DictionaryEntryType {
+    /** An insert operation. */
     INSERT,
+    /** A delete operation. */
     DELETE,
+    /** A value entry. */
     VALUE
 }
 

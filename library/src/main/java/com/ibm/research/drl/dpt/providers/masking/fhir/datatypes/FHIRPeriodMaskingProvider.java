@@ -31,19 +31,35 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.Serializable;
 import java.util.Set;
 
+/** FHIRPeriodMaskingProvider FHIR datatype. */
 public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
+    /** Whether to mask the start element. */
     private final boolean maskStart;
+    /** Whether to mask the end element. */
     private final boolean maskEnd;
+    /** Whether to remove the start element. */
     private final boolean removeStart;
+    /** Whether to remove the end element. */
     private final boolean removeEnd;
 
+    /** Masking provider for the start element. */
     private final MaskingProvider startMaskingProvider;
+    /** Masking provider for the end element. */
     private final MaskingProvider endMaskingProvider;
 
+    /** JSON path to the start field. */
     private final String START_PATH;
+    /** JSON path to the end field. */
     private final String END_PATH;
 
+    /**
+     * Constructs a FHIRPeriodMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRPeriodMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -65,6 +81,11 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRPeriod obj = JsonUtils.MAPPER.treeToValue(node, FHIRPeriod.class);
@@ -75,6 +96,11 @@ public class FHIRPeriodMaskingProvider extends AbstractComplexMaskingProvider<Js
         }
     }
 
+    /**
+     * Masks a FHIR Period object.
+     * @param period the FHIRPeriod to mask
+     * @return the masked FHIRPeriod
+     */
     public FHIRPeriod mask(FHIRPeriod period) {
         if (period == null) {
             return null;

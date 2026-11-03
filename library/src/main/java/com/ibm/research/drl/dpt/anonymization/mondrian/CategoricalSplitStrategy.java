@@ -18,8 +18,13 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.mondrian;
 
+/**
+ * Enumeration of strategies for splitting categorical quasi-identifier columns in Mondrian.
+ */
 public enum CategoricalSplitStrategy {
+    /** Split based on the generalization hierarchy. */
     HIERARCHY_BASED,
+    /** Split based on the ordering of values. */
     ORDER_BASED
 }
 

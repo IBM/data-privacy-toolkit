@@ -25,38 +25,74 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRAnnotation;
 
 import java.util.Collection;
 
+/** FHIRCarePlanActivity FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRCarePlanActivity {
+    /** Constructs a FHIRCarePlanActivity. */
+    public FHIRCarePlanActivity() {}
 
+
+    /**
+     * Returns the actionResulting.
+     * @return the actionResulting
+     */
     public Collection<FHIRReference> getActionResulting() {
         return actionResulting;
     }
 
+    /**
+     * Sets the actionResulting.
+     * @param actionResulting the actionResulting
+     */
     public void setActionResulting(Collection<FHIRReference> actionResulting) {
         this.actionResulting = actionResulting;
     }
 
+    /**
+     * Returns the progress.
+     * @return the progress
+     */
     public Collection<FHIRAnnotation> getProgress() {
         return progress;
     }
 
+    /**
+     * Sets the progress.
+     * @param progress the progress
+     */
     public void setProgress(Collection<FHIRAnnotation> progress) {
         this.progress = progress;
     }
 
+    /**
+     * Returns the reference.
+     * @return the reference
+     */
     public FHIRReference getReference() {
         return reference;
     }
 
+    /**
+     * Sets the reference.
+     * @param reference the reference
+     */
     public void setReference(FHIRReference reference) {
         this.reference = reference;
     }
 
+    /**
+     * Returns the detail.
+     * @return the detail
+     */
     public FHIRCarePlanActivityDetail getDetail() {
         return detail;
     }
 
+    /**
+     * Sets the detail.
+     * @param detail the detail
+     */
     public void setDetail(FHIRCarePlanActivityDetail detail) {
         this.detail = detail;
     }

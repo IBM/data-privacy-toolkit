@@ -19,8 +19,10 @@ under the License.
 package com.ibm.research.drl.dpt.util;
 
 /**
- * @param <K> the type parameter
- * @param <V> the type parameter
+ * A mutable pair of two values.
+ *
+ * @param <K> the type parameter for the first element
+ * @param <V> the type parameter for the second element
  */
 public class MutableTuple<K, V> {
     /**
@@ -69,10 +71,20 @@ public class MutableTuple<K, V> {
         return second;
     }
 
+    /**
+     * Sets first.
+     *
+     * @param newValue the new value
+     */
     public void setFirst(K newValue) {
         this.first = newValue;
     }
 
+    /**
+     * Sets second.
+     *
+     * @param newValue the new value
+     */
     public void setSecond(V newValue) {
         this.second = newValue;
     }

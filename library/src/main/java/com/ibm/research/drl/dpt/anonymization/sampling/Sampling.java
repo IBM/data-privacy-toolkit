@@ -27,7 +27,12 @@ import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** Anonymization algorithm that reduces a dataset by random sampling. */
 public class Sampling implements AnonymizationAlgorithm {
+
+    /** Constructs a Sampling instance. */
+    public Sampling() {}
+
 
     private IPVDataset original;
     private List<Partition> originalPartitions;

@@ -27,15 +27,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/** Generalization hierarchy for US ZIP codes, mapping each code to progressively masked variants. */
 public class ZIPCodeHierarchy implements GeneralizationHierarchy, Serializable {
     private static final long serialVersionUID = 5771549821136802771L;
     private static final ZIPCodeHierarchy instance = new ZIPCodeHierarchy();
 
+    /** Not instantiable directly — use {@link #getInstance()}. */
+    private ZIPCodeHierarchy() {}
+
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton {@code ZIPCodeHierarchy}
+     */
     public static ZIPCodeHierarchy getInstance() {
         return instance;
     }
 
+    /** The top-level generalization term (all wildcards). */
     private final String topTerm = "*****";
+    /** The number of generalization levels. */
     private final int height = 6;
 
     @Override

@@ -22,7 +22,15 @@ import com.ibm.research.drl.dpt.managers.AnimalSpeciesManager;
 import com.ibm.research.drl.dpt.managers.Manager;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+/**
+ * Identifier for animal species names.
+ */
 public class AnimalSpeciesIdentifier extends AbstractManagerBasedIdentifier {
+    /**
+     * Constructs a new AnimalSpeciesIdentifier.
+     */
+    public AnimalSpeciesIdentifier() {
+    }
     private final static AnimalSpeciesManager ANIMAL_SPECIES_MANAGER = AnimalSpeciesManager.getInstance();
 
     @Override

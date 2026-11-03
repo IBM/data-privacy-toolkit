@@ -5,12 +5,12 @@
 import csv
 import filecmp
 import hashlib
+import json
 import logging
 import os
-import pytest
 import shutil
-import json
 
+import pytest
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
 LOGGER = logging.getLogger(__name__)
@@ -21,12 +21,10 @@ DOCKER_IMAGE = os.getenv("IMAGE_NAME")
 def _docker_run(current_test, input_folder="input", output_folder="output", config_folder="config", consistency_folder=None):
     """
     Executes the test by running the dpt docker image.
-
-    @param current_test: path of the current test,
-        where output/ and expected/ sub-folders are expected.
-        If output is not existing will be created
-
     """
+    if not DOCKER_IMAGE:
+        pytest.skip("IMAGE_NAME environment variable not set")
+
     current_test_folder = os.path.dirname(current_test)
     output = os.path.join(current_test_folder, output_folder)
 
@@ -38,13 +36,18 @@ def _docker_run(current_test, input_folder="input", output_folder="output", conf
     if consistency and not os.path.exists(consistency):
         os.makedirs(consistency)
 
+    # Add chmod to ensure output directory is writable
+    os.chmod(output, 0o777)
+    if consistency:
+        os.chmod(consistency, 0o777)
+
     os.system(
-        "docker run --rm " \
-        " --mount type=bind,source=" + os.path.join(current_test_folder, input_folder) + ",target=/input" \
-        " --mount type=bind,source=" + os.path.join(current_test_folder, config_folder) + ",target=/config" \
-        " --mount type=bind,source=" + output + ",target=/output " \
-        " " + ("--mount type=bind,source=" + consistency +",target=/consistency" if consistency_folder else "") + "" \
-        " " + DOCKER_IMAGE
+        "docker run --rm"
+        " --mount type=bind,source=" + os.path.join(current_test_folder, input_folder) + ",target=/input"
+        " --mount type=bind,source=" + os.path.join(current_test_folder, config_folder) + ",target=/config"
+        " --mount type=bind,source=" + output + ",target=/output"
+        + (" --mount type=bind,source=" + consistency + ",target=/consistency" if consistency_folder else "")
+        + " " + DOCKER_IMAGE
     )
 
 
@@ -89,7 +92,7 @@ def _compare_dirs(dir1, dir2, comparer):
     for common_dir in dirs_cmp.common_dirs:
         new_dir1 = os.path.join(dir1, common_dir)
         new_dir2 = os.path.join(dir2, common_dir)
-        if not _compare_dirs(new_dir1, new_dir2):
+        if not _compare_dirs(new_dir1, new_dir2, comparer):
             result = False
 
     return result
@@ -104,10 +107,12 @@ def _compare_filename_only(current_test):
     def comparer(dir1_file, dir2_file):
         return True
 
-    assert compare_dirs(output_subfolder, expected_subfolder, comparer)
+    assert _compare_dirs(output_subfolder, expected_subfolder, comparer)
 
 
 def _compare_entire_content(current_test, output="output/", expected="expected/", logging_level=None):
+    old_logging_level: int | None = None
+
     if logging_level:
         old_logging_level = LOGGER.level
         LOGGER.setLevel(logging_level)
@@ -148,7 +153,7 @@ def _compare_entire_content(current_test, output="output/", expected="expected/"
 
     assert _compare_dirs(output_subfolder, expected_subfolder, comparer)
 
-    if logging_level:
+    if logging_level and old_logging_level:
         LOGGER.setLevel(old_logging_level)
 
 

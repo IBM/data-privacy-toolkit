@@ -20,6 +20,9 @@ package com.ibm.research.drl.dpt.generators;
 
 import java.util.*;
 
+/**
+ * Generator that produces all k-combinations of attribute indices, skipping banned {@link ItemSet}s.
+ */
 public class LevelGenerator implements IPVGenerator {
     private final Set<ItemSet> banned;
 
@@ -32,6 +35,13 @@ public class LevelGenerator implements IPVGenerator {
     private int endIndex = 0;
     private ItemSet nextItem;
 
+    /**
+     * Constructs a LevelGenerator with an initial set of banned item sets.
+     *
+     * @param banned      the collection of item sets to skip
+     * @param nAttributes the total number of attributes
+     * @param k           the combination size (level)
+     */
     public LevelGenerator(Collection<ItemSet> banned, int nAttributes, int k) {
         this.K = k;
         this.N = nAttributes;
@@ -59,6 +69,12 @@ public class LevelGenerator implements IPVGenerator {
         }
     }
 
+    /**
+     * Constructs a LevelGenerator with no initially banned item sets.
+     *
+     * @param nAttributes the total number of attributes
+     * @param level       the combination size (level)
+     */
     public LevelGenerator(int nAttributes, int level) {
         this(new HashSet<ItemSet>(), nAttributes, level);
     }

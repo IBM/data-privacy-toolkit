@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Represents a parsed age value with optional year, month, week and day portions.
+ */
 public class Age {
 
     private final AgePortion yearPortion;
@@ -25,6 +28,14 @@ public class Age {
     private final AgePortion weeksPortion;
     private final AgePortion daysPortion;
 
+    /**
+     * Constructs an Age with all portions.
+     *
+     * @param yearPortion   the year portion
+     * @param monthPortion  the month portion
+     * @param weeksPortion  the weeks portion
+     * @param daysPortion   the days portion
+     */
     public Age(AgePortion yearPortion, AgePortion monthPortion, AgePortion weeksPortion, AgePortion daysPortion) {
         this.daysPortion = daysPortion;
         this.weeksPortion = weeksPortion;
@@ -32,18 +43,38 @@ public class Age {
         this.yearPortion = yearPortion;
     }
 
+    /**
+     * Returns the year portion of the age.
+     *
+     * @return the year portion
+     */
     public AgePortion getYearPortion() {
         return yearPortion;
     }
 
+    /**
+     * Returns the month portion of the age.
+     *
+     * @return the month portion
+     */
     public AgePortion getMonthPortion() {
         return monthPortion;
     }
 
+    /**
+     * Returns the weeks portion of the age.
+     *
+     * @return the weeks portion
+     */
     public AgePortion getWeeksPortion() {
         return weeksPortion;
     }
 
+    /**
+     * Returns the days portion of the age.
+     *
+     * @return the days portion
+     */
     public AgePortion getDaysPortion() {
         return daysPortion;
     }

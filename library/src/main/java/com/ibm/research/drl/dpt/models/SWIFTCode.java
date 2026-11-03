@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a SWIFT/BIC bank identifier code with its associated country. */
 public class SWIFTCode {
     private final String code;
     private final Country country;

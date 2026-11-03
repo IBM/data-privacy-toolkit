@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class SensitiveSimilarityMeasureTest {
 
     private IPVDataset loadDataset() throws IOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/random1.txt")) {
+        try (InputStream inputStream = SensitiveSimilarityMeasureTest.class.getResourceAsStream("/random1.txt")) {
             return IPVDataset.load(inputStream, false, ',', '"', false);
         }
     }

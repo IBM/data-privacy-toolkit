@@ -5,49 +5,39 @@ Refer to the [documentation](../docs/README.md) for information about the offere
 
 ## Requirements
 
-The DPT library is a Java project, and it is currently being tested against the following releases:
-* AdoptOpenJDK Hotspot 11
-* AdoptOpenJDK Hotspot 17
-* Microsoft Build of OpenJDK 11
-* Microsoft Build of OpenJDK 17
-* Amazon Corretto Build of OpenJDK 11
-* Amazon Corretto Build of OpenJDK 17
+The DPT library requires **Java 21** and is tested against the following distributions on every build:
 
-and it currently builds using gradle version 8.0.2, offering gradle wrapper as a convenience tool.
+* Eclipse Temurin 21
+* Microsoft Build of OpenJDK 21
+* Amazon Corretto 21
+
+It builds using Gradle 8.14.3, with a Gradle wrapper included for convenience.
 
 ## Building the project
 
-The library can be tested by running:
+The library can be built and tested by running:
 
 ```bash
 ./gradlew build
 ```
 
-This gradle task will compile the project, execute all the tests specified in the `/src/test/java` subfolder, and create
-the final jar file in the `/build/libs` subfolder.
+This task compiles the project, executes all tests under `/src/test/java`, and produces the final jar in `/build/libs`.
 
 ## Dependency declaration
 
-DPT library is publicly available in the OSS repositories of MavenCentral.
+The DPT library is publicly available on Maven Central.
 
+Add it to any Java/Scala/Kotlin project as a standard dependency:
+
+### Gradle (Kotlin DSL):
 ```kotlin
-repositories {
-    repository {
-        maven {
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-        }
-        maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-        }
-    }
+dependencies {
+    implementation("com.ibm.research.drl.dpt:data-privacy-toolkit:${dpt_version}")
 }
 ```
 
-Therefore, the library can be used in any Java/Scala/Kotlin project by adding it as a traditional dependency.
-Examples are in the following.
-
-### Gradle:
-```kotlin
+### Gradle (Groovy DSL):
+```groovy
 dependencies {
     implementation "com.ibm.research.drl.dpt:data-privacy-toolkit:${dpt_version}"
 }
@@ -59,8 +49,7 @@ dependencies {
     <groupId>com.ibm.research.drl.dpt</groupId>
     <artifactId>data-privacy-toolkit</artifactId>
     <version>${dpt_version}</version>
-    <type>jar</type>
 </dependency>
 ```
 
-where `dpt_version` is a variable specifying the latest version of the library, currently `6.0.0-SNAPSHOT`.
+where `dpt_version` is the version of the library to use, currently `6.0.0-SNAPSHOT`.

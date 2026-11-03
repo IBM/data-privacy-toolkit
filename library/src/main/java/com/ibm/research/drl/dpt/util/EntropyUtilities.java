@@ -21,7 +21,18 @@ package com.ibm.research.drl.dpt.util;
 
 import java.util.Collection;
 
+/** Utility methods for entropy calculations. */
 public class EntropyUtilities {
+    /** Not instantiable. */
+    private EntropyUtilities() {}
+
+    /**
+     * Calculates the entropy of a value distribution.
+     *
+     * @param values the counts for each category
+     * @param total  the total count
+     * @return the entropy value
+     */
     public static double calculateEntropy(Collection<Long> values, Long total) {
 
         double sum1 = 0d;
@@ -33,6 +44,13 @@ public class EntropyUtilities {
         return -sum1;
     }
 
+    /**
+     * Calculates the entropy of a histogram.
+     *
+     * @param histogram the histogram
+     * @param total     the total count
+     * @return the entropy value
+     */
     public static double calculateEntropy(Histogram histogram, int total) {
         return calculateEntropy(histogram.values(), (long) total);
     }

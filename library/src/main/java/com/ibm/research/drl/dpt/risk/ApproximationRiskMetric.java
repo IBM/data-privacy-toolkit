@@ -32,8 +32,19 @@ import java.util.Map;
 import static org.apache.commons.math3.util.CombinatoricsUtils.factorial;
 
 
+/**
+ * Risk metric based on a Poisson approximation model for estimating re-identification risk.
+ */
 public class ApproximationRiskMetric implements RiskMetric {
+    /**
+     * Constructs a new ApproximationRiskMetric.
+     */
+    public ApproximationRiskMetric() {
+    }
+
+    /** Option key for the total population size. */
     public static final String POPULATION = "N";
+    /** Option key for whether to use a global sampling probability. */
     public static final String USE_GLOBAL_P = "useGlobalP";
 
     private List<PoissonDistribution> F;
@@ -112,6 +123,11 @@ public class ApproximationRiskMetric implements RiskMetric {
         return (pk / fk) * k_risk;
     }
 
+    /**
+     * Reports the maximum re-identification risk using local (per-equivalence-class) sampling probability.
+     *
+     * @return the maximum risk estimate
+     */
     public Double reportLocalP() {
         double risk = 0.0;
 
@@ -129,6 +145,11 @@ public class ApproximationRiskMetric implements RiskMetric {
         return risk;
     }
 
+    /**
+     * Reports the maximum re-identification risk using a global sampling probability.
+     *
+     * @return the maximum risk estimate
+     */
     public double reportGlobalP() {
         double risk = 0.0;
 

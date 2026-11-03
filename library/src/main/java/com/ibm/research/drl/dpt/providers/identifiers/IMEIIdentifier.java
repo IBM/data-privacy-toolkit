@@ -24,7 +24,11 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for IMEI (International Mobile Equipment Identity) numbers. */
 public class IMEIIdentifier extends AbstractIdentifier implements LuhnBasedIdentifier {
+
+    /** Constructs an IMEIIdentifier. */
+    public IMEIIdentifier() {}
     private final static String[] appropriateNames = new String[]{"IMEI"};
     private final static IMEIManager imeiManager = IMEIManager.getInstance();
 

@@ -31,6 +31,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Generalization hierarchy for date values, supporting day, month, and year granularity levels.
+ */
 public class DateHierarchy implements GeneralizationHierarchy {
     private static final String TOP_TERM = "*";
     private static final int TOP_LEVEL = 3;
@@ -38,18 +41,29 @@ public class DateHierarchy implements GeneralizationHierarchy {
     private static final int MONTH_LEVEL = 1;
     private static final int DAY_LEVEL = 0;
 
+    /** Date format matching year, month, and day. */
     private final SimpleDateFormat yearMonthDaySimpleDateFormat;
+    /** Date format matching year and month. */
     private final SimpleDateFormat yearMonthSimpleDateFormat;
+    /** Date format matching year only. */
     private final SimpleDateFormat yearSimpleDateFormat;
 
     private static final SimpleDateFormat yearOnlySimpleDateFormat = new SimpleDateFormat("yyyy");
     private static final SimpleDateFormat monthOnlySimpleDateFormat = new SimpleDateFormat("MM");
     private static final SimpleDateFormat dayOnlySimpleDateFormat = new SimpleDateFormat("dd");
 
+    /**
+     * Constructs a DateHierarchy using the default ISO date pattern ({@code yyyy-MM-dd}).
+     */
     public DateHierarchy() {
         this("yyyy-MM-dd"); // because it is the sanest format!
     }
 
+    /**
+     * Constructs a DateHierarchy using the given date format pattern.
+     *
+     * @param pattern the date format pattern (e.g. {@code "MM/dd/yyyy"})
+     */
     public DateHierarchy(String pattern) {
         if (pattern.contains("y")) {
             if (pattern.contains("M")) {

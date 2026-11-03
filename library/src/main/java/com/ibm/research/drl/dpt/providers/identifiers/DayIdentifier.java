@@ -25,7 +25,10 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifies day-of-week values. */
 public class DayIdentifier extends AbstractManagerBasedIdentifier {
+    /** Constructs a DayIdentifier. */
+    public DayIdentifier() {}
     private static final DayManager dayManager = DayManager.getInstance();
     private static final String[] appropriateNames = {"Day"};
 

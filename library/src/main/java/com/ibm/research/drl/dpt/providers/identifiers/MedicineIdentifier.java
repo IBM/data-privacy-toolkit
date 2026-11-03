@@ -25,7 +25,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Identifier for medicine (drug) names using a controlled vocabulary.
+ */
 public class MedicineIdentifier extends AbstractManagerBasedIdentifier {
+    /** Constructs a MedicineIdentifier. */
+    public MedicineIdentifier() {}
     private final static MedicineManager medicineManager = MedicineManager.getInstance();
     private final static String[] appropriateNames = {"Medicine"};
 

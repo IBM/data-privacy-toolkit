@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.providers.masking.dicom;
 
+/** Entity types used in DICOM masking. */
 public enum DicomEntityType {
     /**
      * Name dicom entity type.

@@ -25,21 +25,20 @@ import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetricO
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoders;
 import scala.Tuple2;
 
 import java.util.List;
 
 
 public class DiscernibilityStar implements InformationMetricSpark {
-    private JavaRDD<String> anonymized;
+    private Dataset<String> anonymized;
     private List<ColumnInformation> columnInformationList;
 
     @Override
-    public String getName(){
+    public String getName() {
         return "Discernibility Star";
     }
 
@@ -77,43 +76,27 @@ public class DiscernibilityStar implements InformationMetricSpark {
     public Double report() {
         final List<Integer> quasiColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
 
-        return this.anonymized.mapToPair(new PairFunction<String, String, Long>() {
-            @Override
-            public Tuple2<String, Long> call(String s) throws Exception {
-                String key = "";
-                CSVRecord record = CSVParser.parse(s, CSVFormat.RFC4180).getRecords().get(0);
-
-                for(Integer column: quasiColumns) {
-                    key += record.get(column) + ":";
-                }
-
-                return new Tuple2<String, Long>(key, 1L);
-            }
-        }).reduceByKey(new Function2<Long, Long, Long>() {
-            @Override
-            public Long call(Long a, Long b) throws Exception {
-                return a + b;
-            }
-        }).map(new Function<Tuple2<String,Long>, Double>() {
-            @Override
-            public Double call(Tuple2<String, Long> s) throws Exception {
-                return Math.pow(s._2(), 2);
-            }
-        }).reduce(new Function2<Double, Double, Double>() {
-            @Override
-            public Double call(Double a, Double b) throws Exception {
-                return a + b;
-            }
-        });
-
+        return this.anonymized
+                .map((MapFunction<String, String>) s -> {
+                    StringBuilder key = new StringBuilder();
+                    CSVRecord record = CSVParser.parse(s, CSVFormat.RFC4180).getRecords().get(0);
+                    for (Integer column : quasiColumns) {
+                        key.append(record.get(column)).append(":");
+                    }
+                    return key.toString();
+                }, Encoders.STRING())
+                .groupBy(org.apache.spark.sql.functions.col("value"))
+                .count()
+                .map((MapFunction<org.apache.spark.sql.Row, Double>) row -> Math.pow(row.getLong(1), 2),
+                        Encoders.DOUBLE())
+                .reduce((org.apache.spark.api.java.function.ReduceFunction<Double>) (a, b) -> a + b);
     }
 
     @Override
-    public InformationMetricSpark initialize(JavaRDD<String> original, JavaRDD<String> anonymized, List<ColumnInformation> columnInformationList,
+    public InformationMetricSpark initialize(Dataset<String> original, Dataset<String> anonymized, List<ColumnInformation> columnInformationList,
                                              int k, InformationMetricOptions options) {
         this.anonymized = anonymized;
         this.columnInformationList = columnInformationList;
-
         return this;
     }
 }

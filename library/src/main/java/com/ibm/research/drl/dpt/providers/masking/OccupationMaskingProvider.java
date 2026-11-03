@@ -26,12 +26,18 @@ import com.ibm.research.drl.dpt.models.Occupation;
 import java.security.SecureRandom;
 import java.util.List;
 
+/**
+ * Masking provider that replaces occupation values with randomly chosen alternatives
+ * or generalizes them to a category.
+ */
 public class OccupationMaskingProvider implements MaskingProvider {
     /**
      * The constant occupationManager.
      */
     public static final OccupationManager occupationManager = OccupationManager.getInstance();
+    /** Whether to generalise to the occupation category rather than randomise. */
     private final boolean generalizeToCategory;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

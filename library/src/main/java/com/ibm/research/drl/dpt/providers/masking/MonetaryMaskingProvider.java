@@ -21,10 +21,20 @@ package com.ibm.research.drl.dpt.providers.masking;
 import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 
+/**
+ * Masking provider that replaces or removes monetary digits from string values.
+ */
 public class MonetaryMaskingProvider implements MaskingProvider {
+    /** The character used to replace masked digits. */
     private final String replacingCharacter;
+    /** Whether to preserve the original value length when masking. */
     private final boolean preserveSize;
 
+    /**
+     * Constructs a MonetaryMaskingProvider.
+     *
+     * @param configuration the masking configuration
+     */
     public MonetaryMaskingProvider(MaskingConfiguration configuration) {
 
         replacingCharacter = configuration.getStringValue("monetary.replacing.character");

@@ -25,46 +25,90 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 
 import java.util.Collection;
 
+/** FHIRAnnotation FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRAnnotation {
+    /** Constructs a FHIRAnnotation. */
+    public FHIRAnnotation() {}
 
+
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the authorReference.
+     * @return the authorReference
+     */
     public FHIRReference getAuthorReference() {
         return authorReference;
     }
 
+    /**
+     * Sets the authorReference.
+     * @param authorReference the authorReference
+     */
     public void setAuthorReference(FHIRReference authorReference) {
         this.authorReference = authorReference;
     }
 
+    /**
+     * Returns the authorString.
+     * @return the authorString
+     */
     public String getAuthorString() {
         return authorString;
     }
 
+    /**
+     * Sets the authorString.
+     * @param authorString the authorString
+     */
     public void setAuthorString(String authorString) {
         this.authorString = authorString;
     }
 
+    /**
+     * Returns the time.
+     * @return the time
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     * Sets the time.
+     * @param time the time
+     */
     public void setTime(String time) {
         this.time = time;
     }
 
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }

@@ -19,10 +19,17 @@ under the License.
 package com.ibm.research.drl.dpt.models;
 
 
+/** Represents an IMSI (International Mobile Subscriber Identity) value. */
 public class IMSI {
     private final String mcc;
     private final String mnc;
 
+    /**
+     * Constructs an IMSI with the given MCC and MNC.
+     *
+     * @param mcc the Mobile Country Code
+     * @param mnc the Mobile Network Code
+     */
     public IMSI(String mcc, String mnc) {
         this.mcc = mcc;
         this.mnc = mnc;

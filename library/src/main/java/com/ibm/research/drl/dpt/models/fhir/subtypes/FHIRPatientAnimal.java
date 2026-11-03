@@ -23,29 +23,57 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
 
+/** FHIRPatientAnimal FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRPatientAnimal {
+    /** Constructs a FHIRPatientAnimal. */
+    public FHIRPatientAnimal() {}
+
+    /**
+     * Returns the species.
+     * @return the species
+     */
     public FHIRCodeableConcept getSpecies() {
         return species;
     }
 
+    /**
+     * Sets the species.
+     * @param species the species
+     */
     public void setSpecies(FHIRCodeableConcept species) {
         this.species = species;
     }
 
+    /**
+     * Returns the breed.
+     * @return the breed
+     */
     public FHIRCodeableConcept getBreed() {
         return breed;
     }
 
+    /**
+     * Sets the breed.
+     * @param breed the breed
+     */
     public void setBreed(FHIRCodeableConcept breed) {
         this.breed = breed;
     }
 
+    /**
+     * Returns the genderStatus.
+     * @return the genderStatus
+     */
     public FHIRCodeableConcept getGenderStatus() {
         return genderStatus;
     }
 
+    /**
+     * Sets the genderStatus.
+     * @param genderStatus the genderStatus
+     */
     public void setGenderStatus(FHIRCodeableConcept genderStatus) {
         this.genderStatus = genderStatus;
     }

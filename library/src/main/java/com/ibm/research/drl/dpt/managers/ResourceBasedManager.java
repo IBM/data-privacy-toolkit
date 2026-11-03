@@ -34,13 +34,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * Base class for managers that load localization resources from CSV files.
+ *
+ * @param <K> the type of value stored in this manager
+ */
 public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
     private static final String allCountriesName = "__all__";
+    /** Map from country code to the resource lookup map for that country. */
     private final Map<String, MapWithRandomPick<String, K>> resourceMap;
+    /** Map from country code to the ordered list of keys for that country. */
     private final Map<String, List<String>> listMap;
+    /** Map from country code to the probability-weighted pairs for that country. */
     private final Map<String, List<Pair<String, Double>>> probMap;
+    /** Map from country code to the enumerated distribution for random selection. */
     private final Map<String, EnumeratedDistribution<String>> probDistMap;
+    /** The minimum key length seen across loaded resources. */
     protected int minimumLength;
+    /** The maximum key length seen across loaded resources. */
     protected int maximumLength;
 
     /**
@@ -73,9 +84,8 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         localMap.put(key, value);
         listMap.get(countryCode).add(key);
 
-        if (value instanceof ProbabilisticEntity) {
-            double probability = ((ProbabilisticEntity) value).getProbability();
-            probMap.get(countryCode).add(new Pair<>(key, probability));
+        if (value instanceof ProbabilisticEntity pe) {
+            probMap.get(countryCode).add(new Pair<>(key, pe.getProbability()));
         }
     }
 
@@ -86,13 +96,31 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
      */
     protected abstract Collection<ResourceEntry> getResources();
 
+    /**
+     * Parses a single CSV record into one or more key-value pairs for the resource map.
+     *
+     * @param record      the CSV record to parse
+     * @param countryCode the country code for the resource file being parsed
+     * @return a list of key-value tuples to add to the resource map
+     */
     protected abstract List<Tuple<String, K>> parseResourceRecord(CSVRecord record, String countryCode);
 
 
+    /**
+     * Returns whether this manager's resources apply to all countries only (no per-country mapping).
+     *
+     * @return true if resources apply globally only
+     */
     protected boolean appliesToAllCountriesOnly() {
         return false;
     }
 
+    /**
+     * Reads resources from the given entries and returns a map from country code to value map.
+     *
+     * @param entries the resource entries to load
+     * @return a map from country code to a map of uppercased key to value
+     */
     protected Map<String, Map<String, K>> readResources(Collection<ResourceEntry> entries) {
         Map<String, Map<String, K>> resources = new HashMap<>();
 
@@ -198,10 +226,21 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return getValues(allCountriesName);
     }
 
+    /**
+     * Returns all keys across all locales.
+     *
+     * @return list of all keys
+     */
     public List<String> getKeys() {
         return listMap.get(allCountriesName);
     }
 
+    /**
+     * Returns keys for the given locale, falling back to all-locales if not found.
+     *
+     * @param countryCode the locale country code
+     * @return list of keys for the locale, or global keys if locale not found
+     */
     public List<String> getKeys(String countryCode) {
         List<String> list = listMap.get(countryCode);
         if (list != null) {
@@ -222,6 +261,12 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return keys.get(position);
     }
 
+    /**
+     * Returns a pseudorandom value deterministically derived from the given identifier.
+     *
+     * @param identifier the seed identifier
+     * @return a pseudorandom string value
+     */
     public String getPseudorandom(String identifier) {
         String key = identifier.toUpperCase();
         K value = getKey(key);
@@ -229,9 +274,8 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         if (value == null) {
             return getPseudorandomElement(getKeys(), key);
         } else {
-            if (value instanceof LocalizedEntity) {
-                String countryCode = ((LocalizedEntity) value).getNameCountryCode();
-                return getPseudorandomElement(getKeys(countryCode), key);
+            if (value instanceof LocalizedEntity le) {
+                return getPseudorandomElement(getKeys(le.getNameCountryCode()), key);
             }
 
             return getPseudorandomElement(getKeys(), key);
@@ -243,10 +287,21 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return getRandomKey(allCountriesName);
     }
 
+    /**
+     * Returns a random value from the global (all-locales) pool.
+     *
+     * @return a random value
+     */
     public K getRandomValue() {
         return resourceMap.get(allCountriesName).getRandomValue();
     }
 
+    /**
+     * Returns a random value for the given locale.
+     *
+     * @param countryCode the locale country code
+     * @return a random value for the locale
+     */
     public K getRandomValue(String countryCode) {
         return resourceMap.get(countryCode).getRandomValue();
     }
@@ -272,6 +327,13 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return map != null && map.getMap().containsKey(key.toUpperCase());
     }
 
+    /**
+     * Returns {@code true} if the given key is valid for the specified locale.
+     *
+     * @param countryCode the locale country code
+     * @param key         the key to check
+     * @return {@code true} if the key exists in the locale's resource map
+     */
     public boolean isValidKey(String countryCode, String key) {
         MapWithRandomPick<String, K> map = resourceMap.get(countryCode.toLowerCase());
 
@@ -294,6 +356,13 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return null;
     }
 
+    /**
+     * Returns the value for the given key in the specified locale.
+     *
+     * @param countryCode the locale country code
+     * @param key         the lookup key
+     * @return the value, or {@code null} if not found
+     */
     public K getKey(String countryCode, String key) {
         MapWithRandomPick<String, K> map = resourceMap.get(countryCode.toLowerCase());
 
@@ -304,10 +373,21 @@ public abstract class ResourceBasedManager<K> extends AbstractManager<K> {
         return null;
     }
 
+    /**
+     * Returns a random key selected according to the global probability distribution.
+     *
+     * @return a randomly selected key
+     */
     public String getRandomProbabilityBased() {
         return getRandomProbabilityBased(allCountriesName);
     }
 
+    /**
+     * Returns a random key selected according to the probability distribution for the given locale.
+     *
+     * @param countryCode the locale country code
+     * @return a randomly selected key for the locale
+     */
     public String getRandomProbabilityBased(String countryCode) {
         EnumeratedDistribution<String> distribution = this.probDistMap.get(countryCode);
         if (distribution == null) {

@@ -26,7 +26,14 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Re-identification risk metric based on the k-ratio approach: risk is {@code gamma / |partition|}.
+ */
 public class KRatioMetric implements RiskMetric {
+
+    /** Constructs a KRatioMetric. */
+    public KRatioMetric() {}
+    /** Option key for the gamma parameter. */
     public static final String GAMMA = "gamma";
     private List<Partition> partitions;
     private double gamma;

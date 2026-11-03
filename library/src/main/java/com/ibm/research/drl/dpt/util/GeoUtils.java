@@ -21,6 +21,7 @@ package com.ibm.research.drl.dpt.util;
 import com.ibm.research.drl.dpt.models.LatitudeLongitude;
 import com.ibm.research.drl.dpt.providers.identifiers.LatitudeLongitudeIdentifier;
 
+/** Utility class for geographic coordinate conversions and distance calculations. */
 public class GeoUtils {
     private final static Double R = 6378137.0;
     private final static LatitudeLongitudeIdentifier latitudeLongitudeIdentifier = new LatitudeLongitudeIdentifier();
@@ -29,11 +30,26 @@ public class GeoUtils {
     private final static double e = 8.1819190842622e-2;
     private final static double esq = Math.pow(e, 2);
 
+    /** Not instantiable. */
+    private GeoUtils() {}
 
+    /**
+     * Returns the Earth radius constant in metres.
+     *
+     * @return Earth radius in metres
+     */
     public static Double getR() {
         return R;
     }
 
+    /**
+     * Converts ECEF XYZ coordinates to latitude/longitude.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return the corresponding latitude/longitude
+     */
     public static LatitudeLongitude xyzToLatlon(double x, double y, double z) {
         double b = Math.sqrt(asq * (1 - esq));
         double bsq = Math.pow(b, 2);
@@ -53,6 +69,13 @@ public class GeoUtils {
         return new LatitudeLongitude(Math.toDegrees(lat), Math.toDegrees(lon));
     }
 
+    /**
+     * Converts latitude/longitude to ECEF XYZ coordinates.
+     *
+     * @param lat the latitude in degrees
+     * @param lon the longitude in degrees
+     * @return the corresponding XYZ coordinates
+     */
     public static XYZ latlonToXYZ(double lat, double lon) {
         double cosLat = Math.cos(lat * Math.PI / 180.0);
         double sinLat = Math.sin(lat * Math.PI / 180.0);

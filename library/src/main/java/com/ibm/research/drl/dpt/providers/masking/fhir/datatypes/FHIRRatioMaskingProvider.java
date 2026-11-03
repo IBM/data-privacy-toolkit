@@ -28,18 +28,34 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRRatioMaskingProvider FHIR datatype. */
 public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
+    /** Whether to delete the numerator element. */
     private final boolean deleteNumerator;
+    /** Whether to delete the denominator element. */
     private final boolean deleteDenominator;
+    /** Whether to mask the numerator element. */
     private final boolean maskNumerator;
+    /** Whether to mask the denominator element. */
     private final boolean maskDenominator;
 
+    /** Masking provider for the numerator element. */
     private final FHIRQuantityMaskingProvider numeratorMaskingProvider;
+    /** Masking provider for the denominator element. */
     private final FHIRQuantityMaskingProvider denominatorMaskingProvider;
 
+    /** JSON path to the numerator field. */
     private final String NUMERATOR_PATH;
+    /** JSON path to the denominator field. */
     private final String DENOMINATOR_PATH;
 
+    /**
+     * Constructs a FHIRRatioMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRRatioMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -56,6 +72,11 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRatio obj = JsonUtils.MAPPER.treeToValue(node, FHIRRatio.class);
@@ -66,6 +87,11 @@ public class FHIRRatioMaskingProvider extends AbstractComplexMaskingProvider<Jso
         }
     }
 
+    /**
+     * Masks a FHIR Ratio object.
+     * @param ratio the FHIRRatio to mask
+     * @return the masked FHIRRatio
+     */
     public FHIRRatio mask(FHIRRatio ratio) {
         if (this.deleteDenominator) {
             ratio.setDenominator(null);

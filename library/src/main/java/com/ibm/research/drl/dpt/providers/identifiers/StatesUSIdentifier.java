@@ -22,7 +22,12 @@ import com.ibm.research.drl.dpt.managers.Manager;
 import com.ibm.research.drl.dpt.managers.StatesUSManager;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+/** Identifier for US state name and abbreviation values. */
 public class StatesUSIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a StatesUSIdentifier. */
+    public StatesUSIdentifier() {}
+
     private final static StatesUSManager statesUSManager = StatesUSManager.getInstance();
 
     @Override

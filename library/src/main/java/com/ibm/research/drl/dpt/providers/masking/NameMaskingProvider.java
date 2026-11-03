@@ -33,19 +33,30 @@ import java.util.Set;
  * The type Name masking provider.
  */
 public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> {
+    /** The names dataset used for masking. */
     private final NamesManager.Names names;
+    /** Whether to allow names of any gender when masking. */
     private final boolean allowAnyGender;
+    /** The separator string between name components. */
     private final String separator;
+    /** The whitespace string used between name tokens. */
     private final String whitespace;
+    /** Virtual field name for the masking sub-provider. */
     private final String virtualField;
+    /** Masking provider for the virtual field. */
     private final MaskingProvider virtualFieldMaskingProvider;
+    /** Whether to apply pseudorandom (hash-based) masking. */
     private final boolean getPseudorandom;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**
-     * Instantiates a new Name masking provider.
+     * Constructs a NameMaskingProvider with explicit complex type, configuration, masked fields, and factory.
      *
-     * @param configuration the configuration
+     * @param complexType  the complex type identifier
+     * @param configuration the masking configuration
+     * @param maskedFields  already masked fields (for virtual-field support)
+     * @param factory       the masking provider factory
      */
     public NameMaskingProvider(String complexType, MaskingConfiguration configuration, Set<String> maskedFields, MaskingProviderFactory factory) {
         super(complexType, configuration, maskedFields, factory);
@@ -68,16 +79,31 @@ public class NameMaskingProvider extends AbstractComplexMaskingProvider<String> 
     }
 
     /**
-     * Instantiates a new Name masking provider.
+     * Constructs a NameMaskingProvider using a default configuration.
+     *
+     * @param factory the masking provider factory
      */
     public NameMaskingProvider(MaskingProviderFactory factory) {
         this("name", new DefaultMaskingConfiguration(), Collections.emptySet(), factory);
     }
 
+    /**
+     * Constructs a NameMaskingProvider with a custom configuration.
+     *
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public NameMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("name", maskingConfiguration, Collections.emptySet(), factory);
     }
 
+    /**
+     * Constructs a NameMaskingProvider (ignores the {@link SecureRandom} parameter).
+     *
+     * @param random               ignored random parameter
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public NameMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this("name", maskingConfiguration, Collections.emptySet(), factory);
     }

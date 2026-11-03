@@ -26,54 +26,106 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRPeriod;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRQuantity;
 
 
+/** FHIRMedicationOrderDispenseRequest FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationOrderDispenseRequest {
+    /** Constructs a FHIRMedicationOrderDispenseRequest. */
+    public FHIRMedicationOrderDispenseRequest() {}
 
+
+    /**
+     * Returns the medicationCodeableConcept.
+     * @return the medicationCodeableConcept
+     */
     public FHIRCodeableConcept getMedicationCodeableConcept() {
         return medicationCodeableConcept;
     }
 
+    /**
+     * Sets the medicationCodeableConcept.
+     * @param medicationCodeableConcept the medicationCodeableConcept
+     */
     public void setMedicationCodeableConcept(FHIRCodeableConcept medicationCodeableConcept) {
         this.medicationCodeableConcept = medicationCodeableConcept;
     }
 
+    /**
+     * Returns the medicationReference.
+     * @return the medicationReference
+     */
     public FHIRReference getMedicationReference() {
         return medicationReference;
     }
 
+    /**
+     * Sets the medicationReference.
+     * @param medicationReference the medicationReference
+     */
     public void setMedicationReference(FHIRReference medicationReference) {
         this.medicationReference = medicationReference;
     }
 
+    /**
+     * Returns the validityPeriod.
+     * @return the validityPeriod
+     */
     public FHIRPeriod getValidityPeriod() {
         return validityPeriod;
     }
 
+    /**
+     * Sets the validityPeriod.
+     * @param validityPeriod the validityPeriod
+     */
     public void setValidityPeriod(FHIRPeriod validityPeriod) {
         this.validityPeriod = validityPeriod;
     }
 
+    /**
+     * Returns the numberOfRepeatsAllowed.
+     * @return the numberOfRepeatsAllowed
+     */
     public String getNumberOfRepeatsAllowed() {
         return numberOfRepeatsAllowed;
     }
 
+    /**
+     * Sets the numberOfRepeatsAllowed.
+     * @param numberOfRepeatsAllowed the numberOfRepeatsAllowed
+     */
     public void setNumberOfRepeatsAllowed(String numberOfRepeatsAllowed) {
         this.numberOfRepeatsAllowed = numberOfRepeatsAllowed;
     }
 
+    /**
+     * Returns the quantity.
+     * @return the quantity
+     */
     public FHIRQuantity getQuantity() {
         return quantity;
     }
 
+    /**
+     * Sets the quantity.
+     * @param quantity the quantity
+     */
     public void setQuantity(FHIRQuantity quantity) {
         this.quantity = quantity;
     }
 
+    /**
+     * Returns the expectedSupplyDuration.
+     * @return the expectedSupplyDuration
+     */
     public FHIRQuantity getExpectedSupplyDuration() {
         return expectedSupplyDuration;
     }
 
+    /**
+     * Sets the expectedSupplyDuration.
+     * @param expectedSupplyDuration the expectedSupplyDuration
+     */
     public void setExpectedSupplyDuration(FHIRQuantity expectedSupplyDuration) {
         this.expectedSupplyDuration = expectedSupplyDuration;
     }

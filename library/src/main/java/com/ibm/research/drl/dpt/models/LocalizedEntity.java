@@ -20,6 +20,14 @@ package com.ibm.research.drl.dpt.models;
 
 import java.io.Serializable;
 
+/**
+ * Interface for entities that carry a country-code-scoped name.
+ */
 public interface LocalizedEntity extends Serializable {
+    /**
+     * Returns the country code associated with this entity's name.
+     *
+     * @return the name country code
+     */
     String getNameCountryCode();
 }

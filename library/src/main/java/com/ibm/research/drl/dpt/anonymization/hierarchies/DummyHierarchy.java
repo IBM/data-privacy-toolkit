@@ -23,7 +23,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Collections;
 import java.util.Set;
 
+/** A dummy generalization hierarchy that performs no generalization. */
 public final class DummyHierarchy extends AbstractHierarchy {
+    /**
+     * Constructs a DummyHierarchy from a JSON node.
+     *
+     * @param node the JSON node
+     */
     public DummyHierarchy(JsonNode node) {
         super(node);
     }

@@ -24,9 +24,13 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRExtension;
 
 import java.util.Collection;
 
+/** FHIRCoding FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRCoding {
+    /** Constructs a FHIRCoding. */
+    public FHIRCoding() {}
+
     /* v1.0.2
     {
   // from Element: extension
@@ -45,50 +49,98 @@ public class FHIRCoding {
     private String display;
     private boolean userSelected;
 
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the system.
+     * @return the system
+     */
     public String getSystem() {
         return system;
     }
 
+    /**
+     * Sets the system.
+     * @param system the system
+     */
     public void setSystem(String system) {
         this.system = system;
     }
 
+    /**
+     * Returns the version.
+     * @return the version
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * Sets the version.
+     * @param version the version
+     */
     public void setVersion(String version) {
         this.version = version;
     }
 
+    /**
+     * Returns the code.
+     * @return the code
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Sets the code.
+     * @param code the code
+     */
     public void setCode(String code) {
         this.code = code;
     }
 
+    /**
+     * Returns the display.
+     * @return the display
+     */
     public String getDisplay() {
         return display;
     }
 
+    /**
+     * Sets the display.
+     * @param display the display
+     */
     public void setDisplay(String display) {
         this.display = display;
     }
 
+    /**
+     * Returns the userSelected.
+     * @return the userSelected
+     */
     public boolean isUserSelected() {
         return userSelected;
     }
 
+    /**
+     * Sets the userSelected.
+     * @param userSelected the userSelected
+     */
     public void setUserSelected(boolean userSelected) {
         this.userSelected = userSelected;
     }

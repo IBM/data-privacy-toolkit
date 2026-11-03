@@ -34,7 +34,7 @@ public class ConfigurationManagerTest {
 
     @Test
     public void loadStream() throws Exception {
-        try (InputStream is = this.getClass().getResourceAsStream("/test_configuration.json")) {
+        try (InputStream is = ConfigurationManagerTest.class.getResourceAsStream("/test_configuration.json")) {
             ConfigurationManager manager = ConfigurationManager.load(mapper.readTree(is));
 
             assertNotNull(manager);
@@ -43,7 +43,7 @@ public class ConfigurationManagerTest {
 
     @Test
     public void getFieldConfiguration() throws Exception {
-        try (InputStream is = this.getClass().getResourceAsStream("/test_configuration.json")) {
+        try (InputStream is = ConfigurationManagerTest.class.getResourceAsStream("/test_configuration.json")) {
             ConfigurationManager manager = ConfigurationManager.load(mapper.readTree(is));
 
             assertNotNull(manager);
@@ -58,7 +58,7 @@ public class ConfigurationManagerTest {
 
     @Test
     public void getDefaultConfiguration() throws Exception {
-        try (InputStream is = this.getClass().getResourceAsStream("/test_configuration.json")) {
+        try (InputStream is = ConfigurationManagerTest.class.getResourceAsStream("/test_configuration.json")) {
             ConfigurationManager manager = ConfigurationManager.load(mapper.readTree(is));
 
             assertNotNull(manager);

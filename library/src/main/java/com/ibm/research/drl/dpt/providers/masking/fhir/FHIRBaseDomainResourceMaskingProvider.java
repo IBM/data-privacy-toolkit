@@ -29,19 +29,35 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 
 import java.util.Set;
 
+/** FHIRBaseDomainResourceMaskingProvider FHIR datatype. */
 public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to mask the resource ID. */
     private final boolean maskId;
+    /** Whether to preserve the prefix when masking the resource ID. */
     private final boolean preserveIdPrefix;
+    /** Whether to remove the meta element. */
     private final boolean removeMeta;
+    /** Whether to remove the text element. */
     private final boolean removeText;
+    /** Whether to remove contained resources. */
     private final boolean removeContained;
+    /** Whether to remove extensions. */
     private final boolean removeExtension;
 
+    /** Masking provider for the resource ID field. */
     private final MaskingProvider idMaskingProvider;
 
+    /** JSON path to the resource ID field. */
     private final String idPath;
 
+    /**
+     * Constructs a FHIRBaseDomainResourceMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRBaseDomainResourceMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -59,6 +75,11 @@ public class FHIRBaseDomainResourceMaskingProvider extends AbstractComplexMaskin
 
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param obj the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode obj) {
         if (obj == null || obj.isNull()) {
             return NullNode.getInstance();

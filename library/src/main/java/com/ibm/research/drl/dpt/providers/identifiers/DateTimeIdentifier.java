@@ -31,7 +31,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+/** Identifies date and time values in various formats. */
 public class DateTimeIdentifier extends AbstractIdentifier {
+    /** Constructs a DateTimeIdentifier. */
+    public DateTimeIdentifier() {}
     private static final String[] appropriateNames = {"Datetime", "Timestamp", "Birthday", "Birth date", "Date", "BirthDate", "Date of birth"};
 
     private static final Tuple<String, Pattern>[] patterns = new Tuple[]{
@@ -212,6 +215,12 @@ public class DateTimeIdentifier extends AbstractIdentifier {
 
     private final static String[] temporalSubstrings = {"ago", "last", "next", "every", "day", "week", "month", "year"};
 
+    /**
+     * Returns whether the given string contains temporal language.
+     *
+     * @param identifier the string to test
+     * @return true if the string contains temporal keywords
+     */
     public boolean isTemporal(String identifier) {
         String p = identifier.toLowerCase();
 

@@ -63,7 +63,7 @@ public class SimpleAnonymityCheckerTest {
 
 
         final IPVDataset original;
-        try (InputStream inputStream = getClass().getResourceAsStream("/testOLA.csv")) {
+        try (InputStream inputStream = SimpleAnonymityCheckerTest.class.getResourceAsStream("/testOLA.csv")) {
             original = IPVDataset.load(inputStream, false, ',', '"', false);
         }
 

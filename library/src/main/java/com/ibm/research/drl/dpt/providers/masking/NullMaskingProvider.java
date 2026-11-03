@@ -23,8 +23,12 @@ import com.ibm.research.drl.dpt.configuration.MaskingConfiguration;
 
 import java.security.SecureRandom;
 
+/**
+ * Masking provider that returns an empty string or {@code null} for any input.
+ */
 public class NullMaskingProvider implements MaskingProvider {
 
+    /** Whether to return {@code null} instead of an empty string. */
     private final boolean returnNull;
 
     /**

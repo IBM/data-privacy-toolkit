@@ -41,9 +41,23 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
 
+/**
+ * Abstract base class for format processors that support multi-path (JSON/XML-pointer style) field access.
+ */
 public abstract class MultipathFormatProcessor extends FormatProcessor {
     private final static Logger logger = LogManager.getLogger(MultipathFormatProcessor.class);
 
+    /** Constructs a MultipathFormatProcessor. */
+    public MultipathFormatProcessor() {}
+
+    /**
+     * Extracts the values of relationship operands that are not themselves to be masked.
+     *
+     * @param record                    the current record
+     * @param predefinedRelationships   the defined field relationships
+     * @param fieldsToMask              the fields currently scheduled for masking
+     * @return a map from operand path to its original/masked value pair
+     */
     protected Map<String, OriginalMaskedValuePair> extractOperandsNotToBeMasked(MultipathRecord record, Map<String, FieldRelationship> predefinedRelationships,
                                                                                 Map<String, Tuple<DataMaskingTarget, String>> fieldsToMask) {
 
@@ -88,6 +102,13 @@ public abstract class MultipathFormatProcessor extends FormatProcessor {
         return operandsNotToBeMasked;
     }
 
+    /**
+     * Expands a list of field patterns to their concrete paths in the given record.
+     *
+     * @param fields the field patterns to expand
+     * @param record the current record
+     * @return the list of concrete field paths
+     */
     protected List<String> expandToBeMasked(Iterable<String> fields, MultipathRecord record) {
         List<String> effectivePathsToBeMasked = new ArrayList<>();
 
@@ -104,6 +125,13 @@ public abstract class MultipathFormatProcessor extends FormatProcessor {
         return effectivePathsToBeMasked;
     }
 
+    /**
+     * Expands a map of field patterns to their concrete paths in the given record.
+     *
+     * @param fields the map of field patterns to masking targets
+     * @param record the current record
+     * @return the expanded map of concrete paths to masking target and original pattern tuples
+     */
     protected Map<String, Tuple<DataMaskingTarget, String>> expandToBeMasked(Map<String, DataMaskingTarget> fields, MultipathRecord record) {
         Map<String, Tuple<DataMaskingTarget, String>> effectivePathsToBeMasked = new HashMap<>();
 
@@ -123,6 +151,13 @@ public abstract class MultipathFormatProcessor extends FormatProcessor {
         return effectivePathsToBeMasked;
     }
 
+    /**
+     * Returns whether any relationship operand has a non-fixed (wildcard) path in the given record.
+     *
+     * @param relationships the field relationships
+     * @param record        the current record
+     * @return {@code true} if at least one operand has a non-fixed path
+     */
     protected boolean existOperandsWithNonFixedPath(Map<String, FieldRelationship> relationships, MultipathRecord record) {
         if (relationships == null || relationships.isEmpty()) {
             return false;
@@ -139,6 +174,16 @@ public abstract class MultipathFormatProcessor extends FormatProcessor {
         return false;
     }
 
+    /**
+     * Masks a single record element, applying the given provider and recording the result.
+     *
+     * @param record            the current record
+     * @param fieldIdentifier   the concrete field path to mask
+     * @param provider          the masking provider to apply
+     * @param targetPath        the target (pattern) path for relationship resolution
+     * @param fieldRelationship the field relationship, if any
+     * @param processedFields   the map of already-processed field paths and their values
+     */
     protected void maskElement(MultipathRecord record, String fieldIdentifier, MaskingProvider provider, String targetPath, FieldRelationship fieldRelationship, Map<String, OriginalMaskedValuePair> processedFields) {
         if (record.isPrimitiveType(fieldIdentifier)) {
             logger.debug("Field reference {} is primitive", fieldIdentifier);

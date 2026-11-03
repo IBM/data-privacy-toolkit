@@ -24,11 +24,20 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Database-backed implementation of {@link ChainRetrieval}. */
 public class DBChainRetrieval implements ChainRetrieval {
     private final Connection connection;
     private final String tableName;
     private final List<DictionaryEntry> lastState;
 
+    /**
+     * Constructs a DBChainRetrieval connected to the given database.
+     *
+     * @param host      the JDBC connection URL
+     * @param username  the database username
+     * @param password  the database password
+     * @param tableName the table storing the chain
+     */
     public DBChainRetrieval(String host, String username, String password, String tableName) {
         try {
             this.connection = DriverManager.getConnection(host, username, password);

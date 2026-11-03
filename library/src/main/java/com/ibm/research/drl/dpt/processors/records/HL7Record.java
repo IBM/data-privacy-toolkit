@@ -28,12 +28,18 @@ import org.apache.logging.log4j.LogManager;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
+/** A {@link Record} backed by an HL7 v2 message. */
 public class HL7Record implements Record {
     private final static Logger logger = LogManager.getLogger(HL7Record.class);
 
     private final Terser terser;
     private final Message message;
 
+    /**
+     * Constructs an HL7Record wrapping the given message.
+     *
+     * @param message the HL7 message
+     */
     public HL7Record(Message message) {
         this.message = message;
         this.terser = new Terser(message);
@@ -77,6 +83,11 @@ public class HL7Record implements Record {
         }
     }
 
+    /**
+     * Encodes the message to its string representation.
+     *
+     * @return the encoded HL7 message string
+     */
     protected String formatRecord() {
         try {
             return message.encode();
@@ -90,6 +101,11 @@ public class HL7Record implements Record {
         return formatRecord();
     }
 
+    /**
+     * Encodes the message to its byte representation.
+     *
+     * @return the encoded HL7 message bytes
+     */
     protected byte[] formatRecordBytes() {
         return formatRecord().getBytes();
     }

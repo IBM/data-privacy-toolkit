@@ -24,24 +24,44 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRQuantity;
 
 
+/** FHIRMedicationPackageContent FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationPackageContent {
+    /** Constructs a FHIRMedicationPackageContent. */
+    public FHIRMedicationPackageContent() {}
+
     private FHIRReference item;
     private FHIRQuantity amount;
 
+    /**
+     * Returns the item.
+     * @return the item
+     */
     public FHIRReference getItem() {
         return item;
     }
 
+    /**
+     * Sets the item.
+     * @param item the item
+     */
     public void setItem(FHIRReference item) {
         this.item = item;
     }
 
+    /**
+     * Returns the amount.
+     * @return the amount
+     */
     public FHIRQuantity getAmount() {
         return amount;
     }
 
+    /**
+     * Sets the amount.
+     * @param amount the amount
+     */
     public void setAmount(FHIRQuantity amount) {
         this.amount = amount;
     }

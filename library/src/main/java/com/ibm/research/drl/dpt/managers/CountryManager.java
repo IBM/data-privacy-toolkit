@@ -42,15 +42,23 @@ public class CountryManager extends AbstractManager<Country> {
     private static final Logger logger = LogManager.getLogger(CountryManager.class);
     private static final Collection<ResourceEntry> resourceCountryList =
             LocalizationManager.getInstance().getResources(Resource.COUNTRY);
+    /** Random number generator. */
     private final SecureRandom random;
 
+    /** Map from country code to per-country maps keyed by name. */
     private final Map<String, MapWithRandomPick<String, Country>[]> countryMap;
+    /** Map from country code to all country location entries. */
     private final Map<String, List<Location>> countryListMap;
 
     private static final String ALL_COUNTRIES_NAME = "__all__";
 
     private static final CountryManager instance = new CountryManager();
 
+    /**
+     * Returns the singleton instance of CountryManager.
+     *
+     * @return the singleton instance
+     */
     public static CountryManager getInstance() {
         return instance;
     }
@@ -143,6 +151,12 @@ public class CountryManager extends AbstractManager<Country> {
         return ((Country) (keys.get(position))).getName();
     }
 
+    /**
+     * Returns a pseudorandom country name for the given identifier.
+     *
+     * @param identifier the input identifier
+     * @return a deterministic pseudorandom country name
+     */
     public String getPseudorandom(String identifier) {
         String key = identifier.toUpperCase();
         Country country = lookupCountry(identifier);

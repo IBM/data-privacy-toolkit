@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/** Describes a localization resource — its filename, country code, and entry type. */
 public class ResourceEntry {
 
     private final String filename;

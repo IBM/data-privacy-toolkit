@@ -24,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Options for the Average Equivalence Class Size (AECS) information loss metric.
+ */
 public class AECSOptions implements InformationMetricOptions {
     private final Map<String, Object> values = new HashMap<>();
 
@@ -46,6 +49,7 @@ public class AECSOptions implements InformationMetricOptions {
      * Instantiates a new Aecs options.
      *
      * @param normalized the normalized
+     * @param k          the k value used for normalization
      */
     @JsonCreator
     public AECSOptions(@JsonProperty("normalized") boolean normalized, @JsonProperty("k") int k) {

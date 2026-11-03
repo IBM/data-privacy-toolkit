@@ -26,7 +26,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for MAC (Media Access Control) address values in colon-separated hexadecimal form.
+ */
 public class MACAddressIdentifier extends AbstractRegexBasedIdentifier {
+    /** Constructs a MACAddressIdentifier. */
+    public MACAddressIdentifier() {}
     private static final Collection<Pattern> macAddressPatterns = new ArrayList<Pattern>(List.of(
             Pattern.compile("^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$")
     ));

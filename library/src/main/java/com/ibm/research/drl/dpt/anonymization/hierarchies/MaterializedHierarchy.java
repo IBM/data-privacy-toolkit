@@ -25,19 +25,39 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.util.*;
 
+/**
+ * A generalization hierarchy stored as a materialized set of term paths, supporting
+ * encoding (generalization) and lookup operations.
+ */
 public class MaterializedHierarchy implements GeneralizationHierarchy {
+    /** Nodes keyed by upper-cased value. */
     private final Map<String, GeneralizationNode> nodes;
+    /** All term paths (each path goes from leaf to root). */
     private final List<List<String>> terms;
+    /** Term paths keyed by lower-cased leaf value. */
     private final Map<String, List<String>> leaves;
+    /** Insertion-order index of each leaf, keyed by lower-cased value. */
     private final Map<String, Integer> indices;
+    /** Number of term paths added so far. */
     private int termsAdded;
+    /** The top (most general) term of this hierarchy. */
     private String topTerm;
+    /** The maximum number of levels across all added term paths. */
     private int hierarchyHeight;
 
+    /**
+     * Returns the insertion-order index of the given term (case-insensitive), or {@code null} if absent.
+     *
+     * @param term the term to look up
+     * @return the index, or {@code null}
+     */
     public Integer getIndex(String term) {
         return this.indices.get(term.toLowerCase());
     }
 
+    /**
+     * Constructs an empty MaterializedHierarchy.
+     */
     public MaterializedHierarchy() {
         this.terms = new ArrayList<>();
         this.nodes = new HashMap<>();
@@ -47,6 +67,11 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
         this.hierarchyHeight = 0;
     }
 
+    /**
+     * Constructs a MaterializedHierarchy from a list of term paths.
+     *
+     * @param terms the list of term paths (each path goes from leaf to root)
+     */
     @JsonCreator
     public MaterializedHierarchy(
             @JsonProperty("terms") List<List<String>> terms
@@ -77,10 +102,20 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
         return this.topTerm;
     }
 
+    /**
+     * Adds a term path expressed as a var-arg array.
+     *
+     * @param hierarchy the terms from leaf to root
+     */
     public void add(String... hierarchy) {
         add(Arrays.asList(hierarchy));
     }
 
+    /**
+     * Adds a term path.
+     *
+     * @param hierarchy the list of terms from leaf to root
+     */
     public void add(List<String> hierarchy) {
         String leaf = hierarchy.get(0);
         this.leaves.put(leaf.toLowerCase(), hierarchy);
@@ -163,6 +198,12 @@ public class MaterializedHierarchy implements GeneralizationHierarchy {
         return node.getLeaveValues();
     }
 
+    /**
+     * Returns the {@link GeneralizationNode} for the given value, or {@code null} if not found.
+     *
+     * @param value the term value (case-insensitive)
+     * @return the node, or {@code null}
+     */
     public GeneralizationNode getNode(String value) {
         return this.nodes.get(value.toUpperCase());
     }

@@ -32,8 +32,11 @@ import java.security.SecureRandom;
  */
 public class LatitudeLongitudeMaskingProvider implements MaskingProvider {
 
+    /** Whether to use a fixed radius with random direction when masking. */
     private final boolean fixedRadiusRandomDirection;
+    /** Whether to apply donut masking (offset within a ring). */
     private final boolean donutMasking;
+    /** Whether to randomise the location within a circle. */
     private final boolean randomWithinCircle;
 
     // TODO: implement NRand and theta rand: http://geomobile.como.polimi.it/website/presentations/Location%20Privacy%20Polimi.pdf
@@ -44,26 +47,45 @@ public class LatitudeLongitudeMaskingProvider implements MaskingProvider {
     // private final boolean digitReduction
     // private final int digitsToReduct
 
+    /** Minimum offset (in metres) applied when masking. */
     private final static int minimumOffset = 10;
 
+    /** Maximum offset radius (in metres) for location masking. */
     private final int maximumOffsetRadius;
+    /** Minimum offset radius (in metres) for donut masking. */
     private final int minimumOffsetRadius;
 
+    /** Secure random source. */
     private final SecureRandom random;
+    /** Shared latitude/longitude identifier instance. */
     private final LatitudeLongitudeIdentifier latitudeLongitudeIdentifier = new LatitudeLongitudeIdentifier();
 
+    /**
+     * Constructs a LatitudeLongitudeMaskingProvider using the given random number generator
+     * and default masking configuration.
+     *
+     * @param random the secure random number generator
+     */
     public LatitudeLongitudeMaskingProvider(SecureRandom random) {
         this(random, new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Constructs a LatitudeLongitudeMaskingProvider using the given masking configuration
+     * and a new {@link SecureRandom}.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public LatitudeLongitudeMaskingProvider(MaskingConfiguration maskingConfiguration) {
         this(new SecureRandom(), maskingConfiguration);
     }
 
     /**
-     * Instantiates a new Latitude longitude masking provider.
+     * Constructs a LatitudeLongitudeMaskingProvider with the given random number generator
+     * and masking configuration.
      *
-     * @param configuration the configuration
+     * @param random        the secure random number generator
+     * @param configuration the masking configuration
      */
     public LatitudeLongitudeMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
 
@@ -92,6 +114,12 @@ public class LatitudeLongitudeMaskingProvider implements MaskingProvider {
         this(new SecureRandom(), new DefaultMaskingConfiguration());
     }
 
+    /**
+     * Masks the given {@link LatitudeLongitude} value according to the configured strategy.
+     *
+     * @param latitudeLongitude the coordinate to mask
+     * @return the masked coordinate as a string
+     */
     public String mask(LatitudeLongitude latitudeLongitude) {
         LatitudeLongitude randomLatLon;
 

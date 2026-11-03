@@ -18,10 +18,16 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** The type of a road in an address. */
 public enum RoadTypes {
+    /** Street. */
     STREET,
+    /** Boulevard. */
     BOULEVARD,
+    /** Road. */
     ROAD,
+    /** Avenue. */
     AVENUE,
+    /** Court. */
     COURT
 }

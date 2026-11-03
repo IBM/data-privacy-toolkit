@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.*;
 
+/** Manager for postal code resources, supporting nearest-neighbour and pseudorandom lookups. */
 public class PostalCodeManager implements Manager {
     private static final Collection<ResourceEntry> resourceList =
             LocalizationManager.getInstance().getResources(Resource.POSTAL_CODES);
@@ -114,6 +115,12 @@ public class PostalCodeManager implements Manager {
         return postalCodes;
     }
 
+    /**
+     * Returns a pseudorandom postal code derived from the given identifier.
+     *
+     * @param identifier the seed identifier
+     * @return a pseudorandom postal code string
+     */
     public String getPseudorandom(String identifier) {
         int position = (int) (Math.abs(HashUtils.longFromHash(identifier)) % this.postalCodeList.size());
         return this.postalCodeList.get(position).getName();

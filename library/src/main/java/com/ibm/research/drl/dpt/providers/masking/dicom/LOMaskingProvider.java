@@ -29,17 +29,29 @@ import org.apache.logging.log4j.Logger;
 
 import java.security.SecureRandom;
 
+/**
+ * DICOM LO (Long String) masking provider that delegates to a specialised masking provider
+ * based on the configured entity type (HOSPITAL, NAME, or GENERIC).
+ */
 public class LOMaskingProvider implements MaskingProvider {
+    /** Logger for this class. */
     private static final Logger logger = LogManager.getLogger(LOMaskingProvider.class);
 
+    /** Generic random masking provider. */
     private final RandomMaskingProvider randomMaskingProvider;
+    /** Name masking provider for NAME entity type. */
     private final MaskingProvider nameMaskingProvider;
+    /** Hospital masking provider for HOSPITAL entity type. */
     private final MaskingProvider hospitalMaskingProvider;
 
+    /** The DICOM entity type driving the masking logic. */
     private final DicomEntityType entityType;
 
     /**
-     * Instantiates a new Lo masking provider.
+     * Constructs a LOMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
      */
     public LOMaskingProvider(MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this.randomMaskingProvider = new RandomMaskingProvider(maskingConfiguration);
@@ -48,6 +60,13 @@ public class LOMaskingProvider implements MaskingProvider {
         this.entityType = DicomEntityType.valueOf(maskingConfiguration.getStringValue("dicom.lo.entityType"));
     }
 
+    /**
+     * Constructs a LOMaskingProvider (ignores the {@link SecureRandom} parameter).
+     *
+     * @param ignored              ignored random parameter
+     * @param maskingConfiguration the masking configuration
+     * @param factory              the masking provider factory
+     */
     public LOMaskingProvider(SecureRandom ignored, MaskingConfiguration maskingConfiguration, MaskingProviderFactory factory) {
         this(maskingConfiguration, factory);
     }

@@ -28,12 +28,19 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
+/** Privacy constraint that enforces a re-identification risk threshold using a population dataset linker. */
 public class ReidentificationRisk implements PrivacyConstraint {
+    /** The external population dataset stream. */
     private final InputStream populationDataset;
+    /** The link information used for dataset linkage. */
     private final Collection<LinkInfo> linkInformation;
+    /** Column metadata for quasi-identifier detection. */
     private final List<ColumnInformation> columnInformation;
+    /** The maximum permitted re-identification risk threshold. */
     private final double riskThreshold;
+    /** The linker used to match anonymized rows against the population. */
     private final AnonymizedDatasetLinker anonymizedDatasetLinker;
+    /** Whether quasi-identifier columns and linking columns are identical. */
     private final boolean quasiSameAsLinking;
 
     @Override
@@ -102,6 +109,14 @@ public class ReidentificationRisk implements PrivacyConstraint {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Constructs a ReidentificationRisk constraint.
+     *
+     * @param populationDataset the external population dataset stream
+     * @param linkInformation   the link information for dataset linkage
+     * @param columnInformation column metadata for quasi-identifier detection
+     * @param riskThreshold     the maximum permitted re-identification risk
+     */
     public ReidentificationRisk(InputStream populationDataset,
                                 Collection<LinkInfo> linkInformation,
                                 List<ColumnInformation> columnInformation,

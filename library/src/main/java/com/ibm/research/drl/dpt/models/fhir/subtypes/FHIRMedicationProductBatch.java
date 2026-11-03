@@ -21,24 +21,44 @@ package com.ibm.research.drl.dpt.models.fhir.subtypes;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/** FHIRMedicationProductBatch FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationProductBatch {
+    /** Constructs a FHIRMedicationProductBatch. */
+    public FHIRMedicationProductBatch() {}
+
     private String lotNumber;
     private String expirationDate;
 
+    /**
+     * Returns the expirationDate.
+     * @return the expirationDate
+     */
     public String getExpirationDate() {
         return expirationDate;
     }
 
+    /**
+     * Sets the expirationDate.
+     * @param expirationDate the expirationDate
+     */
     public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
+    /**
+     * Returns the lotNumber.
+     * @return the lotNumber
+     */
     public String getLotNumber() {
         return lotNumber;
     }
 
+    /**
+     * Sets the lotNumber.
+     * @param lotNumber the lotNumber
+     */
     public void setLotNumber(String lotNumber) {
         this.lotNumber = lotNumber;
     }

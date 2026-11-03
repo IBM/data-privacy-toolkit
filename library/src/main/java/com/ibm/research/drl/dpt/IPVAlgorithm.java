@@ -23,6 +23,15 @@ import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 
 import java.util.Collection;
 
+/**
+ * Interface for algorithms that discover individual privacy vulnerabilities (IPV) in a dataset.
+ */
 public interface IPVAlgorithm {
+    /**
+     * Applies the algorithm to the given dataset and returns the detected vulnerabilities.
+     *
+     * @param dataset the dataset to analyse
+     * @return collection of detected vulnerabilities
+     */
     Collection<IPVVulnerability> apply(IPVDataset dataset);
 }

@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.anonymization.informationloss;
 
+/** Options interface for configuring information-loss metrics. */
 public interface InformationMetricOptions {
     /**
      * Gets int value.

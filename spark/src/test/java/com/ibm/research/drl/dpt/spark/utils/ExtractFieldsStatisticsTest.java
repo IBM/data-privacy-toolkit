@@ -18,13 +18,10 @@ under the License.
 */
 package com.ibm.research.drl.dpt.spark.utils;
 
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalyst.encoders.RowEncoder;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
@@ -48,14 +45,12 @@ public class ExtractFieldsStatisticsTest {
 
     @BeforeEach
     public void setUp() {
-        spark = SparkSession.builder().sparkContext(
-                new SparkContext(
-                        new SparkConf(true).
-                                setMaster("local").
-                                setAppName("testing").
-                                set("spark.driver.bindAddress", "127.0.0.1")
-                )
-        ).getOrCreate();
+        spark = SparkSession.builder()
+                .master("local")
+                .appName("testing")
+                .config("spark.driver.bindAddress", "127.0.0.1")
+                .config("spark.driver.host", "127.0.0.1")
+                .getOrCreate();
     }
 
     @AfterEach
@@ -88,7 +83,7 @@ public class ExtractFieldsStatisticsTest {
     }
 
     private Dataset<Row> createDataset(List<List<Object>> data, StructType schema) {
-        return spark.createDataset(convertToRows(data), RowEncoder.apply(schema));
+        return spark.createDataFrame(convertToRows(data), schema);
     }
 
     private List<Row> convertToRows(List<List<Object>> data) {

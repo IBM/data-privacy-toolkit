@@ -30,6 +30,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * Manager for MSISDN (Mobile Subscriber Integrated Services Digital Network) country codes
+ * and US area codes.
+ */
 public class MSISDNManager {
 
     private static final Collection<ResourceEntry> resourceList =
@@ -42,6 +46,11 @@ public class MSISDNManager {
 
     private final static MSISDNManager MSISDN_MANAGER = new MSISDNManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the shared {@link MSISDNManager} instance
+     */
     public static MSISDNManager getInstance() {
         return MSISDN_MANAGER;
     }

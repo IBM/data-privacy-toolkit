@@ -129,9 +129,9 @@ public class FHIRJsonFormatProcessorTest {
     @Test
     public void testMaintainsDataTypeArrays() throws Exception {
         try (
-                InputStream configuration = this.getClass().getResourceAsStream("/fhir/masking-full.json");
-                InputStream is = this.getClass().getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json");
-                InputStream inputStream = this.getClass().getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json");
+                InputStream configuration = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/masking-full.json");
+                InputStream is = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json");
+                InputStream inputStream = FHIRJsonFormatProcessorTest.class.getResourceAsStream("/fhir/MedicationOrder-arrays-230986.json");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 PrintStream output = new PrintStream(baos)
         ) {
@@ -302,7 +302,7 @@ public class FHIRJsonFormatProcessorTest {
 
         for (String filename : filenames) {
             try (
-                    InputStream inputStream = this.getClass().getResourceAsStream(filename);
+                    InputStream inputStream = FHIRJsonFormatProcessorTest.class.getResourceAsStream(filename);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     PrintStream output = new PrintStream(baos)
             ) {

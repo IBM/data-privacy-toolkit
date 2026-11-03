@@ -34,7 +34,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+/** Format processor for DOCX free-text documents. */
 public class DOCXFreeTextFormatProcessor implements FreeTextFormatProcessor {
+    /** Constructs a DOCXFreeTextFormatProcessor. */
+    public DOCXFreeTextFormatProcessor() {}
     private static final Logger logger = LogManager.getLogger(DOCXFreeTextFormatProcessor.class);
 
     @Override

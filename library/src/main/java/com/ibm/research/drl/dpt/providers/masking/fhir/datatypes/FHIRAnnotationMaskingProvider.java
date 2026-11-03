@@ -31,21 +31,39 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRAnnotationMaskingProvider FHIR datatype. */
 public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
+    /** The base field path for this annotation. */
     private final String fieldPath;
 
+    /** Whether to remove extensions from the annotation. */
     private final boolean removeExtensions;
+    /** Whether to remove the text element. */
     private final boolean removeText;
+    /** Whether to remove the authorString element. */
     private final boolean removeAuthorString;
 
+    /** Whether to mask the author reference element. */
     private final boolean maskAuthorReference;
+    /** Whether to mask the time element. */
     private final boolean maskTime;
+    /** Masking provider for the author reference. */
     private final FHIRReferenceMaskingProvider authorReferenceMaskingProvider;
+    /** Masking provider for the time element. */
     private final MaskingProvider timeMaskingProvider;
 
+    /** JSON path to the author reference field. */
     private final String AUTHORREFERENCE_FIELD_PATH;
+    /** JSON path to the time field. */
     private final String TIME_FIELD_PATH;
 
+    /**
+     * Constructs a FHIRAnnotationMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRAnnotationMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -67,6 +85,11 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRAnnotation obj = JsonUtils.MAPPER.treeToValue(node, FHIRAnnotation.class);
@@ -77,6 +100,11 @@ public class FHIRAnnotationMaskingProvider extends AbstractComplexMaskingProvide
         }
     }
 
+    /**
+     * Masks a FHIR Annotation object.
+     * @param annotation the FHIRAnnotation to mask
+     * @return the masked FHIRAnnotation
+     */
     public FHIRAnnotation mask(FHIRAnnotation annotation) {
         if (annotation == null) {
             return null;

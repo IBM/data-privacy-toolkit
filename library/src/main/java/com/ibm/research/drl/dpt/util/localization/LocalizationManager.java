@@ -34,6 +34,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+/**
+ * Singleton manager that loads and provides access to localised data resources
+ * (city names, first names, etc.) for supported country codes.
+ */
 public class LocalizationManager {
     private static final String COMMON = "_common";
 
@@ -203,6 +207,11 @@ public class LocalizationManager {
         return getResources(resource, enabledCountries);
     }
 
+    /**
+     * Registers a country code so that resources for that country are loaded.
+     *
+     * @param country the country code to register (whitespace is trimmed)
+     */
     public synchronized void registerCountryCode(String country) {
         enabledCountries.add(country.trim());
     }

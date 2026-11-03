@@ -23,14 +23,25 @@ import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarch
 
 import java.util.Set;
 
+/** Generalization hierarchy for height values (in centimetres). */
 public class HeightHierarchy implements GeneralizationHierarchy {
     private static final HeightHierarchy instance = new HeightHierarchy();
 
+    /**
+     * Returns the singleton instance of this hierarchy.
+     *
+     * @return the singleton HeightHierarchy
+     */
     public static HeightHierarchy getInstance() {
         return instance;
     }
 
+    /** Constructs a HeightHierarchy (private — use {@link #getInstance()}). */
+    private HeightHierarchy() {}
+
+    /** The top-level generalization term. */
     private final String topTerm = "*";
+    /** Generalization step sizes in centimetres. */
     private final int[] steps = {1, 2, 4, 8, 10, 20, 30};
 
     @Override

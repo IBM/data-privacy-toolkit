@@ -27,7 +27,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/** Identifier for US Social Security Number values. */
 public class SSNUSIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
+
+    /** Constructs a SSNUSIdentifier. */
+    public SSNUSIdentifier() {}
+
     private static final Set<String> prefixes = new HashSet<>(Arrays.asList("SS #", "SS# ", "SS # OF", "SS# OF", "SS:", "SSN:", "SS"));
 
     private final static String[] appropriateNames = new String[]{

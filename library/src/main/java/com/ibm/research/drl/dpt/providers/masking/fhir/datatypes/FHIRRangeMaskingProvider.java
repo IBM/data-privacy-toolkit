@@ -28,19 +28,35 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 
 import java.util.Set;
 
+/** FHIRRangeMaskingProvider FHIR datatype. */
 public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> {
 
+    /** Whether to delete the low quantity element. */
     private final boolean deleteLow;
+    /** Whether to delete the high quantity element. */
     private final boolean deleteHigh;
+    /** Whether to mask the low quantity element. */
     private final boolean maskLow;
+    /** Whether to mask the high quantity element. */
     private final boolean maskHigh;
 
+    /** Masking provider for the low element. */
     private final FHIRQuantityMaskingProvider lowMaskingProvider;
+    /** Masking provider for the high element. */
     private final FHIRQuantityMaskingProvider highMaskingProvider;
 
+    /** JSON path to the low field. */
     private final String LOW_PATH;
+    /** JSON path to the high field. */
     private final String HIGH_PATH;
 
+    /**
+     * Constructs a FHIRRangeMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRRangeMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -59,6 +75,11 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRRange obj = JsonUtils.MAPPER.treeToValue(node, FHIRRange.class);
@@ -69,6 +90,11 @@ public class FHIRRangeMaskingProvider extends AbstractComplexMaskingProvider<Jso
         }
     }
 
+    /**
+     * Masks a FHIR Range object.
+     * @param range the FHIRRange to mask
+     * @return the masked FHIRRange
+     */
     public FHIRRange mask(FHIRRange range) {
         if (this.deleteHigh) {
             range.setHigh(null);

@@ -19,20 +19,59 @@ under the License.
 package com.ibm.research.drl.dpt.processors.records;
 
 
+/** Abstract base for records that support JSON-pointer-style multi-path field access. */
 public abstract class MultipathRecord implements Record {
 
+    /** Constructs a MultipathRecord. */
+    protected MultipathRecord() {}
+
+
+    /**
+     * Generates all concrete field paths matching the given pattern.
+     *
+     * @param pattern the path pattern
+     * @return iterable of concrete field paths
+     */
     public abstract Iterable<String> generatePaths(String pattern);
 
+    /**
+     * Returns whether the given field name is an absolute path.
+     *
+     * @param fieldName the field name to check
+     * @return true if absolute
+     */
     public abstract boolean isAbsolute(String fieldName);
 
+    /**
+     * Returns whether the field reference points to a single element (not an array).
+     *
+     * @param fieldName the field reference
+     * @return true if single element
+     */
     public abstract boolean isSingleElement(String fieldName);
 
+    /**
+     * Returns the base path for the given path (parent path).
+     *
+     * @param path the full path
+     * @return the base path
+     */
     public abstract String getBasepath(String path);
 
+    /**
+     * Returns field references that may include generalized/wildcard paths.
+     *
+     * @return iterable of generalized field references
+     */
     public Iterable<String> getFieldReferencesWithGeneralization() {
         return getFieldReferences();
     }
 
+    /**
+     * Formats this record to its serialized string form.
+     *
+     * @return the formatted record string
+     */
     protected abstract String formatRecord();
 
     @Override
@@ -40,6 +79,11 @@ public abstract class MultipathRecord implements Record {
         return formatRecord();
     }
 
+    /**
+     * Formats this record as a byte array.
+     *
+     * @return the record bytes
+     */
     protected byte[] formatRecordBytes() {
         return formatRecord().getBytes();
     }
@@ -54,6 +98,13 @@ public abstract class MultipathRecord implements Record {
         return false;
     }
 
+    /**
+     * Returns whether the given field identifier matches the given pattern (which may contain {@code *}).
+     *
+     * @param pattern         the path pattern
+     * @param fieldIdentifier the concrete field path
+     * @return {@code true} if the path matches the pattern
+     */
     public boolean isMatching(String pattern, String fieldIdentifier) {
         if (pattern.contains("*")) {
             String[] patternParts = pattern.split("/");
@@ -74,7 +125,19 @@ public abstract class MultipathRecord implements Record {
         }
     }
 
+    /**
+     * Returns whether the field identified by the given path holds a primitive (non-object) value.
+     *
+     * @param fieldIdentifier the field path
+     * @return {@code true} if the field value is a primitive type
+     */
     public abstract boolean isPrimitiveType(String fieldIdentifier);
 
+    /**
+     * Returns the raw field object at the given path.
+     *
+     * @param fieldIdentifier the field path
+     * @return the field value as an {@link Object}
+     */
     public abstract Object getFieldObject(String fieldIdentifier);
 }

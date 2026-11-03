@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
  * The type Email identifier.
  */
 public class EmailIdentifier extends AbstractRegexBasedIdentifier {
+    /** Constructs an EmailIdentifier. */
+    public EmailIdentifier() {}
     private static final Collection<Pattern> emailPatterns = new ArrayList<>(List.of(
             Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")
     ));

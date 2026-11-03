@@ -28,13 +28,27 @@ import org.apache.logging.log4j.LogManager;
 import java.security.SecureRandom;
 import java.util.*;
 
+/**
+ * Differential privacy mechanism for categorical domains using the exponential mechanism.
+ */
 public class Categorical implements DPMechanism {
+    /**
+     * Constructs a new Categorical mechanism.
+     */
+    public Categorical() {
+    }
     private static final Logger log = LogManager.getLogger(Categorical.class);
+    /** Random number generator used for randomisation. */
     private final Random rnd = new SecureRandom();
+    /** The privacy budget. */
     private double epsilon;
+    /** The generalization hierarchy for the categorical domain. */
     private GeneralizationHierarchy hierarchy;
+    /** Pre-computed utility values, keyed by hash of (value1, value2). */
     private Map<Integer, Double> utilityFunction = new HashMap<>();
+    /** Pre-computed normalising constants per base value. */
     private Map<String, Double> normalisingConstant = new HashMap<>();
+    /** The set of leaf values in the hierarchy domain. */
     private Set<String> hierarchyLeaves = new HashSet<>();
 
     @Override
@@ -182,6 +196,13 @@ public class Categorical implements DPMechanism {
         return Math.exp(- this.epsilon * getUtility(value1, value2) / 2);
     }
 
+    /**
+     * Returns the pre-computed utility value for a pair of values.
+     *
+     * @param value1 the first value
+     * @param value2 the second value
+     * @return the utility score
+     */
     public double getUtility(String value1, String value2) {
         return this.utilityFunction.get(getHashValue(value1, value2));
     }

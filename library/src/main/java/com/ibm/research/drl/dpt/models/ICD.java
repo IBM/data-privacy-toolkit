@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents an ICD (International Classification of Diseases) entry. */
 public class ICD {
 
     private final String code;

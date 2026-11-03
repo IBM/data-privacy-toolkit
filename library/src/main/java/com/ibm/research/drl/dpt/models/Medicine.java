@@ -18,8 +18,13 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Model representing a medicine name, optionally associated with a country code.
+ */
 public class Medicine implements LocalizedEntity {
+    /** The medicine name. */
     private final String name;
+    /** The country code this name belongs to. */
     private final String nameCountryCode;
 
     /**

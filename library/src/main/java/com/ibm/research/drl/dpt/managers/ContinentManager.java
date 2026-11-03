@@ -31,16 +31,27 @@ import org.apache.commons.csv.CSVRecord;
 import java.security.SecureRandom;
 import java.util.*;
 
+/**
+ * Manager for continent data loaded from localization resources.
+ */
 public class ContinentManager extends ResourceBasedManager<Continent> {
     private static final ContinentManager CONTINENT_MANAGER = new ContinentManager();
 
+    /**
+     * Returns the singleton instance of ContinentManager.
+     *
+     * @return the singleton instance
+     */
     public static ContinentManager getInstance() {
         return CONTINENT_MANAGER;
     }
 
+    /** Map from country code to the list of continents. */
     private Map<String, List<Continent>> continentListMap;
+    /** KD-tree for spatial lookups, or {@code null} if not yet built. */
     private Map<String, LatLonKDTree<Continent>> latLonTree = null;
 
+    /** Random number generator. */
     private final SecureRandom random = new SecureRandom();
 
     private ContinentManager() {

@@ -27,7 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Information loss metric based on the average equivalence class size (AECS).
+ */
 public class AverageEquivalenceClassSize implements InformationMetric {
+    /**
+     * Constructs a new AverageEquivalenceClassSize.
+     */
+    public AverageEquivalenceClassSize() {
+    }
     private List<Partition> partitions;
     private double total_records;
     private boolean normalized;

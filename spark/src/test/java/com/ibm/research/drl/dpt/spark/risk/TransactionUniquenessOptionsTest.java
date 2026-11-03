@@ -32,7 +32,7 @@ public class TransactionUniquenessOptionsTest {
     
     @Test
     public void testValidConfiguration() throws Exception {
-        InputStream inputStream = this.getClass().getResourceAsStream("/validTUconf.json");
+        InputStream inputStream = TransactionUniquenessOptionsTest.class.getResourceAsStream("/validTUconf.json");
         JsonNode configuration = OBJECT_MAPPER.readTree(inputStream);
         
         TransactionUniquenessOptions options = new TransactionUniquenessOptions(configuration);
@@ -42,7 +42,7 @@ public class TransactionUniquenessOptionsTest {
 
     @Test
     public void testValidConfigurationWithJoin() throws Exception {
-        InputStream inputStream = this.getClass().getResourceAsStream("/validTUconfWithJoin.json");
+        InputStream inputStream = TransactionUniquenessOptionsTest.class.getResourceAsStream("/validTUconfWithJoin.json");
         JsonNode configuration = OBJECT_MAPPER.readTree(inputStream);
 
         TransactionUniquenessOptions options = new TransactionUniquenessOptions(configuration);

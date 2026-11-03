@@ -26,22 +26,42 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
 import java.util.Collection;
 
+/** FHIRContractTermActor FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRContractTermActor {
+    /** Constructs a FHIRContractTermActor. */
+    public FHIRContractTermActor() {}
 
+
+    /**
+     * Returns the entity.
+     * @return the entity
+     */
     public FHIRReference getEntity() {
         return entity;
     }
 
+    /**
+     * Sets the entity.
+     * @param entity the entity
+     */
     public void setEntity(FHIRReference entity) {
         this.entity = entity;
     }
 
+    /**
+     * Returns the role.
+     * @return the role
+     */
     public Collection<FHIRCodeableConcept> getRole() {
         return role;
     }
 
+    /**
+     * Sets the role.
+     * @param role the role
+     */
     public void setRole(Collection<FHIRCodeableConcept> role) {
         this.role = role;
     }

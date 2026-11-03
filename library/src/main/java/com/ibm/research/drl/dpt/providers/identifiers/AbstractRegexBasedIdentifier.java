@@ -21,7 +21,15 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+/**
+ * Abstract base class for identifiers that use regular expression patterns for matching.
+ */
 public abstract class AbstractRegexBasedIdentifier extends AbstractIdentifier {
+    /**
+     * Constructs a new AbstractRegexBasedIdentifier.
+     */
+    public AbstractRegexBasedIdentifier() {
+    }
 
     /**
      * Gets patterns.
@@ -30,6 +38,13 @@ public abstract class AbstractRegexBasedIdentifier extends AbstractIdentifier {
      */
     protected abstract Collection<Pattern> getPatterns();
 
+    /**
+     * Performs a quick pre-check before running the full regex match. Subclasses may override
+     * to reject obviously invalid inputs early.
+     *
+     * @param data the input data to check
+     * @return true if the input should proceed to full regex matching, false to reject immediately
+     */
     protected boolean quickCheck(String data) {
         return true;
     }

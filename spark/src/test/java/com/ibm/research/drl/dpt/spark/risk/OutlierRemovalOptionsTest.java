@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OutlierRemovalOptionsTest {
     @Test
     public void testValidConfiguration() throws Exception {
-        try (InputStream inputStream = getClass().getResourceAsStream("/outlierRemovalValid.json")) {
+        try (InputStream inputStream = OutlierRemovalOptionsTest.class.getResourceAsStream("/outlierRemovalValid.json")) {
             OutlierRemovalOptions options = new ObjectMapper().readValue(inputStream, OutlierRemovalOptions.class);
 
             assertNotNull(options);

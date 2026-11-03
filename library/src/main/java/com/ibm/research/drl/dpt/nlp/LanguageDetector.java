@@ -18,7 +18,16 @@ under the License.
 */
 package com.ibm.research.drl.dpt.nlp;
 
+/**
+ * Strategy interface for detecting the natural language of a text string.
+ */
 public interface LanguageDetector {
+    /**
+     * Detects the language of the given input text.
+     *
+     * @param input the text to analyse
+     * @return the detected {@link Language}
+     */
     Language detectLanguage(String input);
 }
 

@@ -25,9 +25,13 @@ import com.ibm.research.drl.dpt.util.RandomGenerators;
 
 import java.security.SecureRandom;
 
+/** Masking provider that replaces IMSI values with randomly generated IMSI values. */
 public class IMSIMaskingProvider implements MaskingProvider {
+    /** Shared IMSI manager instance. */
     private static final IMSIManager imsiManager = IMSIManager.getInstance();
+    /** Whether to preserve the Mobile Country Code (MCC). */
     private final boolean preserveMCC;
+    /** Whether to preserve the Mobile Network Code (MNC). */
     private final boolean preserveMNC;
 
     /**

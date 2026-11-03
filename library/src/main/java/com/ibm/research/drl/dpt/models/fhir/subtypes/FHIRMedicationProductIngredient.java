@@ -23,25 +23,45 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRatio;
 
+/** FHIRMedicationProductIngredient FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationProductIngredient {
+    /** Constructs a FHIRMedicationProductIngredient. */
+    public FHIRMedicationProductIngredient() {}
+
 
     private FHIRReference item;
     private FHIRRatio amount;
 
+    /**
+     * Returns the amount.
+     * @return the amount
+     */
     public FHIRRatio getAmount() {
         return amount;
     }
 
+    /**
+     * Sets the amount.
+     * @param amount the amount
+     */
     public void setAmount(FHIRRatio amount) {
         this.amount = amount;
     }
 
+    /**
+     * Returns the item.
+     * @return the item
+     */
     public FHIRReference getItem() {
         return item;
     }
 
+    /**
+     * Sets the item.
+     * @param item the item
+     */
     public void setItem(FHIRReference item) {
         this.item = item;
     }

@@ -19,9 +19,17 @@ under the License.
 package com.ibm.research.drl.dpt.configuration;
 
 
+/** Constants representing the behaviour when masking fails. */
 public class FailMode {
+    /** Not instantiable. */
+    private FailMode() {}
+
+    /** Return the original value on failure. */
     public static final int RETURN_ORIGINAL = 1;
+    /** Return an empty string on failure. */
     public static final int RETURN_EMPTY = 2;
+    /** Throw an error on failure. */
     public static final int THROW_ERROR = 3;
+    /** Generate a random value on failure. */
     public static final int GENERATE_RANDOM = 4;
 }

@@ -31,8 +31,19 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * Risk metric based on a Binomial distribution model for estimating re-identification risk.
+ */
 public class BinomialRiskMetric implements RiskMetric {
+    /**
+     * Constructs a new BinomialRiskMetric.
+     */
+    public BinomialRiskMetric() {
+    }
+
+    /** Option key for the total population size. */
     public static final String POPULATION = "N";
+    /** Option key for whether to use a global sampling probability. */
     public static final String USE_GLOBAL_P = "useGlobalP";
 
     private List<PoissonDistribution> F;
@@ -51,6 +62,12 @@ public class BinomialRiskMetric implements RiskMetric {
         return "BINOM";
     }
 
+    /**
+     * Samples a positive integer from the given Poisson distribution.
+     *
+     * @param F the Poisson distribution
+     * @return a positive sample from the distribution
+     */
     public static int extractFk(PoissonDistribution F) {
         int Fk;
         do {
@@ -92,6 +109,11 @@ public class BinomialRiskMetric implements RiskMetric {
         boolean bool = Boolean.parseBoolean(useGlobalP);
     }
 
+    /**
+     * Reports the maximum risk using a local (per-equivalence-class) sampling probability.
+     *
+     * @return the maximum risk estimate
+     */
     public double reportLocalP() {
         double risk = 0.0;
 
@@ -109,6 +131,11 @@ public class BinomialRiskMetric implements RiskMetric {
         return risk;
     }
 
+    /**
+     * Reports the maximum risk using a global sampling probability.
+     *
+     * @return the maximum risk estimate
+     */
     public double reportGlobalP() {
         double risk = 0.0;
 
@@ -124,6 +151,14 @@ public class BinomialRiskMetric implements RiskMetric {
         return risk;
     }
 
+    /**
+     * Computes the risk for an equivalence class using the binomial model.
+     *
+     * @param Fk    the estimated population size of the equivalence class
+     * @param p     the sampling probability
+     * @param tries the number of trials
+     * @return the computed risk value
+     */
     public static double risk(int Fk, double p, long tries) {
         double k_risk = 0.0;
         final BinomialDistribution binomialDistribution = new BinomialDistribution(Fk, p);

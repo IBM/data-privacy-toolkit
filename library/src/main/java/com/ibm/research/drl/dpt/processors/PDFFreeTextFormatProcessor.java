@@ -43,7 +43,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+/** Format processor that extracts and masks free text from PDF documents. */
 public class PDFFreeTextFormatProcessor implements FreeTextFormatProcessor {
+
+    /** Constructs a PDFFreeTextFormatProcessor. */
+    public PDFFreeTextFormatProcessor() {}
+
     private static final Logger logger = LogManager.getLogger(PDFFreeTextFormatProcessor.class);
 
     @Override

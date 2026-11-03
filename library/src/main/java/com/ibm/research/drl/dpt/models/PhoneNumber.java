@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a parsed telephone number with country code, area code, and subscriber number. */
 public class PhoneNumber {
 
     private final String prefix;

@@ -23,29 +23,57 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRPeriod;
 
+/** FHIRGroupMember FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRGroupMember {
+    /** Constructs a FHIRGroupMember. */
+    public FHIRGroupMember() {}
+
+    /**
+     * Returns the entity.
+     * @return the entity
+     */
     public FHIRReference getEntity() {
         return entity;
     }
 
+    /**
+     * Sets the entity.
+     * @param entity the entity
+     */
     public void setEntity(FHIRReference entity) {
         this.entity = entity;
     }
 
+    /**
+     * Returns the period.
+     * @return the period
+     */
     public FHIRPeriod getPeriod() {
         return period;
     }
 
+    /**
+     * Sets the period.
+     * @param period the period
+     */
     public void setPeriod(FHIRPeriod period) {
         this.period = period;
     }
 
+    /**
+     * Returns the inactive.
+     * @return the inactive
+     */
     public boolean isInactive() {
         return inactive;
     }
 
+    /**
+     * Sets the inactive.
+     * @param inactive the inactive
+     */
     public void setInactive(boolean inactive) {
         this.inactive = inactive;
     }

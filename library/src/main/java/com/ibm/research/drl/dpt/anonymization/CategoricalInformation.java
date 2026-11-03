@@ -25,29 +25,74 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchy;
 import com.ibm.research.drl.dpt.anonymization.hierarchies.GeneralizationHierarchyFactory;
 
+/**
+ * Column information for categorical quasi-identifier columns, backed by a generalization hierarchy.
+ */
 public class CategoricalInformation implements ColumnInformation {
+    /** The column type. */
     private final ColumnType columnType;
+    /** The generalization hierarchy. */
     private final GeneralizationHierarchy hierarchy;
+    /** The column weight. */
     private final double weight;
+    /** The maximum generalization level, or -1 for no limit. */
     private final int maximumLevel;
+    /** Whether this column is used for linking. */
     private final boolean forLinking;
 
+    /**
+     * Constructs a CategoricalInformation with default weight and no linking.
+     *
+     * @param hierarchy  the generalization hierarchy
+     * @param columnType the column type
+     */
     public CategoricalInformation(GeneralizationHierarchy hierarchy, ColumnType columnType) {
         this(hierarchy, columnType, 1.0);
     }
 
+    /**
+     * Constructs a CategoricalInformation with default weight and specified linking flag.
+     *
+     * @param hierarchy  the generalization hierarchy
+     * @param columnType the column type
+     * @param forLinking whether this column is used for linking
+     */
     public CategoricalInformation(GeneralizationHierarchy hierarchy, ColumnType columnType, boolean forLinking) {
         this(hierarchy, columnType, 1.0, -1, forLinking);
     }
 
+    /**
+     * Constructs a CategoricalInformation with a specified weight and no maximum level.
+     *
+     * @param hierarchy  the generalization hierarchy
+     * @param columnType the column type
+     * @param weight     the column weight
+     */
     public CategoricalInformation(GeneralizationHierarchy hierarchy, ColumnType columnType, double weight) {
         this(hierarchy, columnType, weight, -1);
     }
 
+    /**
+     * Constructs a CategoricalInformation with a specified weight and maximum level.
+     *
+     * @param hierarchy    the generalization hierarchy
+     * @param columnType   the column type
+     * @param weight       the column weight
+     * @param maximumLevel the maximum generalization level, or -1 for no limit
+     */
     public CategoricalInformation(GeneralizationHierarchy hierarchy, ColumnType columnType, double weight, int maximumLevel) {
         this(hierarchy, columnType, weight, maximumLevel, false);
     }
 
+    /**
+     * Constructs a CategoricalInformation with all parameters specified.
+     *
+     * @param hierarchy    the generalization hierarchy
+     * @param columnType   the column type
+     * @param weight       the column weight
+     * @param maximumLevel the maximum generalization level, or -1 for no limit
+     * @param forLinking   whether this column is used for linking
+     */
     public CategoricalInformation(GeneralizationHierarchy hierarchy, ColumnType columnType, double weight, int maximumLevel, boolean forLinking) {
         this.columnType = columnType;
         this.hierarchy = hierarchy;
@@ -92,10 +137,20 @@ public class CategoricalInformation implements ColumnInformation {
         return forLinking;
     }
 
+    /**
+     * Returns the maximum generalization level allowed for this column.
+     *
+     * @return the maximum level, or -1 if no limit
+     */
     public int getMaximumLevel() {
         return maximumLevel;
     }
 
+    /**
+     * Returns the generalization hierarchy for this column.
+     *
+     * @return the generalization hierarchy
+     */
     public GeneralizationHierarchy getHierarchy() {
         return this.hierarchy;
     }

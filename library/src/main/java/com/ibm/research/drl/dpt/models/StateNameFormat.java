@@ -18,7 +18,10 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** The format in which a US state name should be represented. */
 public enum StateNameFormat {
+    /** Full state name (e.g. "California"). */
     FULL_NAME,
+    /** Two-letter abbreviation (e.g. "CA"). */
     ABBREVIATION
 }

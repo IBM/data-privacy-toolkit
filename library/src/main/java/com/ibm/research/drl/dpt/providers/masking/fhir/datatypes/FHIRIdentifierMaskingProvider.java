@@ -30,29 +30,52 @@ import com.ibm.research.drl.dpt.util.JsonUtils;
 import java.io.Serializable;
 import java.util.Set;
 
+/** FHIRIdentifierMaskingProvider FHIR datatype. */
 public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvider<JsonNode> implements Serializable {
 
+    /** Whether to mask the period element. */
     private final boolean maskPeriod;
+    /** Whether to mask the type element. */
     private final boolean maskType;
+    /** Whether to mask the system element. */
     private final boolean maskSystem;
+    /** Whether to mask the value element. */
     private final boolean maskValue;
+    /** Whether to mask the assigner element. */
     private final boolean maskAssigner;
+    /** Whether to remove extensions. */
     private final boolean removeExtensions;
 
+    /** Masking provider for the value element. */
     private final MaskingProvider maskingProviderForValue;
+    /** Masking provider for the system element. */
     private final MaskingProvider systemMaskingProvider;
 
-
+    /** Masking provider for the period element. */
     private final FHIRPeriodMaskingProvider periodMaskingProvider;
+    /** Masking provider for the type element. */
     private final FHIRCodeableConceptMaskingProvider typeMaskingProvider;
+    /** Masking provider for the assigner element. */
     private final FHIRReferenceMaskingProvider assignerMaskingProvider;
 
+    /** JSON path to the value field. */
     private final String VALUE_PATH;
+    /** JSON path to the period field. */
     private final String PERIOD_PATH;
+    /** JSON path to the type field. */
     private final String TYPE_PATH;
+    /** JSON path to the system field. */
     private final String SYSTEM_PATH;
+    /** JSON path to the assigner field. */
     private final String ASSIGNER_PATH;
 
+    /**
+     * Constructs a FHIRIdentifierMaskingProvider.
+     * @param maskingConfiguration the maskingConfiguration
+     * @param maskedFields the maskedFields
+     * @param fieldPath the fieldPath
+     * @param factory the factory
+     */
     public FHIRIdentifierMaskingProvider(MaskingConfiguration maskingConfiguration, Set<String> maskedFields, final String fieldPath, MaskingProviderFactory factory) {
         super("fhir", maskingConfiguration, maskedFields, factory);
 
@@ -86,6 +109,11 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
     }
 
     @Override
+    /**
+     * Masks a JsonNode object.
+     * @param node the JsonNode to mask
+     * @return the masked JsonNode
+     */
     public JsonNode mask(JsonNode node) {
         try {
             FHIRIdentifier obj = JsonUtils.MAPPER.treeToValue(node, FHIRIdentifier.class);
@@ -96,6 +124,11 @@ public class FHIRIdentifierMaskingProvider extends AbstractComplexMaskingProvide
         }
     }
 
+    /**
+     * Masks a FHIR Identifier object.
+     * @param identifier the FHIRIdentifier to mask
+     * @return the masked FHIRIdentifier
+     */
     public FHIRIdentifier mask(FHIRIdentifier identifier) {
         if (identifier == null) {
             return null;

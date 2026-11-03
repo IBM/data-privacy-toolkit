@@ -24,47 +24,91 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRQuantity;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRRange;
 
+/** FHIRObservationReferenceRange FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRObservationReferenceRange {
+    /** Constructs a FHIRObservationReferenceRange. */
+    public FHIRObservationReferenceRange() {}
 
 
+
+    /**
+     * Returns the low.
+     * @return the low
+     */
     public FHIRQuantity getLow() {
         return low;
     }
 
+    /**
+     * Sets the low.
+     * @param low the low
+     */
     public void setLow(FHIRQuantity low) {
         this.low = low;
     }
 
+    /**
+     * Returns the high.
+     * @return the high
+     */
     public FHIRQuantity getHigh() {
         return high;
     }
 
+    /**
+     * Sets the high.
+     * @param high the high
+     */
     public void setHigh(FHIRQuantity high) {
         this.high = high;
     }
 
+    /**
+     * Returns the meaning.
+     * @return the meaning
+     */
     public FHIRCodeableConcept getMeaning() {
         return meaning;
     }
 
+    /**
+     * Sets the meaning.
+     * @param meaning the meaning
+     */
     public void setMeaning(FHIRCodeableConcept meaning) {
         this.meaning = meaning;
     }
 
+    /**
+     * Returns the age.
+     * @return the age
+     */
     public FHIRRange getAge() {
         return age;
     }
 
+    /**
+     * Sets the age.
+     * @param age the age
+     */
     public void setAge(FHIRRange age) {
         this.age = age;
     }
 
+    /**
+     * Returns the text.
+     * @return the text
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * Sets the text.
+     * @param text the text
+     */
     public void setText(String text) {
         this.text = text;
     }

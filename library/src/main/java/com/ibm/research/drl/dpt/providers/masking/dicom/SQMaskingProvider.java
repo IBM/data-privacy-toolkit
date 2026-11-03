@@ -23,15 +23,27 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 
 import java.security.SecureRandom;
 
+/** DICOM SQ (sequence) masking provider. */
 public class SQMaskingProvider implements MaskingProvider {
     @Override
     public String mask(String identifier) {
         return null;
     }
 
+    /**
+     * Constructs a SQMaskingProvider.
+     *
+     * @param maskingConfiguration the masking configuration
+     */
     public SQMaskingProvider(MaskingConfiguration maskingConfiguration) {
     }
 
+    /**
+     * Constructs a SQMaskingProvider.
+     *
+     * @param random               the secure random source (unused, retained for API compatibility)
+     * @param maskingConfiguration the masking configuration
+     */
     public SQMaskingProvider(SecureRandom random, MaskingConfiguration maskingConfiguration) {
         this(maskingConfiguration);
     }

@@ -27,8 +27,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/** Utility methods for verifying quasi-identifier properties of datasets. */
 public class VerificationUtils {
 
+    /** Not instantiable. */
+    private VerificationUtils() {}
+
+    /**
+     * Builds a map from combined quasi-identifier values to the set of row indices that share those values.
+     *
+     * @param itemSet the set of column indices forming the quasi-identifier
+     * @param dataset the dataset to process
+     * @return a map from combined value strings to sets of row indices
+     */
     public static Map<String, Set<Integer>> buildValueMap(ItemSet itemSet, IPVDataset dataset) {
         Map<String, Set<Integer>> valueMap = new HashMap<>();
 
@@ -53,6 +64,14 @@ public class VerificationUtils {
         return valueMap;
     }
 
+    /**
+     * Determines whether an item set is a quasi-identifier with respect to k.
+     *
+     * @param itemSet the set of column indices to test
+     * @param dataset the dataset to check
+     * @param k       the minimum group size required for non-identification
+     * @return {@code true} if some combination of values appears in fewer than {@code k} rows
+     */
     public static boolean isQuasiIdentifier(ItemSet itemSet, IPVDataset dataset, int k) {
         Map<String, Set<Integer>> valueMap = buildValueMap(itemSet, dataset);
 

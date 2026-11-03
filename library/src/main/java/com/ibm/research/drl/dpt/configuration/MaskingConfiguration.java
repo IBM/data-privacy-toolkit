@@ -44,6 +44,12 @@ public interface MaskingConfiguration {
      */
     int getIntValue(String key);
 
+    /**
+     * Gets double value.
+     *
+     * @param key the key
+     * @return the double value
+     */
     double getDoubleValue(String key);
 
     /**
@@ -62,8 +68,20 @@ public interface MaskingConfiguration {
      */
     String getStringValue(String key);
 
+    /**
+     * Gets a JSON node value.
+     *
+     * @param key the key
+     * @return the JSON node value
+     */
     JsonNode getJsonNodeValue(String key);
 
+    /**
+     * Gets all string values whose keys start with the given prefix.
+     *
+     * @param key the key prefix
+     * @return the matching string values
+     */
     Collection<String> getStringValueWithPrefixMatch(String key);
 
     /**
@@ -75,9 +93,16 @@ public interface MaskingConfiguration {
     void setValue(String key, Object value);
 
     /**
-     * @return the configuration manager that generated this configuration
+     * Returns the configuration manager that generated this configuration.
+     *
+     * @return the configuration manager
      */
     ConfigurationManager getConfigurationManager();
 
+    /**
+     * Sets the configuration manager for this configuration.
+     *
+     * @param configurationManager the configuration manager
+     */
     void setConfigurationManager(ConfigurationManager configurationManager);
 }

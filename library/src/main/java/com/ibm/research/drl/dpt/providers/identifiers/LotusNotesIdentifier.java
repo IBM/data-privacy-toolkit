@@ -27,7 +27,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for IBM Lotus Notes / HCL Notes address strings.
+ */
 public class LotusNotesIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
+    /** Constructs a LotusNotesIdentifier. */
+    public LotusNotesIdentifier() {}
     private static final String validIdentifier = "(?:\\w(?:[\\w\\s-_])*)";
     private static final List<Pattern> patterns = List.of(
             Pattern.compile(

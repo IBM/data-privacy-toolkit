@@ -20,6 +20,10 @@ package com.ibm.research.drl.dpt.anonymization.ola;
 
 import java.util.Collection;
 
+/**
+ * Represents a single node in the OLA generalization lattice, carrying per-dimension
+ * generalization levels and anonymity status.
+ */
 public class LatticeNode {
     private final int[] values;
     private double suppressionRate;
@@ -27,26 +31,56 @@ public class LatticeNode {
     private Double informationLoss = null;
     private boolean tagged = false;
 
+    /**
+     * Returns whether this node has been tagged during lattice exploration.
+     *
+     * @return {@code true} if tagged
+     */
     public boolean isTagged() {
         return tagged;
     }
 
+    /**
+     * Sets the tagged flag for this node.
+     *
+     * @param tagged {@code true} to mark this node as tagged
+     */
     public void setTagged(boolean tagged) {
         this.tagged = tagged;
     }
 
+    /**
+     * Returns the information loss value computed for this node, or {@code null} if not yet computed.
+     *
+     * @return the information loss, or {@code null}
+     */
     public Double getInformationLoss() {
         return informationLoss;
     }
 
+    /**
+     * Sets the information loss value for this node.
+     *
+     * @param informationLoss the information loss value
+     */
     public void setInformationLoss(Double informationLoss) {
         this.informationLoss = informationLoss;
     }
 
+    /**
+     * Returns whether this node is anonymous, or {@code null} if not yet evaluated.
+     *
+     * @return {@code true} if anonymous, {@code false} if not, or {@code null} if unknown
+     */
     public Boolean getAnonymous() {
         return isAnonymous;
     }
 
+    /**
+     * Sets the anonymity status of this node.
+     *
+     * @param anonymous {@code true} if anonymous, {@code false} otherwise
+     */
     public void setAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
     }

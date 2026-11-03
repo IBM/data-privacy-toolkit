@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Model representing a postal code with its geographic coordinates. */
 public class PostalCode implements Location {
     private final String code;
     private final LatitudeLongitude latitudeLongitude;

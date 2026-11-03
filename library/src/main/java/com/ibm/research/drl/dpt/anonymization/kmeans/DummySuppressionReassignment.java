@@ -34,8 +34,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+/** K-means suppression strategy that reassigns suppressed records to the closest cluster. */
 public class DummySuppressionReassignment extends StrategyImpl {
 
     private final double maximumSuppressionRate;
@@ -48,6 +48,14 @@ public class DummySuppressionReassignment extends StrategyImpl {
     private final List<Partition> partitions = new ArrayList<>();
     private final List<Partition> anonymizedPartitions = new ArrayList<>();
 
+    /**
+     * Constructs a DummySuppressionReassignment.
+     *
+     * @param original               the original dataset
+     * @param maximumSuppressionRate the maximum suppression rate allowed
+     * @param columnInformationList  the column information list
+     * @param privacyConstraints     the privacy constraints
+     */
     public DummySuppressionReassignment(IPVDataset original, double maximumSuppressionRate,
                                         List<ColumnInformation> columnInformationList,
                                         List<PrivacyConstraint> privacyConstraints) {
@@ -176,7 +184,7 @@ public class DummySuppressionReassignment extends StrategyImpl {
     private List<String> createCategoricalCentroids(Partition partition) {
 
         List<Integer> categoricalColumns = AnonymizationUtils.getColumnsByType(this.columnInformationList, ColumnType.QUASI);
-        categoricalColumns = categoricalColumns.stream().filter(x -> this.columnInformationList.get(x).isCategorical()).collect(Collectors.toList());
+        categoricalColumns = categoricalColumns.stream().filter(x -> this.columnInformationList.get(x).isCategorical()).toList();
 
         if (categoricalColumns.isEmpty()) {
             return Collections.emptyList();

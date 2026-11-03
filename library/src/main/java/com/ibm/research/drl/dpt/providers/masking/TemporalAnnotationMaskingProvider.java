@@ -24,6 +24,7 @@ import java.security.SecureRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** Masking provider that normalises temporal expressions in free text (e.g. "3 days before"). */
 public class TemporalAnnotationMaskingProvider implements MaskingProvider {
     private final static String DAY = "day";
     private final static String WEEK = "week";
@@ -34,8 +35,15 @@ public class TemporalAnnotationMaskingProvider implements MaskingProvider {
     private final static Pattern daysBefore = Pattern.compile("\\bdays\\s+before\\b");
 
     final static Pattern getNumber = Pattern.compile("(\\d+)");
+    /** Secure random source. */
     private final SecureRandom random;
 
+    /**
+     * Constructs a TemporalAnnotationMaskingProvider.
+     *
+     * @param random        the secure random source
+     * @param configuration the masking configuration (unused)
+     */
     public TemporalAnnotationMaskingProvider(SecureRandom random, MaskingConfiguration configuration) {
         this.random = random;
     }

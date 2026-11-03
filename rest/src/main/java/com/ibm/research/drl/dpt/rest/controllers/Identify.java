@@ -32,8 +32,8 @@ import com.ibm.research.drl.dpt.rest.exceptions.InvalidRequestException;
 import com.ibm.research.drl.dpt.util.Tuple;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 
 @RestController
 public class Identify {
-    private static final Logger logger = LogManager.getLogger(Identify.class);
+    private static final Logger logger = LoggerFactory.getLogger(Identify.class);
 
     private final CSVFormatProcessor csvFormatProcessor;
 
@@ -83,7 +83,7 @@ public class Identify {
                     Tuple::getSecond
             ));
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Identify failed", e);
             throw new InvalidRequestException(e.getMessage());
         }
     }
@@ -109,7 +109,7 @@ public class Identify {
 
             return output.toString();
         } catch (IOException e) {
-            logger.error(e);
+            logger.error("Failed to limit content length", e);
             throw new RuntimeException(e);
         }
     }

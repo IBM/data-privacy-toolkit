@@ -23,25 +23,45 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ibm.research.drl.dpt.models.fhir.FHIRReference;
 import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
+/** FHIRGoalOutcome FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRGoalOutcome {
+    /** Constructs a FHIRGoalOutcome. */
+    public FHIRGoalOutcome() {}
+
 
     private FHIRCodeableConcept resultCodeableConcept;
     private FHIRReference resultReference;
 
+    /**
+     * Returns the resultCodeableConcept.
+     * @return the resultCodeableConcept
+     */
     public FHIRCodeableConcept getResultCodeableConcept() {
         return resultCodeableConcept;
     }
 
+    /**
+     * Sets the resultCodeableConcept.
+     * @param resultCodeableConcept the resultCodeableConcept
+     */
     public void setResultCodeableConcept(FHIRCodeableConcept resultCodeableConcept) {
         this.resultCodeableConcept = resultCodeableConcept;
     }
 
+    /**
+     * Returns the resultReference.
+     * @return the resultReference
+     */
     public FHIRReference getResultReference() {
         return resultReference;
     }
 
+    /**
+     * Sets the resultReference.
+     * @param resultReference the resultReference
+     */
     public void setResultReference(FHIRReference resultReference) {
         this.resultReference = resultReference;
     }

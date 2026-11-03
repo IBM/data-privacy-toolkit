@@ -22,12 +22,36 @@ import com.ibm.research.drl.dpt.anonymization.Partition;
 
 import java.util.List;
 
+/** Computes error metrics for differential privacy algorithms. */
 public interface DPError {
+    /**
+     * Reports the error for the given DifferentialPrivacy run.
+     *
+     * @param differentialPrivacy the completed DP algorithm
+     * @return the computed error value
+     */
     default double reportError(DifferentialPrivacy differentialPrivacy) {
         return reportError(differentialPrivacy.getOriginalPartitions(), differentialPrivacy.getAnonymizedPartitions(), differentialPrivacy.columnIndex);
     }
+
+    /**
+     * Reports the error for a single partition.
+     *
+     * @param original    the original partition
+     * @param noisy       the noisy partition
+     * @param columnIndex the column index
+     * @return the computed error value
+     */
     double reportError(Partition original, Partition noisy, int columnIndex);
 
+    /**
+     * Reports the error across a list of partitions.
+     *
+     * @param original    the original partitions
+     * @param noisy       the noisy partitions
+     * @param columnIndex the column index
+     * @return the weighted average error
+     */
     default double reportError(List<Partition> original, List<Partition> noisy, int columnIndex) {
         int partitions = original.size();
         double error = 0.0;
@@ -48,8 +72,18 @@ public interface DPError {
         return error / totalSize;
     }
 
+    /**
+     * Returns the name of this error metric.
+     *
+     * @return the metric name
+     */
     String getName();
 
+    /**
+     * Returns a description of this error metric.
+     *
+     * @return the metric description
+     */
     String getDescription();
 }
 

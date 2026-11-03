@@ -24,24 +24,44 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRCodeableConcept;
 
 import java.util.Collection;
 
+/** FHIRMedicationPackage FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRMedicationPackage {
+    /** Constructs a FHIRMedicationPackage. */
+    public FHIRMedicationPackage() {}
+
     private FHIRCodeableConcept container;
     private Collection<FHIRMedicationPackageContent> content;
 
+    /**
+     * Returns the content.
+     * @return the content
+     */
     public Collection<FHIRMedicationPackageContent> getContent() {
         return content;
     }
 
+    /**
+     * Sets the content.
+     * @param content the content
+     */
     public void setContent(Collection<FHIRMedicationPackageContent> content) {
         this.content = content;
     }
 
+    /**
+     * Returns the container.
+     * @return the container
+     */
     public FHIRCodeableConcept getContainer() {
         return container;
     }
 
+    /**
+     * Sets the container.
+     * @param container the container
+     */
     public void setContainer(FHIRCodeableConcept container) {
         this.container = container;
     }

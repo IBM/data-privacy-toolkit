@@ -47,8 +47,8 @@ import com.ibm.research.drl.dpt.rest.models.CompleteAlgorithmConfiguration;
 import com.ibm.research.drl.dpt.rest.models.InformationLossResultDescription;
 import com.ibm.research.drl.dpt.rest.models.MaskingProviderDescription;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +70,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/feature/")
 public class Anonymize {
-    private static final Logger logger = LogManager.getLogger(Anonymize.class);
+    private static final Logger logger = LoggerFactory.getLogger(Anonymize.class);
 
     private final ObjectMapper mapper;
 
@@ -177,24 +177,19 @@ public class Anonymize {
 
 
     private AnonymizationAlgorithm getAlgorithm(final String algorithmName) {
-        switch (algorithmName.toLowerCase()) {
-            case "mondrian":
-                return new Mondrian();
-            case "ola":
-                return new OLA();
-        }
-        throw new IllegalArgumentException("Unsupported algorithm " + algorithmName);
+        return switch (algorithmName.toLowerCase()) {
+            case "mondrian" -> new Mondrian();
+            case "ola" -> new OLA();
+            default -> throw new IllegalArgumentException("Unsupported algorithm " + algorithmName);
+        };
     }
 
     private AnonymizationAlgorithmOptions buildOptions(final String algorithmName, final CompleteAlgorithmConfiguration options) throws IOException {
-        switch (algorithmName.toLowerCase()) {
-            case "mondrian":
-                return new MondrianOptions();
-            case "ola":
-                return new OLAOptions(Double.parseDouble(options.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.suppressionRate).toString()));
-            default:
-                throw new IllegalArgumentException("Unsupported algorithm " + algorithmName);
-        }
+        return switch (algorithmName.toLowerCase()) {
+            case "mondrian" -> new MondrianOptions();
+            case "ola" -> new OLAOptions(Double.parseDouble(options.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.suppressionRate).toString()));
+            default -> throw new IllegalArgumentException("Unsupported algorithm " + algorithmName);
+        };
     }
 
     private Collection<IPVVulnerability> buildVulnerabilities(String kQuasiString) throws IOException {
@@ -231,19 +226,16 @@ public class Anonymize {
         if (configuration.hasOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l) && configuration.hasOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.lDiversityAlgorithm)) {
             String lDiversityAlgorithmName = (String) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.lDiversityAlgorithm);
             switch (lDiversityAlgorithmName) {
-                case "distinct":
-                    privacyConstraints.add(new DistinctLDiversity(((Number) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l)).intValue()));
-                    break;
-                case "entropy":
-                    privacyConstraints.add(new EntropyLDiversity(((Number) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l)).intValue()));
-                    break;
-                case "recursiveCL":
+                case "distinct" -> privacyConstraints.add(new DistinctLDiversity(((Number) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l)).intValue()));
+                case "entropy" -> privacyConstraints.add(new EntropyLDiversity(((Number) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l)).intValue()));
+                case "recursiveCL" -> {
                     if (configuration.hasOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.c)) {
                         privacyConstraints.add(new RecursiveCLDiversity(((Number) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l)).intValue(), ((Number) configuration.getOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.c)).doubleValue()));
-                        break;
+                    } else {
+                        throw new InvalidRequestException("Unknown l-diversity algorithm name: " + CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.lDiversityAlgorithm);
                     }
-                default:
-                    throw new InvalidRequestException("Unknown l-diversity algorithm name: " + CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.lDiversityAlgorithm);
+                }
+                default -> throw new InvalidRequestException("Unknown l-diversity algorithm name: " + CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.lDiversityAlgorithm);
             }
         }
 

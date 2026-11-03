@@ -24,14 +24,48 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for re-identification risk metrics.
+ */
 public interface RiskMetric {
+    /**
+     * Returns the full name of this risk metric.
+     *
+     * @return the metric name
+     */
     String getName();
 
+    /**
+     * Returns a short identifier for this risk metric.
+     *
+     * @return the short name
+     */
     String getShortName();
 
+    /**
+     * Reports the computed risk value.
+     *
+     * @return the risk value
+     */
     double report();
 
+    /**
+     * Initializes this risk metric with dataset and configuration.
+     *
+     * @param original              the original dataset
+     * @param anonymized            the anonymized dataset
+     * @param columnInformationList the column information list
+     * @param k                     the k-anonymity parameter
+     * @param options               the metric options
+     * @return this initialized metric
+     */
     RiskMetric initialize(IPVDataset original, IPVDataset anonymized, List<ColumnInformation> columnInformationList, int k, Map<String, String> options);
 
+    /**
+     * Validates the given options for this metric.
+     *
+     * @param options the options to validate
+     * @throws IllegalArgumentException if any option is missing or invalid
+     */
     void validateOptions(Map<String, String> options) throws IllegalArgumentException;
 }

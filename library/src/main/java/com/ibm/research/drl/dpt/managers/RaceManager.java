@@ -29,9 +29,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/** Manager for race and ethnicity resources. */
 public class RaceManager extends ResourceBasedManager<Race> {
     private final static RaceManager RACE_MANAGER = new RaceManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton RaceManager
+     */
     public static RaceManager getInstance() {
         return RACE_MANAGER;
     }

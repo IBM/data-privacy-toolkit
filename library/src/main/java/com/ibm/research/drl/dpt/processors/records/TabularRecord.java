@@ -22,9 +22,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/** Abstract base for tabular (CSV/Excel) records, backed by an array of field values. */
 public abstract class TabularRecord implements Record {
+
+    /** Constructs a TabularRecord. */
+    protected TabularRecord() {}
+
+    /** Whether this record represents a header row. */
     protected boolean isHeader;
+    /** The field values of this record. */
     protected String[] data;
+    /** Mapping from field name to column index. */
     protected Map<String, Integer> fieldNames;
 
     @Override
@@ -78,6 +86,11 @@ public abstract class TabularRecord implements Record {
                 .toArray(String[]::new);
     }
 
+    /**
+     * Formats this record as a string in its native format.
+     *
+     * @return the formatted record string
+     */
     protected abstract String formatRecord();
 
     @Override
@@ -85,6 +98,11 @@ public abstract class TabularRecord implements Record {
         return formatRecord();
     }
 
+    /**
+     * Formats this record as a byte array.
+     *
+     * @return the UTF-8 encoded record bytes
+     */
     protected byte[] formatRecordBytes() {
         return formatRecord().getBytes();
     }

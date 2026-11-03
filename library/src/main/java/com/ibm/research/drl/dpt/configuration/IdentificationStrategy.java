@@ -18,7 +18,10 @@ under the License.
 */
 package com.ibm.research.drl.dpt.configuration;
 
+/** Strategy used for selecting the best identified type from multiple candidates. */
 public enum IdentificationStrategy {
+    /** Select the type that was identified most frequently. */
     FREQUENCY_BASED,
+    /** Select the type with the highest configured priority. */
     PRIORITY_BASED
 }

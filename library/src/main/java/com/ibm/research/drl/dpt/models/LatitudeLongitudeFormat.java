@@ -18,6 +18,9 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/**
+ * Supported string representations for geographic coordinates.
+ */
 public enum LatitudeLongitudeFormat {
     /**
      * Decimal latitude longitude format.

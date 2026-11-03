@@ -29,9 +29,20 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
+/** Utility class for data-type identification operations. */
 public class IdentifierUtils {
     private static final Logger log = LogManager.getLogger(IdentifierUtils.class);
 
+    /** Not instantiable. */
+    private IdentifierUtils() {}
+
+    /**
+     * Returns whether the value appears to be free text (contains at least two whitespace regions
+     * and is at least 10 characters long).
+     *
+     * @param value the string to test
+     * @return true if the value looks like free text
+     */
     public static boolean looksLikeFreeText(String value) {
         if (value.length() < 10) {
             return false;
@@ -52,6 +63,12 @@ public class IdentifierUtils {
         return whitespaceRegions >= 2;
     }
 
+    /**
+     * Creates a bitmask character profile for the input string.
+     *
+     * @param input the string to profile
+     * @return a bitmask of {@link CharacterRequirements} flags present in the input
+     */
     public static int createCharacterProfile(String input) {
         int mask = CharacterRequirements.NONE;
 
@@ -78,6 +95,14 @@ public class IdentifierUtils {
         return mask;
     }
 
+    /**
+     * Counts character occurrences in the input into the counters array and returns the number
+     * of non-ASCII characters.
+     *
+     * @param input    the string to analyse
+     * @param counters an array of at least 257 elements indexed by character code
+     * @return number of non-ASCII characters encountered
+     */
     public static int fillCharacterMap(String input, int[] counters) {
         int nonASCII = 0;
 
@@ -112,6 +137,14 @@ public class IdentifierUtils {
         return (typeConfidence < identificationConfiguration.getFrequencyThresholdForType(typeName));
     }
 
+    /**
+     * Finds the best identified type from a collection of candidates.
+     *
+     * @param identifiedTypes           the candidate types with counts
+     * @param rowsProcessed             total number of rows processed
+     * @param identificationConfiguration the identification configuration
+     * @return the best identified type
+     */
     public static IdentifiedType findBestType(Collection<IdentifiedType> identifiedTypes, Long rowsProcessed, IdentificationConfiguration identificationConfiguration) {
         switch (identificationConfiguration.getIdentificationStrategy()) {
             case FREQUENCY_BASED:
@@ -230,6 +263,14 @@ public class IdentifierUtils {
         return bestType;
     }
 
+    /**
+     * Returns the best identified type per field from a map of field to candidate types.
+     *
+     * @param values                      map of field name to candidate types
+     * @param rowsProcessed               total number of rows processed
+     * @param identificationConfiguration the identification configuration
+     * @return map of field name to best identified type
+     */
     public static Map<String, IdentifiedType> getIdentifiedType(Map<String, List<IdentifiedType>> values, long rowsProcessed, IdentificationConfiguration identificationConfiguration) {
         Map<String, IdentifiedType> identifiedTypes = new HashMap<>(values.size());
 
@@ -244,6 +285,12 @@ public class IdentifierUtils {
         return identifiedTypes;
     }
 
+    /**
+     * Identifies all provider types that match the given value.
+     *
+     * @param value the value to identify
+     * @return map of matched provider types to the number of matching identifiers
+     */
     public static Map<ProviderType, Long> identifySingleValue(String value) {
         Map<ProviderType, Long> results = new HashMap<>();
 
@@ -267,6 +314,12 @@ public class IdentifierUtils {
         return results;
     }
 
+    /**
+     * Converts a raw type-counter map into a map of lists of {@link IdentifiedType}.
+     *
+     * @param allTypes the raw map of field name to type-name counters
+     * @return map of field name to list of identified types
+     */
     public static Map<String, List<IdentifiedType>> organizeToCollection(Map<String, Map<String, Counter>> allTypes) {
         Map<String, List<IdentifiedType>> results = new HashMap<>();
         for (Map.Entry<String, Map<String, Counter>> entry : allTypes.entrySet()) {

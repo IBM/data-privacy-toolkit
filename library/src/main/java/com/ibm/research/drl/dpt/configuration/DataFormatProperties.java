@@ -20,6 +20,9 @@ package com.ibm.research.drl.dpt.configuration;
 
 import java.util.Set;
 
+/**
+ * Describes the capabilities of a data format (identification, masking, anonymization, etc.).
+ */
 public class DataFormatProperties {
 
     private final boolean supportsIdentification;
@@ -29,6 +32,16 @@ public class DataFormatProperties {
     private final boolean supportsFreeText;
     private final Set<DataTypeFormat> validOutputFormats;
 
+    /**
+     * Constructs a DataFormatProperties.
+     *
+     * @param supportsIdentification         whether identification is supported
+     * @param supportsVulnerabilityAssessment whether vulnerability assessment is supported
+     * @param supportsMasking                whether masking is supported
+     * @param supportsAnonymization          whether anonymization is supported
+     * @param supportsFreeText               whether free-text processing is supported
+     * @param validOutputFormats             the set of valid output formats
+     */
     public DataFormatProperties(boolean supportsIdentification, boolean supportsVulnerabilityAssessment, boolean supportsMasking,
                                 boolean supportsAnonymization, boolean supportsFreeText, Set<DataTypeFormat> validOutputFormats) {
         this.supportsAnonymization = supportsAnonymization;
@@ -39,26 +52,56 @@ public class DataFormatProperties {
         this.validOutputFormats = validOutputFormats;
     }
 
+    /**
+     * Returns whether free-text processing is supported.
+     *
+     * @return true if free-text is supported
+     */
     public boolean supportsFreeText() {
         return this.supportsFreeText;
     }
 
+    /**
+     * Returns whether identification is supported.
+     *
+     * @return true if identification is supported
+     */
     public boolean supportsIdentification() {
         return supportsIdentification;
     }
 
+    /**
+     * Returns whether vulnerability assessment is supported.
+     *
+     * @return true if vulnerability assessment is supported
+     */
     public boolean supportsVulnerabilityAssessment() {
         return supportsVulnerabilityAssessment;
     }
 
+    /**
+     * Returns whether masking is supported.
+     *
+     * @return true if masking is supported
+     */
     public boolean supportsMasking() {
         return supportsMasking;
     }
 
+    /**
+     * Returns whether anonymization is supported.
+     *
+     * @return true if anonymization is supported
+     */
     public boolean supportsAnonymization() {
         return supportsAnonymization;
     }
 
+    /**
+     * Returns the set of valid output formats.
+     *
+     * @return the valid output formats
+     */
     public Set<DataTypeFormat> getValidOutputFormats() {
         return validOutputFormats;
     }

@@ -29,11 +29,17 @@ import java.security.SecureRandom;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
+/** Masking provider for telephone, mobile, and fax number values. */
 public class PhoneMaskingProvider implements MaskingProvider {
+    /** Shared phone identifier instance. */
     private final static PhoneIdentifier phoneIdentifier = new PhoneIdentifier();
+    /** Shared MSISDN manager instance. */
     private static final MSISDNManager msisdnManager = MSISDNManager.getInstance();
+    /** Whether to preserve the country code when masking. */
     private final boolean preserveCountryCode;
+    /** Whether to preserve the area code when masking. */
     private final boolean preserveAreaCode;
+    /** Secure random source. */
     private final SecureRandom random;
 
     /**

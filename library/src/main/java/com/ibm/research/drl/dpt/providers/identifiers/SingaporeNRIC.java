@@ -23,7 +23,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/** Identifier for Singapore National Registration Identity Card (NRIC) numbers. */
 public class SingaporeNRIC extends AbstractIdentifier {
+
+    /** Constructs a SingaporeNRIC identifier. */
+    public SingaporeNRIC() {}
+
     private static final Pattern pattern = Pattern.compile("^[SMTFG]\\d\\d\\d\\d\\d\\d\\d\\p{Alnum}$");
 
     @Override

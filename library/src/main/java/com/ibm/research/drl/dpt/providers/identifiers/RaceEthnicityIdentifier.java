@@ -25,11 +25,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
-/**
- * The type Race ethnicity identifier.
- *
- */
+/** Identifier for race and ethnicity values. */
 public class RaceEthnicityIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a RaceEthnicityIdentifier. */
+    public RaceEthnicityIdentifier() {}
+
     private static final RaceManager raceManager = RaceManager.getInstance();
     private static final String[] appropriateNames = {"Race", "Ethnicity"};
 

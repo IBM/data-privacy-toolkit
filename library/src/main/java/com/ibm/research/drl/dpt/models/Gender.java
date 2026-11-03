@@ -18,6 +18,7 @@ under the License.
 */
 package com.ibm.research.drl.dpt.models;
 
+/** Represents a gender value. */
 public enum Gender {
     /**
      * Male gender.

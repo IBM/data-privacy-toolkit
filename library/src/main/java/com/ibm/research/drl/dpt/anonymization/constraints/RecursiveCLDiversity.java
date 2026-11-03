@@ -26,13 +26,21 @@ import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.util.Histogram;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+/** Privacy constraint implementing recursive (c,l)-diversity. */
 public class RecursiveCLDiversity implements PrivacyConstraint {
+    /** The minimum number of occurrences for the l parameter. */
     private final int l;
+    /** The ratio threshold for the c parameter. */
     private final double c;
 
+    /**
+     * Constructs a RecursiveCLDiversity constraint.
+     *
+     * @param l the minimum number of sensitive value occurrences
+     * @param c the ratio threshold
+     */
     @JsonCreator
     public RecursiveCLDiversity(
             @JsonProperty("l") int l,
@@ -41,10 +49,20 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
         this.c = c;
     }
 
+    /**
+     * Returns the l parameter.
+     *
+     * @return l
+     */
     public int getL() {
         return l;
     }
 
+    /**
+     * Returns the c parameter.
+     *
+     * @return c
+     */
     public double getC() {
         return c;
     }
@@ -57,7 +75,7 @@ public class RecursiveCLDiversity implements PrivacyConstraint {
             frequencies.add(counter);
         }
 
-        Collections.sort(frequencies);
+        frequencies.sort(null);
 
         double threshold = 0;
         for (int i = frequencies.size() - this.l; i >= 0; i--) { // minSize=(int)l;

@@ -132,18 +132,17 @@ public class Information {
         CompleteAlgorithmConfiguration configuration = new CompleteAlgorithmConfiguration();
 
         switch (algorithmName.toLowerCase()) {
-            case "mondrian":
+            case "mondrian" -> {
                 configuration.setOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l, 3);
                 configuration.setOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.k, 3);
-                break;
-            case "ola":
+            }
+            case "ola" -> {
                 configuration.setOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.k, 3);
                 configuration.setOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.l, 2);
                 configuration.setOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.lDiversityAlgorithm, "distinct");
                 configuration.setOption(CompleteAlgorithmConfiguration.SUPPORTED_CONFIGURATION.suppressionRate, 5.0);
-                break;
-            default:
-                throw new UnknownAlgorithmName();
+            }
+            default -> throw new UnknownAlgorithmName();
         }
 
         return configuration;

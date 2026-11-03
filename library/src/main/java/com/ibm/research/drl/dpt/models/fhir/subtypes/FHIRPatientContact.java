@@ -25,62 +25,122 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.*;
 
 import java.util.Collection;
 
+/** FHIRPatientContact FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRPatientContact {
+    /** Constructs a FHIRPatientContact. */
+    public FHIRPatientContact() {}
 
+
+    /**
+     * Returns the relationship.
+     * @return the relationship
+     */
     public Collection<FHIRCodeableConcept> getRelationship() {
         return relationship;
     }
 
+    /**
+     * Sets the relationship.
+     * @param relationship the relationship
+     */
     public void setRelationship(Collection<FHIRCodeableConcept> relationship) {
         this.relationship = relationship;
     }
 
+    /**
+     * Returns the name.
+     * @return the name
+     */
     public FHIRHumanName getName() {
         return name;
     }
 
+    /**
+     * Sets the name.
+     * @param name the name
+     */
     public void setName(FHIRHumanName name) {
         this.name = name;
     }
 
+    /**
+     * Returns the telecom.
+     * @return the telecom
+     */
     public Collection<FHIRContactPoint> getTelecom() {
         return telecom;
     }
 
+    /**
+     * Sets the telecom.
+     * @param telecom the telecom
+     */
     public void setTelecom(Collection<FHIRContactPoint> telecom) {
         this.telecom = telecom;
     }
 
+    /**
+     * Returns the address.
+     * @return the address
+     */
     public FHIRAddress getAddress() {
         return address;
     }
 
+    /**
+     * Sets the address.
+     * @param address the address
+     */
     public void setAddress(FHIRAddress address) {
         this.address = address;
     }
 
+    /**
+     * Returns the gender.
+     * @return the gender
+     */
     public String getGender() {
         return gender;
     }
 
+    /**
+     * Sets the gender.
+     * @param gender the gender
+     */
     public void setGender(String gender) {
         this.gender = gender;
     }
 
+    /**
+     * Returns the organization.
+     * @return the organization
+     */
     public FHIRReference getOrganization() {
         return organization;
     }
 
+    /**
+     * Sets the organization.
+     * @param organization the organization
+     */
     public void setOrganization(FHIRReference organization) {
         this.organization = organization;
     }
 
+    /**
+     * Returns the period.
+     * @return the period
+     */
     public FHIRPeriod getPeriod() {
         return period;
     }
 
+    /**
+     * Sets the period.
+     * @param period the period
+     */
     public void setPeriod(FHIRPeriod period) {
         this.period = period;
     }

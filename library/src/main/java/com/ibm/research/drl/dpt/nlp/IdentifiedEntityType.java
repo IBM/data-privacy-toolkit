@@ -14,25 +14,52 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
+/** Represents the type of an identified NLP entity, including subtype and source annotation. */
 public final class IdentifiedEntityType implements Serializable {
+    /** The entity type label. */
     private final String type;
+    /** The entity subtype label. */
     private final String subtype;
+    /** The annotation source that produced this identification. */
     private final String source;
-    
+
+    /** Constant representing an unknown annotation source. */
     public final static String UNKNOWN_SOURCE = "__UNKNOWN_SOURCE__";
 
+    /**
+     * Returns the type name.
+     *
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Returns the subtype name.
+     *
+     * @return the subtype
+     */
     public String getSubtype() {
         return subtype;
     }
 
+    /**
+     * Returns the annotation source identifier.
+     *
+     * @return the source
+     */
     public String getSource() {
         return source;
     }
 
+    /**
+     * Constructs an IdentifiedEntityType.
+     *
+     * @param type    the entity type name (must not be {@code null})
+     * @param subtype the entity subtype
+     * @param source  the annotation source identifier
+     */
     @JsonCreator
     public IdentifiedEntityType(
             @JsonProperty("type") String type, 

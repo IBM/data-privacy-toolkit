@@ -24,33 +24,61 @@ import com.ibm.research.drl.dpt.models.fhir.FHIRExtension;
 
 import java.util.Collection;
 
+/** FHIRPeriod FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRPeriod {
+    /** Constructs a FHIRPeriod. */
+    public FHIRPeriod() {}
+
     private String start;
     private String end;
     private Collection<FHIRExtension> extension;
 
+    /**
+     * Returns the extension.
+     * @return the extension
+     */
     public Collection<FHIRExtension> getExtension() {
         return extension;
     }
 
+    /**
+     * Sets the extension.
+     * @param extension the extension
+     */
     public void setExtension(Collection<FHIRExtension> extension) {
         this.extension = extension;
     }
 
+    /**
+     * Returns the end.
+     * @return the end
+     */
     public String getEnd() {
         return end;
     }
 
+    /**
+     * Sets the end.
+     * @param end the end
+     */
     public void setEnd(String end) {
         this.end = end;
     }
 
+    /**
+     * Returns the start.
+     * @return the start
+     */
     public String getStart() {
         return start;
     }
 
+    /**
+     * Sets the start.
+     * @param start the start
+     */
     public void setStart(String start) {
         this.start = start;
     }

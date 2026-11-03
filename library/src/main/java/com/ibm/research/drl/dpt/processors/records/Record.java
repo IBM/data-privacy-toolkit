@@ -19,20 +19,55 @@ under the License.
 package com.ibm.research.drl.dpt.processors.records;
 
 
+/**
+ * Interface representing a single data record with named field access.
+ */
 public interface Record {
 
+    /**
+     * Returns whether this record is a header record.
+     *
+     * @return true if this is a header record
+     */
     boolean isHeader();
 
+    /**
+     * Returns the field references (names or paths) available in this record.
+     *
+     * @return an iterable of field reference strings
+     */
     Iterable<String> getFieldReferences();
 
+    /**
+     * Returns the raw bytes of the specified field.
+     *
+     * @param fieldReference the field reference
+     * @return the field value as a byte array
+     */
     byte[] getFieldValue(String fieldReference);
 
+    /**
+     * Suppresses (removes or blanks) the specified field.
+     *
+     * @param field the field reference to suppress
+     */
     void suppressField(String field);
 
+    /**
+     * Sets the value of the specified field.
+     *
+     * @param fieldReference the field reference
+     * @param value          the new value as a byte array
+     */
     void setFieldValue(String fieldReference, byte[] value);
 
     @Override
     String toString();
 
+    /**
+     * Returns this record serialized to bytes.
+     *
+     * @return the byte representation of this record
+     */
     byte[] toBytes();
 }

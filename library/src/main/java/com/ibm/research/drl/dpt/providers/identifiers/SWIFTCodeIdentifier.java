@@ -25,7 +25,12 @@ import com.ibm.research.drl.dpt.providers.ProviderType;
 import java.util.Arrays;
 import java.util.Collection;
 
+/** Identifier for SWIFT/BIC code values. */
 public class SWIFTCodeIdentifier extends AbstractManagerBasedIdentifier {
+
+    /** Constructs a SWIFTCodeIdentifier. */
+    public SWIFTCodeIdentifier() {}
+
     private final static String[] appropriateNames = {"SWIFT"};
     private final static SWIFTCodeManager swiftCodeManager = SWIFTCodeManager.getInstance();
 

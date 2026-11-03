@@ -26,6 +26,7 @@ import com.ibm.research.drl.dpt.util.localization.ResourceEntry;
 import java.security.SecureRandom;
 import java.util.Collection;
 
+/** Manager for UK Social Security Number prefix/suffix resources. */
 public class SSNUKManager implements Manager {
 
     private final static char[] allowedSuffixLetters = "ABCD".toCharArray();
@@ -38,6 +39,11 @@ public class SSNUKManager implements Manager {
 
     private static final SSNUKManager instance = new SSNUKManager();
 
+    /**
+     * Returns the singleton instance.
+     *
+     * @return the singleton SSNUKManager
+     */
     public static SSNUKManager getInstance() {
         return instance;
     }
@@ -46,6 +52,11 @@ public class SSNUKManager implements Manager {
         this.random = new SecureRandom();
     }
 
+    /**
+     * Generates a random two-letter SSNUK prefix.
+     *
+     * @return a randomly generated prefix string
+     */
     public String getRandomPrefix() {
         String prefix = "" + allowedFirstLetters[random.nextInt(allowedFirstLetters.length)];
         prefix += allowedSecondLetters[random.nextInt(allowedSecondLetters.length)];
@@ -53,6 +64,11 @@ public class SSNUKManager implements Manager {
         return prefix;
     }
 
+    /**
+     * Generates a random one-letter SSNUK suffix.
+     *
+     * @return a randomly generated suffix character string
+     */
     public String getRandomSuffix() {
         return "" + allowedSuffixLetters[random.nextInt(allowedSuffixLetters.length)];
     }

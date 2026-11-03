@@ -24,11 +24,17 @@ import com.ibm.research.drl.dpt.models.Sex;
 
 import java.util.Collection;
 
+/** Generalization hierarchy for gender values. */
 public class GenderHierarchy extends MaterializedHierarchy {
     private final static GenderManager genderManager = GenderManager.getInstance();
 
     private static final GenderHierarchy instance = new GenderHierarchy();
 
+    /**
+     * Returns the singleton instance of this hierarchy.
+     *
+     * @return the singleton GenderHierarchy
+     */
     public static GenderHierarchy getInstance() {
         return instance;
     }

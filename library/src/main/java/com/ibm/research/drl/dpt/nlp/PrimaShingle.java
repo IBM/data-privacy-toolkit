@@ -20,19 +20,36 @@ package com.ibm.research.drl.dpt.nlp;
 
 import opennlp.tools.util.Span;
 
+/** A text shingle (contiguous token span) used by the PRIMA NLP annotator. */
 public class PrimaShingle {
     private final Span span;
     private final int size;
 
+    /**
+     * Constructs a PrimaShingle.
+     *
+     * @param span the token span covered by this shingle
+     * @param size the number of tokens in this shingle
+     */
     public PrimaShingle(Span span, int size) {
         this.span = span;
         this.size = size;
     }
 
+    /**
+     * Returns the number of tokens in this shingle.
+     *
+     * @return the shingle size
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Returns the token span covered by this shingle.
+     *
+     * @return the span
+     */
     public Span getSpan() {
         return span;
     }

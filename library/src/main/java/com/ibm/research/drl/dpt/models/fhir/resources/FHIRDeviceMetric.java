@@ -29,94 +29,186 @@ import com.ibm.research.drl.dpt.models.fhir.datatypes.FHIRTiming;
 
 import java.util.Collection;
 
+/** FHIRDeviceMetric FHIR datatype. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FHIRDeviceMetric extends FHIRBaseDomainResource {
+    /** Constructs a FHIRDeviceMetric. */
+    public FHIRDeviceMetric() {}
 
+
+    /**
+     * Returns the type.
+     * @return the type
+     */
     public FHIRCodeableConcept getType() {
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param type the type
+     */
     public void setType(FHIRCodeableConcept type) {
         this.type = type;
     }
 
+    /**
+     * Returns the identifier.
+     * @return the identifier
+     */
     public FHIRIdentifier getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Sets the identifier.
+     * @param identifier the identifier
+     */
     public void setIdentifier(FHIRIdentifier identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Returns the unit.
+     * @return the unit
+     */
     public FHIRCodeableConcept getUnit() {
         return unit;
     }
 
+    /**
+     * Sets the unit.
+     * @param unit the unit
+     */
     public void setUnit(FHIRCodeableConcept unit) {
         this.unit = unit;
     }
 
+    /**
+     * Returns the source.
+     * @return the source
+     */
     public FHIRReference getSource() {
         return source;
     }
 
+    /**
+     * Sets the source.
+     * @param source the source
+     */
     public void setSource(FHIRReference source) {
         this.source = source;
     }
 
+    /**
+     * Returns the parent.
+     * @return the parent
+     */
     public FHIRReference getParent() {
         return parent;
     }
 
+    /**
+     * Sets the parent.
+     * @param parent the parent
+     */
     public void setParent(FHIRReference parent) {
         this.parent = parent;
     }
 
+    /**
+     * Returns the operationalStatus.
+     * @return the operationalStatus
+     */
     public String getOperationalStatus() {
         return operationalStatus;
     }
 
+    /**
+     * Sets the operationalStatus.
+     * @param operationalStatus the operationalStatus
+     */
     public void setOperationalStatus(String operationalStatus) {
         this.operationalStatus = operationalStatus;
     }
 
+    /**
+     * Returns the color.
+     * @return the color
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * Sets the color.
+     * @param color the color
+     */
     public void setColor(String color) {
         this.color = color;
     }
 
+    /**
+     * Returns the category.
+     * @return the category
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Sets the category.
+     * @param category the category
+     */
     public void setCategory(String category) {
         this.category = category;
     }
 
+    /**
+     * Returns the measurementPeriod.
+     * @return the measurementPeriod
+     */
     public FHIRTiming getMeasurementPeriod() {
         return measurementPeriod;
     }
 
+    /**
+     * Sets the measurementPeriod.
+     * @param measurementPeriod the measurementPeriod
+     */
     public void setMeasurementPeriod(FHIRTiming measurementPeriod) {
         this.measurementPeriod = measurementPeriod;
     }
 
+    /**
+     * Returns the calibration.
+     * @return the calibration
+     */
     public Collection<FHIRCalibration> getCalibration() {
         return calibration;
     }
 
+    /**
+     * Sets the calibration.
+     * @param calibration the calibration
+     */
     public void setCalibration(Collection<FHIRCalibration> calibration) {
         this.calibration = calibration;
     }
 
+    /**
+     * Returns the resourceType.
+     * @return the resourceType
+     */
     public String getResourceType() {
         return resourceType;
     }
 
+    /**
+     * Sets the resourceType.
+     * @param resourceType the resourceType
+     */
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }

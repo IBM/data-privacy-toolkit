@@ -29,7 +29,15 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Identifier for age expressions in various textual formats (e.g. "35 years old", "6 months old").
+ */
 public class AgeIdentifier extends AbstractRegexBasedIdentifier implements IdentifierWithOffset {
+    /**
+     * Constructs a new AgeIdentifier.
+     */
+    public AgeIdentifier() {
+    }
     private static final AgePortion MISSING_AGE_PORTION = new AgePortion(false, -1, -1, AgePortionFormat.NUMERICAL);
 
     private final static String SUFFIXES = "(?:man|woman|male|female|daughter|son|niece|nephew|lady|gentleman)";
@@ -138,6 +146,12 @@ public class AgeIdentifier extends AbstractRegexBasedIdentifier implements Ident
         return agePatterns;
     }
 
+    /**
+     * Parses the age expression from the given identifier string.
+     *
+     * @param identifier the input string
+     * @return the parsed {@link Age}, or null if the string does not match any age pattern
+     */
     public Age parseAge(String identifier) {
         AgePortion yearPortion = MISSING_AGE_PORTION;
         AgePortion monthPortion = MISSING_AGE_PORTION;

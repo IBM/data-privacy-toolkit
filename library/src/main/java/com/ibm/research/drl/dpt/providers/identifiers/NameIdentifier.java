@@ -28,7 +28,12 @@ import java.util.Arrays;
 import java.util.Collection;
 
 
+/**
+ * Identifier for person names (first or last) using NamesManager vocabulary lists.
+ */
 public class NameIdentifier extends AbstractIdentifier implements IdentifierWithOffset {
+    /** Constructs a NameIdentifier. */
+    public NameIdentifier() {}
 
     private static final Names names = NamesManager.instance();
     private static final String[] appropriateNames = {"Name", "Surname"};

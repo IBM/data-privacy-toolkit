@@ -20,7 +20,12 @@ package com.ibm.research.drl.dpt.providers.identifiers;
 
 import com.ibm.research.drl.dpt.providers.ProviderType;
 
+/**
+ * Identifier for numeric values (integers or floating-point numbers).
+ */
 public class NumericIdentifier extends AbstractIdentifier {
+    /** Constructs a NumericIdentifier. */
+    public NumericIdentifier() {}
     @Override
     public int getPriority() {
         return 0;
