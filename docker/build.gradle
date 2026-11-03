@@ -44,16 +44,15 @@ ext {
 
     log4j2_version = '2.25.2'
 
+    commons_csv_version = '1.8'
+    commons_io_version = '2.22.0'
     commons_codec_version = '1.18.0'
-    commons_csv_version = '1.14.1'
     commons_lang_version = '3.20.0'
     commons_math_version = '3.6.1'
     commons_text_version = '1.13.1'
     commons_validator_version = '1.10.1'
     pdfbox_version = '3.0.6'
-
     commons_cli_version = '1.11.0'
-    commons_io_version = '2.21.0'
 
     poi_version = "5.4.0"
 }
