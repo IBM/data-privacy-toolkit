@@ -53,7 +53,7 @@ ext {
     pdfbox_version = '3.0.6'
 
     commons_cli_version = '1.11.0'
-    commons_io_version = '2.21.0'
+    commons_io_version = '2.22.0'
 
     poi_version = "5.4.0"
 }
