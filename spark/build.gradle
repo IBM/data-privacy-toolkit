@@ -61,7 +61,7 @@ ext {
     commons_validator_version = '1.10.1'
     commons_cli_version = "1.11.0"
 
-    spark_version = '4.0.0'
+    spark_version = '4.3.0'
 
     poi_version = "5.4.0"
 }
