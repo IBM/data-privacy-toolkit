@@ -96,6 +96,8 @@ public class DataProtection {
 
         final DefaultMaskingConfiguration configuration = null == confS ? new DefaultMaskingConfiguration() : mapper.readValue(confS, DefaultMaskingConfiguration.class);
 
+        validateClientConfiguration(configuration);
+
         final ConfigurationManager configurationManager = new ConfigurationManager(configuration);
 
         if (userRequestedDifferentialPrivacy(targets)) {
@@ -142,6 +144,40 @@ public class DataProtection {
         } catch (Exception e) {
             e.printStackTrace();
             throw new InvalidRequestException(e.getMessage());
+        }
+    }
+
+    /**
+     * Options that reference server-side resources (files, directories, databases). They are operator
+     * configuration and must not be controlled by the caller.
+     */
+    private static boolean isServerSideOption(String name) {
+        return name.startsWith("persistence.")
+                || name.equals("dictionaryBased.mask.filename")
+                || name.startsWith("freetext.mask.") && name.endsWith("Filename");
+    }
+
+    /**
+     * Rejects configurations that contain unknown options or that change server-side resource options
+     * from their default value.
+     */
+    static void validateClientConfiguration(DefaultMaskingConfiguration configuration) {
+        final Map<String, ConfigurationOption> defaults = new DefaultMaskingConfiguration().getOptions();
+
+        for (Map.Entry<String, ConfigurationOption> entry : configuration.getOptions().entrySet()) {
+            final String name = entry.getKey();
+            final ConfigurationOption defaultOption = defaults.get(name);
+
+            if (null == defaultOption) {
+                throw new InvalidRequestException("Invalid configuration");
+            }
+
+            if (isServerSideOption(name)) {
+                final ConfigurationOption option = entry.getValue();
+                if (null == option || !Objects.equals(defaultOption.getValue(), option.getValue())) {
+                    throw new InvalidRequestException("Invalid configuration");
+                }
+            }
         }
     }
 
