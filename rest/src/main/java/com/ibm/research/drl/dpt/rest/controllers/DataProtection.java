@@ -48,6 +48,7 @@ import java.util.*;
 @RequestMapping(value = "/api/feature/mask")
 public class DataProtection {
     private static final Logger logger = LoggerFactory.getLogger(DataProtection.class);
+    private static final int MAX_OPTION_STRING_LENGTH = 4096;
     private final ObjectMapper mapper;
     private final CSVFormatProcessor csvProcessor;
 
@@ -142,8 +143,8 @@ public class DataProtection {
 
             return writer.toString();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new InvalidRequestException(e.getMessage());
+            logger.error("Unable to mask the dataset", e);
+            throw new InvalidRequestException("Unable to process the request");
         }
     }
 
@@ -158,8 +159,9 @@ public class DataProtection {
     }
 
     /**
-     * Rejects configurations that contain unknown options or that change server-side resource options
-     * from their default value.
+     * Rejects configurations that contain unknown options, options whose value has a different type than
+     * the server default (or is an unbounded string), or that change server-side resource options from
+     * their default value.
      */
     static void validateClientConfiguration(DefaultMaskingConfiguration configuration) {
         final Map<String, ConfigurationOption> defaults = new DefaultMaskingConfiguration().getOptions();
@@ -167,18 +169,53 @@ public class DataProtection {
         for (Map.Entry<String, ConfigurationOption> entry : configuration.getOptions().entrySet()) {
             final String name = entry.getKey();
             final ConfigurationOption defaultOption = defaults.get(name);
+            final ConfigurationOption option = entry.getValue();
 
-            if (null == defaultOption) {
+            if (null == defaultOption || null == option) {
                 throw new InvalidRequestException("Invalid configuration");
             }
 
-            if (isServerSideOption(name)) {
-                final ConfigurationOption option = entry.getValue();
-                if (null == option || !Objects.equals(defaultOption.getValue(), option.getValue())) {
-                    throw new InvalidRequestException("Invalid configuration");
-                }
+            if (!hasCompatibleType(defaultOption.getValue(), option.getValue())) {
+                throw new InvalidRequestException("Invalid configuration");
+            }
+
+            if (isServerSideOption(name) && !Objects.equals(defaultOption.getValue(), option.getValue())) {
+                throw new InvalidRequestException("Invalid configuration");
             }
         }
+    }
+
+    /**
+     * All server defaults are null or scalars (boolean, number, string). A client value must be null or a
+     * scalar of the same kind as the default; when the default is null any scalar is accepted. Collections,
+     * objects and oversized strings are never accepted.
+     */
+    private static boolean hasCompatibleType(Object defaultValue, Object value) {
+        if (null == value) {
+            return true;
+        }
+
+        if (value instanceof String s && s.length() > MAX_OPTION_STRING_LENGTH) {
+            return false;
+        }
+
+        if (null == defaultValue) {
+            return value instanceof String || value instanceof Number || value instanceof Boolean;
+        }
+
+        if (defaultValue instanceof Boolean) {
+            return value instanceof Boolean;
+        }
+
+        if (defaultValue instanceof Number) {
+            return value instanceof Number;
+        }
+
+        if (defaultValue instanceof String) {
+            return value instanceof String;
+        }
+
+        return false;
     }
 
     private boolean userRequestedDifferentialPrivacy(Map<String, DataMaskingTarget> targets) {
