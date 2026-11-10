@@ -23,7 +23,7 @@ plugins {
     id 'maven-publish'
     id 'jacoco'
     id 'signing'
-    id 'org.barfuin.gradle.taskinfo' version '2.2.1'
+    id 'org.barfuin.gradle.taskinfo' version '3.1.0'
 }
 
 group = 'com.ibm.research.drl.dpt'
