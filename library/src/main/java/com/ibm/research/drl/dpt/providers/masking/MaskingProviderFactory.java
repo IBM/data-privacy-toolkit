@@ -181,7 +181,7 @@ public final class MaskingProviderFactory implements Serializable {
             return namespace;
         }
 
-        return new File(configuration.getStringValue("persistence.file"), namespace).getAbsolutePath();
+        return FileBackedPersistentMaskingProvider.resolveNamespaceFile(configuration.getStringValue("persistence.file"), namespace).getAbsolutePath();
     }
 
     private MaskingProvider getPersistentMaskingProvider(MaskingConfiguration configuration, ProviderType providerType) {

@@ -38,6 +38,30 @@ public class FileBackedPersistentMaskingProvider extends AbstractPersistentMaski
     private final FileCache cache;
 
     /**
+     * Resolves the file backing a namespace. The namespace must be a plain file name: it is rejected if it is
+     * empty, absolute, contains a path separator or NUL, or is a relative-path component ({@code .} or {@code ..}),
+     * so that the resulting file always lives directly inside {@code directoryName}.
+     *
+     * @param directoryName the directory holding the persisted mappings
+     * @param nameSpace     the namespace
+     * @return the file backing the namespace
+     * @throws IllegalArgumentException if the namespace is not a plain file name
+     */
+    public static File resolveNamespaceFile(String directoryName, String nameSpace) {
+        if (null == nameSpace
+                || nameSpace.isEmpty()
+                || nameSpace.equals(".")
+                || nameSpace.equals("..")
+                || nameSpace.indexOf('/') >= 0
+                || nameSpace.indexOf('\\') >= 0
+                || nameSpace.indexOf('\0') >= 0) {
+            throw new IllegalArgumentException("Invalid persistence namespace");
+        }
+
+        return new File(directoryName, nameSpace);
+    }
+
+    /**
      * Constructs a FileBackedPersistentMaskingProvider.
      *
      * @param maskingProvider the underlying masking provider
@@ -48,7 +72,7 @@ public class FileBackedPersistentMaskingProvider extends AbstractPersistentMaski
         String directoryName = configuration.getStringValue("persistence.file");
         String nameSpace = configuration.getStringValue("persistence.namespace");
 
-        this.cache = new FileCache(new File(directoryName, nameSpace).getAbsolutePath());
+        this.cache = new FileCache(resolveNamespaceFile(directoryName, nameSpace).getAbsolutePath());
 
         log.warn("File-backed persistent provider initialized. " + UUID.randomUUID());
     }

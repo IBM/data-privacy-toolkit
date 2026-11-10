@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -66,7 +67,17 @@ public class DictionaryBasedMaskingProvider implements MaskingProvider {
     private List<String> loadTermsFromFile(String dictionaryFilename) throws IOException {
         List<String> terms = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(dictionaryFilename))) {
+        if (null == dictionaryFilename || dictionaryFilename.isEmpty()) {
+            throw new IOException("dictionary filename not set");
+        }
+
+        // only regular files: reject directories and special files (e.g. devices, pipes)
+        File dictionaryFile = new File(dictionaryFilename).getAbsoluteFile();
+        if (!dictionaryFile.isFile()) {
+            throw new IOException("dictionary is not a regular file");
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(dictionaryFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 terms.add(line.trim());
