@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -64,5 +65,17 @@ public class DictionaryBasedMaskingProviderTest {
         
         assertTrue(maskedValues.size() > 0);
         
+    }
+
+    @Test
+    public void rejectsNonRegularFiles() throws Exception {
+        Path directory = Files.createTempDirectory("dict-dir");
+
+        for (String filename : new String[]{"", directory.toString(), directory.resolve("missing.txt").toString()}) {
+            MaskingConfiguration maskingConfiguration = new DefaultMaskingConfiguration();
+            maskingConfiguration.setValue("dictionaryBased.mask.filename", filename);
+
+            assertThrows(RuntimeException.class, () -> new DictionaryBasedMaskingProvider(maskingConfiguration));
+        }
     }
 }

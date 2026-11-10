@@ -25,10 +25,12 @@ import com.ibm.research.drl.dpt.providers.masking.MaskingProvider;
 import com.ibm.research.drl.dpt.providers.masking.MaskingProviderFactory;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FileBackedPersistentMaskingProviderTest {
     @Test
@@ -51,5 +53,31 @@ public class FileBackedPersistentMaskingProviderTest {
 
         String maskedEmail2_once = provider.mask(email2);
         assertNotEquals(maskedEmail2_once, maskedEmail1_once);
+    }
+
+    @Test
+    public void namespaceResolvesInsideDirectory() {
+        assertEquals(new File("/tmp", "AAAA"), FileBackedPersistentMaskingProvider.resolveNamespaceFile("/tmp", "AAAA"));
+    }
+
+    @Test
+    public void namespaceMustBeAPlainFileName() {
+        for (String namespace : new String[]{null, "", ".", "..", "../escaped.txt", "a/../../b", "/etc/passwd", "sub/dir", "..\\escaped", "a\0b"}) {
+            assertThrows(IllegalArgumentException.class,
+                    () -> FileBackedPersistentMaskingProvider.resolveNamespaceFile("/tmp", namespace),
+                    String.valueOf(namespace));
+        }
+    }
+
+    @Test
+    public void traversalNamespaceIsRejectedByProvider() {
+        MaskingProvider emailMaskingProvider = new EmailMaskingProvider(new MaskingProviderFactory(new ConfigurationManager(), Collections.emptyMap()));
+
+        DefaultMaskingConfiguration configuration = new DefaultMaskingConfiguration();
+        configuration.setValue("persistence.file", "/tmp/dpt-persist");
+        configuration.setValue("persistence.namespace", "../dpt-escaped.txt");
+
+        assertThrows(IllegalArgumentException.class, () -> new FileBackedPersistentMaskingProvider(emailMaskingProvider, configuration));
+        assertEquals(false, new File("/tmp/dpt-escaped.txt").exists());
     }
 }
