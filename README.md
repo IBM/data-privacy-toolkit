@@ -7,6 +7,7 @@
 [![license](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 
 The IBM Data Privacy Toolkit, (formerly known as Privacy Masking and Anonymization, or PRIMA) is a toolkit for data type identification, privacy risk assessment, data masking and data anonymization that is exposed as a Java/Scala library and as a REST API.
+The REST API and its web UI (see [`rest`](rest)) are provided as an example only and are not meant to be used as production code.
 The toolkit consists of four main components:
 - **Type identification**
 - **Masking providers**
