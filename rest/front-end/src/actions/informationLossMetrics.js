@@ -1,3 +1,6 @@
+import { apiFetch } from '../api'
+import { reportError } from './alerts'
+
 export const REQUEST_INFORMATION_LOSS_METRICS = 'REQUEST_INFORMATION_LOSS_METRICS'
 export const SAVE_INFORMATION_LOSS_METRICS = 'SAVE_INFORMATION_LOSS_METRICS'
 
@@ -18,17 +21,11 @@ function fetchInformationLossMetrics () {
   return dispatch => {
     dispatch(requestInformationLossMetrics())
 
-    window.fetch('api/information/informationLoss').then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Unable to retrieve information loss metrics')
-      }
-    }).then(data => dispatch(saveInformationLossMetrics(data)))
+    apiFetch('api/information/informationLoss', { what: 'Unable to retrieve the information loss metrics' })
+      .then(data => dispatch(saveInformationLossMetrics(data)))
       .catch(error => {
-        console.log(error)
         dispatch(saveInformationLossMetrics(undefined))
-        window.alert(error.message)
+        dispatch(reportError(error))
       })
   }
 }

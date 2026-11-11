@@ -1,4 +1,6 @@
 import { CSVToArray, arrayToCSV } from '../utilities'
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
 
 export const PROTECT_DATASET = 'PROTECT_DATASET'
 export const SAVE_PROTECTED_DATASET = 'SAVE_PROTECTED_DATASET'
@@ -40,14 +42,12 @@ export function protectDataset (dataset, hasHeader, useCompound, direct, types, 
       body.set('fields', JSON.stringify(fields))
       body.set('configuration', JSON.stringify(processConfiguration(configuration)))
 
-      window.fetch(`api/feature/mask/${Boolean(hasHeader)}/${Boolean(useCompound)}`, {
+      apiFetch(`api/feature/mask/${Boolean(hasHeader)}/${Boolean(useCompound)}`, {
+        what: 'Unable to protect the dataset',
+        as: 'text',
         method: 'POST',
-        body
-      }).then(response => {
-        if (response.ok) {
-          return response.text()
-        }
-        throw new Error('Error protecting the dataset')
+        body,
+        timeout: TIMEOUT.long
       }).then(
         data => {
           dispatch(saveProtectedData(CSVToArray(data.trim())))
@@ -55,7 +55,7 @@ export function protectDataset (dataset, hasHeader, useCompound, direct, types, 
       ).catch(
         error => {
           dispatch(saveProtectedData(undefined))
-          window.alert(error.message)
+          dispatch(reportError(error))
         }
       )
     } else {

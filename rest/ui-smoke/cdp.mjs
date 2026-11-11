@@ -22,6 +22,7 @@ export class Page {
   #problems = []
   #loadWaiters = []
   #stubs = new Map()
+  #expectedFailures = new Set()
   #endpoint
   #targetId
 
@@ -97,9 +98,9 @@ export class Page {
         const command = stub
           ? this.send('Fetch.fulfillRequest', {
             requestId: p.requestId,
-            responseCode: 200,
+            responseCode: stub.status,
             responseHeaders: [{ name: 'Content-Type', value: 'application/json' }],
-            body: Buffer.from(JSON.stringify(stub)).toString('base64')
+            body: Buffer.from(JSON.stringify(stub.body)).toString('base64')
           })
           : this.send('Fetch.continueRequest', { requestId: p.requestId })
         command.catch(() => {})
@@ -115,7 +116,7 @@ export class Page {
   /** Problems seen since the last call. Failing HTTP requests are included. */
   takeProblems () {
     const httpErrors = [...this.#requests.values()]
-      .filter(r => r.status >= 400)
+      .filter(r => r.status >= 400 && ![...this.#expectedFailures].some(fragment => r.url.includes(fragment)))
       .map(r => `HTTP ${r.status}: ${r.method} ${r.url}`)
     const problems = [...this.#problems, ...httpErrors]
     this.#problems = []
@@ -134,9 +135,33 @@ export class Page {
    * Answers requests whose URL contains `urlFragment` with `body` (as JSON) instead of asking the back-end. For
    * endpoints the back-end does not implement (yet) or that cannot be exercised with a small data set.
    */
-  async stub (urlFragment, body) {
-    this.#stubs.set(urlFragment, body)
-    await this.send('Fetch.enable', { patterns: [...this.#stubs.keys()].map(fragment => ({ urlPattern: `*${fragment}*` })) })
+  async stub (urlFragment, body, { status = 200 } = {}) {
+    this.#stubs.set(urlFragment, { body, status })
+    await this.#interceptStubbed()
+  }
+
+  /** Stops answering requests that contain `urlFragment` itself. */
+  async unstub (urlFragment) {
+    this.#stubs.delete(urlFragment)
+    await this.#interceptStubbed()
+  }
+
+  async #interceptStubbed () {
+    if (this.#stubs.size === 0) await this.send('Fetch.disable')
+    else await this.send('Fetch.enable', { patterns: [...this.#stubs.keys()].map(fragment => ({ urlPattern: `*${fragment}*` })) })
+  }
+
+  /**
+   * Requests whose URL contains `urlFragment` may fail with HTTP >= 400 without failing the scenario, for scenarios
+   * that check how the page copes with a failing back-end.
+   */
+  expectFailure (urlFragment) {
+    this.#expectedFailures.add(urlFragment)
+  }
+
+  /** Back to the default: every HTTP error is a problem. */
+  expectNoFailures () {
+    this.#expectedFailures.clear()
   }
 
   /** Clicks with the mouse at page coordinates, for elements (such as chart points) that have no click() of their own. */

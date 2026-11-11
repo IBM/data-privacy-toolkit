@@ -160,6 +160,32 @@ const scenarios = [
       await page.click('', 'a.btn[href="#/configurationAnon/OLA"]')
       await expectApiCall('api/information/defaultConfiguration/OLA')
     }
+  },
+
+  {
+    name: 'a failing back-end is reported in the page, which stays usable (no dialog, no stuck overlay)',
+    async run (page) {
+      const endpoint = 'api/information/configuration'
+      page.expectFailure(endpoint)
+      await page.stub(endpoint, { message: 'java.lang.IllegalStateException: details that must not be shown' }, { status: 500 })
+      try {
+        await page.route('#/configuration')
+        await page.waitForText('Unable to retrieve the configuration (HTTP 500)')
+
+        if ((await page.text()).includes('IllegalStateException')) throw new Error('the server message is shown to the user')
+        await page.waitFor("document.getElementById('blocker').classList.contains('invisible')", { description: 'the please-wait overlay to go away' })
+
+        await page.click('', '.alerts .btn-close')
+        await page.waitFor("document.querySelectorAll('.alerts .alert').length === 0", { description: 'the dismissed alert to disappear' })
+      } finally {
+        await page.unstub(endpoint)
+        page.expectNoFailures()
+      }
+
+      // the same page works again once the back-end does
+      await page.click('Reset')
+      await page.waitFor("document.querySelectorAll('#root .panel').length > 0", { description: 'the configuration to be shown' })
+    }
   }
 ]
 

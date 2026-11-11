@@ -17,6 +17,7 @@ import Explore from './pages/Explore'
 import Workflow from './pages/Workflow'
 
 import Blocker from './components/Blocker'
+import Alerts from './components/Alerts'
 
 import NavBar from './components/NavBar'
 
@@ -44,6 +45,7 @@ const Layout = () => (
         <Route path='*' element={<NotFound />} />
       </Routes>
     </div>
+    <Alerts />
     <Blocker />
   </div>
 )

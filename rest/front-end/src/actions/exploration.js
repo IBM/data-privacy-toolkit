@@ -1,3 +1,6 @@
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
+
 export const REQUEST_EXPLORATION = 'REQUEST_EXPLORATION'
 export const SAVE_EXPLORATION = 'SAVE_EXPLORATION'
 export const SAVE_LINKING = 'SAVE_LINKING'
@@ -63,18 +66,14 @@ function explore (hasHeader,
       `minK=${k.min}&maxK=${k.max}&kInterval=${k.step}&` +
       `minSuppression=${suppression.min}&maxSuppression=${suppression.max}&suppressionInterval=${suppression.step}`
 
-    window.fetch(
-      url,
-      {
-        method: 'POST',
-        body
-      }).then(response => {
-      if (response.ok) {
-        return response.json()
-      } else throw new Error('Unable to explore correctly')
+    apiFetch(url, {
+      what: 'Unable to explore the risk and utility',
+      method: 'POST',
+      body,
+      timeout: TIMEOUT.long
     }).then(data => dispatch(saveExploration(data)))
       .catch(error => {
-        window.alert(error.message)
+        dispatch(reportError(error))
         dispatch(saveExploration())
       })
   }
