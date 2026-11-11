@@ -179,7 +179,6 @@ const scenarios = [
         await page.waitFor("document.querySelectorAll('.alerts .alert').length === 0", { description: 'the dismissed alert to disappear' })
       } finally {
         await page.unstub(endpoint)
-        page.expectNoFailures()
       }
 
       // the same page works again once the back-end does

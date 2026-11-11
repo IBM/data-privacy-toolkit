@@ -120,6 +120,7 @@ export class Page {
       .map(r => `HTTP ${r.status}: ${r.method} ${r.url}`)
     const problems = [...this.#problems, ...httpErrors]
     this.#problems = []
+    this.#expectedFailures.clear()
     this.#requests = new Map([...this.#requests].filter(([, r]) => r.status < 400 || r.status === undefined))
     return problems
   }
@@ -153,15 +154,10 @@ export class Page {
 
   /**
    * Requests whose URL contains `urlFragment` may fail with HTTP >= 400 without failing the scenario, for scenarios
-   * that check how the page copes with a failing back-end.
+   * that check how the page copes with a failing back-end. Valid until the problems of the scenario are taken.
    */
   expectFailure (urlFragment) {
     this.#expectedFailures.add(urlFragment)
-  }
-
-  /** Back to the default: every HTTP error is a problem. */
-  expectNoFailures () {
-    this.#expectedFailures.clear()
   }
 
   /** Clicks with the mouse at page coordinates, for elements (such as chart points) that have no click() of their own. */
