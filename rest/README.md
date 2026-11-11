@@ -29,6 +29,12 @@ in a container, set `SERVER_ADDRESS=0.0.0.0` inside the container and publish th
 loopback interface only (`-p 127.0.0.1:8080:8080`). See the comment above the runtime stage of the
 [Dockerfile](Dockerfile) for a hardened `docker run` command.
 
+## Testing the web UI
+
+`./gradlew uiSmokeTest` builds the web UI in [`front-end`](front-end), serves it from this application and drives it
+with a headless Chrome, failing on JavaScript errors, failed requests or error dialogs. It needs Chrome or Chromium
+and either Node 22+ or Docker, so it is not part of `./gradlew check`. See [`ui-smoke/README.md`](ui-smoke/README.md).
+
 ## Masking configuration
 
 `POST /api/feature/mask/{hasHeader}/{useCompound}` accepts the masking configuration from the request.

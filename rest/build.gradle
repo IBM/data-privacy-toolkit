@@ -56,3 +56,15 @@ tasks.withType(JavaCompile).configureEach {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+// End-to-end smoke test of the web UI: builds front-end/, serves it from this application and drives it with a
+// headless Chrome. It needs Chrome or Chromium and either Node >= 22 or Docker, so it is not part of `check`:
+//   ./gradlew uiSmokeTest
+tasks.register('uiSmokeTest', Exec) {
+    group = 'verification'
+    description = 'Runs the web UI against this back-end in a headless browser (see ui-smoke/README.md).'
+
+    dependsOn 'bootJar'
+    environment 'DPT_REST_JAR', tasks.named('bootJar').flatMap { it.archiveFile }.get().asFile.absolutePath
+    commandLine 'bash', "${projectDir}/ui-smoke/run.sh"
+}
