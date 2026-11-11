@@ -33,12 +33,20 @@ for (const scenario of scenarios) {
       { description: `a call to ${fragment}` })
   }
 
+  const screenshotFile = () => join(SCREENSHOT_DIR, `${String(scenarios.indexOf(scenario) + 1).padStart(2, '0')}-${scenario.name.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase()}.png`)
+
   try {
     await scenario.run(page, { expectApiCall })
     await new Promise(resolve => setTimeout(resolve, STEP_SETTLE_MS)) // let late errors surface
-    if (SCREENSHOT_DIR) await page.screenshot(join(SCREENSHOT_DIR, `${String(scenarios.indexOf(scenario) + 1).padStart(2, '0')}-${scenario.name.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase()}.png`))
   } catch (e) {
     error = e.message
+  }
+
+  // also for failed scenarios: the picture of what was on screen is the quickest way to see what went wrong
+  if (SCREENSHOT_DIR) {
+    const file = screenshotFile()
+    await page.screenshot(file)
+    console.log(`      screenshot: ${file}`)
   }
 
   const problems = page.takeProblems()

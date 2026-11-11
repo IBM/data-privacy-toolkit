@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Pager } from 'react-bootstrap'
+import Icon from './Icon'
 
 class DatasetCell extends Component {
   render () {
@@ -119,13 +119,13 @@ export default class DatasetViewer extends Component {
             </tbody>
           </table>
         </div>
-        <Pager>
-          <Pager.Item onClick={this.goToFirstPage.bind(this)} aria-label='First'><i className='fa fa-step-backward' /></Pager.Item>
-          <Pager.Item onClick={this.goToPreviousPage.bind(this)} aria-label='Previous'><i className='fa fa-play fa-flip-horizontal' /></Pager.Item>
-          {this.state.currentPage + 1} / {this.getLastPage()}
-          <Pager.Item onClick={this.goToNextPage.bind(this)} aria-label='Next'><i className='fa fa-play' /></Pager.Item>
-          <Pager.Item onClick={this.goToLastPage.bind(this)} aria-label='Last'><i className='fa fa-step-forward' /></Pager.Item>
-        </Pager>
+        <nav className='pager' aria-label='Dataset pages'>
+          <button type='button' className='btn btn-link p-0' onClick={this.goToFirstPage.bind(this)} aria-label='First'><Icon name='skip-backward-fill' /></button>
+          <button type='button' className='btn btn-link p-0' onClick={this.goToPreviousPage.bind(this)} aria-label='Previous'><Icon name='play-fill' flip /></button>
+          <span>{this.state.currentPage + 1} / {this.getLastPage()}</span>
+          <button type='button' className='btn btn-link p-0' onClick={this.goToNextPage.bind(this)} aria-label='Next'><Icon name='play-fill' /></button>
+          <button type='button' className='btn btn-link p-0' onClick={this.goToLastPage.bind(this)} aria-label='Last'><Icon name='skip-forward-fill' /></button>
+        </nav>
       </div>
     )
   }

@@ -4,13 +4,14 @@ import { Route, Routes, Navigate } from 'react-router'
 
 import withRouter from '../withRouter'
 
-import { Nav, NavItem } from 'react-bootstrap'
+import { Nav } from 'react-bootstrap'
 
 import Loading from './Loading'
 import Identify from './Identify'
 import VulnerabilityDetection from './VulnerabilityDetection'
 import ProtectDataset from './ProtectDataset'
 import Anonymize from './Anonymize'
+import Icon from '../components/Icon'
 
 // the workflow is mounted at this path in App.jsx
 const BASE_PATH = '/workflow'
@@ -21,16 +22,16 @@ const separator = {
 
 class Workflow extends Component {
   render () {
-    const next = this.isStart() ? undefined : (<a className='btn btn-primary' onClick={this.back.bind(this)}><i className='fa fa-step-backward' /> Back</a>)
+    const next = this.isStart() ? undefined : (<button type='button' className='btn btn-primary' onClick={this.back.bind(this)}><Icon name='skip-backward-fill' /> Back</button>)
     return (
       <div className='container-fluid'>
         <h3>Privacy Protection Workflow</h3>
-        <Nav bsStyle='pills' activeKey={this.getActiveKey()}>
-          <NavItem eventKey={1}><i className='fa fa-upload' /> Load Data</NavItem>
-          <NavItem eventKey={2}><i className='fa fa-search' /> Identify Types</NavItem>
-          <NavItem eventKey={3}><i className='fa fa-search' /> Vulnerability Detection</NavItem>
-          <NavItem eventKey={4}><i className='fa fa-lock' /> Data Protection</NavItem>
-          <NavItem eventKey={5}><i className='fa fa-user-secret' /> Anonymization</NavItem>
+        <Nav variant='pills' className='workflow-pills' activeKey={this.getActiveKey()} aria-label='Workflow steps'>
+          <Nav.Item><Nav.Link as='span' eventKey={1}><Icon name='upload' /> Load Data</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link as='span' eventKey={2}><Icon name='search' /> Identify Types</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link as='span' eventKey={3}><Icon name='search' /> Vulnerability Detection</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link as='span' eventKey={4}><Icon name='lock-fill' /> Data Protection</Nav.Link></Nav.Item>
+          <Nav.Item><Nav.Link as='span' eventKey={5}><Icon name='incognito' /> Anonymization</Nav.Link></Nav.Item>
         </Nav>
         <div style={separator} />
         <Routes>
@@ -41,17 +42,18 @@ class Workflow extends Component {
           <Route path='anonymize' element={<Anonymize />} />
           <Route path='*' element={<Navigate to={`${BASE_PATH}/loading`} replace />} />
         </Routes>
-        <div className='btn-group pull-right' data-role='groups'>
+        <div className='btn-group float-end' role='group'>
           {next}
-          <a
+          <button
+            type='button'
             className='btn btn-primary' onClick={
               (event) => {
                 const nextState = this.getNextState()
                 this.props.navigate(`${BASE_PATH}/${nextState}`)
               }
             }
-          >{this.getNextLabel()} <i className='fa fa-step-forward' />
-          </a>
+          >{this.getNextLabel()} <Icon name='skip-forward-fill' />
+          </button>
         </div>
       </div>
     )

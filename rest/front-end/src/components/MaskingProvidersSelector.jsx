@@ -1,11 +1,12 @@
 import React from 'react'
 
 import SelectableValue from './SelectableValue'
+import Icon from './Icon'
 
 const MaskingProvidersSelector = ({ selected = 'UNKNOWN', providers, onChange }) => (
   <SelectableValue
     shownValue={
-      <span>{selected} <i className='fa fa-pencil' /></span>
+      <span>{selected} <Icon name='pencil-fill' /></span>
     }
     hiddenValue={
       <select

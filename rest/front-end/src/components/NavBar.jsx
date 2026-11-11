@@ -1,41 +1,38 @@
 import React from 'react'
 
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
+import { Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 
-const generateTitle = (iconClass, text) => {
-  return (
-    <span><i className={'fa ' + iconClass} /> {text}</span>
-  )
-}
+import Icon from './Icon'
+
+const title = (icon, text) => <span><Icon name={icon} /> {text}</span>
 
 const NavBar = () => (
-  <Navbar className='navbar navbar-default navbar-fixed-top'>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href='https://www.research.ibm.com/labs/ireland/'>IBM Research Europe - Ireland</a>
-      </Navbar.Brand>
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <NavItem href='#/'><i className='fa fa-home' /> Home</NavItem>
-        <NavDropdown id='information_drop_down' title={generateTitle('fa-info-circle', 'Information')}>
-          <MenuItem href='#/identifiers'>Identifiers</MenuItem>
-          <MenuItem href='#/maskingProviders'>Masking Providers</MenuItem>
-          <MenuItem href='#/anonymizationProviders'>Anonymization Providers</MenuItem>
-        </NavDropdown>
-        <NavDropdown id='configuration_drop_down' title={generateTitle('fa-gear', 'Configurations')}>
-          <MenuItem href='#/configuration'>Masking Providers</MenuItem>
-          <MenuItem href='#/configurationAnon'>Anonymization Algorithms</MenuItem>
-        </NavDropdown>
-        <NavDropdown id='demos_drop_down' title={generateTitle('fa-laptop', 'Demos')}>
-          <MenuItem href='#/workflow/loading'>Data Protection Workflow</MenuItem>
-          <MenuItem divider />
-          <MenuItem href='#/dicomMasking' disabled>DICOM Masking</MenuItem>
-          <MenuItem divider />
-          <MenuItem href='#/freetext' disabled>Free-text Pipeline</MenuItem>
-        </NavDropdown>
-      </Nav>
-    </Navbar.Collapse>
+  <Navbar expand='lg' fixed='top' variant='dark' className='app-navbar' collapseOnSelect>
+    <Container fluid>
+      <Navbar.Brand href='https://www.research.ibm.com/labs/ireland/'>IBM Research Europe - Ireland</Navbar.Brand>
+      <Navbar.Toggle aria-controls='main-navigation' />
+      <Navbar.Collapse id='main-navigation'>
+        <Nav>
+          <Nav.Link href='#/'><Icon name='house-fill' /> Home</Nav.Link>
+          <NavDropdown id='information_drop_down' title={title('info-circle-fill', 'Information')}>
+            <NavDropdown.Item href='#/identifiers'>Identifiers</NavDropdown.Item>
+            <NavDropdown.Item href='#/maskingProviders'>Masking Providers</NavDropdown.Item>
+            <NavDropdown.Item href='#/anonymizationProviders'>Anonymization Providers</NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown id='configuration_drop_down' title={title('gear-fill', 'Configurations')}>
+            <NavDropdown.Item href='#/configuration'>Masking Providers</NavDropdown.Item>
+            <NavDropdown.Item href='#/configurationAnon'>Anonymization Algorithms</NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown id='demos_drop_down' title={title('laptop', 'Demos')}>
+            <NavDropdown.Item href='#/workflow/loading'>Data Protection Workflow</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href='#/dicomMasking' disabled>DICOM Masking</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href='#/freetext' disabled>Free-text Pipeline</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+    </Container>
   </Navbar>
 )
 

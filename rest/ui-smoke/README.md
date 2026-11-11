@@ -44,7 +44,7 @@ The output ends with the list of back-end calls the UI made.
 
 Append to `scenarios` in [`scenarios.mjs`](scenarios.mjs). The helpers on `page` are documented in
 [`cdp.mjs`](cdp.mjs): `route`, `click`, `choose`, `waitFor`, `waitForText`, `evaluate`, plus `expectApiCall(fragment)`.
-`click` only matches buttons (`a.btn`, `button.btn`), not navigation links.
+`click` matches buttons (`button.btn`, and `a.btn` for link-styled buttons), not the plain navigation links.
 
 ## Running against an already running instance
 

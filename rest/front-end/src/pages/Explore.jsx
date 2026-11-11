@@ -8,6 +8,7 @@ import Controllers from '../components/Controllers'
 
 import { saveConfiguration, exploreIfNeeded } from '../actions/exploration'
 import { arrayToCSV } from '../utilities'
+import Icon from '../components/Icon'
 
 class Explore extends Component {
   constructor (props) {
@@ -61,8 +62,9 @@ class Explore extends Component {
             this.setState(Object.assign({}, this.state, { suppression }))
           }}
         />
-        <a
-          className='btn btn-primary pull-right' onClick={event => {
+        <button
+          type='button'
+          className='btn btn-primary float-end' onClick={event => {
             const sensitive = this.props.sensitive
             const vulnerabilities = this.props.eQuasi.concat(this.props.kQuasi)
 
@@ -77,8 +79,8 @@ class Explore extends Component {
               arrayToCSV(this.props.protected)
             )
           }}
-        ><i className='fa fa-gear' /> Compute risk utility
-        </a>
+        ><Icon name='gear-fill' /> Compute risk utility
+        </button>
       </div>
     )
   }

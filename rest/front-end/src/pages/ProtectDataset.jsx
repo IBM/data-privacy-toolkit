@@ -12,6 +12,7 @@ import { protectDataset } from '../actions/protect'
 import { updateColumnValue } from '../actions/identify'
 import { getMaskingProvidersIfNeeded } from '../actions/maskingProviders'
 import { getMaskingConfigurationIfNeeded } from '../actions/configurations'
+import Icon from '../components/Icon'
 
 class ProtectDataset extends Component {
   constructor (props) {
@@ -44,15 +45,16 @@ class ProtectDataset extends Component {
         </div>
         <div className='form-inline'>
           <div className='form-group'>
-            <a className='btn btn-info' onClick={event => { this.props.navigate('/configuration') }}><i className='fa fa-gear' /> Configure</a>
+            <button type='button' className='btn btn-info' onClick={event => { this.props.navigate('/configuration') }}><Icon name='gear-fill' /> Configure</button>
           </div>
           <div className='form-group'>
-            <a
+            <button
+              type='button'
               className='btn btn-primary' onClick={event => {
                 this.props.protectDataset(this.props.dataset, this.props.hasHeader, this.state.useCompound, this.props.direct, this.props.headers, this.props.configuration, this.state.useGlobalDiffPriv)
               }}
-            ><i className='fa fa-lock' /> Protect
-            </a>
+            ><Icon name='lock-fill' /> Protect
+            </button>
           </div>
         </div>
       </div>

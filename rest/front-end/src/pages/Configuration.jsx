@@ -3,13 +3,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { saveMaskingConfiguration, getMaskingConfigurationIfNeeded } from '../actions/configurations'
+import Icon from '../components/Icon'
 
 const ConfigurationEntry = ({ index, option, onChangeValue }) => (
   <div className='row'>
-    <div className='col-xs-1'><span className='pull-right'>{index + 1}</span></div>
-    <div className='col-xs-4'>{option.id}</div>
-    <div className='col-xs-4'>{option.description}</div>
-    <div className='col-xs-3'>
+    <div className='col-1'><span className='float-end'>{index + 1}</span></div>
+    <div className='col-4'>{option.id}</div>
+    <div className='col-4'>{option.description}</div>
+    <div className='col-3'>
       <input
         value={option.value || 'null'} type={option.type} onChange={(event) => {
           let value
@@ -44,9 +45,9 @@ const Category = ({ category, options, onChangeValue }) => {
   })
 
   return (
-    <div className='panel panel-default'>
+    <div className='panel'>
       <div className='panel-heading'><b>{category}</b></div>
-      <div className='panel-content'>
+      <div className='panel-content p-2'>
         {configurationEntries}
       </div>
     </div>
@@ -85,12 +86,13 @@ class Configuration extends Component {
       <div className='component-fluid'>
         <h3>System configuration (by category)</h3>
         {rows}
-        <a
+        <button
+          type='button'
           className='btn btn-success' onClick={() => {
             this.props.getConfiguration()
           }}
-        ><i className='fa fa-refresh' /> Reset
-        </a>
+        ><Icon name='arrow-clockwise' /> Reset
+        </button>
       </div>
     )
   }

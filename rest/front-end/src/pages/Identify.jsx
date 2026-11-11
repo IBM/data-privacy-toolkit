@@ -8,6 +8,7 @@ import MaskingProvidersSelector from '../components/MaskingProvidersSelector'
 
 import { identifyDataset, updateColumnValue } from '../actions/identify'
 import { getMaskingProvidersIfNeeded } from '../actions/maskingProviders'
+import Icon from '../components/Icon'
 
 class Identify extends Component {
   constructor (props) {
@@ -33,12 +34,13 @@ class Identify extends Component {
             />
           </div>
           <div className='form-group'>
-            <a
+            <button
+              type='button'
               className='btn btn-primary' onClick={event => {
                 this.props.identifyDataset(this.props.dataset, this.props.hasHeader, this.state.sampleSize)
               }}
-            ><i className='fa fa-search' /> Identify
-            </a>
+            ><Icon name='search' /> Identify
+            </button>
           </div>
         </div>
       </div>

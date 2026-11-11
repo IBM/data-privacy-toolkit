@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import { getAnonymizationProvidersIfNeeded } from '../actions/anonymizationProviders'
 import { beautify } from '../utilities'
+import Icon from '../components/Icon'
 
 class ConfigurationEntry extends React.Component {
   render () {
@@ -14,7 +15,7 @@ class ConfigurationEntry extends React.Component {
         <td>{this.props.index + 1}</td>
         <td>{x.friendlyName || beautify(x.name)}</td>
         <td>{x.description}</td>
-        <td><a href={'#/configurationAnon/' + x.name} className='btn btn-primary'><i className='fa fa-gear' /></a></td>
+        <td><a href={'#/configurationAnon/' + x.name} className='btn btn-primary'><Icon name='gear-fill' /></a></td>
       </tr>
     )
   }

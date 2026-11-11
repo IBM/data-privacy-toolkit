@@ -6,12 +6,14 @@ import { loadDicomFile, maskDicomFile } from '../actions/dicom'
 import DicomImageViewer from '../components/DicomImageViewer'
 import DicomFileSelector from '../components/DicomFileSelector'
 import DicomMetadata from '../components/DicomMetadata'
+import Icon from '../components/Icon'
 
 class DICOMMasking extends Component {
   render () {
     const mask = this.props.original
       ? (
-        <a
+        <button
+          type='button'
           className='btn btn-primary' onClick={
           _ => {
             if (this.props.original) {
@@ -19,8 +21,8 @@ class DICOMMasking extends Component {
             }
           }
         }
-        ><i className='fa fa-lock' /> Mask
-        </a>
+        ><Icon name='lock-fill' /> Mask
+        </button>
         )
       : undefined
 

@@ -15,6 +15,7 @@ import { saveLinking } from '../actions/exploration'
 import { anonymizeDataset } from '../actions/anonymize'
 
 import { getFieldColor } from '../utilities'
+import Icon from '../components/Icon'
 
 const InformationLossSelector = ({ id = '', algorithms, selected, onChange }) => {
   const options = algorithms.map((algorithm, index) => <option key={index} value={algorithm.shortName}>{algorithm.name}</option>)
@@ -81,15 +82,17 @@ class Anonymize extends Component {
         </div>
         <div className='form-inline'>
           <div className='form-group'>
-            <a
+            <button
+              type='button'
               className='btn btn-primary' onClick={event => {
                 this.props.navigate('/exploration')
               }}
-            ><i className='fa fa-line-chart' /> Explore
-            </a>
+            ><Icon name='graph-up' /> Explore
+            </button>
           </div>
           <div className='form-group'>
-            <a
+            <button
+              type='button'
               className='btn btn-primary' onClick={event => {
                 const options = {
                   lossMetric: this.state.selectedMetric,
@@ -102,8 +105,8 @@ class Anonymize extends Component {
                   this.props.protected, this.props.hasHeader, Array.from(this.props.kQuasi), Array.from(this.props.eQuasi), Array.from(this.props.sensitive), this.props.headers, options
                 )
               }}
-            ><i className='fa fa-user-secret' /> Anonymize
-            </a>
+            ><Icon name='incognito' /> Anonymize
+            </button>
           </div>
         </div>
       </div>
@@ -151,21 +154,23 @@ class Anonymize extends Component {
         const fieldSensitivity = this.getFieldSensitivity(i)
         const fieldContainerClasses = `fieldTypeContainer ${getFieldColor(fieldSensitivity)}`
 
-        const icon = `fa fa-${this.props.linkingData.has(i) ? 'link' : 'chain-broken'}`
+        const linked = this.props.linkingData.has(i)
+        const toggleLinking = () => {
+          const newLinkingData = new Set(this.props.linkingData)
+
+          if (linked) {
+            newLinkingData.delete(i)
+          } else {
+            newLinkingData.add(i)
+          }
+
+          this.props.updateLinking(newLinkingData)
+        }
+        // a real button, so that the toggle can be reached and operated with the keyboard
         const linkIcon = (
-          <i
-            className={icon} onClick={event => {
-              const newLinkingData = new Set(this.props.linkingData)
-
-              if (this.props.linkingData.has(i)) {
-                newLinkingData.delete(i)
-              } else {
-                newLinkingData.add(i)
-              }
-
-              this.props.updateLinking(newLinkingData)
-            }}
-          />
+          <button type='button' className='btn btn-link p-0 border-0 align-baseline' aria-pressed={linked} title='Use this column to link records' onClick={toggleLinking}>
+            <Icon name={linked ? 'link-45deg' : 'x-lg'} label={linked ? 'Linked' : 'Not linked'} />
+          </button>
         )
 
         return (

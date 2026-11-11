@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Icon from './Icon'
 
 const separator = {
   marginTop: '10px'
@@ -40,9 +41,9 @@ class DatasetUploader extends Component {
     return (
       <div>
         <input type='file' className='form-control' onChange={this.onFileSelection.bind(this)} />
-        <div className='checkbox'>
+        <div className='form-check'>
           <label>Has header: <input type='checkbox' onChange={this.onHasHeadersChange.bind(this)} /></label>
-          <a className='btn btn-primary' onClick={this.uploadFile.bind(this)}><i className='fa fa-upload' /> Load the Selected Dataset</a>
+          <button type='button' className='btn btn-primary' onClick={this.uploadFile.bind(this)}><Icon name='upload' /> Load the Selected Dataset</button>
         </div>
       </div>
     )

@@ -10,7 +10,7 @@ const Confirmation = ({ k, suppression, onYes, onNo }) => (
       <b>k:</b> <code>{k}</code>, <b>suppression:</b> <code>{suppression}</code>
     </div>
     <div style={{ textAlign: 'right' }}>
-      <a className='btn btn-success' onClick={onYes}>Yes</a> <a className='btn btn-danger' onClick={onNo}>No</a>
+      <button type='button' className='btn btn-success' onClick={onYes}>Yes</button> <button type='button' className='btn btn-danger' onClick={onNo}>No</button>
     </div>
   </div>
 )

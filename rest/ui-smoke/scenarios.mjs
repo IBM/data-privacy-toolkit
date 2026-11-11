@@ -115,14 +115,22 @@ const scenarios = [
       await page.click('Compute risk utility')
       await expectApiCall('api/feature/explore')
 
+      // The chart is an SVG drawn with an animation. Points are the small filled symbols above the legend (axis ticks
+      // have no fill); the legend's own symbols are below them.
+      const points = `(() => {
+        const chart = document.querySelector('.riskUtilityChart')
+        const legendTop = chart.getBoundingClientRect().bottom - 60
+        return [...chart.querySelectorAll('svg path')]
+          .map(p => ({ box: p.getBoundingClientRect(), fill: p.getAttribute('fill'), stroke: p.getAttribute('stroke') }))
+          .filter(p => p.fill && p.fill !== 'none' && p.box.width > 0 && p.box.width < 14 && p.box.bottom < legendTop)
+      })()`
       // 3 results at the initial suppression (0), for 2 risk metrics (HGEORM is not drawn)
-      const symbols = "[...document.querySelectorAll('.riskUtilityChart svg path')].filter(p => p.getAttribute('fill') && p.getAttribute('fill') !== 'none' && p.getBBox().width < 14 && p.getBBox().width > 0)"
-      await page.waitFor(`${symbols}.length === 6`, { description: '6 chart points (3 per metric x 2 metrics)' })
+      await page.waitFor(`${points}.length === 6`, { description: '6 chart points (3 results x 2 risk metrics)' })
 
-      const [x, y] = await page.evaluate(`(() => { const r = ${symbols}[0].getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2] })()`)
+      const [x, y] = await page.evaluate(`(() => { const r = ${points}[0].box; return [r.x + r.width / 2, r.y + r.height / 2] })()`)
       await page.clickAt(x, y)
       await page.waitForText('Use the following values for the anonymization step')
-      await page.click('Yes', 'a.btn')
+      await page.click('Yes', 'button.btn')
       await page.waitFor("location.hash !== '#/exploration'", { description: 'to leave the exploration page after choosing' })
     }
   },

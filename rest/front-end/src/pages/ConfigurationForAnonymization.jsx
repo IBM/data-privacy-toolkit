@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import withRouter from '../withRouter'
 
 import { saveAnonymizationProviderConfiguration, fetchAnonymizationProviderConfigurationIfNeeded } from '../actions/configurations'
+import Icon from '../components/Icon'
 
 function beautify (name) {
   return name.toUpperCase()
@@ -79,7 +80,7 @@ class ConfigurationForAnonymization extends Component {
             {rows}
           </tbody>
         </table>
-        <a className='btn btn-primary' onClick={this.update.bind(this)}><i className='fa fa-save' /> Save</a>
+        <button type='button' className='btn btn-primary' onClick={this.update.bind(this)}><Icon name='floppy-fill' /> Save</button>
       </div>
     )
   }
