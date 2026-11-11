@@ -33,7 +33,7 @@ step throws **or** if the page reports any of:
 - an uncaught exception;
 - a `console.error` or `console.warn`;
 - a failed request or an HTTP status >= 400;
-- an `alert()` / `confirm()` dialog (the UI uses `alert` to report back-end errors).
+- an `alert()` / `confirm()` dialog (the UI reports back-end errors in the page, see `components/Alerts.jsx`).
 
 The current scenarios load every information page, open the not-found page, and walk the whole data-protection
 workflow (load `simple.csv`, identify types, find vulnerabilities, protect, anonymize, explore risk/utility), asserting
@@ -41,7 +41,9 @@ that each back-end endpoint is actually called. Scenarios run in one browser tab
 depend on each other. The output ends with the list of back-end calls the UI made.
 
 The back-end has no `explore` endpoint yet, so that scenario answers `POST api/feature/explore` with a canned response
-(`page.stub`). It is the only stubbed call.
+(`page.stub`). The last scenario makes a call fail on purpose (`page.stub(..., { status: 500 })` plus
+`page.expectFailure`) to check that the page shows the error, hides the overlay and keeps working. Otherwise every
+HTTP status >= 400 fails the scenario.
 
 ## Screenshots
 
@@ -57,7 +59,8 @@ SCREENSHOTS_OUT=ui-smoke/screenshots/mine ./gradlew uiSmokeTest
 
 Append to `scenarios` in [`scenarios.mjs`](scenarios.mjs). The helpers on `page` are documented in
 [`cdp.mjs`](cdp.mjs): `route`, `click`, `clickAt` (mouse click at page coordinates, e.g. on a chart), `choose`,
-`waitFor`, `waitForText`, `evaluate`, `stub(urlFragment, jsonBody)` (answer a request without calling the back-end),
+`waitFor`, `waitForText`, `evaluate`, `stub(urlFragment, jsonBody, { status })` / `unstub` (answer a request without calling the back-end),
+`expectFailure(urlFragment)` (tolerate an HTTP error for the current scenario),
 plus `expectApiCall(fragment)`.
 `click` matches buttons (`button.btn`, and `a.btn` for link-styled buttons), not the plain navigation links.
 
