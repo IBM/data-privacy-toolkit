@@ -168,7 +168,7 @@ class Anonymize extends Component {
         }
         // a real button, so that the toggle can be reached and operated with the keyboard
         const linkIcon = (
-          <button type='button' className='btn btn-link p-0 border-0 align-baseline' aria-pressed={linked} title='Use this column to link records' onClick={toggleLinking}>
+          <button type='button' className='btn btn-link p-0 border-0 align-baseline text-reset' aria-pressed={linked} title='Use this column to link records' onClick={toggleLinking}>
             <Icon name={linked ? 'link-45deg' : 'x-lg'} label={linked ? 'Linked' : 'Not linked'} />
           </button>
         )

@@ -73,7 +73,7 @@ const scenarios = [
       await page.click('Identify')
       await expectApiCall('api/feature/identify/false')
       // the identified types are shown in the header selectors of the dataset
-      await page.waitFor("[...document.querySelectorAll('#root .fa-pencil')].length > 0", { description: 'identified column types' })
+      await page.waitFor("[...document.querySelectorAll('#root .fieldTypeText')].some(e => e.innerText.includes('PHONE'))", { description: 'the PHONE column type found by the back-end' })
     }
   },
 

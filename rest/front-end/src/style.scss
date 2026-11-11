@@ -25,6 +25,11 @@
   $nav-pills-link-active-bg: $IBMBlue4,
   $nav-link-padding-y: 0.4rem,
   $nav-link-padding-x: 0.8rem,
+  // white text on the IBM blue buttons, as before (white on #008ABF is 3.9:1; Bootstrap's default threshold is 4.5)
+  $min-contrast-ratio: 3.5,
+  $navbar-dark-color: #fff,
+  $navbar-dark-hover-color: #fff,
+  $navbar-dark-active-color: #fff,
   $enable-shadows: false
 );
 
@@ -148,12 +153,6 @@
 
 .watsonCursor {
     cursor: url(images/watson.gif), auto !important;
-}
-
-.invisible {
-    visibility: visible !important;
-    opacity: 0;
-    z-index: -1000;
 }
 
 #blocker {

@@ -36,14 +36,29 @@ step throws **or** if the page reports any of:
 - an `alert()` / `confirm()` dialog (the UI uses `alert` to report back-end errors).
 
 The current scenarios load every information page, open the not-found page, and walk the whole data-protection
-workflow (load `simple.csv`, identify types, find vulnerabilities, protect, anonymize), asserting that each back-end
-endpoint is actually called. Scenarios run in one browser tab, in order, because the workflow steps depend on each other.
-The output ends with the list of back-end calls the UI made.
+workflow (load `simple.csv`, identify types, find vulnerabilities, protect, anonymize, explore risk/utility), asserting
+that each back-end endpoint is actually called. Scenarios run in one browser tab, in order, because the workflow steps
+depend on each other. The output ends with the list of back-end calls the UI made.
+
+The back-end has no `explore` endpoint yet, so that scenario answers `POST api/feature/explore` with a canned response
+(`page.stub`). It is the only stubbed call.
+
+## Screenshots
+
+Set `SCREENSHOTS_OUT=<dir>` (relative to `rest/` when using Gradle) to save one PNG per scenario, including failed ones.
+The picture is taken when the scenario ends, so it shows the page the scenario finished on. The directory
+`screenshots/` is git-ignored; use it to compare the look of the UI before and after a change.
+
+```bash
+SCREENSHOTS_OUT=ui-smoke/screenshots/mine ./gradlew uiSmokeTest
+```
 
 ## Adding a scenario
 
 Append to `scenarios` in [`scenarios.mjs`](scenarios.mjs). The helpers on `page` are documented in
-[`cdp.mjs`](cdp.mjs): `route`, `click`, `choose`, `waitFor`, `waitForText`, `evaluate`, plus `expectApiCall(fragment)`.
+[`cdp.mjs`](cdp.mjs): `route`, `click`, `clickAt` (mouse click at page coordinates, e.g. on a chart), `choose`,
+`waitFor`, `waitForText`, `evaluate`, `stub(urlFragment, jsonBody)` (answer a request without calling the back-end),
+plus `expectApiCall(fragment)`.
 `click` matches buttons (`button.btn`, and `a.btn` for link-styled buttons), not the plain navigation links.
 
 ## Running against an already running instance
