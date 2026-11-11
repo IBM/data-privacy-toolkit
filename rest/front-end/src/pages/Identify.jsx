@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import withRouter from '../withRouter'
+
 import DatasetViewer from '../components/DatasetViewer'
 import MaskingProvidersSelector from '../components/MaskingProvidersSelector'
 
@@ -45,7 +47,7 @@ class Identify extends Component {
 
   componentDidMount () {
     if (undefined === this.props.dataset) {
-      this.props.history.goBack()
+      this.props.navigate(-1)
     } else {
       this.props.getMaskingProviders()
       // if (false && undefined === this.props.headers) {
@@ -105,7 +107,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Identify)
+)(Identify))

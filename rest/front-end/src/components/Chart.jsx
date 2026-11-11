@@ -12,8 +12,10 @@ export default class Chart extends Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps (nextProps) {
-    this.chart.update(nextProps.options)
+  componentDidUpdate (previousProps) {
+    if (this.chart && previousProps.options !== this.props.options) {
+      this.chart.update(this.props.options)
+    }
   }
 
   render () {

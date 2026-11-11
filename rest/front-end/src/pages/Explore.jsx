@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import withRouter from '../withRouter'
+
 import Plot from '../components/Plot'
 import Controllers from '../components/Controllers'
 
@@ -31,7 +33,7 @@ class Explore extends Component {
         <Plot
           minSuppression={this.state.k.min} data={this.props.result} selectedConfiguration={(k, suppression) => {
             this.props.saveConfiguration(k, suppression)
-            this.props.history.goBack()
+            this.props.navigate(-1)
           }}
         />
         )
@@ -83,7 +85,7 @@ class Explore extends Component {
 
   componentDidMount () {
     if (undefined === this.props.protected || undefined === this.props.direct || undefined === this.props.eQuasi || undefined === this.props.kQuasi || undefined === this.props.sensitive) {
-      this.props.history.goBack()
+      this.props.navigate(-1)
     }
   }
 }
@@ -131,6 +133,6 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
-  mapDispatchToProps)(Explore)
+  mapDispatchToProps)(Explore))

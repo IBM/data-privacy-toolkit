@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { withRouter } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const NotFound = () => (
   <div>
@@ -17,4 +16,4 @@ const NotFound = () => (
   </div>
 )
 
-export default withRouter(NotFound)
+export default NotFound

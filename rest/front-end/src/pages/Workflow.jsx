@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
-import { Route, Redirect, Switch, withRouter } from 'react-router'
+import { Route, Routes, Navigate } from 'react-router'
+
+import withRouter from '../withRouter'
 
 import { Nav, NavItem } from 'react-bootstrap'
 
@@ -9,6 +11,9 @@ import Identify from './Identify'
 import VulnerabilityDetection from './VulnerabilityDetection'
 import ProtectDataset from './ProtectDataset'
 import Anonymize from './Anonymize'
+
+// the workflow is mounted at this path in App.jsx
+const BASE_PATH = '/workflow'
 
 const separator = {
   marginTop: '10px'
@@ -28,21 +33,21 @@ class Workflow extends Component {
           <NavItem eventKey={5}><i className='fa fa-user-secret' /> Anonymization</NavItem>
         </Nav>
         <div style={separator} />
-        <Switch>
-          <Route path={this.props.match.path + '/loading'} component={Loading} />
-          <Route path={this.props.match.path + '/identify'} component={Identify} />
-          <Route path={this.props.match.path + '/risk'} component={VulnerabilityDetection} />
-          <Route path={this.props.match.path + '/protect'} component={ProtectDataset} />
-          <Route path={this.props.match.path + '/anonymize'} component={Anonymize} />
-          <Redirect from={this.props.match.path} to={this.props.match.path + '/loading'} />
-        </Switch>
+        <Routes>
+          <Route path='loading' element={<Loading />} />
+          <Route path='identify' element={<Identify />} />
+          <Route path='risk' element={<VulnerabilityDetection />} />
+          <Route path='protect' element={<ProtectDataset />} />
+          <Route path='anonymize' element={<Anonymize />} />
+          <Route path='*' element={<Navigate to={`${BASE_PATH}/loading`} replace />} />
+        </Routes>
         <div className='btn-group pull-right' data-role='groups'>
           {next}
           <a
             className='btn btn-primary' onClick={
               (event) => {
                 const nextState = this.getNextState()
-                this.props.history.push(`${this.props.match.path}/${nextState}`)
+                this.props.navigate(`${BASE_PATH}/${nextState}`)
               }
             }
           >{this.getNextLabel()} <i className='fa fa-step-forward' />
@@ -53,7 +58,7 @@ class Workflow extends Component {
   }
 
   back (event) {
-    this.props.history.goBack()
+    this.props.navigate(-1)
   }
 
   getNextState () {
@@ -95,11 +100,7 @@ class Workflow extends Component {
   }
 
   getChildPath () {
-    const path = this.props.match.path
-    const pathRegEx = new RegExp(path + '/(.*)')
-    const fullPath = this.props.location.pathname
-
-    const matchedPath = pathRegEx.exec(fullPath)
+    const matchedPath = new RegExp(`^${BASE_PATH}/(.*)`).exec(this.props.location.pathname)
 
     if (matchedPath === null || matchedPath.length <= 1) {
       return 'loading'

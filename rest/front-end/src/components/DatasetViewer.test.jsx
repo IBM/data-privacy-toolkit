@@ -1,43 +1,19 @@
-/* global it expect */
-
-import React from 'react'
-import ReactDOM from 'react-dom'
-
-import renderer from 'react-test-renderer'
-import ShallowRenderer from 'react-test-renderer/shallow'
+import { describe, it, expect } from 'vitest'
+import { render } from '@testing-library/react'
 
 import DatasetViewer from './DatasetViewer'
 
-const shallow = element => {
-  const shallowRenderer = new ShallowRenderer()
-  shallowRenderer.render(element)
-  return shallowRenderer.getRenderOutput()
-}
+describe('DatasetViewer', () => {
+  it('renders an empty dataset', () => {
+    const { container } = render(<DatasetViewer dataset={[]} />)
 
-it('testing component only, withtout internal structures', () => {
-  const component = shallow(<DatasetViewer dataset={[]} />)
+    expect(container.querySelectorAll('tbody tr')).toHaveLength(0)
+  })
 
-  expect(component).not.toBeUndefined()
-})
+  it('renders one table row per dataset row, with a leading row number', () => {
+    const { container } = render(<DatasetViewer dataset={[[0, 1, 2, 3], [4, 5, 6, 7]]} />)
 
-it('renders empty dataset', () => {
-  const component = renderer.create(<DatasetViewer dataset={[]} />)
-
-  expect(component).not.toBeUndefined()
-})
-
-it('renders the dataset of a row using shallow', () => {
-  const testDataset = [[0, 1, 2, 3]]
-
-  const component = shallow(<DatasetViewer dataset={testDataset} />)
-
-  expect(component).not.toBeUndefined()
-})
-
-it('renders the dataset of a row', () => {
-  const div = document.createElement('div')
-
-  const testDataset = [[0, 1, 2, 3]]
-
-  ReactDOM.render(<DatasetViewer dataset={testDataset} />, div)
+    const rows = [...container.querySelectorAll('tbody tr')].map(row => [...row.querySelectorAll('td')].map(cell => cell.textContent))
+    expect(rows).toEqual([['1', '0', '1', '2', '3'], ['2', '4', '5', '6', '7']])
+  })
 })

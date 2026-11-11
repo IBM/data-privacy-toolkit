@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import withRouter from '../withRouter'
+
 import DatasetViewer from '../components/DatasetViewer'
 import AlgorithmSelector from '../components/AlgorithmSelector'
 import Legend from '../components/Legend'
@@ -81,7 +83,7 @@ class Anonymize extends Component {
           <div className='form-group'>
             <a
               className='btn btn-primary' onClick={event => {
-                this.props.history.push('/exploration')
+                this.props.navigate('/exploration')
               }}
             ><i className='fa fa-line-chart' /> Explore
             </a>
@@ -110,7 +112,7 @@ class Anonymize extends Component {
 
   componentDidMount () {
     if (undefined === this.props.protected) {
-      this.props.history.goBack()
+      this.props.navigate(-1)
     } else {
       if (this.props.metrics.length === 0) {
         this.props.getInformationLossMetrics()
@@ -217,7 +219,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Anonymize)
+)(Anonymize))

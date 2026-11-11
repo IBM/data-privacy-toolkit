@@ -36,6 +36,15 @@ const scenarios = [
   },
 
   {
+    name: 'exploration without protected data goes back instead of crashing',
+    async run (page) {
+      // runs before the workflow scenarios: it needs an empty application state
+      await page.route('#/exploration')
+      await page.waitFor("location.hash !== '#/exploration'", { description: 'the guard to navigate back' })
+    }
+  },
+
+  {
     name: `workflow: load ${SIMPLE_DATASET}`,
     async run (page) {
       await page.route('#/workflow/loading')
@@ -83,6 +92,33 @@ const scenarios = [
     async run (page) {
       await page.click('Next')
       await page.waitForText('Explore')
+    }
+  },
+
+  {
+    name: 'workflow: Back returns to the previous step (router history)',
+    async run (page) {
+      await page.click('Back')
+      await page.waitForText('Use Compound Data Masking')
+    }
+  },
+
+  {
+    name: 'workflow: Configure opens the masking configuration (router navigation)',
+    async run (page, { expectApiCall }) {
+      await page.click('Configure')
+      await page.waitFor("location.hash === '#/configuration'", { description: 'the #/configuration route' })
+      await page.waitForText('System configuration')
+    }
+  },
+
+  {
+    name: 'anonymization algorithm configuration uses the route parameter',
+    async run (page, { expectApiCall }) {
+      await page.route('#/configurationAnon')
+      await page.waitFor("!!document.querySelector('#root a[href=\"#/configurationAnon/OLA\"]')", { description: 'the list of algorithms' })
+      await page.click('', 'a.btn[href="#/configurationAnon/OLA"]')
+      await expectApiCall('api/information/defaultConfiguration/OLA')
     }
   }
 ]

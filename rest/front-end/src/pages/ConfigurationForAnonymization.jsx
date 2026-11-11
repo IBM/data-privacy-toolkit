@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 
+import withRouter from '../withRouter'
+
 import { saveAnonymizationProviderConfiguration, fetchAnonymizationProviderConfigurationIfNeeded } from '../actions/configurations'
 
 function beautify (name) {
@@ -25,7 +27,7 @@ class ConfigurationForAnonymization extends Component {
   }
 
   componentDidMount () {
-    const selectedAlgorithm = this.props.match.params.anonymizationAlgorithm
+    const selectedAlgorithm = this.props.params.anonymizationAlgorithm
     this.props.getAnonymizationConfiguration(selectedAlgorithm)
   }
 
@@ -61,7 +63,7 @@ class ConfigurationForAnonymization extends Component {
   }
 
   render () {
-    const rows = this.buildPropertyList(this.state || this.props.algorithmConfigurations, this.props.match.params.anonymizationAlgorithm)
+    const rows = this.buildPropertyList(this.state || this.props.algorithmConfigurations, this.props.params.anonymizationAlgorithm)
 
     return (
       <div>
@@ -100,7 +102,7 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(ConfigurationForAnonymization)
+)(ConfigurationForAnonymization))
