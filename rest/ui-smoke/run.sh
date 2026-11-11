@@ -9,6 +9,7 @@
 #   NODE_IMAGE    container image used when no local Node >= 22 exists
 #   APP_PORT      port of the back-end             (default 18080)
 #   CDP_PORT      DevTools port of the browser     (default 19222)
+#   SCREENSHOTS_OUT  directory that receives a PNG per scenario (for reviewing the look of the UI)
 #
 # Needs: Java 21, Chrome or Chromium, and either Node >= 22 or Docker. Everything listens on 127.0.0.1 only.
 set -euo pipefail
@@ -74,7 +75,7 @@ if local_node_ok; then
   rm -rf "$WORK/front-end/node_modules" "$WORK/front-end/build"
   (cd "$WORK/front-end" && npm ci --no-audit --no-fund && npm run build)
   UI_BUILD="$WORK/front-end/build"
-  run_driver () { node "$HERE/smoke.mjs"; }
+  run_driver () { SCREENSHOT_DIR="${SCREENSHOTS_OUT:-}" node "$HERE/smoke.mjs"; }
 else
   command -v docker >/dev/null 2>&1 || { echo "Need Node >= 22 or Docker" >&2; exit 1; }
   log "No local Node >= 22: building the web UI in $NODE_IMAGE"
@@ -95,7 +96,7 @@ else
   CDP_HOST=host.docker.internal
   run_driver () {
     docker exec -e CDP_HOST="$CDP_HOST" -e CDP_PORT="$CDP_PORT" -e APP_URL="http://127.0.0.1:$APP_PORT/" \
-      -w /tmp/ui-smoke "$CONTAINER" node smoke.mjs
+      -e SCREENSHOT_DIR="${SCREENSHOTS_OUT:+/tmp/screenshots}" -w /tmp/ui-smoke "$CONTAINER" node smoke.mjs
   }
 fi
 
@@ -132,4 +133,13 @@ wait_for "http://127.0.0.1:$CDP_PORT/json/version" 30 || { tail -30 "$WORK/chrom
 # ---------------------------------------------------------------------------------------------------------------
 log "Running the UI smoke scenarios"
 export CDP_HOST CDP_PORT APP_URL="http://127.0.0.1:$APP_PORT/"
-run_driver
+if [ -n "${SCREENSHOTS_OUT:-}" ]; then rm -rf "$SCREENSHOTS_OUT"; mkdir -p "$SCREENSHOTS_OUT"; fi
+
+status=0
+run_driver || status=$?
+
+if [ -n "${SCREENSHOTS_OUT:-}" ] && [ -n "$CONTAINER" ]; then
+  docker cp "$CONTAINER:/tmp/screenshots/." "$SCREENSHOTS_OUT" 2>/dev/null || true
+fi
+[ -z "${SCREENSHOTS_OUT:-}" ] || echo "Screenshots: $SCREENSHOTS_OUT"
+exit $status

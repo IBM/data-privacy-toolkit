@@ -2,6 +2,7 @@
 // It drives a headless Chrome that is already listening on CDP_HOST:CDP_PORT and records everything that
 // indicates a broken page: uncaught exceptions, console errors/warnings, failed or 4xx/5xx requests and
 // alert()/confirm() dialogs.
+import { writeFile } from 'node:fs/promises'
 import { lookup } from 'node:dns/promises'
 import { isIP } from 'node:net'
 
@@ -20,6 +21,7 @@ export class Page {
   #requests = new Map()
   #problems = []
   #loadWaiters = []
+  #stubs = new Map()
   #endpoint
   #targetId
 
@@ -36,6 +38,8 @@ export class Page {
     const socketUrl = target.webSocketDebuggerUrl.replace(/^ws:\/\/[^/]+/, `ws://${endpoint}`)
     await page.#connect(socketUrl)
     for (const domain of ['Page', 'Runtime', 'Network', 'Log']) await page.send(`${domain}.enable`)
+    // fixed viewport, so that screenshots of different runs can be compared
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false })
     return page
   }
 
@@ -88,6 +92,19 @@ export class Page {
         if (!p.canceled) this.#problems.push(`request failed: ${request?.method} ${request?.url} (${p.errorText})`)
         break
       }
+      case 'Fetch.requestPaused': {
+        const stub = [...this.#stubs].find(([fragment]) => p.request.url.includes(fragment))?.[1]
+        const command = stub
+          ? this.send('Fetch.fulfillRequest', {
+            requestId: p.requestId,
+            responseCode: 200,
+            responseHeaders: [{ name: 'Content-Type', value: 'application/json' }],
+            body: Buffer.from(JSON.stringify(stub)).toString('base64')
+          })
+          : this.send('Fetch.continueRequest', { requestId: p.requestId })
+        command.catch(() => {})
+        break
+      }
       case 'Page.javascriptDialogOpening':
         this.#problems.push(`${p.type} dialog shown: ${p.message}`)
         this.send('Page.handleJavaScriptDialog', { accept: true }).catch(() => {})
@@ -111,6 +128,21 @@ export class Page {
     return [...this.#requests.values()]
       .filter(r => new URL(r.url).pathname.includes('/api/'))
       .map(r => ({ method: r.method, path: new URL(r.url).pathname + new URL(r.url).search, status: r.status }))
+  }
+
+  /**
+   * Answers requests whose URL contains `urlFragment` with `body` (as JSON) instead of asking the back-end. For
+   * endpoints the back-end does not implement (yet) or that cannot be exercised with a small data set.
+   */
+  async stub (urlFragment, body) {
+    this.#stubs.set(urlFragment, body)
+    await this.send('Fetch.enable', { patterns: [...this.#stubs.keys()].map(fragment => ({ urlPattern: `*${fragment}*` })) })
+  }
+
+  /** Saves a PNG of the whole page. */
+  async screenshot (file) {
+    const { data } = await this.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true })
+    await writeFile(file, Buffer.from(data, 'base64'))
   }
 
   async goto (url) {

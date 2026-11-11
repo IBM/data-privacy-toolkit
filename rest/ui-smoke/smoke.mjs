@@ -3,15 +3,21 @@
 //   APP_URL   address of the application served by the back-end  (default http://127.0.0.1:8080/)
 //   CDP_HOST  host of the Chrome DevTools endpoint                (default 127.0.0.1)
 //   CDP_PORT  port of the Chrome DevTools endpoint                (default 9222)
+//   SCREENSHOT_DIR  when set, a PNG is saved there after every scenario
 //
 // Use run.sh to have the front-end built and the back-end and Chrome started and stopped for you.
+import { mkdir } from 'node:fs/promises'
+import { join } from 'node:path'
+
 import { Page } from './cdp.mjs'
 import { scenarios } from './scenarios.mjs'
 
 const APP_URL = process.env.APP_URL ?? 'http://127.0.0.1:8080/'
 const STEP_SETTLE_MS = 250
+const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR
 
 const page = await Page.open()
+if (SCREENSHOT_DIR) await mkdir(SCREENSHOT_DIR, { recursive: true })
 let failures = 0
 
 for (const scenario of scenarios) {
@@ -30,6 +36,7 @@ for (const scenario of scenarios) {
   try {
     await scenario.run(page, { expectApiCall })
     await new Promise(resolve => setTimeout(resolve, STEP_SETTLE_MS)) // let late errors surface
+    if (SCREENSHOT_DIR) await page.screenshot(join(SCREENSHOT_DIR, `${String(scenarios.indexOf(scenario) + 1).padStart(2, '0')}-${scenario.name.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase()}.png`))
   } catch (e) {
     error = e.message
   }
