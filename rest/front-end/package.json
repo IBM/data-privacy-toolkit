@@ -2,45 +2,43 @@
   "name": "ibm-data-privacy-toolkit",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
   "dependencies": {
-    "FileSaver": "^0.10.0",
-    "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "font-awesome-sass": "^4.7.0",
     "highcharts": "^6.0.2",
+    "history": "^4.10.1",
     "lodash": "^4.17.4",
-    "lz-string": "^1.4.4",
-    "react": "^16.2.0",
+    "react": "^16.14.0",
     "react-bootstrap": "^0.33.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6",
+    "react-dom": "^16.14.0",
+    "react-redux": "^5.1.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.6",
-    "redux": "^3.7.2",
+    "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
-    "sass": "^1.55.0",
-    "treant-js": "^1.0.1",
+    "redux-thunk": "^2.4.2",
     "underscore": "^1.9.1"
   },
   "devDependencies": {
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
-    "npm-run-all": "^4.1.1",
-    "react-scripts": "^1.0.13",
-    "react-test-renderer": "^16.0.0",
-    "standard": "*"
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^31.0.0",
+    "react-test-renderer": "^16.14.0",
+    "sass": "^1.108.2",
+    "standard": "^17.1.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
   },
   "scripts": {
-    "build-css": "sass -I ./node_modules src:src",
-    "watch-css": "npm run build-css && sass -I ./node_modules src:src --watch",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
-    "test": "standard && react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "homepage": ".",
-  "proxy": "http://localhost:8080/"
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "standard",
+    "test": "standard && vitest run"
+  }
 }

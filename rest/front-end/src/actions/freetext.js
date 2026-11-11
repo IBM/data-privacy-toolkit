@@ -11,9 +11,8 @@ export function annotateText (text) {
   return (dispatch, getState) => {
     if (shouldAnnotate(getState())) {
       dispatch(requestAnnotation())
-      console.log(`Annotating with ${text}`)
 
-      window.fetch(`api/freetext`, {
+      window.fetch('api/freetext', {
         method: 'POST',
         body: text
       }).then(response => {

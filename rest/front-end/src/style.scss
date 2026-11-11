@@ -61,7 +61,7 @@ $IBMCoolGray0 : #EFEFF1;
 $IBMCoolGray1 : #E3E4E6;
 $IBMCoolGray2 : #CDCED2;
 $IBMCoolGray3 : #B8BABE;
-$IBMCoolGray4 : #A4AA6AB;
+$IBMCoolGray4 : #A4A6AB;
 $IBMCoolGray5 : #929399;
 $IBMCoolGray6 : #808287;
 $IBMCoolGray7 : #6E6E73;
@@ -312,7 +312,7 @@ $dropdown-divider-bg:            rgba(0,0,0,.2) !default;
 //** Dropdown link text color.
 $dropdown-link-color:            #555 !default;
 //** Hover color for dropdown links.
-$dropdown-link-hover-color:      darke-n($gray-dark, 5%) !default;
+$dropdown-link-hover-color:      darken($gray-dark, 5%) !default;
 //** Hover background for dropdown links.
 $dropdown-link-hover-bg:         #eee !default;
 
@@ -939,8 +939,8 @@ $dl-horizontal-breakpoint:    $grid-float-breakpoint !default;
 //** Horizontal line color.
 $hr-border:                   $table-border-color !default;
 
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-$fa-font-path: "~font-awesome-sass/assets/fonts/font-awesome/" !default;
+$icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
+$fa-font-path: "font-awesome-sass/assets/fonts/font-awesome/" !default;
 @import "bootstrap-sass/assets/stylesheets/bootstrap";
 @import "font-awesome-sass/assets/stylesheets/font-awesome";
 
@@ -994,8 +994,8 @@ $fa-font-path: "~font-awesome-sass/assets/fonts/font-awesome/" !default;
 
 
 .vulnerabilityReport {
-  width: 300;
-  height: 60;
+  width: 300px;
+  height: 60px;
   top: 0;
 }
 
@@ -1081,8 +1081,8 @@ $fa-font-path: "~font-awesome-sass/assets/fonts/font-awesome/" !default;
 .hchart {
     position: absolute; /* Stay in place */
     z-index: 1; /* Sit on top */
-    left: 100;
-    top: 100;
+    left: 100px;
+    top: 100px;
     height: 559px;
     width: 832px;
     margin: 5px;

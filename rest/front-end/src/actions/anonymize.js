@@ -13,12 +13,12 @@ export function anonymizeDataset (dataset, hasHeader, kQuasi, eQuasi, sensitive,
 
       const fields = {}
       kQuasi.forEach((v) => {
-        const columnName = hasHeader ? dataset[0][v] : `Column ${v}`;
+        const columnName = hasHeader ? dataset[0][v] : `Column ${v}`
         const type = types[columnName]
         if (type) {
           fields[columnName] = type
         } else {
-          fields[columnName] = {'name': 'HASH'}
+          fields[columnName] = { name: 'HASH' }
         }
       })
 
@@ -46,7 +46,7 @@ export function anonymizeDataset (dataset, hasHeader, kQuasi, eQuasi, sensitive,
           throw new Error('Error anonymizing the dataset')
         }
       ).then(
-        data => dispatch(saveAnonymized({...data, dataset: CSVToArray(data.dataset)}))
+        data => dispatch(saveAnonymized({ ...data, dataset: CSVToArray(data.dataset) }))
       ).catch(
         error => {
           window.alert(error.message)
