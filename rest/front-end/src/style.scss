@@ -177,7 +177,7 @@
 // Error messages: above the page and the blocker's overlay, so they stay readable
 .alerts {
   position: fixed;
-  top: 60px;
+  bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
   width: min(40rem, 90vw);
