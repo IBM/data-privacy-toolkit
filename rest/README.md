@@ -29,6 +29,16 @@ in a container, set `SERVER_ADDRESS=0.0.0.0` inside the container and publish th
 loopback interface only (`-p 127.0.0.1:8080:8080`). See the comment above the runtime stage of the
 [Dockerfile](Dockerfile) for a hardened `docker run` command.
 
+### Container image
+
+The [Dockerfile](Dockerfile) builds the web UI, the library and this service from source (no local Node or
+Java needed) and produces a minimal UBI image that runs as an unprivileged user. It must be built from the
+repository root, because the service depends on the [library](../library) module:
+
+```bash
+docker build -f rest/Dockerfile -t dpt-rest .
+```
+
 ## Testing the web UI
 
 `./gradlew uiSmokeTest` builds the web UI in [`front-end`](front-end), serves it from this application and drives it
