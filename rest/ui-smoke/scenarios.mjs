@@ -6,6 +6,17 @@
 
 const SIMPLE_DATASET = 'simple.csv'
 
+// The back-end has no risk/utility exploration endpoint (yet), so the exploration page is exercised with this
+// response: one result per (k, suppression) pair, as the page expects it.
+const EXPLORATION_RESULT = [0, 5].flatMap(suppression => [2, 5, 10].map(k => ({
+  k,
+  suppression,
+  realSuppression: suppression / 2,
+  bestNode: `[${k % 3}, ${k % 2}]`,
+  informationLoss: { NUE: { first: k / 20 + suppression / 100 }, CP: { first: k / 5 } },
+  riskMetricResults: { HGEORM: 1, SUDA: 1 / k, PROSECUTOR: 2 / k }
+})))
+
 const scenarios = [
   {
     name: 'home page renders',
@@ -92,6 +103,27 @@ const scenarios = [
     async run (page) {
       await page.click('Next')
       await page.waitForText('Explore')
+    }
+  },
+
+  {
+    name: 'exploration: risk/utility chart is drawn and a point can be chosen (stubbed API)',
+    async run (page, { expectApiCall }) {
+      await page.stub('api/feature/explore', EXPLORATION_RESULT)
+      await page.route('#/exploration')
+      await page.waitForText('Compute risk utility')
+      await page.click('Compute risk utility')
+      await expectApiCall('api/feature/explore')
+
+      // 3 results at the initial suppression (0), for 2 risk metrics (HGEORM is not drawn)
+      const symbols = "[...document.querySelectorAll('.riskUtilityChart svg path')].filter(p => p.getAttribute('fill') && p.getAttribute('fill') !== 'none' && p.getBBox().width < 14 && p.getBBox().width > 0)"
+      await page.waitFor(`${symbols}.length === 6`, { description: '6 chart points (3 per metric x 2 metrics)' })
+
+      const [x, y] = await page.evaluate(`(() => { const r = ${symbols}[0].getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2] })()`)
+      await page.clickAt(x, y)
+      await page.waitForText('Use the following values for the anonymization step')
+      await page.click('Yes', 'a.btn')
+      await page.waitFor("location.hash !== '#/exploration'", { description: 'to leave the exploration page after choosing' })
     }
   },
 

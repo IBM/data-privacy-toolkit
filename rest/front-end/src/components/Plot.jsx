@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 
-import _ from 'underscore'
-
 import Chart from './Chart'
+import { buildChartOptions } from './plotOptions'
 
 const Confirmation = ({ k, suppression, onYes, onNo }) => (
   <div className='confirmationMessage'>
@@ -33,81 +32,11 @@ export default class Plot extends Component {
     }
   }
 
-  extractSeries () {
-    const suppression = this.state.selectedSuppression
-    const series = []
-    const serieLabels = Object.keys(this.props.data[0].riskMetricResults)
-
-    const filterPredicate = obj => obj.suppression === suppression
-
-    for (const i in serieLabels) {
-      const label = serieLabels[i]
-
-      if (label === 'HGEORM') continue
-
-      const labelData = _.sortBy(
-        this.props.data.filter(filterPredicate).map(testData => {
-          const iloss = testData.informationLoss[this.state.selectedIloss]
-          const k = testData.k
-          const x = iloss.first
-          return {
-            name: `<b>k: ${k}<br />BestNode: ${testData.bestNode}<br />Suppression: ${testData.realSuppression}</b>`,
-            x,
-            k,
-            suppression,
-            y: testData.riskMetricResults[label]
-          }
-        }),
-        obj => { return obj.x }
-      )
-
-      const serie = {
-        type: 'line',
-        allowPointSelect: true,
-        data: labelData,
-        name: label,
-        events: {
-          click: e => {
-            const { k, suppression } = e.point
-            this.setState(Object.assign({}, this.state, { showPopup: true, k, suppression }))
-          }
-        }
-      }
-      series.push(serie)
-    }
-
-    return series
-  }
-
   render () {
     const suppressions = this.state.suppressions.map((suppression, i) => (<option key={i} value={suppression}>{suppression}</option>))
-    const series = this.extractSeries()
     const metrics = this.state.metrics.map((metric, i) => (<option key={i} value={metric}>{metric}</option>))
 
-    const options = {
-      title: {
-        text: '<b>Disclose Risk (Re-identification/linkage)</b>',
-        x: -20
-      },
-      subtitle: {
-        text: `Suppression: ${this.state.selectedSuppression}%`,
-        x: -20 // center
-      },
-      xAxis: {
-        allowDecimals: true,
-        title: {
-          text: `<b>Utility Loss (${this.state.selectedIloss})</b>`
-        }
-      },
-      yAxis: {
-        allowDecimals: true,
-        title: {
-          text: 'Risk'
-        },
-        endOnTick: true
-      },
-      series
-    }
+    const options = buildChartOptions(this.props.data, this.state.selectedSuppression, this.state.selectedIloss)
     const confirmation = this.state.showPopup
       ? (
         <Confirmation
@@ -123,7 +52,11 @@ export default class Plot extends Component {
 
     return (
       <div>
-        <Chart options={options} />
+        <Chart
+          options={options}
+          label='Risk against utility loss'
+          onPointClick={({ k, suppression }) => this.setState(Object.assign({}, this.state, { showPopup: true, k, suppression }))}
+        />
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='suppression'>Suppressions:</label>

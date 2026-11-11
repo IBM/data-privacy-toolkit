@@ -31,7 +31,7 @@ class Explore extends Component {
     const plot = this.props.result
       ? (
         <Plot
-          minSuppression={this.state.k.min} data={this.props.result} selectedConfiguration={(k, suppression) => {
+          minSuppression={this.state.suppression.min} data={this.props.result} selectedConfiguration={(k, suppression) => {
             this.props.saveConfiguration(k, suppression)
             this.props.navigate(-1)
           }}

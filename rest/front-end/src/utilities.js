@@ -1,7 +1,5 @@
 import { DIRECT_IDENTIFIER, K_QUASI_IDENTIFIER, E_QUASI_IDENTIFIER, SENSITIVE, NORMAL } from './actions/risk'
 
-import _ from 'lodash'
-
 export const arrayToCSV = a => {
   return a.map(b => b.join()).join('\n')
 }
@@ -27,7 +25,7 @@ export function getFieldColor (sensitivity) {
 }
 
 export function computeCDF (data) {
-  let cdf = _.sortBy(data).map((value, idx) => {
+  let cdf = [...data].sort((a, b) => a - b).map((value, idx) => {
     const count = idx + 1
 
     return { value, count }
@@ -48,9 +46,7 @@ export function computeCDF (data) {
     return [ratio, risk]
   })
 
-  return _.sortBy(cdf, function (entry) {
-    return entry[0]
-  })
+  return cdf.sort((a, b) => a[0] - b[0])
 }
 
 export function DatasetToArray (strName, strData, hasHeader, strDelimiter) {

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export const SAVE_MASKING_CONFIGURATION = 'SAVE_MASKING_CONFIGURATION'
 export const REQUEST_MASKING_CONFIGURATION = 'REQUEST_MASKING_CONFIGURATION'
 
@@ -31,7 +29,7 @@ const processConfiguration = (options) => {
   for (const key in options) {
     const keyOptions = options[key]
     const category = keyOptions.category
-    if (!_.has(categories, category)) {
+    if (!Object.hasOwn(categories, category)) {
       categories[category] = []
     }
 

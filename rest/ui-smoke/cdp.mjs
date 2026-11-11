@@ -139,6 +139,13 @@ export class Page {
     await this.send('Fetch.enable', { patterns: [...this.#stubs.keys()].map(fragment => ({ urlPattern: `*${fragment}*` })) })
   }
 
+  /** Clicks with the mouse at page coordinates, for elements (such as chart points) that have no click() of their own. */
+  async clickAt (x, y) {
+    for (const type of ['mousePressed', 'mouseReleased']) {
+      await this.send('Input.dispatchMouseEvent', { type, x, y, button: 'left', clickCount: 1 })
+    }
+  }
+
   /** Saves a PNG of the whole page. */
   async screenshot (file) {
     const { data } = await this.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true })
