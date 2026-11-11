@@ -97,6 +97,57 @@ jobs:
         working-directory: ./docker
         run: ./gradlew build --no-daemon
 
+  front-end:
+    name: REST web UI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rest/front-end
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: rest/front-end/package-lock.json
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Lint and unit tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Audit dependencies
+        run: npm audit
+
+  rest-image:
+    name: REST container image
+    needs: [ library, front-end ]
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: dpt-rest:test
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build image
+        run: docker build -f rest/Dockerfile -t $IMAGE_NAME .
+      - name: Start the hardened container
+        run: |
+          docker run -d --name dpt-rest -e SERVER_ADDRESS=0.0.0.0 -p 127.0.0.1:8080:8080 \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+            --cap-drop=ALL --security-opt=no-new-privileges $IMAGE_NAME
+      - name: Check that the UI and the API are served
+        run: |
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://127.0.0.1:8080/api/information/identifiers && break
+            sleep 1
+          done
+          curl -sf -o /dev/null http://127.0.0.1:8080/
+          curl -sf -o /dev/null http://127.0.0.1:8080/datasets/simple.csv
+          test "$(docker exec dpt-rest id -u)" != "0"
+      - name: Show the container log on failure
+        if: failure()
+        run: docker logs dpt-rest
+
   end-to-end:
     name: End to end test
     needs: docker
