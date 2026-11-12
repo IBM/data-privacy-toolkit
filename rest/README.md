@@ -45,6 +45,20 @@ docker build -f rest/Dockerfile -t dpt-rest .
 with a headless Chrome, failing on JavaScript errors, failed requests or error dialogs. It needs Chrome or Chromium
 and either Node 22+ or Docker, so it is not part of `./gradlew check`. See [`ui-smoke/README.md`](ui-smoke/README.md).
 
+## Risk/utility exploration
+
+`POST /api/feature/explore/{hasHeader}` anonymizes the data set with OLA for every pair of `k` and maximum
+suppression in the requested ranges (`minK`, `maxK`, `kInterval`, `minSuppression`, `maxSuppression`,
+`suppressionInterval`, as query parameters; the data and column choices are sent as multipart fields `data`,
+`fields`, `vulnerabilities`, `sensitive` and `linkingAttributes`). For each pair it reports the suppression actually
+needed, the generalization levels chosen, the information loss (all metrics that apply) and the re-identification risk
+(`KRM`, `FKRM` and `BINOM`), which the web UI plots to help choosing the parameters of the anonymization.
+
+- A request is limited to 100 pairs; larger requests are rejected with HTTP 400.
+- Pairs that no generalization can satisfy (for instance `k` larger than the data set) are left out of the answer.
+- The population used by the risk metrics is the optional `population` parameter, by default ten times the size of
+  the data set.
+
 ## Masking configuration
 
 `POST /api/feature/mask/{hasHeader}/{useCompound}` accepts the masking configuration from the request.
