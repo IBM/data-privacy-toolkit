@@ -48,7 +48,7 @@ ext {
 
     commons_codec_version = '1.18.0'
     commons_csv_version = '1.14.1'
-    commons_lang_version = '3.21.0'
+    commons_lang_version = '3.22.0'
     commons_math_version = '3.6.1'
     commons_text_version = '1.13.1'
     commons_validator_version = '1.11.0'
