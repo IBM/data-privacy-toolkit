@@ -6,7 +6,7 @@ WORKDIR /app
 RUN npm install
 RUN npm run build
 
-FROM eclipse-temurin:17.0.20_8-jdk as backend
+FROM eclipse-temurin:17.0.21_9-jdk as backend
 WORKDIR /app
 COPY src build.gradle settings.gradle /app
 MKDIR /app/src/main/resources/static
