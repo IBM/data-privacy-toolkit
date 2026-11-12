@@ -10,13 +10,13 @@ import Explore from './Explore'
 // ECharts needs a layout engine that the test environment does not have
 vi.mock('../components/Chart', () => ({ default: () => <div data-testid='chart' /> }))
 
-const renderWith = explorationReport => {
+const renderWith = (explorationReport, quasi = [0]) => {
   const state = {
     workflow: {
       protectedDataset: [['a', 'b']],
       direct: [],
       eQuasi: [],
-      kQuasi: [0],
+      kQuasi: quasi,
       sensitive: [],
       hasHeader: false,
       identifiedTypes: {},
@@ -49,6 +49,13 @@ describe('Explore page', () => {
     expect(screen.getByText('Compute risk utility')).toBeTruthy()
     expect(screen.queryByTestId('chart')).toBeNull()
     expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('does not explore, and says why, when no column is a quasi-identifier', () => {
+    renderWith(undefined, [])
+
+    expect(screen.getByText('Compute risk utility').closest('button').disabled).toBe(true)
+    expect(screen.getByRole('status').textContent).toContain('No column is marked as a quasi-identifier')
   })
 
   it('draws the chart when there are results', () => {

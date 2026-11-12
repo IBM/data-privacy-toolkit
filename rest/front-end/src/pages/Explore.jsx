@@ -30,6 +30,7 @@ class Explore extends Component {
 
   render () {
     const noSolution = Array.isArray(this.props.result) && this.props.result.length === 0
+    const noQuasiIdentifiers = this.props.eQuasi.length + this.props.kQuasi.length === 0
     const plot = this.props.result && !noSolution
       ? (
         <Plot
@@ -45,6 +46,11 @@ class Explore extends Component {
       <div className='container-fluid'>
         <h1>Risk/Utility Exploration</h1>
         {plot}
+        {noQuasiIdentifiers && (
+          <div className='alert alert-warning' role='status'>
+            No column is marked as a quasi-identifier. Mark at least one in the Vulnerability Detection step.
+          </div>
+        )}
         {noSolution && (
           <div className='alert alert-warning' role='status'>
             No generalization satisfies these values. Try smaller values of k or a larger suppression.
@@ -69,7 +75,7 @@ class Explore extends Component {
           }}
         />
         <button
-          type='button'
+          type='button' disabled={noQuasiIdentifiers}
           className='btn btn-primary float-end' onClick={event => {
             const sensitive = this.props.sensitive
             const vulnerabilities = this.props.eQuasi.concat(this.props.kQuasi)
