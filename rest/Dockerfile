@@ -25,7 +25,7 @@ RUN ./gradlew build
 #     --cap-drop=ALL --security-opt=no-new-privileges \
 #     --memory=1g --pids-limit=256 \
 #     dpt-rest
-FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2-1792742351
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.3-1794499233
 
 LABEL authors="Marco Simioni <marco.simioni@ibm.com>, Stefano Braghin <stefanob@ie.ibm.com>"
 
