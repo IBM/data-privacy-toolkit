@@ -29,7 +29,8 @@ class Explore extends Component {
   }
 
   render () {
-    const plot = this.props.result
+    const noSolution = Array.isArray(this.props.result) && this.props.result.length === 0
+    const plot = this.props.result && !noSolution
       ? (
         <Plot
           minSuppression={this.state.suppression.min} data={this.props.result} selectedConfiguration={(k, suppression) => {
@@ -44,6 +45,11 @@ class Explore extends Component {
       <div className='container-fluid'>
         <h1>Risk/Utility Exploration</h1>
         {plot}
+        {noSolution && (
+          <div className='alert alert-warning' role='status'>
+            No generalization satisfies these values. Try smaller values of k or a larger suppression.
+          </div>
+        )}
         <Controllers
           k={this.state.k}
           onKChange={update => {

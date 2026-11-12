@@ -121,6 +121,7 @@ class ExploreTest {
                 .andExpect(jsonPath("$[0].realSuppression", greaterThanOrEqualTo(0.0)))
                 .andExpect(jsonPath("$[0].informationLoss.NUE.first").isNumber())
                 .andExpect(jsonPath("$[0].informationLoss.CP.first").isNumber())
+                .andExpect(jsonPath("$[0].informationLoss.AECS.first").isNumber())
                 .andExpect(jsonPath("$[0].riskMetricResults.KRM").isNumber())
                 .andExpect(jsonPath("$[0].riskMetricResults.FKRM").isNumber())
                 .andExpect(jsonPath("$[0].riskMetricResults.BINOM").isNumber());

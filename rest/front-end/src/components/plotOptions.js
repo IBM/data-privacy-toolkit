@@ -3,8 +3,6 @@
 // `data` is a list of results, one per (k, suppression) pair:
 //   { k, suppression, realSuppression, bestNode, informationLoss: { [metric]: { first } }, riskMetricResults: { [name]: risk } }
 
-const IGNORED_RISK_METRICS = ['HGEORM']
-
 const escapeHtml = value => String(value)
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
@@ -22,7 +20,7 @@ export const tooltipHtml = ({ seriesName, data }) => [
 
 export function buildChartOptions (data, suppression, metric) {
   const rows = data.filter(result => result.suppression === suppression)
-  const riskMetrics = Object.keys(data[0].riskMetricResults).filter(name => !IGNORED_RISK_METRICS.includes(name))
+  const riskMetrics = Object.keys(data[0].riskMetricResults)
 
   const series = riskMetrics.map(name => ({
     type: 'line',

@@ -6,17 +6,6 @@
 
 const SIMPLE_DATASET = 'simple.csv'
 
-// The back-end has no risk/utility exploration endpoint (yet), so the exploration page is exercised with this
-// response: one result per (k, suppression) pair, as the page expects it.
-const EXPLORATION_RESULT = [0, 5].flatMap(suppression => [2, 5, 10].map(k => ({
-  k,
-  suppression,
-  realSuppression: suppression / 2,
-  bestNode: `[${k % 3}, ${k % 2}]`,
-  informationLoss: { NUE: { first: k / 20 + suppression / 100 }, CP: { first: k / 5 } },
-  riskMetricResults: { HGEORM: 1, SUDA: 1 / k, PROSECUTOR: 2 / k }
-})))
-
 const scenarios = [
   {
     name: 'home page renders',
@@ -107,13 +96,12 @@ const scenarios = [
   },
 
   {
-    name: 'exploration: risk/utility chart is drawn and a point can be chosen (stubbed API)',
+    name: 'exploration: risk/utility chart is drawn and a point can be chosen (POST api/feature/explore)',
     async run (page, { expectApiCall }) {
-      await page.stub('api/feature/explore', EXPLORATION_RESULT)
       await page.route('#/exploration')
       await page.waitForText('Compute risk utility')
       await page.click('Compute risk utility')
-      await expectApiCall('api/feature/explore')
+      await expectApiCall('api/feature/explore/false')
 
       // The chart is an SVG drawn with an animation. Points are the small filled symbols above the legend (axis ticks
       // have no fill); the legend's own symbols are below them.
@@ -124,8 +112,8 @@ const scenarios = [
           .map(p => ({ box: p.getBoundingClientRect(), fill: p.getAttribute('fill'), stroke: p.getAttribute('stroke') }))
           .filter(p => p.fill && p.fill !== 'none' && p.box.width > 0 && p.box.width < 14 && p.box.bottom < legendTop)
       })()`
-      // 3 results at the initial suppression (0), for 2 risk metrics (HGEORM is not drawn)
-      await page.waitFor(`${points}.length === 6`, { description: '6 chart points (3 results x 2 risk metrics)' })
+      // The data set has 3 rows, so only the smallest k can be satisfied: one point per risk metric.
+      await page.waitFor(`${points}.length >= 1`, { description: 'a point in the chart' })
 
       const [x, y] = await page.evaluate(`(() => { const r = ${points}[0].box; return [r.x + r.width / 2, r.y + r.height / 2] })()`)
       await page.clickAt(x, y)

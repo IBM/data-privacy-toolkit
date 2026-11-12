@@ -24,6 +24,7 @@ import com.ibm.research.drl.dpt.anonymization.ColumnInformation;
 import com.ibm.research.drl.dpt.anonymization.DefaultColumnInformation;
 import com.ibm.research.drl.dpt.anonymization.PrivacyConstraint;
 import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
+import com.ibm.research.drl.dpt.anonymization.informationloss.AECSOptions;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationLossMetricFactory;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetric;
 import com.ibm.research.drl.dpt.anonymization.ola.OLA;
@@ -268,7 +269,7 @@ public class Explore {
                 try {
                     final double value = metric.initialize(dataset, anonymized,
                             algorithm.getOriginalPartitions(), algorithm.getAnonymizedPartitions(),
-                            algorithm.getColumnInformationList(), null).report();
+                            algorithm.getColumnInformationList(), new AECSOptions(false, k)).report();
                     if (Double.isFinite(value)) {
                         informationLoss.put(metric.getShortName(), new InformationLossValue(value));
                     }
