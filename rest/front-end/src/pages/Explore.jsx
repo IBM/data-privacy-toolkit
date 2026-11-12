@@ -30,7 +30,8 @@ class Explore extends Component {
 
   render () {
     const noSolution = Array.isArray(this.props.result) && this.props.result.length === 0
-    const noQuasiIdentifiers = this.props.eQuasi.length + this.props.kQuasi.length === 0
+    // the guard in componentDidMount runs after the first render, when these may still be missing
+    const noQuasiIdentifiers = (this.props.eQuasi || []).length + (this.props.kQuasi || []).length === 0
     const plot = this.props.result && !noSolution
       ? (
         <Plot

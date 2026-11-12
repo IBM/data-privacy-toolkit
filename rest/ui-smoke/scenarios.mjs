@@ -74,6 +74,18 @@ const scenarios = [
       await page.choose(1, 0) // first real algorithm, after the placeholder
       await page.click('Find Privacy Vulnerabilities')
       await expectApiCall('api/feature/analyze/')
+
+      // The back-end finds only single-column identifiers in this tiny data set; like a user would, mark a column as
+      // a quasi-identifier, which the exploration needs.
+      const markColumn = `(() => {
+        const select = document.querySelectorAll('#root .fieldTypeSelect')[1]
+        if (!select) return false
+        select.value = 'K_QUASI_IDENTIFIER'
+        select.dispatchEvent(new Event('change', { bubbles: true }))
+        return true
+      })()`
+      await page.waitFor(markColumn, { description: 'the column selectors, to mark a quasi-identifier' })
+      await page.waitFor("document.querySelectorAll('#root .fieldTypeContainer.kQuasiIdentifier').length === 1", { description: 'the quasi-identifier column to be marked' })
     }
   },
 
@@ -112,7 +124,7 @@ const scenarios = [
           .map(p => ({ box: p.getBoundingClientRect(), fill: p.getAttribute('fill'), stroke: p.getAttribute('stroke') }))
           .filter(p => p.fill && p.fill !== 'none' && p.box.width > 0 && p.box.width < 14 && p.box.bottom < legendTop)
       })()`
-      // The data set has 3 rows, so only the smallest k can be satisfied: one point per risk metric.
+      // The data set has 4 rows, so only the smallest values of k can be satisfied; the page draws what is left.
       await page.waitFor(`${points}.length >= 1`, { description: 'a point in the chart' })
 
       const [x, y] = await page.evaluate(`(() => { const r = ${points}[0].box; return [r.x + r.width / 2, r.y + r.height / 2] })()`)
