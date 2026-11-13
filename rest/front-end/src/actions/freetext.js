@@ -1,3 +1,6 @@
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
+
 export const REQUEST_ANNOTATION = 'REQUEST_ANNOTATION'
 export const SAVE_ANNOTATION = 'SAVE_ANNOTATION'
 
@@ -11,20 +14,16 @@ export function annotateText (text) {
   return (dispatch, getState) => {
     if (shouldAnnotate(getState())) {
       dispatch(requestAnnotation())
-      console.log(`Annotating with ${text}`)
 
-      window.fetch(`api/freetext`, {
+      apiFetch('api/freetext', {
+        what: 'Unable to annotate the text',
         method: 'POST',
-        body: text
-      }).then(response => {
-        if (response.ok) {
-          return response.json()
-        }
-        throw new Error(`Unable to perform annotation ${response.statusText}`)
+        body: text,
+        timeout: TIMEOUT.long
       }).then(data => {
         dispatch(saveAnnotation(data))
       }).catch(error => {
-        window.alert(error.message)
+        dispatch(reportError(error))
         dispatch(saveAnnotation(undefined))
       })
     }
@@ -130,20 +129,21 @@ export function annotate (text, configuration) {
     if (shouldAnnotate(getState())) {
       dispatch(requestAnnotate())
 
-      window.fetch('/api/freetext/annotate', {
+      apiFetch('api/freetext/annotate', {
+        what: 'Unable to annotate the text',
+        as: 'text',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text,
           configuration: JSON.stringify(configuration)
-        })
-      }).then(response => {
-        if (response.ok) {
-          return response.text()
-        }
+        }),
+        timeout: TIMEOUT.long
       }).then(text => dispatch(saveNote(text)))
+        .catch(error => {
+          dispatch(reportError(error))
+          dispatch(saveNote(undefined))
+        })
     }
   }
 }

@@ -1,3 +1,6 @@
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
+
 export const ANALYZE_DATASET = 'ANALYZE_DATASET'
 export const SAVE_RISK_IDENTIFICATION = 'SAVE_RISK_IDENTIFICATION'
 
@@ -12,20 +15,17 @@ export function analyzeDataset (dataset, hasHeader, k, algorithmName) {
     if (needsIdentification(getState())) {
       dispatch(startAnalyze())
 
-      const headers = new window.Headers()
-      headers.set('Content-Type', 'text/csv')
-
-      window.fetch(`api/feature/analyze/${algorithmName}/${k}/${Boolean(hasHeader)}`, {
+      apiFetch(`api/feature/analyze/${algorithmName}/${k}/${Boolean(hasHeader)}`, {
+        what: 'Unable to detect the vulnerabilities',
         method: 'POST',
-        headers,
-        body: dataset
-      }).then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          return undefined
-        }
+        headers: { 'Content-Type': 'text/csv' },
+        body: dataset,
+        timeout: TIMEOUT.long
       }).then(data => dispatch(saveAnalyzedData(convertResponse(data), k)))
+        .catch(error => {
+          dispatch(saveAnalyzedData(convertResponse(undefined), k))
+          dispatch(reportError(error))
+        })
     }
   }
 }
@@ -37,7 +37,7 @@ function convertResponse (data) {
   const sensitive = []
 
   if (undefined !== data) {
-    const moreSane = data.map(({itemSet}) => itemSet.items)
+    const moreSane = data.map(({ itemSet }) => itemSet.items)
     direct = moreSane.filter(a => a.length === 1).reduce((a, c) => a.concat(c), [])
     kQuasi = Array.from(new Set(moreSane.filter(a => a.length !== 1).reduce((a, c) => a.concat(c), [])))
   }
@@ -60,7 +60,7 @@ function needsIdentification (state) {
   return !state.workflow.isFetching
 }
 
-function saveAnalyzedData ({direct, kQuasi, eQuasi, sensitive}, k) {
+function saveAnalyzedData ({ direct, kQuasi, eQuasi, sensitive }, k) {
   return {
     type: SAVE_RISK_IDENTIFICATION,
     direct,

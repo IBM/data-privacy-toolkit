@@ -1,3 +1,6 @@
+import { apiFetch } from '../api'
+import { reportError } from './alerts'
+
 export const REQUEST_ANONYMIZATION_PROVIDERS = 'REQUEST_ANONYMIZATION_PROVIDERS'
 export const SAVE_ANONYMIZATION_PROVIDERS = 'SAVE_ANONYMIZATION_PROVIDERS'
 
@@ -18,18 +21,11 @@ function requestAnonymizationProviders () {
 function fetchAnonymizationProviders () {
   return dispatch => {
     dispatch(requestAnonymizationProviders())
-    window.fetch('api/information/anonymizationProviders')
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error('Error retrieving anonymization providers the dataset')
-        }
-      }).then(json => dispatch(saveAnonymizationProviders(json)))
+    apiFetch('api/information/anonymizationProviders', { what: 'Unable to retrieve the anonymization providers' })
+      .then(json => dispatch(saveAnonymizationProviders(json)))
       .catch(error => {
-        console.log(error)
         dispatch(saveAnonymizationProviders(undefined))
-        window.alert('Unable to retrieve anonymization providers')
+        dispatch(reportError(error))
       })
   }
 }

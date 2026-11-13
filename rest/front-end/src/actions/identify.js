@@ -1,3 +1,6 @@
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
+
 export const IDENTIFY_DATASET = 'IDENTIFY_DATASET'
 export const SAVE_IDENTIFICATION = 'SAVE_IDENTIFICATION'
 
@@ -6,24 +9,18 @@ export function identifyDataset (dataset, hasHeader, sampleSize) {
     if (needsIdentification(getState())) {
       dispatch(startIdentification())
 
-      const headers = new window.Headers()
-      headers.set('Content-Type', 'text/csv')
-
       sampleSize = sampleSize || 1000
 
-      window.fetch(`api/feature/identify/${Boolean(hasHeader)}?sampleSize=${sampleSize}`, {
+      apiFetch(`api/feature/identify/${Boolean(hasHeader)}?sampleSize=${sampleSize}`, {
+        what: 'Unable to identify the column types',
         method: 'POST',
-        headers,
-        body: dataset
-      }).then(response => {
-        if (response.ok) {
-          return response.json()
-        }
-        throw new Error('Error identifying dataset')
+        headers: { 'Content-Type': 'text/csv' },
+        body: dataset,
+        timeout: TIMEOUT.long
       }).then(data => dispatch(saveIdentifiedData(data)))
         .catch(error => {
           dispatch(saveIdentifiedData(undefined))
-          window.alert(error.message)
+          dispatch(reportError(error))
         })
     }
   }
@@ -48,6 +45,6 @@ export function startIdentification () {
 
 export function updateColumnValue (columnName, provider) {
   return (dispatch, getState) => {
-    dispatch(saveIdentifiedData(Object.assign({}, getState().workflow.identifiedTypes, {[columnName]: provider})))
+    dispatch(saveIdentifiedData(Object.assign({}, getState().workflow.identifiedTypes, { [columnName]: provider })))
   }
 }
