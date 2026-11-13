@@ -8,6 +8,9 @@ on:
   pull_request:
     branches:
       - 'main'
+# Nothing here writes to the repository: the token only needs to read it.
+permissions:
+  contents: read
 jobs:
   library:
     name: Library
@@ -118,7 +121,8 @@ jobs:
       - name: Build
         run: npm run build
       - name: Audit dependencies
-        run: npm audit
+        # Only what ships, and only what matters: an advisory in a dev tool must not fail unrelated pull requests.
+        run: npm audit --omit=dev --audit-level=high
 
   rest-image:
     name: REST container image

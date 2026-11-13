@@ -73,15 +73,25 @@ if local_node_ok; then
   log "Building the web UI with local Node $(node -v)"
   cp -R "$REST/front-end/." "$WORK/front-end"
   rm -rf "$WORK/front-end/node_modules" "$WORK/front-end/build"
-  (cd "$WORK/front-end" && npm ci --no-audit --no-fund && npm run build)
+  (cd "$WORK/front-end" && npm ci --ignore-scripts --no-audit --no-fund && npm run build)
   UI_BUILD="$WORK/front-end/build"
   run_driver () { SCREENSHOT_DIR="${SCREENSHOTS_OUT:-}" node "$HERE/smoke.mjs"; }
 else
   command -v docker >/dev/null 2>&1 || { echo "Need Node >= 22 or Docker" >&2; exit 1; }
   log "No local Node >= 22: building the web UI in $NODE_IMAGE"
   CONTAINER="dpt-ui-smoke-$$"
+  # The driver, in the container, has to reach the DevTools port that Chrome opens on the loopback interface of the
+  # host. On Linux the container shares the network of the host. Docker Desktop (macOS, Windows) runs containers in a
+  # virtual machine, where host.docker.internal is forwarded to the loopback interface of the host.
+  if [ "$(uname -s)" = "Linux" ]; then
+    NETWORK=(--network host)
+    CDP_HOST=127.0.0.1
+  else
+    NETWORK=(--add-host=host.docker.internal:host-gateway)
+    CDP_HOST=host.docker.internal
+  fi
   docker create --name "$CONTAINER" -w /tmp/app -e HOME=/tmp -e CI=true \
-    --add-host=host.docker.internal:host-gateway --entrypoint sh "$NODE_IMAGE" -c 'sleep 3600' >/dev/null
+    "${NETWORK[@]}" --entrypoint sh "$NODE_IMAGE" -c 'sleep 3600' >/dev/null
   docker start "$CONTAINER" >/dev/null
   docker exec -u 0 "$CONTAINER" mkdir -p /tmp/app /tmp/ui-smoke
   # streamed with tar instead of `docker cp`, which rejects the extended attributes macOS adds to files
@@ -89,11 +99,10 @@ else
     | docker exec -i -u 0 "$CONTAINER" tar -xf - -C /tmp/app
   tar --no-xattrs -C "$HERE" -cf - . | docker exec -i -u 0 "$CONTAINER" tar -xf - -C /tmp/ui-smoke
   docker exec -u 0 "$CONTAINER" chown -R 1001:0 /tmp/app /tmp/ui-smoke
-  docker exec -w /tmp/app "$CONTAINER" sh -c 'npm ci --no-audit --no-fund && npm run build'
+  docker exec -w /tmp/app "$CONTAINER" sh -c 'npm ci --ignore-scripts --no-audit --no-fund && npm run build'
   mkdir -p "$WORK/front-end"
   docker cp "$CONTAINER:/tmp/app/build" "$WORK/front-end/build"
   UI_BUILD="$WORK/front-end/build"
-  CDP_HOST=host.docker.internal
   run_driver () {
     docker exec -e CDP_HOST="$CDP_HOST" -e CDP_PORT="$CDP_PORT" -e APP_URL="http://127.0.0.1:$APP_PORT/" \
       -e SCREENSHOT_DIR="${SCREENSHOTS_OUT:+/tmp/screenshots}" -w /tmp/ui-smoke "$CONTAINER" node smoke.mjs

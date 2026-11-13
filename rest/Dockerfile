@@ -39,8 +39,10 @@ FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2-1792742351
 
 LABEL authors="Marco Simioni <marco.simioni@ibm.com>, Stefano Braghin <stefanob@ie.ibm.com>"
 
-RUN microdnf install -y shadow-utils java-21-openjdk-headless && microdnf clean all \
-    && groupadd -r dpt && useradd -r -g dpt -s /sbin/nologin dpt
+# shadow-utils is only needed to create the user: it is removed again, with its setuid helpers.
+RUN microdnf install -y shadow-utils java-21-openjdk-headless \
+    && groupadd -r -g 10001 dpt && useradd -r -u 10001 -g dpt -s /sbin/nologin dpt \
+    && microdnf remove -y shadow-utils && microdnf clean all
 
 WORKDIR /app
 
@@ -52,7 +54,8 @@ ENV SERVER_PORT=8080
 # Multipart uploads and Tomcat's working files go to /tmp: mount it as a tmpfs when running read-only.
 EXPOSE 8080
 
-USER dpt
+# Numeric, so that Kubernetes (runAsNonRoot) can verify that the user is not root.
+USER 10001:10001
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
     CMD ["/bin/bash", "-c", "exec 3<>/dev/tcp/${SERVER_ADDRESS:-127.0.0.1}/${SERVER_PORT}"]
