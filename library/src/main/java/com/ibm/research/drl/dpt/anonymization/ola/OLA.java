@@ -281,7 +281,7 @@ public class OLA implements AnonymizationAlgorithm {
         if (!kMinimalNodes.isEmpty()) {
             bestNode = selectLowestLossOnLevel(kMinimalNodes);
         } else {
-            throw new RuntimeException("unable to find a suitable generalization");
+            throw new NoSuitableGeneralizationException();
         }
 
         IPVDataset anonymized = DatasetGeneralizer.generalize(original, this.columnInformationList, bestNode.getValues());
