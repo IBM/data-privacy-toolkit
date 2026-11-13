@@ -7,7 +7,7 @@ const result = (k, suppression, nue, risks, bestNode = '[0, 1]') => ({
   suppression,
   realSuppression: suppression / 2,
   bestNode,
-  informationLoss: { NUE: { first: nue }, CP: { first: nue * 10 } },
+  informationLoss: { NUE: { value: nue }, CP: { value: nue * 10 } },
   riskMetricResults: risks
 })
 

@@ -64,9 +64,7 @@ export default class DatasetViewer extends Component {
   }
 
   goToPage (pageNumber) {
-    this.setState(Object.assign({}, this.state, {
-      currentPage: pageNumber
-    }))
+    this.setState({ currentPage: pageNumber })
   }
 
   getLastPage () {

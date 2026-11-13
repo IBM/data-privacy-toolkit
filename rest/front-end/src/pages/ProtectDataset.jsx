@@ -35,9 +35,7 @@ class ProtectDataset extends Component {
             <label htmlFor='useCompound'>
               <input
                 id='useCompound' type='checkbox' value={this.state.useCompound} onChange={event => {
-                  this.setState(
-                    Object.assign({}, this.state, { useCompound: event.target.checked })
-                  )
+                  this.setState({ useCompound: event.target.checked })
                 }}
               /> Use Compound Data Masking
             </label>

@@ -1,7 +1,7 @@
 // Turns the result of a risk/utility exploration into ECharts options.
 //
 // `data` is a list of results, one per (k, suppression) pair:
-//   { k, suppression, realSuppression, bestNode, informationLoss: { [metric]: { first } }, riskMetricResults: { [name]: risk } }
+//   { k, suppression, realSuppression, bestNode, informationLoss: { [metric]: { value } }, riskMetricResults: { [name]: risk } }
 
 const escapeHtml = value => String(value)
   .replace(/&/g, '&amp;')
@@ -27,7 +27,7 @@ export function buildChartOptions (data, suppression, metric) {
     name,
     data: rows
       .map(result => ({
-        value: [result.informationLoss[metric].first, result.riskMetricResults[name]],
+        value: [result.informationLoss[metric].value, result.riskMetricResults[name]],
         k: result.k,
         suppression,
         bestNode: result.bestNode,

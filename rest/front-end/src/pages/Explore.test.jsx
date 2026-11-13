@@ -1,6 +1,6 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router'
 import { legacy_createStore as createStore } from 'redux'
@@ -10,9 +10,10 @@ import Explore from './Explore'
 // ECharts needs a layout engine that the test environment does not have
 vi.mock('../components/Chart', () => ({ default: () => <div data-testid='chart' /> }))
 
-const renderWith = (explorationReport, quasi = [0]) => {
+const renderWith = (explorationReport, quasi = [0], isFetching = false) => {
   const state = {
     workflow: {
+      isFetching,
       protectedDataset: [['a', 'b']],
       direct: [],
       eQuasi: [],
@@ -38,7 +39,7 @@ const result = {
   suppression: 0,
   realSuppression: 0,
   bestNode: '[0, 1]',
-  informationLoss: { NUE: { first: 1 } },
+  informationLoss: { NUE: { value: 1 } },
   riskMetricResults: { KRM: 0.5 }
 }
 
@@ -63,6 +64,21 @@ describe('Explore page', () => {
 
     expect(screen.getByTestId('chart')).toBeTruthy()
     expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('does not let the user start an exploration while another one is running', () => {
+    renderWith(undefined, [0], true)
+
+    expect(screen.getByText('Compute risk utility').closest('button').disabled).toBe(true)
+  })
+
+  it('does not send values the back-end would reject, and says why', () => {
+    renderWith(undefined)
+
+    fireEvent.change(screen.getByLabelText('Min', { selector: '#minK' }), { target: { value: '1' } })
+
+    expect(screen.getByText('Compute risk utility').closest('button').disabled).toBe(true)
+    expect(screen.getByRole('status').textContent).toContain('The minimum k must be at least 2')
   })
 
   it('explains that nothing satisfies the parameters instead of failing, when the back-end returns no result', () => {

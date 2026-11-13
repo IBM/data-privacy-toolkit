@@ -66,6 +66,43 @@ describe('apiFetch', () => {
     expect(error.message).toBe('Unable to do x: the server did not answer in time')
   })
 
+  describe('when asked to explain the errors', () => {
+    it('shows the reason given by the server', async () => {
+      vi.spyOn(window, 'fetch').mockResolvedValue(respond(400, '{"error":"The minimum k must be at least 2"}'))
+
+      const error = await apiFetch('api/x', { what: 'Unable to do x', explain: true }).catch(e => e)
+
+      expect(error.message).toBe('Unable to do x: The minimum k must be at least 2')
+      expect(error.status).toBe(400)
+    })
+
+    it('does not show anything else the server says', async () => {
+      vi.spyOn(window, 'fetch').mockResolvedValue(respond(500, 'java.lang.NullPointerException at secret.Class'))
+
+      const error = await apiFetch('api/x', { what: 'Unable to do x', explain: true }).catch(e => e)
+
+      expect(error.message).toBe('Unable to do x (HTTP 500)')
+    })
+
+    it('does not show an error that is not text, or that is too long to be a message', async () => {
+      const fetch = vi.spyOn(window, 'fetch')
+
+      fetch.mockResolvedValueOnce(respond(400, '{"error":{"stack":"at secret.Class"}}'))
+      expect((await apiFetch('api/x', { what: 'Unable to do x', explain: true }).catch(e => e)).message).toBe('Unable to do x (HTTP 400)')
+
+      fetch.mockResolvedValueOnce(respond(400, JSON.stringify({ error: 'x'.repeat(201) })))
+      expect((await apiFetch('api/x', { what: 'Unable to do x', explain: true }).catch(e => e)).message).toBe('Unable to do x (HTTP 400)')
+    })
+  })
+
+  it('does not show the reason given by the server unless asked to', async () => {
+    vi.spyOn(window, 'fetch').mockResolvedValue(respond(400, '{"error":"The minimum k must be at least 2"}'))
+
+    const error = await apiFetch('api/x', { what: 'Unable to do x' }).catch(e => e)
+
+    expect(error.message).toBe('Unable to do x (HTTP 400)')
+  })
+
   it('rejects when the body cannot be read as requested', async () => {
     vi.spyOn(window, 'fetch').mockResolvedValue(respond(200, '<html>not json</html>'))
 

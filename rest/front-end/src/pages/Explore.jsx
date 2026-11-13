@@ -6,7 +6,7 @@ import withRouter from '../withRouter'
 import Plot from '../components/Plot'
 import Controllers from '../components/Controllers'
 
-import { saveConfiguration, exploreIfNeeded } from '../actions/exploration'
+import { saveConfiguration, exploreIfNeeded, explorationProblem } from '../actions/exploration'
 import { arrayToCSV } from '../utilities'
 import Icon from '../components/Icon'
 
@@ -32,6 +32,7 @@ class Explore extends Component {
     const noSolution = Array.isArray(this.props.result) && this.props.result.length === 0
     // the guard in componentDidMount runs after the first render, when these may still be missing
     const noQuasiIdentifiers = (this.props.eQuasi || []).length + (this.props.kQuasi || []).length === 0
+    const problem = explorationProblem(this.state.k, this.state.suppression)
     const plot = this.props.result && !noSolution
       ? (
         <Plot
@@ -61,7 +62,7 @@ class Explore extends Component {
           k={this.state.k}
           onKChange={update => {
             const k = Object.assign({}, this.state.k, update)
-            this.setState(Object.assign({}, this.state, { k }))
+            this.setState({ k })
           }}
           suppression={this.state.suppression}
           onSuppressionChange={event => {
@@ -72,12 +73,15 @@ class Explore extends Component {
             const update = {}
             update[property] = value
             const suppression = Object.assign({}, this.state.suppression, update)
-            this.setState(Object.assign({}, this.state, { suppression }))
+            this.setState({ suppression })
           }}
         />
+        {problem && (
+          <div className='alert alert-warning' role='status'>{problem}</div>
+        )}
         <button
-          type='button' disabled={noQuasiIdentifiers}
-          className='btn btn-primary float-end' onClick={event => {
+          type='button' disabled={noQuasiIdentifiers || Boolean(problem) || this.props.isFetching}
+          className='btn btn-primary float-end' onClick={() => {
             const sensitive = this.props.sensitive
             const vulnerabilities = this.props.eQuasi.concat(this.props.kQuasi)
 
@@ -115,6 +119,7 @@ const mapStateToProps = state => {
     kQuasi: state.workflow.kQuasi,
     sensitive: state.workflow.sensitive,
     result: state.workflow.explorationReport,
+    isFetching: state.workflow.isFetching,
     linkingData: state.workflow.linkingData
   }
 }

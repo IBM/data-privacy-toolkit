@@ -46,9 +46,7 @@ class Anonymize extends Component {
           <label htmlFor='suppression'>Suppression:</label>
           <input
             id='suppression' type='number' value={this.state.suppression} min='0.0' max='20.0' step='0.01' onChange={event => {
-              this.setState(
-                Object.assign({}, this.state, { suppression: Number(event.target.value) })
-              )
+              this.setState({ suppression: Number(event.target.value) })
             }}
           />
         </div>
@@ -62,13 +60,13 @@ class Anonymize extends Component {
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='algorithm'>Algorithm:</label>
-            <AlgorithmSelector id='metric' algorithms={this.props.algorithms} selected={this.state.selectedAlgorithm} onChange={event => this.setState(Object.assign({}, this.state, { selectedAlgorithm: event.target.value }))} />
+            <AlgorithmSelector id='metric' algorithms={this.props.algorithms} selected={this.state.selectedAlgorithm} onChange={event => this.setState({ selectedAlgorithm: event.target.value })} />
           </div>
           <div className='form-group'>
             <label htmlFor='kInputField'>k value:</label>
             <input
               id='kInputField' type='number' min='2' step='1' value={this.state.k} onChange={event => {
-                this.setState(Object.assign({}, this.state, { k: Number(event.target.value) }))
+                this.setState({ k: Number(event.target.value) })
               }}
             />
           </div>
@@ -77,7 +75,7 @@ class Anonymize extends Component {
         <div className='form-inline'>
           <div className='form-group'>
             <label htmlFor='metric'>Information Loss Metric:</label>
-            <InformationLossSelector id='metric' algorithms={this.props.metrics} selected={this.state.selectedMetric} onChange={event => this.setState(Object.assign({}, this.state, { selectedMetric: event.target.value }))} />
+            <InformationLossSelector id='metric' algorithms={this.props.metrics} selected={this.state.selectedMetric} onChange={event => this.setState({ selectedMetric: event.target.value })} />
           </div>
         </div>
         <div className='form-inline'>
@@ -164,7 +162,8 @@ class Anonymize extends Component {
             newLinkingData.add(i)
           }
 
-          this.props.updateLinking(newLinkingData)
+          // an array, not the Set: the store is serialized to JSON, which turns a Set into {}
+          this.props.updateLinking(Array.from(newLinkingData))
         }
         // a real button, so that the toggle can be reached and operated with the keyboard
         const linkIcon = (

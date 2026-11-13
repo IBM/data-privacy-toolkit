@@ -42,9 +42,9 @@ export default class Plot extends Component {
         <Confirmation
           k={this.state.k} suppression={this.state.suppression} onYes={() => {
             this.props.selectedConfiguration(this.state.k, this.state.suppression)
-            this.setState(Object.assign({}, this.state, { showPopup: false }))
+            this.setState({ showPopup: false })
           }} onNo={() => {
-            this.setState(Object.assign({}, this.state, { showPopup: false }))
+            this.setState({ showPopup: false })
           }}
         />
         )
@@ -55,7 +55,7 @@ export default class Plot extends Component {
         <Chart
           options={options}
           label='Risk against utility loss'
-          onPointClick={({ k, suppression }) => this.setState(Object.assign({}, this.state, { showPopup: true, k, suppression }))}
+          onPointClick={({ k, suppression }) => this.setState({ showPopup: true, k, suppression })}
         />
         <div className='form-inline'>
           <div className='form-group'>
@@ -63,7 +63,7 @@ export default class Plot extends Component {
             <select
               id='suppression' value={this.state.selectedSuppression} onChange={event => {
                 const selectedSuppression = Number(event.target.value)
-                this.setState(Object.assign({}, this.state, { selectedSuppression }))
+                this.setState({ selectedSuppression })
               }}
             >
               {suppressions}
@@ -74,7 +74,7 @@ export default class Plot extends Component {
             <select
               id='metric' value={this.state.selectedIloss} onChange={event => {
                 const selectedIloss = event.target.value
-                this.setState(Object.assign({}, this.state, { selectedIloss }))
+                this.setState({ selectedIloss })
               }}
             >
               {metrics}
