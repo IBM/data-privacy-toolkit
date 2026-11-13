@@ -57,6 +57,13 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// The sample data set served by the web UI is also what the tests use: there is a single copy of it.
+tasks.named('processTestResources') {
+    from('front-end/public/datasets') {
+        include 'healthcare-dataset.txt'
+    }
+}
+
 // End-to-end smoke test of the web UI: builds front-end/, serves it from this application and drives it with a
 // headless Chrome. It needs Chrome or Chromium and either Node >= 22 or Docker, so it is not part of `check`:
 //   ./gradlew uiSmokeTest

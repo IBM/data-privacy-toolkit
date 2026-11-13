@@ -18,6 +18,8 @@ under the License.
 */
 package com.ibm.research.drl.dpt.rest.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
@@ -119,31 +123,46 @@ class ExploreTest {
                 .andExpect(jsonPath("$[0].bestNode", containsString("[")))
                 .andExpect(jsonPath("$[0].realSuppression", lessThanOrEqualTo(5.0)))
                 .andExpect(jsonPath("$[0].realSuppression", greaterThanOrEqualTo(0.0)))
-                .andExpect(jsonPath("$[0].informationLoss.NUE.first").isNumber())
-                .andExpect(jsonPath("$[0].informationLoss.CP.first").isNumber())
-                .andExpect(jsonPath("$[0].informationLoss.AECS.first").isNumber())
+                .andExpect(jsonPath("$[0].informationLoss.NUE.value").isNumber())
+                .andExpect(jsonPath("$[0].informationLoss.CP.value").isNumber())
+                .andExpect(jsonPath("$[0].informationLoss.AECS.value").isNumber())
                 .andExpect(jsonPath("$[0].riskMetricResults.KRM").isNumber())
                 .andExpect(jsonPath("$[0].riskMetricResults.FKRM").isNumber())
                 .andExpect(jsonPath("$[0].riskMetricResults.BINOM").isNumber());
     }
 
     @Test
-    void largerKNeverMeansMoreRisk() throws Exception {
-        mvc.perform(request("2", "10", "8", "10", "10", "1"))
+    void riskOfTheKRatioMetricIsBoundedByTheValueOfK() throws Exception {
+        final String body = mvc.perform(request("2", "10", "4", "10", "10", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                // risk of the k-ratio metric is gamma / size of the smallest equivalence class
-                .andExpect(jsonPath("$[0].riskMetricResults.KRM", greaterThanOrEqualTo(0.0)))
-                .andExpect(jsonPath("$[0].riskMetricResults.KRM", lessThanOrEqualTo(0.5)))
-                .andExpect(jsonPath("$[1].riskMetricResults.KRM", lessThanOrEqualTo(0.1)));
+                .andReturn().getResponse().getContentAsString();
+
+        final JsonNode results = new ObjectMapper().readTree(body);
+        assertThat(results.size(), equalTo(3));
+        for (JsonNode result : results) {
+            // the risk of the k-ratio metric is gamma (1.0) over the size of the smallest equivalence class, which
+            // is at least k in a k-anonymous dataset
+            final double risk = result.get("riskMetricResults").get("KRM").asDouble();
+            assertThat(risk, greaterThanOrEqualTo(0.0));
+            assertThat(risk, lessThanOrEqualTo(1.0 / result.get("k").asInt()));
+        }
     }
 
     @Test
     void omitsThePairsThatNoGeneralizationSatisfies() throws Exception {
-        // 400 records cannot be in classes of 1000
-        mvc.perform(request("1000", "1000", "1", "0", "0", "1"))
+        // 400 records cannot be in classes of 1000: only k = 2 is reported
+        mvc.perform(request("2", "1000", "998", "0", "0", "1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].k").value(2));
+    }
+
+    @Test
+    void rejectsAMinimumKLargerThanTheDataset() throws Exception {
+        // 400 records cannot be in classes of 1000, and nothing is left to explore
+        mvc.perform(request("1000", "1000", "1", "0", "0", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error", containsString("larger than the number of records")));
     }
 
     @Test
@@ -163,29 +182,82 @@ class ExploreTest {
     }
 
     @Test
+    void explainsWhyTheParametersAreRejected() throws Exception {
+        mvc.perform(request("1", "10", "1", "0", "10", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("The minimum k must be at least 2"));
+        mvc.perform(request("2", "100", "1", "0", "20", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error", containsString("Too many combinations")));
+    }
+
+    @Test
+    void rejectsParametersThatAreNotNumbers() throws Exception {
+        mvc.perform(request("NaN", "10", "1", "0", "10", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("The parameter minK is not a valid number"));
+        mvc.perform(request("2", "10", "1", "NaN", "10", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error", containsString("suppression")));
+    }
+
+    @Test
     void rejectsColumnsThatDoNotExist() throws Exception {
         mvc.perform(requestWith("vulnerabilities", "[4,500]"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Unknown column 500"));
     }
 
     @Test
     void needsAtLeastOneQuasiIdentifier() throws Exception {
         mvc.perform(requestWith("vulnerabilities", "[]"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("At least one quasi-identifier is needed"));
+    }
+
+    @Test
+    void acceptsTheLinkingAttributesTheWebUiSendsAfterAColumnIsToggled() throws Exception {
+        mvc.perform(requestWith("linkingAttributes", "[4,6]"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    void rejectsLinkingAttributesThatAreNotAList() throws Exception {
+        // what JSON.stringify makes of a Set, which is what the web UI used to send once a column was toggled
+        mvc.perform(requestWith("linkingAttributes", "{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid request"));
+    }
+
+    @Test
+    void rejectsTypesThatAreNotKnown() throws Exception {
+        mvc.perform(requestWith("fields", "{\"Column 4\":{\"name\":\"NOT_A_TYPE\"}}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Unknown type for the column Column 4"));
+    }
+
+    @Test
+    void rejectsTypesWithoutAName() throws Exception {
+        mvc.perform(requestWith("fields", "{\"Column 4\":{}}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(requestWith("fields", "{\"Column 4\":null}"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void doesNotRevealDetailsOfTheDataInErrors() throws Exception {
-        mvc.perform(requestWith("vulnerabilities", "[4,500]"))
-                .andExpect(content().string(not(containsString("Exception"))))
-                .andExpect(content().string(not(containsString("Sophia"))));
+    void doesNotRevealDetailsOfTheDataOrTheServerInErrors() throws Exception {
+        final String body = mvc.perform(requestWith("vulnerabilities", "[4,500]"))
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(body, equalTo("{\"error\":\"Unknown column 500\"}"));
     }
 
     @Test
-    void rejectsMalformedColumnLists() throws Exception {
+    void rejectsMalformedColumnListsWithoutRevealingTheParser() throws Exception {
         mvc.perform(requestWith("vulnerabilities", "not json"))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().string(not(containsString("Jackson"))))
-                .andExpect(content().string(not(containsString("Unrecognized"))));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(equalTo("{\"error\":\"Invalid request\"}")));
     }
 }

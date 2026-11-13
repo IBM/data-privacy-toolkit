@@ -27,12 +27,14 @@ import com.ibm.research.drl.dpt.anonymization.constraints.KAnonymity;
 import com.ibm.research.drl.dpt.anonymization.informationloss.AECSOptions;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationLossMetricFactory;
 import com.ibm.research.drl.dpt.anonymization.informationloss.InformationMetric;
+import com.ibm.research.drl.dpt.anonymization.ola.NoSuitableGeneralizationException;
 import com.ibm.research.drl.dpt.anonymization.ola.OLA;
 import com.ibm.research.drl.dpt.anonymization.ola.OLAOptions;
 import com.ibm.research.drl.dpt.datasets.IPVDataset;
 import com.ibm.research.drl.dpt.generators.ItemSet;
 import com.ibm.research.drl.dpt.providers.ProviderType;
 import com.ibm.research.drl.dpt.rest.exceptions.InvalidRequestException;
+import com.ibm.research.drl.dpt.rest.exceptions.ServiceUnavailableException;
 import com.ibm.research.drl.dpt.rest.models.ExplorationResult;
 import com.ibm.research.drl.dpt.rest.models.ExplorationResult.InformationLossValue;
 import com.ibm.research.drl.dpt.rest.models.MaskingProviderDescription;
@@ -43,7 +45,7 @@ import com.ibm.research.drl.dpt.risk.RiskMetric;
 import com.ibm.research.drl.dpt.vulnerability.IPVVulnerability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,7 +66,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Anonymizes a dataset with OLA for a grid of (k, suppression) pairs and reports, for each pair, the information
@@ -81,9 +86,6 @@ public class Explore {
     /** Used when the caller does not know the size of the population the dataset was sampled from. */
     private static final int DEFAULT_POPULATION_FACTOR = 10;
 
-    // The OLA implementation reports "no solution" only with this message.
-    private static final String NO_SOLUTION = "unable to find a suitable generalization";
-
     // Risk metrics that stay affordable on large datasets. The Holohan metrics take time proportional to the size of
     // the population for each equivalence class, the hypergeometric one is constant for the data this service sees,
     // and the approximation metric shares its short name with the binomial one.
@@ -95,8 +97,19 @@ public class Explore {
 
     private final ObjectMapper mapper;
 
-    public Explore(@Autowired ObjectMapper mapper) {
+    /** Explorations are CPU bound: only this many run at the same time, the others are turned away. */
+    private final Semaphore slots;
+
+    /** The time after which a running exploration gives up; it is checked between the steps of the exploration. */
+    private final long timeoutNanos;
+
+    public Explore(
+            ObjectMapper mapper,
+            @Value("${demo.explore.max-concurrent:2}") int maxConcurrent,
+            @Value("${demo.explore.timeout-seconds:300}") long timeoutSeconds) {
         this.mapper = mapper;
+        this.slots = new Semaphore(maxConcurrent);
+        this.timeoutNanos = TimeUnit.SECONDS.toNanos(timeoutSeconds);
     }
 
     @PostMapping(value = "/explore/{hasHeader}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -123,8 +136,17 @@ public class Explore {
             throw new InvalidRequestException("The population must be greater than 0");
         }
 
+        if (!slots.tryAcquire()) {
+            throw new ServiceUnavailableException("The server is busy with other explorations. Try again later.");
+        }
         try (StringReader reader = new StringReader(data)) {
             final IPVDataset dataset = IPVDataset.load(reader, hasHeader, ',', '"', false);
+
+            // no class can have more records than the dataset: with this k there is nothing to explore at all
+            if (minK > dataset.getNumberOfRows()) {
+                throw new InvalidRequestException(
+                        "The minimum k is larger than the number of records in the dataset (" + dataset.getNumberOfRows() + ")");
+            }
 
             final Set<Integer> quasi = columns(vulnerabilitiesS, dataset);
             if (quasi.isEmpty()) {
@@ -142,7 +164,8 @@ public class Explore {
                     sensitive,
                     linking,
                     fieldTypes(fieldsS),
-                    null == population ? DEFAULT_POPULATION_FACTOR * dataset.getNumberOfRows() : population);
+                    null == population ? DEFAULT_POPULATION_FACTOR * dataset.getNumberOfRows() : population,
+                    System.nanoTime() + timeoutNanos);
 
             logger.info("Exploring {} combinations on a dataset of {} rows and {} columns", ks.size() * suppressions.size(),
                     dataset.getNumberOfRows(), dataset.getNumberOfColumns());
@@ -158,6 +181,8 @@ public class Explore {
         } catch (IOException e) {
             logger.error("Unable to read the request", e);
             throw new InvalidRequestException("Invalid request");
+        } finally {
+            slots.release();
         }
     }
 
@@ -203,8 +228,17 @@ public class Explore {
     private Map<String, ProviderType> fieldTypes(String json) throws IOException {
         final Map<String, MaskingProviderDescription> described = mapper.readValue(json, new TypeReference<>() {});
 
+        // ProviderType.valueOf registers every name it does not know: look names up without creating them, so that
+        // the caller cannot grow the registry of the whole service.
+        final Set<String> known = Arrays.stream(ProviderType.values()).map(ProviderType::name).collect(Collectors.toSet());
+
         final Map<String, ProviderType> types = new HashMap<>(described.size());
-        described.forEach((column, type) -> types.put(column, ProviderType.valueOf(type.getName())));
+        described.forEach((column, type) -> {
+            if (null == type || null == type.getName() || !known.contains(type.getName())) {
+                throw new InvalidRequestException("Unknown type for the column " + column);
+            }
+            types.put(column, ProviderType.valueOf(type.getName()));
+        });
         return types;
     }
 
@@ -216,11 +250,13 @@ public class Explore {
         private final List<ColumnInformation> linkingColumns;
         private final Map<String, ProviderType> fieldTypes;
         private final Map<String, String> riskOptions;
+        private final long deadline;
 
         Exploration(IPVDataset dataset, Set<Integer> quasi, Set<Integer> sensitive, Set<Integer> linking,
-                    Map<String, ProviderType> fieldTypes, int population) {
+                    Map<String, ProviderType> fieldTypes, int population, long deadline) {
             this.dataset = dataset;
             this.fieldTypes = fieldTypes;
+            this.deadline = deadline;
 
             final ItemSet items = new ItemSet();
             quasi.forEach(items::addItem);
@@ -242,11 +278,19 @@ public class Explore {
                     BinomialRiskMetric.USE_GLOBAL_P, "true");
         }
 
+        private void checkDeadline() {
+            if (System.nanoTime() - deadline > 0) {
+                throw new ServiceUnavailableException(
+                        "The exploration needs more time than allowed. Use fewer combinations or a smaller dataset.");
+            }
+        }
+
         /** The outcome for one pair of parameters, or nothing if no generalization satisfies them. */
         Optional<ExplorationResult> run(int k, double suppression) {
             if (k > dataset.getNumberOfRows()) {
                 return Optional.empty();
             }
+            checkDeadline();
 
             final OLA algorithm = new OLA();
             final List<PrivacyConstraint> constraints = List.of(new KAnonymity(k));
@@ -255,16 +299,14 @@ public class Explore {
             try {
                 anonymized = algorithm.initialize(dataset, vulnerabilities, sensitiveNames, fieldTypes, constraints,
                         new OLAOptions(suppression)).apply();
-            } catch (RuntimeException e) {
-                if (null != e.getMessage() && e.getMessage().startsWith(NO_SOLUTION)) {
-                    logger.info("No generalization for k={} and suppression={}", k, suppression);
-                    return Optional.empty();
-                }
-                throw e;
+            } catch (NoSuitableGeneralizationException e) {
+                logger.info("No generalization for k={} and suppression={}", k, suppression);
+                return Optional.empty();
             }
 
             final Map<String, InformationLossValue> informationLoss = new LinkedHashMap<>();
             for (InformationMetric available : InformationLossMetricFactory.getAvailableMetrics()) {
+                checkDeadline();
                 final InformationMetric metric = InformationLossMetricFactory.getInstance(available.getShortName());
                 try {
                     final double value = metric.initialize(dataset, anonymized,
@@ -274,13 +316,16 @@ public class Explore {
                         informationLoss.put(metric.getShortName(), new InformationLossValue(value));
                     }
                 } catch (RuntimeException e) {
-                    // not every metric applies to every dataset (for instance, one needs a sensitive column)
-                    logger.info("Information loss metric {} not available: {}", metric.getShortName(), e.getClass().getSimpleName());
+                    // not every metric applies to every dataset (for instance, one needs a sensitive column), so the
+                    // point is left out, but with the stack trace in the log: a defect must not go unnoticed
+                    logger.warn("Information loss metric {} not available for k={} and suppression={}",
+                            metric.getShortName(), k, suppression, e);
                 }
             }
 
             final Map<String, Double> risks = new LinkedHashMap<>();
             for (Supplier<RiskMetric> supplier : RISK_METRICS) {
+                checkDeadline();
                 final RiskMetric metric = supplier.get();
                 try {
                     final double value = metric.initialize(dataset, anonymized, linkingColumns, k, riskOptions).report();
@@ -288,7 +333,8 @@ public class Explore {
                         risks.put(metric.getShortName(), value);
                     }
                 } catch (RuntimeException e) {
-                    logger.info("Risk metric {} not available: {}", metric.getShortName(), e.getClass().getSimpleName());
+                    logger.warn("Risk metric {} not available for k={} and suppression={}",
+                            metric.getShortName(), k, suppression, e);
                 }
             }
 

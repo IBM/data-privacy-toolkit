@@ -39,8 +39,8 @@ public record ExplorationResult(int k,
     /**
      * A value of an information loss metric.
      *
-     * @param first the value
+     * @param value the value of the metric
      */
-    public record InformationLossValue(double first) {
+    public record InformationLossValue(double value) {
     }
 }
