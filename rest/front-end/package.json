@@ -19,7 +19,7 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
+    "redux-thunk": "^3.0.0",
     "sass": "^1.55.0",
     "treant-js": "^1.0.1",
     "underscore": "^1.9.1"
