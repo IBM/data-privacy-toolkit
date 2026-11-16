@@ -52,6 +52,21 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 - [Toolkit (CLI/Docker)](docker)
 - [Spark wrappers](spark)
 
+## Building and testing
+The modules are independent Gradle builds, each with its own Gradle wrapper, and need **Java 21**.
+The library has to be built first, because the other Java modules read it from the local Maven repository:
+
+```bash
+cd library && ./gradlew build publishToMavenLocal   # compiles, runs the tests, publishes to ~/.m2
+cd ../docker && ./gradlew build                      # toolkit (CLI)
+cd ../spark && ./gradlew build                       # Spark wrappers
+cd ../rest && ./gradlew build                        # REST service
+cd front-end && npm ci && npm test                   # web UI: lint and tests (Node 22 or later)
+```
+
+These are the commands the [build workflow](.github/workflows/dpt-build.yml) runs on every pull request.
+Each module's README has the details.
+
 ## Academic References:
 * M. Kesarwani, A. Kaul, S. Braghin, N. Holohan, and S. Antonatos, "Secure k-anonymization over encrypted databases," 2021 IEEE 14th International Conference on Cloud Computing (CLOUD), 2021, pp. 20-30, doi: 10.1109/CLOUD53861.2021.00015.
 * M. Pachilakis, S. Antonatos, K. Levacher, and S. Braghin, "PrivLeAD: Privacy Leakage Detection on the Web," Intelligent Systems and Applications. IntelliSys 2020. Advances in Intelligent Systems and Computing, vol 1250. Springer, Cham. doi: 10.1007/978-3-030-55180-3_32.
