@@ -49,6 +49,7 @@ Our toolkit includes anonymization algorithms that can be applied to a dataset a
 - [Java Library](library)
 - [Toolkit (CLI/Docker)](docker)
 - [Spark wrappers](spark)
+- [REST service and web UI](rest) (example only, not for production use)
 
 ## Academic References:
 * M. Kesarwani, A. Kaul, S. Braghin, N. Holohan, and S. Antonatos, "Secure k-anonymization over encrypted databases," 2021 IEEE 14th International Conference on Cloud Computing (CLOUD), 2021, pp. 20-30, doi: 10.1109/CLOUD53861.2021.00015.
