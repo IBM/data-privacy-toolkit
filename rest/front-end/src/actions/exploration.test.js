@@ -1,11 +1,36 @@
 import { describe, it, expect } from 'vitest'
 
-import { explorationProblem } from './exploration'
+import { explorationProblem, countSuppression } from './exploration'
 
 const k = (min = 2, max = 20, step = 5) => ({ min, max, step })
 const suppression = (min = 0, max = 20, step = 5) => ({ min, max, step })
 
+describe('countSuppression', () => {
+  // the back-end rounds every value to 6 decimals before comparing it with the maximum
+  it.each([
+    [0, 20, 5, 5],
+    [0, 0, 1, 1],
+    [0, 1, 0.1, 11],
+    [0, 0.3, 0.1, 4], // 0.3 / 0.1 is 2.9999999999999996, so dividing the range by the step gives 3
+    [0, 0.7, 0.1, 8],
+    [0.1, 0.4, 0.1, 4],
+    [0, 20, 0.01, 101] // stops past the limit of the back-end instead of counting all 2001
+  ])('counts the values from %f to %f by %f: %i', (min, max, step, expected) => {
+    expect(countSuppression(min, max, step)).toBe(expected)
+  })
+})
+
 describe('explorationProblem', () => {
+  it('counts the combinations like the back-end when the steps are fractions', () => {
+    // 13 values of k by 8 of suppression (0, 0.1 ... 0.7) is 104: dividing the range by the step counted 7 values, 91
+    expect(explorationProblem(k(2, 14, 1), suppression(0, 0.7, 0.1))).toMatch(/^Too many combinations/)
+  })
+
+  it('accepts the fractions that fit', () => {
+    // 12 values of k by 8 of suppression is 96
+    expect(explorationProblem(k(2, 13, 1), suppression(0, 0.7, 0.1))).toBeUndefined()
+  })
+
   it('accepts the default values', () => {
     expect(explorationProblem(k(), suppression())).toBeUndefined()
   })
