@@ -1,3 +1,6 @@
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
+
 export const LOAD_DICOM_FILE = 'LOAD_DICOM_FILE'
 export const SAVE_DICOM_FILE = 'SAVE_DICOM_FILE'
 
@@ -13,63 +16,44 @@ export const SAVE_MASKED_DICOM_ATTRIBUTES = 'SAVE_MASKED_DICOM_ATTRIBUTES'
 
 export const NOTIFY_DICOM_MASKED = 'NOTIFY_DICOM_MASKED'
 
-const headers = new window.Headers()
-headers.append('Content-Type', 'application/octet-stream')
+const OCTET_STREAM = { 'Content-Type': 'application/octet-stream' }
+
+const post = (url, what, as, body, timeout = TIMEOUT.short) => apiFetch(url, { what, as, method: 'POST', headers: OCTET_STREAM, body, timeout })
+
+function loadImage (dispatch, data, store) {
+  dispatch(requestImage())
+  post('api/feature/dicom/image', 'Unable to process the image file', 'text', data)
+    .then(image => dispatch(store(`data:image/png;base64,${image}`)))
+    .catch(error => {
+      dispatch(reportError(error))
+      dispatch(store(undefined))
+    })
+}
+
+function loadAttributes (dispatch, data, store) {
+  dispatch(requestAttribute())
+  post('api/feature/dicom/attributes', 'Unable to extract the attributes', 'json', data)
+    .then(attributes => dispatch(store(attributes)))
+    .catch(error => {
+      dispatch(reportError(error))
+      dispatch(store(undefined))
+    })
+}
 
 export function maskDicomFile (file) {
   return (dispatch, getState) => {
     if (beProcessed(getState())) {
       dispatch(requestMasking())
-      window.fetch('api/feature/dicom/mask', {
-        method: 'POST',
-        headers,
-        body: file
-      }).then(response => {
-        if (response.ok) {
-          return response.arrayBuffer()
-        }
-        throw new Error(`Error masking: ${response.statusText}`)
-      }).then(data => {
-        dispatch(notifyDicomFileMasked(data))
+      post('api/feature/dicom/mask', 'Unable to mask the file', 'arrayBuffer', file, TIMEOUT.long)
+        .then(data => {
+          dispatch(notifyDicomFileMasked(data))
 
-        dispatch(requestImage())
-        window.fetch('api/feature/dicom/image', {
-          method: 'POST',
-          headers,
-          body: data
-        }).then(response => {
-          if (response.ok) {
-            return response.text()
-          }
-          throw new Error(`Error processing image file ${response.statusText}`)
-        }).then(image => {
-          dispatch(storeMaskedDicomImage(`data:image/png;base64,${image}`))
+          loadImage(dispatch, data, storeMaskedDicomImage)
+          loadAttributes(dispatch, data, storeMaskedDicomAttributes)
         }).catch(error => {
-          window.alert(error.message)
-          dispatch(storeMaskedDicomImage(undefined))
+          dispatch(reportError(error))
+          dispatch(notifyDicomFileMasked(undefined))
         })
-
-        dispatch(requestAttribute())
-        window.fetch('api/feature/dicom/attributes', {
-          method: 'POST',
-          headers,
-          body: data
-        }).then(response => {
-          if (response.ok) {
-            return response.json()
-          }
-          throw new Error(`Error extracting attributes ${response.statusText}`)
-        }).then(data => {
-          dispatch(storeMaskedDicomAttributes(data))
-        }).catch(error => {
-          window.alert(error.message)
-          dispatch(storeMaskedDicomAttributes(undefined))
-        })
-      }).catch(error => {
-        window.alert(error.message)
-
-        dispatch(notifyDicomFileMasked(undefined))
-      })
     }
   }
 }
@@ -84,39 +68,8 @@ export function loadDicomFile (file) {
         const data = new Uint8Array(event.target.result)
         dispatch(storeOriginalDicomFile(data))
 
-        dispatch(requestImage())
-        window.fetch('api/feature/dicom/image', {
-          method: 'POST',
-          headers,
-          body: data
-        }).then(response => {
-          if (response.ok) {
-            return response.text()
-          }
-          throw new Error(`Error processing image file ${response.statusText}`)
-        }).then(image => {
-          dispatch(storeOriginalDicomImage(`data:image/png;base64,${image}`))
-        }).catch(error => {
-          window.alert(error.message)
-          dispatch(storeOriginalDicomImage(undefined))
-        })
-
-        dispatch(requestAttribute())
-        window.fetch('api/feature/dicom/attributes', {
-          method: 'POST',
-          headers,
-          body: data
-        }).then(response => {
-          if (response.ok) {
-            return response.json()
-          }
-          throw new Error(`Error extracting attributes ${response.statusText}`)
-        }).then(data => {
-          dispatch(storeOriginalDicomAttributes(data))
-        }).catch(error => {
-          window.alert(error.message)
-          dispatch(storeOriginalDicomAttributes(undefined))
-        })
+        loadImage(dispatch, data, storeOriginalDicomImage)
+        loadAttributes(dispatch, data, storeOriginalDicomAttributes)
       }
       reader.readAsArrayBuffer(file)
     }

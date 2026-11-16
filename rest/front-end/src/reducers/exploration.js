@@ -8,11 +8,11 @@ const reducer = (state = {
 }, action) => {
   switch (action.type) {
     case REQUEST_EXPLORATION:
-      return Object.assign({}, state, {isFetching: true})
+      return Object.assign({}, state, { isFetching: true })
     case SAVE_EXPLORATION:
-      return Object.assign({}, state, {isFetching: false, data: action.data})
+      return Object.assign({}, state, { isFetching: false, data: action.data })
     case SAVE_LINKING:
-      return Object.assign({}, state, {linkingData: action.linkingData})
+      return Object.assign({}, state, { linkingData: action.linkingData })
     case CLEAR_STATE:
       return {}
     default:

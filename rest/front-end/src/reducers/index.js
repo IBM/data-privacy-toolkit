@@ -7,6 +7,7 @@ import hierarchies from './hierarchies'
 import workflow from './workflow'
 import dicom from './dicom'
 import freetext from './freetext'
+import alerts from './alerts'
 
 const reducers = {
   configurations,
@@ -17,7 +18,8 @@ const reducers = {
   hierarchies,
   workflow,
   dicom,
-  freetext
+  freetext,
+  alerts
 }
 
 export default reducers

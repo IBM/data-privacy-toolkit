@@ -30,9 +30,9 @@ const reducer = (state = INITIAL_STATE, action) => {
       })
 
     case SAVE_EXPLORATION:
-      return Object.assign({}, state, {isFetching: false, explorationReport: action.data})
+      return Object.assign({}, state, { isFetching: false, explorationReport: action.data })
     case SAVE_LINKING:
-      return Object.assign({}, state, {linkingData: action.linkingData})
+      return Object.assign({}, state, { linkingData: action.linkingData })
     case SAVE_CONFIGURATION:
       return Object.assign({}, state, {
         k: action.k,
@@ -55,7 +55,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         protectedDataset: action.data
       })
 
-    case SAVE_ANONYMIZED_DATASET:
+    case SAVE_ANONYMIZED_DATASET: {
       const { dataset, columnInformation, informationLossResult, suppression } = action.data
       return Object.assign({}, state, {
         isFetching: false,
@@ -64,6 +64,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         informationLossResult,
         suppression
       })
+    }
 
     case CLEAR_STATE:
       return INITIAL_STATE

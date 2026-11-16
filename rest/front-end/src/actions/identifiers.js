@@ -1,3 +1,6 @@
+import { apiFetch } from '../api'
+import { reportError } from './alerts'
+
 export const REQUEST_IDENTIFIERS = 'REQUEST_IDENTIFIER'
 export const SAVE_IDENTIFIERS = 'SAVE_IDENTIFIERS'
 
@@ -18,16 +21,11 @@ function requestIdentifiers () {
 function fetchIdentifiers () {
   return dispatch => {
     dispatch(requestIdentifiers())
-    window.fetch('api/information/identifiers').then(response => {
-      if (response.ok) {
-        return response.json()
-      }
-      throw new Error('Unable to retrieve identifiers')
-    }).then(json => dispatch(saveIdentifiers(json))).catch(
-      error => {
-        console.log(error.message)
-        window.alert(error.message)
+    apiFetch('api/information/identifiers', { what: 'Unable to retrieve the identifiers' })
+      .then(json => dispatch(saveIdentifiers(json)))
+      .catch(error => {
         dispatch(saveIdentifiers(undefined))
+        dispatch(reportError(error))
       })
   }
 }

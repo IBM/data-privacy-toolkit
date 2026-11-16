@@ -1,4 +1,5 @@
-import _ from 'lodash'
+import { apiFetch } from '../api'
+import { reportError } from './alerts'
 
 export const SAVE_MASKING_CONFIGURATION = 'SAVE_MASKING_CONFIGURATION'
 export const REQUEST_MASKING_CONFIGURATION = 'REQUEST_MASKING_CONFIGURATION'
@@ -28,14 +29,10 @@ const processConfiguration = (options) => {
   options = options.options
   const categories = {}
 
-  for (let key in options) {
-    if (key.indexOf('_') !== -1) {
-      console.log('Contains underscore')
-    }
-
-    let keyOptions = options[key]
-    let category = keyOptions.category
-    if (!_.has(categories, category)) {
+  for (const key in options) {
+    const keyOptions = options[key]
+    const category = keyOptions.category
+    if (!Object.hasOwn(categories, category)) {
       categories[category] = []
     }
 
@@ -63,8 +60,11 @@ const getType = (value) => {
 function fetchMaskingConfiguration () {
   return dispatch => {
     dispatch(requestMaskingConfiguration())
-    window.fetch('api/information/configuration').then(response => response.json()).then(json => {
+    apiFetch('api/information/configuration', { what: 'Unable to retrieve the configuration' }).then(json => {
       dispatch(saveMaskingConfiguration(processConfiguration(json)))
+    }).catch(error => {
+      dispatch(saveMaskingConfiguration(undefined))
+      dispatch(reportError(error))
     })
   }
 }
@@ -147,6 +147,11 @@ function requestAnonymizationProviderConfiguration (algorithmName) {
 function fetchAnonymizationProviderConfiguration (algorithmName) {
   return dispatch => {
     dispatch(requestAnonymizationProviderConfiguration(algorithmName))
-    window.fetch(`api/information/defaultConfiguration/${algorithmName}`).then(response => response.json()).then(json => dispatch(saveAnonymizationProviderConfiguration(json, algorithmName)))
+    apiFetch(`api/information/defaultConfiguration/${encodeURIComponent(algorithmName)}`, { what: `Unable to retrieve the configuration of ${algorithmName}` })
+      .then(json => dispatch(saveAnonymizationProviderConfiguration(json, algorithmName)))
+      .catch(error => {
+        dispatch(saveAnonymizationProviderConfiguration(undefined, algorithmName))
+        dispatch(reportError(error))
+      })
   }
 }

@@ -1,0 +1,12 @@
+# Build context of rest/Dockerfile (the repository root): only what the image build needs.
+*
+!library
+!rest
+
+**/build
+**/.gradle
+**/.idea
+**/node_modules
+**/.smoke
+rest/ui-smoke
+rest/front-end/src/**/._*

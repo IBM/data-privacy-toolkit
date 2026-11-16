@@ -1,3 +1,6 @@
+import { apiFetch } from '../api'
+import { reportError } from './alerts'
+
 export const REQUEST_HIERARCHY = 'REQUEST_HIERARCHY'
 export const SAVE_HIERARCHY = 'SAVE_HIERARCHY'
 
@@ -18,17 +21,11 @@ function fetchHierarchy (hierarchy) {
   return dispatch => {
     dispatch(requestHierarchy())
 
-    window.fetch(`api/information/hierarchy/${hierarchy}`).then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Unable to retrieve hierarchy ' + hierarchy)
-      }
-    }).then(data => dispatch(saveHierarchy(data, hierarchy)))
+    apiFetch(`api/information/hierarchy/${encodeURIComponent(hierarchy)}`, { what: `Unable to retrieve the hierarchy ${hierarchy}` })
+      .then(data => dispatch(saveHierarchy(data, hierarchy)))
       .catch(error => {
-        console.log(error)
         dispatch(saveHierarchy(undefined, undefined))
-        window.alert(error.message)
+        dispatch(reportError(error))
       })
   }
 }

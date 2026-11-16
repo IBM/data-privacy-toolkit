@@ -1,4 +1,6 @@
 import { CSVToArray, arrayToCSV } from '../utilities'
+import { apiFetch, TIMEOUT } from '../api'
+import { reportError } from './alerts'
 
 export const REQUEST_ANONYMIZE = 'REQUEST_ANONYMIZE'
 export const SAVE_ANONYMIZED_DATASET = 'SAVE_ANONYMIZED_DATASET'
@@ -13,12 +15,12 @@ export function anonymizeDataset (dataset, hasHeader, kQuasi, eQuasi, sensitive,
 
       const fields = {}
       kQuasi.forEach((v) => {
-        const columnName = hasHeader ? dataset[0][v] : `Column ${v}`;
+        const columnName = hasHeader ? dataset[0][v] : `Column ${v}`
         const type = types[columnName]
         if (type) {
           fields[columnName] = type
         } else {
-          fields[columnName] = {'name': 'HASH'}
+          fields[columnName] = { name: 'HASH' }
         }
       })
 
@@ -35,21 +37,16 @@ export function anonymizeDataset (dataset, hasHeader, kQuasi, eQuasi, sensitive,
       body.set('sensitive', JSON.stringify(sensitive))
       body.set('fields', JSON.stringify(fields))
 
-      window.fetch(`api/feature/anonymize/${algorithmName}/${hasHeader}`, {
+      apiFetch(`api/feature/anonymize/${algorithmName}/${hasHeader}`, {
+        what: 'Unable to anonymize the dataset',
         method: 'POST',
-        body
+        body,
+        timeout: TIMEOUT.long
       }).then(
-        response => {
-          if (response.ok) {
-            return response.json()
-          }
-          throw new Error('Error anonymizing the dataset')
-        }
-      ).then(
-        data => dispatch(saveAnonymized({...data, dataset: CSVToArray(data.dataset)}))
+        data => dispatch(saveAnonymized({ ...data, dataset: CSVToArray(data.dataset) }))
       ).catch(
         error => {
-          window.alert(error.message)
+          dispatch(reportError(error))
           dispatch(saveAnonymized({}))
         }
       )
