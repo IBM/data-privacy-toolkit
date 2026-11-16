@@ -1,8 +1,6 @@
 # IBM Data Privacy Toolkit (DPT)
-[![DataPrivacyToolkit-Library](https://github.com/IBM/data-privacy-toolkit/actions/workflows/library.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/library.yml)
-[![DataPrivacyToolkit-Toolkit](https://github.com/IBM/data-privacy-toolkit/actions/workflows/toolkit.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/toolkit.yml)
-[![DataPrivacyToolkit-Spark](https://github.com/IBM/data-privacy-toolkit/actions/workflows/spark.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/spark.yml)
-![CodeQL](https://github.com/IBM/data-privacy-toolkit/actions/workflows/codeql.yml/badge.svg)
+[![DataPrivacyToolkit](https://github.com/IBM/data-privacy-toolkit/actions/workflows/dpt-build.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/dpt-build.yml)
+[![CodeQL](https://github.com/IBM/data-privacy-toolkit/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/IBM/data-privacy-toolkit/actions/workflows/codeql.yml)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](./CODE_OF_CONDUCT.md)
 [![license](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 
