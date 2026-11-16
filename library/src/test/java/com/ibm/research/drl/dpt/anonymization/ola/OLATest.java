@@ -1055,6 +1055,30 @@ public class OLATest {
     }
     
     @Test
+    public void reportsTheAbsenceOfASolutionWithADedicatedException() throws Exception {
+        ageHierarchy.add("13", "10-14", "10-19", "0-49", "0-99");
+        ageHierarchy.add("18", "15-19", "10-19", "0-49", "0-99");
+        ageHierarchy.add("19", "15-19", "10-19", "0-49", "0-99");
+        ageHierarchy.add("21", "20-24", "20-29", "0-49", "0-99");
+        ageHierarchy.add("22", "20-24", "20-29", "0-49", "0-99");
+        ageHierarchy.add("23", "20-24", "20-29", "0-49", "0-99");
+
+        // the ages cannot be generalized and are not the same, so 3 records never share them, and no record can be suppressed
+        List<ColumnInformation> columnInformationList = new ArrayList<>();
+        columnInformationList.add(new DefaultColumnInformation());
+        columnInformationList.add(new DefaultColumnInformation());
+        columnInformationList.add(new CategoricalInformation(ageHierarchy, ColumnType.QUASI, 1.0, 0));
+
+        IPVDataset original = IPVDataset.load(OLATest.class.getResourceAsStream("/testOLA.csv"), false, ',', '"', false);
+
+        OLA ola = new OLA();
+        ola.initialize(original, columnInformationList, List.of(new KAnonymity(5)), new OLAOptions(0.0d));
+
+        NoSuitableGeneralizationException e = assertThrows(NoSuitableGeneralizationException.class, ola::apply);
+        assertEquals("unable to find a suitable generalization", e.getMessage());
+    }
+
+    @Test
     public void testSanityChecks() {
         assertThrows(RuntimeException.class, () -> {
 
