@@ -98,7 +98,20 @@ function saveExploration (data) {
 // request is sent.
 const MAX_COMBINATIONS = 100
 
-const count = (min, max, step) => Math.floor((max - min) / step) + 1
+// k is an integer: the number of values is exact
+const countK = (min, max, step) => Math.floor((max - min) / step) + 1
+
+// Counted the way Explore.values does it, value by value with the same rounding to 6 decimals: dividing the range by
+// the step is off by one when the values are not exact in floating point (0 to 0.3 by 0.1 has 4 values, not 3).
+// It stops past the limit, as the back-end does, so that a tiny step does not make a huge loop.
+export const countSuppression = (min, max, step) => {
+  let count = 0
+  for (let i = 0; count <= MAX_COMBINATIONS; i++) {
+    if (Math.round((min + i * step) * 1e6) / 1e6 > max) break
+    count++
+  }
+  return count
+}
 
 /** Why the values cannot be explored, or undefined if they can. */
 export function explorationProblem (k, suppression) {
@@ -113,7 +126,7 @@ export function explorationProblem (k, suppression) {
   if (minS < 0 || maxS > 100) return 'The suppression must be between 0 and 100.'
   if (maxS < minS) return 'The maximum suppression must not be smaller than the minimum.'
   if (!(stepS > 0)) return 'The suppression step must be greater than 0.'
-  if (count(minK, maxK, stepK) * count(minS, maxS, stepS) > MAX_COMBINATIONS) {
+  if (countK(minK, maxK, stepK) * countSuppression(minS, maxS, stepS) > MAX_COMBINATIONS) {
     return `Too many combinations of k and suppression: at most ${MAX_COMBINATIONS}. Increase a step or narrow a range.`
   }
 }
