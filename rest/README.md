@@ -43,7 +43,8 @@ docker build -f rest/Dockerfile -t dpt-rest .
 
 `./gradlew uiSmokeTest` builds the web UI in [`front-end`](front-end), serves it from this application and drives it
 with a headless Chrome, failing on JavaScript errors, failed requests or error dialogs. It needs Chrome or Chromium
-and either Node 22+ or Docker, so it is not part of `./gradlew check`. See [`ui-smoke/README.md`](ui-smoke/README.md).
+and either Node 22+ or Docker, so it is not part of `./gradlew check`; the `ui-smoke` job of the build workflow runs it on every pull request.
+See [`ui-smoke/README.md`](ui-smoke/README.md).
 
 ## Risk/utility exploration
 

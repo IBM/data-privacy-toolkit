@@ -13,6 +13,8 @@ ui-smoke/run.sh              # builds the jar with ./gradlew bootJar unless DPT_
 ```
 
 `uiSmokeTest` is intentionally **not** part of `./gradlew check`: it needs a browser and a Node toolchain.
+The `ui-smoke` job of [`dpt-build.yml`](../../.github/workflows/dpt-build.yml) runs it on every pull request, on
+`ubuntu-latest` with its Google Chrome and Node 24, and keeps the screenshots of the scenarios as an artifact for 7 days.
 
 ## What it needs
 

@@ -124,6 +124,41 @@ jobs:
         # Only what ships, and only what matters: an advisory in a dev tool must not fail unrelated pull requests.
         run: npm audit --omit=dev --audit-level=high
 
+  ui-smoke:
+    name: Web UI smoke test
+    needs: library
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Run gradlew publish to maven local
+        working-directory: ./library
+        run: ./gradlew publishToMavenLocal -x test --no-daemon
+      # ubuntu-latest has Google Chrome: run.sh finds google-chrome and uses the local Node, so there is no Docker step.
+      - name: Run the smoke scenarios
+        working-directory: ./rest
+        env:
+          SCREENSHOTS_OUT: ${{ runner.temp }}/ui-smoke-screenshots
+        run: ./gradlew uiSmokeTest --no-daemon
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ui-smoke-screenshots
+          path: ${{ runner.temp }}/ui-smoke-screenshots
+          if-no-files-found: ignore
+          retention-days: 7
+
   rest-image:
     name: REST container image
     needs: [ library, front-end ]
