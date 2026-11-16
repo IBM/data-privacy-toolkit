@@ -6,7 +6,7 @@ Refer to the [documentation](../docs/spark/README.md) for information about the 
 ## Requirements
 
 * **Java 21** (Eclipse Temurin, Microsoft OpenJDK, or Amazon Corretto)
-* **Apache Spark 3.5.x** (Scala 2.13)
+* **Apache Spark 4.x** (Scala 2.13; `spark_version` in [`build.gradle`](build.gradle))
 * Gradle 8.14.3, with a Gradle wrapper included for convenience
 
 ## Building the project
