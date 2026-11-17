@@ -111,7 +111,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26'
           cache: 'npm'
           cache-dependency-path: rest/front-end/package-lock.json
       - name: Install dependencies
@@ -140,7 +140,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '26'
       - name: Run gradlew publish to maven local
         working-directory: ./library
         run: ./gradlew publishToMavenLocal -x test --no-daemon
