@@ -32,7 +32,7 @@ public class Readers {
     private Readers() {}
 
     private static CSVParser createGenericReader(Reader reader, char separator, char quoteChar) throws IOException {
-        return CSVFormat.DEFAULT.withDelimiter(separator).withQuote(quoteChar).parse(reader);
+        return CSVFormat.DEFAULT.builder().setDelimiter(separator).setQuote(quoteChar).get().parse(reader);
     }
 
     /**
